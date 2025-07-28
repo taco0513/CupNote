@@ -1,0 +1,99 @@
+{
+  "name": "CupNote - 나의 커피 감각 저널",
+  "short_name": "CupNote",
+  "description": "당신의 커피 경험을 기록하고 분석하는 스마트한 커피 저널",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFF8F0",
+  "theme_color": "#7C5842",
+  "dir": "ltr",
+  "lang": "ko-KR",
+  "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/home.png",
+      "sizes": "375x812",
+      "type": "image/png",
+      "label": "홈 화면"
+    },
+    {
+      "src": "/screenshots/brew-timer.png",
+      "sizes": "375x812",
+      "type": "image/png",
+      "label": "추출 타이머"
+    },
+    {
+      "src": "/screenshots/flavor-wheel.png",
+      "sizes": "375x812",
+      "type": "image/png",
+      "label": "향미 선택"
+    }
+  ],
+  "categories": ["food", "lifestyle", "utilities"],
+  "shortcuts": [
+    {
+      "name": "새 테이스팅 노트",
+      "short_name": "새 노트",
+      "description": "커피 테이스팅 노트 작성",
+      "url": "/new-note",
+      "icons": [{ "src": "/icons/new-note.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "내 레시피",
+      "short_name": "레시피",
+      "description": "저장된 레시피 보기",
+      "url": "/recipes",
+      "icons": [{ "src": "/icons/recipes.png", "sizes": "96x96" }]
+    }
+  ]
+}

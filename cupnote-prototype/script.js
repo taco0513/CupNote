@@ -63,7 +63,10 @@ const appState = {
     balance: 50
   },
   personalNote: '',
-  roasterNote: ''
+  roasterNote: '',
+  // User authentication state
+  user: null,
+  isAuthenticated: false
 };
 
 // 화면 순서 정의 (모드별)
@@ -987,3 +990,199 @@ window.addEventListener('resize', setViewportHeight);
 
 // 모바일 터치 최적화
 document.addEventListener('touchstart', () => {}, {passive: true});
+
+// ===== Authentication Functions =====
+
+// Check authentication status on app load
+function checkAuthStatus() {
+  const token = localStorage.getItem('cupnote_token');
+  if (token && window.api) {
+    // TODO: Verify token validity with backend
+    appState.isAuthenticated = true;
+    // Load user data if needed
+  }
+}
+
+// Login function
+async function login(email, password) {
+  try {
+    if (!window.api) {
+      showToast('API not initialized', 'error');
+      return false;
+    }
+    
+    const result = await window.api.auth.login({ email, password });
+    appState.user = result.user;
+    appState.isAuthenticated = true;
+    showToast('로그인 성공!', 'success');
+    
+    // Load user's tasting notes
+    await loadUserData();
+    
+    return true;
+  } catch (error) {
+    showToast(error.message || '로그인 실패', 'error');
+    return false;
+  }
+}
+
+// Register function
+async function register(email, password, username) {
+  try {
+    if (!window.api) {
+      showToast('API not initialized', 'error');
+      return false;
+    }
+    
+    const result = await window.api.auth.register({ email, password, username });
+    appState.user = result.user;
+    appState.isAuthenticated = true;
+    showToast('회원가입 성공!', 'success');
+    return true;
+  } catch (error) {
+    showToast(error.message || '회원가입 실패', 'error');
+    return false;
+  }
+}
+
+// Logout function
+function logout() {
+  if (window.api) {
+    window.api.auth.logout();
+  }
+  appState.user = null;
+  appState.isAuthenticated = false;
+  showToast('로그아웃 되었습니다', 'info');
+  switchScreen('mode-selection');
+}
+
+// Load user data
+async function loadUserData() {
+  if (!appState.isAuthenticated || !window.api) return;
+  
+  try {
+    // Load user's recent tasting notes
+    const tastingNotes = await window.api.tastingNotes.list({ limit: 10 });
+    console.log('Loaded tasting notes:', tastingNotes);
+    
+    // Load user's recipes
+    const recipes = await window.api.recipes.list({ is_favorite: true });
+    console.log('Loaded recipes:', recipes);
+    
+    // Load user's achievements
+    const achievements = await window.api.achievements.getMine();
+    console.log('Loaded achievements:', achievements);
+  } catch (error) {
+    console.error('Failed to load user data:', error);
+  }
+}
+
+// Save tasting note to backend
+async function saveTastingNote() {
+  if (!appState.isAuthenticated || !window.api) {
+    showToast('로그인이 필요합니다', 'warning');
+    return false;
+  }
+  
+  try {
+    const noteData = {
+      mode: appState.selectedMode,
+      coffee_id: appState.coffeeInfo.id || null,
+      
+      // Mode-specific data
+      ...(appState.selectedMode === 'cafe' && {
+        cafe_name: appState.coffeeInfo.cafeName,
+        menu_item: appState.coffeeInfo.temperature === 'hot' ? 'Hot Coffee' : 'Iced Coffee'
+      }),
+      
+      ...(appState.selectedMode === 'brew' && {
+        brew_method: appState.brewSettings.dripper,
+        water_temp: 93, // Default for now
+        grind_size: 'Medium',
+        brew_time: formatTime(appState.brewTimer.totalTime),
+        coffee_weight: appState.brewSettings.coffeeAmount,
+        water_weight: appState.brewSettings.waterAmount,
+        brew_ratio: `1:${appState.brewSettings.ratio}`,
+        timer_laps: appState.brewTimer.laps
+      }),
+      
+      ...(appState.selectedMode === 'lab' && {
+        brew_method: appState.labData.brewMethod,
+        water_temp: appState.labData.waterTemp,
+        grind_size: appState.labData.grindSize,
+        brew_time: formatTime(appState.labData.totalBrewTime),
+        equipment: ['V60', 'Scale', 'Thermometer'], // Default for now
+        detailed_process: `TDS: ${appState.labData.tds}, EY: ${appState.labData.extractionYield}%`
+      }),
+      
+      // Common evaluation data
+      overall_score: 4, // Calculate from sliders
+      flavor_notes: appState.selectedFlavors,
+      aroma: Math.round(appState.sensorySliders.acidity / 20),
+      acidity: Math.round(appState.sensorySliders.acidity / 20),
+      body: Math.round(appState.sensorySliders.body / 20),
+      aftertaste: Math.round(appState.sensorySliders.finish / 20),
+      balance: Math.round(appState.sensorySliders.balance / 20),
+      mouthfeel: Math.round(appState.sensorySliders.body / 10),
+      
+      personal_notes: appState.personalNote,
+      roaster_notes: appState.roasterNote
+    };
+    
+    const result = await window.api.tastingNotes.create(noteData);
+    showToast('테이스팅 노트가 저장되었습니다!', 'success');
+    return result;
+  } catch (error) {
+    showToast(error.message || '저장 실패', 'error');
+    return false;
+  }
+}
+
+// Toast notification system
+function showToast(message, type = 'info') {
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.textContent = message;
+  
+  // Add styles if not already in CSS
+  toast.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#F44336' : type === 'warning' ? '#FF9800' : '#2196F3'};
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    z-index: 9999;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  `;
+  
+  document.body.appendChild(toast);
+  
+  // Trigger animation
+  setTimeout(() => {
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+  }, 10);
+  
+  // Remove after 3 seconds
+  setTimeout(() => {
+    toast.style.transform = 'translateX(-50%) translateY(100px)';
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
+// Format time from milliseconds to MM:SS
+function formatTime(ms) {
+  const totalSeconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
+// Initialize authentication on app load
+document.addEventListener('DOMContentLoaded', () => {
+  checkAuthStatus();
+});
