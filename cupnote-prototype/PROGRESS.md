@@ -7,7 +7,7 @@
 - ✅ 기본 화면 플로우 설정
 - ✅ HomeCafe 전용 화면들 추가
 
-### Session 2 (2025-07-28) - Timer & Consistency Updates
+### Session 2 (2025-07-28) - Timer, Consistency & Documentation Updates
 **주요 작업:**
 - ✅ HomeCafe 설정 페이지에 Brew Timer 추가
 - ✅ 랩 기능 구현 (뜸들이기 → 1차/2차/3차 추출)
@@ -16,7 +16,8 @@
 - ✅ Lab Mode에 brew-settings 화면 추가
 - ✅ personal-comment → personal-notes 변경
 - ✅ 비율 프리셋 단순화 (맛 설명 제거)
-- ✅ sensory-slider → sensory-mouthfeel 변경
+- ✅ sensory-slider → sensory-mouthfeel 변경 + UI "Mouth Feel"로 업데이트
+- ✅ **종합 문서화 시스템 구축**: README.md, API.md, DEPLOYMENT.md 생성
 
 **기술적 성과:**
 - 고급 타이머 시스템 (밀리초 정밀도, 랩 기능)
