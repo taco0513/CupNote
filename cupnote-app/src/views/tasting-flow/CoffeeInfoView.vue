@@ -1,31 +1,20 @@
 <template>
-  <div class="coffee-setup-view">
+  <div class="coffee-info-view">
     <!-- Header -->
     <header class="setup-header">
+      <button class="back-btn" @click="$router.push('/mode-selection')">
+        ←
+      </button>
       <h1 class="setup-title">
         ☕ 커피 정보 입력
       </h1>
       <p class="setup-subtitle">
         {{ modeLabels[currentMode] }} 모드
       </p>
-    </header>
-
-    <!-- Mode Selection -->
-    <section class="mode-selection">
-      <h2 class="section-title">모드 선택</h2>
-      <div class="mode-buttons">
-        <button
-          v-for="mode in modes"
-          :key="mode.value"
-          :class="['mode-btn', { active: currentMode === mode.value }]"
-          @click="currentMode = mode.value"
-        >
-          <span class="mode-icon">{{ mode.icon }}</span>
-          <span class="mode-label">{{ mode.label }}</span>
-          <span class="mode-desc">{{ mode.description }}</span>
-        </button>
+      <div class="progress-bar">
+        <div class="progress-fill" :style="{ width: '25%' }"></div>
       </div>
-    </section>
+    </header>
 
     <!-- Coffee Info Form -->
     <form @submit.prevent="handleSubmit" class="coffee-form">
@@ -112,6 +101,17 @@
                 type="text"
                 class="input-field"
                 placeholder="예: 아라비카, 게이샤"
+              />
+            </div>
+
+            <div class="input-group">
+              <label for="altitude" class="input-label">고도</label>
+              <input
+                id="altitude"
+                v-model="formData.altitude"
+                type="text"
+                class="input-field"
+                placeholder="예: 1,800m"
               />
             </div>
 
@@ -286,7 +286,7 @@
 
       <!-- Action Buttons -->
       <div class="action-buttons">
-        <button type="button" class="btn-secondary" @click="$router.go(-1)">
+        <button type="button" class="btn-secondary" @click="$router.push('/mode-selection')">
           취소
         </button>
         <button type="submit" class="btn-primary" :disabled="!isFormValid">
@@ -298,35 +298,14 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCoffeeRecordStore } from '../../stores/coffeeRecord'
 
 const router = useRouter()
 const coffeeRecordStore = useCoffeeRecordStore()
 
-// Mode Configuration
-const modes = [
-  {
-    value: 'cafe',
-    label: '카페',
-    icon: '🏪',
-    description: '간단한 정보만'
-  },
-  {
-    value: 'homecafe',
-    label: '홈카페',
-    icon: '🏠',
-    description: '브루잉 설정 포함'
-  },
-  {
-    value: 'lab',
-    label: '랩',
-    icon: '🔬',
-    description: '전문적인 데이터'
-  }
-]
-
+// Mode Labels
 const modeLabels = {
   cafe: '카페',
   homecafe: '홈카페',
@@ -334,7 +313,7 @@ const modeLabels = {
 }
 
 // State
-const currentMode = ref('cafe')
+const currentMode = computed(() => coffeeRecordStore.currentSession.mode || 'cafe')
 const showOptionalFields = ref(false)
 
 // Form Data
@@ -345,6 +324,7 @@ const formData = ref({
   temperature: 'hot',
   origin: '',
   variety: '',
+  altitude: '',
   process: '',
   roastLevel: '',
   
@@ -424,28 +404,41 @@ const handleSubmit = () => {
     }
   }
   
-  // Save to store
+  // Save to store with altitude
   coffeeRecordStore.updateCoffeeSetup({
     coffeeName: formData.value.coffeeName,
     cafeName: formData.value.cafeName,
     location: location,
-    brewingMethod: brewingMethod
+    brewingMethod: brewingMethod,
+    origin: formData.value.origin,
+    variety: formData.value.variety,
+    altitude: formData.value.altitude,
+    process: formData.value.process,
+    roastLevel: formData.value.roastLevel
   })
   
   console.log('Coffee setup saved:', coffeeRecordStore.currentSession)
   
-  // Navigate to flavor selection
-  router.push('/flavor-selection')
+  // Navigate based on mode
+  if (currentMode.value === 'cafe') {
+    router.push('/unified-flavor')
+  } else if (currentMode.value === 'homecafe') {
+    router.push('/home-cafe')
+  } else if (currentMode.value === 'lab') {
+    router.push('/home-cafe') // Lab mode also goes to HomeCafe first
+  }
 }
 
-// Reset form when mode changes
-watch(currentMode, () => {
-  showOptionalFields.value = false
+// Initialize mode from route if coming back
+onMounted(() => {
+  if (!coffeeRecordStore.currentSession.mode) {
+    router.push('/mode-selection')
+  }
 })
 </script>
 
 <style scoped>
-.coffee-setup-view {
+.coffee-info-view {
   max-width: 600px;
   margin: 0 auto;
   padding: 1rem;
@@ -456,6 +449,45 @@ watch(currentMode, () => {
 .setup-header {
   text-align: center;
   margin-bottom: 2rem;
+  position: relative;
+  padding-top: 2rem;
+}
+
+.back-btn {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #7C5842;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.back-btn:hover {
+  background-color: rgba(124, 88, 66, 0.1);
+}
+
+.progress-bar {
+  max-width: 300px;
+  height: 4px;
+  background: #E8D5C4;
+  border-radius: 2px;
+  margin: 1rem auto 0;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #7C5842;
+  transition: width 0.3s ease;
 }
 
 .setup-title {
@@ -829,7 +861,7 @@ watch(currentMode, () => {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .coffee-setup-view {
+  .coffee-info-view {
     padding: 0.5rem;
   }
   

@@ -281,13 +281,11 @@ const handleNext = () => {
   // Convert selected expressions to array format for storage
   const sensoryArray = []
   
-  Object.entries(selectedExpressions.value).forEach(([categoryId, expressions]) => {
-    expressions.forEach(expression => {
-      sensoryArray.push({
-        id: expression.id,
-        category: getCategoryName(categoryId),
-        text: expression.name
-      })
+  Object.entries(selectedExpressions.value).forEach(([categoryId, expression]) => {
+    sensoryArray.push({
+      id: expression.id,
+      category: getCategoryName(categoryId),
+      text: expression.text
     })
   })
   
@@ -296,8 +294,15 @@ const handleNext = () => {
   
   console.log('Sensory expressions saved:', sensoryArray)
   
-  // Navigate to next step (Personal Notes)
-  router.push('/personal-notes')
+  // Get current mode from store
+  const currentMode = coffeeRecordStore.currentSession.mode || 'homecafe'
+  
+  // Navigate based on mode
+  if (currentMode === 'lab') {
+    router.push('/sensory-slider')
+  } else {
+    router.push('/personal-comment')
+  }
 }
 </script>
 

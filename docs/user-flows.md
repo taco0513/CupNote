@@ -14,9 +14,9 @@
 **목표**: 추출 레시피와 맛 평가를 함께 기록
 **소요시간**: 5-8분
 
-#### **Scenario 3: 커피 전문가 (Lab Mode)**
-**상황**: 커피 품질을 전문적으로 평가하고 데이터화
-**목표**: 실험 데이터와 정량적 평가까지 완전한 기록
+#### **Scenario 3: 커피 전문가 (Pro Mode)**
+**상황**: SCA 표준에 따른 전문적 커피 품질 평가
+**목표**: 전문 실험 데이터와 SCA 기준 정량적 평가
 **소요시간**: 8-12분
 
 ## 📱 상세 사용자 플로우
@@ -31,7 +31,7 @@
 사용자가 의도/상황에 맞는 모드 선택
     ├─ ☕ Cafe Mode (간편함 우선)
     ├─ 🏠 Brew Mode (홈브루 기록)
-    └─ 🔬 Lab Mode (전문 평가)
+    └─ 🎯 Pro Mode (SCA 표준 전문 평가)
 ```
 
 **인터랙션 세부사항**:
@@ -102,34 +102,47 @@ Coffee Info → Brew Settings → Flavor Selection → Sensory Expression → Pe
 - 타이머: `setInterval`로 실시간 업데이트
 - 랩 기능: 단계별 시간 누적 기록
 
-### **3C. Lab Mode 플로우 (전문가)**
+### **3C. Pro Mode 플로우 (SCA 표준 전문가)**
 
 ```
-Coffee Info → Brew Settings → Experimental Data → Flavor Selection → Sensory Mouthfeel → Sensory Expression → Personal Notes → Roaster Notes → Result
+Coffee Info → Brew Settings → Pro Brewing Protocol → QC Measurement → SCA Flavor Selection → Sensory Expression → SCA Sensory Evaluation → Personal Notes → Roaster Notes → Pro QC Report
 ```
 
-#### **Experimental Data 상세 플로우**:
+#### **Pro Brewing Protocol 상세 플로우**:
 ```
-추출 방법 선택 (V60/Chemex/Aeropress/Espresso)
+SCA 표준 추출 방법 선택 (Pour Over/Immersion/Pressure)
     ↓
-분쇄도 선택 (Coarse/Medium/Fine/Extra Fine)
+분쇄도 설정 (1-10 스케일, SCA 기준)
     ↓
-실험 변수 조절 (±1 단위)
-    ├─ 물 온도 (°C)
-    ├─ 총 추출 시간 (초)
-    ├─ TDS (%)
-    └─ 추출 수율 (%)
+SCA 표준 추출 변수
+    ├─ 원두:물 비율 (1:15-1:17)
+    ├─ 물 온도 (90-96°C)
+    ├─ 추출 시간 (2:30-6:00)
+    ├─ 물 품질 (TDS ppm, pH)
+    └─ 블루밍 시간, 유속 등
 ```
 
-#### **Sensory Mouthfeel 상세 플로우**:
+#### **QC Measurement 상세 플로우**:
 ```
-6개 파라미터를 0-100 슬라이더로 평가
-    ├─ Body (바디감): 가벼움 ↔ 묵직함
+TDS 측정 (선택적 필수)
+    ↓
+추출 수율 자동 계산 (18-22% SCA 기준)
+    ↓
+품질 등급 판정 (미추출/적정/과추출)
+    ↓
+SCA 표준 대비 평가 상태 표시
+```
+
+#### **SCA Sensory Evaluation 상세 플로우**:
+```
+SCA 표준 7개 항목을 1-5 스케일로 평가
+    ├─ Fragrance/Aroma (향미): 약함 ↔ 강함
+    ├─ Flavor (맛): 단조로움 ↔ 복합적
+    ├─ Aftertaste (여운): 짧음 ↔ 김
     ├─ Acidity (산미): 낮음 ↔ 높음
-    ├─ Sweetness (단맛): 없음 ↔ 강함
-    ├─ Finish (피니시): 짧음 ↔ 길음
-    ├─ Bitterness (쓴맛): 없음 ↔ 강함
-    └─ Balance (균형감): 불균형 ↔ 완벽한 균형
+    ├─ Body (바디): 가벼움 ↔ 묵직함
+    ├─ Balance (균형): 불균형 ↔ 완벽
+    └─ Overall (종합): 낮음 ↔ 뛰어남
 ```
 
 **인터랙션 세부사항**:

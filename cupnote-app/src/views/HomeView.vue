@@ -12,7 +12,7 @@
           로스터의 의도와 비교해보세요
         </p>
         <div class="hero-actions">
-          <RouterLink to="/coffee-setup" class="btn-primary">
+          <RouterLink to="/mode-selection" class="btn-primary">
             ☕ 커피 기록 시작하기
           </RouterLink>
           <RouterLink to="/records" class="btn-secondary">
@@ -105,7 +105,7 @@
           첫 번째 커피를 기록하고<br>
           당신의 커피 여정을 시작하세요
         </p>
-        <RouterLink to="/coffee-setup" class="btn-primary btn-large">
+        <RouterLink to="/mode-selection" class="btn-primary btn-large">
           🚀 무료로 시작하기
         </RouterLink>
       </div>

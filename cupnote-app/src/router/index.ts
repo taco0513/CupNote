@@ -18,16 +18,47 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue'),
     },
+    // Tasting Flow Routes
     {
-      path: '/coffee-setup',
-      name: 'coffee-setup',
-      component: () => import('../views/coffee-setup/CoffeeSetupView.vue'),
+      path: '/mode-selection',
+      name: 'mode-selection',
+      component: () => import('../views/tasting-flow/ModeSelectionView.vue'),
       meta: { requiresAuth: true }
     },
     {
-      path: '/flavor-selection',
-      name: 'flavor-selection',
-      component: () => import('../views/tasting-flow/FlavorSelectionView.vue'),
+      path: '/coffee-info',
+      name: 'coffee-info',
+      component: () => import('../views/tasting-flow/CoffeeInfoView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/home-cafe',
+      name: 'home-cafe',
+      component: () => import('../views/tasting-flow/HomeCafeView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/pro-brewing',
+      name: 'pro-brewing', 
+      component: () => import('../views/tasting-flow/ProBrewingView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/qc-measurement',
+      name: 'qc-measurement',
+      component: () => import('../views/tasting-flow/QcMeasurementView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/pro-qc-report',
+      name: 'pro-qc-report',
+      component: () => import('../views/tasting-flow/ProQcReportView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/unified-flavor',
+      name: 'unified-flavor',
+      component: () => import('../views/tasting-flow/UnifiedFlavorView.vue'),
       meta: { requiresAuth: true }
     },
     {
@@ -37,9 +68,15 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: '/personal-notes',
-      name: 'personal-notes',
-      component: () => import('../views/tasting-flow/PersonalNotesView.vue'),
+      path: '/sensory-slider',
+      name: 'sensory-slider',
+      component: () => import('../views/tasting-flow/SensorySliderView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/personal-comment',
+      name: 'personal-comment',
+      component: () => import('../views/tasting-flow/PersonalCommentView.vue'),
       meta: { requiresAuth: true }
     },
     {
@@ -49,10 +86,31 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: '/tasting-result',
-      name: 'tasting-result',
+      path: '/result',
+      name: 'result',
       component: () => import('../views/tasting-flow/ResultView.vue'),
       meta: { requiresAuth: true }
+    },
+    // Legacy route redirects for backward compatibility
+    {
+      path: '/coffee-setup',
+      redirect: '/mode-selection'
+    },
+    {
+      path: '/flavor-selection',
+      redirect: '/unified-flavor'
+    },
+    {
+      path: '/personal-notes',
+      redirect: '/personal-comment'
+    },
+    {
+      path: '/experimental-data',
+      redirect: '/pro-brewing'
+    },
+    {
+      path: '/tasting-result',
+      redirect: '/result'
     },
     {
       path: '/records',

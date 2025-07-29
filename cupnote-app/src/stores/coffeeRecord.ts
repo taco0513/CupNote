@@ -6,12 +6,67 @@ import type { Database } from '../types/database.types'
 type CoffeeRecord = Database['public']['Tables']['coffee_records']['Row']
 type CoffeeRecordInsert = Database['public']['Tables']['coffee_records']['Insert']
 
+interface HomeCafeData {
+  dripper: string
+  recipe: {
+    coffee_amount: number
+    water_amount: number
+    ratio: number
+    water_temp: number
+    brew_time: number
+    lap_times: number[]
+  }
+  quick_notes?: string
+}
+
+interface SensorySliderData {
+  ratings: {
+    acidity: number
+    sweetness: number
+    bitterness: number
+    body: number
+    aftertaste: number
+    balance: number
+  }
+  overall_score: number
+  quick_notes: string
+}
+
+interface ProBrewingData {
+  extraction_method: string
+  grind_size: string
+  tds: number
+  extraction_yield: number
+  water_tds: number
+  water_ph: number
+  bloom_time: number
+  total_time: number
+  notes?: string
+}
+
 interface TastingSession {
+  // Mode
+  mode?: 'cafe' | 'homecafe' | 'pro'
+  
   // Coffee setup
   coffeeName: string
   cafeName: string
   location: string
   brewingMethod: string
+  origin?: string
+  variety?: string
+  altitude?: string
+  process?: string
+  roastLevel?: string
+  
+  // HomeCafe data
+  homeCafeData?: HomeCafeData
+  
+  // Pro brewing data (Pro mode)
+  proBrewingData?: ProBrewingData
+  
+  // Sensory slider data (Pro mode)
+  sensorySliderData?: SensorySliderData
   
   // Flavor selection
   selectedFlavors: Array<{ id: number; text: string }>
@@ -43,6 +98,11 @@ export const useCoffeeRecordStore = defineStore('coffeeRecord', () => {
     cafeName: string
     location: string
     brewingMethod: string
+    origin?: string
+    variety?: string
+    altitude?: string
+    process?: string
+    roastLevel?: string
   }) => {
     currentSession.value = {
       ...currentSession.value,
@@ -102,6 +162,11 @@ export const useCoffeeRecordStore = defineStore('coffeeRecord', () => {
         cafe_name: currentSession.value.cafeName!,
         location: currentSession.value.location!,
         brewing_method: currentSession.value.brewingMethod!,
+        origin: currentSession.value.origin || null,
+        variety: currentSession.value.variety || null,
+        altitude: currentSession.value.altitude || null,
+        process: currentSession.value.process || null,
+        roast_level: currentSession.value.roastLevel || null,
         selected_flavors: currentSession.value.selectedFlavors || [],
         selected_sensory: currentSession.value.selectedSensory || [],
         personal_notes: currentSession.value.personalNotes || null,

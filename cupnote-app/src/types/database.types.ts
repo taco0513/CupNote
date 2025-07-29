@@ -49,6 +49,11 @@ export interface Database {
           cafe_name: string
           location: string
           brewing_method: string
+          origin: string | null
+          variety: string | null
+          altitude: string | null
+          process: string | null
+          roast_level: string | null
           selected_flavors: Json
           selected_sensory: Json
           personal_notes: string | null
@@ -67,6 +72,11 @@ export interface Database {
           cafe_name: string
           location: string
           brewing_method: string
+          origin?: string | null
+          variety?: string | null
+          altitude?: string | null
+          process?: string | null
+          roast_level?: string | null
           selected_flavors?: Json
           selected_sensory?: Json
           personal_notes?: string | null
@@ -85,6 +95,11 @@ export interface Database {
           cafe_name?: string
           location?: string
           brewing_method?: string
+          origin?: string | null
+          variety?: string | null
+          altitude?: string | null
+          process?: string | null
+          roast_level?: string | null
           selected_flavors?: Json
           selected_sensory?: Json
           personal_notes?: string | null

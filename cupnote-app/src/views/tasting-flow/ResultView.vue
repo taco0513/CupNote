@@ -258,7 +258,7 @@ const shareResult = () => {
 }
 
 const startNewTasting = () => {
-  router.push('/coffee-setup')
+  router.push('/mode-selection')
 }
 
 const closeAchievement = () => {
