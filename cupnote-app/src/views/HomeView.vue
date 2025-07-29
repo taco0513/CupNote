@@ -12,12 +12,36 @@
           로스터의 의도와 비교해보세요
         </p>
         <div class="hero-actions">
-          <RouterLink to="/mode-selection" class="btn-primary">
+          <RouterLink 
+            v-if="isAuthenticated" 
+            to="/mode-selection" 
+            class="btn-primary"
+          >
             ☕ 커피 기록 시작하기
           </RouterLink>
-          <RouterLink to="/records" class="btn-secondary">
+          <RouterLink 
+            v-else 
+            to="/auth" 
+            class="btn-primary"
+          >
+            🚀 무료로 시작하기
+          </RouterLink>
+          
+          <RouterLink 
+            v-if="isAuthenticated" 
+            to="/records" 
+            class="btn-secondary"
+          >
             📚 나의 기록 보기
           </RouterLink>
+          <RouterLink 
+            v-else 
+            to="/auth?view=signup" 
+            class="btn-secondary"
+          >
+            📝 회원가입
+          </RouterLink>
+          
           <button @click="showDemo" class="btn-demo">
             ✨ 데모 체험하기
           </button>
@@ -105,19 +129,28 @@
           첫 번째 커피를 기록하고<br>
           당신의 커피 여정을 시작하세요
         </p>
-        <RouterLink to="/mode-selection" class="btn-primary btn-large">
-          🚀 무료로 시작하기
+        <RouterLink 
+          :to="isAuthenticated ? '/mode-selection' : '/auth'" 
+          class="btn-primary btn-large"
+        >
+          {{ isAuthenticated ? '☕ 커피 기록하기' : '🚀 무료로 시작하기' }}
         </RouterLink>
       </div>
     </section>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useNotificationStore } from '../stores/notification'
+import { useAuthStore } from '../stores/auth'
 
 const notificationStore = useNotificationStore()
+const authStore = useAuthStore()
+
+// Computed
+const isAuthenticated = computed(() => authStore.isAuthenticated)
 
 const showDemo = () => {
   // Master Playbook의 Vibe Coding 방법론을 활용한 인터랙티브 데모

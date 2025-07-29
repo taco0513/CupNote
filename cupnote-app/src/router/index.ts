@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import { useAuthStore } from '../stores/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -136,10 +135,11 @@ const router = createRouter({
       component: () => import('../views/AdminDashboard.vue'),
       meta: { requiresAuth: true }
     },
+    // Authentication Routes
     {
-      path: '/auth/login',
-      name: 'login',
-      component: () => import('../views/auth/LoginView.vue'),
+      path: '/auth',
+      name: 'auth',
+      component: () => import('../views/auth/AuthView.vue'),
       meta: { requiresGuest: true }
     },
     {
@@ -147,40 +147,55 @@ const router = createRouter({
       name: 'auth-callback',
       component: () => import('../views/auth/CallbackView.vue')
     },
+    {
+      path: '/auth/reset-password',
+      name: 'reset-password',
+      component: () => import('../views/auth/ResetPasswordView.vue')
+    },
   ],
 })
 
 // Navigation guards
 router.beforeEach(async (to, from, next) => {
+  // Import auth store dynamically to avoid circular dependency
+  const { useAuthStore } = await import('../stores/auth')
   const authStore = useAuthStore()
   
-  // Development mode: Skip auth for easier testing
-  const isDevelopment = import.meta.env.DEV
-  
-  if (isDevelopment) {
-    // In development, allow all routes without authentication
-    next()
-    return
-  }
-  
-  // Wait for auth initialization if not already done
-  if (!authStore.user && !authStore.isLoading) {
-    await authStore.initialize()
+  // Initialize auth if not already done
+  if (!authStore.initialized) {
+    await authStore.initializeAuth()
   }
   
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   const requiresGuest = to.matched.some(record => record.meta.requiresGuest)
   const isAuthenticated = authStore.isAuthenticated
   
+  // Check mode access for protected routes
+  if (requiresAuth && isAuthenticated) {
+    const mode = to.query.mode || to.params.mode
+    if (mode && !authStore.hasAccess(mode)) {
+      // Redirect to appropriate mode based on user experience
+      const experience = authStore.userMetadata.coffee_experience || 'beginner'
+      const redirectMode = experience === 'beginner' ? 'cafe' : 'homecafe'
+      
+      next({
+        ...to,
+        query: { ...to.query, mode: redirectMode }
+      })
+      return
+    }
+  }
+  
   if (requiresAuth && !isAuthenticated) {
-    // Redirect to login with return path
+    // Redirect to auth page with return path
     next({
-      name: 'login',
+      name: 'auth',
       query: { redirect: to.fullPath }
     })
   } else if (requiresGuest && isAuthenticated) {
     // Redirect authenticated users away from auth pages
-    next({ name: 'home' })
+    const redirectPath = to.query.redirect || '/'
+    next(redirectPath)
   } else {
     next()
   }

@@ -17,6 +17,6 @@ app.use(router)
 
 // Initialize auth store
 const authStore = useAuthStore()
-authStore.initialize()
+authStore.initializeAuth()
 
 app.mount('#app')

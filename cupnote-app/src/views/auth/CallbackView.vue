@@ -20,30 +20,36 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, onMounted } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { RouterLink, useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '../../stores/auth'
 
-const router = useRouter();
-const authStore = useAuthStore();
-const error = ref('');
+const router = useRouter()
+const route = useRoute()
+const authStore = useAuthStore()
+const error = ref('')
 
 onMounted(async () => {
   try {
-    // The auth state change will be handled automatically by the auth store
-    // We just need to wait a bit and then redirect
+    // Initialize auth if not already done
+    if (!authStore.initialized) {
+      await authStore.initializeAuth()
+    }
+    
+    // Wait for auth state to settle
     setTimeout(() => {
       if (authStore.isAuthenticated) {
         // Redirect to home or original destination
-        const redirect = router.currentRoute.value.query.redirect as string | undefined;
-        router.push(redirect || '/');
+        const redirectPath = route.query.redirect || '/'
+        router.push(redirectPath)
       } else {
-        error.value = '로그인 처리 중 오류가 발생했습니다.';
+        error.value = '로그인 처리 중 오류가 발생했습니다.'
       }
     }, 2000)
   } catch (err) {
-    error.value = err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.';
+    console.error('Callback error:', err)
+    error.value = err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.'
   }
 })
 </script>
