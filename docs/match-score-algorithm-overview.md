@@ -72,17 +72,17 @@ Match Score = (향미 40%) + (감각 40%) + (전체 인상 20%)
 
 ## 🚀 단계적 구현 전략
 
-### Phase 1: MVP (1-2주)
-- **Level 1 구현**: 향미 전용으로 시작
-- 10-20개 주요 향미만 지원
-- 기본 매칭 로직
-- 심플한 UI/UX
+### Phase 1: MVP (1-2주) - 동적 레벨 시스템
+- **동적 레벨 구현**: 사용자 입력에 따라 Level 1 또는 2 자동 적용
+- 감각 표현 스킵 가능
+- 30개 주요 향미 지원
+- 유연한 평가 시스템
 
 ### Phase 2: 정식 출시 (3-4주)
-- **Level 2 도입**: 향미 + 감각
-- 사용자 레벨 시스템
-- 30-50개 향미 확장
-- 한국어 감각 표현 매핑
+- **레벨 시스템 고도화**: 사용자 통계 기반 개인화
+- 50개 향미로 확장
+- 한국어 감각 표현 매핑 강화
+- 사용 패턴 분석
 
 ### Phase 3: 프리미엄 (5-8주)
 - **Level 3 옵션**: 전체 버전
@@ -92,20 +92,35 @@ Match Score = (향미 40%) + (감각 40%) + (전체 인상 20%)
 
 ## 📊 레벨 선택 가이드
 
+### MVP: 동적 레벨 시스템
 ```javascript
-// 자동 레벨 추천 시스템
-function recommendMatchScoreLevel(user) {
-  const { experience, tastingCount, preferences } = user;
+// 사용자 입력에 따른 자동 레벨 결정
+function determineMatchScoreLevel(tastingData) {
+  const { flavors, sensoryExpressions } = tastingData;
   
-  if (tastingCount < 10 || experience === 'beginner') {
-    return 'level1'; // 향미 전용
-  } else if (tastingCount < 50 || experience === 'intermediate') {
-    return 'level2'; // 향미 + 감각
-  } else if (preferences.detailedAnalysis || experience === 'expert') {
-    return 'level3'; // 전체 버전
+  // 감각 표현이 없거나 스킵한 경우
+  if (!sensoryExpressions || isEmptySensoryExpressions(sensoryExpressions)) {
+    return 'level1'; // 향미만 평가
   }
   
-  return 'level2'; // 기본값
+  // 감각 표현이 있는 경우
+  return 'level2'; // 향미 + 감각 평가
+}
+```
+
+### 향후: 사용자 경험 기반 추천
+```javascript
+// 사용자 통계 기반 레벨 추천
+function recommendMatchScoreLevel(userStats) {
+  const { sensoryCompletionRate, totalTastings } = userStats;
+  
+  if (sensoryCompletionRate < 30) {
+    return 'level1'; // 감각 표현 잘 안함
+  } else if (sensoryCompletionRate > 70) {
+    return 'level2'; // 감각 표현 자주 함
+  }
+  
+  return 'dynamic'; // 선택적
 }
 ```
 

@@ -50,12 +50,14 @@
    - 종합 보고서 작성 및 MVP 로드맵 수립
    - 기술 스택 추천: React Native + Expo, Node.js, PostgreSQL
 
-10. **기술 스택 및 MVP 범위 최종 결정** ⭐ NEW
+10. **기술 스택 및 MVP 범위 최종 결정** 
    - PWA + Capacitor로 기술 스택 확정 (React Native 대신)
    - MVP 8개 화면 유지 결정
    - Todo App 패턴 수정: 다단계 폼, 오프라인 동기화
    - Supabase 백엔드 선택 (커스텀 오프라인 레이어 추가)
-   - Match Score MVP: Level 2 (향미 50% + 감각 50%) 확정
+   - Match Score MVP: 동적 레벨 시스템 확정 ⭐ UPDATE
+     - 감각 표현 스킵 시 Level 1 (향미만)
+     - 감각 표현 입력 시 Level 2 (향미 + 감각)
    - Match Score 3단계 레벨 시스템 문서화 완료
 
 ### 📋 현재 프로젝트 구조
@@ -83,7 +85,9 @@
 - [ ] **Phase 1 MVP 개발 시작** (2-3주)
   - [ ] 테이스팅 기록 기능 (8개 화면)
   - [ ] 한국식 표현 변환
-  - [ ] Match Score Level 2 구현 (향미 + 감각)
+  - [ ] Match Score 동적 레벨 구현
+    - [ ] 감각 표현 스킵 기능
+    - [ ] Level 1/2 자동 적용
   - [ ] 기본 사용자 관리
   - [ ] PWA + Capacitor 설정
 
@@ -113,6 +117,6 @@
 - 개발 준비도: 98% 완료 (기술 스택 확정)
 - MVP 로드맵: 3주 계획 수립 완료
 - 기술 스택 확정: PWA + Capacitor + Supabase
-- Match Score MVP: Level 2 (향미 50% + 감각 50%)
+- Match Score MVP: 동적 레벨 시스템 (감각 스킵 시 Level 1, 입력 시 Level 2)
 - Smart Assistant 활용 계획 수립
 - MASTER_PLAYBOOK 체크리스트 작성 (docs/master-playbook-checklist.md)
