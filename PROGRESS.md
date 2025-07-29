@@ -78,6 +78,12 @@
   - [x] Frontend: PWA + Capacitor (확정)
   - [x] Backend: Supabase + 커스텀 오프라인 레이어 (확정)
   - [x] Database: Supabase (PostgreSQL) (확정)
+- [x] **브랜드 스토리 및 기능 확정** ✅ 완료 (2025-07-29)
+  - [x] CupNote 브랜드 철학 정립
+  - [x] 향미 선택 시스템 확정 (SCA 85개, Level 2/3)
+  - [x] 커뮤니티 요소 설계 ("다른 사람들은?")
+  - [x] Personal Growth System 설계 (통계, 배지, 레벨)
+  - [x] 모든 페이지 문서 검토 및 업데이트
 - [ ] **프로젝트 초기화**
   - [ ] 선택된 기술로 scaffolding
   - [ ] 모듈형 구조 설정
@@ -88,6 +94,8 @@
   - [ ] Match Score 동적 레벨 구현
     - [ ] 감각 표현 스킵 기능
     - [ ] Level 1/2 자동 적용
+  - [ ] Personal Growth System 기본 구현
+  - [ ] 커뮤니티 기능 MVP ("다른 사람들은?")
   - [ ] 기본 사용자 관리
   - [ ] PWA + Capacitor 설정
 

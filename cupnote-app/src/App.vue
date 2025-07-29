@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import SupabaseConnectionTest from './components/SupabaseConnectionTest.vue'
+// import SupabaseConnectionTest from './components/SupabaseConnectionTest.vue'
 </script>
 
 <template>
@@ -21,9 +21,6 @@ import SupabaseConnectionTest from './components/SupabaseConnectionTest.vue'
 
     <main class="main-content">
       <div class="container">
-        <!-- 개발 중: Supabase 연결 테스트 -->
-        <SupabaseConnectionTest />
-        
         <!-- 실제 라우터 뷰 -->
         <RouterView />
       </div>

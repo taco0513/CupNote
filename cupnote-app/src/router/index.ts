@@ -17,6 +17,31 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue'),
     },
+    {
+      path: '/coffee-setup',
+      name: 'coffee-setup',
+      component: () => import('../views/coffee-setup/CoffeeSetupView.vue'),
+    },
+    {
+      path: '/flavor-selection',
+      name: 'flavor-selection',
+      component: () => import('../views/tasting-flow/FlavorSelectionView.vue'),
+    },
+    {
+      path: '/sensory-expression',
+      name: 'sensory-expression',
+      component: () => import('../views/tasting-flow/SensoryExpressionView.vue'),
+    },
+    {
+      path: '/personal-notes',
+      name: 'personal-notes',
+      component: () => import('../views/tasting-flow/PersonalNotesView.vue'),
+    },
+    {
+      path: '/roaster-notes',
+      name: 'roaster-notes',
+      component: () => import('../views/tasting-flow/RoasterNotesView.vue'),
+    },
   ],
 })
 

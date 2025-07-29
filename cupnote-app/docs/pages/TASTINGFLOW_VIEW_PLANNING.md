@@ -338,4 +338,46 @@
 
 ---
 
-*문서 상태: 초안 완성, 논의 대기 중*
+---
+
+## 🆕 최종 확정사항 (2025-07-29 업데이트)
+
+### 1. 향미 선택 확정
+- **SCA Flavor Wheel 완전판**: 9개 대분류, 85개 향미
+- **Level 2/3 계층 시스템**: 기본 Level 2 선택, 선택적 Level 3 구체화
+- **별도 상세 문서**: [FLAVOR_SELECTION_PLANNING.md](FLAVOR_SELECTION_PLANNING.md)
+
+### 2. 감각 표현 확정
+- **4개 카테고리**: 산미, 단맛, 바디, 여운 (6개→4개 단순화)
+- **카테고리별 4개 표현**: 전문 감각 표현 리스트 기반
+- **선택 방식**: 각 카테고리별 1개씩 선택 (선택적)
+
+### 3. 개인 메모 확정 (인터랙티브)
+- **이전 선택 결과 표시**: 향미+감각을 클릭 가능한 버튼으로
+- **빠른 입력**: 버튼 클릭 시 메모에 자동 추가
+- **스마트 처리**: 조사와 띄어쓰기 자동 처리
+- **중복 방지**: 사용된 버튼은 비활성화
+
+### 4. 로스터 노트 확정
+- **선택사항으로 변경**: 필수→옵션
+- **스킵 허용**: Level 1 매치 스코어만 제공
+- **향후 확장**: 커피 DB 자동 매칭 준비
+
+### 5. 브랜드 철학 반영
+- **내 언어 존중**: "블루베리" 대신 "새콤달콤 사탕" 표현 허용
+- **격려 중심**: 정답 찾기가 아닌 감각 인정
+- **부담 없는 진행**: 모든 단계 선택적 참여 가능
+
+---
+
+## 🔗 연관 문서
+
+- [Flavor Selection 상세](FLAVOR_SELECTION_PLANNING.md)
+- [Result View 통합](RESULT_VIEW_PLANNING.md)
+- [CupNote 브랜드 스토리](../CUPNOTE_STORY_AND_VISION.md)
+- [Personal Growth System](../features/PERSONAL_GROWTH_SYSTEM.md)
+- [Community Features](../features/COMMUNITY_FEATURES.md)
+
+---
+
+*문서 상태: 최종 확정 완료*
