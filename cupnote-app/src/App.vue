@@ -1,6 +1,7 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import { useAuthStore } from './stores/auth'
+import NotificationToast from './components/NotificationToast.vue'
 
 const authStore = useAuthStore()
 </script>
@@ -22,6 +23,7 @@ const authStore = useAuthStore()
           <template v-if="authStore.isAuthenticated">
             <RouterLink to="/records" class="nav-link">기록</RouterLink>
             <RouterLink to="/stats" class="nav-link">통계</RouterLink>
+            <RouterLink to="/admin" class="nav-link admin-link">📊 관리자</RouterLink>
             <RouterLink to="/profile" class="nav-link">프로필</RouterLink>
           </template>
           
@@ -39,6 +41,9 @@ const authStore = useAuthStore()
         <RouterView />
       </div>
     </main>
+    
+    <!-- 알림 토스트 -->
+    <NotificationToast />
   </div>
 </template>
 
@@ -115,6 +120,18 @@ const authStore = useAuthStore()
 .nav-link.auth-link:hover {
   background: rgba(255, 255, 255, 0.25);
   border-color: rgba(255, 255, 255, 0.5);
+}
+
+.nav-link.admin-link {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-weight: 600;
+}
+
+.nav-link.admin-link:hover {
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .main-content {

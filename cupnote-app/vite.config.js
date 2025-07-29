@@ -62,4 +62,42 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  build: {
+    // 빌드 최적화
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor': ['vue', 'vue-router', 'pinia'],
+          'supabase': ['@supabase/supabase-js'],
+        },
+      },
+    },
+    // 압축 설정
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
+    // 청크 크기 경고 임계값
+    chunkSizeWarningLimit: 1000,
+  },
+  // 프로덕션 최적화
+  optimizeDeps: {
+    include: ['vue', 'vue-router', 'pinia', '@supabase/supabase-js'],
+  },
+  server: {
+    port: 5173,
+    host: '0.0.0.0',
+    cors: true,
+    fs: {
+      strict: false
+    }
+  },
+  preview: {
+    port: 4173,
+    host: '0.0.0.0',
+    cors: true
+  },
 })

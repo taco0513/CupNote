@@ -248,8 +248,9 @@ export const useAuthStore = defineStore('auth', () => {
 
       if (xpError) throw xpError
 
+      const oldLevel = userProfile.value?.level || 1
       userProfile.value = data
-      return { xpGained: amount, levelUp: newLevel > userProfile.value.level }
+      return { xpGained: amount, levelUp: newLevel > oldLevel }
     } catch (err) {
       console.error('Failed to add XP:', err)
     }

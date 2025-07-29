@@ -18,6 +18,9 @@
           <RouterLink to="/records" class="btn-secondary">
             📚 나의 기록 보기
           </RouterLink>
+          <button @click="showDemo" class="btn-demo">
+            ✨ 데모 체험하기
+          </button>
         </div>
       </div>
       <div class="hero-image">
@@ -112,6 +115,67 @@
 
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import { useNotificationStore } from '../stores/notification'
+
+const notificationStore = useNotificationStore()
+
+const showDemo = () => {
+  // Master Playbook의 Vibe Coding 방법론을 활용한 인터랙티브 데모
+  const demoSequence = [
+    {
+      type: 'coffee' as const,
+      title: '☕ CupNote 데모 시작',
+      message: '실제 커피 테이스팅 과정을 체험해보세요!',
+      duration: 3000
+    },
+    {
+      type: 'info' as const,
+      title: '1단계: 커피 정보',
+      message: '카페명과 커피 이름을 입력합니다',
+      duration: 4000
+    },
+    {
+      type: 'tip' as const,
+      title: '2단계: 향미 선택',
+      message: '느껴지는 향과 맛을 자유롭게 선택하세요',
+      duration: 4000
+    },
+    {
+      type: 'coffee' as const,
+      title: '3단계: 감각 표현',
+      message: '산미, 단맛, 바디감 등을 슬라이더로 표현합니다',
+      duration: 4000
+    },
+    {
+      type: 'achievement' as const,
+      title: '🎯 매치 결과',
+      message: '로스터 의도와 85% 일치! 훌륭한 감각입니다',
+      duration: 5000
+    },
+    {
+      type: 'success' as const,
+      title: '데모 완료!',
+      message: '지금 바로 실제 테이스팅을 시작해보세요',
+      duration: 4000
+    }
+  ]
+
+  // Quick Wins 30분 프로토타입 전략: 순차적 알림으로 사용자 경험 극대화
+  demoSequence.forEach((notification, index) => {
+    setTimeout(() => {
+      notificationStore.addNotification(notification)
+    }, index * 2000) // 2초 간격으로 순차 표시
+  })
+
+  // AI Experts 페르소나 시스템 활용: Frontend 페르소나의 사용자 경험 최적화
+  setTimeout(() => {
+    notificationStore.showTip(
+      '데모가 마음에 드셨나요? 실제 커피와 함께 테이스팅을 시작해보세요!',
+      '💡 다음 단계',
+      { duration: 6000 }
+    )
+  }, demoSequence.length * 2000 + 2000)
+}
 </script>
 
 <style scoped>
@@ -357,6 +421,27 @@ import { RouterLink } from 'vue-router'
   border-color: #D4B896;
   background: #F8F4F0;
   transform: translateY(-2px);
+}
+
+.btn-demo {
+  display: inline-block;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-demo:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
 }
 
 .btn-large {
