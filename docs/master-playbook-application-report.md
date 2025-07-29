@@ -68,53 +68,55 @@ CupNote 프로젝트의 현재 상태와 Master Playbook 분석 결과를 종합
 ## 💡 기술 스택 추천
 
 ### Frontend
-**추천: React Native + Expo**
-- ✅ 크로스 플랫폼 (iOS/Android)
-- ✅ JavaScript 일관성
-- ✅ 빠른 개발 속도
-- ✅ PWA 호환
-- ✅ 큰 생태계
+**최종 결정: PWA + Capacitor** ✅
+- ✅ 웹 기술 일관성 (HTML/CSS/JS)
+- ✅ 프로토타입 코드 재사용
+- ✅ 크로스 플랫폼 (iOS/Android/Web)
+- ✅ 단일 코드베이스
+- ✅ 향후 확장 용이
 
 ### Backend
-**추천: Node.js + Express + TypeScript**
-- ✅ JavaScript 일관성
-- ✅ Master Playbook 예제 활용
-- ✅ 빠른 개발
-- ✅ 타입 안정성
+**최종 결정: Supabase + Custom Offline Layer** ✅
+- ✅ 빠른 MVP 개발 (2주 단축)
+- ✅ 내장 인증 시스템
+- ✅ 실시간 동기화
+- ✅ PostgreSQL 기반
+- ✅ 커스텀 오프라인 레이어 추가
 
 ### Database
-**추천: PostgreSQL + Redis**
-- ✅ 관계형 데이터 (Coffee ↔ Tasting)
+**최종 결정: Supabase (PostgreSQL)** ✅
+- ✅ 관계형 데이터 완벽 지원
 - ✅ JSON 필드 지원
-- ✅ Redis 캐싱/세션
+- ✅ 실시간 구독 기능
+- ✅ 자동 백업
 
 ### 인프라
-**추천: Supabase (초기) → AWS (확장)**
-- ✅ 빠른 프로토타이핑
-- ✅ 내장 인증
-- ✅ 실시간 기능
-- ✅ 확장 가능
+**최종 결정: Supabase** ✅
+- ✅ All-in-one 솔루션
+- ✅ 무료 티어로 시작
+- ✅ 자동 스케일링
+- ✅ 향후 self-hosting 가능
 
 ## 📅 MVP 개발 로드맵
 
 ### Phase 1: Core MVP (2-3주)
 **Week 1: 기초 구축**
-- [ ] 프로젝트 초기화 (React Native + Expo)
-- [ ] 기본 네비게이션 구조
+- [ ] PWA 프로젝트 초기화 (Vue.js or React)
+- [ ] Supabase 프로젝트 설정
 - [ ] Todo App 인증 시스템 적용
-- [ ] 데이터베이스 스키마 구현
+- [ ] 오프라인 DB 설정 (IndexedDB)
 
 **Week 2: 핵심 기능**
-- [ ] 테이스팅 기록 CRUD
-- [ ] 브루 타이머 구현
+- [ ] 8개 화면 UI 구현
+- [ ] 다단계 폼 로직
+- [ ] Match Score Level 2 (향미 50% + 감각 50%)
 - [ ] 한국어 표현 시스템
-- [ ] 오프라인 저장
 
 **Week 3: 완성 및 배포**
-- [ ] Match Score 구현
-- [ ] PWA 최적화
-- [ ] 테스트 및 버그 수정
-- [ ] 베타 배포
+- [ ] 오프라인 동기화 구현
+- [ ] Capacitor iOS 빌드
+- [ ] TestFlight 배포
+- [ ] 버그 수정 및 최적화
 
 ### Phase 2: Social Features (2주)
 - [ ] 사용자 프로필
@@ -132,27 +134,35 @@ CupNote 프로젝트의 현재 상태와 Master Playbook 분석 결과를 종합
 
 ### 1. 환경 설정 (Day 1)
 ```bash
-# Expo CLI 설치
-npm install -g expo-cli
+# Vue.js 프로젝트 생성 (Option 1)
+npm create vue@latest cupnote-app
+cd cupnote-app
+npm install
 
-# 프로젝트 생성
-expo init cupnote-app --template expo-template-blank-typescript
+# React 프로젝트 생성 (Option 2)
+npm create vite@latest cupnote-app -- --template react-ts
+cd cupnote-app
+npm install
 
-# 필수 패키지 설치
-npm install @react-navigation/native
-npm install react-native-async-storage
-npm install expo-secure-store
+# PWA 플러그인 설치
+npm install -D vite-plugin-pwa workbox-window
+
+# Capacitor 설치
+npm install @capacitor/core @capacitor/cli
+npx cap init
 ```
 
 ### 2. 프로토타입 마이그레이션 (Day 2-3)
-- HTML 구조 → React Native 컴포넌트
-- CSS → StyleSheet
-- JavaScript 로직 → React Hooks
+- HTML 구조 → Vue/React 컴포넌트
+- CSS Design Tokens → 그대로 활용
+- JavaScript 로직 → Composition API (Vue) or Hooks (React)
+- Service Worker → 그대로 활용
 
-### 3. 인증 시스템 (Day 4-5)
-- Todo App의 JWT 코드 복사
-- 로그인/회원가입 UI
-- 토큰 관리
+### 3. Supabase 설정 (Day 4-5)
+- Supabase 프로젝트 생성
+- 인증 시스템 설정
+- 데이터베이스 스키마 생성
+- 오프라인 동기화 레이어 설계
 
 ## 📈 성공 지표
 
@@ -173,24 +183,25 @@ npm install expo-secure-store
 ### 1. 빠른 실행
 - 프로토타입 검증 완료
 - Master Playbook 패턴 활용
-- 최소 기능으로 시작
+- Supabase로 2주 단축
 
 ### 2. 사용자 중심
 - 한국 커피 문화 반영
-- 모바일 우선 설계
-- 직관적 UX
+- Match Score Level 2 (균형잡힌 평가)
+- 직관적 8단계 플로우
 
 ### 3. 기술적 우수성
-- 오프라인 우선
-- 실시간 성능
+- PWA + Capacitor (크로스 플랫폼)
+- 오프라인 우선 설계
 - 확장 가능한 구조
 
 ## 🎬 다음 단계
 
 ### 즉시 (Today)
-1. [ ] 기술 스택 최종 결정
-2. [ ] 개발 환경 설정
-3. [ ] 프로젝트 초기화
+1. [x] 기술 스택 최종 결정 ✅
+2. [ ] Vue.js vs React 선택
+3. [ ] 개발 환경 설정
+4. [ ] 프로젝트 초기화
 
 ### 이번 주
 1. [ ] 기본 구조 구축
@@ -207,10 +218,10 @@ npm install expo-secure-store
 CupNote은 명확한 비전과 검증된 프로토타입을 보유한 프로젝트입니다. Master Playbook의 실전 예제들을 활용하면 2-3주 내에 MVP를 출시할 수 있습니다. 
 
 **핵심 전략**:
-1. React Native + Expo로 빠른 개발
-2. Todo App + Social Network 패턴 활용
-3. 오프라인 우선 + PWA 지원
-4. 한국어 특화 기능 강화
+1. PWA + Capacitor로 크로스 플랫폼 지원
+2. Supabase로 백엔드 개발 시간 단축
+3. Match Score Level 2로 균형잡힌 평가
+4. 오프라인 우선 설계 + 한국어 특화
 
 **예상 결과**: 3주 후 iOS/Android 동시 출시 가능한 MVP 완성
 
