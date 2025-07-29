@@ -20,7 +20,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '../../stores/auth'
@@ -36,7 +36,7 @@ onMounted(async () => {
     setTimeout(() => {
       if (authStore.isAuthenticated) {
         // Redirect to home or original destination
-        const redirect = router.currentRoute.value.query.redirect as string;
+        const redirect = router.currentRoute.value.query.redirect as string | undefined;
         router.push(redirect || '/');
       } else {
         error.value = '로그인 처리 중 오류가 발생했습니다.';

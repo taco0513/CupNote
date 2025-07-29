@@ -90,6 +90,15 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
   
+  // Development mode: Skip auth for easier testing
+  const isDevelopment = import.meta.env.DEV
+  
+  if (isDevelopment) {
+    // In development, allow all routes without authentication
+    next()
+    return
+  }
+  
   // Wait for auth initialization if not already done
   if (!authStore.user && !authStore.isLoading) {
     await authStore.initialize()

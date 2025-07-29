@@ -231,7 +231,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '../../stores/auth'
@@ -309,7 +309,7 @@ const handleSignIn = async () => {
     await authStore.signIn(signInForm.value.email, signInForm.value.password)
     
     // Redirect to original destination or home
-    const redirect = router.currentRoute.value.query.redirect as string;
+    const redirect = router.currentRoute.value.query.redirect as string | undefined;
     router.push(redirect || '/');
   } catch (error) {
     // Error is handled by the store
