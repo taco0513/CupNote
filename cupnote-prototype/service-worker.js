@@ -9,6 +9,7 @@ const urlsToCache = [
   '/components.css',
   '/script.js',
   '/frontend/api.js',
+  '/components/feedback.js',
   '/manifest.json',
   'https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap'
 ];
