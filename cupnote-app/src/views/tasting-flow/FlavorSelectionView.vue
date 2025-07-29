@@ -96,29 +96,32 @@
               :key="level2.id"
               class="level2-group"
             >
-              <label class="flavor-checkbox level2-checkbox">
-                <input
-                  type="checkbox"
-                  :checked="isLevel2Selected(level2)"
-                  :disabled="hasSelectedLevel3(level2)"
-                  @change="toggleLevel2(level2)"
-                />
-                <span :class="['checkbox-custom', { disabled: hasSelectedLevel3(level2) }]"></span>
-                <span :class="['flavor-name', { disabled: hasSelectedLevel3(level2) }]">
-                  {{ level2.name }}
-                </span>
+              <div class="level2-header">
+                <label class="flavor-checkbox level2-checkbox">
+                  <input
+                    type="checkbox"
+                    :checked="isLevel2Selected(level2)"
+                    :disabled="hasSelectedLevel3(level2)"
+                    @change="toggleLevel2(level2)"
+                  />
+                  <span :class="['checkbox-custom', { disabled: hasSelectedLevel3(level2) }]"></span>
+                  <span :class="['flavor-name', { disabled: hasSelectedLevel3(level2) }]">
+                    {{ level2.name }}
+                  </span>
+                </label>
                 <button
                   v-if="level2.level3Items && level2.level3Items.length > 0"
+                  type="button"
                   class="expand-level3-btn"
                   @click="toggleLevel3Section(level2.id)"
                 >
                   {{ expandedLevel3.includes(level2.id) ? '▲' : '▼' }}
                 </button>
-              </label>
+              </div>
 
               <!-- Level 3 Items -->
               <div
-                v-if="level2.level3Items && (isLevel2Selected(level2) || hasSelectedLevel3(level2))"
+                v-if="level2.level3Items && level2.level3Items.length > 0"
                 v-show="expandedLevel3.includes(level2.id)"
                 class="level3-section"
               >
@@ -211,8 +214,10 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useCoffeeRecordStore } from '../../stores/coffeeRecord'
 
 const router = useRouter()
+const coffeeRecordStore = useCoffeeRecordStore()
 
 // State
 const searchQuery = ref('')
@@ -260,7 +265,7 @@ const searchResults = computed(() => {
   return results
 })
 
-// Flavor Data
+// SCA Flavor Wheel 85개 향미 완전 데이터
 const flavorCategories = ref([
   {
     id: 'fruity',
@@ -277,7 +282,16 @@ const flavorCategories = ref([
           { id: 'strawberry', name: '딸기', description: '상큼하고 달콤한 붉은 베리' }
         ]
       },
-      { id: 'dried-fruit', name: '건조 과일' },
+      {
+        id: 'dried-fruit',
+        name: '건조 과일',
+        level3Items: [
+          { id: 'raisin', name: '건포도', description: '달콤하고 진한 건조 포도' },
+          { id: 'prune', name: '자두', description: '단단하고 깊은 맛의 건조 자두' },
+          { id: 'fig', name: '무화과', description: '부드럽고 꿀 같은 건조 과일' },
+          { id: 'date', name: '대추야자', description: '끈적하고 달콤한 열매' }
+        ]
+      },
       {
         id: 'citrus',
         name: '시트러스',
@@ -292,10 +306,13 @@ const flavorCategories = ref([
         id: 'other-fruit',
         name: '기타 과일',
         level3Items: [
-          { id: 'coconut', name: '코코넛' },
-          { id: 'cherry', name: '체리' },
-          { id: 'apple', name: '사과' },
-          { id: 'peach', name: '복숭아' }
+          { id: 'coconut', name: '코코넛', description: '고소하고 달콤한 열대 과일' },
+          { id: 'cherry', name: '체리', description: '새콤달콤한 빨간 과일' },
+          { id: 'apple', name: '사과', description: '상큼하고 깔끔한 과일' },
+          { id: 'peach', name: '복숭아', description: '부드럽고 달콤한 과일' },
+          { id: 'pear', name: '배', description: '시원하고 달콤한 과일' },
+          { id: 'grape', name: '포도', description: '달콤하고 과즙이 풍부한 과일' },
+          { id: 'pineapple', name: '파인애플', description: '달콤하고 상큼한 열대 과일' }
         ]
       }
     ]
@@ -315,8 +332,21 @@ const flavorCategories = ref([
           { id: 'honey', name: '꿀', description: '부드럽고 자연스러운 단맛' }
         ]
       },
-      { id: 'vanilla', name: '바닐라' },
-      { id: 'overall-sweet', name: '전반적 단맛' }
+      {
+        id: 'vanilla',
+        name: '바닐라',
+        level3Items: [
+          { id: 'vanilla', name: '바닐라', description: '부드럽고 크리미한 향신료' }
+        ]
+      },
+      {
+        id: 'overall-sweet',
+        name: '전반적 단맛',
+        level3Items: [
+          { id: 'brown-sugar', name: '흑설탕', description: '깊고 복합적인 단맛' },
+          { id: 'raw-sugar', name: '원당', description: '자연스럽고 깔끔한 단맛' }
+        ]
+      }
     ]
   },
   {
@@ -330,32 +360,24 @@ const flavorCategories = ref([
         level3Items: [
           { id: 'almond', name: '아몬드', description: '고소하고 부드러운 견과' },
           { id: 'hazelnut', name: '헤이즐넛', description: '진하고 버터리한 견과' },
-          { id: 'peanut', name: '땅콩', description: '구수하고 친숙한 견과' }
+          { id: 'peanut', name: '땅콩', description: '구수하고 친숙한 견과' },
+          { id: 'walnut', name: '호두', description: '쌉싸름하고 기름진 견과' },
+          { id: 'pecan', name: '피칸', description: '부드럽고 달콤한 견과' }
         ]
       },
       {
         id: 'chocolate',
         name: '초콜릿향',
         level3Items: [
-          { id: 'chocolate', name: '초콜릿', description: '달콤하고 부드러운 초콜릿' },
-          { id: 'dark-chocolate', name: '다크초콜릿', description: '쌉싸름하고 진한 카카오' }
+          { id: 'dark-chocolate', name: '다크 초콜릿', description: '진하고 쌉싸름한 초콜릿' },
+          { id: 'milk-chocolate', name: '밀크 초콜릿', description: '부드럽고 달콤한 초콜릿' }
         ]
-      }
-    ]
-  },
-  {
-    id: 'floral',
-    name: '꽃향기',
-    icon: '🌺',
-    level2Items: [
-      { id: 'black-tea', name: '홍차' },
+      },
       {
-        id: 'floral',
-        name: '꽃향기',
+        id: 'cocoa',
+        name: '코코아',
         level3Items: [
-          { id: 'chamomile', name: '카모마일' },
-          { id: 'rose', name: '장미' },
-          { id: 'jasmine', name: '자스민' }
+          { id: 'cocoa-powder', name: '코코아 파우더', description: '건조하고 쌉싸름한 코코아' }
         ]
       }
     ]
@@ -365,42 +387,182 @@ const flavorCategories = ref([
     name: '향신료',
     icon: '🌶️',
     level2Items: [
-      { id: 'pepper', name: '후추' },
       {
-        id: 'brown-spices',
-        name: '갈색 향신료',
+        id: 'pungent',
+        name: '자극적인 향신료',
         level3Items: [
-          { id: 'anise', name: '아니스' },
-          { id: 'nutmeg', name: '육두구' },
-          { id: 'cinnamon', name: '계피' },
-          { id: 'clove', name: '정향' }
+          { id: 'pepper', name: '후추', description: '날카롭고 자극적인 향신료' },
+          { id: 'chili', name: '고추', description: '매콤하고 뜨거운 향신료' }
+        ]
+      },
+      {
+        id: 'warm-spices',
+        name: '따뜻한 향신료',
+        level3Items: [
+          { id: 'cinnamon', name: '계피', description: '따뜻하고 달콤한 향신료' },
+          { id: 'nutmeg', name: '육두구', description: '진하고 향긋한 향신료' },
+          { id: 'clove', name: '정향', description: '강하고 향긋한 향신료' },
+          { id: 'cardamom', name: '카다몬', description: '상큼하고 향긋한 향신료' },
+          { id: 'ginger', name: '생강', description: '자극적이고 따뜻한 향신료' }
         ]
       }
     ]
   },
   {
     id: 'roasted',
-    name: '로스팅',
+    name: '로스팅 향',
     icon: '🔥',
     level2Items: [
-      { id: 'pipe-tobacco', name: '파이프 담배' },
-      { id: 'tobacco', name: '담배' },
       {
-        id: 'burnt-smoky',
-        name: '탄내/스모키',
+        id: 'cereal',
+        name: '곡물향',
         level3Items: [
-          { id: 'acrid', name: '신랄한' },
-          { id: 'ashy', name: '재 냄새' },
-          { id: 'smoky', name: '연기' },
-          { id: 'brown-roast', name: '브라운 로스트' }
+          { id: 'wheat', name: '밀', description: '고소하고 담백한 곡물' },
+          { id: 'toast', name: '토스트', description: '구운 빵의 고소한 향' },
+          { id: 'biscuit', name: '비스킷', description: '바삭하고 고소한 과자' },
+          { id: 'graham', name: '그레이엄', description: '통밀의 구수한 향' }
         ]
       },
       {
-        id: 'cereal',
-        name: '곡물/구운빵',
+        id: 'burnt',
+        name: '탄 향',
         level3Items: [
-          { id: 'grain', name: '곡식' },
-          { id: 'malt', name: '맥아' }
+          { id: 'burnt-sugar', name: '탄 설탕', description: '쌉싸름한 캐러멜 향' },
+          { id: 'charcoal', name: '숯', description: '스모키하고 건조한 향' }
+        ]
+      },
+      {
+        id: 'tobacco',
+        name: '담배향',
+        level3Items: [
+          { id: 'tobacco', name: '담배', description: '깊고 스모키한 향' }
+        ]
+      },
+      {
+        id: 'pipe-tobacco',
+        name: '파이프 담배',
+        level3Items: [
+          { id: 'pipe-tobacco', name: '파이프 담배', description: '달콤하고 향긋한 담배' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'vegetative',
+    name: '식물성',
+    icon: '🌿',
+    level2Items: [
+      {
+        id: 'olive-oil',
+        name: '올리브 오일',
+        level3Items: [
+          { id: 'olive-oil', name: '올리브 오일', description: '부드럽고 기름진 식물성 오일' }
+        ]
+      },
+      {
+        id: 'raw',
+        name: '날것의',
+        level3Items: [
+          { id: 'green-vegetable', name: '녹색 채소', description: '신선하고 풀냄새 나는' },
+          { id: 'under-ripe', name: '덜 익은', description: '생생하고 풋내 나는' }
+        ]
+      },
+      {
+        id: 'hay-like',
+        name: '건초 같은',
+        level3Items: [
+          { id: 'hay', name: '건초', description: '건조하고 풀 냄새 나는' },
+          { id: 'herb-like', name: '허브 같은', description: '향긋하고 약초 향의' }
+        ]
+      },
+      {
+        id: 'fresh',
+        name: '신선한',
+        level3Items: [
+          { id: 'fresh-herb', name: '신선한 허브', description: '생생하고 상쾌한 허브' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'other',
+    name: '기타',
+    icon: '🔗',
+    level2Items: [
+      {
+        id: 'paper-musty',
+        name: '종이/곰팡이 냄새',
+        level3Items: [
+          { id: 'stale', name: '쿰쿰한', description: '오래되고 탁한 냄새' },
+          { id: 'cardboard', name: '골판지', description: '건조하고 먼지 같은' },
+          { id: 'papery', name: '종이', description: '건조하고 평면적인' },
+          { id: 'woody', name: '나무', description: '목재 같은 건조한 향' },
+          { id: 'moldy', name: '곰팡이', description: '습하고 썩은 냄새' },
+          { id: 'musty', name: '눅눅한', description: '습기 있고 곰팡이 냄새' }
+        ]
+      },
+      {
+        id: 'chemical',
+        name: '화학적',
+        level3Items: [
+          { id: 'petroleum', name: '석유', description: '화학적이고 자극적인' },
+          { id: 'medicinal', name: '약품', description: '의약품 같은 화학 냄새' },
+          { id: 'skunky', name: '스컹크', description: '불쾌하고 자극적인' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'sour',
+    name: '신맛',
+    icon: '🍋',
+    level2Items: [
+      {
+        id: 'sour',
+        name: '신맛',
+        level3Items: [
+          { id: 'sour', name: '신맛', description: '자극적이고 신 맛' },
+          { id: 'vinegar', name: '식초', description: '강하고 찌르는 신맛' }
+        ]
+      },
+      {
+        id: 'alcohol-fermented',
+        name: '알코올/발효',
+        level3Items: [
+          { id: 'winey', name: '와인 같은', description: '발효된 포도주 향' },
+          { id: 'whiskey', name: '위스키', description: '강한 알코올 향' },
+          { id: 'fermented', name: '발효된', description: '숙성되고 복합적인' },
+          { id: 'overripe', name: '과숙된', description: '너무 익어서 발효된' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'green',
+    name: '그린/허브',
+    icon: '🌱',
+    level2Items: [
+      {
+        id: 'olive-oil',
+        name: '올리브 오일',
+        level3Items: [
+          { id: 'olive-oil', name: '올리브 오일', description: '부드럽고 기름진 식물성 오일' }
+        ]
+      },
+      {
+        id: 'raw',
+        name: '날것의',
+        level3Items: [
+          { id: 'green-vegetable', name: '녹색 채소', description: '신선하고 풀냄새 나는' },
+          { id: 'under-ripe', name: '덜 익은', description: '생생하고 풋내 나는' }
+        ]
+      },
+      {
+        id: 'hay-like',
+        name: '건초 같은',
+        level3Items: [
+          { id: 'hay', name: '건초', description: '건조하고 풀 냄새 나는' },
+          { id: 'herb-like', name: '허브 같은', description: '향긋하고 약초 향의' }
         ]
       }
     ]
@@ -490,33 +652,44 @@ const hasSelectedLevel3 = (level2) => {
   return level2.level3Items.some(level3 => selectedFlavorIds.value.includes(level3.id))
 }
 
-const toggleFlavor = (flavor) => {
-  const index = selectedFlavorIds.value.indexOf(flavor.id)
-  if (index === -1) {
-    selectedFlavorIds.value.push(flavor.id)
-  } else {
+const toggleLevel2 = (level2) => {
+  const isSelected = selectedFlavorIds.value.includes(level2.id)
+  
+  if (isSelected) {
+    // Level 2 해제: 해당 Level 2와 모든 Level 3 해제
+    const index = selectedFlavorIds.value.indexOf(level2.id)
     selectedFlavorIds.value.splice(index, 1)
+    
+    // Level 3도 모두 해제
+    if (level2.level3Items) {
+      level2.level3Items.forEach(level3 => {
+        const level3Index = selectedFlavorIds.value.indexOf(level3.id)
+        if (level3Index !== -1) {
+          selectedFlavorIds.value.splice(level3Index, 1)
+        }
+      })
+    }
+  } else {
+    // Level 2 선택
+    selectedFlavorIds.value.push(level2.id)
+    
+    // Level 3 섹션 자동 열기
+    if (level2.level3Items && level2.level3Items.length > 0) {
+      if (!expandedLevel3.value.includes(level2.id)) {
+        expandedLevel3.value.push(level2.id)
+      }
+    }
   }
 }
 
-const toggleLevel2 = (level2) => {
-  if (hasSelectedLevel3(level2)) {
-    // Level 3가 선택된 경우: 모든 Level 3 해제
-    level2.level3Items.forEach(level3 => {
-      const index = selectedFlavorIds.value.indexOf(level3.id)
-      if (index !== -1) {
-        selectedFlavorIds.value.splice(index, 1)
-      }
-    })
-  }
+const toggleFlavor = (flavor) => {
+  const isSelected = selectedFlavorIds.value.includes(flavor.id)
   
-  toggleFlavor(level2)
-  
-  // Level 2 선택 시 Level 3 섹션 자동 열기
-  if (selectedFlavorIds.value.includes(level2.id) && level2.level3Items && level2.level3Items.length > 0) {
-    if (!expandedLevel3.value.includes(level2.id)) {
-      expandedLevel3.value.push(level2.id)
-    }
+  if (isSelected) {
+    const index = selectedFlavorIds.value.indexOf(flavor.id)
+    selectedFlavorIds.value.splice(index, 1)
+  } else {
+    selectedFlavorIds.value.push(flavor.id)
   }
 }
 
@@ -575,8 +748,16 @@ const getSelectedCountInCategory = (category) => {
 const handleNext = () => {
   if (selectedFlavors.value.length === 0) return
   
-  // TODO: Save flavor selection data
-  console.log('Selected Flavors:', selectedFlavors.value)
+  // Convert selected flavors to simple format for storage
+  const simplifiedFlavors = selectedFlavors.value.map(flavor => ({
+    id: flavor.id,
+    text: flavor.name
+  }))
+  
+  // Save to store
+  coffeeRecordStore.updateFlavorSelection(simplifiedFlavors)
+  
+  console.log('Flavors saved:', simplifiedFlavors)
   
   // Navigate to next step (Sensory Expression)
   router.push('/sensory-expression')
@@ -765,7 +946,15 @@ onMounted(() => {
   margin-bottom: 1rem;
 }
 
+.level2-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
 .level2-checkbox {
+  flex: 1;
   font-weight: 500;
   color: #7C5842;
 }
@@ -773,11 +962,21 @@ onMounted(() => {
 .expand-level3-btn {
   background: none;
   border: none;
-  color: #A0796A;
-  font-size: 0.8rem;
+  color: #7C5842;
+  font-size: 0.9rem;
   cursor: pointer;
-  padding: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
   margin-left: 0.5rem;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.expand-level3-btn:hover {
+  background: rgba(124, 88, 66, 0.1);
+  color: #5D3F2E;
 }
 
 /* Level 3 Section */

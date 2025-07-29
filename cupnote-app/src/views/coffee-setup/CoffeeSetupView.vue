@@ -300,8 +300,10 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { useCoffeeRecordStore } from '../../stores/coffeeRecord'
 
 const router = useRouter()
+const coffeeRecordStore = useCoffeeRecordStore()
 
 // Mode Configuration
 const modes = [
@@ -405,9 +407,32 @@ const adjustTemp = (delta) => {
 const handleSubmit = () => {
   if (!isFormValid.value) return
   
-  // TODO: Save data and navigate to next step
-  console.log('Form Data:', formData.value)
-  console.log('Mode:', currentMode.value)
+  // Create location string based on mode
+  const location = currentMode.value === 'cafe' 
+    ? formData.value.cafeName 
+    : currentMode.value === 'homecafe' 
+      ? '홈카페' 
+      : '랩'
+  
+  // Create brewing method string
+  let brewingMethod = `${currentMode.value === 'cafe' ? '카페' : formData.value.dripper || '기타'}`
+  
+  if (currentMode.value !== 'cafe') {
+    brewingMethod += ` - ${formData.value.coffeeAmount}g, 1:${formData.value.ratio}`
+    if (currentMode.value === 'lab' && formData.value.waterTemp) {
+      brewingMethod += `, ${formData.value.waterTemp}°C`
+    }
+  }
+  
+  // Save to store
+  coffeeRecordStore.updateCoffeeSetup({
+    coffeeName: formData.value.coffeeName,
+    cafeName: formData.value.cafeName,
+    location: location,
+    brewingMethod: brewingMethod
+  })
+  
+  console.log('Coffee setup saved:', coffeeRecordStore.currentSession)
   
   // Navigate to flavor selection
   router.push('/flavor-selection')

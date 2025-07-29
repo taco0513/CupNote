@@ -1,6 +1,8 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-// import SupabaseConnectionTest from './components/SupabaseConnectionTest.vue'
+import { useAuthStore } from './stores/auth'
+
+const authStore = useAuthStore()
 </script>
 
 <template>
@@ -15,6 +17,18 @@ import { RouterLink, RouterView } from 'vue-router'
         <nav class="main-nav">
           <RouterLink to="/" class="nav-link">홈</RouterLink>
           <RouterLink to="/about" class="nav-link">소개</RouterLink>
+          
+          <!-- Authenticated User Navigation -->
+          <template v-if="authStore.isAuthenticated">
+            <RouterLink to="/records" class="nav-link">기록</RouterLink>
+            <RouterLink to="/stats" class="nav-link">통계</RouterLink>
+            <RouterLink to="/profile" class="nav-link">프로필</RouterLink>
+          </template>
+          
+          <!-- Guest Navigation -->
+          <template v-else>
+            <RouterLink to="/auth/login" class="nav-link auth-link">로그인</RouterLink>
+          </template>
         </nav>
       </div>
     </header>
@@ -91,6 +105,16 @@ import { RouterLink, RouterView } from 'vue-router'
 .nav-link.router-link-active {
   background: rgba(255, 255, 255, 0.2);
   font-weight: 600;
+}
+
+.nav-link.auth-link {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.nav-link.auth-link:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .main-content {

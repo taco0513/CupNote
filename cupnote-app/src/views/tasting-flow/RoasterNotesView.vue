@@ -217,8 +217,10 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useCoffeeRecordStore } from '../../stores/coffeeRecord'
 
 const router = useRouter()
+const coffeeRecordStore = useCoffeeRecordStore()
 
 // State
 const inputMethod = ref('text') // 'text', 'photo', 'skip'
@@ -268,20 +270,16 @@ const addSuggestion = (text) => {
 }
 
 const handleNext = () => {
-  const result = {
-    method: inputMethod.value,
-    notes: inputMethod.value === 'skip' ? null : roasterNotes.value.trim(),
-    timestamp: new Date().toISOString()
-  }
+  const notes = inputMethod.value === 'skip' ? null : roasterNotes.value.trim()
+  const level = inputMethod.value === 'skip' ? 1 : 2
   
-  // TODO: Save roaster notes data
-  console.log('Roaster Notes Result:', result)
+  // Save to store
+  coffeeRecordStore.updateRoasterNotes(notes, level)
   
-  // Show completion message
-  alert(`테이스팅 완료! ${inputMethod.value === 'skip' ? 'Level 1' : 'Level 2'} 매치 스코어로 결과를 확인하세요.`)
+  console.log('Roaster notes saved:', { notes, level })
   
-  // Navigate back to home for now (until result view is implemented)
-  router.push('/')
+  // Navigate to result view
+  router.push('/tasting-result')
 }
 </script>
 

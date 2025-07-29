@@ -126,8 +126,10 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useCoffeeRecordStore } from '../../stores/coffeeRecord'
 
 const router = useRouter()
+const coffeeRecordStore = useCoffeeRecordStore()
 
 // State
 const selectedExpressions = ref({})
@@ -276,8 +278,23 @@ const getCategoryName = (categoryId) => {
 }
 
 const handleNext = () => {
-  // TODO: Save sensory expression data
-  console.log('Selected Sensory Expressions:', selectedExpressions.value)
+  // Convert selected expressions to array format for storage
+  const sensoryArray = []
+  
+  Object.entries(selectedExpressions.value).forEach(([categoryId, expressions]) => {
+    expressions.forEach(expression => {
+      sensoryArray.push({
+        id: expression.id,
+        category: getCategoryName(categoryId),
+        text: expression.name
+      })
+    })
+  })
+  
+  // Save to store
+  coffeeRecordStore.updateSensoryExpression(sensoryArray)
+  
+  console.log('Sensory expressions saved:', sensoryArray)
   
   // Navigate to next step (Personal Notes)
   router.push('/personal-notes')
