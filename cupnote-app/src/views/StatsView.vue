@@ -201,30 +201,9 @@
         </div>
       </section>
 
-      <!-- Goals Section -->
-      <section class="goals-section">
-        <h3 class="section-title">목표 달성 현황</h3>
-        <div class="goals-grid">
-          <div v-for="goal in goals" :key="goal.id" class="goal-card">
-            <div class="goal-header">
-              <div class="goal-icon">{{ goal.icon }}</div>
-              <div class="goal-info">
-                <div class="goal-title">{{ goal.title }}</div>
-                <div class="goal-progress-text">{{ goal.current }}/{{ goal.target }} {{ goal.unit }}</div>
-              </div>
-            </div>
-            <div class="goal-progress-bar">
-              <div 
-                class="goal-progress-fill"
-                :style="{ width: `${Math.min((goal.current / goal.target) * 100, 100)}%` }"
-                :class="{ completed: goal.current >= goal.target }"
-              ></div>
-            </div>
-            <div class="goal-status" :class="{ completed: goal.current >= goal.target }">
-              {{ goal.current >= goal.target ? '달성 완료!' : `${goal.target - goal.current}${goal.unit} 남음` }}
-            </div>
-          </div>
-        </div>
+      <!-- Goals Dashboard -->
+      <section class="goals-dashboard-section">
+        <GoalsDashboard />
       </section>
     </div>
 
@@ -242,13 +221,16 @@ import { RouterLink } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { useCoffeeRecordStore } from '../stores/coffeeRecord'
 import { useUserStatsStore } from '../stores/userStats'
+import { useGoalsStore } from '../stores/goals'
 import LineChart from '../components/charts/LineChart.vue'
 import DoughnutChart from '../components/charts/DoughnutChart.vue'
 import BarChart from '../components/charts/BarChart.vue'
+import GoalsDashboard from '../components/goals/GoalsDashboard.vue'
 
 const authStore = useAuthStore()
 const coffeeRecordStore = useCoffeeRecordStore()
 const userStatsStore = useUserStatsStore()
+const goalsStore = useGoalsStore()
 
 // State
 const isLoading = ref(false)
@@ -520,48 +502,6 @@ const recentImprovements = computed(() => [
   }
 ])
 
-const goals = computed(() => {
-  // Combine weekly and monthly goals from userStatsStore
-  const weeklyGoalsList = weeklyGoals.value || []
-  const monthlyGoalsList = monthlyGoals.value || []
-  
-  // Fallback to computed goals if userStats not available
-  const fallbackGoals = [
-    {
-      id: 1,
-      icon: '☕',
-      title: '월간 테이스팅',
-      current: filteredRecords.value.filter(r => {
-        const recordDate = new Date(r.created_at)
-        const thisMonth = new Date()
-        return recordDate.getMonth() === thisMonth.getMonth() && 
-               recordDate.getFullYear() === thisMonth.getFullYear()
-      }).length,
-      target: 20,
-      unit: '회'
-    },
-    {
-      id: 2,
-      icon: '🎯',
-      title: '평균 점수',
-      current: averageScore.value,
-      target: 85,
-      unit: '점'
-    },
-    {
-      id: 3,
-      icon: '🔥',
-      title: '연속 기록',
-      current: currentStreak.value,
-      target: 7,
-      unit: '일'
-    }
-  ]
-  
-  return [...weeklyGoalsList, ...monthlyGoalsList].length > 0 
-    ? [...weeklyGoalsList, ...monthlyGoalsList]
-    : fallbackGoals
-})
 
 // Methods
 const formatChartDate = (dateString) => {
@@ -1069,13 +1009,9 @@ onMounted(async () => {
   color: #374151;
 }
 
-/* Goals Section */
-.goals-section {
-  background: white;
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+/* Goals Dashboard Section */
+.goals-dashboard-section {
+  margin-top: 2rem;
 }
 
 .section-title {
@@ -1083,83 +1019,6 @@ onMounted(async () => {
   font-weight: 600;
   color: #7C5842;
   margin: 0 0 1.5rem 0;
-}
-
-.goals-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1rem;
-}
-
-.goal-card {
-  background: #F8F4F0;
-  border-radius: 12px;
-  padding: 1.5rem;
-  border: 1px solid #F0E8DC;
-}
-
-.goal-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.goal-icon {
-  font-size: 1.5rem;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: white;
-  border-radius: 10px;
-  border: 1px solid #E8D5C4;
-}
-
-.goal-info {
-  flex: 1;
-}
-
-.goal-title {
-  font-weight: 600;
-  color: #7C5842;
-  margin-bottom: 0.25rem;
-}
-
-.goal-progress-text {
-  font-size: 0.9rem;
-  color: #666;
-}
-
-.goal-progress-bar {
-  background: #E8D5C4;
-  border-radius: 8px;
-  height: 8px;
-  overflow: hidden;
-  margin-bottom: 0.75rem;
-}
-
-.goal-progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #7C5842, #A0796A);
-  border-radius: 8px;
-  transition: width 0.3s ease;
-}
-
-.goal-progress-fill.completed {
-  background: linear-gradient(90deg, #10B981, #059669);
-}
-
-.goal-status {
-  font-size: 0.8rem;
-  color: #666;
-  text-align: center;
-}
-
-.goal-status.completed {
-  color: #10B981;
-  font-weight: 600;
 }
 
 /* Loading */
