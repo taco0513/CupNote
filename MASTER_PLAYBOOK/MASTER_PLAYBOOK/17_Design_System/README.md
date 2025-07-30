@@ -45,17 +45,17 @@ Claude Code CLI가 일관되고 확장 가능한 UI를 자동 생성할 수 있�
   --color-success: #10B981;
   --color-warning: #F59E0B;
   --color-error: #EF4444;
-  
+
   /* 📝 Text Colors */
   --text-primary: #111827;
   --text-secondary: #6B7280;
   --text-muted: #9CA3AF;
-  
+
   /* 🏢 Background */
   --bg-primary: #FFFFFF;
   --bg-secondary: #F9FAFB;
   --bg-muted: #F3F4F6;
-  
+
   /* 📏 Spacing Scale (8px grid) */
   --space-1: 0.25rem; /* 4px */
   --space-2: 0.5rem;  /* 8px */
@@ -63,7 +63,7 @@ Claude Code CLI가 일관되고 확장 가능한 UI를 자동 생성할 수 있�
   --space-4: 1rem;    /* 16px */
   --space-6: 1.5rem;  /* 24px */
   --space-8: 2rem;    /* 32px */
-  
+
   /* 🔤 Typography */
   --text-xs: 0.75rem;   /* 12px */
   --text-sm: 0.875rem;  /* 14px */
@@ -72,7 +72,7 @@ Claude Code CLI가 일관되고 확장 가능한 UI를 자동 생성할 수 있�
   --text-xl: 1.25rem;   /* 20px */
   --text-2xl: 1.5rem;   /* 24px */
   --text-3xl: 1.875rem; /* 30px */
-  
+
   /* 🎯 Border & Shadow */
   --border-radius: 0.375rem; /* 6px */
   --border-color: #E5E7EB;
@@ -87,19 +87,19 @@ Claude Code CLI가 일관되고 확장 가능한 UI를 자동 생성할 수 있�
 
 ```jsx
 // 🔘 Button Component - Claude Code 최적화
-const Button = ({ 
+const Button = ({
   variant = 'primary',    // primary | secondary | ghost
   size = 'md',           // sm | md | lg
   children,
   className = '',
-  ...props 
+  ...props
 }) => {
   const variants = {
     primary: 'bg-[var(--color-primary)] text-white',
     secondary: 'bg-transparent border border-[var(--color-primary)] text-[var(--color-primary)]',
     ghost: 'bg-transparent text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]'
   };
-  
+
   const sizes = {
     sm: 'px-[var(--space-3)] py-[var(--space-1)] text-[var(--text-sm)]',
     md: 'px-[var(--space-4)] py-[var(--space-2)] text-[var(--text-base)]',
@@ -107,7 +107,7 @@ const Button = ({
   };
 
   return (
-    <button 
+    <button
       className={`
         inline-flex items-center justify-center
         rounded-[var(--border-radius)]
@@ -143,7 +143,7 @@ const Button = ({
 ```bash
 # Claude 명령어 예시
 /implement button component with primary, secondary variants using design tokens
-/create card component with header, body, footer using spacing tokens  
+/create card component with header, body, footer using spacing tokens
 /build simple form with input, label, validation using color tokens
 ```
 
@@ -173,7 +173,7 @@ const Button = ({
   --color-primary-500: #4F46E5;
   --color-primary-600: #4338CA;
   --color-primary-700: #3730A3;
-  
+
   /* 반응형 간격 */
   --space-mobile: clamp(1rem, 4vw, 2rem);
   --space-desktop: clamp(2rem, 6vw, 4rem);
@@ -261,12 +261,12 @@ struct DesignTokens {
         static let primary = Color("PrimaryBlue")
         static let secondary = Color("SecondaryGray")
         static let surface = Color("SurfaceWhite")
-        
+
         // 다이나믹 컬러 (다크모드 자동 대응)
         static let adaptiveBackground = Color(UIColor.systemBackground)
         static let adaptiveText = Color(UIColor.label)
     }
-    
+
     // 간격 시스템 (pt 단위)
     struct Spacing {
         static let xs: CGFloat = 4
@@ -275,7 +275,7 @@ struct DesignTokens {
         static let lg: CGFloat = 24
         static let xl: CGFloat = 32
     }
-    
+
     // 타이포그래피
     struct Typography {
         static let headlineLarge = Font.system(.largeTitle, design: .default, weight: .bold)
@@ -295,12 +295,12 @@ struct SafeAreaAwareView: View {
                 // 상단 콘텐츠
                 HeaderView()
                     .padding(.top, geometry.safeAreaInsets.top)
-                
+
                 // 메인 콘텐츠
                 ScrollView {
                     ContentView()
                 }
-                
+
                 // 하단 네비게이션
                 TabBarView()
                     .padding(.bottom, geometry.safeAreaInsets.bottom)
@@ -326,7 +326,7 @@ object DesignTokens {
         surface = Color(0xFFFFFBFE),
         onSurface = Color(0xFF1C1B1F)
     )
-    
+
     // 간격 시스템 (dp 단위)
     object Spacing {
         val xs = 4.dp
@@ -335,7 +335,7 @@ object DesignTokens {
         val lg = 24.dp
         val xl = 32.dp
     }
-    
+
     // 타이포그래피
     val Typography = Typography(
         headlineLarge = TextStyle(
@@ -364,13 +364,13 @@ fun InteractiveButton(
     content: @Composable () -> Unit
 ) {
     val context = LocalContext.current
-    
+
     Button(
         onClick = {
             // 햅틱 피드백
             val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
-            
+
             onClick()
         },
         modifier = modifier
@@ -536,7 +536,7 @@ Create a responsive navigation component using our design tokens:
 - Include mobile hamburger menu
 - Follow accessibility guidelines
 
-# ❌ 피해야 할 예시  
+# ❌ 피해야 할 예시
 Make a nice navigation bar that looks good
 ```
 
@@ -555,9 +555,9 @@ Make a nice navigation bar that looks good
 **2. 컴포넌트 생성 자동화:**
 ```bash
 # Claude 명령어 템플릿
-/create [component-name] 
+/create [component-name]
   --variant [primary|secondary|ghost]
-  --size [sm|md|lg] 
+  --size [sm|md|lg]
   --responsive true
   --tokens @design-tokens.css
 ```
@@ -685,7 +685,7 @@ if (userInput.includes('dashboard')) {
   /* Brand Colors */
   --brand-primary: #[YOUR-HEX];
   --brand-secondary: #[YOUR-HEX];
-  
+
   /* Semantic Colors */
   --color-success: #10B981;
   --color-warning: #F59E0B;
@@ -766,15 +766,15 @@ Day 3: 베타 사용자 피드백 반영
 ## 💡 핵심 성공 팁
 
 > 🎨 **"토큰부터 시작, 컴포넌트로 확장"**
-> 
+>
 > 완벽한 디자인이 아니라 일관된 시스템이 목표입니다.
 
 > 🤖 **"AI 친화적 구조가 생산성을 결정한다"**
-> 
+>
 > Claude가 이해하기 쉬운 패턴으로 설계하면 개발 속도가 10배 빨라집니다.
 
 > ⚡ **"프로토타입에서 프로덕션까지 한 번에"**
-> 
+>
 > 처음부터 확장 가능한 구조로 시작하면 나중에 다시 만들 필요가 없습니다.
 
 ---

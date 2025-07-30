@@ -118,7 +118,7 @@ import { createProject } from '@/lib/project-generator';
 export const saasTemplate = {
   name: "SaaS Starter",
   description: "Production-ready SaaS with auth, billing, and dashboard",
-  
+
   features: [
     "Multi-tenant architecture",
     "Stripe subscription billing",
@@ -128,7 +128,7 @@ export const saasTemplate = {
     "API rate limiting",
     "Webhook handling"
   ],
-  
+
   structure: {
     // 인증 및 온보딩
     auth: {
@@ -136,21 +136,21 @@ export const saasTemplate = {
       pages: ["signin", "signup", "verify-email", "onboarding"],
       api: ["auth/[...nextauth]", "auth/magic-link", "auth/verify"]
     },
-    
+
     // 결제 시스템
     billing: {
       components: ["PricingTable", "CheckoutForm", "BillingPortal"],
       pages: ["pricing", "checkout", "billing"],
       api: ["stripe/webhook", "stripe/checkout", "stripe/portal"]
     },
-    
+
     // 대시보드
     dashboard: {
       components: ["StatsCard", "UsageChart", "ActivityFeed"],
       pages: ["dashboard", "analytics", "team", "settings"],
       api: ["stats", "usage", "team/invite", "team/members"]
     },
-    
+
     // 관리자 패널
     admin: {
       components: ["UserTable", "SubscriptionManager", "SystemHealth"],
@@ -158,7 +158,7 @@ export const saasTemplate = {
       api: ["admin/users", "admin/metrics", "admin/system"]
     }
   },
-  
+
   dependencies: {
     core: [
       "next@14", "react@18", "typescript@5",
@@ -274,7 +274,7 @@ flutter pub get
 export const aiChatbotTemplate = {
   name: "AI Chatbot",
   stack: ["Next.js", "OpenAI", "Vercel AI SDK", "Prisma"],
-  
+
   structure: {
     api: {
       chat: {
@@ -289,7 +289,7 @@ const openai = new OpenAIApi(config);
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
-  
+
   const response = await openai.createChatCompletion({
     model: 'gpt-4',
     stream: true,
@@ -297,7 +297,7 @@ export async function POST(req: Request) {
     temperature: 0.7,
     max_tokens: 500,
   });
-  
+
   const stream = OpenAIStream(response, {
     onStart: async () => {
       // 대화 시작 로깅
@@ -310,7 +310,7 @@ export async function POST(req: Request) {
       await saveConversation(messages, completion);
     },
   });
-  
+
   return new StreamingTextResponse(stream);
 }
         `
@@ -323,18 +323,18 @@ import { PineconeClient } from '@pinecone-database/pinecone';
 
 export async function POST(req: Request) {
   const { text, namespace } = await req.json();
-  
+
   // 임베딩 생성
   const embeddings = new OpenAIEmbeddings();
   const vectors = await embeddings.embedQuery(text);
-  
+
   // 벡터 DB에 저장
   const pinecone = new PineconeClient();
   await pinecone.init({
     apiKey: process.env.PINECONE_API_KEY!,
     environment: process.env.PINECONE_ENV!,
   });
-  
+
   const index = pinecone.Index('knowledge-base');
   await index.upsert({
     vectors: [{
@@ -343,13 +343,13 @@ export async function POST(req: Request) {
       metadata: { text, namespace }
     }]
   });
-  
+
   return Response.json({ success: true });
 }
         `
       }
     },
-    
+
     components: {
       chat: {
         "ChatInterface.tsx": `
@@ -367,11 +367,11 @@ export function ChatInterface() {
       console.error('Chat error:', error);
     },
   });
-  
+
   return (
     <div className="flex flex-col h-full">
       <MessageList messages={messages} />
-      
+
       <form onSubmit={handleSubmit} className="p-4 border-t">
         <div className="flex gap-2">
           <Input
@@ -437,8 +437,8 @@ app.use('/api/v1', apiRouter);
 
 // 헬스 체크
 app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'ok', 
+  res.json({
+    status: 'ok',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
   });
@@ -550,7 +550,7 @@ program
   .option('-t, --template <template>', 'Template to use', 'default')
   .action(async (options) => {
     const spinner = ora('Initializing project...').start();
-    
+
     try {
       // 프로젝트 이름 묻기
       if (!options.name) {
@@ -564,16 +564,16 @@ program
         ]);
         options.name = answers.name;
       }
-      
+
       // 프로젝트 생성 로직
       await createProject(options);
-      
+
       spinner.succeed(chalk.green('Project initialized successfully!'));
       console.log(chalk.cyan(`\nNext steps:`));
       console.log(chalk.gray(`  cd ${options.name}`));
       console.log(chalk.gray(`  npm install`));
       console.log(chalk.gray(`  npm run dev`));
-      
+
     } catch (error) {
       spinner.fail(chalk.red('Failed to initialize project'));
       console.error(error);
@@ -588,7 +588,7 @@ program
   .option('-p, --production', 'Production build')
   .action(async (options) => {
     const spinner = ora('Building project...').start();
-    
+
     try {
       await buildProject(options);
       spinner.succeed(chalk.green('Build completed!'));

@@ -128,13 +128,13 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   generateEtags: true,
-  
+
   // 번들 분석기
   webpack: (config, { dev, isServer }) => {
     // 프로덕션에서 번들 크기 분석
     if (!dev && !isServer) {
       const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-      
+
       config.plugins.push(
         new BundleAnalyzerPlugin({
           analyzerMode: 'static',
@@ -241,20 +241,20 @@ export default function OptimizedPage() {
   return (
     <div>
       <h1>성능 최적화된 페이지</h1>
-      
+
       {/* 즉시 필요한 컨텐츠 */}
       <div className="mb-8">
         <p>중요한 컨텐츠는 즉시 로딩됩니다.</p>
       </div>
 
       {/* 사용자 상호작용 후 로딩 */}
-      <button 
+      <button
         onClick={() => setShowChart(true)}
         className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
       >
         차트 보기
       </button>
-      
+
       {showChart && (
         <Suspense fallback={<div>차트 로딩 중...</div>}>
           <HeavyChart />
@@ -328,7 +328,7 @@ class OptimizedDatabase {
   // 연결 최적화 (선택적 로딩)
   async getUser(id: string, includeProfile: boolean = false) {
     const cacheKey = `user:${id}:${includeProfile}`;
-    
+
     if (this.queryCache.has(cacheKey)) {
       return this.queryCache.get(cacheKey);
     }
@@ -452,7 +452,7 @@ class OptimizedDatabase {
         this.prisma.like.count({ where: { userId } }),
         this.prisma.follower.count({ where: { followingId: userId } })
       ]),
-      
+
       // 최근 활동
       this.prisma.post.findMany({
         where: { userId },
@@ -484,9 +484,9 @@ class OptimizedDatabase {
   async searchPosts(query: string, limit: number = 10) {
     // PostgreSQL 풀텍스트 검색 사용
     return await this.prisma.$queryRaw`
-      SELECT id, title, excerpt, 
+      SELECT id, title, excerpt,
              ts_rank(search_vector, plainto_tsquery(${query})) as rank
-      FROM posts 
+      FROM posts
       WHERE search_vector @@ plainto_tsquery(${query})
       ORDER BY rank DESC, created_at DESC
       LIMIT ${limit}
@@ -588,7 +588,7 @@ class CacheManager {
   async smartSet(key: string, value: any, accessFrequency: number = 1) {
     // 접근 빈도에 따라 TTL 조정
     let ttl = this.DEFAULT_TTL;
-    
+
     if (accessFrequency > 100) ttl *= 2; // 자주 접근하는 데이터는 더 오래
     if (accessFrequency < 10) ttl /= 2;  // 가끔 접근하는 데이터는 짧게
 
@@ -600,7 +600,7 @@ class CacheManager {
     const entries = Array.from(this.memoryCache.entries())
       .sort(([,a], [,b]) => a.expiry - b.expiry)
       .slice(0, 100);
-      
+
     entries.forEach(([key]) => this.memoryCache.delete(key));
   }
 }
@@ -614,12 +614,12 @@ export async function getCachedData<T>(
   ttl?: number
 ): Promise<T> {
   let data = await cache.get(key);
-  
+
   if (data === null) {
     data = await fetcher();
     await cache.set(key, data, ttl);
   }
-  
+
   return data;
 }
 ```
@@ -679,10 +679,10 @@ export class PerformanceMonitor {
     if (!this.metrics.has(name)) {
       this.metrics.set(name, []);
     }
-    
+
     const values = this.metrics.get(name)!;
     values.push(value);
-    
+
     // 최근 100개 값만 유지
     if (values.length > 100) {
       values.shift();
@@ -730,11 +730,11 @@ export class PerformanceMonitor {
     apiCall: () => Promise<T>
   ): Promise<T> {
     const startTime = performance.now();
-    
+
     try {
       const result = await apiCall();
       const duration = performance.now() - startTime;
-      
+
       this.recordMetric(`api_${name}`, duration);
       return result;
     } catch (error) {
@@ -749,7 +749,7 @@ export class PerformanceMonitor {
     if (typeof window !== 'undefined') {
       window.addEventListener('load', () => {
         const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-        
+
         const metrics = {
           dns_lookup: navigation.domainLookupEnd - navigation.domainLookupStart,
           tcp_connect: navigation.connectEnd - navigation.connectStart,
@@ -793,7 +793,7 @@ export class PerformanceMonitor {
   // 성능 개선 권장사항
   private generateRecommendations(): string[] {
     const recommendations: string[] = [];
-    
+
     const lcpStats = this.getStats('lcp');
     if (lcpStats && lcpStats.p75 > 2500) {
       recommendations.push('LCP 개선 필요: 이미지 최적화, 크리티컬 리소스 우선로딩');
@@ -815,7 +815,7 @@ export class PerformanceMonitor {
   private async sendAlert(metric: string, value: number, threshold: number) {
     // 실제 구현에서는 Slack, 이메일 등으로 알림 발송
     console.warn(`⚠️ Performance Alert: ${metric} = ${value} (threshold: ${threshold})`);
-    
+
     // 웹훅 알림 (옵션)
     try {
       await fetch('/api/alerts/performance', {

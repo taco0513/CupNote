@@ -55,12 +55,12 @@ terraform {
       version = "~> 2.0"
     }
   }
-  
+
   backend "s3" {
     bucket = "terraform-state-bucket"
     key    = "infrastructure/terraform.tfstate"
     region = "us-west-2"
-    
+
     dynamodb_table = "terraform-locks"
     encrypt        = true
   }
@@ -69,7 +69,7 @@ terraform {
 # 프로바이더 설정
 provider "aws" {
   region = var.aws_region
-  
+
   default_tags {
     tags = {
       Environment = var.environment
@@ -86,7 +86,7 @@ locals {
     Environment = var.environment
     Project     = var.project_name
   }
-  
+
   availability_zones = data.aws_availability_zones.available.names
 }
 ```
@@ -98,7 +98,7 @@ resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
   enable_dns_support   = true
-  
+
   tags = merge(var.tags, {
     Name = "${var.project_name}-vpc"
   })
@@ -107,7 +107,7 @@ resource "aws_vpc" "main" {
 # Internet Gateway
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
-  
+
   tags = merge(var.tags, {
     Name = "${var.project_name}-igw"
   })
@@ -116,12 +116,12 @@ resource "aws_internet_gateway" "main" {
 # Public Subnets
 resource "aws_subnet" "public" {
   count = length(var.public_subnet_cidrs)
-  
+
   vpc_id                  = aws_vpc.main.id
   cidr_block              = var.public_subnet_cidrs[count.index]
   availability_zone       = var.availability_zones[count.index]
   map_public_ip_on_launch = true
-  
+
   tags = merge(var.tags, {
     Name = "${var.project_name}-public-${count.index + 1}"
     Type = "public"
@@ -131,11 +131,11 @@ resource "aws_subnet" "public" {
 # Private Subnets
 resource "aws_subnet" "private" {
   count = length(var.private_subnet_cidrs)
-  
+
   vpc_id            = aws_vpc.main.id
   cidr_block        = var.private_subnet_cidrs[count.index]
   availability_zone = var.availability_zones[count.index]
-  
+
   tags = merge(var.tags, {
     Name = "${var.project_name}-private-${count.index + 1}"
     Type = "private"
@@ -145,26 +145,26 @@ resource "aws_subnet" "private" {
 # NAT Gateway
 resource "aws_eip" "nat" {
   count = var.enable_nat_gateway ? length(var.public_subnet_cidrs) : 0
-  
+
   domain = "vpc"
-  
+
   tags = merge(var.tags, {
     Name = "${var.project_name}-nat-eip-${count.index + 1}"
   })
-  
+
   depends_on = [aws_internet_gateway.main]
 }
 
 resource "aws_nat_gateway" "main" {
   count = var.enable_nat_gateway ? length(var.public_subnet_cidrs) : 0
-  
+
   allocation_id = aws_eip.nat[count.index].id
   subnet_id     = aws_subnet.public[count.index].id
-  
+
   tags = merge(var.tags, {
     Name = "${var.project_name}-nat-${count.index + 1}"
   })
-  
+
   depends_on = [aws_internet_gateway.main]
 }
 ```
@@ -176,23 +176,23 @@ resource "aws_eks_cluster" "main" {
   name     = var.cluster_name
   role_arn = aws_iam_role.cluster.arn
   version  = var.kubernetes_version
-  
+
   vpc_config {
     subnet_ids              = var.subnet_ids
     endpoint_private_access = true
     endpoint_public_access  = var.enable_public_access
     public_access_cidrs     = var.public_access_cidrs
-    
+
     security_group_ids = [aws_security_group.cluster.id]
   }
-  
+
   encryption_config {
     provider {
       key_arn = aws_kms_key.eks.arn
     }
     resources = ["secrets"]
   }
-  
+
   enabled_cluster_log_types = [
     "api",
     "audit",
@@ -200,9 +200,9 @@ resource "aws_eks_cluster" "main" {
     "controllerManager",
     "scheduler"
   ]
-  
+
   tags = var.tags
-  
+
   depends_on = [
     aws_iam_role_policy_attachment.cluster_AmazonEKSClusterPolicy,
     aws_cloudwatch_log_group.cluster
@@ -215,22 +215,22 @@ resource "aws_eks_node_group" "main" {
   node_group_name = "${var.cluster_name}-workers"
   node_role_arn   = aws_iam_role.node_group.arn
   subnet_ids      = var.private_subnet_ids
-  
+
   instance_types = var.node_instance_types
   ami_type       = var.node_ami_type
   capacity_type  = var.node_capacity_type
   disk_size      = var.node_disk_size
-  
+
   scaling_config {
     desired_size = var.node_desired_size
     max_size     = var.node_max_size
     min_size     = var.node_min_size
   }
-  
+
   update_config {
     max_unavailable = var.node_max_unavailable
   }
-  
+
   # Spot 인스턴스 설정
   dynamic "taint" {
     for_each = var.node_capacity_type == "SPOT" ? [1] : []
@@ -240,11 +240,11 @@ resource "aws_eks_node_group" "main" {
       effect = "NO_SCHEDULE"
     }
   }
-  
+
   tags = merge(var.tags, {
     "kubernetes.io/cluster/${var.cluster_name}" = "owned"
   })
-  
+
   depends_on = [
     aws_iam_role_policy_attachment.node_group_AmazonEKSWorkerNodePolicy,
     aws_iam_role_policy_attachment.node_group_AmazonEKS_CNI_Policy,
@@ -259,27 +259,27 @@ resource "aws_eks_node_group" "main" {
 export class TerraformAutomation {
   private workspace: string;
   private stateBackend: StateBackend;
-  
+
   async planInfrastructure(config: InfrastructureConfig): Promise<PlanResult> {
     // 1. 변수 파일 생성
     await this.generateTerraformVars(config);
-    
+
     // 2. Terraform 초기화
     await this.runCommand(['terraform', 'init', '-upgrade']);
-    
+
     // 3. 워크스페이스 선택/생성
     await this.selectWorkspace(config.environment);
-    
+
     // 4. Plan 실행
     const planOutput = await this.runCommand([
       'terraform', 'plan',
       '-var-file', `${config.environment}.tfvars`,
       '-out', `${config.environment}.tfplan`
     ]);
-    
+
     // 5. Plan 분석
     const analysis = await this.analyzePlan(planOutput);
-    
+
     return {
       planFile: `${config.environment}.tfplan`,
       changes: analysis.changes,
@@ -287,7 +287,7 @@ export class TerraformAutomation {
       securityIssues: await this.scanSecurity(analysis)
     };
   }
-  
+
   async applyInfrastructure(planFile: string): Promise<ApplyResult> {
     try {
       // 1. Apply 실행
@@ -296,11 +296,11 @@ export class TerraformAutomation {
         '-auto-approve',
         planFile
       ]);
-      
+
       // 2. 상태 검증
       const state = await this.getState();
       const validation = await this.validateResources(state);
-      
+
       return {
         success: true,
         resources: validation.resources,
@@ -312,27 +312,27 @@ export class TerraformAutomation {
       throw error;
     }
   }
-  
+
   private async analyzePlan(planOutput: string): Promise<PlanAnalysis> {
     const changes = this.extractChanges(planOutput);
-    
+
     return {
       changes,
       resourceCount: changes.length,
       riskLevel: this.assessRisk(changes)
     };
   }
-  
+
   private async estimateCosts(analysis: PlanAnalysis): Promise<CostEstimate> {
     const costs: ResourceCost[] = [];
-    
+
     for (const change of analysis.changes) {
       if (change.action === 'create' || change.action === 'update') {
         const cost = await this.getResourceCost(change.resource);
         costs.push(cost);
       }
     }
-    
+
     return {
       monthly: costs.reduce((sum, cost) => sum + cost.monthly, 0),
       yearly: costs.reduce((sum, cost) => sum + cost.yearly, 0),
@@ -359,7 +359,7 @@ export class AWSProvider implements CloudProvider {
   private rdsClient: RDSClient;
   private s3Client: S3Client;
   private elbClient: ELBv2Client;
-  
+
   async createCluster(config: ClusterConfig): Promise<Cluster> {
     const command = new CreateClusterCommand({
       name: config.name,
@@ -370,9 +370,9 @@ export class AWSProvider implements CloudProvider {
         securityGroupIds: config.securityGroupIds
       }
     });
-    
+
     const result = await this.eksClient.send(command);
-    
+
     return {
       id: result.cluster?.name!,
       endpoint: result.cluster?.endpoint!,
@@ -380,7 +380,7 @@ export class AWSProvider implements CloudProvider {
       provider: 'aws'
     };
   }
-  
+
   async createDatabase(config: DatabaseConfig): Promise<Database> {
     const command = new CreateDBInstanceCommand({
       DBInstanceIdentifier: config.name,
@@ -391,9 +391,9 @@ export class AWSProvider implements CloudProvider {
       VpcSecurityGroupIds: config.securityGroupIds,
       DBSubnetGroupName: config.subnetGroup
     });
-    
+
     const result = await this.rdsClient.send(command);
-    
+
     return {
       id: result.DBInstance?.DBInstanceIdentifier!,
       endpoint: result.DBInstance?.Endpoint?.Address!,
@@ -406,7 +406,7 @@ export class AWSProvider implements CloudProvider {
 export class GCPProvider implements CloudProvider {
   private gkeClient: any; // GKE client
   private sqlClient: any; // Cloud SQL client
-  
+
   async createCluster(config: ClusterConfig): Promise<Cluster> {
     const cluster = {
       name: config.name,
@@ -418,15 +418,15 @@ export class GCPProvider implements CloudProvider {
       network: config.network,
       subnetwork: config.subnet
     };
-    
+
     const [operation] = await this.gkeClient.createCluster({
       parent: config.location,
       cluster
     });
-    
+
     // 작업 완료 대기
     await operation.promise();
-    
+
     return {
       id: cluster.name,
       endpoint: operation.targetLink,
@@ -438,28 +438,28 @@ export class GCPProvider implements CloudProvider {
 
 export class MultiCloudManager {
   private providers: Map<string, CloudProvider> = new Map();
-  
+
   constructor() {
     this.providers.set('aws', new AWSProvider());
     this.providers.set('gcp', new GCPProvider());
     this.providers.set('azure', new AzureProvider());
   }
-  
+
   async deployToMultipleClouds(
     config: MultiCloudConfig
   ): Promise<MultiCloudDeployment> {
     const deployments: CloudDeployment[] = [];
-    
+
     for (const cloudConfig of config.clouds) {
       const provider = this.providers.get(cloudConfig.provider);
       if (!provider) {
         throw new Error(`Unsupported provider: ${cloudConfig.provider}`);
       }
-      
+
       try {
         const cluster = await provider.createCluster(cloudConfig.cluster);
         const database = await provider.createDatabase(cloudConfig.database);
-        
+
         deployments.push({
           provider: cloudConfig.provider,
           region: cloudConfig.region,
@@ -476,7 +476,7 @@ export class MultiCloudManager {
         });
       }
     }
-    
+
     return {
       deployments,
       success: deployments.every(d => d.status === 'deployed')
@@ -492,20 +492,20 @@ export class MultiCloudDatabaseManager {
   async setupGlobalDatabase(config: GlobalDatabaseConfig): Promise<GlobalDatabase> {
     const regions = config.regions;
     const databases: RegionalDatabase[] = [];
-    
+
     // 주 지역 데이터베이스 생성
     const primary = await this.createPrimaryDatabase(config.primary);
     databases.push(primary);
-    
+
     // 읽기 전용 복제본 생성
     for (const region of regions.replicas) {
       const replica = await this.createReadReplica(primary, region);
       databases.push(replica);
     }
-    
+
     // 글로벌 라우팅 설정
     const router = await this.setupDatabaseRouter(databases);
-    
+
     return {
       primary,
       replicas: databases.filter(db => db.type === 'replica'),
@@ -513,7 +513,7 @@ export class MultiCloudDatabaseManager {
       globalEndpoint: router.endpoint
     };
   }
-  
+
   private async createPrimaryDatabase(config: PrimaryDatabaseConfig): Promise<RegionalDatabase> {
     switch (config.provider) {
       case 'aws':
@@ -526,11 +526,11 @@ export class MultiCloudDatabaseManager {
         throw new Error(`Unsupported provider: ${config.provider}`);
     }
   }
-  
+
   private async setupDatabaseRouter(databases: RegionalDatabase[]): Promise<DatabaseRouter> {
     // 글로벌 로드 밸런서 설정
     const routingRules: RoutingRule[] = [];
-    
+
     // 지역별 라우팅 규칙
     for (const db of databases) {
       if (db.type === 'primary') {
@@ -548,7 +548,7 @@ export class MultiCloudDatabaseManager {
         });
       }
     }
-    
+
     return {
       endpoint: await this.createGlobalEndpoint(routingRules),
       rules: routingRules,
@@ -569,16 +569,16 @@ export class MicroservicesArchitect {
   ): Promise<MicroservicesArchitecture> {
     // 1. 도메인 분해
     const services = await this.decomposeDomain(domain);
-    
+
     // 2. 서비스 간 통신 설계
     const communication = await this.designCommunication(services);
-    
+
     // 3. 데이터 일관성 전략
     const dataStrategy = await this.designDataStrategy(services);
-    
+
     // 4. 장애 복구 전략
     const resilienceStrategy = await this.designResilienceStrategy(services);
-    
+
     return {
       services,
       communication,
@@ -587,10 +587,10 @@ export class MicroservicesArchitect {
       deployment: await this.designDeploymentStrategy(services)
     };
   }
-  
+
   private async decomposeDomain(domain: DomainModel): Promise<MicroService[]> {
     const services: MicroService[] = [];
-    
+
     // 비즈니스 기능별 분해
     for (const boundedContext of domain.boundedContexts) {
       const service: MicroService = {
@@ -600,17 +600,17 @@ export class MicroservicesArchitect {
         api: this.generateAPISpec(boundedContext),
         dependencies: this.identifyDependencies(boundedContext, domain)
       };
-      
+
       services.push(service);
     }
-    
+
     return services;
   }
-  
+
   private async designCommunication(services: MicroService[]): Promise<CommunicationStrategy> {
     const syncCommunication: SyncCommunication[] = [];
     const asyncCommunication: AsyncCommunication[] = [];
-    
+
     for (const service of services) {
       // 동기 통신 (HTTP/gRPC)
       for (const dependency of service.dependencies) {
@@ -623,7 +623,7 @@ export class MicroservicesArchitect {
           });
         }
       }
-      
+
       // 비동기 통신 (Event-driven)
       for (const event of service.events) {
         asyncCommunication.push({
@@ -635,7 +635,7 @@ export class MicroservicesArchitect {
         });
       }
     }
-    
+
     return {
       sync: syncCommunication,
       async: asyncCommunication,
@@ -652,20 +652,20 @@ export class MicroservicesArchitect {
 export class EventDrivenArchitecture {
   private eventStore: EventStore;
   private messageQueue: MessageQueue;
-  
+
   async setupEventSourcing(aggregate: AggregateRoot): Promise<EventSourcingSetup> {
     // 1. 이벤트 스토어 설정
     const eventStore = await this.createEventStore(aggregate.name);
-    
+
     // 2. 이벤트 핸들러 등록
     const handlers = await this.registerEventHandlers(aggregate.events);
-    
+
     // 3. 프로젝션 설정
     const projections = await this.setupProjections(aggregate.projections);
-    
+
     // 4. 스냅샷 전략
     const snapshotStrategy = await this.configureSnapshots(aggregate);
-    
+
     return {
       eventStore,
       handlers,
@@ -673,10 +673,10 @@ export class EventDrivenArchitecture {
       snapshotStrategy
     };
   }
-  
+
   async implementSagaPattern(saga: SagaDefinition): Promise<SagaImplementation> {
     const steps: SagaStep[] = [];
-    
+
     for (const transaction of saga.transactions) {
       const step: SagaStep = {
         name: transaction.name,
@@ -690,10 +690,10 @@ export class EventDrivenArchitecture {
           retryableExceptions: ['TimeoutException', 'ServiceUnavailableException']
         }
       };
-      
+
       steps.push(step);
     }
-    
+
     return {
       sagaId: saga.id,
       steps,
@@ -701,31 +701,31 @@ export class EventDrivenArchitecture {
       monitoring: await this.setupSagaMonitoring(saga.id)
     };
   }
-  
+
   private async createSagaOrchestrator(steps: SagaStep[]): Promise<SagaOrchestrator> {
     return {
       async execute(sagaInstance: SagaInstance): Promise<SagaResult> {
         const executedSteps: ExecutedStep[] = [];
-        
+
         try {
           for (const step of steps) {
             const result = await this.executeStep(step, sagaInstance);
             executedSteps.push({ step, result, status: 'completed' });
           }
-          
+
           return { status: 'completed', steps: executedSteps };
         } catch (error) {
           // 보상 트랜잭션 실행
           await this.executeCompensation(executedSteps.reverse());
-          
-          return { 
-            status: 'compensated', 
+
+          return {
+            status: 'compensated',
             steps: executedSteps,
-            error: error.message 
+            error: error.message
           };
         }
       },
-      
+
       async executeStep(step: SagaStep, instance: SagaInstance): Promise<StepResult> {
         const command = {
           service: step.service,
@@ -733,10 +733,10 @@ export class EventDrivenArchitecture {
           payload: instance.data,
           timeout: step.timeout
         };
-        
+
         return await this.messageQueue.sendCommand(command);
       },
-      
+
       async executeCompensation(executedSteps: ExecutedStep[]): Promise<void> {
         for (const executedStep of executedSteps) {
           if (executedStep.step.compensationAction && executedStep.status === 'completed') {
@@ -763,7 +763,7 @@ export class CloudCostOptimizer {
     const costs = await this.getCostData(timeRange);
     const trends = await this.analyzeTrends(costs);
     const recommendations = await this.generateRecommendations(costs, trends);
-    
+
     return {
       totalCost: costs.total,
       breakdown: costs.breakdown,
@@ -772,13 +772,13 @@ export class CloudCostOptimizer {
       potentialSavings: recommendations.reduce((sum, rec) => sum + rec.savings, 0)
     };
   }
-  
+
   private async generateRecommendations(
-    costs: CostData, 
+    costs: CostData,
     trends: CostTrends
   ): Promise<CostOptimizationRecommendation[]> {
     const recommendations: CostOptimizationRecommendation[] = [];
-    
+
     // 1. 미사용 리소스 식별
     const unusedResources = await this.identifyUnusedResources();
     for (const resource of unusedResources) {
@@ -790,7 +790,7 @@ export class CloudCostOptimizer {
         priority: 'high'
       });
     }
-    
+
     // 2. 오버프로비저닝된 리소스
     const oversizedResources = await this.identifyOversizedResources();
     for (const resource of oversizedResources) {
@@ -802,7 +802,7 @@ export class CloudCostOptimizer {
         priority: 'medium'
       });
     }
-    
+
     // 3. 예약 인스턴스 기회
     const reservationOpportunities = await this.analyzeReservationOpportunities();
     for (const opportunity of reservationOpportunities) {
@@ -814,7 +814,7 @@ export class CloudCostOptimizer {
         priority: 'low'
       });
     }
-    
+
     // 4. 스팟 인스턴스 전환
     const spotOpportunities = await this.analyzeSpotOpportunities();
     for (const opportunity of spotOpportunities) {
@@ -827,19 +827,19 @@ export class CloudCostOptimizer {
         considerations: ['워크로드 중단 허용성 검토 필요']
       });
     }
-    
+
     return recommendations.sort((a, b) => {
       const priorityOrder = { high: 3, medium: 2, low: 1 };
       return priorityOrder[b.priority] - priorityOrder[a.priority] || b.savings - a.savings;
     });
   }
-  
+
   async implementCostOptimization(
     recommendations: CostOptimizationRecommendation[]
   ): Promise<OptimizationResult> {
     const results: OptimizationStepResult[] = [];
     let totalSavings = 0;
-    
+
     for (const rec of recommendations) {
       try {
         const result = await this.executeRecommendation(rec);
@@ -855,7 +855,7 @@ export class CloudCostOptimizer {
         });
       }
     }
-    
+
     return {
       implementedRecommendations: results.filter(r => r.success).length,
       totalRecommendations: recommendations.length,
@@ -873,70 +873,70 @@ export class AutoScalingOptimizer {
   async optimizeAutoScaling(cluster: string): Promise<AutoScalingOptimization> {
     // 1. 현재 스케일링 정책 분석
     const currentPolicies = await this.getCurrentScalingPolicies(cluster);
-    
+
     // 2. 워크로드 패턴 분석
     const workloadPatterns = await this.analyzeWorkloadPatterns(cluster, '30d');
-    
+
     // 3. 최적화된 정책 생성
     const optimizedPolicies = await this.generateOptimizedPolicies(
-      currentPolicies, 
+      currentPolicies,
       workloadPatterns
     );
-    
+
     return {
       currentPolicies,
       optimizedPolicies,
       expectedSavings: await this.calculateExpectedSavings(
-        currentPolicies, 
+        currentPolicies,
         optimizedPolicies,
         workloadPatterns
       ),
       implementation: await this.generateImplementationPlan(optimizedPolicies)
     };
   }
-  
+
   private async analyzeWorkloadPatterns(
-    cluster: string, 
+    cluster: string,
     timeRange: string
   ): Promise<WorkloadPattern[]> {
     const metrics = await this.getMetrics(cluster, timeRange);
     const patterns: WorkloadPattern[] = [];
-    
+
     // 일별 패턴 분석
     const dailyPattern = this.analyzeDailyPattern(metrics);
     patterns.push(dailyPattern);
-    
+
     // 주별 패턴 분석
     const weeklyPattern = this.analyzeWeeklyPattern(metrics);
     patterns.push(weeklyPattern);
-    
+
     // 월별 패턴 분석
     const monthlyPattern = this.analyzeMonthlyPattern(metrics);
     patterns.push(monthlyPattern);
-    
+
     return patterns;
   }
-  
+
   private async generateOptimizedPolicies(
     current: ScalingPolicy[],
     patterns: WorkloadPattern[]
   ): Promise<OptimizedScalingPolicy[]> {
     const optimized: OptimizedScalingPolicy[] = [];
-    
+
     for (const policy of current) {
-      const relevantPattern = patterns.find(p => 
+      const relevantPattern = patterns.find(p =>
         p.applies(policy.target)
       );
-      
+
       if (relevantPattern) {
         optimized.push({
           ...policy,
           scaleUpThreshold: this.optimizeThreshold(
-            policy.scaleUpThreshold, 
+            policy.scaleUpThreshold,
             relevantPattern.scaleUpEvents
           ),
           scaleDownThreshold: this.optimizeThreshold(
-            policy.scaleDownThreshold, 
+            policy.scaleDownThreshold,
             relevantPattern.scaleDownEvents
           ),
           cooldownPeriod: this.optimizeCooldown(
@@ -949,7 +949,7 @@ export class AutoScalingOptimizer {
         optimized.push(policy);
       }
     }
-    
+
     return optimized;
   }
 }

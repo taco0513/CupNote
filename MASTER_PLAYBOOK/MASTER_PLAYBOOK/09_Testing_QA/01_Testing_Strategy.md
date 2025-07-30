@@ -17,7 +17,7 @@ testing_pyramid:
       - "높은 격리성"
       - "세밀한 테스트"
       - "높은 유지보수성"
-  
+
   integration_tests:
     coverage: "20%"
     purpose: "모듈 간 상호작용 검증"
@@ -27,7 +27,7 @@ testing_pyramid:
       - "실제 환경 시뮬레이션"
       - "API/DB 연동 테스트"
       - "계약 기반 테스트"
-  
+
   e2e_tests:
     coverage: "10%"
     purpose: "전체 사용자 시나리오 검증"
@@ -258,7 +258,7 @@ services:
       - redis-test
     volumes:
       - ./coverage:/app/coverage
-  
+
   postgres-test:
     image: postgres:15-alpine
     environment:
@@ -269,14 +269,14 @@ services:
       - "5433:5432"
     tmpfs:
       - /var/lib/postgresql/data
-  
+
   redis-test:
     image: redis:7-alpine
     ports:
       - "6380:6379"
     tmpfs:
       - /data
-  
+
   playwright:
     build:
       context: .
@@ -392,7 +392,7 @@ let testEnv: TestEnvironment;
 beforeAll(async () => {
   testEnv = new TestEnvironment();
   await testEnv.setup();
-  
+
   // 글로벌 변수로 설정
   global.testDb = testEnv.getDbConnection();
   global.testRedis = testEnv.getRedisClient();
@@ -565,7 +565,7 @@ export const testScenarios = {
         discount: 15.00
       }
     },
-    
+
     completedOrder: {
       user: UserFactory.create(),
       order: {
@@ -611,11 +611,11 @@ export const testScenarios = {
 describe('Order Processing', () => {
   it('should process completed order correctly', async () => {
     const scenario = testScenarios.ecommerce.completedOrder;
-    
+
     // 시나리오 데이터로 테스트 실행
     const user = await UserFactory.createInDb(scenario.user);
     const order = await createOrder(user.id, scenario.order);
-    
+
     expect(order.status).toBe('completed');
     expect(order.total).toBe(scenario.order.total);
   });
@@ -642,22 +642,22 @@ jobs:
     strategy:
       matrix:
         node-version: [18, 20]
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run unit tests
         run: npm run test:unit -- --coverage --watchAll=false
-      
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
@@ -679,7 +679,7 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
-      
+
       redis:
         image: redis:7
         options: >-
@@ -689,19 +689,19 @@ jobs:
           --health-retries 5
         ports:
           - 6379:6379
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run integration tests
         run: npm run test:integration
         env:
@@ -712,31 +712,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
-      
+
       - name: Build application
         run: npm run build
-      
+
       - name: Start application
         run: npm start &
-        
+
       - name: Wait for application to be ready
         run: npx wait-on http://localhost:3000
-      
+
       - name: Run E2E tests
         run: npm run test:e2e
-      
+
       - name: Upload test results
         uses: actions/upload-artifact@v3
         if: failure()
@@ -748,14 +748,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/node@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           args: --severity-threshold=high
-      
+
       - name: Run OWASP ZAP Baseline Scan
         uses: zaproxy/action-baseline@v0.7.0
         with:
@@ -764,28 +764,28 @@ jobs:
   performance-tests:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Build and start application
         run: |
           npm run build
           npm start &
           npx wait-on http://localhost:3000
-      
+
       - name: Run performance tests
         run: npm run test:performance
-      
+
       - name: Upload performance results
         uses: actions/upload-artifact@v3
         with:
@@ -843,7 +843,7 @@ export default defineConfig({
   fullyParallel: true,
   workers: process.env.CI ? 2 : undefined,
   retries: process.env.CI ? 2 : 0,
-  
+
   projects: [
     {
       name: 'chromium',
@@ -866,7 +866,7 @@ export default defineConfig({
       use: { ...devices['iPhone 12'] },
     }
   ],
-  
+
   use: {
     baseURL: process.env.BASE_URL || 'http://localhost:3000',
     trace: 'on-first-retry',
@@ -912,22 +912,22 @@ export class CoverageAnalyzer {
       path.join(process.cwd(), 'coverage/coverage-summary.json'),
       'utf-8'
     );
-    
+
     return JSON.parse(coverageData);
   }
 
   async analyzeCoverage(): Promise<void> {
     const report = await this.generateCoverageReport();
-    
+
     console.log('\n📊 커버리지 분석 결과');
     console.log('='.repeat(50));
-    
+
     // 전체 커버리지 분석
     this.printCoverageMetrics('전체', report.total);
-    
+
     // 임계값 미달 파일 찾기
     const lowCoverageFiles = this.findLowCoverageFiles(report.files);
-    
+
     if (lowCoverageFiles.length > 0) {
       console.log('\n⚠️  커버리지 임계값 미달 파일:');
       lowCoverageFiles.forEach(({ file, metrics }) => {
@@ -939,7 +939,7 @@ export class CoverageAnalyzer {
         });
       });
     }
-    
+
     // 커버리지 트렌드 분석
     await this.trackCoverageTrend(report.total);
   }
@@ -954,7 +954,7 @@ export class CoverageAnalyzer {
 
   private findLowCoverageFiles(files: Record<string, CoverageData>): Array<{file: string, metrics: Record<string, number>}> {
     const lowCoverageFiles: Array<{file: string, metrics: Record<string, number>}> = [];
-    
+
     Object.entries(files).forEach(([file, data]) => {
       const metrics: Record<string, number> = {
         statements: data.statements.pct,
@@ -962,26 +962,26 @@ export class CoverageAnalyzer {
         functions: data.functions.pct,
         lines: data.lines.pct
       };
-      
-      const hasLowCoverage = Object.entries(metrics).some(([type, pct]) => 
+
+      const hasLowCoverage = Object.entries(metrics).some(([type, pct]) =>
         pct < this.coverageThresholds[type as keyof typeof this.coverageThresholds]
       );
-      
+
       if (hasLowCoverage) {
         lowCoverageFiles.push({ file, metrics });
       }
     });
-    
+
     return lowCoverageFiles;
   }
 
   private async trackCoverageTrend(currentCoverage: CoverageData): Promise<void> {
     const trendFile = path.join(process.cwd(), 'coverage/trend.json');
-    
+
     try {
       const existingTrend = await fs.readFile(trendFile, 'utf-8');
       const trend = JSON.parse(existingTrend);
-      
+
       // 새로운 데이터 추가
       trend.push({
         date: new Date().toISOString(),
@@ -990,26 +990,26 @@ export class CoverageAnalyzer {
         functions: currentCoverage.functions.pct,
         lines: currentCoverage.lines.pct
       });
-      
+
       // 최근 30개 항목만 유지
       if (trend.length > 30) {
         trend.splice(0, trend.length - 30);
       }
-      
+
       await fs.writeFile(trendFile, JSON.stringify(trend, null, 2));
-      
+
       // 트렌드 분석
       if (trend.length >= 2) {
         const previous = trend[trend.length - 2];
         const current = trend[trend.length - 1];
-        
+
         console.log('\n📈 커버리지 트렌드:');
         this.printTrendAnalysis('구문', previous.statements, current.statements);
         this.printTrendAnalysis('분기', previous.branches, current.branches);
         this.printTrendAnalysis('함수', previous.functions, current.functions);
         this.printTrendAnalysis('라인', previous.lines, current.lines);
       }
-      
+
     } catch (error) {
       // 첫 번째 실행인 경우 새 파일 생성
       const initialTrend = [{
@@ -1019,7 +1019,7 @@ export class CoverageAnalyzer {
         functions: currentCoverage.functions.pct,
         lines: currentCoverage.lines.pct
       }];
-      
+
       await fs.writeFile(trendFile, JSON.stringify(initialTrend, null, 2));
     }
   }
@@ -1028,7 +1028,7 @@ export class CoverageAnalyzer {
     const diff = current - previous;
     const arrow = diff > 0 ? '↗️' : diff < 0 ? '↘️' : '➡️';
     const diffStr = diff !== 0 ? ` (${diff > 0 ? '+' : ''}${diff.toFixed(1)}%)` : '';
-    
+
     console.log(`  ${type}: ${current.toFixed(1)}% ${arrow}${diffStr}`);
   }
 }

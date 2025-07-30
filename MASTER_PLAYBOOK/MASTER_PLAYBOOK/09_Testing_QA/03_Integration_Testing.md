@@ -12,22 +12,22 @@ integration_test_types:
     description: "API 엔드포인트와 데이터베이스 통합"
     scope: ["RESTful APIs", "GraphQL", "gRPC"]
     tools: ["Supertest", "Newman", "Postman"]
-    
+
   database_integration:
     description: "데이터베이스 연동 및 트랜잭션 테스트"
     scope: ["CRUD operations", "Transactions", "Migrations"]
     tools: ["Testcontainers", "In-memory DB", "Docker"]
-    
+
   external_service_integration:
     description: "외부 서비스 및 API 연동 테스트"
     scope: ["Third-party APIs", "Payment gateways", "Email services"]
     tools: ["WireMock", "MSW", "Nock"]
-    
+
   microservice_integration:
     description: "마이크로서비스 간 통신 테스트"
     scope: ["Service mesh", "Message queues", "Event streams"]
     tools: ["Testcontainers", "Docker Compose", "Kafka"]
-    
+
   frontend_backend_integration:
     description: "프론트엔드와 백엔드 연동 테스트"
     scope: ["API calls", "Authentication", "Data flow"]
@@ -73,7 +73,7 @@ describe('Authentication API Integration Tests', () => {
     // 테스트 데이터베이스 설정
     dbHelper = new DatabaseHelper();
     await dbHelper.setup();
-    
+
     // 외부 서비스 모킹
     mockEmailService = new EmailService() as jest.Mocked<EmailService>;
     mockEmailService.sendWelcomeEmail = jest.fn().mockResolvedValue(undefined);
@@ -203,7 +203,7 @@ describe('Authentication API Integration Tests', () => {
 
       // Assert
       expect(response.body.success).toBe(true);
-      
+
       // 사용자는 여전히 생성되어야 함
       const user = await dbHelper.findUserByEmail(validRegistrationData.email);
       expect(user).toBeDefined();
@@ -357,9 +357,9 @@ describe('Authentication API Integration Tests', () => {
 
     it('이미 인증된 사용자의 토큰으로 인증 시 400 오류를 반환한다', async () => {
       // Arrange
-      await dbHelper.updateUser(testUser.id, { 
-        isActive: true, 
-        verificationToken: null 
+      await dbHelper.updateUser(testUser.id, {
+        isActive: true,
+        verificationToken: null
       });
 
       // Act
@@ -534,7 +534,7 @@ describe('UserRepository Integration Tests', () => {
         'SELECT * FROM users WHERE email = $1',
         [userData.email]
       );
-      
+
       expect(result.rows).toHaveLength(1);
       expect(result.rows[0].email).toBe(userData.email);
     });
@@ -685,22 +685,22 @@ describe('UserRepository Integration Tests', () => {
   describe('트랜잭션 테스트', () => {
     it('트랜잭션 내에서 오류 발생 시 롤백된다', async () => {
       const client = await pool.connect();
-      
+
       try {
         await client.query('BEGIN');
-        
+
         // 첫 번째 사용자 생성
         await client.query(
           'INSERT INTO users (email, first_name, last_name, password_hash) VALUES ($1, $2, $3, $4)',
           ['user1@example.com', 'User', 'One', 'hash1']
         );
-        
+
         // 두 번째 사용자 생성 (의도적으로 오류 발생)
         await client.query(
           'INSERT INTO users (email, first_name, last_name, password_hash) VALUES ($1, $2, $3, $4)',
           ['user1@example.com', 'User', 'Two', 'hash2'] // 중복 이메일
         );
-        
+
         await client.query('COMMIT');
       } catch (error) {
         await client.query('ROLLBACK');
@@ -715,20 +715,20 @@ describe('UserRepository Integration Tests', () => {
 
     it('트랜잭션이 성공적으로 커밋된다', async () => {
       const client = await pool.connect();
-      
+
       try {
         await client.query('BEGIN');
-        
+
         await client.query(
           'INSERT INTO users (email, first_name, last_name, password_hash) VALUES ($1, $2, $3, $4)',
           ['user1@example.com', 'User', 'One', 'hash1']
         );
-        
+
         await client.query(
           'INSERT INTO users (email, first_name, last_name, password_hash) VALUES ($1, $2, $3, $4)',
           ['user2@example.com', 'User', 'Two', 'hash2']
         );
-        
+
         await client.query('COMMIT');
       } catch (error) {
         await client.query('ROLLBACK');
@@ -763,7 +763,7 @@ describe('UserRepository Integration Tests', () => {
 
     it('활성 사용자만 조회한다', async () => {
       const activeUsers = await userRepository.findActiveUsers();
-      
+
       expect(activeUsers).toHaveLength(2);
       expect(activeUsers.every(user => user.isActive)).toBe(true);
     });
@@ -771,12 +771,12 @@ describe('UserRepository Integration Tests', () => {
     it('페이지네이션이 올바르게 작동한다', async () => {
       const page1 = await userRepository.findUsersWithPagination(1, 2);
       const page2 = await userRepository.findUsersWithPagination(2, 2);
-      
+
       expect(page1.users).toHaveLength(2);
       expect(page2.users).toHaveLength(2);
       expect(page1.total).toBe(4);
       expect(page2.total).toBe(4);
-      
+
       // 다른 사용자들이어야 함
       const page1Ids = page1.users.map(u => u.id);
       const page2Ids = page2.users.map(u => u.id);
@@ -785,9 +785,9 @@ describe('UserRepository Integration Tests', () => {
 
     it('검색 기능이 올바르게 작동한다', async () => {
       const searchResults = await userRepository.searchUsers('Active');
-      
+
       expect(searchResults).toHaveLength(2);
-      expect(searchResults.every(user => 
+      expect(searchResults.every(user =>
         user.firstName.includes('Active') || user.lastName.includes('Active')
       )).toBe(true);
     });
@@ -804,10 +804,10 @@ describe('UserRepository Integration Tests', () => {
       }));
 
       const startTime = Date.now();
-      
+
       // 배치 삽입
       await userRepository.createMany(users);
-      
+
       const endTime = Date.now();
       const duration = endTime - startTime;
 
@@ -828,14 +828,14 @@ describe('UserRepository Integration Tests', () => {
         lastName: 'Performance',
         passwordHash: 'hashed_password'
       }));
-      
+
       await userRepository.createMany(users);
 
       // 조회 성능 테스트
       const startTime = Date.now();
       const allUsers = await userRepository.findAll();
       const endTime = Date.now();
-      
+
       const duration = endTime - startTime;
 
       expect(allUsers).toHaveLength(userCount);
@@ -862,7 +862,7 @@ describe('PaymentService Integration Tests', () => {
   beforeAll(async () => {
     // WireMock 서버 시작
     wireMock = new WireMockApi('http://localhost:8080');
-    
+
     // PaymentService 초기화 (WireMock URL 사용)
     paymentService = new PaymentService({
       baseUrl: 'http://localhost:8080',
@@ -946,7 +946,7 @@ describe('PaymentService Integration Tests', () => {
       // WireMock 호출 검증
       const requests = await wireMock.getRequests();
       expect(requests.requests).toHaveLength(1);
-      
+
       const request = requests.requests[0];
       expect(request.request.method).toBe('POST');
       expect(request.request.url).toBe('/api/v1/payments');
@@ -1117,7 +1117,7 @@ describe('PaymentService Integration Tests', () => {
     it('결제 상태를 조회한다', async () => {
       // Arrange
       const paymentId = 'payment_12345';
-      
+
       await wireMock.register({
         request: {
           method: 'GET',

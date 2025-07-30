@@ -8,11 +8,11 @@
 
 ## 🎯 이런 상황에 사용하세요
 
-✅ **기본 기능은 완성되었지만 성능이 아쉬운 상황**  
-✅ **사용자가 늘어나면서 속도나 안정성 문제가 생긴 경우**  
-✅ **코드가 복잡해져서 유지보수가 어려워진 상황**  
-✅ **새로운 기능 추가 시 기존 코드에 영향을 주는 경우**  
-✅ **팀 규모가 커지면서 협업 효율성이 떨어진 경우**  
+✅ **기본 기능은 완성되었지만 성능이 아쉬운 상황**
+✅ **사용자가 늘어나면서 속도나 안정성 문제가 생긴 경우**
+✅ **코드가 복잡해져서 유지보수가 어려워진 상황**
+✅ **새로운 기능 추가 시 기존 코드에 영향을 주는 경우**
+✅ **팀 규모가 커지면서 협업 효율성이 떨어진 경우**
 
 ---
 
@@ -29,8 +29,8 @@
 
 2. @/MASTER_PLAYBOOK/13_Advanced_Claude_Features/README.md
    - 고급 프롬프트 엔지니어링과 컨텍스트 관리
-   - 복잡한 코드베이스에서의 AI 활용 전략
-   - 코드 리뷰와 품질 관리 자동화
+   - 🔄 스마트 Git Worktrees: AI 자동 작업 분석으로 병렬 개발 최적화
+   - 복잡한 코드베이스에서의 AI 활용 전략과 성과 분석
 
 3. @/MASTER_PLAYBOOK/07_Advanced_Patterns/README.md
    - 엔터프라이즈급 아키텍처 패턴
@@ -262,9 +262,9 @@ const useAppStore = create<AppState>()(
     user: null,
     settings: defaultSettings,
     updateUser: (user) => set({ user }),
-    updateSettings: (newSettings) => 
-      set((state) => ({ 
-        settings: { ...state.settings, ...newSettings } 
+    updateSettings: (newSettings) =>
+      set((state) => ({
+        settings: { ...state.settings, ...newSettings }
       })),
   }))
 );
@@ -285,7 +285,7 @@ class ApiClient {
   }
 
   async request<T>(
-    endpoint: string, 
+    endpoint: string,
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
     const url = `${this.baseURL}${endpoint}`;
@@ -297,11 +297,11 @@ class ApiClient {
     try {
       const response = await fetch(url, config);
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new ApiError(data.message, response.status);
       }
-      
+
       return { data, status: response.status };
     } catch (error) {
       throw new ApiError('Network error', 0);
@@ -310,11 +310,11 @@ class ApiClient {
 
   // 타입 안전한 메서드들
   get<T>(endpoint: string) { return this.request<T>(endpoint); }
-  post<T>(endpoint: string, data: unknown) { 
-    return this.request<T>(endpoint, { 
-      method: 'POST', 
-      body: JSON.stringify(data) 
-    }); 
+  post<T>(endpoint: string, data: unknown) {
+    return this.request<T>(endpoint, {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
   }
 }
 ```
@@ -334,7 +334,7 @@ class PerformanceMonitor {
       const start = performance.now();
       const result = await fn.apply(this, args);
       const end = performance.now();
-      
+
       this.recordMetric(name, end - start);
       return result;
     };
@@ -345,7 +345,7 @@ class PerformanceMonitor {
       this.metrics.set(name, []);
     }
     this.metrics.get(name)!.push(value);
-    
+
     // 100개 이상 쌓이면 오래된 것 제거
     const values = this.metrics.get(name)!;
     if (values.length > 100) {

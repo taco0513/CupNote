@@ -107,22 +107,22 @@ export class ContainerSecurityScanner {
   private trivyScanner: TrivyScanner;
   private synkScanner: SynkScanner;
   private cosignVerifier: CosignVerifier;
-  
+
   async scanContainerImage(image: string): Promise<SecurityScanResult> {
     // 1. 취약점 스캔
     const vulnerabilities = await this.scanVulnerabilities(image);
-    
+
     // 2. 설정 검사
     const configIssues = await this.scanConfiguration(image);
-    
+
     // 3. 시크릿 스캔
     const secrets = await this.scanSecrets(image);
-    
+
     // 4. 서명 검증
     const signatureVerification = await this.verifySignature(image);
-    
+
     const riskScore = this.calculateRiskScore(vulnerabilities, configIssues, secrets);
-    
+
     return {
       image,
       timestamp: new Date(),
@@ -134,14 +134,14 @@ export class ContainerSecurityScanner {
       recommendation: this.generateRecommendation(riskScore)
     };
   }
-  
+
   private async scanVulnerabilities(image: string): Promise<Vulnerability[]> {
     const trivyResult = await this.trivyScanner.scan(image);
     const synkResult = await this.synkScanner.scan(image);
-    
+
     // 결과 통합 및 중복 제거
     const vulnerabilities = this.mergeVulnerabilities(trivyResult, synkResult);
-    
+
     return vulnerabilities.map(vuln => ({
       id: vuln.id,
       severity: vuln.severity,
@@ -153,11 +153,11 @@ export class ContainerSecurityScanner {
       exploitAvailable: vuln.exploitAvailable
     }));
   }
-  
+
   private async scanConfiguration(image: string): Promise<ConfigIssue[]> {
     const dockerfile = await this.extractDockerfile(image);
     const issues: ConfigIssue[] = [];
-    
+
     // Dockerfile 보안 검사
     if (dockerfile.includes('FROM scratch')) {
       // 허용 - 최소 이미지
@@ -170,7 +170,7 @@ export class ContainerSecurityScanner {
         remediation: 'Add USER instruction to run as non-root user'
       });
     }
-    
+
     if (dockerfile.includes('ADD ')) {
       issues.push({
         type: 'configuration',
@@ -180,7 +180,7 @@ export class ContainerSecurityScanner {
         remediation: 'Use COPY instead of ADD when possible'
       });
     }
-    
+
     // 이미지 메타데이터 검사
     const metadata = await this.getImageMetadata(image);
     if (!metadata.healthcheck) {
@@ -192,17 +192,17 @@ export class ContainerSecurityScanner {
         remediation: 'Add HEALTHCHECK instruction'
       });
     }
-    
+
     return issues;
   }
-  
+
   private calculateRiskScore(
     vulnerabilities: Vulnerability[],
     configIssues: ConfigIssue[],
     secrets: Secret[]
   ): RiskScore {
     let score = 0;
-    
+
     // 취약점 점수
     vulnerabilities.forEach(vuln => {
       switch (vuln.severity) {
@@ -211,10 +211,10 @@ export class ContainerSecurityScanner {
         case 'medium': score += 4; break;
         case 'low': score += 1; break;
       }
-      
+
       if (vuln.exploitAvailable) score += 3;
     });
-    
+
     // 설정 이슈 점수
     configIssues.forEach(issue => {
       switch (issue.severity) {
@@ -223,14 +223,14 @@ export class ContainerSecurityScanner {
         case 'low': score += 1; break;
       }
     });
-    
+
     // 시크릿 점수
     score += secrets.length * 8;
-    
+
     return {
       total: Math.min(score, 100),
-      level: score >= 80 ? 'critical' : 
-             score >= 60 ? 'high' : 
+      level: score >= 80 ? 'critical' :
+             score >= 60 ? 'high' :
              score >= 30 ? 'medium' : 'low'
     };
   }
@@ -244,21 +244,21 @@ export class RuntimeSecurityMonitor {
   private falcoClient: FalcoClient;
   private auditLogger: AuditLogger;
   private alertManager: AlertManager;
-  
+
   async startMonitoring(): Promise<void> {
     // 1. Falco 규칙 설정
     await this.setupFalcoRules();
-    
+
     // 2. 이벤트 스트림 시작
     this.falcoClient.onSecurityEvent(this.handleSecurityEvent.bind(this));
-    
+
     // 3. 네트워크 트래픽 모니터링
     await this.setupNetworkMonitoring();
-    
+
     // 4. 파일 시스템 모니터링
     await this.setupFileSystemMonitoring();
   }
-  
+
   private async setupFalcoRules(): Promise<void> {
     const rules = [
       // 권한 상승 감지
@@ -290,48 +290,48 @@ export class RuntimeSecurityMonitor {
         priority: 'critical'
       }
     ];
-    
+
     for (const rule of rules) {
       await this.falcoClient.addRule(rule);
     }
   }
-  
+
   private async handleSecurityEvent(event: SecurityEvent): Promise<void> {
     // 1. 이벤트 로깅
     await this.auditLogger.logSecurityEvent(event);
-    
+
     // 2. 위험도 평가
     const riskAssessment = await this.assessEventRisk(event);
-    
+
     // 3. 자동 대응
     if (riskAssessment.level === 'critical') {
       await this.executeEmergencyResponse(event);
     }
-    
+
     // 4. 알림 발송
     await this.sendSecurityAlert(event, riskAssessment);
-    
+
     // 5. 상관관계 분석
     await this.analyzeEventCorrelation(event);
   }
-  
+
   private async executeEmergencyResponse(event: SecurityEvent): Promise<void> {
     switch (event.type) {
       case 'privilege_escalation':
         // 컨테이너 격리
         await this.isolateContainer(event.containerId);
         break;
-        
+
       case 'container_escape':
         // 노드 격리
         await this.isolateNode(event.nodeId);
         break;
-        
+
       case 'malware_detected':
         // 네트워크 차단
         await this.blockNetworkAccess(event.containerId);
         break;
-        
+
       case 'data_exfiltration':
         // 즉시 알림 및 연결 차단
         await this.blockExternalConnections(event.containerId);
@@ -437,7 +437,7 @@ spec:
 export class ServiceMeshSecurity {
   private istioApi: IstioAPI;
   private certManager: CertManager;
-  
+
   async setupMutualTLS(): Promise<void> {
     // 1. 전역 mTLS 정책
     const globalMTLS = {
@@ -453,21 +453,21 @@ export class ServiceMeshSecurity {
         }
       }
     };
-    
+
     await this.istioApi.apply(globalMTLS);
-    
+
     // 2. 네임스페이스별 정책
     const namespacePolicies = [
       'production',
       'staging',
       'development'
     ];
-    
+
     for (const namespace of namespacePolicies) {
       await this.createNamespaceMTLSPolicy(namespace);
     }
   }
-  
+
   async setupAuthorizationPolicies(): Promise<void> {
     const policies: AuthorizationPolicy[] = [
       // 웹 앱 접근 제어
@@ -551,12 +551,12 @@ export class ServiceMeshSecurity {
         }
       }
     ];
-    
+
     for (const policy of policies) {
       await this.istioApi.apply(policy);
     }
   }
-  
+
   async setupSecurityMonitoring(): Promise<void> {
     // 1. 보안 이벤트 수집
     const telemetryConfig = {
@@ -595,13 +595,13 @@ export class ServiceMeshSecurity {
         }]
       }
     };
-    
+
     await this.istioApi.apply(telemetryConfig);
-    
+
     // 2. 보안 알림 규칙
     await this.setupSecurityAlerts();
   }
-  
+
   private async setupSecurityAlerts(): Promise<void> {
     const alertRules = [
       // mTLS 실패 감지
@@ -641,7 +641,7 @@ export class ServiceMeshSecurity {
         }
       }
     ];
-    
+
     for (const rule of alertRules) {
       await this.alertManager.addRule(rule);
     }
@@ -657,18 +657,18 @@ export class ServiceMeshSecurity {
 export class EncryptionManager {
   private kmsClient: KMSClient;
   private vaultClient: VaultClient;
-  
+
   async setupEncryptionAtRest(): Promise<void> {
     // 1. 데이터베이스 암호화
     await this.setupDatabaseEncryption();
-    
+
     // 2. 파일 시스템 암호화
     await this.setupStorageEncryption();
-    
+
     // 3. 애플리케이션 수준 암호화
     await this.setupApplicationEncryption();
   }
-  
+
   private async setupDatabaseEncryption(): Promise<void> {
     const encryptionConfigs = [
       {
@@ -698,12 +698,12 @@ export class EncryptionManager {
         }
       }
     ];
-    
+
     for (const config of encryptionConfigs) {
       await this.configureDatabaseEncryption(config);
     }
   }
-  
+
   async setupSecretsManagement(): Promise<void> {
     // 1. Vault 정책 설정
     const policies: VaultPolicy[] = [
@@ -730,18 +730,18 @@ export class EncryptionManager {
         `
       }
     ];
-    
+
     for (const policy of policies) {
       await this.vaultClient.createPolicy(policy);
     }
-    
+
     // 2. 동적 시크릿 설정
     await this.setupDynamicSecrets();
-    
+
     // 3. 시크릿 자동 순환
     await this.setupSecretRotation();
   }
-  
+
   private async setupDynamicSecrets(): Promise<void> {
     // 데이터베이스 동적 자격 증명
     const dbConfig = {
@@ -751,9 +751,9 @@ export class EncryptionManager {
       username: 'vault',
       password: '{{.RandomPassword}}'
     };
-    
+
     await this.vaultClient.configureDatabaseEngine(dbConfig);
-    
+
     // 역할 정의
     const role = {
       name: 'web-app-role',
@@ -765,10 +765,10 @@ export class EncryptionManager {
       default_ttl: '1h',
       max_ttl: '24h'
     };
-    
+
     await this.vaultClient.createDatabaseRole(role);
   }
-  
+
   async implementFieldLevelEncryption(): Promise<void> {
     // 애플리케이션 수준 암호화
     const encryptionService = new FieldEncryptionService({
@@ -783,7 +783,7 @@ export class EncryptionManager {
         retainOldKeys: 3
       }
     });
-    
+
     // 민감한 필드 암호화 설정
     const sensitiveFields = [
       { field: 'email', type: 'deterministic' },
@@ -791,7 +791,7 @@ export class EncryptionManager {
       { field: 'creditCard', type: 'randomized' },
       { field: 'phoneNumber', type: 'deterministic' }
     ];
-    
+
     for (const field of sensitiveFields) {
       await encryptionService.configureFieldEncryption(field);
     }
@@ -805,7 +805,7 @@ export class EncryptionManager {
 export class DataClassificationService {
   private classificationRules: ClassificationRule[];
   private dlpScanner: DLPScanner;
-  
+
   async classifyData(data: any): Promise<DataClassification> {
     const classification: DataClassification = {
       confidentialityLevel: 'public',
@@ -813,7 +813,7 @@ export class DataClassificationService {
       complianceRequirements: [],
       retentionPeriod: '7y'
     };
-    
+
     // 1. 자동 분류
     for (const rule of this.classificationRules) {
       const matches = await this.evaluateRule(rule, data);
@@ -826,7 +826,7 @@ export class DataClassificationService {
         classification.complianceRequirements.push(...rule.complianceRequirements);
       }
     }
-    
+
     // 2. DLP 스캔
     const dlpResults = await this.dlpScanner.scan(data);
     for (const result of dlpResults) {
@@ -838,16 +838,16 @@ export class DataClassificationService {
         });
       }
     }
-    
+
     // 3. 보호 정책 적용
     const protectionPolicy = await this.determineProtectionPolicy(classification);
-    
+
     return {
       ...classification,
       protectionPolicy
     };
   }
-  
+
   private async determineProtectionPolicy(
     classification: DataClassification
   ): Promise<ProtectionPolicy> {
@@ -869,7 +869,7 @@ export class DataClassificationService {
         allowedProtocols: ['HTTPS', 'TLS']
       }
     };
-    
+
     switch (classification.confidentialityLevel) {
       case 'highly_confidential':
         policy.encryption.required = true;
@@ -877,23 +877,23 @@ export class DataClassificationService {
         policy.storage.region = 'specific';
         policy.transmission.allowedProtocols = ['TLS'];
         break;
-        
+
       case 'confidential':
         policy.encryption.required = true;
         policy.access.requiredRoles = ['user', 'manager'];
         policy.storage.region = 'regional';
         break;
-        
+
       case 'internal':
         policy.access.requiredRoles = ['employee'];
         break;
-        
+
       case 'public':
         policy.access.requiresAuthentication = false;
         policy.access.requiredRoles = [];
         break;
     }
-    
+
     // 컴플라이언스 요구사항 적용
     if (classification.complianceRequirements.includes('GDPR')) {
       policy.privacy = {
@@ -902,7 +902,7 @@ export class DataClassificationService {
         consentRequired: true
       };
     }
-    
+
     if (classification.complianceRequirements.includes('HIPAA')) {
       policy.encryption.required = true;
       policy.audit = {
@@ -910,7 +910,7 @@ export class DataClassificationService {
         changeTracking: true
       };
     }
-    
+
     return policy;
   }
 }
@@ -924,35 +924,35 @@ export class DataClassificationService {
 export class ComplianceChecker {
   private regulations: ComplianceRegulation[];
   private auditLogger: AuditLogger;
-  
+
   async performComplianceAudit(scope: AuditScope): Promise<ComplianceReport> {
     const findings: ComplianceFinding[] = [];
-    
+
     // 1. 시스템 설정 검사
     const systemFindings = await this.auditSystemConfiguration(scope);
     findings.push(...systemFindings);
-    
+
     // 2. 데이터 보호 검사
     const dataFindings = await this.auditDataProtection(scope);
     findings.push(...dataFindings);
-    
+
     // 3. 접근 제어 검사
     const accessFindings = await this.auditAccessControls(scope);
     findings.push(...accessFindings);
-    
+
     // 4. 로깅 및 모니터링 검사
     const loggingFindings = await this.auditLoggingCompliance(scope);
     findings.push(...loggingFindings);
-    
+
     const report = this.generateComplianceReport(findings);
     await this.auditLogger.logComplianceAudit(report);
-    
+
     return report;
   }
-  
+
   private async auditSystemConfiguration(scope: AuditScope): Promise<ComplianceFinding[]> {
     const findings: ComplianceFinding[] = [];
-    
+
     // PCI DSS 요구사항 검사
     if (scope.regulations.includes('PCI_DSS')) {
       // 네트워크 분할 검사
@@ -967,7 +967,7 @@ export class ComplianceChecker {
           evidence: 'Network policies configuration'
         });
       }
-      
+
       // 암호화 검사
       const encryptionStatus = await this.checkEncryption();
       if (!encryptionStatus.databaseEncrypted) {
@@ -981,7 +981,7 @@ export class ComplianceChecker {
         });
       }
     }
-    
+
     // SOC 2 Type II 검사
     if (scope.regulations.includes('SOC2')) {
       // 접근 로깅 검사
@@ -997,18 +997,18 @@ export class ComplianceChecker {
         });
       }
     }
-    
+
     return findings;
   }
-  
+
   private async auditDataProtection(scope: AuditScope): Promise<ComplianceFinding[]> {
     const findings: ComplianceFinding[] = [];
-    
+
     // GDPR 검사
     if (scope.regulations.includes('GDPR')) {
       // 개인 데이터 식별
       const personalData = await this.identifyPersonalData();
-      
+
       for (const data of personalData) {
         // 법적 근거 확인
         if (!data.legalBasis) {
@@ -1021,7 +1021,7 @@ export class ComplianceChecker {
             evidence: `Data classification for ${data.location}`
           });
         }
-        
+
         // 보존 기간 확인
         if (!data.retentionPeriod) {
           findings.push({
@@ -1033,7 +1033,7 @@ export class ComplianceChecker {
             evidence: `Data retention configuration`
           });
         }
-        
+
         // 삭제 권리 구현 확인
         if (!data.deletionCapability) {
           findings.push({
@@ -1047,13 +1047,13 @@ export class ComplianceChecker {
         }
       }
     }
-    
+
     return findings;
   }
-  
+
   async generateComplianceReport(findings: ComplianceFinding[]): Promise<ComplianceReport> {
     const summary = this.summarizeFindings(findings);
-    
+
     return {
       timestamp: new Date(),
       scope: 'production',
@@ -1064,14 +1064,14 @@ export class ComplianceChecker {
       nextAuditDate: this.calculateNextAuditDate(summary.riskLevel)
     };
   }
-  
+
   private generateRecommendations(findings: ComplianceFinding[]): ComplianceRecommendation[] {
     const recommendations: ComplianceRecommendation[] = [];
-    
+
     // 우선순위별 그룹화
     const criticalFindings = findings.filter(f => f.severity === 'critical');
     const highFindings = findings.filter(f => f.severity === 'high');
-    
+
     if (criticalFindings.length > 0) {
       recommendations.push({
         priority: 'immediate',
@@ -1080,7 +1080,7 @@ export class ComplianceChecker {
         findings: criticalFindings.map(f => f.requirement)
       });
     }
-    
+
     if (highFindings.length > 0) {
       recommendations.push({
         priority: 'high',
@@ -1089,7 +1089,7 @@ export class ComplianceChecker {
         findings: highFindings.map(f => f.requirement)
       });
     }
-    
+
     // 자동화 기회 식별
     const automationOpportunities = this.identifyAutomationOpportunities(findings);
     if (automationOpportunities.length > 0) {
@@ -1100,7 +1100,7 @@ export class ComplianceChecker {
         details: automationOpportunities
       });
     }
-    
+
     return recommendations;
   }
 }
@@ -1112,21 +1112,21 @@ export class ComplianceChecker {
 export class RegulatoryAutomation {
   private policyEngine: PolicyEngine;
   private workflowEngine: WorkflowEngine;
-  
+
   async implementGDPRCompliance(): Promise<void> {
     // 1. 데이터 주체 권리 자동화
     await this.setupDataSubjectRights();
-    
+
     // 2. 동의 관리 자동화
     await this.setupConsentManagement();
-    
+
     // 3. 데이터 보호 영향 평가 자동화
     await this.setupDPIAWorkflow();
-    
+
     // 4. 위반 알림 자동화
     await this.setupBreachNotification();
   }
-  
+
   private async setupDataSubjectRights(): Promise<void> {
     const workflows = [
       // 접근 권리 (Art. 15)
@@ -1200,12 +1200,12 @@ export class RegulatoryAutomation {
         ]
       }
     ];
-    
+
     for (const workflow of workflows) {
       await this.workflowEngine.createWorkflow(workflow);
     }
   }
-  
+
   private async setupBreachNotification(): Promise<void> {
     const breachDetectionRules = [
       {
@@ -1227,7 +1227,7 @@ export class RegulatoryAutomation {
         action: 'immediate_breach_response'
       }
     ];
-    
+
     const breachWorkflow = {
       name: 'gdpr_breach_notification',
       steps: [
@@ -1254,9 +1254,9 @@ export class RegulatoryAutomation {
         }
       ]
     };
-    
+
     await this.workflowEngine.createWorkflow(breachWorkflow);
-    
+
     for (const rule of breachDetectionRules) {
       await this.policyEngine.addRule(rule);
     }

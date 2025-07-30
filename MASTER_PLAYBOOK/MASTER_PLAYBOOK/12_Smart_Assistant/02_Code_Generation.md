@@ -18,14 +18,14 @@ interface CodeGenerationContext {
     architecture: "mvc" | "mvvm" | "clean" | "hexagonal";
     conventions: CodingConventions;
   };
-  
+
   target: {
     component: "controller" | "service" | "model" | "view" | "utility";
     purpose: string;
     requirements: Requirement[];
     constraints: Constraint[];
   };
-  
+
   environment: {
     buildTool: string;
     testFramework: string;
@@ -39,29 +39,29 @@ class SmartCodeGenerator {
   private context: CodeGenerationContext;
   private templates: Map<string, Template> = new Map();
   private patterns: Map<string, Pattern> = new Map();
-  
+
   constructor(context: CodeGenerationContext) {
     this.context = context;
     this.loadTemplates();
     this.loadPatterns();
   }
-  
+
   async generateComponent(specification: ComponentSpec): Promise<GeneratedComponent> {
     // 1. 요구사항 분석
     const analysis = await this.analyzeRequirements(specification);
-    
+
     // 2. 적절한 패턴 선택
     const pattern = this.selectBestPattern(analysis);
-    
+
     // 3. 템플릿 조합
     const template = this.combineTemplates(pattern, analysis);
-    
+
     // 4. 코드 생성
     const generatedCode = await this.generateFromTemplate(template, specification);
-    
+
     // 5. 최적화 및 검증
     const optimizedCode = await this.optimizeCode(generatedCode);
-    
+
     return {
       code: optimizedCode,
       tests: await this.generateTests(optimizedCode, specification),
@@ -69,31 +69,31 @@ class SmartCodeGenerator {
       dependencies: this.extractDependencies(optimizedCode)
     };
   }
-  
+
   // 패턴 기반 생성
   async generateWithPattern(
     patternName: string,
     parameters: PatternParameters
   ): Promise<PatternBasedCode> {
-    
+
     const pattern = this.patterns.get(patternName);
     if (!pattern) {
       throw new Error(`Unknown pattern: ${patternName}`);
     }
-    
+
     // 패턴 매개변수 검증
     this.validatePatternParameters(pattern, parameters);
-    
+
     // 패턴 적용
     const generatedStructure = pattern.apply(parameters);
-    
+
     // 각 구성 요소 생성
     const components = await Promise.all(
       generatedStructure.components.map(comp =>
         this.generateComponent(comp.specification)
       )
     );
-    
+
     return {
       structure: generatedStructure,
       components,
@@ -110,18 +110,18 @@ class SmartCodeGenerator {
 // 동적 템플릿 엔진
 class TemplateEngine {
   private templateCache: Map<string, CompiledTemplate> = new Map();
-  
+
   async generateFromTemplate(
     templateName: string,
     variables: TemplateVariables
   ): Promise<string> {
-    
+
     const template = await this.loadTemplate(templateName);
     const compiled = this.compileTemplate(template);
-    
+
     return compiled.render(variables);
   }
-  
+
   // React 컴포넌트 템플릿
   private createReactComponentTemplate(): Template {
     return {
@@ -145,13 +145,13 @@ export const use{{componentName}} = ({{#each hookParams}}{{name}}: {{type}}{{#un
   {{#each stateVars}}
   const [{{name}}, set{{capitalize name}}] = useState<{{type}}>({{defaultValue}});
   {{/each}}
-  
+
   {{#each effects}}
   useEffect(() => {
     {{body}}
   }, [{{dependencies}}]);
   {{/each}}
-  
+
   return {
     {{#each returnValues}}
     {{name}}{{#unless @last}},{{/unless}}
@@ -165,13 +165,13 @@ export const {{componentName}}: React.FC<{{componentName}}Props> = ({
   {{#each stateVars}}
   const [{{name}}, set{{capitalize name}}] = useState<{{type}}>({{defaultValue}});
   {{/each}}
-  
+
   {{#each handlers}}
   const {{name}} = {{#if isAsync}}async {{/if}}({{parameters}}) => {
     {{body}}
   };
   {{/each}}
-  
+
   return (
     <{{containerElement}}{{#if hasClassName}} className="{{className}}"{{/if}}>
       {{#each children}}
@@ -185,12 +185,12 @@ export const {{componentName}}: React.FC<{{componentName}}Props> = ({
 export default {{componentName}};
       `,
       variables: [
-        "componentName", "props", "hasTypes", "isHook", 
+        "componentName", "props", "hasTypes", "isHook",
         "stateVars", "effects", "handlers", "children"
       ]
     };
   }
-  
+
   // Express API 템플릿
   private createExpressAPITemplate(): Template {
     return {
@@ -230,11 +230,11 @@ router.{{method}}('{{path}}'{{#if hasValidation}}, {{name}}Validation{{/if}}, as
       return res.status(400).json({ errors: errors.array() });
     }
     {{/if}}
-    
+
     {{#each steps}}
     {{this}}
     {{/each}}
-    
+
     res.status({{successStatus}}).json({{response}});
   } catch (error) {
     console.error('{{name}} error:', error);
@@ -246,7 +246,7 @@ router.{{method}}('{{path}}'{{#if hasValidation}}, {{name}}Validation{{/if}}, as
 export default router;
       `,
       variables: [
-        "endpoints", "hasMiddleware", "middleware", 
+        "endpoints", "hasMiddleware", "middleware",
         "hasValidation", "imports"
       ]
     };
@@ -261,76 +261,76 @@ export default router;
 class ProjectScaffolder {
   async createProject(config: ProjectConfig): Promise<ProjectStructure> {
     const structure = await this.generateProjectStructure(config);
-    
+
     // 기본 파일들 생성
     await this.generateBasicFiles(structure, config);
-    
+
     // 설정 파일들 생성
     await this.generateConfigFiles(structure, config);
-    
+
     // 예제 코드 생성
     await this.generateExampleCode(structure, config);
-    
+
     return structure;
   }
-  
+
   private async generateBasicFiles(
     structure: ProjectStructure,
     config: ProjectConfig
   ): Promise<void> {
-    
+
     // package.json 생성
     const packageJson = await this.generatePackageJson(config);
     await this.writeFile(structure.root + '/package.json', packageJson);
-    
+
     // tsconfig.json 생성 (TypeScript 프로젝트인 경우)
     if (config.language === 'typescript') {
       const tsConfig = await this.generateTSConfig(config);
       await this.writeFile(structure.root + '/tsconfig.json', tsConfig);
     }
-    
+
     // README.md 생성
     const readme = await this.generateReadme(config);
     await this.writeFile(structure.root + '/README.md', readme);
-    
+
     // .gitignore 생성
     const gitignore = await this.generateGitignore(config);
     await this.writeFile(structure.root + '/.gitignore', gitignore);
-    
+
     // Docker 파일들 생성 (필요한 경우)
     if (config.includeDocker) {
       const dockerfile = await this.generateDockerfile(config);
       await this.writeFile(structure.root + '/Dockerfile', dockerfile);
-      
+
       const dockerCompose = await this.generateDockerCompose(config);
       await this.writeFile(structure.root + '/docker-compose.yml', dockerCompose);
     }
   }
-  
+
   // 특정 기능 추가
   async addFeature(
     projectPath: string,
     featureSpec: FeatureSpecification
   ): Promise<GeneratedFeature> {
-    
+
     const projectContext = await this.analyzeProject(projectPath);
     const featureCode = await this.generateFeatureCode(featureSpec, projectContext);
-    
+
     // 파일 생성/수정
     for (const file of featureCode.files) {
       await this.writeFile(file.path, file.content);
     }
-    
+
     // 종속성 업데이트
     if (featureCode.dependencies.length > 0) {
       await this.updateDependencies(projectPath, featureCode.dependencies);
     }
-    
+
     // 설정 업데이트
     if (featureCode.configUpdates.length > 0) {
       await this.updateConfigurations(projectPath, featureCode.configUpdates);
     }
-    
+
     return {
       feature: featureSpec,
       generatedFiles: featureCode.files,
@@ -367,10 +367,10 @@ class DomainSpecificGenerator {
       tests: await this.generateCRUDTests(entity),
       migrations: await this.generateMigrations(entity)
     };
-    
+
     return implementation;
   }
-  
+
   private async generateModel(entity: EntityDefinition): Promise<string> {
     return `
 // ${entity.name} Model
@@ -400,7 +400,7 @@ export interface Update${entity.name}DTO {
 }
     `;
   }
-  
+
   private async generateRepository(entity: EntityDefinition): Promise<string> {
     return `
 // ${entity.name} Repository
@@ -409,7 +409,7 @@ import { ${entity.name} } from '../models/${entity.name}';
 
 @EntityRepository(${entity.name})
 export class ${entity.name}Repository extends Repository<${entity.name}> {
-  
+
   async findByIdOrFail(id: string): Promise<${entity.name}> {
     const entity = await this.findOne(id);
     if (!entity) {
@@ -417,12 +417,12 @@ export class ${entity.name}Repository extends Repository<${entity.name}> {
     }
     return entity;
   }
-  
+
   ${entity.queries?.map(query => this.generateCustomQuery(query, entity)).join('\n  ') || ''}
-  
+
   async search(searchTerm: string, limit: number = 10): Promise<${entity.name}[]> {
     return this.createQueryBuilder('${entity.name.toLowerCase()}')
-      ${entity.searchableFields.map(field => 
+      ${entity.searchableFields.map(field =>
         `.orWhere('${entity.name.toLowerCase()}.${field.name} ILIKE :search', { search: \`%\${searchTerm}%\` })`
       ).join('\n      ')}
       .limit(limit)
@@ -431,17 +431,17 @@ export class ${entity.name}Repository extends Repository<${entity.name}> {
 }
     `;
   }
-  
+
   // 비즈니스 로직 생성
   async generateBusinessLogic(
     workflow: WorkflowDefinition
   ): Promise<BusinessLogicImplementation> {
-    
+
     const stateMachine = await this.generateStateMachine(workflow);
     const validators = await this.generateValidators(workflow);
     const handlers = await this.generateEventHandlers(workflow);
     const services = await this.generateBusinessServices(workflow);
-    
+
     return {
       stateMachine,
       validators,
@@ -462,9 +462,9 @@ class TestGenerator {
     sourceCode: string,
     testType: "unit" | "integration" | "e2e"
   ): Promise<GeneratedTests> {
-    
+
     const analysis = await this.analyzeCode(sourceCode);
-    
+
     switch (testType) {
       case "unit":
         return await this.generateUnitTests(analysis);
@@ -474,27 +474,27 @@ class TestGenerator {
         return await this.generateE2ETests(analysis);
     }
   }
-  
+
   private async generateUnitTests(analysis: CodeAnalysis): Promise<GeneratedTests> {
     const tests: TestCase[] = [];
-    
+
     // 각 함수/메서드에 대한 테스트 생성
     for (const func of analysis.functions) {
       // 정상 케이스
       tests.push(await this.generateHappyPathTest(func));
-      
+
       // 에러 케이스
       tests.push(...await this.generateErrorCases(func));
-      
+
       // 경계 값 테스트
       tests.push(...await this.generateBoundaryTests(func));
-      
+
       // 모킹이 필요한 의존성 테스트
       if (func.dependencies.length > 0) {
         tests.push(...await this.generateMockedTests(func));
       }
     }
-    
+
     return {
       framework: "jest",
       files: await this.organizeTestFiles(tests),
@@ -502,32 +502,32 @@ class TestGenerator {
       utilities: await this.generateTestUtilities(analysis)
     };
   }
-  
+
   // React 컴포넌트 테스트 생성
   async generateReactTests(component: ReactComponent): Promise<ReactTestSuite> {
     return {
       renderTests: await this.generateRenderTests(component),
       interactionTests: await this.generateInteractionTests(component),
       propTests: await this.generatePropTests(component),
-      hookTests: component.hooks.length > 0 
+      hookTests: component.hooks.length > 0
         ? await this.generateHookTests(component.hooks)
         : [],
       snapshotTests: await this.generateSnapshotTests(component)
     };
   }
-  
+
   private async generateRenderTests(component: ReactComponent): Promise<TestCase[]> {
     return [`
 describe('${component.name} Rendering', () => {
   it('renders without crashing', () => {
     render(<${component.name} ${this.generateMinimalProps(component)} />);
   });
-  
+
   it('renders with all props', () => {
     const props = ${JSON.stringify(this.generateFullProps(component), null, 2)};
     render(<${component.name} {...props} />);
   });
-  
+
   ${component.conditionalRenders.map(condition => `
   it('renders ${condition.description}', () => {
     const props = ${JSON.stringify(condition.props, null, 2)};
@@ -549,7 +549,7 @@ class APIDocumentationGenerator {
   async generateOpenAPISpec(
     routes: RouteDefinition[]
   ): Promise<OpenAPISpecification> {
-    
+
     const spec: OpenAPISpecification = {
       openapi: "3.0.3",
       info: {
@@ -567,41 +567,41 @@ class APIDocumentationGenerator {
         securitySchemes: {}
       }
     };
-    
+
     for (const route of routes) {
       spec.paths[route.path] = await this.generatePathItem(route);
-      
+
       // 스키마 추출 및 추가
       const schemas = this.extractSchemas(route);
       Object.assign(spec.components.schemas, schemas);
     }
-    
+
     return spec;
   }
-  
+
   private async generatePathItem(route: RouteDefinition): Promise<PathItem> {
     const operation: Operation = {
       summary: route.summary || `${route.method.toUpperCase()} ${route.path}`,
       description: route.description || "",
       tags: route.tags || [],
       parameters: await this.generateParameters(route),
-      requestBody: route.requestBody 
+      requestBody: route.requestBody
         ? await this.generateRequestBody(route.requestBody)
         : undefined,
       responses: await this.generateResponses(route.responses),
       security: route.requiresAuth ? [{ bearerAuth: [] }] : undefined
     };
-    
+
     return {
       [route.method]: operation
     };
   }
-  
+
   // 인터랙티브 문서 생성
   async generateInteractiveDocs(
     spec: OpenAPISpecification
   ): Promise<InteractiveDocumentation> {
-    
+
     return {
       html: await this.generateSwaggerUI(spec),
       postmanCollection: await this.generatePostmanCollection(spec),
@@ -628,10 +628,10 @@ class CodeQualityValidator {
       performance: await this.analyzePerformance(code),
       maintainability: await this.assessMaintainability(code)
     };
-    
+
     return results;
   }
-  
+
   private async validateSyntax(code: string): Promise<SyntaxValidation> {
     // TypeScript 컴파일러를 사용한 구문 검증
     const ts = await import('typescript');
@@ -641,7 +641,7 @@ class CodeQualityValidator {
       ts.ScriptTarget.Latest,
       true
     );
-    
+
     const diagnostics = ts.getPreEmitDiagnostics(
       ts.createProgram(['temp.ts'], {}, {
         getSourceFile: () => sourceFile,
@@ -655,7 +655,7 @@ class CodeQualityValidator {
         getNewLine: () => '\n'
       })
     );
-    
+
     return {
       isValid: diagnostics.length === 0,
       errors: diagnostics.map(d => ({
@@ -665,15 +665,15 @@ class CodeQualityValidator {
       }))
     };
   }
-  
+
   // 자동 수정 제안
   async suggestImprovements(
     code: string,
     validationResults: ValidationResult
   ): Promise<ImprovementSuggestion[]> {
-    
+
     const suggestions: ImprovementSuggestion[] = [];
-    
+
     // 복잡도 개선
     if (validationResults.complexity.cyclomaticComplexity > 10) {
       suggestions.push({
@@ -684,18 +684,18 @@ class CodeQualityValidator {
         suggestedFix: await this.suggestFunctionDecomposition(code)
       });
     }
-    
+
     // 성능 최적화
     if (validationResults.performance.hasIssues) {
       suggestions.push(...await this.suggestPerformanceOptimizations(code));
     }
-    
+
     // 보안 개선
     if (validationResults.security.vulnerabilities.length > 0) {
       suggestions.push(...await this.suggestSecurityFixes(code, validationResults.security));
     }
-    
-    return suggestions.sort((a, b) => 
+
+    return suggestions.sort((a, b) =>
       this.getPriorityScore(b.priority) - this.getPriorityScore(a.priority)
     );
   }
@@ -712,25 +712,25 @@ class CodeEvolutionSystem {
     feedback: DeveloperFeedback,
     requirements: UpdatedRequirements
   ): Promise<EvolvedCode> {
-    
+
     // 기존 코드 분석
     const analysis = await this.analyzeExistingCode(originalCode);
-    
+
     // 변경 요구사항 분석
     const changeAnalysis = await this.analyzeChanges(requirements, analysis);
-    
+
     // 점진적 개선 계획 수립
     const evolutionPlan = await this.createEvolutionPlan(changeAnalysis, feedback);
-    
+
     // 단계별 코드 진화
     let evolvedCode = originalCode;
     const evolutionSteps: EvolutionStep[] = [];
-    
+
     for (const step of evolutionPlan.steps) {
       const stepResult = await this.executeEvolutionStep(evolvedCode, step);
       evolvedCode = stepResult.code;
       evolutionSteps.push(stepResult);
-      
+
       // 각 단계 후 검증
       const validation = await this.validateEvolutionStep(stepResult);
       if (!validation.isValid) {
@@ -738,7 +738,7 @@ class CodeEvolutionSystem {
         evolvedCode = await this.rollbackAndTryAlternative(evolvedCode, step, validation);
       }
     }
-    
+
     return {
       originalCode,
       evolvedCode,
@@ -748,18 +748,18 @@ class CodeEvolutionSystem {
       migrationGuide: await this.generateMigrationGuide(evolutionSteps)
     };
   }
-  
+
   // 학습 기반 개선
   async learnFromUsage(
     codeUsage: CodeUsageData,
     performanceMetrics: PerformanceMetrics,
     userFeedback: UserFeedback[]
   ): Promise<LearningInsights> {
-    
+
     const patterns = await this.identifyUsagePatterns(codeUsage);
     const bottlenecks = await this.identifyPerformanceBottlenecks(performanceMetrics);
     const painPoints = await this.analyzeFeedback(userFeedback);
-    
+
     return {
       commonPatterns: patterns,
       optimizationOpportunities: bottlenecks,
@@ -847,32 +847,32 @@ class GenerationFailureHandler {
     error: GenerationError,
     context: GenerationContext
   ): Promise<RecoveryResult> {
-    
+
     // 오류 유형별 대응
     switch (error.type) {
       case "context-insufficient":
         return await this.requestAdditionalContext(context);
-        
+
       case "template-mismatch":
         return await this.findAlternativeTemplate(context);
-        
+
       case "complexity-too-high":
         return await this.simplifyRequirements(context);
-        
+
       case "dependency-conflict":
         return await this.resolveDependencies(context);
-        
+
       default:
         return await this.fallbackGeneration(context);
     }
   }
-  
+
   private async requestAdditionalContext(
     context: GenerationContext
   ): Promise<RecoveryResult> {
-    
+
     const missingInfo = this.identifyMissingInformation(context);
-    
+
     return {
       status: "needs-clarification",
       questions: missingInfo.map(info => ({

@@ -24,7 +24,7 @@ class FeedbackInterpreter {
         ],
         action: "UX 개선 및 기존 기능 홍보"
       },
-      
+
       // "속도가 느려요" → 실제로는?
       performanceComplaint: {
         stated: "로딩이 너무 오래 걸려요",
@@ -36,7 +36,7 @@ class FeedbackInterpreter {
         ],
         action: "로딩 인디케이터 추가, 점진적 로딩"
       },
-      
+
       // "디자인이 별로예요" → 실제로는?
       designCriticism: {
         stated: "UI가 예쁘지 않아요",
@@ -49,7 +49,7 @@ class FeedbackInterpreter {
         action: "정보 구조 재설계, 일관성 개선"
       }
     };
-    
+
     return this.analyzeRealNeed(feedback, patterns);
   }
 }
@@ -68,7 +68,7 @@ class EmotionalFeedbackAnalyzer {
       actionable: this.findActionableItems(rawFeedback)
     };
   }
-  
+
   // 화난 피드백 → 진짜 문제 찾기
   processAngryFeedback(feedback: string): ActionPlan {
     const analysis = {
@@ -79,7 +79,7 @@ class EmotionalFeedbackAnalyzer {
       },
       "왜 이렇게 복잡해요?": {
         realIssue: "사용자 여정이 복잡함",
-        urgency: "high", 
+        urgency: "high",
         action: "온보딩 프로세스 단순화"
       },
       "다른 서비스가 더 낫네요": {
@@ -88,10 +88,10 @@ class EmotionalFeedbackAnalyzer {
         action: "경쟁사 분석 및 USP 강화"
       }
     };
-    
+
     return this.generateActionPlan(analysis[feedback] || this.defaultAnalysis);
   }
-  
+
   // 칭찬 피드백 → 강화 포인트 찾기
   processPositiveFeedback(feedback: string): ReinforcementPlan {
     const patterns = {
@@ -108,7 +108,7 @@ class EmotionalFeedbackAnalyzer {
         reinforce: "디자인 시스템 일관성 유지"
       }
     };
-    
+
     return this.createReinforcementPlan(patterns);
   }
 }
@@ -127,7 +127,7 @@ class SilentUserAnalyzer {
       silentUnsatisfied: {
         signals: [
           "사용 빈도 감소",
-          "세션 시간 단축", 
+          "세션 시간 단축",
           "특정 기능 회피",
           "도움말 페이지 반복 방문"
         ],
@@ -137,7 +137,7 @@ class SilentUserAnalyzer {
           "A/B 테스트로 개선점 파악"
         ]
       },
-      
+
       // 만족하지만 말하지 않는 사용자
       silentSatisfied: {
         signals: [
@@ -152,12 +152,12 @@ class SilentUserAnalyzer {
           "추천/리뷰 요청"
         ]
       },
-      
+
       // 중립적 사용자
       neutralUsers: {
         signals: [
           "평균 사용량",
-          "기본 기능만 사용", 
+          "기본 기능만 사용",
           "정기적이지만 깊지 않은 사용"
         ],
         opportunity: [
@@ -178,7 +178,7 @@ class SilentUserAnalyzer {
 class UserBehaviorAnalyzer {
   async analyzeUsagePatterns(userId: string): Promise<UsageInsights> {
     const data = await this.getUserData(userId);
-    
+
     return {
       // 사용 패턴 분석
       usagePattern: {
@@ -187,7 +187,7 @@ class UserBehaviorAnalyzer {
         retention: this.calculateRetention(data.timeline),
         progression: this.analyzeProgression(data.journey)
       },
-      
+
       // 문제 징후 탐지
       problemSignals: {
         frustrationPoints: this.findFrustrationPoints(data.sessions),
@@ -195,7 +195,7 @@ class UserBehaviorAnalyzer {
         errorPatterns: this.analyzeErrorPatterns(data.errors),
         helpSeeking: this.trackHelpBehavior(data.help)
       },
-      
+
       // 성공 징후 탐지
       successSignals: {
         masteryIndicators: this.findMasteryIndicators(data.features),
@@ -203,7 +203,7 @@ class UserBehaviorAnalyzer {
         explorationBehavior: this.analyzeExploration(data.features),
         valueRealization: this.assessValueRealization(data.outcomes)
       },
-      
+
       // 개선 기회
       opportunities: {
         quickWins: this.identifyQuickWins(data),
@@ -235,7 +235,7 @@ class FeedbackBiasAnalyzer {
           "대표성 있는 표본 추출"
         ]
       },
-      
+
       // 파워 유저 편향
       powerUserBias: {
         description: "고급 사용자 요구사항이 과대 반영",
@@ -246,7 +246,7 @@ class FeedbackBiasAnalyzer {
           "일반 사용자 우선 기능 식별"
         ]
       },
-      
+
       // 생존자 편향
       survivorshipBias: {
         description: "이탈한 사용자 의견 누락",
@@ -275,28 +275,28 @@ class FeedbackQualityAssessor {
         good: "구체적인 상황과 예제 포함",
         bad: "모호하고 일반적인 표현"
       },
-      
+
       actionability: {
         weight: 0.25,
         score: this.measureActionability(feedback.content),
         good: "개선 방향 제시",
         bad: "단순 불만 표출"
       },
-      
+
       context: {
         weight: 0.2,
         score: this.measureContext(feedback.metadata),
         good: "사용 환경/목적 명시",
         bad: "상황 정보 부족"
       },
-      
+
       impact: {
         weight: 0.15,
         score: this.measureImpact(feedback.severity),
         good: "영향도/중요도 표현",
         bad: "문제 심각성 불명확"
       },
-      
+
       reproducibility: {
         weight: 0.1,
         score: this.measureReproducibility(feedback.steps),
@@ -304,11 +304,11 @@ class FeedbackQualityAssessor {
         bad: "상황 재현 불가"
       }
     };
-    
+
     const totalScore = Object.values(criteria).reduce(
       (sum, c) => sum + (c.score * c.weight), 0
     );
-    
+
     return {
       overall: totalScore,
       breakdown: criteria,
@@ -328,7 +328,7 @@ class FeedbackPrioritizer {
   prioritizeFeedback(feedbacks: Feedback[]): PrioritizedFeedback[] {
     return feedbacks.map(feedback => {
       const priority = this.calculatePriority(feedback);
-      
+
       return {
         ...feedback,
         priority,
@@ -338,21 +338,21 @@ class FeedbackPrioritizer {
       };
     }).sort((a, b) => b.priority.score - a.priority.score);
   }
-  
+
   private calculatePriority(feedback: Feedback): Priority {
     // RICE 프레임워크 활용
     const reach = this.estimateReach(feedback); // 영향 받는 사용자 수
     const impact = this.assessImpact(feedback); // 사용자당 영향도
     const confidence = this.gaugeConfidence(feedback); // 해결 확신도
     const effort = this.estimateEffort(feedback); // 구현 노력
-    
+
     const riceScore = (reach * impact * confidence) / effort;
-    
+
     // 추가 요인들
     const strategicAlign = this.checkStrategicAlignment(feedback);
     const technicalRisk = this.assessTechnicalRisk(feedback);
     const competitiveUrgency = this.checkCompetitive(feedback);
-    
+
     return {
       score: riceScore * strategicAlign * (1 - technicalRisk) * competitiveUrgency,
       factors: {
@@ -377,21 +377,21 @@ class FeedbackResponseGenerator {
         timeline: "이번 주 내로 수정하겠습니다.",
         followUp: "수정 완료 후 다시 연락드리겠습니다."
       },
-      
+
       // 기능 요청
       featureRequest: {
         acknowledge: "좋은 아이디어 감사합니다.",
         evaluation: "팀에서 검토 후 로드맵에 반영하겠습니다.",
         alternatives: "당장은 이런 방법으로 해결 가능합니다: [대안]"
       },
-      
+
       // 설계상 제약
       designConstraint: {
         acknowledge: "피드백 잘 받았습니다.",
         context: "현재 구조상 [이유]로 인해 제약이 있습니다.",
         alternatives: "이런 방식으로 목적을 달성할 수 있습니다: [방법]"
       },
-      
+
       // 사용법 관련
       usageGuidance: {
         acknowledge: "사용하시면서 어려움이 있으셨군요.",
@@ -399,7 +399,7 @@ class FeedbackResponseGenerator {
         improvement: "더 직관적이 되도록 개선하겠습니다."
       }
     };
-    
+
     return this.customizeResponse(templates[action.type], feedback, action);
   }
 }
@@ -414,7 +414,7 @@ class FeedbackResponseGenerator {
 class FeedbackTrendAnalyzer {
   async analyzeTrends(timeRange: TimeRange): Promise<TrendAnalysis> {
     const feedbacks = await this.getFeedbackInRange(timeRange);
-    
+
     return {
       // 주제별 트렌드
       topicTrends: {
@@ -422,21 +422,21 @@ class FeedbackTrendAnalyzer {
         declining: this.identifyDecliningTopics(feedbacks),
         persistent: this.identifyPersistentIssues(feedbacks)
       },
-      
+
       // 감정 트렌드
       sentimentTrends: {
         overall: this.calculateSentimentTrend(feedbacks),
         byFeature: this.analyzeSentimentByFeature(feedbacks),
         seasonal: this.identifySeasonalPatterns(feedbacks)
       },
-      
+
       // 사용자 세그먼트별 트렌드
       segmentTrends: {
         newUsers: this.analyzeNewUserFeedback(feedbacks),
         powerUsers: this.analyzePowerUserFeedback(feedbacks),
         churningUsers: this.analyzeChurningUserFeedback(feedbacks)
       },
-      
+
       // 예측 및 권장사항
       predictions: {
         futureIssues: this.predictFutureIssues(feedbacks),

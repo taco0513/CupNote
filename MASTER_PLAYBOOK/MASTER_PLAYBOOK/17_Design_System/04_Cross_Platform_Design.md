@@ -31,7 +31,7 @@ interface CrossPlatformTokenSystem {
       fontWeights: [300, 400, 500, 600, 700]
     }
   };
-  
+
   // 플랫폼별 토큰 매핑
   platform: {
     web: {
@@ -48,7 +48,7 @@ interface CrossPlatformTokenSystem {
         fontFamily: 'system-ui, -apple-system, sans-serif'
       }
     },
-    
+
     ios: {
       colors: {
         primary: 'UIColor(named: "PrimaryColor")',
@@ -56,14 +56,14 @@ interface CrossPlatformTokenSystem {
       },
       spacing: {
         xs: '4',
-        sm: '8', 
+        sm: '8',
         md: '16'
       },
       typography: {
         fontFamily: '.SF UI Text'
       }
     },
-    
+
     android: {
       colors: {
         primary: '@color/primary',
@@ -99,7 +99,7 @@ class PlatformDesignMapper {
             secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300'
           }
         },
-        
+
         ios: {
           element: 'UIButton',
           baseStyles: {
@@ -117,7 +117,7 @@ class PlatformDesignMapper {
             }
           }
         },
-        
+
         android: {
           element: 'MaterialButton',
           baseStyles: {
@@ -137,14 +137,14 @@ class PlatformDesignMapper {
           }
         }
       },
-      
+
       // Input 컴포넌트 매핑
       Input: {
         web: {
           element: 'input',
           baseStyles: 'px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500'
         },
-        
+
         ios: {
           element: 'UITextField',
           baseStyles: {
@@ -152,7 +152,7 @@ class PlatformDesignMapper {
             font: '.systemFont(ofSize: 16)'
           }
         },
-        
+
         android: {
           element: 'TextInputLayout + TextInputEditText',
           baseStyles: {
@@ -162,7 +162,7 @@ class PlatformDesignMapper {
         }
       }
     };
-    
+
     return mappings[component.type]?.[targetPlatform];
   }
 }
@@ -183,13 +183,13 @@ class PlatformDesignMapper {
   --bp-desktop: 1200px;
   --bp-desktop-lg: 1440px;
   --bp-desktop-xl: 1920px;
-  
+
   /* 컨테이너 크기 */
   --container-mobile: 100%;
   --container-tablet: 768px;
   --container-desktop: 1200px;
   --container-max: 1440px;
-  
+
   /* 플루이드 타이포그래피 */
   --text-fluid-sm: clamp(0.875rem, 2vw, 1rem);
   --text-fluid-base: clamp(1rem, 2.5vw, 1.125rem);
@@ -241,7 +241,7 @@ const AccessibleWebComponents = {
       </span>
     </button>
   `,
-  
+
   Input: `
     <div className="input-group">
       <label htmlFor={inputId} className="input-label">
@@ -265,7 +265,7 @@ const AccessibleWebComponents = {
       )}
     </div>
   `,
-  
+
   Modal: `
     <div
       className="modal-overlay"
@@ -304,13 +304,13 @@ const PerformantWebPatterns = {
     const LazyImage = ({ src, alt, className, ...props }) => {
       const [imageSrc, setImageSrc] = useState('');
       const [imageRef, isIntersecting] = useIntersectionObserver();
-      
+
       useEffect(() => {
         if (isIntersecting && src) {
           setImageSrc(src);
         }
       }, [isIntersecting, src]);
-      
+
       return (
         <div ref={imageRef} className={className}>
           {imageSrc ? (
@@ -328,7 +328,7 @@ const PerformantWebPatterns = {
       );
     };
   `,
-  
+
   // 가상화된 리스트
   VirtualizedList: `
     const VirtualizedList = ({ items, renderItem, itemHeight = 50 }) => {
@@ -338,7 +338,7 @@ const PerformantWebPatterns = {
       const startIndex = Math.floor(scrollTop / itemHeight);
       const endIndex = Math.min(startIndex + visibleCount, items.length);
       const visibleItems = items.slice(startIndex, endIndex);
-      
+
       return (
         <div
           className="virtual-list-container"
@@ -383,14 +383,14 @@ struct iOSDesignTokens {
         static let background = Color(UIColor.systemBackground)
         static let onSurface = Color(UIColor.label)
         static let onBackground = Color(UIColor.label)
-        
+
         // 시맨틱 컬러
         static let success = Color("SuccessGreen")
         static let warning = Color("WarningOrange")
         static let error = Color("ErrorRed")
         static let info = Color("InfoBlue")
     }
-    
+
     // 타이포그래피
     struct Typography {
         static let largeTitle = Font.largeTitle.weight(.bold)
@@ -405,7 +405,7 @@ struct iOSDesignTokens {
         static let caption1 = Font.caption
         static let caption2 = Font.caption2
     }
-    
+
     // 간격 시스템
     struct Spacing {
         static let xs: CGFloat = 4
@@ -415,7 +415,7 @@ struct iOSDesignTokens {
         static let xl: CGFloat = 32
         static let xxl: CGFloat = 48
     }
-    
+
     // 반지름
     struct Radius {
         static let sm: CGFloat = 4
@@ -432,15 +432,15 @@ struct iOSButton: View {
     let variant: ButtonVariant
     let size: ButtonSize
     let action: () -> Void
-    
+
     enum ButtonVariant {
         case primary, secondary, tertiary, destructive
     }
-    
+
     enum ButtonSize {
         case small, medium, large
     }
-    
+
     var body: some View {
         Button(action: action) {
             Text(title)
@@ -456,7 +456,7 @@ struct iOSButton: View {
         .scaleEffect(isPressed ? 0.95 : 1.0)
         .animation(.easeInOut(duration: 0.1), value: isPressed)
     }
-    
+
     private var fontForSize: Font {
         switch size {
         case .small: return .footnote
@@ -464,7 +464,7 @@ struct iOSButton: View {
         case .large: return .headline
         }
     }
-    
+
     private var backgroundColor: Color {
         switch variant {
         case .primary: return iOSDesignTokens.Colors.primary
@@ -473,7 +473,7 @@ struct iOSButton: View {
         case .destructive: return iOSDesignTokens.Colors.error
         }
     }
-    
+
     private var textColor: Color {
         switch variant {
         case .primary, .destructive: return .white
@@ -489,14 +489,14 @@ struct iOSTextField: View {
     @Binding var text: String
     let placeholder: String
     let errorMessage: String?
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: iOSDesignTokens.Spacing.sm) {
             Text(title)
                 .font(iOSDesignTokens.Typography.footnote)
                 .fontWeight(.medium)
                 .foregroundColor(iOSDesignTokens.Colors.onSurface)
-            
+
             TextField(placeholder, text: $text)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding(.horizontal, iOSDesignTokens.Spacing.md)
@@ -507,7 +507,7 @@ struct iOSTextField: View {
                     RoundedRectangle(cornerRadius: iOSDesignTokens.Radius.md)
                         .stroke(borderColor, lineWidth: 1)
                 )
-            
+
             if let errorMessage = errorMessage {
                 Text(errorMessage)
                     .font(iOSDesignTokens.Typography.caption1)
@@ -515,7 +515,7 @@ struct iOSTextField: View {
             }
         }
     }
-    
+
     private var borderColor: Color {
         if errorMessage != nil {
             return iOSDesignTokens.Colors.error
@@ -535,7 +535,7 @@ struct HIGCompliantPatterns {
         let title: String
         let leadingButton: (() -> Void)?
         let trailingButton: (() -> Void)?
-        
+
         var body: some View {
             NavigationView {
                 ContentView()
@@ -547,7 +547,7 @@ struct HIGCompliantPatterns {
                                 Button("Cancel", action: leadingAction)
                             }
                         }
-                        
+
                         if let trailingAction = trailingButton {
                             ToolbarItem(placement: .navigationBarTrailing) {
                                 Button("Done", action: trailingAction)
@@ -558,11 +558,11 @@ struct HIGCompliantPatterns {
             }
         }
     }
-    
+
     // 리스트 패턴
     struct ListPattern: View {
         let items: [ListItem]
-        
+
         var body: some View {
             List(items) { item in
                 HStack {
@@ -576,20 +576,20 @@ struct HIGCompliantPatterns {
                     }
                     .frame(width: 44, height: 44)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
-                    
+
                     VStack(alignment: .leading, spacing: 2) {
                         Text(item.title)
                             .font(.headline)
                             .foregroundColor(.primary)
-                        
+
                         Text(item.subtitle)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                             .lineLimit(2)
                     }
-                    
+
                     Spacer()
-                    
+
                     Image(systemName: "chevron.right")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -599,13 +599,13 @@ struct HIGCompliantPatterns {
             .listStyle(PlainListStyle())
         }
     }
-    
+
     // 모달 패턴
     struct ModalPattern: View {
         @Binding var isPresented: Bool
         let title: String
         let content: AnyView
-        
+
         var body: some View {
             NavigationView {
                 content
@@ -617,7 +617,7 @@ struct HIGCompliantPatterns {
                                 isPresented = false
                             }
                         }
-                        
+
                         ToolbarItem(placement: .navigationBarTrailing) {
                             Button("Done") {
                                 // Handle save action
@@ -665,7 +665,7 @@ object AndroidDesignTokens {
         background = Color(0xFFFFFBFE),
         onBackground = Color(0xFF1C1B1F)
     )
-    
+
     val DarkColorScheme = darkColorScheme(
         primary = Color(0xFF6366F1),
         onPrimary = Color(0xFF1E1B4B),
@@ -680,7 +680,7 @@ object AndroidDesignTokens {
         background = Color(0xFF111827),
         onBackground = Color(0xFFE6E1E5)
     )
-    
+
     // 타이포그래피
     val Typography = Typography(
         displayLarge = TextStyle(
@@ -774,7 +774,7 @@ object AndroidDesignTokens {
             lineHeight = 16.sp
         )
     )
-    
+
     // 간격
     object Spacing {
         val xs = 4.dp
@@ -784,7 +784,7 @@ object AndroidDesignTokens {
         val xl = 32.dp
         val xxl = 48.dp
     }
-    
+
     // 모양
     val Shapes = Shapes(
         small = RoundedCornerShape(4.dp),
@@ -818,13 +818,13 @@ fun AndroidButton(
             contentColor = MaterialTheme.colorScheme.primary
         )
     }
-    
+
     val contentPadding = when (size) {
         ButtonSize.Small -> PaddingValues(horizontal = 12.dp, vertical = 6.dp)
         ButtonSize.Medium -> PaddingValues(horizontal = 16.dp, vertical = 8.dp)
         ButtonSize.Large -> PaddingValues(horizontal = 20.dp, vertical = 12.dp)
     }
-    
+
     val buttonComposable: @Composable () -> Unit = {
         Button(
             onClick = onClick,
@@ -851,7 +851,7 @@ fun AndroidButton(
             }
         }
     }
-    
+
     when (variant) {
         ButtonVariant.Primary -> buttonComposable()
         ButtonVariant.Secondary -> OutlinedButton(
@@ -917,7 +917,7 @@ fun AndroidTextField(
             ),
             modifier = Modifier.fillMaxWidth()
         )
-        
+
         if (error != null) {
             Text(
                 text = error,
@@ -962,13 +962,13 @@ StyleDictionary.registerFormat({
   formatter: function(dictionary) {
     const tokens = dictionary.allTokens
       .map(token => {
-        const value = token.type === 'color' 
-          ? `Color("${token.name}")` 
+        const value = token.type === 'color'
+          ? `Color("${token.name}")`
           : `${token.value}`;
         return `    static let ${token.name} = ${value}`;
       })
       .join('\n');
-    
+
     return `import SwiftUI\n\nstruct DesignTokens {\n${tokens}\n}`;
   }
 });
@@ -981,12 +981,12 @@ StyleDictionary.registerFormat({
       .filter(token => token.type === 'color')
       .map(token => `    <color name="${token.name}">${token.value}</color>`)
       .join('\n');
-    
+
     const dimenTokens = dictionary.allTokens
       .filter(token => token.type === 'dimension')
       .map(token => `    <dimen name="${token.name}">${token.value}dp</dimen>`)
       .join('\n');
-    
+
     return `<?xml version="1.0" encoding="UTF-8"?>\n<resources>\n${colorTokens}\n${dimenTokens}\n</resources>`;
   }
 });
@@ -999,12 +999,12 @@ StyleDictionary.registerFormat({
       .filter(token => token.type === 'color')
       .map(token => `    val ${token.name} = Color(${token.value.replace('#', '0xFF')})`)
       .join('\n');
-    
+
     const spacingTokens = dictionary.allTokens
       .filter(token => token.type === 'dimension')
       .map(token => `    val ${token.name} = ${token.value}.dp`)
       .join('\n');
-    
+
     return `package com.example.designsystem\n\nimport androidx.compose.ui.graphics.Color\nimport androidx.compose.ui.unit.dp\n\nobject DesignTokens {\n${colorTokens}\n${spacingTokens}\n}`;
   }
 });
@@ -1038,7 +1038,7 @@ module.exports = {
           filter: token => token.type === 'color'
         },
         {
-          destination: 'dimens.xml', 
+          destination: 'dimens.xml',
           format: 'android/xml',
           filter: token => token.type === 'dimension'
         }

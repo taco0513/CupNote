@@ -14,16 +14,16 @@ class CodeDocumentationExtractor {
   private parser: CodeParser;
   private analyzer: CodeAnalyzer;
   private generator: DocumentationGenerator;
-  
+
   async extractDocumentation(
     filePath: string
   ): Promise<Documentation> {
     // 1. 코드 파싱
     const ast = await this.parser.parse(filePath);
-    
+
     // 2. 코드 분석
     const analysis = await this.analyzer.analyze(ast);
-    
+
     // 3. 컨텍스트 추출
     const context = {
       purpose: this.extractPurpose(ast),
@@ -32,7 +32,7 @@ class CodeDocumentationExtractor {
       patterns: this.identifyPatterns(analysis),
       complexity: this.calculateComplexity(ast)
     };
-    
+
     // 4. 문서 생성
     return this.generator.generate({
       filePath,
@@ -41,15 +41,15 @@ class CodeDocumentationExtractor {
       context
     });
   }
-  
+
   // WHY 주석 추출
   private extractWhyComments(ast: AST): WhyComment[] {
     const comments: WhyComment[] = [];
-    
+
     ast.traverse({
       Comment(node) {
         const text = node.value.trim();
-        
+
         // WHY, TRIED, CONTEXT 패턴 감지
         if (text.startsWith('WHY:')) {
           comments.push({
@@ -73,7 +73,7 @@ class CodeDocumentationExtractor {
         }
       }
     });
-    
+
     return comments;
   }
 }
@@ -95,17 +95,17 @@ class JSDocExtractor {
       gotchas: [],
       patterns: []
     };
-    
+
     let currentSection = 'description';
-    
+
     for (const line of lines) {
       const trimmed = line.trim().replace(/^\* ?/, '');
-      
+
       // 태그 감지
       if (trimmed.startsWith('@')) {
         const [tag, ...rest] = trimmed.split(' ');
         const content = rest.join(' ');
-        
+
         switch (tag) {
           case '@param':
             const [name, ...desc] = content.split(' ');
@@ -114,24 +114,24 @@ class JSDocExtractor {
               description: desc.join(' ')
             });
             break;
-            
+
           case '@returns':
             context.returns = content;
             break;
-            
+
           case '@example':
             currentSection = 'example';
             break;
-            
+
           case '@related':
             context.related.push(content);
             break;
-            
+
           case '@gotcha':
           case '@warning':
             context.gotchas.push(content);
             break;
-            
+
           case '@pattern':
             context.patterns.push(content);
             break;
@@ -142,7 +142,7 @@ class JSDocExtractor {
         context.description += trimmed + ' ';
       }
     }
-    
+
     return context;
   }
 }
@@ -161,7 +161,7 @@ class TypeDocumentationGenerator {
     const types: TypeDefinition[] = [];
     const interfaces: InterfaceDefinition[] = [];
     const functions: FunctionDefinition[] = [];
-    
+
     // 타입 정의 수집
     ts.forEachChild(sourceFile, node => {
       if (ts.isTypeAliasDeclaration(node)) {
@@ -172,7 +172,7 @@ class TypeDocumentationGenerator {
         functions.push(this.extractFunction(node));
       }
     });
-    
+
     // 문서 생성
     return {
       types: types.map(type => this.documentType(type)),
@@ -181,7 +181,7 @@ class TypeDocumentationGenerator {
       relationships: this.analyzeRelationships(types, interfaces, functions)
     };
   }
-  
+
   private documentInterface(
     iface: InterfaceDefinition
   ): InterfaceDocumentation {
@@ -212,7 +212,7 @@ class TypeRelationshipAnalyzer {
     interfaces: InterfaceDefinition[]
   ): RelationshipGraph {
     const graph = new RelationshipGraph();
-    
+
     // 상속 관계 분석
     interfaces.forEach(iface => {
       if (iface.extends) {
@@ -221,7 +221,7 @@ class TypeRelationshipAnalyzer {
         });
       }
     });
-    
+
     // 참조 관계 분석
     types.forEach(type => {
       const references = this.extractTypeReferences(type);
@@ -229,7 +229,7 @@ class TypeRelationshipAnalyzer {
         graph.addEdge(type.name, ref, 'references');
       });
     });
-    
+
     // 문서화를 위한 Mermaid 다이어그램 생성
     return {
       graph,
@@ -238,15 +238,15 @@ class TypeRelationshipAnalyzer {
       complexity: this.calculateGraphComplexity(graph)
     };
   }
-  
+
   private generateMermaidDiagram(graph: RelationshipGraph): string {
     let diagram = 'graph TD\n';
-    
+
     graph.edges.forEach(edge => {
       const arrow = edge.type === 'extends' ? '--|>' : '-->';
       diagram += `  ${edge.from}${arrow}${edge.to}\n`;
     });
-    
+
     return diagram;
   }
 }
@@ -275,15 +275,15 @@ class APIDocumentationGenerator {
         securitySchemes: {}
       }
     };
-    
+
     // 라우트별 문서 생성
     for (const route of routes) {
       const path = this.expressPathToOpenAPI(route.path);
-      
+
       if (!spec.paths[path]) {
         spec.paths[path] = {};
       }
-      
+
       spec.paths[path][route.method.toLowerCase()] = {
         summary: this.extractSummary(route),
         description: this.extractDescription(route),
@@ -292,19 +292,19 @@ class APIDocumentationGenerator {
         responses: this.extractResponses(route),
         security: this.extractSecurity(route)
       };
-      
+
       // 스키마 추출
       const schemas = this.extractSchemas(route);
       Object.assign(spec.components.schemas, schemas);
     }
-    
+
     return spec;
   }
-  
+
   // Express 라우트에서 파라미터 추출
   private extractParameters(route: Route): Parameter[] {
     const parameters: Parameter[] = [];
-    
+
     // 경로 파라미터
     const pathParams = route.path.match(/:([^/]+)/g);
     if (pathParams) {
@@ -319,11 +319,11 @@ class APIDocumentationGenerator {
         });
       });
     }
-    
+
     // 쿼리 파라미터 (코드 분석으로 추출)
     const queryParams = this.analyzeQueryParameters(route.handler);
     parameters.push(...queryParams);
-    
+
     return parameters;
   }
 }
@@ -352,14 +352,14 @@ class PostmanCollectionGenerator {
         }
       ]
     };
-    
+
     // API 경로별 요청 생성
     Object.entries(apiSpec.paths).forEach(([path, methods]) => {
       const folder = {
         name: this.extractResourceName(path),
         item: []
       };
-      
+
       Object.entries(methods).forEach(([method, operation]) => {
         const request = {
           name: operation.summary || `${method.toUpperCase()} ${path}`,
@@ -375,13 +375,13 @@ class PostmanCollectionGenerator {
           },
           response: this.generateExampleResponses(operation)
         };
-        
+
         folder.item.push(request);
       });
-      
+
       collection.item.push(folder);
     });
-    
+
     return collection;
   }
 }
@@ -435,25 +435,25 @@ class ChangeImpactAnalyzer {
   ): Promise<ImpactAnalysis> {
     const impactedFiles: Set<string> = new Set();
     const impactedTests: Set<string> = new Set();
-    
+
     // 1. 직접 의존성 분석
     const directDependents = await this.findDirectDependents(changedFile);
     directDependents.forEach(file => impactedFiles.add(file));
-    
+
     // 2. 간접 의존성 분석 (트랜지티브)
     const transitiveDependents = await this.findTransitiveDependents(
       changedFile,
       3 // 최대 3단계까지
     );
     transitiveDependents.forEach(file => impactedFiles.add(file));
-    
+
     // 3. 테스트 파일 찾기
     const testFiles = await this.findRelatedTests(changedFile);
     testFiles.forEach(test => impactedTests.add(test));
-    
+
     // 4. 문서 업데이트 필요 파일
     const docsToUpdate = await this.findRelatedDocumentation(changedFile);
-    
+
     // 5. 영향도 점수 계산
     const impactScore = this.calculateImpactScore({
       directDependents: directDependents.length,
@@ -461,7 +461,7 @@ class ChangeImpactAnalyzer {
       testFiles: testFiles.length,
       changeType
     });
-    
+
     return {
       changedFile,
       changeType,
@@ -485,49 +485,49 @@ class ChangeImpactAnalyzer {
 class DocumentationWatcher {
   private watcher: chokidar.FSWatcher;
   private documentationUpdater: DocumentationUpdater;
-  
+
   async start() {
     this.watcher = chokidar.watch('src/**/*.{ts,js}', {
       ignored: /node_modules/,
       persistent: true
     });
-    
+
     // 파일 변경 시 문서 업데이트
     this.watcher.on('change', async (path) => {
       console.log(`🔄 File changed: ${path}`);
-      
+
       try {
         // 1. 코드 분석
         const analysis = await this.analyzeFile(path);
-        
+
         // 2. 문서 업데이트
         await this.documentationUpdater.updateDocumentation(path, analysis);
-        
+
         // 3. 관련 문서 업데이트
         await this.updateRelatedDocumentation(path, analysis);
-        
+
         // 4. AI 컨텍스트 업데이트
         await this.updateAIContext(path, analysis);
-        
+
         console.log(`✅ Documentation updated for ${path}`);
       } catch (error) {
         console.error(`❌ Error updating documentation for ${path}:`, error);
       }
     });
-    
+
     // 새 파일 추가 시
     this.watcher.on('add', async (path) => {
       console.log(`➕ New file: ${path}`);
       await this.createInitialDocumentation(path);
     });
   }
-  
+
   private async updateAIContext(
     filePath: string,
     analysis: FileAnalysis
   ) {
     const contextFile = `.claude/context/${path.basename(filePath)}.md`;
-    
+
     const context = `
 # ${filePath}
 
@@ -550,7 +550,7 @@ ${analysis.patterns.map(pattern => `- ${pattern}`).join('\n')}
 - Cyclomatic: ${analysis.complexity.cyclomatic}
 - Cognitive: ${analysis.complexity.cognitive}
 `;
-    
+
     await fs.writeFile(contextFile, context);
   }
 }
@@ -565,7 +565,7 @@ class DocumentationQualityChecker {
     documentation: Documentation
   ): Promise<QualityReport> {
     const checks: QualityCheck[] = [];
-    
+
     // 1. 완전성 검사
     checks.push({
       name: 'completeness',
@@ -573,7 +573,7 @@ class DocumentationQualityChecker {
       score: this.calculateCompletenessScore(documentation),
       issues: this.findMissingElements(documentation)
     });
-    
+
     // 2. 일관성 검사
     checks.push({
       name: 'consistency',
@@ -581,7 +581,7 @@ class DocumentationQualityChecker {
       score: this.calculateConsistencyScore(documentation),
       issues: this.findInconsistencies(documentation)
     });
-    
+
     // 3. 업데이트 상태
     checks.push({
       name: 'freshness',
@@ -589,7 +589,7 @@ class DocumentationQualityChecker {
       score: this.calculateFreshnessScore(documentation),
       issues: this.findOutdatedSections(documentation)
     });
-    
+
     // 4. 코드-문서 동기화
     checks.push({
       name: 'synchronization',
@@ -597,9 +597,9 @@ class DocumentationQualityChecker {
       score: await this.calculateSyncScore(documentation),
       issues: await this.findSyncIssues(documentation)
     });
-    
+
     const overallScore = this.calculateOverallScore(checks);
-    
+
     return {
       score: overallScore,
       grade: this.scoreToGrade(overallScore),
@@ -623,13 +623,13 @@ class ArchitectureDiagramGenerator {
   ): Promise<ArchitectureDiagram> {
     // 1. 프로젝트 구조 분석
     const structure = await this.analyzeProjectStructure(projectRoot);
-    
+
     // 2. 계층 분리
     const layers = this.identifyLayers(structure);
-    
+
     // 3. 컴포넌트 관계 분석
     const relationships = await this.analyzeRelationships(structure);
-    
+
     // 4. PlantUML 코드 생성
     const plantUML = `
 @startuml Architecture
@@ -638,30 +638,30 @@ class ArchitectureDiagramGenerator {
 skinparam componentStyle rectangle
 
 package "Presentation Layer" {
-  ${layers.presentation.map(comp => 
+  ${layers.presentation.map(comp =>
     `[${comp.name}] as ${comp.id}`
   ).join('\n  ')}
 }
 
 package "Business Logic Layer" {
-  ${layers.business.map(comp => 
+  ${layers.business.map(comp =>
     `[${comp.name}] as ${comp.id}`
   ).join('\n  ')}
 }
 
 package "Data Access Layer" {
-  ${layers.data.map(comp => 
+  ${layers.data.map(comp =>
     `[${comp.name}] as ${comp.id}`
   ).join('\n  ')}
 }
 
-${relationships.map(rel => 
+${relationships.map(rel =>
   `${rel.from} --> ${rel.to} : ${rel.label}`
 ).join('\n')}
 
 @enduml
 `;
-    
+
     return {
       plantUML,
       mermaid: this.convertToMermaid(plantUML),
@@ -684,20 +684,20 @@ class SequenceDiagramGenerator {
   ): Promise<SequenceDiagram> {
     // 1. 함수 호출 트레이스
     const callTrace = await this.traceFunctionCalls(functionName, filePath);
-    
+
     // 2. 시퀀스 다이어그램 생성
     const mermaid = `
 sequenceDiagram
     participant User
-    ${this.extractParticipants(callTrace).map(p => 
+    ${this.extractParticipants(callTrace).map(p =>
       `participant ${p}`
     ).join('\n    ')}
-    
-    ${this.generateSequence(callTrace).map(call => 
+
+    ${this.generateSequence(callTrace).map(call =>
       `${call.from}->>+${call.to}: ${call.method}(${call.params})`
     ).join('\n    ')}
 `;
-    
+
     return {
       mermaid,
       participants: this.extractParticipants(callTrace),

@@ -11,19 +11,19 @@ unit_test_characteristics:
   isolation:
     description: "다른 코드 단위와 완전히 격리"
     implementation: "모킹, 스터빙, 의존성 주입"
-    
+
   speed:
     description: "빠른 실행 속도 (< 1초)"
     target: "전체 테스트 스위트 실행 시간 < 30초"
-    
+
   deterministic:
     description: "일관된 결과 보장"
     requirements: ["랜덤값 제어", "시간 의존성 제거", "외부 상태 격리"]
-    
+
   readability:
     description: "테스트 의도가 명확히 드러남"
     patterns: ["AAA 패턴", "서술적 테스트명", "명확한 어셔션"]
-    
+
   maintainability:
     description: "코드 변경에 따른 유지보수 용이성"
     practices: ["DRY 원칙", "테스트 유틸리티", "공통 설정 분리"]
@@ -166,7 +166,7 @@ describe('UserValidator', () => {
   describe('validateAge', () => {
     it('유효한 나이 범위를 올바르게 검증한다', () => {
       const validAges = [0, 1, 25, 65, 100, 150];
-      
+
       validAges.forEach(age => {
         expect(UserValidator.validateAge(age)).toBe(true);
       });
@@ -174,7 +174,7 @@ describe('UserValidator', () => {
 
     it('유효하지 않은 나이를 올바르게 거부한다', () => {
       const invalidAges = [-1, -10, 151, 200, 1000];
-      
+
       invalidAges.forEach(age => {
         expect(UserValidator.validateAge(age)).toBe(false);
       });
@@ -182,7 +182,7 @@ describe('UserValidator', () => {
 
     it('소수점 숫자를 거부한다', () => {
       const floatAges = [25.5, 30.1, 18.9];
-      
+
       floatAges.forEach(age => {
         expect(UserValidator.validateAge(age)).toBe(false);
       });
@@ -257,7 +257,7 @@ describe('UserValidator', () => {
 
         expect(() => UserValidator.validateUser(userWithoutId))
           .toThrow(ValidationError);
-        
+
         expect(() => UserValidator.validateUser(userWithoutId))
           .toThrow('ID는 필수입니다');
       });
@@ -391,11 +391,11 @@ describe('UserValidator', () => {
   describe('성능 테스트', () => {
     it('대량의 이메일 검증을 빠르게 처리한다', () => {
       const emails = Array.from({ length: 10000 }, (_, i) => `user${i}@example.com`);
-      
+
       const startTime = performance.now();
       emails.forEach(email => UserValidator.validateEmail(email));
       const endTime = performance.now();
-      
+
       expect(endTime - startTime).toBeLessThan(100); // 100ms 이내
     });
   });
@@ -458,9 +458,9 @@ export class UserService {
       return user;
 
     } catch (error) {
-      this.logger.error('Failed to create user', { 
-        email: request.email, 
-        error: error.message 
+      this.logger.error('Failed to create user', {
+        email: request.email,
+        error: error.message
       });
       throw error;
     }
@@ -468,7 +468,7 @@ export class UserService {
 
   async verifyEmail(token: string): Promise<User> {
     const user = await this.databaseService.findUserByVerificationToken(token);
-    
+
     if (!user) {
       throw new Error('유효하지 않은 인증 토큰입니다');
     }
@@ -493,7 +493,7 @@ export class UserService {
   }
 
   private generateVerificationToken(): string {
-    return Math.random().toString(36).substring(2, 15) + 
+    return Math.random().toString(36).substring(2, 15) +
            Math.random().toString(36).substring(2, 15);
   }
 }
@@ -867,7 +867,7 @@ describe('DateUtils with time mocking', () => {
       // 토요일로 변경
       const saturday = new Date('2024-01-13T10:30:00.000Z');
       jest.setSystemTime(saturday);
-      
+
       expect(DateUtils.isBusinessHour()).toBe(false);
     });
 
@@ -875,7 +875,7 @@ describe('DateUtils with time mocking', () => {
       // 평일 오후 7시 (업무 시간 외)
       const afterHours = new Date('2024-01-15T19:00:00.000Z');
       jest.setSystemTime(afterHours);
-      
+
       expect(DateUtils.isBusinessHour()).toBe(false);
     });
   });
@@ -884,7 +884,7 @@ describe('DateUtils with time mocking', () => {
     it('마감일까지 남은 시간을 올바르게 계산한다', () => {
       const deadline = new Date('2024-01-15T15:30:00.000Z'); // 5시간 후
       const timeLeft = DateUtils.getTimeUntilDeadline(deadline);
-      
+
       expect(timeLeft).toEqual({
         days: 0,
         hours: 5,
@@ -896,7 +896,7 @@ describe('DateUtils with time mocking', () => {
     it('과거 마감일에 대해 음수 시간을 반환한다', () => {
       const pastDeadline = new Date('2024-01-15T08:30:00.000Z'); // 2시간 전
       const timeLeft = DateUtils.getTimeUntilDeadline(pastDeadline);
-      
+
       expect(timeLeft.hours).toBe(-2);
     });
   });
@@ -904,7 +904,7 @@ describe('DateUtils with time mocking', () => {
   describe('시간 진행 테스트', () => {
     it('타이머 진행에 따른 상태 변화를 테스트한다', () => {
       let callbackCount = 0;
-      
+
       // 5초마다 호출되는 콜백 설정
       setInterval(() => {
         callbackCount++;
@@ -912,12 +912,12 @@ describe('DateUtils with time mocking', () => {
 
       // 10초 진행
       jest.advanceTimersByTime(10000);
-      
+
       expect(callbackCount).toBe(2); // 5초, 10초에 호출
-      
+
       // 추가로 15초 진행 (총 25초)
       jest.advanceTimersByTime(15000);
-      
+
       expect(callbackCount).toBe(5); // 5초, 10초, 15초, 20초, 25초에 호출
     });
   });
@@ -991,7 +991,7 @@ describe('ShoppingCart', () => {
 
     it('동일한 상품을 추가하면 수량이 합쳐진다', () => {
       const item = { id: '1', name: 'Book', price: 10.99 };
-      
+
       cart.addItem(item, 2);
       cart.addItem(item, 3);
 
@@ -1002,7 +1002,7 @@ describe('ShoppingCart', () => {
     it('다른 상품들은 별도로 관리된다', () => {
       const book = { id: '1', name: 'Book', price: 10.99 };
       const pen = { id: '2', name: 'Pen', price: 1.99 };
-      
+
       cart.addItem(book, 1);
       cart.addItem(pen, 3);
 
@@ -1013,7 +1013,7 @@ describe('ShoppingCart', () => {
 
     it('수량이 0 이하면 오류를 발생시킨다', () => {
       const item = { id: '1', name: 'Book', price: 10.99 };
-      
+
       expect(() => cart.addItem(item, 0)).toThrow('수량은 1 이상이어야 합니다');
       expect(() => cart.addItem(item, -1)).toThrow('수량은 1 이상이어야 합니다');
     });
@@ -1023,9 +1023,9 @@ describe('ShoppingCart', () => {
     it('상품을 카트에서 제거한다', () => {
       const item = { id: '1', name: 'Book', price: 10.99 };
       cart.addItem(item, 2);
-      
+
       cart.removeItem('1');
-      
+
       expect(cart.getItems()).toHaveLength(0);
     });
 
@@ -1039,18 +1039,18 @@ describe('ShoppingCart', () => {
     it('상품 수량을 업데이트한다', () => {
       const item = { id: '1', name: 'Book', price: 10.99 };
       cart.addItem(item, 2);
-      
+
       cart.updateQuantity('1', 5);
-      
+
       expect(cart.getItemById('1')?.quantity).toBe(5);
     });
 
     it('수량을 0으로 설정하면 상품이 제거된다', () => {
       const item = { id: '1', name: 'Book', price: 10.99 };
       cart.addItem(item, 2);
-      
+
       cart.updateQuantity('1', 0);
-      
+
       expect(cart.getItems()).toHaveLength(0);
     });
   });
@@ -1059,10 +1059,10 @@ describe('ShoppingCart', () => {
     it('카트의 총 금액을 계산한다', () => {
       const book = { id: '1', name: 'Book', price: 10.99 };
       const pen = { id: '2', name: 'Pen', price: 1.99 };
-      
+
       cart.addItem(book, 2);  // 21.98
       cart.addItem(pen, 3);   // 5.97
-      
+
       expect(cart.getTotal()).toBe(27.97);
     });
 
@@ -1075,9 +1075,9 @@ describe('ShoppingCart', () => {
     it('카트의 모든 상품을 제거한다', () => {
       const item = { id: '1', name: 'Book', price: 10.99 };
       cart.addItem(item, 2);
-      
+
       cart.clear();
-      
+
       expect(cart.getItems()).toHaveLength(0);
       expect(cart.getTotal()).toBe(0);
     });
@@ -1094,7 +1094,7 @@ export class ShoppingCart {
     }
 
     const existingItemIndex = this.items.findIndex(cartItem => cartItem.id === item.id);
-    
+
     if (existingItemIndex >= 0) {
       // 기존 상품의 수량 증가
       this.items[existingItemIndex].quantity += quantity;
@@ -1106,11 +1106,11 @@ export class ShoppingCart {
 
   removeItem(id: string): void {
     const itemIndex = this.items.findIndex(item => item.id === id);
-    
+
     if (itemIndex === -1) {
       throw new Error('상품을 찾을 수 없습니다');
     }
-    
+
     this.items.splice(itemIndex, 1);
   }
 
@@ -1253,8 +1253,8 @@ describe('MathUtils - Property-based Testing', () => {
   describe('add 함수의 속성', () => {
     it('덧셈은 교환법칙을 만족한다: a + b = b + a', () => {
       fc.assert(fc.property(
-        fc.integer(), 
-        fc.integer(), 
+        fc.integer(),
+        fc.integer(),
         (a, b) => {
           expect(MathUtils.add(a, b)).toBe(MathUtils.add(b, a));
         }

@@ -43,7 +43,7 @@
 ```
 1. 다운로드된 Cursor.dmg 더블클릭
 2. 열린 창에서:
-   - Cursor 아이콘을 
+   - Cursor 아이콘을
    - Applications 폴더로 드래그
 3. 설치 완료!
 ```
@@ -130,7 +130,7 @@ AI와 함께 코딩을 시작합니다.
 해결:
 1. 시스템 환경설정 → 보안 및 개인정보 보호
 2. "확인 없이 열기" 클릭
-3. 또는 터미널에서: 
+3. 또는 터미널에서:
    xattr -d com.apple.quarantine /Applications/Cursor.app
 ```
 

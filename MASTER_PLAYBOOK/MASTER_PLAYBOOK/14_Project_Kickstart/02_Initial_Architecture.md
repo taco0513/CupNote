@@ -15,7 +15,7 @@ class PrototypeArchitectureGenerator {
     projectType: ProjectType,
     requirements: QuickRequirements
   ): Promise<PrototypeArchitecture> {
-    
+
     // 최소 구조 생성
     const minimalStructure = {
       frontend: {
@@ -35,7 +35,7 @@ class PrototypeArchitectureGenerator {
         environment: 'development'
       }
     };
-    
+
     return {
       structure: minimalStructure,
       setupTime: '30 minutes',
@@ -61,7 +61,7 @@ class MVPArchitectureDesigner {
     prototype: PrototypeArchitecture,
     businessRequirements: BusinessRequirements
   ): Promise<MVPArchitecture> {
-    
+
     // 계층 구조 정의
     const layers = [
       {
@@ -92,10 +92,10 @@ class MVPArchitectureDesigner {
         technologies: ['Prisma', 'PostgreSQL']
       }
     ];
-    
+
     // 핵심 패턴 선택
     const patterns = await this.selectCorePatterns(businessRequirements);
-    
+
     // 인프라 구성
     const infrastructure = {
       hosting: {
@@ -113,7 +113,7 @@ class MVPArchitectureDesigner {
         environments: ['development', 'staging']
       }
     };
-    
+
     return {
       layers,
       patterns,
@@ -133,13 +133,13 @@ class ProductionArchitecture {
     mvpArchitecture: MVPArchitecture,
     productionRequirements: ProductionRequirements
   ): Promise<ProductionReadyArchitecture> {
-    
+
     // 마이크로서비스 고려
     const serviceArchitecture = await this.evaluateMicroservices(
       mvpArchitecture,
       productionRequirements
     );
-    
+
     // 보안 강화
     const securityArchitecture = {
       authentication: {
@@ -158,7 +158,7 @@ class ProductionArchitecture {
         keyManagement: 'AWS KMS'
       }
     };
-    
+
     // 확장성 설계
     const scalabilityDesign = {
       horizontal: {
@@ -180,7 +180,7 @@ class ProductionArchitecture {
         backups: 'Daily automated'
       }
     };
-    
+
     return {
       services: serviceArchitecture,
       security: securityArchitecture,
@@ -207,7 +207,7 @@ class ArchitectureDecisionRecorder {
       date: new Date(),
       title: decision.title,
       status: 'Proposed', // Proposed, Accepted, Deprecated, Superseded
-      
+
       context: decision.context,
       decision: decision.decision,
       consequences: {
@@ -215,24 +215,24 @@ class ArchitectureDecisionRecorder {
         negative: decision.negativeConsequences,
         neutral: decision.neutralConsequences
       },
-      
+
       alternatives: decision.alternatives.map(alt => ({
         option: alt.option,
         pros: alt.pros,
         cons: alt.cons,
         reason_rejected: alt.rejectionReason
       })),
-      
+
       implementation: {
         steps: decision.implementationSteps,
         timeline: decision.timeline,
         team: decision.responsibleTeam
       }
     };
-    
+
     await this.saveADR(adr);
     await this.notifyStakeholders(adr);
-    
+
     return adr;
   }
 }
@@ -247,16 +247,16 @@ const frontendFrameworkDecision: ADR = {
   date: new Date('2024-01-15'),
   title: 'Next.js를 프론트엔드 프레임워크로 선택',
   status: 'Accepted',
-  
+
   context: `
     - 빠른 개발 속도가 필요
     - SEO 최적화가 중요
     - 풀스택 개발자가 작업
     - 서버사이드 렌더링 필요
   `,
-  
+
   decision: 'Next.js 14를 사용하여 프론트엔드 구축',
-  
+
   consequences: {
     positive: [
       'SSR/SSG 기본 지원',
@@ -274,7 +274,7 @@ const frontendFrameworkDecision: ADR = {
       'TypeScript 필수'
     ]
   },
-  
+
   alternatives: [
     {
       option: 'Vite + React',
@@ -303,7 +303,7 @@ class TechStackRecommender {
     projectType: string,
     constraints: ProjectConstraints
   ): Promise<RecommendedStack> {
-    
+
     const stacks = {
       'saas-b2b': {
         frontend: {
@@ -324,7 +324,7 @@ class TechStackRecommender {
           monitoring: 'DataDog'
         }
       },
-      
+
       'mobile-first': {
         frontend: {
           framework: 'React Native/Flutter',
@@ -339,7 +339,7 @@ class TechStackRecommender {
           storage: 'S3'
         }
       },
-      
+
       'ai-powered': {
         frontend: {
           framework: 'Next.js',
@@ -355,7 +355,7 @@ class TechStackRecommender {
         }
       }
     };
-    
+
     return this.customizeForConstraints(
       stacks[projectType],
       constraints
@@ -390,7 +390,7 @@ class ModularArchitecture {
         dependencies: ['prisma']
       }
     },
-    
+
     // 기능 모듈
     features: {
       billing: {
@@ -409,7 +409,7 @@ class ModularArchitecture {
         dependencies: ['@core/user', 'posthog']
       }
     },
-    
+
     // 공유 모듈
     shared: {
       utils: {
@@ -426,7 +426,7 @@ class ModularArchitecture {
       }
     }
   };
-  
+
   // 모듈 간 통신
   async setupModuleCommunication() {
     return {
@@ -468,7 +468,7 @@ class PerformanceOptimizer {
         metrics: ['FCP', 'LCP', 'TTI', 'CLS']
       }
     ],
-    
+
     backend: [
       {
         area: 'Database',
@@ -505,7 +505,7 @@ class SecurityArchitecture {
   async implementSecurityLayers(
     architecture: Architecture
   ): Promise<SecureArchitecture> {
-    
+
     return {
       // 네트워크 보안
       network: {
@@ -514,7 +514,7 @@ class SecurityArchitecture {
         ssl: 'TLS 1.3 enforced',
         cors: 'Strict origin policy'
       },
-      
+
       // 애플리케이션 보안
       application: {
         authentication: {
@@ -534,7 +534,7 @@ class SecurityArchitecture {
           files: 'Type + size validation'
         }
       },
-      
+
       // 데이터 보안
       data: {
         encryption: {
@@ -548,7 +548,7 @@ class SecurityArchitecture {
           retention: 'Policy based'
         }
       },
-      
+
       // 모니터링 및 감사
       monitoring: {
         logging: {
@@ -612,7 +612,7 @@ class ArchitectureEvolution {
     currentArchitecture: Architecture,
     targetGoals: ArchitectureGoals
   ): Promise<EvolutionPlan> {
-    
+
     const phases = [
       {
         phase: 1,
@@ -655,7 +655,7 @@ class ArchitectureEvolution {
         ]
       }
     ];
-    
+
     return {
       phases,
       risks: await this.assessRisks(phases),

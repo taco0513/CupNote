@@ -9,26 +9,26 @@ SuperClaude에서 토큰 관리는 성능과 비용 효율성의 핵심입니다
 ### 리소스 관리 임계값
 ```yaml
 resource_zones:
-  green: 
+  green:
     range: "0-60%"
     action: "전체 기능 활성화"
     monitoring: "예측 모니터링"
-  
+
   yellow:
     range: "60-75%"
     action: "리소스 최적화"
     features: "캐싱, --uc 제안"
-  
+
   orange:
     range: "75-85%"
     action: "경고 알림"
     features: "비필수 작업 연기"
-  
+
   red:
     range: "85-95%"
     action: "효율성 모드 강제"
     features: "필수 작업만"
-  
+
   critical:
     range: "95%+"
     action: "긴급 프로토콜"
@@ -98,7 +98,7 @@ structural_optimization:
     1. Presentation Layer: Handles user interface
     2. Business Logic Layer: Processes business rules
     3. Data Access Layer: Manages database operations
-  
+
   # 최적화된 방식
   optimized: |
     arch: 3-layer
@@ -177,7 +177,7 @@ optimization_strategy:
   focus: "구조적 명확성"
   symbols: "→, ⇒, arch, impl"
   compression: "moderate"
-  
+
 example:
   normal: "시스템 아키텍처를 마이크로서비스로 전환하여 확장성 개선"
   optimized: "sys arch → μsvc ⇒ scalability+"
@@ -189,7 +189,7 @@ optimization_strategy:
   focus: "UI/UX 용어"
   symbols: "🎨, 📱, perf"
   compression: "visual"
-  
+
 example:
   normal: "반응형 디자인으로 모바일 최적화 구현"
   optimized: "📱 responsive → mobile opt ✅"
@@ -201,7 +201,7 @@ optimization_strategy:
   focus: "위협 및 대응"
   symbols: "🛡️, 🚨, sec"
   compression: "critical info"
-  
+
 example:
   normal: "SQL 인젝션 취약점 발견 및 수정 완료"
   optimized: "🛡️ SQLi vuln → patched ✅"
@@ -215,7 +215,7 @@ caching_strategy:
   first_lookup: "5K tokens"
   cached_lookup: "500 tokens"
   savings: "90%"
-  
+
 implementation:
   - "세션별 캐시"
   - "버전 인식"
@@ -228,7 +228,7 @@ reuse_patterns:
   analysis_cache: "분석 결과 저장"
   pattern_library: "패턴 라이브러리"
   decision_trees: "의사결정 트리"
-  
+
 savings: "40-60% on repeated analysis"
 ```
 
@@ -321,7 +321,7 @@ context_compression:
     라인: 45-67
     함수: handleClick
     문제: 성능 이슈
-  
+
   after: |
     Button.jsx:45-67 handleClick() perf issue
 ```

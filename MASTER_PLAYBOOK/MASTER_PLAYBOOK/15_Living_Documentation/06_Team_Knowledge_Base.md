@@ -13,23 +13,23 @@
 class TeamKnowledgeCollector {
   private knowledgeBase: KnowledgeRepository;
   private analyzer: InsightAnalyzer;
-  
+
   async collectKnowledge() {
     // 1. 코드 리뷰에서 인사이트 추출
     const codeReviews = await this.extractFromCodeReviews();
-    
+
     // 2. 커밋 메시지에서 패턴 분석
     const commitPatterns = await this.analyzeCommitMessages();
-    
+
     // 3. 이슈/PR 토론에서 결정사항 수집
     const decisions = await this.extractFromDiscussions();
-    
+
     // 4. 에러 해결 과정 기록
     const solutions = await this.collectErrorSolutions();
-    
+
     // 5. 팀 미팅 노트 분석
     const meetingInsights = await this.processMeetingNotes();
-    
+
     // 6. 지식 통합 및 저장
     await this.integrateKnowledge({
       codeReviews,
@@ -39,19 +39,19 @@ class TeamKnowledgeCollector {
       meetingInsights
     });
   }
-  
+
   private async extractFromCodeReviews(): Promise<ReviewInsight[]> {
     const reviews = await this.getRecentCodeReviews();
     const insights: ReviewInsight[] = [];
-    
+
     for (const review of reviews) {
       // 중요한 코멘트 추출
-      const importantComments = review.comments.filter(comment => 
+      const importantComments = review.comments.filter(comment =>
         comment.reactions.length > 2 || // 반응이 많은 코멘트
         comment.resolved && comment.changes_requested || // 변경 요청 후 해결
         comment.body.match(/IMPORTANT|TODO|FIXME|NOTE/i) // 키워드 포함
       );
-      
+
       for (const comment of importantComments) {
         insights.push({
           type: 'code_review',
@@ -68,7 +68,7 @@ class TeamKnowledgeCollector {
         });
       }
     }
-    
+
     return insights;
   }
 }
@@ -84,16 +84,16 @@ class TeamLearningAnalyzer {
   ): Promise<TeamPatterns> {
     // 1. 코드 작성 패턴
     const codingPatterns = await this.analyzeCodingPatterns(timeRange);
-    
+
     // 2. 문제 해결 패턴
     const problemSolvingPatterns = await this.analyzeProblemSolving(timeRange);
-    
+
     // 3. 커뮤니케이션 패턴
     const communicationPatterns = await this.analyzeCommunication(timeRange);
-    
+
     // 4. 협업 패턴
     const collaborationPatterns = await this.analyzeCollaboration(timeRange);
-    
+
     return {
       coding: codingPatterns,
       problemSolving: problemSolvingPatterns,
@@ -108,15 +108,15 @@ class TeamLearningAnalyzer {
       recommendations: this.generateRecommendations()
     };
   }
-  
+
   private async analyzeCodingPatterns(
     timeRange: TimeRange
   ): Promise<CodingPattern[]> {
     const patterns: CodingPattern[] = [];
-    
+
     // 자주 사용되는 코드 패턴 분석
     const codeAnalysis = await this.analyzeCodebase(timeRange);
-    
+
     // 팀원별 선호 패턴
     for (const member of this.teamMembers) {
       const memberPatterns = await this.analyzeMemberPatterns(member, codeAnalysis);
@@ -128,7 +128,7 @@ class TeamLearningAnalyzer {
         improvementAreas: memberPatterns.improvements
       });
     }
-    
+
     return patterns;
   }
 }
@@ -163,42 +163,42 @@ class KnowledgeSharingBoard {
       relatedPosts: await this.findRelatedPosts(knowledge),
       aiSummary: await this.generateAISummary(knowledge)
     };
-    
+
     // 저장 및 인덱싱
     await this.savePost(post);
     await this.indexForSearch(post);
-    
+
     // 관련 팀원에게 알림
     await this.notifyRelevantMembers(post);
-    
+
     return post;
   }
-  
+
   async searchKnowledge(
     query: string,
     filters?: SearchFilters
   ): Promise<SearchResults> {
     // 1. 키워드 검색
     const keywordResults = await this.searchByKeywords(query);
-    
+
     // 2. 시맨틱 검색
     const semanticResults = await this.semanticSearch(query);
-    
+
     // 3. 컨텍스트 기반 검색
     const contextResults = await this.searchByContext(query, this.getCurrentContext());
-    
+
     // 4. 결과 통합 및 랭킹
     const combinedResults = this.combineAndRank([
       keywordResults,
       semanticResults,
       contextResults
     ]);
-    
+
     // 5. 필터 적용
-    const filteredResults = filters 
+    const filteredResults = filters
       ? this.applyFilters(combinedResults, filters)
       : combinedResults;
-    
+
     return {
       results: filteredResults,
       totalCount: filteredResults.length,
@@ -216,32 +216,32 @@ class KnowledgeSharingBoard {
 class KnowledgeTaggingSystem {
   private tagOntology: TagOntology;
   private mlClassifier: MLClassifier;
-  
+
   async autoTagKnowledge(knowledge: Knowledge): Promise<Tag[]> {
     const tags: Tag[] = [];
-    
+
     // 1. 컨텐츠 분석
     const contentAnalysis = await this.analyzeContent(knowledge.content);
-    
+
     // 2. 기술 스택 태그
     tags.push(...this.extractTechStackTags(contentAnalysis));
-    
+
     // 3. 문제 유형 태그
     tags.push(...this.extractProblemTypeTags(contentAnalysis));
-    
+
     // 4. 난이도 태그
     tags.push(this.assessDifficultyTag(contentAnalysis));
-    
+
     // 5. 팀 특화 태그
     tags.push(...this.extractTeamSpecificTags(knowledge));
-    
+
     // 6. ML 기반 추천 태그
     const mlTags = await this.mlClassifier.suggestTags(knowledge);
     tags.push(...mlTags.filter(tag => tag.confidence > 0.7));
-    
+
     return this.deduplicateAndRank(tags);
   }
-  
+
   private extractTechStackTags(analysis: ContentAnalysis): Tag[] {
     const techTags: Tag[] = [];
     const techKeywords = {
@@ -252,9 +252,9 @@ class KnowledgeTaggingSystem {
       'kubernetes': ['k8s', 'kubernetes', 'pod', 'deployment'],
       'aws': ['aws', 'ec2', 's3', 'lambda']
     };
-    
+
     for (const [tech, keywords] of Object.entries(techKeywords)) {
-      if (keywords.some(keyword => 
+      if (keywords.some(keyword =>
         analysis.tokens.includes(keyword.toLowerCase())
       )) {
         techTags.push({
@@ -264,7 +264,7 @@ class KnowledgeTaggingSystem {
         });
       }
     }
-    
+
     return techTags;
   }
 }
@@ -280,7 +280,7 @@ class KnowledgeGraphVisualizer {
   async generateKnowledgeGraph(): Promise<KnowledgeGraph> {
     const nodes: GraphNode[] = [];
     const edges: GraphEdge[] = [];
-    
+
     // 1. 지식 노드 생성
     const knowledgePosts = await this.getAllKnowledgePosts();
     for (const post of knowledgePosts) {
@@ -297,7 +297,7 @@ class KnowledgeGraphVisualizer {
         }
       });
     }
-    
+
     // 2. 사람 노드 생성
     const teamMembers = await this.getTeamMembers();
     for (const member of teamMembers) {
@@ -313,7 +313,7 @@ class KnowledgeGraphVisualizer {
         }
       });
     }
-    
+
     // 3. 관계 엣지 생성
     // 작성자 관계
     for (const post of knowledgePosts) {
@@ -324,7 +324,7 @@ class KnowledgeGraphVisualizer {
         weight: 1
       });
     }
-    
+
     // 지식 간 관계
     for (const post of knowledgePosts) {
       for (const relatedId of post.relatedPosts) {
@@ -336,7 +336,7 @@ class KnowledgeGraphVisualizer {
         });
       }
     }
-    
+
     return {
       nodes,
       edges,
@@ -354,7 +354,7 @@ class KnowledgeGraphVisualizer {
 class TeamLearningDashboard {
   async generateDashboard(): Promise<DashboardData> {
     const timeRange = { start: dayjs().subtract(30, 'day').toDate(), end: new Date() };
-    
+
     return {
       // 핵심 지표
       metrics: {
@@ -363,14 +363,14 @@ class TeamLearningDashboard {
         knowledgeApplications: await this.countApplications(timeRange),
         averageTimeToSolution: await this.calculateAvgSolutionTime(timeRange)
       },
-      
+
       // 트렌드 차트
       trends: {
         knowledgeGrowth: await this.calculateKnowledgeGrowthTrend(),
         topicEvolution: await this.analyzeTopicEvolution(),
         expertiseMap: await this.mapTeamExpertise()
       },
-      
+
       // 핵심 인사이트
       insights: {
         mostValuableKnowledge: await this.identifyMostValuable(),
@@ -378,7 +378,7 @@ class TeamLearningDashboard {
         collaborationPatterns: await this.analyzeCollaborationPatterns(),
         learningVelocity: await this.calculateLearningVelocity()
       },
-      
+
       // 추천 사항
       recommendations: {
         topicsToExplore: await this.recommendTopics(),
@@ -406,7 +406,7 @@ class AIKnowledgeFormatter {
         context: this.extractContext(knowledge),
         outcome: this.extractOutcome(knowledge)
       },
-      
+
       // 구조화된 데이터
       structured: {
         prerequisites: this.extractPrerequisites(knowledge),
@@ -414,14 +414,14 @@ class AIKnowledgeFormatter {
         codeExamples: this.extractCodeExamples(knowledge),
         pitfalls: this.extractPitfalls(knowledge)
       },
-      
+
       // 관계 정보
       relationships: {
         relatedKnowledge: knowledge.relatedPosts,
         requiredSkills: this.identifyRequiredSkills(knowledge),
         applicableScenarios: this.identifyScenarios(knowledge)
       },
-      
+
       // 메타데이터
       metadata: {
         confidence: this.assessConfidence(knowledge),
@@ -429,7 +429,7 @@ class AIKnowledgeFormatter {
         timeToImplement: this.estimateImplementationTime(knowledge),
         successRate: this.calculateSuccessRate(knowledge)
       },
-      
+
       // 팀 컨텍스트
       teamContext: {
         previousApplications: this.getPreviousApplications(knowledge),

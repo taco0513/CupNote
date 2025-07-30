@@ -11,15 +11,15 @@ e2e_test_characteristics:
   user_perspective:
     description: "실제 사용자 관점에서 시스템 전체를 테스트"
     scope: ["User journeys", "Business workflows", "Cross-browser compatibility"]
-    
+
   real_environment:
     description: "실제 운영 환경과 유사한 환경에서 테스트"
     components: ["Frontend", "Backend", "Database", "External services"]
-    
+
   automation_benefits:
     description: "반복적인 회귀 테스트 자동화"
     advantages: ["Consistent testing", "24/7 monitoring", "Fast feedback"]
-    
+
   maintenance_challenges:
     description: "높은 유지보수 비용과 복잡성"
     considerations: ["Flaky tests", "Slow execution", "Environment dependencies"]
@@ -60,13 +60,13 @@ export default defineConfig({
     ['junit', { outputFile: 'test-results/junit.xml' }],
     ['allure-playwright']
   ],
-  
+
   use: {
     baseURL: process.env.BASE_URL || 'http://localhost:3000',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
-    
+
     // Global test settings
     actionTimeout: 10000,
     navigationTimeout: 30000
@@ -145,9 +145,9 @@ export abstract class BasePage {
   }
 
   async takeScreenshot(name: string): Promise<void> {
-    await this.page.screenshot({ 
+    await this.page.screenshot({
       path: `test-results/screenshots/${name}.png`,
-      fullPage: true 
+      fullPage: true
     });
   }
 
@@ -202,7 +202,7 @@ export class LoginPage extends BasePage {
 
   constructor(page: Page) {
     super(page, '/login');
-    
+
     this.emailInput = page.locator('[data-testid="email-input"]');
     this.passwordInput = page.locator('[data-testid="password-input"]');
     this.loginButton = page.locator('[data-testid="login-button"]');
@@ -216,11 +216,11 @@ export class LoginPage extends BasePage {
   async login(email: string, password: string, rememberMe: boolean = false): Promise<void> {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
-    
+
     if (rememberMe) {
       await this.rememberMeCheckbox.check();
     }
-    
+
     await this.loginButton.click();
   }
 
@@ -276,7 +276,7 @@ export class DashboardPage extends BasePage {
 
   constructor(page: Page) {
     super(page, '/dashboard');
-    
+
     this.welcomeMessage = page.locator('[data-testid="welcome-message"]');
     this.userMenu = page.locator('[data-testid="user-menu"]');
     this.logoutButton = page.locator('[data-testid="logout-button"]');
@@ -549,7 +549,7 @@ test.describe('사용자 인증 여정', () => {
 
       const resetPasswordPage = new ResetPasswordPage(page);
       const newPassword = 'NewSecurePassword123!';
-      
+
       await resetPasswordPage.resetPassword(newPassword, newPassword);
 
       await expect(resetPasswordPage.successMessage).toBeVisible();
@@ -607,7 +607,7 @@ test.describe('전자상거래 구매 여정', () => {
     // 2. 검색 결과 확인
     await expect(page).toHaveURL(/.*search.*query=노트북/);
     await productListPage.waitForProductsToLoad();
-    
+
     const productCount = await productListPage.getProductCount();
     expect(productCount).toBeGreaterThan(0);
 
@@ -615,7 +615,7 @@ test.describe('전자상거래 구매 여정', () => {
     const firstProduct = await productListPage.getFirstProduct();
     const productName = await firstProduct.getName();
     const productPrice = await firstProduct.getPrice();
-    
+
     await firstProduct.click();
 
     // 4. 상품 상세 페이지 확인
@@ -761,7 +761,7 @@ test.describe('전자상거래 구매 여정', () => {
   test('재고 부족 상품은 구매할 수 없다', async ({ page }) => {
     // 사전 조건: 재고가 1개인 상품 생성
     const product = await testDataManager.createProductWithLimitedStock(1);
-    
+
     await productDetailPage.goto(`/products/${product.id}`);
     await productDetailPage.waitForPageLoad();
 
@@ -781,7 +781,7 @@ test.describe('전자상거래 구매 여정', () => {
   test('게스트 사용자도 구매할 수 있다', async ({ page, context }) => {
     // 로그아웃하여 게스트 상태로 변경
     await context.clearCookies();
-    
+
     // 상품을 장바구니에 추가
     await homePage.goto();
     await homePage.searchForProduct('책');
@@ -860,7 +860,7 @@ test.describe('시각적 회귀 테스트', () => {
 
   test('반응형 디자인이 올바르게 작동한다', async ({ page, browserName }) => {
     const homePage = new HomePage(page);
-    
+
     // 다양한 뷰포트 크기에서 테스트
     const viewports = [
       { width: 1920, height: 1080, name: 'desktop-large' },
@@ -943,7 +943,7 @@ test.describe('시각적 회귀 테스트', () => {
     // 잘못된 이메일 형식
     await loginPage.emailInput.fill('invalid-email');
     await loginPage.loginButton.click();
-    
+
     await expect(loginPage.emailInput).toHaveScreenshot('email-format-error.png');
   });
 });
@@ -963,16 +963,16 @@ test.describe('성능 테스트', () => {
     const performanceMetrics = await page.evaluate(() => {
       const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
       const paint = performance.getEntriesByType('paint');
-      
+
       return {
         // 네비게이션 타이밍
         domContentLoaded: navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart,
         loadComplete: navigation.loadEventEnd - navigation.loadEventStart,
-        
+
         // 페인트 타이밍
         firstPaint: paint.find(entry => entry.name === 'first-paint')?.startTime || 0,
         firstContentfulPaint: paint.find(entry => entry.name === 'first-contentful-paint')?.startTime || 0,
-        
+
         // 리소스 타이밍
         totalLoadTime: navigation.loadEventEnd - navigation.fetchStart,
       };
@@ -989,17 +989,17 @@ test.describe('성능 테스트', () => {
   test('큰 이미지 로딩이 페이지 성능에 영향을 주지 않는다', async ({ page }) => {
     // 이미지 로딩 시작 시간 기록
     const startTime = Date.now();
-    
+
     await page.goto('/gallery');
-    
+
     // 첫 번째 이미지가 로드될 때까지 대기
     await page.waitForLoadState('networkidle');
-    
+
     const loadTime = Date.now() - startTime;
-    
+
     // 이미지가 많은 페이지도 5초 이내에 로드되어야 함
     expect(loadTime).toBeLessThan(5000);
-    
+
     // Lazy loading 확인
     const visibleImages = await page.locator('img[loading="lazy"]').count();
     expect(visibleImages).toBeGreaterThan(0);
@@ -1007,18 +1007,18 @@ test.describe('성능 테스트', () => {
 
   test('검색 결과 페이지네이션이 빠르게 작동한다', async ({ page }) => {
     await page.goto('/search?q=laptop');
-    
+
     // 첫 페이지 로딩 시간
     await page.waitForLoadState('networkidle');
-    
+
     // 페이지 변경 시간 측정
     const startTime = Date.now();
-    
+
     await page.click('[data-testid="page-2"]');
     await page.waitForLoadState('networkidle');
-    
+
     const paginationTime = Date.now() - startTime;
-    
+
     // 페이지네이션은 1초 이내에 완료되어야 함
     expect(paginationTime).toBeLessThan(1000);
   });
@@ -1029,23 +1029,23 @@ test.describe('성능 테스트', () => {
     await page.fill('[data-testid="email-input"]', 'test@example.com');
     await page.fill('[data-testid="password-input"]', 'password123');
     await page.click('[data-testid="login-button"]');
-    
+
     // 상품 페이지로 이동
     await page.goto('/products/laptop-123');
-    
+
     // 장바구니 추가 시간 측정
     const startTime = Date.now();
-    
+
     await page.click('[data-testid="add-to-cart"]');
-    
+
     // 장바구니 카운터 업데이트 대기
     await page.waitForFunction(() => {
       const counter = document.querySelector('[data-testid="cart-count"]');
       return counter && counter.textContent !== '0';
     });
-    
+
     const updateTime = Date.now() - startTime;
-    
+
     // 장바구니 업데이트는 500ms 이내에 완료되어야 함
     expect(updateTime).toBeLessThan(500);
   });
@@ -1062,30 +1062,30 @@ import AxeBuilder from '@axe-core/playwright';
 test.describe('접근성 테스트', () => {
   test('홈페이지가 WCAG 2.1 AA 기준을 만족한다', async ({ page }) => {
     await page.goto('/');
-    
+
     const accessibilityScanResults = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
       .analyze();
-    
+
     expect(accessibilityScanResults.violations).toEqual([]);
   });
 
   test('로그인 폼이 스크린 리더 친화적이다', async ({ page }) => {
     await page.goto('/login');
-    
+
     // 폼 라벨 확인
     const emailInput = page.locator('[data-testid="email-input"]');
     const passwordInput = page.locator('[data-testid="password-input"]');
-    
+
     await expect(emailInput).toHaveAttribute('aria-label', '이메일 주소');
     await expect(passwordInput).toHaveAttribute('aria-label', '비밀번호');
-    
+
     // 오류 메시지 aria-describedby 확인
     await page.click('[data-testid="login-button"]');
-    
+
     await expect(emailInput).toHaveAttribute('aria-describedby');
     await expect(passwordInput).toHaveAttribute('aria-describedby');
-    
+
     // 접근성 스캔
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
     expect(accessibilityScanResults.violations).toEqual([]);
@@ -1093,17 +1093,17 @@ test.describe('접근성 테스트', () => {
 
   test('키보드 네비게이션이 올바르게 작동한다', async ({ page }) => {
     await page.goto('/');
-    
+
     // Tab 키로 네비게이션
     await page.keyboard.press('Tab');
     let focusedElement = await page.evaluate(() => document.activeElement?.tagName);
     expect(['BUTTON', 'A', 'INPUT']).toContain(focusedElement);
-    
+
     // Skip to main content 링크 확인
     await page.keyboard.press('Tab');
     const skipLink = page.locator('[data-testid="skip-to-main"]');
     await expect(skipLink).toBeFocused();
-    
+
     await page.keyboard.press('Enter');
     const mainContent = page.locator('main');
     await expect(mainContent).toBeFocused();
@@ -1111,20 +1111,20 @@ test.describe('접근성 테스트', () => {
 
   test('색상 대비가 충분하다', async ({ page }) => {
     await page.goto('/');
-    
+
     const accessibilityScanResults = await new AxeBuilder({ page })
       .withTags(['color-contrast'])
       .analyze();
-    
+
     expect(accessibilityScanResults.violations).toEqual([]);
   });
 
   test('동적 콘텐츠 변경이 스크린 리더에 알려진다', async ({ page }) => {
     await page.goto('/cart');
-    
+
     // 수량 변경 시 aria-live 영역 확인
     await page.click('[data-testid="increase-quantity"]');
-    
+
     const liveRegion = page.locator('[aria-live="polite"]');
     await expect(liveRegion).toContainText('수량이 업데이트되었습니다');
   });

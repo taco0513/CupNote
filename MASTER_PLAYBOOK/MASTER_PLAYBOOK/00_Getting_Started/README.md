@@ -13,6 +13,7 @@
 ## 📚 가이드 구성
 
 ### 1️⃣ 시작하기 (현재 위치)
+- [🚀 설치 가이드](00_Installation_Guide.md) - 30분만에 시작하는 완벽한 설치 가이드
 - [소개](01_Introduction.md) - 이 가이드와 바이브 코딩 소개
 - [준비사항](02_Prerequisites.md) - 필요한 것들과 마인드셋
 - [만들 수 있는 것들](03_What_You_Can_Build.md) - 17일 후의 당신
@@ -21,16 +22,19 @@
 1. **[환경 설정](../01_Setup/README.md)** - Cursor와 Claude 설치 (Day 0)
 2. **[AI 전문가들](../02_AI_Experts/README.md)** - 36명의 도우미 소개
 3. **[바이브 코딩](../03_Vibe_Coding/README.md)** - 대화로 코딩하기
-4. **[개발 방법론](../04_Methodologies/README.md)** - 3가지 접근법
+4. **[개발 방법론](../04_BMAD_Method/README.md)** - 3가지 접근법
 5. **[17일 여정](../05_17Day_Journey/README.md)** - 단계별 가이드
 
 ## 🎮 빠른 시작
 
-### 지금 당장 시작하고 싶다면?
-👉 **[5분 만에 첫 버튼 만들기](../11_Quick_Wins/01_First_Hour.md)**
+### 🚀 지금 당장 시작하고 싶다면?
+👉 **[설치 가이드](00_Installation_Guide.md)** - 30분만에 AI 개발 시작!
 
-### 차근차근 배우고 싶다면?
+### 📚 차근차근 배우고 싶다면?
 👉 **[소개 문서](01_Introduction.md)**부터 순서대로 읽어보세요.
+
+### ⚡ 30분 체험하고 싶다면?
+👉 **[30분 프로토타입 만들기](../11_Quick_Wins/01_30min_Prototype.md)**
 
 ## ❓ 자주 묻는 질문
 

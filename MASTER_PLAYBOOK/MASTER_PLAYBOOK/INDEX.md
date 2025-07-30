@@ -43,6 +43,7 @@ Claude Code CLI + Cursor IDE를 활용한 Vibe Coding으로 아이디어를 현�
 
 ### 🏃‍♂️ 빠른 시작 (1-2일)
 **[00_Getting_Started](00_Getting_Started/README.md)** - 개발 환경 구축과 기본 개념
+- **[🚀 설치 가이드](00_Getting_Started/00_Installation_Guide.md)** - 30분만에 시작하는 완벽한 가이드
 - 개념 이해와 마인드셋
 - 도구 설치와 환경 설정
 - 첫 번째 AI 개발 경험
@@ -148,8 +149,11 @@ Claude Code CLI + Cursor IDE를 활용한 Vibe Coding으로 아이디어를 현�
 
 **[13_Advanced_Claude_Features](13_Advanced_Claude_Features/README.md)** - Claude Code 고급 기능 마스터
 - Sub-Agents: 전문화된 AI 에이전트
-- Extended Thinking: 깊은 사고 모드
-- Parallel Sessions: Git Worktrees 병렬 개발
+- Extended Thinking: 깊은 사고 모드  
+- **🔄 스마트 Git Worktrees**: AI 자동 작업 분석 + 병렬 개발 시스템
+  - AI 기반 자동 워크플로우 결정 매트릭스
+  - 지능형 충돌 방지 및 리소스 관리
+  - 자동화 스크립트와 성과 분석 시스템
 - Unix Integration: CLI 도구 활용
 - @ 참조 시스템: 즉시 컨텍스트 포함
 - Image Analysis: 시각적 자료 분석
@@ -311,23 +315,24 @@ Claude Code CLI + Cursor IDE를 활용한 Vibe Coding으로 아이디어를 현�
 
 ### 지금 바로 시작하세요!
 
-1. **[Getting Started](00_Getting_Started/README.md)**로 첫 걸음
-2. **[Setup Guide](01_Setup/README.md)**로 환경 구축
-3. **[17일 여정](05_17Day_Journey/README.md)**으로 MVP 완성
-4. **[Quick Wins](11_Quick_Wins/README.md)**로 즉시 성과
+1. **[🚀 설치 가이드](00_Getting_Started/00_Installation_Guide.md)** - 30분만에 바로 시작!
+2. **[Getting Started](00_Getting_Started/README.md)**로 첫 걸음
+3. **[Setup Guide](01_Setup/README.md)**로 환경 구축
+4. **[17일 여정](05_17Day_Journey/README.md)**으로 MVP 완성
+5. **[Quick Wins](11_Quick_Wins/README.md)**로 즉시 성과
 
 ### 성공을 위한 마음가짐
 
 > 💡 **"AI는 도구가 아니라 파트너다"**
-> 
+>
 > AI와 함께 개발하면 혼자서는 불가능한 일을 해낼 수 있습니다.
 
 > 🚀 **"완벽함보다 실행이 우선이다"**
-> 
+>
 > 80% 완성도로 출시하고 사용자 피드백으로 개선하세요.
 
 > 🎯 **"작은 성공이 큰 성취를 만든다"**
-> 
+>
 > 매일 작은 진전을 만들어가면 놀라운 결과를 얻습니다.
 
 ---

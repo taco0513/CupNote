@@ -10,7 +10,7 @@ data_pipeline:
   name: "E-commerce Analytics Pipeline"
   domain: "전자상거래 데이터 분석"
   scale: "일일 10TB+ 데이터 처리"
-  
+
 data_sources:
   - "웹사이트 이벤트 (클릭스트림)"
   - "모바일 앱 이벤트"
@@ -42,22 +42,22 @@ technology_stack:
     ingestion: "Apache Kafka"
     processing: "Apache Flink / Kafka Streams"
     storage: "Apache Cassandra / ClickHouse"
-  
+
   batch:
     orchestration: "Apache Airflow"
     processing: "Apache Spark"
     storage: "AWS S3 / HDFS"
-  
+
   infrastructure:
     cloud: "AWS / GCP"
     containers: "Docker + Kubernetes"
     monitoring: "Prometheus + Grafana"
-    
+
   languages:
     python: "Apache Beam, Pandas, PySpark"
     java: "Kafka Streams, Flink"
     sql: "dbt, BigQuery"
-    
+
   ml_ops:
     feature_store: "Feast"
     model_serving: "MLflow + Seldon"
@@ -89,13 +89,13 @@ lambda_architecture:
     latency: "< 1초"
     technologies: ["Kafka", "Flink", "Redis"]
     data_types: ["스트림 이벤트", "실시간 메트릭"]
-  
+
   batch_layer:
     purpose: "정확성 보장 (Cold Path)"
     latency: "시간/일 단위"
     technologies: ["Airflow", "Spark", "S3"]
     data_types: ["전체 데이터셋", "복잡한 분석"]
-  
+
   serving_layer:
     purpose: "통합 뷰 제공"
     latency: "< 100ms"
@@ -217,13 +217,13 @@ kafka_topics:
     replication_factor: 3
     retention_ms: 604800000  # 7 days
     cleanup_policy: "delete"
-    
+
   transactions:
     partitions: 12
     replication_factor: 3
     retention_ms: 2592000000  # 30 days
     cleanup_policy: "compact"
-    
+
   user-profiles:
     partitions: 6
     replication_factor: 3
@@ -242,94 +242,94 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 
 public class EcommerceStreamProcessor {
-    
+
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        
+
         // 체크포인트 설정
         env.enableCheckpointing(60000); // 1분마다
         env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
-        
+
         // Kafka 소스 설정
         Properties kafkaProps = new Properties();
         kafkaProps.setProperty("bootstrap.servers", "kafka-cluster:9092");
         kafkaProps.setProperty("group.id", "flink-processor");
-        
+
         FlinkKafkaConsumer<UserEvent> eventConsumer = new FlinkKafkaConsumer<>(
             "user-events",
             new UserEventDeserializationSchema(),
             kafkaProps
         );
-        
+
         // 이벤트 스트림 생성
         DataStream<UserEvent> eventStream = env.addSource(eventConsumer);
-        
+
         // 실시간 세션 분석
         DataStream<SessionMetrics> sessionMetrics = eventStream
             .keyBy(UserEvent::getSessionId)
             .window(Time.minutes(30))
             .process(new SessionAnalysisFunction());
-        
+
         // 실시간 상품 인기도 계산
         DataStream<ProductPopularity> productPopularity = eventStream
             .filter(event -> "product_view".equals(event.getEventType()))
             .keyBy(event -> event.getProperties().get("productId"))
             .window(Time.minutes(5))
             .aggregate(new ProductViewCountAggregator());
-        
+
         // 실시간 이상 탐지
         DataStream<AlertEvent> alerts = eventStream
             .keyBy(UserEvent::getUserId)
             .process(new AnomalyDetectionFunction());
-        
+
         // 결과를 다른 토픽으로 전송
         sessionMetrics.addSink(new FlinkKafkaProducer<>(
             "session-metrics",
             new SessionMetricsSerializationSchema(),
             kafkaProps
         ));
-        
+
         productPopularity.addSink(new FlinkKafkaProducer<>(
             "product-popularity",
             new ProductPopularitySerializationSchema(),
             kafkaProps
         ));
-        
+
         alerts.addSink(new FlinkKafkaProducer<>(
             "alerts",
             new AlertSerializationSchema(),
             kafkaProps
         ));
-        
+
         env.execute("E-commerce Stream Processing");
     }
 }
 
 // 세션 분석 함수
 public class SessionAnalysisFunction extends ProcessWindowFunction<UserEvent, SessionMetrics, String, TimeWindow> {
-    
+
     @Override
     public void process(String sessionId, Context context, Iterable<UserEvent> events, Collector<SessionMetrics> out) {
         List<UserEvent> eventList = StreamSupport.stream(events.spliterator(), false)
             .collect(Collectors.toList());
-        
+
         if (eventList.isEmpty()) return;
-        
+
         // 세션 메트릭 계산
         long startTime = eventList.stream().mapToLong(UserEvent::getTimestamp).min().orElse(0);
         long endTime = eventList.stream().mapToLong(UserEvent::getTimestamp).max().orElse(0);
         long duration = endTime - startTime;
-        
+
         int pageViews = (int) eventList.stream().filter(e -> "page_view".equals(e.getEventType())).count();
         int clicks = (int) eventList.stream().filter(e -> "click".equals(e.getEventType())).count();
         boolean haspurchase = eventList.stream().anyMatch(e -> "purchase".equals(e.getEventType()));
-        
+
         Set<String> uniquePages = eventList.stream()
             .filter(e -> "page_view".equals(e.getEventType()))
             .map(e -> e.getProperties().get("page"))
             .filter(Objects::nonNull)
             .collect(Collectors.toSet());
-        
+
         SessionMetrics metrics = SessionMetrics.builder()
             .sessionId(sessionId)
             .userId(eventList.get(0).getUserId())
@@ -341,41 +341,41 @@ public class SessionAnalysisFunction extends ProcessWindowFunction<UserEvent, Se
             .uniquePages(uniquePages.size())
             .hasConversion(haspurchase)
             .build();
-        
+
         out.collect(metrics);
     }
 }
 
 // 이상 탐지 함수
 public class AnomalyDetectionFunction extends KeyedProcessFunction<String, UserEvent, AlertEvent> {
-    
+
     private ValueState<UserBehaviorProfile> userProfileState;
     private ValueState<Long> lastEventTimeState;
-    
+
     @Override
     public void open(Configuration parameters) {
-        ValueStateDescriptor<UserBehaviorProfile> profileDescriptor = 
+        ValueStateDescriptor<UserBehaviorProfile> profileDescriptor =
             new ValueStateDescriptor<>("userProfile", UserBehaviorProfile.class);
         userProfileState = getRuntimeContext().getState(profileDescriptor);
-        
-        ValueStateDescriptor<Long> timeDescriptor = 
+
+        ValueStateDescriptor<Long> timeDescriptor =
             new ValueStateDescriptor<>("lastEventTime", Long.class);
         lastEventTimeState = getRuntimeContext().getState(timeDescriptor);
     }
-    
+
     @Override
     public void processElement(UserEvent event, Context ctx, Collector<AlertEvent> out) throws Exception {
         UserBehaviorProfile profile = userProfileState.value();
         Long lastEventTime = lastEventTimeState.value();
-        
+
         if (profile == null) {
             profile = new UserBehaviorProfile(event.getUserId());
         }
-        
+
         // 이상 행동 탐지 로직
         boolean isAnomaly = false;
         String reason = "";
-        
+
         // 1. 비정상적인 클릭 속도
         if (lastEventTime != null) {
             long timeDiff = event.getTimestamp() - lastEventTime;
@@ -384,7 +384,7 @@ public class AnomalyDetectionFunction extends KeyedProcessFunction<String, UserE
                 reason = "Unusually fast clicking detected";
             }
         }
-        
+
         // 2. 비정상적인 구매 패턴
         if ("purchase".equals(event.getEventType())) {
             double amount = Double.parseDouble(event.getProperties().getOrDefault("amount", "0"));
@@ -393,15 +393,15 @@ public class AnomalyDetectionFunction extends KeyedProcessFunction<String, UserE
                 reason = "Unusually large purchase amount";
             }
         }
-        
+
         // 3. 지리적 이상
         String currentLocation = event.getContext().getIp();
-        if (!profile.getKnownLocations().contains(currentLocation) && 
+        if (!profile.getKnownLocations().contains(currentLocation) &&
             lastEventTime != null && (event.getTimestamp() - lastEventTime) < 3600000) {
             isAnomaly = true;
             reason = "Rapid location change detected";
         }
-        
+
         if (isAnomaly) {
             AlertEvent alert = AlertEvent.builder()
                 .userId(event.getUserId())
@@ -411,10 +411,10 @@ public class AnomalyDetectionFunction extends KeyedProcessFunction<String, UserE
                 .reason(reason)
                 .timestamp(event.getTimestamp())
                 .build();
-            
+
             out.collect(alert);
         }
-        
+
         // 프로필 업데이트
         profile.update(event);
         userProfileState.update(profile);
@@ -440,7 +440,7 @@ class RealTimeDashboard:
     def __init__(self):
         self.metrics_buffer = deque(maxlen=1000)
         self.alerts_buffer = deque(maxlen=100)
-        
+
     def consume_metrics(self):
         """백그라운드에서 Kafka 메시지 소비"""
         consumer = KafkaConsumer(
@@ -450,7 +450,7 @@ class RealTimeDashboard:
             bootstrap_servers=['kafka-cluster:9092'],
             value_deserializer=lambda m: json.loads(m.decode('utf-8'))
         )
-        
+
         for message in consumer:
             if message.topic == 'session-metrics':
                 self.metrics_buffer.append({
@@ -466,56 +466,56 @@ class RealTimeDashboard:
                 })
             elif message.topic == 'alerts':
                 self.alerts_buffer.append(message.value)
-    
+
     def run_dashboard(self):
         st.set_page_config(page_title="E-commerce Real-time Analytics", layout="wide")
-        
+
         st.title("🛍️ E-commerce Real-time Analytics Dashboard")
-        
+
         # 메트릭 요약
         col1, col2, col3, col4 = st.columns(4)
-        
+
         with col1:
             st.metric(
                 label="Active Sessions",
                 value=self.get_active_sessions(),
                 delta=self.get_session_delta()
             )
-        
+
         with col2:
             st.metric(
                 label="Conversion Rate",
                 value=f"{self.get_conversion_rate():.1f}%",
                 delta=f"{self.get_conversion_delta():.1f}%"
             )
-        
+
         with col3:
             st.metric(
                 label="Avg Session Duration",
                 value=f"{self.get_avg_session_duration():.1f}min",
                 delta=f"{self.get_duration_delta():.1f}min"
             )
-        
+
         with col4:
             st.metric(
                 label="Alerts (Last Hour)",
                 value=len([a for a in self.alerts_buffer if time.time() - a['timestamp']/1000 < 3600]),
                 delta=self.get_alerts_delta()
             )
-        
+
         # 실시간 차트
         col1, col2 = st.columns(2)
-        
+
         with col1:
             st.subheader("Session Metrics Over Time")
             session_chart = self.create_session_chart()
             st.plotly_chart(session_chart, use_container_width=True)
-        
+
         with col2:
             st.subheader("Top Products (Real-time)")
             product_chart = self.create_product_chart()
             st.plotly_chart(product_chart, use_container_width=True)
-        
+
         # 알람 테이블
         st.subheader("Recent Alerts")
         alerts_df = pd.DataFrame(list(self.alerts_buffer)[-10:])
@@ -523,84 +523,84 @@ class RealTimeDashboard:
             st.dataframe(alerts_df, use_container_width=True)
         else:
             st.info("No recent alerts")
-        
+
         # 자동 새로고침
         time.sleep(5)
         st.experimental_rerun()
-    
+
     def create_session_chart(self):
         session_data = [m for m in self.metrics_buffer if m['metric_type'] == 'session']
         if not session_data:
             return go.Figure()
-        
+
         df = pd.DataFrame([{
             'timestamp': pd.to_datetime(m['timestamp'], unit='ms'),
             'duration': m['value']['duration'] / 60000,  # 분 단위로 변환
             'page_views': m['value']['pageViews'],
             'has_conversion': m['value']['hasConversion']
         } for m in session_data[-100:]])
-        
+
         fig = px.scatter(
-            df, 
-            x='timestamp', 
+            df,
+            x='timestamp',
             y='duration',
             size='page_views',
             color='has_conversion',
             title="Session Duration vs Page Views"
         )
-        
+
         return fig
-    
+
     def create_product_chart(self):
         product_data = [m for m in self.metrics_buffer if m['metric_type'] == 'product']
         if not product_data:
             return go.Figure()
-        
+
         # 최근 제품 인기도 데이터 집계
         product_counts = {}
         for m in product_data[-50:]:
             product_id = m['value']['productId']
             count = m['value']['viewCount']
             product_counts[product_id] = product_counts.get(product_id, 0) + count
-        
+
         df = pd.DataFrame([
-            {'product_id': k, 'view_count': v} 
+            {'product_id': k, 'view_count': v}
             for k, v in sorted(product_counts.items(), key=lambda x: x[1], reverse=True)[:10]
         ])
-        
+
         fig = px.bar(df, x='product_id', y='view_count', title="Top 10 Products by Views")
         return fig
-    
+
     def get_active_sessions(self):
         # 최근 5분간 활성 세션 수
         current_time = time.time() * 1000
         active_sessions = set()
-        
+
         for m in self.metrics_buffer:
             if current_time - m['timestamp'] < 300000:  # 5분
                 if m['metric_type'] == 'session':
                     active_sessions.add(m['value']['sessionId'])
-        
+
         return len(active_sessions)
-    
+
     def get_conversion_rate(self):
-        recent_sessions = [m for m in self.metrics_buffer 
-                          if m['metric_type'] == 'session' and 
+        recent_sessions = [m for m in self.metrics_buffer
+                          if m['metric_type'] == 'session' and
                           time.time() * 1000 - m['timestamp'] < 3600000]  # 1시간
-        
+
         if not recent_sessions:
             return 0.0
-        
+
         conversions = sum(1 for m in recent_sessions if m['value']['hasConversion'])
         return (conversions / len(recent_sessions)) * 100
 
 if __name__ == "__main__":
     dashboard = RealTimeDashboard()
-    
+
     # 백그라운드에서 Kafka 소비자 실행
     consumer_thread = threading.Thread(target=dashboard.consume_metrics, daemon=True)
     consumer_thread.start()
-    
+
     # 대시보드 실행
     dashboard.run_dashboard()
 ```
@@ -642,37 +642,37 @@ dag = DAG(
 # 데이터 품질 검증
 def validate_data_quality(**context):
     from data_quality import DataQualityValidator
-    
+
     execution_date = context['execution_date']
     validator = DataQualityValidator()
-    
+
     # 원본 데이터 검증
     raw_data_path = f"s3://data-lake/raw/events/year={execution_date.year}/month={execution_date.month:02d}/day={execution_date.day:02d}/"
-    
+
     validation_results = validator.validate_raw_events(raw_data_path)
-    
+
     if not validation_results['is_valid']:
         raise ValueError(f"Data quality validation failed: {validation_results['errors']}")
-    
+
     return validation_results
 
 # 사용자 세그먼트 계산
 def calculate_user_segments(**context):
     from user_analytics import UserSegmentCalculator
-    
+
     execution_date = context['execution_date']
     calculator = UserSegmentCalculator()
-    
+
     # 과거 30일 데이터를 기반으로 세그먼트 계산
     end_date = execution_date
     start_date = end_date - timedelta(days=30)
-    
+
     segments = calculator.calculate_segments(start_date, end_date)
-    
+
     # 결과를 S3에 저장
     output_path = f"s3://data-lake/processed/user_segments/date={execution_date.strftime('%Y-%m-%d')}/"
     calculator.save_segments(segments, output_path)
-    
+
     return len(segments)
 
 # 1. 원본 데이터 검증
@@ -735,15 +735,15 @@ load_to_warehouse = PostgresOperator(
     postgres_conn_id='data_warehouse',
     sql="""
     INSERT INTO fact_daily_metrics (date, metric_name, metric_value)
-    SELECT 
+    SELECT
         '{{ ds }}'::date,
         'daily_active_users',
         COUNT(DISTINCT user_id)
     FROM events_{{ ds_nodash }}
     WHERE event_type IN ('page_view', 'click', 'purchase');
-    
+
     INSERT INTO fact_daily_metrics (date, metric_name, metric_value)
-    SELECT 
+    SELECT
         '{{ ds }}'::date,
         'total_revenue',
         SUM(total_amount)
@@ -807,13 +807,13 @@ def process_events(spark, input_path, output_path, date):
             StructField("referrer", StringType(), True)
         ]), True)
     ])
-    
+
     # 원본 이벤트 데이터 로드
     events_df = spark.read \
         .schema(event_schema) \
         .option("multiline", "true") \
         .json(input_path)
-    
+
     # 데이터 정제 및 변환
     cleaned_events = events_df \
         .filter(col("eventType").isNotNull()) \
@@ -822,7 +822,7 @@ def process_events(spark, input_path, output_path, date):
         .withColumn("event_hour", hour(from_unixtime(col("timestamp") / 1000))) \
         .withColumn("user_agent_parsed", parse_user_agent(col("context.userAgent"))) \
         .withColumn("geo_info", get_geo_info(col("context.ip")))
-    
+
     # 세션 레벨 집계
     session_metrics = cleaned_events \
         .groupBy("sessionId", "userId", "event_date") \
@@ -838,10 +838,10 @@ def process_events(spark, input_path, output_path, date):
             first("geo_info.country").alias("country"),
             first("user_agent_parsed.device_type").alias("device_type")
         ) \
-        .withColumn("session_duration_minutes", 
+        .withColumn("session_duration_minutes",
                    (col("session_end") - col("session_start")) / 60000) \
         .withColumn("has_conversion", col("purchases") > 0)
-    
+
     # 사용자 레벨 일별 집계
     user_daily_metrics = cleaned_events \
         .filter(col("userId").isNotNull()) \
@@ -851,13 +851,13 @@ def process_events(spark, input_path, output_path, date):
             count("*").alias("total_events"),
             sum(when(col("eventType") == "page_view", 1).otherwise(0)).alias("page_views"),
             sum(when(col("eventType") == "purchase", 1).otherwise(0)).alias("purchases"),
-            sum(when(col("eventType") == "purchase", 
+            sum(when(col("eventType") == "purchase",
                     col("properties.amount").cast(DoubleType())).otherwise(0)).alias("total_spent"),
             collect_set("properties.category").alias("categories_viewed"),
             first("geo_info.country").alias("country"),
             first("user_agent_parsed.device_type").alias("primary_device")
         )
-    
+
     # 제품 인기도 계산
     product_metrics = cleaned_events \
         .filter(col("eventType").isin(["page_view", "click", "add_to_cart", "purchase"])) \
@@ -874,28 +874,28 @@ def process_events(spark, input_path, output_path, date):
         ) \
         .withColumn("view_to_cart_rate", col("cart_adds") / col("views")) \
         .withColumn("cart_to_purchase_rate", col("purchases") / col("cart_adds"))
-    
+
     # 결과 저장
     cleaned_events.write \
         .mode("overwrite") \
         .partitionBy("event_date", "event_hour") \
         .parquet(f"{output_path}/events")
-    
+
     session_metrics.write \
         .mode("overwrite") \
         .partitionBy("event_date") \
         .parquet(f"{output_path}/session_metrics")
-    
+
     user_daily_metrics.write \
         .mode("overwrite") \
         .partitionBy("event_date") \
         .parquet(f"{output_path}/user_daily_metrics")
-    
+
     product_metrics.write \
         .mode("overwrite") \
         .partitionBy("event_date") \
         .parquet(f"{output_path}/product_metrics")
-    
+
     # 데이터 품질 메트릭 계산
     quality_metrics = {
         "total_events": cleaned_events.count(),
@@ -904,7 +904,7 @@ def process_events(spark, input_path, output_path, date):
         "null_user_rate": cleaned_events.filter(col("userId").isNull()).count() / cleaned_events.count(),
         "event_types": cleaned_events.select("eventType").distinct().collect()
     }
-    
+
     # 품질 메트릭을 JSON으로 저장
     spark.createDataFrame([quality_metrics]).write \
         .mode("overwrite") \
@@ -917,10 +917,10 @@ def process_events(spark, input_path, output_path, date):
 ]))
 def parse_user_agent(user_agent):
     from user_agents import parse
-    
+
     if user_agent is None:
         return {"browser": None, "device_type": None, "os": None}
-    
+
     parsed = parse(user_agent)
     return {
         "browser": parsed.browser.family,
@@ -936,10 +936,10 @@ def parse_user_agent(user_agent):
 ]))
 def get_geo_info(ip_address):
     import geoip2.database
-    
+
     if ip_address is None:
         return {"country": None, "city": None, "latitude": None, "longitude": None}
-    
+
     try:
         with geoip2.database.Reader('/opt/geoip/GeoLite2-City.mmdb') as reader:
             response = reader.city(ip_address)
@@ -957,11 +957,11 @@ if __name__ == "__main__":
     parser.add_argument("--input-path", required=True)
     parser.add_argument("--output-path", required=True)
     parser.add_argument("--date", required=True)
-    
+
     args = parser.parse_args()
-    
+
     spark = create_spark_session()
-    
+
     try:
         process_events(spark, args.input_path, args.output_path, args.date)
         print(f"Successfully processed events for {args.date}")
@@ -1020,36 +1020,36 @@ class RealTimeFeatureCalculator:
     def __init__(self, redis_client, feast_client):
         self.redis = redis_client
         self.feast = feast_client
-    
+
     def calculate_user_features(self, user_id, events):
         """실시간으로 사용자 피처를 계산하고 업데이트"""
-        
+
         # 현재 피처 값 가져오기
         current_features = self.feast.get_online_features(
             features=["user_behavior_features:total_page_views_7d",
                      "user_behavior_features:avg_session_duration"],
             entity_rows=[{"user_id": user_id}]
         ).to_dict()
-        
+
         # 새 이벤트를 기반으로 피처 업데이트
         page_views = sum(1 for e in events if e['event_type'] == 'page_view')
         session_durations = [e['session_duration'] for e in events if 'session_duration' in e]
-        
+
         updated_features = {
             "user_id": user_id,
             "total_page_views_7d": current_features.get("total_page_views_7d", 0) + page_views,
             "avg_session_duration": np.mean(session_durations) if session_durations else current_features.get("avg_session_duration", 0),
             "timestamp": datetime.now()
         }
-        
+
         # Redis에 실시간 피처 저장
         self.redis.hset(f"user_features:{user_id}", mapping=updated_features)
-        
+
         return updated_features
-    
+
     def get_recommendation_features(self, user_id, product_ids):
         """추천 시스템을 위한 피처 조합"""
-        
+
         # 사용자 피처
         user_features = self.feast.get_online_features(
             features=["user_behavior_features:avg_order_value",
@@ -1057,7 +1057,7 @@ class RealTimeFeatureCalculator:
                      "user_behavior_features:device_type"],
             entity_rows=[{"user_id": user_id}]
         ).to_dict()
-        
+
         # 제품 피처
         product_features = self.feast.get_online_features(
             features=["product_features:category",
@@ -1065,7 +1065,7 @@ class RealTimeFeatureCalculator:
                      "product_features:popularity_score"],
             entity_rows=[{"product_id": pid} for pid in product_ids]
         ).to_dict()
-        
+
         # 상호작용 피처 계산
         interaction_features = []
         for i, product_id in enumerate(product_ids):
@@ -1079,9 +1079,9 @@ class RealTimeFeatureCalculator:
                 )
             }
             interaction_features.append(features)
-        
+
         return interaction_features
-    
+
     def calculate_device_optimization(self, device_type, product_category):
         """디바이스 타입과 제품 카테고리의 최적화 점수"""
         optimization_matrix = {

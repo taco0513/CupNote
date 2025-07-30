@@ -10,7 +10,7 @@ api_service:
   name: "SocialHub API"
   domain: "소셜 미디어 플랫폼"
   version: "v1.0"
-  
+
 core_entities:
   - "Users (사용자)"
   - "Posts (게시물)"
@@ -79,19 +79,19 @@ api_architecture:
       - "Middleware"
       - "Validation"
       - "Error Handling"
-    
+
     business:
       - "Service Layer"
       - "Business Logic"
       - "Data Transformation"
       - "External Integrations"
-    
+
     data:
       - "Repository Pattern"
       - "Database Access"
       - "Caching Layer"
       - "Search Engine"
-  
+
   patterns:
     - "Dependency Injection"
     - "Repository Pattern"
@@ -236,7 +236,7 @@ passport.use(new JwtStrategy(jwtOptions, async (payload, done) => {
   try {
     const userService = new UserService();
     const user = await userService.findById(payload.sub);
-    
+
     if (user) {
       return done(null, user);
     } else {
@@ -253,11 +253,11 @@ export const authenticate = (req: AuthenticatedRequest, res: Response, next: Nex
     if (err) {
       return next(new ApiError(500, 'Authentication error'));
     }
-    
+
     if (!user) {
       return next(new ApiError(401, 'Unauthorized'));
     }
-    
+
     req.user = user;
     next();
   })(req, res, next);
@@ -266,11 +266,11 @@ export const authenticate = (req: AuthenticatedRequest, res: Response, next: Nex
 // 선택적 인증 (토큰이 있으면 인증, 없어도 계속 진행)
 export const optionalAuth = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
-  
+
   if (!token) {
     return next();
   }
-  
+
   authenticate(req, res, next);
 };
 
@@ -280,11 +280,11 @@ export const authorize = (roles: string[]) => {
     if (!req.user) {
       return next(new ApiError(401, 'Unauthorized'));
     }
-    
+
     if (!roles.includes(req.user.role)) {
       return next(new ApiError(403, 'Forbidden'));
     }
-    
+
     next();
   };
 };
@@ -296,18 +296,18 @@ export const generateTokens = (user: any) => {
     email: user.email,
     role: user.role,
   };
-  
+
   const accessToken = jwt.sign(payload, process.env.JWT_SECRET!, {
     expiresIn: '15m',
     algorithm: 'HS256',
   });
-  
+
   const refreshToken = jwt.sign(
     { sub: user.id },
     process.env.JWT_REFRESH_SECRET!,
     { expiresIn: '7d', algorithm: 'HS256' }
   );
-  
+
   return { accessToken, refreshToken };
 };
 
@@ -433,7 +433,7 @@ export class UserService {
       const usernameExists = await this.prisma.user.findUnique({
         where: { username: updateData.username }
       });
-      
+
       if (usernameExists) {
         throw new ApiError(409, 'Username already exists');
       }
@@ -576,7 +576,7 @@ export class UserService {
   }
 
   private generateVerificationToken(): string {
-    return Math.random().toString(36).substring(2, 15) + 
+    return Math.random().toString(36).substring(2, 15) +
            Math.random().toString(36).substring(2, 15);
   }
 }
@@ -812,7 +812,7 @@ export class PostService {
       posts.pop(); // 추가로 가져온 항목 제거
     }
 
-    const transformedPosts = posts.map(post => 
+    const transformedPosts = posts.map(post =>
       this.transformPostToDto(post, post.likes.length > 0)
     );
 
@@ -931,7 +931,7 @@ export class NotificationService {
 
     // 사용자 설정에 따른 푸시 알림
     const userSettings = await this.getUserNotificationSettings(userId);
-    
+
     if (userSettings.pushEnabled && this.shouldSendPushNotification(type, userSettings)) {
       await this.pushService.sendNotification(userId, {
         title: this.getNotificationTitle(type),
@@ -1221,7 +1221,7 @@ export class SearchService {
       });
 
       // Elasticsearch 결과 순서대로 정렬
-      const orderedPosts = postIds.map((id: string) => 
+      const orderedPosts = postIds.map((id: string) =>
         posts.find(post => post.id === id)
       ).filter(Boolean);
 
@@ -1433,7 +1433,7 @@ const activeConnections = new Gauge({
 
 export const monitoringMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const start = Date.now();
-  
+
   // 활성 연결 수 증가
   activeConnections.inc();
 

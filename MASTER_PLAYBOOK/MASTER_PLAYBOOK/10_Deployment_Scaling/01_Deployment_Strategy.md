@@ -142,28 +142,28 @@ export const productionConfig: DeploymentConfig = {
 // blue-green-deployment.ts
 export class BlueGreenDeployment {
   private currentEnvironment: 'blue' | 'green' = 'blue';
-  
+
   async deploy(artifact: DeploymentArtifact): Promise<DeploymentResult> {
     const targetEnvironment = this.currentEnvironment === 'blue' ? 'green' : 'blue';
-    
+
     try {
       // 1. 새 환경에 배포
       await this.deployToEnvironment(targetEnvironment, artifact);
-      
+
       // 2. 헬스 체크
       await this.waitForHealthy(targetEnvironment);
-      
+
       // 3. 스모크 테스트
       await this.runSmokeTests(targetEnvironment);
-      
+
       // 4. 트래픽 전환
       await this.switchTraffic(targetEnvironment);
-      
+
       // 5. 최종 검증
       await this.verifyDeployment(targetEnvironment);
-      
+
       this.currentEnvironment = targetEnvironment;
-      
+
       return {
         success: true,
         environment: targetEnvironment,
@@ -174,22 +174,22 @@ export class BlueGreenDeployment {
       throw error;
     }
   }
-  
+
   private async deployToEnvironment(env: string, artifact: DeploymentArtifact) {
     const deployment = new K8sDeployment(env);
     await deployment.deploy(artifact);
   }
-  
+
   private async waitForHealthy(env: string, maxWaitTime = 300000) {
     const start = Date.now();
-    
+
     while (Date.now() - start < maxWaitTime) {
       const isHealthy = await this.checkHealth(env);
       if (isHealthy) return;
-      
+
       await new Promise(resolve => setTimeout(resolve, 5000));
     }
-    
+
     throw new Error(`Environment ${env} failed to become healthy`);
   }
 }
@@ -200,47 +200,47 @@ export class BlueGreenDeployment {
 // canary-deployment.ts
 export class CanaryDeployment {
   private trafficPercentages = [5, 10, 25, 50, 100];
-  
+
   async deploy(artifact: DeploymentArtifact): Promise<DeploymentResult> {
     try {
       // 1. Canary 환경 배포
       await this.deployCanary(artifact);
-      
+
       // 2. 점진적 트래픽 증가
       for (const percentage of this.trafficPercentages) {
         await this.setTrafficPercentage(percentage);
         await this.monitorCanary(300000); // 5분 모니터링
-        
+
         const metrics = await this.getCanaryMetrics();
         if (!this.isCanaryHealthy(metrics)) {
           throw new Error(`Canary unhealthy at ${percentage}% traffic`);
         }
       }
-      
+
       // 3. 기존 버전 정리
       await this.cleanupOldVersion();
-      
+
       return { success: true, strategy: 'canary' };
     } catch (error) {
       await this.rollbackCanary();
       throw error;
     }
   }
-  
+
   private async monitorCanary(duration: number) {
     const start = Date.now();
-    
+
     while (Date.now() - start < duration) {
       const metrics = await this.getCanaryMetrics();
-      
+
       if (!this.isCanaryHealthy(metrics)) {
         throw new Error('Canary metrics indicate problems');
       }
-      
+
       await new Promise(resolve => setTimeout(resolve, 10000));
     }
   }
-  
+
   private isCanaryHealthy(metrics: CanaryMetrics): boolean {
     return (
       metrics.errorRate < 0.01 && // 1% 미만 오류율
@@ -258,34 +258,34 @@ export class RollingDeployment {
   async deploy(artifact: DeploymentArtifact): Promise<DeploymentResult> {
     const instances = await this.getRunningInstances();
     const batchSize = Math.ceil(instances.length * 0.25); // 25%씩 배포
-    
+
     for (let i = 0; i < instances.length; i += batchSize) {
       const batch = instances.slice(i, i + batchSize);
-      
+
       try {
         // 1. 배치 업데이트
         await this.updateBatch(batch, artifact);
-        
+
         // 2. 헬스 체크 대기
         await this.waitForBatchHealthy(batch);
-        
+
         // 3. 서비스 검증
         await this.verifyBatch(batch);
-        
+
       } catch (error) {
         await this.rollbackBatch(batch);
         throw error;
       }
     }
-    
+
     return { success: true, strategy: 'rolling' };
   }
-  
+
   private async updateBatch(instances: Instance[], artifact: DeploymentArtifact) {
-    const promises = instances.map(instance => 
+    const promises = instances.map(instance =>
       this.updateInstance(instance, artifact)
     );
-    
+
     await Promise.all(promises);
   }
 }
@@ -306,7 +306,7 @@ export interface RiskAssessment {
 export class DeploymentRiskAssessor {
   assessRisk(deployment: DeploymentRequest): RiskAssessment {
     const factors: RiskFactor[] = [];
-    
+
     // 코드 변경량 평가
     if (deployment.changedFiles > 100) {
       factors.push({
@@ -315,7 +315,7 @@ export class DeploymentRiskAssessor {
         description: '대량의 코드 변경'
       });
     }
-    
+
     // 데이터베이스 마이그레이션 평가
     if (deployment.hasDatabaseMigration) {
       factors.push({
@@ -324,7 +324,7 @@ export class DeploymentRiskAssessor {
         description: '데이터베이스 스키마 변경'
       });
     }
-    
+
     // 외부 의존성 변경 평가
     if (deployment.dependencyChanges.length > 0) {
       factors.push({
@@ -333,9 +333,9 @@ export class DeploymentRiskAssessor {
         description: '외부 라이브러리 변경'
       });
     }
-    
+
     const level = this.calculateRiskLevel(factors);
-    
+
     return {
       level,
       factors,
@@ -343,13 +343,13 @@ export class DeploymentRiskAssessor {
       rollbackPlan: this.createRollbackPlan(deployment)
     };
   }
-  
+
   private calculateRiskLevel(factors: RiskFactor[]): RiskLevel {
     const weights = { low: 1, medium: 3, high: 7, critical: 15 };
-    const totalScore = factors.reduce((sum, factor) => 
+    const totalScore = factors.reduce((sum, factor) =>
       sum + weights[factor.level], 0
     );
-    
+
     if (totalScore >= 15) return 'critical';
     if (totalScore >= 10) return 'high';
     if (totalScore >= 5) return 'medium';
@@ -364,37 +364,37 @@ export class DeploymentRiskAssessor {
 export class PreDeploymentChecker {
   async runChecklist(deployment: DeploymentRequest): Promise<ChecklistResult> {
     const checks: CheckResult[] = [];
-    
+
     // 1. 코드 품질 검사
     checks.push(await this.checkCodeQuality(deployment));
-    
+
     // 2. 테스트 커버리지 검사
     checks.push(await this.checkTestCoverage(deployment));
-    
+
     // 3. 보안 스캔
     checks.push(await this.checkSecurity(deployment));
-    
+
     // 4. 성능 테스트
     checks.push(await this.checkPerformance(deployment));
-    
+
     // 5. 인프라 준비 상태
     checks.push(await this.checkInfrastructure(deployment));
-    
+
     // 6. 롤백 계획 검증
     checks.push(await this.checkRollbackPlan(deployment));
-    
+
     const passed = checks.every(check => check.passed);
-    
+
     return {
       passed,
       checks,
       recommendation: passed ? 'proceed' : 'block'
     };
   }
-  
+
   private async checkCodeQuality(deployment: DeploymentRequest): Promise<CheckResult> {
     const quality = await this.codeQualityService.analyze(deployment.branch);
-    
+
     return {
       name: 'Code Quality',
       passed: quality.score >= 0.8,
@@ -413,23 +413,23 @@ export class PreDeploymentChecker {
 export class DeploymentMonitor {
   private metrics: MetricCollector;
   private alerts: AlertManager;
-  
+
   async monitorDeployment(
-    deployment: Deployment, 
+    deployment: Deployment,
     duration: number = 600000 // 10분
   ): Promise<MonitoringResult> {
     const start = Date.now();
     const baseline = await this.getBaselineMetrics();
-    
+
     while (Date.now() - start < duration) {
       const current = await this.getCurrentMetrics();
       const analysis = this.analyzeMetrics(baseline, current);
-      
+
       if (analysis.severity === 'critical') {
         await this.triggerRollback(deployment);
         throw new Error('Critical issues detected, rollback initiated');
       }
-      
+
       if (analysis.severity === 'warning') {
         await this.sendAlert({
           type: 'deployment_warning',
@@ -437,19 +437,19 @@ export class DeploymentMonitor {
           metrics: analysis
         });
       }
-      
+
       await new Promise(resolve => setTimeout(resolve, 30000)); // 30초 간격
     }
-    
+
     return {
       success: true,
       metrics: await this.getCurrentMetrics()
     };
   }
-  
+
   private analyzeMetrics(baseline: Metrics, current: Metrics): MetricAnalysis {
     const issues: Issue[] = [];
-    
+
     // 에러율 분석
     if (current.errorRate > baseline.errorRate * 2) {
       issues.push({
@@ -459,7 +459,7 @@ export class DeploymentMonitor {
         threshold: baseline.errorRate * 2
       });
     }
-    
+
     // 응답시간 분석
     if (current.responseTime > baseline.responseTime * 1.5) {
       issues.push({
@@ -469,7 +469,7 @@ export class DeploymentMonitor {
         threshold: baseline.responseTime * 1.5
       });
     }
-    
+
     // CPU 사용률 분석
     if (current.cpuUsage > 0.8) {
       issues.push({
@@ -479,11 +479,11 @@ export class DeploymentMonitor {
         threshold: 0.8
       });
     }
-    
-    const severity = issues.length > 0 ? 
-      Math.max(...issues.map(i => i.severity === 'critical' ? 3 : 1)) === 3 ? 'critical' : 'warning' 
+
+    const severity = issues.length > 0 ?
+      Math.max(...issues.map(i => i.severity === 'critical' ? 3 : 1)) === 3 ? 'critical' : 'warning'
       : 'normal';
-    
+
     return { severity, issues };
   }
 }
@@ -510,17 +510,17 @@ export class AutoRollbackSystem {
       severity: 'critical'
     }
   ];
-  
+
   async evaluateRollback(deployment: Deployment): Promise<RollbackDecision> {
     const metrics = await this.getCurrentMetrics();
     const triggeredRules: RollbackTrigger[] = [];
-    
+
     for (const trigger of this.rollbackTriggers) {
       if (trigger.condition(metrics)) {
         triggeredRules.push(trigger);
       }
     }
-    
+
     if (triggeredRules.some(rule => rule.severity === 'critical')) {
       return {
         shouldRollback: true,
@@ -528,29 +528,29 @@ export class AutoRollbackSystem {
         triggers: triggeredRules
       };
     }
-    
+
     return {
       shouldRollback: false,
       triggers: triggeredRules
     };
   }
-  
+
   async executeRollback(deployment: Deployment): Promise<RollbackResult> {
     const rollbackPlan = deployment.rollbackPlan;
-    
+
     try {
       // 1. 트래픽 차단
       await this.stopTraffic(deployment);
-      
+
       // 2. 이전 버전으로 복원
       await this.restorePreviousVersion(rollbackPlan);
-      
+
       // 3. 헬스 체크
       await this.verifyRollback(rollbackPlan);
-      
+
       // 4. 트래픽 복원
       await this.restoreTraffic(deployment);
-      
+
       return {
         success: true,
         timeToRestore: Date.now() - deployment.rollbackStartTime

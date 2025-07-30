@@ -14,15 +14,15 @@ interface ComponentProps {
   // 필수 props
   children?: React.ReactNode;
   className?: string;
-  
+
   // 변형 props
   variant?: string;
   size?: 'sm' | 'md' | 'lg';
-  
+
   // 상태 props
   disabled?: boolean;
   loading?: boolean;
-  
+
   // 이벤트 핸들러
   onClick?: (event: React.MouseEvent) => void;
   onFocus?: (event: React.FocusEvent) => void;
@@ -46,10 +46,10 @@ const ComponentTemplate = ({
   };
   const sizeClasses = {
     sm: 'size-sm',
-    md: 'size-md', 
+    md: 'size-md',
     lg: 'size-lg'
   };
-  
+
   const combinedClasses = [
     baseClasses,
     variantClasses[variant],
@@ -57,7 +57,7 @@ const ComponentTemplate = ({
     disabled && 'disabled',
     className
   ].filter(Boolean).join(' ');
-  
+
   return (
     <div className={combinedClasses} {...props}>
       {children}
@@ -123,7 +123,7 @@ const Button = ({
     focus:outline-none focus:ring-2 focus:ring-offset-2
     disabled:opacity-50 disabled:cursor-not-allowed
   `;
-  
+
   const variantClasses = {
     primary: `
       bg-[var(--color-primary)] text-white
@@ -147,20 +147,20 @@ const Button = ({
       focus:ring-[var(--color-error)]
     `
   };
-  
+
   const sizeClasses = {
     sm: 'px-3 py-1.5 text-sm rounded-md',
     md: 'px-4 py-2 text-base rounded-lg',
     lg: 'px-6 py-3 text-lg rounded-lg'
   };
-  
+
   const combinedClasses = [
     baseClasses,
     variantClasses[variant],
     sizeClasses[size],
     className
   ].join(' ').replace(/\s+/g, ' ').trim();
-  
+
   return (
     <button
       className={combinedClasses}
@@ -207,15 +207,15 @@ const Input = ({
   ...props
 }: InputProps) => {
   const inputId = props.id || `input-${Math.random().toString(36).substr(2, 9)}`;
-  
+
   const baseClasses = `
-    w-full px-3 py-2 
+    w-full px-3 py-2
     text-[var(--text-primary)] placeholder-[var(--text-muted)]
     transition-colors duration-200
     focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]
     disabled:opacity-50 disabled:cursor-not-allowed
   `;
-  
+
   const variantClasses = {
     default: `
       border border-[var(--border-primary)] rounded-lg
@@ -233,12 +233,12 @@ const Input = ({
       focus:border-[var(--color-primary)]
     `
   };
-  
+
   const errorClasses = error ? `
     border-[var(--color-error)] focus:border-[var(--color-error)]
     focus:ring-[var(--color-error)]
   ` : '';
-  
+
   const inputClasses = [
     baseClasses,
     variantClasses[variant],
@@ -247,38 +247,38 @@ const Input = ({
     rightIcon && 'pr-10',
     className
   ].join(' ').replace(/\s+/g, ' ').trim();
-  
+
   return (
     <div className="space-y-1">
       {label && (
-        <label 
+        <label
           htmlFor={inputId}
           className="block text-sm font-medium text-[var(--text-primary)]"
         >
           {label}
         </label>
       )}
-      
+
       <div className="relative">
         {leftIcon && (
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <span className="text-[var(--text-muted)]">{leftIcon}</span>
           </div>
         )}
-        
+
         <input
           id={inputId}
           className={inputClasses}
           {...props}
         />
-        
+
         {rightIcon && (
           <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
             <span className="text-[var(--text-muted)]">{rightIcon}</span>
           </div>
         )}
       </div>
-      
+
       {(error || helper) && (
         <p className={`text-sm ${error ? 'text-[var(--color-error)]' : 'text-[var(--text-secondary)]'}`}>
           {error || helper}
@@ -297,9 +297,9 @@ export default Input;
 // Text.tsx
 interface TextProps {
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'div';
-  variant?: 'display-lg' | 'display-md' | 'display-sm' | 
-           'heading-xl' | 'heading-lg' | 'heading-md' | 
-           'body-lg' | 'body' | 'body-sm' | 
+  variant?: 'display-lg' | 'display-md' | 'display-sm' |
+           'heading-xl' | 'heading-lg' | 'heading-md' |
+           'body-lg' | 'body' | 'body-sm' |
            'caption' | 'overline';
   color?: 'primary' | 'secondary' | 'muted' | 'inverse' | 'error' | 'success' | 'warning';
   weight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold';
@@ -333,7 +333,7 @@ const Text = ({
     'caption': 'text-sm font-medium leading-snug',
     'overline': 'text-xs font-medium leading-normal uppercase tracking-wider'
   };
-  
+
   const colorClasses = {
     primary: 'text-[var(--text-primary)]',
     secondary: 'text-[var(--text-secondary)]',
@@ -343,7 +343,7 @@ const Text = ({
     success: 'text-[var(--color-success)]',
     warning: 'text-[var(--color-warning)]'
   };
-  
+
   const weightClasses = weight ? {
     light: 'font-light',
     normal: 'font-normal',
@@ -351,14 +351,14 @@ const Text = ({
     semibold: 'font-semibold',
     bold: 'font-bold'
   }[weight] : '';
-  
+
   const alignClasses = align ? {
     left: 'text-left',
     center: 'text-center',
     right: 'text-right',
     justify: 'text-justify'
   }[align] : '';
-  
+
   const combinedClasses = [
     variantClasses[variant],
     colorClasses[color],
@@ -367,7 +367,7 @@ const Text = ({
     truncate && 'truncate',
     className
   ].filter(Boolean).join(' ');
-  
+
   return (
     <Component className={combinedClasses} {...props}>
       {children}
@@ -402,7 +402,7 @@ const Icon = ({
     lg: 'w-6 h-6',
     xl: 'w-8 h-8'
   };
-  
+
   const colorClasses = {
     current: 'text-current',
     primary: 'text-[var(--color-primary)]',
@@ -412,13 +412,13 @@ const Icon = ({
     success: 'text-[var(--color-success)]',
     warning: 'text-[var(--color-warning)]'
   };
-  
+
   const combinedClasses = [
     sizeClasses[size],
     colorClasses[color],
     className
   ].join(' ');
-  
+
   // 아이콘 매핑 (Heroicons 또는 다른 아이콘 라이브러리 사용)
   const iconPaths = {
     'check': 'M5 13l4 4L19 7',
@@ -429,7 +429,7 @@ const Icon = ({
     'search': 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z',
     'loading': 'M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
   };
-  
+
   return (
     <svg
       className={combinedClasses}
@@ -486,27 +486,27 @@ const Card = ({
   className = ''
 }: CardProps) => {
   const baseClasses = 'rounded-[var(--radius-card)] transition-all duration-200';
-  
+
   const variantClasses = {
     default: 'bg-[var(--bg-primary)] border border-[var(--border-primary)]',
     outlined: 'bg-[var(--bg-primary)] border-2 border-[var(--border-primary)]',
     elevated: 'bg-[var(--bg-primary)] shadow-[var(--shadow-md)]'
   };
-  
+
   const paddingClasses = {
     none: '',
     sm: 'p-4',
     md: 'p-6',
     lg: 'p-8'
   };
-  
+
   const combinedClasses = [
     baseClasses,
     variantClasses[variant],
     padding !== 'none' && paddingClasses[padding],
     className
   ].filter(Boolean).join(' ');
-  
+
   return (
     <div className={combinedClasses}>
       {children}
@@ -530,14 +530,14 @@ const CardBody = ({ children, className = '' }: CardBodyProps) => {
   );
 };
 
-const CardFooter = ({ 
-  children, 
-  actions = false, 
-  className = '' 
+const CardFooter = ({
+  children,
+  actions = false,
+  className = ''
 }: CardFooterProps) => {
   const baseClasses = 'border-t border-[var(--border-primary)] pt-4 mt-4';
   const actionClasses = actions ? 'flex items-center justify-end gap-3' : '';
-  
+
   return (
     <div className={`${baseClasses} ${actionClasses} ${className}`}>
       {children}
@@ -581,7 +581,7 @@ const Modal = ({
     xl: 'max-w-4xl',
     full: 'max-w-7xl'
   };
-  
+
   // 키보드 이벤트 처리
   React.useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -589,31 +589,31 @@ const Modal = ({
         onClose();
       }
     };
-    
+
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
       document.body.style.overflow = 'hidden';
     }
-    
+
     return () => {
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = 'unset';
     };
   }, [isOpen, onClose]);
-  
+
   if (!isOpen) return null;
-  
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       {/* 배경 오버레이 */}
-      <div 
+      <div
         className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
         onClick={onClose}
       />
-      
+
       {/* 모달 컨테이너 */}
       <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-        <div 
+        <div
           className={`
             relative transform overflow-hidden rounded-[var(--radius-modal)]
             bg-[var(--bg-primary)] px-4 pb-4 pt-5 text-left shadow-xl
@@ -636,7 +636,7 @@ const Modal = ({
               </button>
             </div>
           )}
-          
+
           {/* 컨텐츠 */}
           <div>
             {children}
@@ -677,14 +677,14 @@ const Container = ({
     '2xl': 'max-w-screen-2xl', // 1536px
     full: 'max-w-none'
   };
-  
+
   const combinedClasses = [
     'mx-auto',
     maxWidthClasses[maxWidth],
     padding && 'px-4 sm:px-6 lg:px-8',
     className
   ].filter(Boolean).join(' ');
-  
+
   return (
     <div className={combinedClasses}>
       {children}
@@ -727,7 +727,7 @@ const Grid = ({
     6: 'grid-cols-6',
     12: 'grid-cols-12'
   };
-  
+
   const gapClasses = {
     none: 'gap-0',
     sm: 'gap-2',
@@ -735,13 +735,13 @@ const Grid = ({
     lg: 'gap-6',
     xl: 'gap-8'
   };
-  
+
   const responsiveClasses = responsive ? [
     responsive.sm && `sm:grid-cols-${responsive.sm}`,
     responsive.md && `md:grid-cols-${responsive.md}`,
     responsive.lg && `lg:grid-cols-${responsive.lg}`
   ].filter(Boolean) : [];
-  
+
   const combinedClasses = [
     'grid',
     colsClasses[cols],
@@ -749,7 +749,7 @@ const Grid = ({
     ...responsiveClasses,
     className
   ].join(' ');
-  
+
   return (
     <div className={combinedClasses}>
       {children}
@@ -787,7 +787,7 @@ const Stack = ({
     row: 'flex-row',
     column: 'flex-col'
   };
-  
+
   const gapClasses = {
     none: 'gap-0',
     xs: 'gap-1',
@@ -796,14 +796,14 @@ const Stack = ({
     lg: 'gap-6',
     xl: 'gap-8'
   };
-  
+
   const alignClasses = align ? {
     start: 'items-start',
     center: 'items-center',
     end: 'items-end',
     stretch: 'items-stretch'
   }[align] : '';
-  
+
   const justifyClasses = justify ? {
     start: 'justify-start',
     center: 'justify-center',
@@ -812,7 +812,7 @@ const Stack = ({
     around: 'justify-around',
     evenly: 'justify-evenly'
   }[justify] : '';
-  
+
   const combinedClasses = [
     'flex',
     directionClasses[direction],
@@ -822,7 +822,7 @@ const Stack = ({
     wrap && 'flex-wrap',
     className
   ].filter(Boolean).join(' ');
-  
+
   return (
     <div className={combinedClasses}>
       {children}
@@ -961,7 +961,7 @@ export interface ComponentStyleProps {
 # 기본 컴포넌트 생성
 /create component Button --primitive --variants "primary,secondary,ghost" --sizes "sm,md,lg" --with-icons
 
-# 조합 컴포넌트 생성  
+# 조합 컴포넌트 생성
 /create component Card --composed --subcomponents "Header,Body,Footer" --variants "default,outlined,elevated"
 
 # 폼 컴포넌트 생성
@@ -995,7 +995,7 @@ describe('Button Component', () => {
   it('handles click events', () => {
     const handleClick = jest.fn();
     render(<Button onClick={handleClick}>Click me</Button>);
-    
+
     fireEvent.click(screen.getByRole('button'));
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
@@ -1003,14 +1003,14 @@ describe('Button Component', () => {
   it('shows loading state', () => {
     render(<Button loading>Loading</Button>);
     const button = screen.getByRole('button');
-    
+
     expect(button).toBeDisabled();
     expect(screen.getByRole('img', { hidden: true })).toBeInTheDocument(); // Loading icon
   });
 
   it('applies all variants correctly', () => {
     const variants = ['primary', 'secondary', 'ghost', 'destructive'];
-    
+
     variants.forEach(variant => {
       const { rerender } = render(<Button variant={variant}>Test</Button>);
       expect(screen.getByRole('button')).toHaveClass(`variant-${variant}`);

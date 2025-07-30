@@ -78,7 +78,7 @@
 ```
 용도: 4K 토큰 수준의 분석
 예시: /analyze --think
-효과: 
+효과:
 - 상세한 문제 분석
 - 단계별 해결책
 - 여러 옵션 제시
@@ -326,22 +326,22 @@ AI가 수행하는 작업:
 ```
 1. 기획
    /analyze 요구사항 --think
-   
+
 2. 설계
    /design 시스템 --persona-architect
-   
+
 3. 구현
    /implement 기능 --c7
-   
+
 4. 테스트
    /test 전체 --seq
-   
+
 5. 최적화
    /improve --performance
-   
+
 6. 배포
    /deploy 프로덕션
-   
+
 7. 문서화
    /document 전체 시스템
 ```

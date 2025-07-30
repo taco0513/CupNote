@@ -13,17 +13,17 @@ security_layers:
     - "방화벽"
     - "웹 애플리케이션 방화벽 (WAF)"
     - "DDoS 보호"
-  
+
   network:
     - "네트워크 분할"
     - "VPN"
     - "네트워크 모니터링"
-  
+
   application:
     - "입력 검증"
     - "출력 인코딩"
     - "인증/인가"
-  
+
   data:
     - "암호화"
     - "데이터 마스킹"
@@ -37,12 +37,12 @@ zero_trust_principles:
     - "모든 요청 검증"
     - "컨텍스트 기반 인증"
     - "지속적 검증"
-  
+
   least_privilege:
     - "최소 권한 원칙"
     - "역할 기반 접근 제어"
     - "시간 제한 권한"
-  
+
   assume_breach:
     - "침해 가정"
     - "격리 및 제한"
@@ -58,12 +58,12 @@ secure_design_checklist:
     - "보안 요구사항 정의"
     - "위협 모델링"
     - "보안 아키텍처 설계"
-  
+
   implementation:
     - "안전한 코딩 가이드라인"
     - "보안 라이브러리 사용"
     - "코드 리뷰 프로세스"
-  
+
   deployment:
     - "보안 설정 검증"
     - "취약점 스캔"
@@ -91,12 +91,12 @@ validation_layers:
     - "데이터 타입 검증"
     - "길이 제한"
     - "형식 검증"
-  
+
   semantic:
     - "비즈니스 규칙 검증"
     - "컨텍스트 검증"
     - "무결성 검증"
-  
+
   security:
     - "악성 패턴 탐지"
     - "인젝션 방지"
@@ -111,22 +111,22 @@ function validateInput(input, rules) {
   if (!input || typeof input !== 'string') {
     throw new ValidationError('Invalid input type');
   }
-  
+
   // 2. 길이 검증
   if (input.length > rules.maxLength) {
     throw new ValidationError('Input too long');
   }
-  
+
   // 3. 패턴 검증
   if (!rules.pattern.test(input)) {
     throw new ValidationError('Invalid format');
   }
-  
+
   // 4. 보안 검증
   if (containsMaliciousPattern(input)) {
     throw new SecurityError('Malicious input detected');
   }
-  
+
   return sanitizeInput(input);
 }
 ```
@@ -149,12 +149,12 @@ mfa_factors:
     - "비밀번호"
     - "PIN"
     - "보안 질문"
-  
+
   possession:
     - "SMS 코드"
     - "앱 기반 토큰"
     - "하드웨어 토큰"
-  
+
   inherence:
     - "지문"
     - "얼굴 인식"
@@ -169,7 +169,7 @@ jwt_security:
     - "짧은 만료 시간"
     - "리프레시 토큰 사용"
     - "토큰 블랙리스트"
-  
+
   payload_security:
     - "민감 정보 제외"
     - "최소 필요 정보만"
@@ -182,13 +182,13 @@ rbac_structure:
   users:
     - id: "user123"
       roles: ["editor", "viewer"]
-  
+
   roles:
     editor:
       permissions: ["read", "write", "update"]
     viewer:
       permissions: ["read"]
-  
+
   resources:
     - id: "document1"
       owner: "user123"
@@ -204,12 +204,12 @@ encryption_strategy:
     algorithm: "AES-256-GCM"
     key_management: "AWS KMS / Azure Key Vault"
     rotation: "90일마다"
-  
+
   data_in_transit:
     protocol: "TLS 1.3"
     certificate: "Let's Encrypt / 상용 인증서"
     validation: "인증서 핀닝"
-  
+
   data_in_use:
     method: "동형 암호화 / TEE"
     use_case: "민감한 계산"
@@ -223,12 +223,12 @@ key_management:
     - "하드웨어 난수 생성기"
     - "충분한 엔트로피"
     - "검증된 알고리즘"
-  
+
   storage:
     - "하드웨어 보안 모듈 (HSM)"
     - "키 관리 서비스"
     - "분리된 환경"
-  
+
   rotation:
     - "정기적 교체"
     - "이벤트 기반 교체"
@@ -244,17 +244,17 @@ api_security:
     - "강력한 인증 메커니즘"
     - "API 키 관리"
     - "토큰 기반 인증"
-  
+
   authorization:
     - "세분화된 권한"
     - "리소스 기반 접근 제어"
     - "컨텍스트 기반 인가"
-  
+
   rate_limiting:
     - "요청 속도 제한"
     - "사용자별 쿼터"
     - "DDoS 방지"
-  
+
   data_validation:
     - "입력 스키마 검증"
     - "출력 필터링"
@@ -268,12 +268,12 @@ graphql_security:
     - "최대 깊이 제한"
     - "복잡도 분석"
     - "타임아웃 설정"
-  
+
   introspection:
     - "프로덕션에서 비활성화"
     - "권한 기반 제한"
     - "스키마 정보 보호"
-  
+
   authorization:
     - "필드 레벨 권한"
     - "동적 권한 검사"
@@ -289,12 +289,12 @@ security_logging:
     - "로그인 시도"
     - "인증 실패"
     - "권한 상승"
-  
+
   access_events:
     - "리소스 접근"
     - "권한 변경"
     - "데이터 수정"
-  
+
   security_events:
     - "의심스러운 활동"
     - "보안 정책 위반"
@@ -308,12 +308,12 @@ security_monitoring:
     - "비정상 접근 패턴"
     - "권한 남용"
     - "데이터 유출 시도"
-  
+
   threat_intelligence:
     - "알려진 위협 지표"
     - "악성 IP 차단"
     - "공격 패턴 탐지"
-  
+
   automated_response:
     - "계정 잠금"
     - "IP 차단"
@@ -341,27 +341,27 @@ incident_response:
     - "대응 팀 구성"
     - "절차 문서화"
     - "도구 준비"
-  
+
   detection:
     - "사고 탐지"
     - "영향 범위 확인"
     - "심각도 평가"
-  
+
   containment:
     - "공격 차단"
     - "확산 방지"
     - "증거 보존"
-  
+
   eradication:
     - "위협 제거"
     - "취약점 패치"
     - "시스템 정화"
-  
+
   recovery:
     - "서비스 복구"
     - "모니터링 강화"
     - "정상화 확인"
-  
+
   lessons_learned:
     - "사후 분석"
     - "프로세스 개선"
@@ -389,12 +389,12 @@ sast_tools:
     - "SonarQube"
     - "Checkmarx"
     - "Veracode"
-  
+
   dependency_scan:
     - "OWASP Dependency Check"
     - "Snyk"
     - "WhiteSource"
-  
+
   infrastructure:
     - "Terraform Security"
     - "CloudFormation Guard"
@@ -408,12 +408,12 @@ dast_tools:
     - "OWASP ZAP"
     - "Burp Suite"
     - "Nessus"
-  
+
   api_testing:
     - "Postman Security"
     - "RestAPI Security"
     - "GraphQL Cop"
-  
+
   network_scanning:
     - "Nmap"
     - "Masscan"
@@ -428,12 +428,12 @@ penetration_testing:
     - "API 엔드포인트"
     - "네트워크 인프라"
     - "클라우드 환경"
-  
+
   methodology:
     - "OWASP Testing Guide"
     - "NIST SP 800-115"
     - "PTES"
-  
+
   frequency:
     - "연간 정기 테스트"
     - "주요 변경 시"
@@ -449,13 +449,13 @@ gdpr_compliance:
     - "개인정보 최소화"
     - "목적 제한"
     - "저장 기간 제한"
-  
+
   user_rights:
     - "접근권"
     - "정정권"
     - "삭제권"
     - "이동권"
-  
+
   technical_measures:
     - "가명 처리"
     - "암호화"
@@ -469,12 +469,12 @@ soc2_controls:
     - "접근 통제"
     - "논리적 물리적 보안"
     - "시스템 운영"
-  
+
   availability:
     - "시스템 가용성"
     - "모니터링"
     - "백업 및 복구"
-  
+
   confidentiality:
     - "데이터 보호"
     - "암호화"
@@ -490,17 +490,17 @@ security_pipeline:
     - "보안 커밋 훅"
     - "비밀 정보 스캔"
     - "코드 서명"
-  
+
   build:
     - "정적 분석"
     - "의존성 스캔"
     - "컨테이너 스캔"
-  
+
   test:
     - "동적 분석"
     - "권한 테스트"
     - "API 보안 테스트"
-  
+
   deploy:
     - "보안 설정 검증"
     - "런타임 보호"

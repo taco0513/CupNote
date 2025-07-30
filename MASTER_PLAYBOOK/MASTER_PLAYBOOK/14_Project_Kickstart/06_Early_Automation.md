@@ -29,25 +29,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run linter
         run: npm run lint
-      
+
       - name: Type check
         run: npm run type-check
-      
+
       - name: Check formatting
         run: npm run format:check
-      
+
       - name: Security audit
         run: npm audit --audit-level=moderate
 
@@ -55,29 +55,29 @@ jobs:
   test:
     runs-on: ubuntu-latest
     needs: quality-check
-    
+
     strategy:
       matrix:
         node-version: [16, 18, 20]
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run unit tests
         run: npm run test:unit -- --coverage
-      
+
       - name: Run integration tests
         run: npm run test:integration
-      
+
       - name: Upload coverage
         uses: codecov/codecov-action@v3
         with:
@@ -90,26 +90,26 @@ jobs:
     runs-on: ubuntu-latest
     needs: [quality-check, test]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v2
-      
+
       - name: Log in to Container Registry
         uses: docker/login-action@v2
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Extract metadata
         id: meta
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-      
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
@@ -119,7 +119,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      
+
       - name: Deploy to staging
         run: |
           echo "Deploying to staging environment"
@@ -141,24 +141,24 @@ jobs:
   quick-test:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci --prefer-offline --no-audit
-      
+
       - name: Quick checks
         run: |
           npm run lint:quick
           npm run test:unit -- --passWithNoTests
-      
+
       - name: Comment PR
         uses: actions/github-script@v6
         if: always()
@@ -167,7 +167,7 @@ jobs:
             const status = '${{ job.status }}';
             const emoji = status === 'success' ? '✅' : '❌';
             const message = `${emoji} Quick checks ${status}`;
-            
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
@@ -189,7 +189,7 @@ repos:
     hooks:
       - id: prettier
         types_or: [javascript, typescript, jsx, tsx, json, yaml, markdown]
-  
+
   # 코드 품질
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: v8.0.0
@@ -202,21 +202,21 @@ repos:
           - typescript
           - '@typescript-eslint/parser'
           - '@typescript-eslint/eslint-plugin'
-  
+
   # 보안 검사
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.4.0
     hooks:
       - id: detect-secrets
         args: ['--baseline', '.secrets.baseline']
-  
+
   # 커밋 메시지 검사
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v3.0.0
     hooks:
       - id: commitizen
         stages: [commit-msg]
-  
+
   # 대용량 파일 검사
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
@@ -238,11 +238,11 @@ import { analyzeCode } from './code-analyzer';
 
 class AutoCodeReviewer {
   private octokit: Octokit;
-  
+
   constructor(token: string) {
     this.octokit = new Octokit({ auth: token });
   }
-  
+
   async reviewPR(owner: string, repo: string, prNumber: number) {
     // PR 변경 사항 가져오기
     const { data: files } = await this.octokit.pulls.listFiles({
@@ -250,19 +250,19 @@ class AutoCodeReviewer {
       repo,
       pull_number: prNumber
     });
-    
+
     const comments: ReviewComment[] = [];
-    
+
     for (const file of files) {
       // 코드 분석
       const analysis = await analyzeCode(file);
-      
+
       // 자동 리뷰 코멘트 생성
       if (analysis.issues.length > 0) {
         comments.push(...this.generateComments(file, analysis));
       }
     }
-    
+
     // 리뷰 제출
     if (comments.length > 0) {
       await this.octokit.pulls.createReview({
@@ -275,7 +275,7 @@ class AutoCodeReviewer {
       });
     }
   }
-  
+
   private generateComments(
     file: File,
     analysis: CodeAnalysis
@@ -291,7 +291,7 @@ class AutoCodeReviewer {
 // 코드 분석 함수
 export async function analyzeCode(file: File): Promise<CodeAnalysis> {
   const issues: Issue[] = [];
-  
+
   // 복잡도 검사
   if (file.complexity > 10) {
     issues.push({
@@ -301,7 +301,7 @@ export async function analyzeCode(file: File): Promise<CodeAnalysis> {
       suggestion: '더 작은 함수로 분리해보세요'
     });
   }
-  
+
   // 중복 코드 검사
   const duplicates = findDuplicates(file.content);
   if (duplicates.length > 0) {
@@ -312,7 +312,7 @@ export async function analyzeCode(file: File): Promise<CodeAnalysis> {
       suggestion: '공통 함수로 추출하세요'
     })));
   }
-  
+
   return { issues };
 }
 ```
@@ -400,28 +400,28 @@ echo "🚀 개발 환경 자동 설정을 시작합니다..."
 # 1. 필수 도구 확인
 check_requirements() {
   echo "🔍 필수 도구 확인 중..."
-  
+
   # Docker
   if ! command -v docker &> /dev/null; then
     echo "❌ Docker가 설치되어 있지 않습니다."
     echo "   https://docs.docker.com/get-docker/ 에서 설치하세요."
     exit 1
   fi
-  
+
   # Node.js
   if ! command -v node &> /dev/null; then
     echo "❌ Node.js가 설치되어 있지 않습니다."
     echo "   https://nodejs.org/ 에서 설치하세요."
     exit 1
   fi
-  
+
   echo "✅ 모든 필수 도구가 설치되어 있습니다."
 }
 
 # 2. 환경 변수 설정
 setup_env() {
   echo "🔐 환경 변수 설정 중..."
-  
+
   if [ ! -f .env.local ]; then
     cp .env.example .env.local
     echo "📝 .env.local 파일이 생성되었습니다. 필요한 값을 업데이트하세요."
@@ -433,9 +433,9 @@ setup_env() {
 # 3. Docker 컨테이너 시작
 start_containers() {
   echo "🐳 Docker 컨테이너 시작 중..."
-  
+
   docker-compose -f docker-compose.dev.yml up -d
-  
+
   # DB 초기화 대기
   echo "⏳ 데이터베이스 초기화 대기 중..."
   sleep 5
@@ -469,7 +469,7 @@ main() {
   install_dependencies
   run_migrations
   setup_git_hooks
-  
+
   echo "
 ✅ 개발 환경 설정이 완료되었습니다!"
   echo "
@@ -512,34 +512,34 @@ test.describe('인증 플로우', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:3000');
   });
-  
+
   test('회원가입 프로세스', async ({ page }) => {
     // 회원가입 버튼 클릭
     await page.click('text=회원가입');
-    
+
     // 폼 작성
     await page.fill('input[name="email"]', 'test@example.com');
     await page.fill('input[name="password"]', 'Password123!');
     await page.fill('input[name="confirmPassword"]', 'Password123!');
-    
+
     // 제출
     await page.click('button[type="submit"]');
-    
+
     // 성공 확인
     await expect(page.locator('text=회원가입이 완료되었습니다')).toBeVisible();
   });
-  
+
   test('로그인 프로세스', async ({ page }) => {
     // 로그인 페이지로 이동
     await page.click('text=로그인');
-    
+
     // 폼 작성
     await page.fill('input[name="email"]', 'existing@example.com');
     await page.fill('input[name="password"]', 'Password123!');
-    
+
     // 제출
     await page.click('button[type="submit"]');
-    
+
     // 대시보드로 리다이렉트 확인
     await expect(page).toHaveURL('/dashboard');
   });
@@ -588,40 +588,40 @@ class StagingDeployer {
   async deploy(branch: string) {
     try {
       console.log('🚀 스테이징 배포를 시작합니다...');
-      
+
       // 1. 테스트 실행
       console.log('🧪 테스트 실행 중...');
       await execAsync('npm run test:ci');
-      
+
       // 2. 빌드
       console.log('🏭 빌드 중...');
       await execAsync('npm run build');
-      
+
       // 3. Docker 이미지 빌드
       console.log('🐳 Docker 이미지 빌드 중...');
       const tag = `staging-${Date.now()}`;
       await execAsync(`docker build -t myapp:${tag} .`);
-      
+
       // 4. 이미지 푸시
       console.log('📤 이미지 푸시 중...');
       await execAsync(`docker push registry.company.com/myapp:${tag}`);
-      
+
       // 5. 스테이징 서버 업데이트
       console.log('🔄 스테이징 서버 업데이트 중...');
       await this.updateStagingServer(tag);
-      
+
       // 6. 헬스 체크
       console.log('🏥 헬스 체크 중...');
       await this.checkHealth('https://staging.myapp.com/health');
-      
+
       console.log('✅ 스테이징 배포 완료!');
-      
+
     } catch (error) {
       console.error('❌ 배포 실패:', error);
       throw error;
     }
   }
-  
+
   private async updateStagingServer(tag: string) {
     // Kubernetes 또는 Docker Swarm 업데이트
     await execAsync(`
@@ -630,7 +630,7 @@ class StagingDeployer {
         --namespace=staging
     `);
   }
-  
+
   private async checkHealth(url: string) {
     const response = await fetch(url);
     if (!response.ok) {
@@ -654,22 +654,22 @@ class ErrorTracker {
       dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
       environment: process.env.NODE_ENV,
       tracesSampleRate: 1.0,
-      
+
       beforeSend(event, hint) {
         // 민감한 정보 필터링
         if (event.request?.cookies) {
           delete event.request.cookies;
         }
-        
+
         // 개발 환경에서는 콘솔로만 출력
         if (process.env.NODE_ENV === 'development') {
           console.error('Sentry Event:', event);
           return null;
         }
-        
+
         return event;
       },
-      
+
       integrations: [
         new Sentry.BrowserTracing(),
         new Sentry.Replay({
@@ -679,7 +679,7 @@ class ErrorTracker {
       ]
     });
   }
-  
+
   static captureError(error: Error, context?: any) {
     Sentry.captureException(error, {
       contexts: {
@@ -706,25 +706,25 @@ if (typeof window !== 'undefined') {
 // lib/performance-monitoring.ts
 class PerformanceMonitor {
   private metrics: Map<string, number[]> = new Map();
-  
+
   // API 응답 시간 추적
   async trackAPICall<T>(
     name: string,
     fn: () => Promise<T>
   ): Promise<T> {
     const start = performance.now();
-    
+
     try {
       const result = await fn();
       const duration = performance.now() - start;
-      
+
       this.recordMetric(name, duration);
-      
+
       // 임계값 초과 시 경고
       if (duration > 1000) {
         console.warn(`Slow API call: ${name} took ${duration}ms`);
       }
-      
+
       return result;
     } catch (error) {
       const duration = performance.now() - start;
@@ -732,30 +732,30 @@ class PerformanceMonitor {
       throw error;
     }
   }
-  
+
   private recordMetric(name: string, value: number) {
     if (!this.metrics.has(name)) {
       this.metrics.set(name, []);
     }
-    
+
     const values = this.metrics.get(name)!;
     values.push(value);
-    
+
     // 최근 100개만 유지
     if (values.length > 100) {
       values.shift();
     }
   }
-  
+
   getMetrics(name: string) {
     const values = this.metrics.get(name) || [];
-    
+
     if (values.length === 0) {
       return null;
     }
-    
+
     const sorted = [...values].sort((a, b) => a - b);
-    
+
     return {
       avg: values.reduce((a, b) => a + b, 0) / values.length,
       min: sorted[0],

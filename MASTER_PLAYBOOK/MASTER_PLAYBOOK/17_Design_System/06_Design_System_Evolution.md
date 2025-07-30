@@ -20,7 +20,7 @@ interface QuickDesignSystem {
     background: '#FFFFFF';  // 배경
     text: '#111827';        // 텍스트
   };
-  
+
   // 2. 기본 간격
   spacing: {
     xs: '0.5rem';  // 8px
@@ -29,7 +29,7 @@ interface QuickDesignSystem {
     lg: '2rem';    // 32px
     xl: '3rem';    // 48px
   };
-  
+
   // 3. 타이포그래피
   typography: {
     small: '14px';
@@ -37,7 +37,7 @@ interface QuickDesignSystem {
     heading: '24px';
     display: '32px';
   };
-  
+
   // 4. 기본 컴포넌트 (5개)
   components: [
     'Button',     // 버튼
@@ -51,27 +51,27 @@ interface QuickDesignSystem {
 // 초고속 CSS 프레임워크
 const QuickStyles = `
 /* 30분 프로토타입용 스타일 */
-.btn { 
-  padding: 0.5rem 1rem; 
-  border-radius: 0.25rem; 
-  border: none; 
-  cursor: pointer; 
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
 }
 .btn-primary { background: #3B82F6; color: white; }
 .btn-secondary { background: #6B7280; color: white; }
 
-.input { 
-  padding: 0.5rem; 
-  border: 1px solid #D1D5DB; 
-  border-radius: 0.25rem; 
-  width: 100%; 
+.input {
+  padding: 0.5rem;
+  border: 1px solid #D1D5DB;
+  border-radius: 0.25rem;
+  width: 100%;
 }
 
-.card { 
-  padding: 1rem; 
-  border-radius: 0.5rem; 
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
-  background: white; 
+.card {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  background: white;
 }
 
 .text-sm { font-size: 14px; }
@@ -104,7 +104,7 @@ interface BetaDesignSystem {
         info: Record<50 | 500 | 600, string>;
       };
     };
-    
+
     spacing: {
       // 8px 그리드 시스템
       0: '0';
@@ -119,7 +119,7 @@ interface BetaDesignSystem {
       12: '3rem';    // 48px
       16: '4rem';    // 64px
     };
-    
+
     typography: {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'];
@@ -135,7 +135,7 @@ interface BetaDesignSystem {
         '3xl': ['1.875rem', { lineHeight: '2.25rem' }];
       };
     };
-    
+
     borderRadius: {
       none: '0';
       sm: '0.125rem';
@@ -144,7 +144,7 @@ interface BetaDesignSystem {
       xl: '0.75rem';
       full: '9999px';
     };
-    
+
     shadow: {
       sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)';
       md: '0 4px 6px -1px rgb(0 0 0 / 0.1)';
@@ -152,7 +152,7 @@ interface BetaDesignSystem {
       xl: '0 20px 25px -5px rgb(0 0 0 / 0.1)';
     };
   };
-  
+
   // 2. 10-15개 컴포넌트
   components: [
     // Primitives
@@ -164,7 +164,7 @@ interface BetaDesignSystem {
     // Complex
     'Navigation'
   ];
-  
+
   // 3. 기본 패턴 정의
   patterns: {
     forms: 'vertical-stack';
@@ -214,7 +214,7 @@ interface ProductionDesignSystem {
     semantic: SemanticTokens;   // 의미적 토큰
     component: ComponentTokens; // 컴포넌트별 토큰
   };
-  
+
   // 2. 완전한 컴포넌트 라이브러리 (30-50개)
   components: {
     primitives: [
@@ -240,7 +240,7 @@ interface ProductionDesignSystem {
       'EmptyState', 'ErrorBoundary'
     ];
   };
-  
+
   // 3. 고급 패턴 시스템
   patterns: {
     layouts: LayoutPatterns;
@@ -249,7 +249,7 @@ interface ProductionDesignSystem {
     responsive: ResponsivePatterns;
     animations: AnimationPatterns;
   };
-  
+
   // 4. 테마 시스템
   themes: {
     light: LightTheme;
@@ -257,7 +257,7 @@ interface ProductionDesignSystem {
     contrast: HighContrastTheme;
     brand: BrandTheme[];
   };
-  
+
   // 5. 품질 보증
   quality: {
     testing: TestingFramework;
@@ -278,17 +278,17 @@ class ProductionButton {
     rightIcon?: React.ReactNode;
     fullWidth?: boolean;
     children: React.ReactNode;
-    
+
     // 접근성
     'aria-label'?: string;
     'aria-describedby'?: string;
-    
+
     // 이벤트
     onClick?: (event: React.MouseEvent) => void;
     onFocus?: (event: React.FocusEvent) => void;
     onBlur?: (event: React.FocusEvent) => void;
   }
-  
+
   // 컴포넌트 구현
   const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
     variant = 'primary',
@@ -308,7 +308,7 @@ class ProductionButton {
       'transition-all duration-200 ease-in-out',
       'focus:outline-none focus:ring-2 focus:ring-offset-2',
       'disabled:opacity-50 disabled:cursor-not-allowed',
-      
+
       // 변형별 스타일
       {
         'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-600': variant === 'primary',
@@ -316,7 +316,7 @@ class ProductionButton {
         'bg-transparent text-gray-700 hover:bg-gray-50': variant === 'ghost',
         'bg-red-600 text-white hover:bg-red-700 focus:ring-red-600': variant === 'destructive'
       },
-      
+
       // 크기별 스타일
       {
         'px-2 py-1 text-xs rounded': size === 'xs',
@@ -325,13 +325,13 @@ class ProductionButton {
         'px-6 py-3 text-lg rounded-lg': size === 'lg',
         'px-8 py-4 text-xl rounded-lg': size === 'xl'
       },
-      
+
       // 전체 너비
       fullWidth && 'w-full',
-      
+
       className
     );
-    
+
     return (
       <button
         ref={ref}
@@ -367,7 +367,7 @@ interface EnterpriseDesignSystem {
       patterns: PatternCustomizations;
     };
   };
-  
+
   // 2. 플랫폼별 구현
   platforms: {
     web: WebImplementation;
@@ -376,7 +376,7 @@ interface EnterpriseDesignSystem {
     flutter: FlutterImplementation;
     'react-native': ReactNativeImplementation;
   };
-  
+
   // 3. 고급 기능
   features: {
     // 국제화
@@ -386,7 +386,7 @@ interface EnterpriseDesignSystem {
       dateFormats: LocaleFormats;
       numberFormats: LocaleFormats;
     };
-    
+
     // 접근성
     accessibility: {
       wcag: 'AA' | 'AAA';
@@ -395,7 +395,7 @@ interface EnterpriseDesignSystem {
       colorContrast: number;
       animations: 'respect-preference' | 'always' | 'never';
     };
-    
+
     // 성능
     performance: {
       treeshaking: boolean;
@@ -403,7 +403,7 @@ interface EnterpriseDesignSystem {
       criticalCss: boolean;
       lazyLoading: boolean;
     };
-    
+
     // 사용자 정의
     customization: {
       themes: CustomThemeEngine;
@@ -411,7 +411,7 @@ interface EnterpriseDesignSystem {
       whiteLabeling: WhiteLabelEngine;
     };
   };
-  
+
   // 4. 거버넌스
   governance: {
     versionControl: SemanticVersioning;
@@ -420,7 +420,7 @@ interface EnterpriseDesignSystem {
     documentation: ComprehensiveDocumentation;
     training: TrainingMaterials;
   };
-  
+
   // 5. 도구 체인
   toolchain: {
     designTools: ['Figma', 'Sketch', 'Adobe XD'];
@@ -435,13 +435,13 @@ class EnterpriseComponentSystem {
   // 멀티 플랫폼 컴포넌트 추상화
   abstract class BaseComponent<T extends ComponentProps> {
     abstract render(props: T): ReactElement | NativeElement | FlutterWidget;
-    
+
     // 공통 기능
     protected applyBranding(props: T): T {
       const brand = this.context.brand;
       return { ...props, ...brand.overrides[this.componentName] };
     }
-    
+
     protected applyA11y(props: T): T {
       return {
         ...props,
@@ -450,13 +450,13 @@ class EnterpriseComponentSystem {
         'tabIndex': this.getTabIndex(props)
       };
     }
-    
+
     protected applyTheme(props: T): T {
       const theme = this.context.theme;
       return { ...props, theme: theme.getTokens(this.componentName) };
     }
   }
-  
+
   // 플랫폼별 구현
   class WebButton extends BaseComponent<ButtonProps> {
     render(props: ButtonProps): ReactElement {
@@ -465,11 +465,11 @@ class EnterpriseComponentSystem {
           this.applyTheme(props)
         )
       );
-      
+
       return <button {...finalProps}>{props.children}</button>;
     }
   }
-  
+
   class NativeButton extends BaseComponent<ButtonProps> {
     render(props: ButtonProps): NativeElement {
       // React Native 구현
@@ -482,32 +482,32 @@ class EnterpriseComponentSystem {
 class EnterpriseThemeEngine {
   private themes: Map<string, Theme> = new Map();
   private brands: Map<string, Brand> = new Map();
-  
+
   // 런타임 테마 생성
   generateTheme(config: ThemeConfig): Theme {
     const baseTheme = this.getBaseTheme();
     const brandCustomizations = this.getBrandCustomizations(config.brandId);
     const userPreferences = this.getUserPreferences(config.userId);
-    
+
     return this.mergeThemes(baseTheme, brandCustomizations, userPreferences);
   }
-  
+
   // 테마 검증
   validateTheme(theme: Theme): ValidationResult {
     const results: ValidationResult[] = [];
-    
+
     // 접근성 검증
     results.push(this.validateAccessibility(theme));
-    
+
     // 브랜드 가이드라인 검증
     results.push(this.validateBrandGuidelines(theme));
-    
+
     // 성능 검증
     results.push(this.validatePerformance(theme));
-    
+
     return this.combineResults(results);
   }
-  
+
   // 자동 다크모드 생성
   generateDarkTheme(lightTheme: Theme): Theme {
     return {
@@ -540,7 +540,7 @@ interface MigrationStrategy {
     risks: ['스타일 깨짐', '일관성 부족'];
     mitigation: ['점진적 적용', '시각적 회귀 테스트'];
   };
-  
+
   // Level 2 → Level 3 마이그레이션
   betaToProduction: {
     timeline: '1-2 weeks';
@@ -556,7 +556,7 @@ interface MigrationStrategy {
     risks: ['성능 저하', '번들 크기 증가', '복잡성 증가'];
     mitigation: ['Tree shaking', '지연 로딩', '점진적 채택'];
   };
-  
+
   // Level 3 → Level 4 마이그레이션
   productionToEnterprise: {
     timeline: '2-6 months';
@@ -579,31 +579,31 @@ class DesignSystemMigrator {
   // CSS → 토큰 변환
   async migrateCSSToTokens(cssFiles: string[]): Promise<TokenMigrationResult> {
     const results: TokenMigrationResult[] = [];
-    
+
     for (const file of cssFiles) {
       const css = await this.readCSS(file);
       const tokens = this.extractTokens(css);
       const converted = this.convertToTokens(tokens);
-      
+
       results.push({
         originalFile: file,
         tokens: converted,
         coverage: this.calculateCoverage(css, converted)
       });
     }
-    
+
     return this.combineResults(results);
   }
-  
+
   // 컴포넌트 업그레이드
   async upgradeComponents(components: ComponentFile[]): Promise<UpgradeResult> {
     const upgrades: ComponentUpgrade[] = [];
-    
+
     for (const component of components) {
       const analysis = await this.analyzeComponent(component);
       const upgrade = await this.generateUpgrade(analysis);
       const validation = await this.validateUpgrade(upgrade);
-      
+
       upgrades.push({
         component: component.name,
         changes: upgrade.changes,
@@ -611,22 +611,22 @@ class DesignSystemMigrator {
         validation: validation
       });
     }
-    
+
     return { upgrades, summary: this.generateSummary(upgrades) };
   }
-  
+
   // 자동 코드모드
   generateCodemods(migrationPlan: MigrationPlan): Codemod[] {
     return [
       // CSS 클래스 → 토큰 변환
       this.createCSSTokenCodemod(migrationPlan.cssToTokens),
-      
+
       // 컴포넌트 props 업데이트
       this.createPropsUpdateCodemod(migrationPlan.componentUpdates),
-      
+
       // Import 경로 수정
       this.createImportUpdateCodemod(migrationPlan.importChanges),
-      
+
       // 중복 제거
       this.createDeduplicationCodemod(migrationPlan.duplicates)
     ];
@@ -657,7 +657,7 @@ interface DesignSystemVersioning {
       'LTS 버전 지원'
     ];
   };
-  
+
   // 마이너 버전 (New Features)
   minor: {
     triggers: [
@@ -673,7 +673,7 @@ interface DesignSystemVersioning {
       'A/B 테스트'
     ];
   };
-  
+
   // 패치 버전 (Bug Fixes)
   patch: {
     triggers: [
@@ -722,7 +722,7 @@ const SupportPolicy = {
 /setup tailwind --config production --purge --optimize
 /generate components --count 10 --primitives --composed --layout
 
-# Level 2 → Level 3 업그레이드  
+# Level 2 → Level 3 업그레이드
 /upgrade design-system --from beta --to production --timeline "2 weeks"
 /expand token-system --complete-palette --semantic-tokens --component-tokens
 /generate components --count 50 --all-categories --a11y --tests

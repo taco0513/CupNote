@@ -20,7 +20,7 @@ class BusinessRegistrationChecker {
         "세금계산서 발행 필요",
         "결제 시스템 등록 필요"
       ],
-      
+
       // 한달 내 등록 권장
       withinMonth: [
         "월 100만원 이상 매출 예상",
@@ -28,7 +28,7 @@ class BusinessRegistrationChecker {
         "광고 집행 계획",
         "투자 유치 필요"
       ],
-      
+
       // 아직 기다려도 OK
       canWait: [
         "무료 베타 테스트 중",
@@ -37,7 +37,7 @@ class BusinessRegistrationChecker {
         "개인 학습 목적"
       ]
     };
-    
+
     return this.evaluateCriteria(criteria);
   }
 }
@@ -68,7 +68,7 @@ class KoreanBusinessRegistration {
         ],
         cost: 0
       },
-      
+
       // 2. 업종 선택 팁
       businessTypes: {
         recommended: [
@@ -89,7 +89,7 @@ class KoreanBusinessRegistration {
           }
         ]
       },
-      
+
       // 3. 세금 기초
       taxes: {
         basicRate: "10% 부가세 (매출의 10%)",
@@ -141,7 +141,7 @@ class PrivacyComplianceChecker {
           template: this.getTermsTemplate()
         }
       ],
-      
+
       // 동의 받기
       consentRequirements: {
         signupProcess: [
@@ -156,7 +156,7 @@ class PrivacyComplianceChecker {
           withdrawable: true
         }
       },
-      
+
       // 보안 조치
       securityMeasures: [
         "HTTPS 필수",
@@ -167,7 +167,7 @@ class PrivacyComplianceChecker {
       ]
     };
   }
-  
+
   private getPrivacyPolicyTemplate(): string {
     return `# 개인정보처리방침
 
@@ -283,7 +283,7 @@ class TaxBasicsForDevs {
         "소득": "매출 - 비용",
         "세금": "소득의 일정 비율"
       },
-      
+
       // 비용 처리 가능 항목
       deductibleExpenses: [
         {
@@ -313,7 +313,7 @@ class TaxBasicsForDevs {
           ]
         }
       ],
-      
+
       // 세금 일정
       taxSchedule: {
         "부가세": {
@@ -327,7 +327,7 @@ class TaxBasicsForDevs {
           tip: "세무사 도움 받기"
         }
       },
-      
+
       // 초보자 팁
       beginnerTips: [
         "모든 영수증 보관 (전자영수증 포함)",
@@ -391,7 +391,7 @@ class ContractTemplateManager {
       }
     ];
   }
-  
+
   generateSimpleNDA(): string {
     return `# 비밀유지계약서
 
@@ -472,7 +472,7 @@ class StartupSupportPrograms {
       }
     ];
   }
-  
+
   getApplicationTips(): ApplicationTips {
     return {
       preparation: [
@@ -481,14 +481,14 @@ class StartupSupportPrograms {
         "MVP 또는 프로토타입 준비",
         "팀 구성 명확히"
       ],
-      
+
       commonMistakes: [
         "기술만 강조 (시장성 무시)",
         "비현실적 수치 제시",
         "경쟁사 분석 부족",
         "수익 모델 불명확"
       ],
-      
+
       timeline: {
         "6개월 전": "아이디어 검증, MVP 개발",
         "3개월 전": "사업계획서 작성, 팀 구성",

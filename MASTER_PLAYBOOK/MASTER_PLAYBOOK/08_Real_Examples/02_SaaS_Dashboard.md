@@ -14,13 +14,13 @@ dashboard_requirements:
     - "API 사용량 모니터링"
     - "알림 및 경고 시스템"
     - "리포트 생성 및 내보내기"
-  
+
   user_types:
     - "Super Admin: 모든 권한"
     - "Organization Admin: 조직 관리"
     - "User: 기본 사용자"
     - "Viewer: 읽기 전용"
-  
+
   performance_requirements:
     - "실시간 데이터 업데이트"
     - "1초 미만 페이지 로딩"
@@ -37,7 +37,7 @@ technology_stack:
     state_management: "Redux Toolkit + RTK Query"
     charts: "Chart.js / Recharts"
     testing: "Jest + React Testing Library"
-  
+
   backend:
     runtime: "Node.js + TypeScript"
     framework: "NestJS"
@@ -45,7 +45,7 @@ technology_stack:
     cache: "Redis"
     queue: "Bull Queue"
     websockets: "Socket.io"
-  
+
   infrastructure:
     cloud: "AWS"
     monitoring: "Prometheus + Grafana"
@@ -78,13 +78,13 @@ system_architecture:
     - "Progressive Web App (PWA)"
     - "Responsive Design"
     - "Dark/Light Theme"
-  
+
   api_layer:
     - "GraphQL API (Apollo Server)"
     - "REST API (NestJS)"
     - "WebSocket Server (Socket.io)"
     - "File Upload Service"
-  
+
   business_layer:
     - "Auth Service (JWT + RBAC)"
     - "User Management Service"
@@ -92,7 +92,7 @@ system_architecture:
     - "Notification Service"
     - "Analytics Service"
     - "Report Generation Service"
-  
+
   data_layer:
     - "PostgreSQL (Primary Data)"
     - "TimescaleDB (Time Series)"
@@ -215,7 +215,7 @@ export class AuthService {
 
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.usersService.findByEmail(email);
-    
+
     if (user && await bcrypt.compare(password, user.password)) {
       const { password, ...result } = user;
       return result;
@@ -224,13 +224,13 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { 
-      email: user.email, 
+    const payload = {
+      email: user.email,
       sub: user.id,
       orgId: user.organizationId,
-      role: user.role 
+      role: user.role
     };
-    
+
     return {
       access_token: this.jwtService.sign(payload),
       user: {
@@ -261,7 +261,7 @@ export class TenantMiddleware implements NestMiddleware {
 
     if (orgSlug) {
       const organization = await this.organizationService.findBySlug(orgSlug);
-      
+
       if (!organization) {
         throw new BadRequestException('Invalid organization');
       }
@@ -315,16 +315,16 @@ export class MetricsGateway implements OnGatewayConnection, OnGatewayDisconnect 
     try {
       const token = client.handshake.auth.token;
       const payload = this.jwtService.verify(token);
-      
+
       client.data.userId = payload.sub;
       client.data.organizationId = payload.orgId;
-      
+
       // 조직별 룸에 참가
       const roomName = `org_${payload.orgId}`;
       client.join(roomName);
-      
+
       this.addClientToRoom(payload.orgId, client.id);
-      
+
       console.log(`Client ${client.id} connected to room ${roomName}`);
     } catch (error) {
       client.disconnect();
@@ -343,7 +343,7 @@ export class MetricsGateway implements OnGatewayConnection, OnGatewayDisconnect 
     @MessageBody() data: { metricNames: string[] },
   ) {
     const { organizationId } = client.data;
-    
+
     // 실시간 메트릭 스트림 시작
     this.metricsService.startMetricStream(
       organizationId,
@@ -433,12 +433,12 @@ export class MetricsService {
   ) {
     // Redis 구독을 통한 실시간 스트림
     const subscriber = this.redisClient.duplicate();
-    
+
     subscriber.subscribe(`metrics:${organizationId}`);
-    
+
     subscriber.on('message', (channel, message) => {
       const metric = JSON.parse(message);
-      
+
       if (metricNames.includes(metric.metricName)) {
         callback([metric]);
       }
@@ -580,7 +580,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ organizationId }) => {
             />
           </Card>
         </Grid.Col>
-        
+
         <Grid.Col span={4}>
           <Card shadow="sm" padding="lg">
             <Title order={4} mb="md">상위 API 엔드포인트</Title>
@@ -658,22 +658,22 @@ export const MetricChart: React.FC<MetricChartProps> = ({
   // 실시간 데이터와 기존 데이터 병합
   const chartData = useMemo(() => {
     const combined = [...data];
-    
+
     // 실시간 데이터 추가
     realTimeData.forEach(rtData => {
       const existingIndex = combined.findIndex(
         item => item.timestamp === rtData.timestamp
       );
-      
+
       if (existingIndex >= 0) {
         combined[existingIndex] = { ...combined[existingIndex], ...rtData };
       } else {
         combined.push(rtData);
       }
     });
-    
+
     // 시간순 정렬
-    return combined.sort((a, b) => 
+    return combined.sort((a, b) =>
       new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
     );
   }, [data, realTimeData]);
@@ -700,20 +700,20 @@ export const MetricChart: React.FC<MetricChartProps> = ({
         return (
           <LineChart {...commonProps}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis 
-              dataKey="timestamp" 
+            <XAxis
+              dataKey="timestamp"
               tickFormatter={(value) => new Date(value).toLocaleTimeString()}
             />
             <YAxis />
-            <Tooltip 
+            <Tooltip
               labelFormatter={formatTooltipLabel}
               formatter={formatTooltipValue}
             />
             <Legend />
-            <Line 
-              type="monotone" 
-              dataKey="value" 
-              stroke={color} 
+            <Line
+              type="monotone"
+              dataKey="value"
+              stroke={color}
               strokeWidth={2}
               dot={{ fill: color, strokeWidth: 2, r: 3 }}
               activeDot={{ r: 5 }}
@@ -725,20 +725,20 @@ export const MetricChart: React.FC<MetricChartProps> = ({
         return (
           <AreaChart {...commonProps}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis 
-              dataKey="timestamp" 
+            <XAxis
+              dataKey="timestamp"
               tickFormatter={(value) => new Date(value).toLocaleTimeString()}
             />
             <YAxis />
-            <Tooltip 
+            <Tooltip
               labelFormatter={formatTooltipLabel}
               formatter={formatTooltipValue}
             />
             <Legend />
-            <Area 
-              type="monotone" 
-              dataKey="value" 
-              stroke={color} 
+            <Area
+              type="monotone"
+              dataKey="value"
+              stroke={color}
               fill={color}
               fillOpacity={0.3}
             />
@@ -821,7 +821,7 @@ export const UserManagement: React.FC = () => {
       } else {
         await createUser(values);
       }
-      
+
       setModalOpened(false);
       setEditingUser(null);
       form.reset();
@@ -959,21 +959,21 @@ export const UserManagement: React.FC = () => {
             {...form.getInputProps('firstName')}
             mb="md"
           />
-          
+
           <TextInput
             label="성"
             placeholder="성을 입력하세요"
             {...form.getInputProps('lastName')}
             mb="md"
           />
-          
+
           <TextInput
             label="이메일"
             placeholder="이메일을 입력하세요"
             {...form.getInputProps('email')}
             mb="md"
           />
-          
+
           <Select
             label="역할"
             placeholder="역할을 선택하세요"
@@ -981,14 +981,14 @@ export const UserManagement: React.FC = () => {
               { value: 'viewer', label: '뷰어' },
               { value: 'user', label: '사용자' },
               { value: 'admin', label: '관리자' },
-              ...(currentUser?.role === 'super_admin' 
-                ? [{ value: 'super_admin', label: '슈퍼 관리자' }] 
+              ...(currentUser?.role === 'super_admin'
+                ? [{ value: 'super_admin', label: '슈퍼 관리자' }]
                 : [])
             ]}
             {...form.getInputProps('role')}
             mb="xl"
           />
-          
+
           <Group position="right">
             <Button
               variant="subtle"
@@ -1096,7 +1096,7 @@ export class NotificationService {
 
     for (const metric of metrics) {
       const threshold = thresholds.find(t => t.metricName === metric.metricName);
-      
+
       if (threshold && this.isThresholdBreached(metric, threshold)) {
         await this.createAlert(
           organizationId,
@@ -1184,7 +1184,7 @@ export class ReportService {
     options: ReportOptions,
   ) {
     const timeRange = this.getTimeRangeForType(type);
-    
+
     const [
       metrics,
       userActivity,

@@ -115,7 +115,7 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold mb-8">대시보드</h1>
-        
+
         {/* 통계 카드 */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <StatCard
@@ -151,10 +151,10 @@ export default function Dashboard() {
             <LineChart data={chartData}>
               <XAxis dataKey="name" />
               <YAxis />
-              <Line 
-                type="monotone" 
-                dataKey="value" 
-                stroke="#8884d8" 
+              <Line
+                type="monotone"
+                dataKey="value"
+                stroke="#8884d8"
                 strokeWidth={2}
               />
             </LineChart>
@@ -219,7 +219,7 @@ interface CartItem extends Product {
 
 export default function EcommercePage() {
   const [cart, setCart] = useState<CartItem[]>([]);
-  
+
   const products: Product[] = [
     {
       id: 1,
@@ -456,8 +456,8 @@ export default function ChatbotPage() {
                 }`}
               >
                 <div className={`p-2 rounded-full ${
-                  message.sender === 'user' 
-                    ? 'bg-blue-100 text-blue-600' 
+                  message.sender === 'user'
+                    ? 'bg-blue-100 text-blue-600'
                     : 'bg-gray-100 text-gray-600'
                 }`}>
                   {message.sender === 'user' ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
@@ -476,7 +476,7 @@ export default function ChatbotPage() {
                 </div>
               </div>
             ))}
-            
+
             {isLoading && (
               <div className="flex items-start gap-3">
                 <div className="p-2 rounded-full bg-gray-100 text-gray-600">
@@ -653,7 +653,7 @@ export default function FeedbackButton() {
 
 ### 30분 완료 기준
 - [ ] **기능**: 핵심 기능 1개가 완전히 작동
-- [ ] **UI**: 기본적인 사용자 인터페이스 완성  
+- [ ] **UI**: 기본적인 사용자 인터페이스 완성
 - [ ] **반응형**: 모바일에서도 사용 가능
 - [ ] **배포**: 공개 URL로 접근 가능
 - [ ] **피드백**: 사용자 의견 수집 방법 준비

@@ -1,0 +1,21 @@
+/* CupNote Global Styles Entry Point */
+
+/* 1. Design Tokens - 디자인 시스템 변수 */
+@import '../design-tokens.css';
+
+/* 2. Base Styles - 기본 요소 스타일 */
+@import './base/reset.css';
+@import './base/typography.css';
+@import './base/layout.css';
+
+/* 3. Utilities - 유틸리티 클래스 */
+@import './utilities/spacing.css';
+@import './utilities/colors.css';
+@import './utilities/shadows.css';
+@import './utilities/animations.css';
+
+/* 4. Components - 글로벌 컴포넌트 스타일 */
+@import '../components.css';
+
+/* 5. Vendor Overrides - 외부 라이브러리 스타일 오버라이드 */
+/* @import './vendor/chart.css'; */

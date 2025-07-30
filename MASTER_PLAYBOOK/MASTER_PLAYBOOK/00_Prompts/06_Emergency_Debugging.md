@@ -8,11 +8,11 @@
 
 ## 🎯 이런 상황에 사용하세요
 
-🚨 **서버가 갑자기 죽었거나 빌드가 실패한 경우**  
-🚨 **에러 메시지를 봐도 도무지 원인을 모르겠는 경우**  
-🚨 **데드라인이 임박했는데 중요한 기능이 작동하지 않는 경우**  
-🚨 **새로운 기술 스택에서 예상치 못한 문제가 발생한 경우**  
-🚨 **팀원이나 사용자로부터 긴급 버그 리포트가 들어온 경우**  
+🚨 **서버가 갑자기 죽었거나 빌드가 실패한 경우**
+🚨 **에러 메시지를 봐도 도무지 원인을 모르겠는 경우**
+🚨 **데드라인이 임박했는데 중요한 기능이 작동하지 않는 경우**
+🚨 **새로운 기술 스택에서 예상치 못한 문제가 발생한 경우**
+🚨 **팀원이나 사용자로부터 긴급 버그 리포트가 들어온 경우**
 
 ---
 
@@ -292,7 +292,7 @@ class EmergencyDebugger {
     };
 
     console.error('🚨 EMERGENCY DEBUG:', JSON.stringify(errorInfo, null, 2));
-    
+
     // 프로덕션에서는 외부 로깅 서비스로 전송
     if (!this.debugMode) {
       this.sendToLoggingService(errorInfo);
@@ -302,7 +302,7 @@ class EmergencyDebugger {
   logPerformance(label: string, startTime: number): void {
     const duration = Date.now() - startTime;
     console.log(`⏱️ PERFORMANCE [${label}]: ${duration}ms`);
-    
+
     if (duration > 1000) {
       console.warn(`🐌 SLOW OPERATION [${label}]: ${duration}ms`);
     }
@@ -337,11 +337,11 @@ const debugger = EmergencyDebugger.getInstance();
 // API 에러 디버깅
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   debugger.logError(error, `API: ${req.method} ${req.path}`);
-  
+
   if (process.env.NODE_ENV === 'development') {
     debugger.dumpSystemState();
   }
-  
+
   res.status(500).json({ error: 'Internal Server Error' });
 });
 
@@ -385,7 +385,7 @@ class EarlyWarningSystem {
   private checkMemoryUsage(): void {
     const usage = process.memoryUsage();
     const usagePercent = (usage.heapUsed / usage.heapTotal) * 100;
-    
+
     if (usagePercent > this.thresholds.memory) {
       this.sendAlert('HIGH_MEMORY_USAGE', {
         current: usagePercent,
@@ -397,10 +397,10 @@ class EarlyWarningSystem {
 
   private sendAlert(type: string, data: any): void {
     console.warn(`🚨 EARLY WARNING [${type}]:`, data);
-    
+
     // Slack, Discord, 이메일 등으로 알림 전송
     // 구현은 각 플랫폼별 API 문서 참조
-    
+
     // 자동 복구 로직 실행 (옵션)
     this.attemptAutoRecovery(type, data);
   }
@@ -456,7 +456,7 @@ for service in "${services[@]}"; do
     echo "⚠️ $service is down, attempting restart..."
     sudo systemctl restart $service
     sleep 5
-    
+
     if systemctl is-active --quiet $service; then
       echo "✅ $service restarted successfully"
     else
@@ -476,7 +476,7 @@ else
   echo "⚠️ Application is down, restarting..."
   pm2 restart all
   sleep 10
-  
+
   if pgrep -f "node.*app.js" > /dev/null; then
     echo "✅ Application restarted successfully"
   else

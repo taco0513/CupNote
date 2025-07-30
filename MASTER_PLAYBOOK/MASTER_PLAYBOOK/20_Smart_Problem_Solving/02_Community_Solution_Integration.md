@@ -34,7 +34,7 @@ interface CommunitySourceRanking {
       }
     ];
   };
-  
+
   // Tier 2: 커뮤니티 검증 소스
   communityVerified: {
     sources: [
@@ -60,7 +60,7 @@ interface CommunitySourceRanking {
       }
     ];
   };
-  
+
   // Tier 3: 커뮤니티 토론 소스
   communityDiscussion: {
     sources: [
@@ -85,7 +85,7 @@ interface CommunitySourceRanking {
       }
     ];
   };
-  
+
   // Tier 4: 블로그 및 튜토리얼
   educational: {
     sources: [
@@ -114,21 +114,21 @@ interface CommunitySourceRanking {
 // 소스별 검색 전략
 class CommunitySourceManager {
   private sourceConfig: CommunitySourceRanking;
-  
+
   async searchBestSolution(problem: ProblemDescription): Promise<CommunitySearchResult> {
     const searchPlan = this.createSearchPlan(problem);
     const results: SourceResult[] = [];
-    
+
     // 병렬 검색 실행
-    const searches = searchPlan.sources.map(source => 
+    const searches = searchPlan.sources.map(source =>
       this.searchSource(source, problem)
     );
-    
+
     const searchResults = await Promise.allSettled(searches);
-    
+
     // 결과 통합 및 순위 매기기
     const rankedResults = this.rankAndMergeResults(searchResults);
-    
+
     return {
       bestSolution: rankedResults[0],
       alternatives: rankedResults.slice(1, 4),
@@ -136,13 +136,13 @@ class CommunitySourceManager {
       confidence: this.calculateOverallConfidence(rankedResults)
     };
   }
-  
+
   private createSearchPlan(problem: ProblemDescription): SearchPlan {
     const { technology, errorType, urgency, complexity } = problem;
-    
+
     // 문제 특성에 따른 소스 우선순위 조정
     let sourceOrder: SourceCategory[];
-    
+
     if (urgency === 'high' && errorType === 'syntax') {
       // 급한 문법 오류 - Stack Overflow 우선
       sourceOrder = ['communityVerified', 'official', 'educational'];
@@ -156,7 +156,7 @@ class CommunitySourceManager {
       // 일반적인 경우 - 균형잡힌 접근
       sourceOrder = ['communityVerified', 'official', 'educational', 'communityDiscussion'];
     }
-    
+
     return {
       sources: this.selectSources(sourceOrder, problem),
       maxConcurrentSearches: 4,
@@ -179,52 +179,52 @@ class CommunitySourceValidator {
       this.validateFreshness(solution),
       this.validateSecurity(solution)
     ]);
-    
+
     return this.combineValidations(validations);
   }
-  
+
   private async validateTechnical(solution: CommunitySolution): Promise<TechnicalValidation> {
     return {
       // 코드 문법 검증
       syntaxValid: await this.checkSyntax(solution.code),
-      
+
       // 의존성 호환성 검증
       dependencyCompatible: await this.checkDependencies(solution.dependencies),
-      
+
       // 베스트 프랙티스 준수
       followsBestPractices: this.checkBestPractices(solution.code),
-      
+
       // 성능 영향 분석
       performanceImpact: this.analyzePerformance(solution.code),
-      
+
       // 테스트 가능성
       testable: this.checkTestability(solution.code)
     };
   }
-  
+
   private async validateCommunity(solution: CommunitySolution): Promise<CommunityValidation> {
     return {
       // 커뮤니티 피드백 분석
       upvotes: solution.metrics.upvotes || 0,
       downvotes: solution.metrics.downvotes || 0,
       comments: solution.metrics.comments || 0,
-      
+
       // 답변자 신뢰도
       authorReputation: solution.author.reputation || 0,
       authorBadges: solution.author.badges || [],
-      
+
       // 솔루션 채택률
       acceptanceRate: solution.metrics.acceptanceRate || 0,
-      
+
       // 커뮤니티 검증 점수
       communityScore: this.calculateCommunityScore(solution.metrics)
     };
   }
-  
+
   private async validateFreshness(solution: CommunitySolution): Promise<FreshnessValidation> {
     const age = Date.now() - solution.createdAt;
     const ageInDays = age / (1000 * 60 * 60 * 24);
-    
+
     return {
       ageInDays,
       isFresh: ageInDays < 365, // 1년 이내
@@ -236,10 +236,10 @@ class CommunitySourceValidator {
       freshnessScore: Math.max(0, 1 - (ageInDays / 730)) // 2년에 걸쳐 점수 감소
     };
   }
-  
+
   private async validateSecurity(solution: CommunitySolution): Promise<SecurityValidation> {
     const securityIssues = await this.scanForSecurityIssues(solution.code);
-    
+
     return {
       hasSecurityIssues: securityIssues.length > 0,
       securityIssues,
@@ -248,10 +248,10 @@ class CommunitySourceValidator {
       exposesSecrets: this.checkForExposedSecrets(solution.code)
     };
   }
-  
+
   private combineValidations(validations: ValidationResult[]): OverallValidation {
     const [technical, community, freshness, security] = validations;
-    
+
     // 가중치 기반 종합 점수 계산
     const weights = {
       technical: 0.4,
@@ -259,13 +259,13 @@ class CommunitySourceValidator {
       freshness: 0.2,
       security: 0.15
     };
-    
-    const overallScore = 
+
+    const overallScore =
       technical.score * weights.technical +
       community.score * weights.community +
       freshness.score * weights.freshness +
       security.score * weights.security;
-    
+
     return {
       overallScore,
       technical,
@@ -291,37 +291,37 @@ class SolutionQualityFilter {
     good: 0.75,
     excellent: 0.9
   };
-  
+
   async filterSolutions(solutions: CommunitySolution[]): Promise<FilteredSolutions> {
     // 1단계: 기본 품질 필터
-    const basicFiltered = solutions.filter(solution => 
+    const basicFiltered = solutions.filter(solution =>
       this.passesBasicQuality(solution)
     );
-    
+
     // 2단계: 중복 제거
     const deduplicated = this.removeDuplicates(basicFiltered);
-    
+
     // 3단계: 상세 품질 평가
     const qualityScored = await Promise.all(
       deduplicated.map(solution => this.scoreQuality(solution))
     );
-    
+
     // 4단계: 임계값 기반 필터링
     const filtered = qualityScored.filter(
       scored => scored.qualityScore >= this.qualityThresholds.minimum
     );
-    
+
     // 5단계: 다양성 보장
     const diversified = this.ensureDiversity(filtered);
-    
+
     return {
       excellent: diversified.filter(s => s.qualityScore >= this.qualityThresholds.excellent),
-      good: diversified.filter(s => 
-        s.qualityScore >= this.qualityThresholds.good && 
+      good: diversified.filter(s =>
+        s.qualityScore >= this.qualityThresholds.good &&
         s.qualityScore < this.qualityThresholds.excellent
       ),
-      acceptable: diversified.filter(s => 
-        s.qualityScore >= this.qualityThresholds.minimum && 
+      acceptable: diversified.filter(s =>
+        s.qualityScore >= this.qualityThresholds.minimum &&
         s.qualityScore < this.qualityThresholds.good
       ),
       totalProcessed: solutions.length,
@@ -329,47 +329,47 @@ class SolutionQualityFilter {
       filteringStats: this.generateFilteringStats(solutions, diversified)
     };
   }
-  
+
   private passesBasicQuality(solution: CommunitySolution): boolean {
     return (
       // 코드가 포함되어 있어야 함
       solution.hasCode &&
-      
+
       // 최소 설명이 있어야 함
       solution.description.length >= 50 &&
-      
+
       // 스팸이 아니어야 함
       !this.isSpam(solution) &&
-      
+
       // 관련성이 있어야 함
       this.isRelevant(solution) &&
-      
+
       // 언어가 지원되어야 함
       this.isSupportedLanguage(solution.language)
     );
   }
-  
+
   private async scoreQuality(solution: CommunitySolution): Promise<ScoredSolution> {
     const scores = {
       // 기술적 정확성 (40%)
       technical: await this.scoreTechnicalAccuracy(solution),
-      
+
       // 커뮤니티 검증 (25%)
       community: this.scoreCommunityValidation(solution),
-      
+
       // 완성도 (20%)
       completeness: this.scoreCompleteness(solution),
-      
+
       // 설명 품질 (15%)
       explanation: this.scoreExplanationQuality(solution)
     };
-    
-    const qualityScore = 
+
+    const qualityScore =
       scores.technical * 0.4 +
       scores.community * 0.25 +
       scores.completeness * 0.2 +
       scores.explanation * 0.15;
-    
+
     return {
       ...solution,
       qualityScore,
@@ -377,16 +377,16 @@ class SolutionQualityFilter {
       qualityReason: this.generateQualityReason(scores)
     };
   }
-  
+
   private ensureDiversity(solutions: ScoredSolution[]): ScoredSolution[] {
     // 접근법별로 그룹화
     const grouped = this.groupByApproach(solutions);
-    
+
     // 각 그룹에서 최고 품질 솔루션 선택
-    const diverseSolutions = Object.values(grouped).map(group => 
+    const diverseSolutions = Object.values(grouped).map(group =>
       group.sort((a, b) => b.qualityScore - a.qualityScore)[0]
     );
-    
+
     // 품질 순으로 정렬
     return diverseSolutions.sort((a, b) => b.qualityScore - a.qualityScore);
   }
@@ -404,10 +404,10 @@ class ContextualSolutionRecommender {
   ): Promise<RecommendationResult> {
     // 사용자 컨텍스트 분석
     const userContext = await this.analyzeUserContext(problem);
-    
+
     // 솔루션별 적합성 점수 계산
     const rankedSolutions = await this.rankSolutions(solutions, userContext);
-    
+
     // 최적 추천 생성
     return {
       primary: this.selectPrimarySolution(rankedSolutions),
@@ -417,29 +417,29 @@ class ContextualSolutionRecommender {
       preventiveMeasures: this.suggestPreventiveMeasures(problem, rankedSolutions)
     };
   }
-  
+
   private async analyzeUserContext(problem: ProblemContext): Promise<UserContext> {
     return {
       // 기술 스택 분석
       technologyStack: problem.technology,
-      
+
       // 경험 수준 추정
       experienceLevel: this.estimateExperienceLevel(problem),
-      
+
       // 프로젝트 특성
       projectType: this.identifyProjectType(problem),
-      
+
       // 시간 제약
       urgency: problem.urgency || 'medium',
-      
+
       // 학습 선호도
       learningPreference: this.detectLearningPreference(problem),
-      
+
       // 위험 허용도
       riskTolerance: this.assessRiskTolerance(problem)
     };
   }
-  
+
   private async rankSolutions(
     solutions: FilteredSolutions,
     context: UserContext
@@ -449,14 +449,14 @@ class ContextualSolutionRecommender {
       ...solutions.good,
       ...solutions.acceptable
     ];
-    
+
     const ranked = await Promise.all(
       allSolutions.map(solution => this.scoreSolutionFit(solution, context))
     );
-    
+
     return ranked.sort((a, b) => b.contextScore - a.contextScore);
   }
-  
+
   private async scoreSolutionFit(
     solution: ScoredSolution,
     context: UserContext
@@ -464,27 +464,27 @@ class ContextualSolutionRecommender {
     const fitScores = {
       // 기술 스택 호환성
       techFit: this.scoreTechnologyFit(solution, context.technologyStack),
-      
+
       // 경험 수준 적합성
       experienceFit: this.scoreExperienceFit(solution, context.experienceLevel),
-      
+
       // 시간 요구사항 적합성
       timeFit: this.scoreTimeFit(solution, context.urgency),
-      
+
       // 복잡도 적합성
       complexityFit: this.scoreComplexityFit(solution, context.experienceLevel),
-      
+
       // 위험도 적합성
       riskFit: this.scoreRiskFit(solution, context.riskTolerance)
     };
-    
-    const contextScore = 
+
+    const contextScore =
       fitScores.techFit * 0.3 +
       fitScores.experienceFit * 0.25 +
       fitScores.timeFit * 0.2 +
       fitScores.complexityFit * 0.15 +
       fitScores.riskFit * 0.1;
-    
+
     return {
       ...solution,
       contextScore,
@@ -509,14 +509,14 @@ class CommunityFeedbackIntegrator {
     'discord-reactions',
     'dev-to-hearts'
   ];
-  
+
   async integrateRealTimeFeedback(
     solution: CommunitySolution
   ): Promise<EnrichedSolution> {
     const feedbackData = await this.gatherFeedbackData(solution);
     const sentiment = await this.analyzeSentiment(feedbackData);
     const trends = await this.analyzeTrends(feedbackData);
-    
+
     return {
       ...solution,
       communityFeedback: {
@@ -534,24 +534,24 @@ class CommunityFeedbackIntegrator {
       }
     };
   }
-  
+
   private async gatherFeedbackData(solution: CommunitySolution): Promise<FeedbackData> {
     const feedbackPromises = this.feedbackChannels.map(channel =>
       this.fetchChannelFeedback(channel, solution)
     );
-    
+
     const channelFeedback = await Promise.allSettled(feedbackPromises);
-    
+
     return this.consolidateFeedback(channelFeedback);
   }
-  
+
   private async analyzeSentiment(feedbackData: FeedbackData): Promise<SentimentAnalysis> {
     const comments = feedbackData.comments || [];
-    
+
     const sentimentScores = await Promise.all(
       comments.map(comment => this.analyzeSingleComment(comment))
     );
-    
+
     return {
       positive: sentimentScores.filter(s => s.sentiment === 'positive').length,
       negative: sentimentScores.filter(s => s.sentiment === 'negative').length,
@@ -562,7 +562,7 @@ class CommunityFeedbackIntegrator {
       keyNegatives: this.extractKeyNegatives(sentimentScores)
     };
   }
-  
+
   private detectConsensus(feedbackData: FeedbackData): ConsensusAnalysis {
     const indicators = {
       highUpvoteRatio: feedbackData.upvoteRatio > 0.8,
@@ -570,9 +570,9 @@ class CommunityFeedbackIntegrator {
       expertAgreement: feedbackData.expertEndorsements > 2,
       consistentPositiveFeedback: feedbackData.positiveFeedbackRatio > 0.75
     };
-    
+
     const consensusScore = Object.values(indicators).filter(Boolean).length / 4;
-    
+
     return {
       hasConsensus: consensusScore >= 0.75,
       consensusScore,
@@ -595,7 +595,7 @@ class CommunityContributionSystem {
   ): Promise<ContributionResult> {
     // 개선사항 검증
     const validation = await this.validateImprovement(originalSolution, improvement);
-    
+
     if (!validation.isValid) {
       return {
         success: false,
@@ -603,17 +603,17 @@ class CommunityContributionSystem {
         suggestions: validation.suggestions
       };
     }
-    
+
     // 커뮤니티에 기여
     const contribution = await this.submitContribution({
       originalSolution,
       improvement,
       validation
     });
-    
+
     // 피드백 수집 시작
     this.startFeedbackCollection(contribution);
-    
+
     return {
       success: true,
       contributionId: contribution.id,
@@ -621,32 +621,32 @@ class CommunityContributionSystem {
       trackingUrl: contribution.trackingUrl
     };
   }
-  
+
   async suggestImprovements(solution: CommunitySolution): Promise<ImprovementSuggestion[]> {
     const suggestions: ImprovementSuggestion[] = [];
-    
+
     // 코드 개선 제안
     const codeImprovements = await this.analyzeCodeImprovements(solution.code);
     suggestions.push(...codeImprovements);
-    
+
     // 설명 개선 제안
     const explanationImprovements = await this.analyzeExplanationImprovements(solution.description);
     suggestions.push(...explanationImprovements);
-    
+
     // 예제 추가 제안
     const exampleSuggestions = await this.suggestAdditionalExamples(solution);
     suggestions.push(...exampleSuggestions);
-    
+
     // 보안 개선 제안
     const securityImprovements = await this.suggestSecurityImprovements(solution);
     suggestions.push(...securityImprovements);
-    
+
     return suggestions.sort((a, b) => b.priority - a.priority);
   }
-  
+
   private async analyzeCodeImprovements(code: string): Promise<CodeImprovement[]> {
     const improvements: CodeImprovement[] = [];
-    
+
     // 성능 최적화 기회
     const performanceIssues = await this.detectPerformanceIssues(code);
     performanceIssues.forEach(issue => {
@@ -658,7 +658,7 @@ class CommunityContributionSystem {
         difficulty: 'low'
       });
     });
-    
+
     // 가독성 개선
     const readabilityIssues = await this.detectReadabilityIssues(code);
     readabilityIssues.forEach(issue => {
@@ -670,7 +670,7 @@ class CommunityContributionSystem {
         difficulty: 'low'
       });
     });
-    
+
     // 보안 강화
     const securityIssues = await this.detectSecurityIssues(code);
     securityIssues.forEach(issue => {
@@ -682,7 +682,7 @@ class CommunityContributionSystem {
         difficulty: 'medium'
       });
     });
-    
+
     return improvements;
   }
 }

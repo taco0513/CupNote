@@ -10,7 +10,7 @@ app_concept:
   name: "FitTrack Pro"
   category: "건강 및 피트니스"
   target_users: "운동 애호가, 건강 관리자"
-  
+
 core_features:
   - "운동 기록 및 추적"
   - "개인화된 운동 계획"
@@ -36,7 +36,7 @@ technology_stack:
   state_management: "Redux Toolkit + RTK Query"
   ui_library: "React Native Elements + NativeBase"
   animations: "React Native Reanimated 3"
-  
+
 backend:
   runtime: "Node.js + TypeScript"
   framework: "Express.js"
@@ -44,7 +44,7 @@ backend:
   auth: "Firebase Auth"
   storage: "Firebase Storage"
   push: "Firebase Cloud Messaging"
-  
+
 development_tools:
   testing: "Jest + Detox"
   code_quality: "ESLint + Prettier"
@@ -227,7 +227,7 @@ class AuthService {
   async signUpWithEmail(email: string, password: string, userData: any) {
     try {
       const userCredential = await auth().createUserWithEmailAndPassword(email, password);
-      
+
       // 사용자 프로필 업데이트
       await userCredential.user.updateProfile({
         displayName: `${userData.firstName} ${userData.lastName}`,
@@ -235,7 +235,7 @@ class AuthService {
 
       // Firestore에 추가 사용자 정보 저장
       await this.createUserProfile(userCredential.user.uid, userData);
-      
+
       return userCredential.user;
     } catch (error) {
       throw this.handleAuthError(error);
@@ -246,10 +246,10 @@ class AuthService {
     try {
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
       const { idToken } = await GoogleSignin.signIn();
-      
+
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
       const userCredential = await auth().signInWithCredential(googleCredential);
-      
+
       await this.saveUserSession(userCredential.user);
       return userCredential.user;
     } catch (error) {
@@ -260,7 +260,7 @@ class AuthService {
   async signInWithFacebook() {
     try {
       const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
-      
+
       if (result.isCancelled) {
         throw new Error('사용자가 로그인을 취소했습니다');
       }
@@ -272,7 +272,7 @@ class AuthService {
 
       const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
       const userCredential = await auth().signInWithCredential(facebookCredential);
-      
+
       await this.saveUserSession(userCredential.user);
       return userCredential.user;
     } catch (error) {
@@ -284,12 +284,12 @@ class AuthService {
     try {
       await auth().signOut();
       await AsyncStorage.removeItem('userSession');
-      
+
       // 소셜 로그인 세션도 정리
       if (await GoogleSignin.isSignedIn()) {
         await GoogleSignin.signOut();
       }
-      
+
       LoginManager.logOut();
     } catch (error) {
       console.error('Sign out error:', error);
@@ -304,7 +304,7 @@ class AuthService {
       photoURL: user.photoURL,
       lastLoginAt: new Date().toISOString(),
     };
-    
+
     await AsyncStorage.setItem('userSession', JSON.stringify(session));
   }
 
@@ -316,7 +316,7 @@ class AuthService {
       'auth/weak-password': '비밀번호는 6자 이상이어야 합니다',
       'auth/invalid-email': '유효하지 않은 이메일 형식입니다',
     };
-    
+
     return new Error(errorMessages[error.code] || '인증 오류가 발생했습니다');
   }
 }
@@ -347,10 +347,10 @@ export const WorkoutScreen: React.FC = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const dispatch = useDispatch();
-  
+
   const { workout } = route.params as { workout: Workout };
   const { currentWorkout, isRecording } = useSelector((state: RootState) => state.workout);
-  
+
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
   const [currentSetIndex, setCurrentSetIndex] = useState(0);
   const [isResting, setIsResting] = useState(false);
@@ -409,7 +409,7 @@ export const WorkoutScreen: React.FC = () => {
 
   const finishWorkout = async () => {
     const endTime = new Date();
-    const duration = workoutStartTime 
+    const duration = workoutStartTime
       ? Math.round((endTime.getTime() - workoutStartTime.getTime()) / 1000 / 60)
       : 0;
 
@@ -421,7 +421,7 @@ export const WorkoutScreen: React.FC = () => {
 
     try {
       await dispatch(workoutActions.saveWorkout(completedWorkout)).unwrap();
-      
+
       Alert.alert(
         '운동 완료!',
         `훌륭합니다! ${duration}분 동안 운동하셨습니다.`,
@@ -599,11 +599,11 @@ import React from 'react';
 import { View, Text, Dimensions, StyleSheet } from 'react-native';
 import { LineChart, BarChart, ProgressChart } from 'react-native-chart-kit';
 import { Card } from 'react-native-elements';
-import Animated, { 
-  useAnimatedStyle, 
-  useSharedValue, 
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
   withTiming,
-  Easing 
+  Easing
 } from 'react-native-reanimated';
 
 const screenWidth = Dimensions.get('window').width;
@@ -728,7 +728,7 @@ export const ProgressChart: React.FC<ProgressChartProps> = ({
     return latest - previous;
   };
 
-  const changePercent = data.length >= 2 
+  const changePercent = data.length >= 2
     ? ((getChange() / data[data.length - 2].value) * 100)
     : 0;
 
@@ -750,7 +750,7 @@ export const ProgressChart: React.FC<ProgressChartProps> = ({
           )}
         </View>
       </View>
-      
+
       <Animated.View style={animatedStyle}>
         {renderChart()}
       </Animated.View>
@@ -819,7 +819,7 @@ import { syncActions } from '../store/slices/syncSlice';
 class OfflineService {
   private isOnline = true;
   private syncQueue: any[] = [];
-  
+
   constructor() {
     this.initializeNetworkListener();
     this.loadSyncQueue();
@@ -829,7 +829,7 @@ class OfflineService {
     NetInfo.addEventListener(state => {
       const wasOffline = !this.isOnline;
       this.isOnline = state.isConnected ?? false;
-      
+
       if (wasOffline && this.isOnline) {
         // 온라인 복구 시 동기화 실행
         this.processSyncQueue();
@@ -845,9 +845,9 @@ class OfflineService {
         timestamp,
         synced: false,
       };
-      
+
       await AsyncStorage.setItem(`offline_${key}`, JSON.stringify(offlineData));
-      
+
       // 동기화 큐에 추가
       if (!this.isOnline) {
         this.addToSyncQueue('save', key, data);
@@ -879,7 +879,7 @@ class OfflineService {
       timestamp: new Date().toISOString(),
       retryCount: 0,
     };
-    
+
     this.syncQueue.push(syncItem);
     await this.saveSyncQueue();
   }
@@ -917,7 +917,7 @@ class OfflineService {
       } catch (error) {
         console.error(`Failed to sync item: ${item.key}`, error);
         item.retryCount++;
-        
+
         // 3회 재시도 후 실패 처리
         if (item.retryCount < 3) {
           failedItems.push(item);
@@ -999,8 +999,8 @@ class OfflineService {
     return {
       isOnline: this.isOnline,
       pendingSyncItems: this.syncQueue.length,
-      lastSyncAttempt: this.syncQueue.length > 0 
-        ? this.syncQueue[this.syncQueue.length - 1].timestamp 
+      lastSyncAttempt: this.syncQueue.length > 0
+        ? this.syncQueue[this.syncQueue.length - 1].timestamp
         : null,
     };
   }
@@ -1062,7 +1062,7 @@ app_store_listing:
     subtitle: "개인 맞춤 피트니스 트래커"
     description: |
       FitTrack Pro는 당신의 피트니스 여정을 완벽하게 추적하고 관리하는 올인원 솔루션입니다.
-      
+
       ■ 주요 기능
       • 개인 맞춤 운동 플랜 생성
       • 실시간 운동 기록 및 추적
@@ -1070,20 +1070,20 @@ app_store_listing:
       • 친구들과 함께하는 소셜 기능
       • Apple Health 및 웨어러블 기기 연동
       • 오프라인 모드 지원
-    
+
     keywords: "피트니스,운동,헬스,트래커,다이어트,건강"
     category: "건강 및 피트니스"
     content_rating: "4+"
-    
+
   android:
     app_name: "FitTrack Pro"
     short_description: "개인 맞춤 피트니스 트래커로 건강한 라이프스타일을 시작하세요"
     full_description: |
       🏋️‍♂️ FitTrack Pro - 당신만의 피트니스 코치
-      
-      개인화된 운동 계획부터 상세한 진행 상황 추적까지, 
+
+      개인화된 운동 계획부터 상세한 진행 상황 추적까지,
       건강한 라이프스타일을 위한 모든 것이 하나의 앱에!
-      
+
       ✨ 핵심 기능
       🎯 AI 기반 개인 맞춤 운동 플랜
       📊 실시간 운동 데이터 추적
@@ -1091,7 +1091,7 @@ app_store_listing:
       👥 친구들과 함께하는 챌린지
       ⌚ 웨어러블 기기 완벽 연동
       📱 오프라인에서도 모든 기능 사용 가능
-    
+
     category: "HEALTH_AND_FITNESS"
     content_rating: "Everyone"
 ```

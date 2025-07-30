@@ -64,7 +64,7 @@ decision_matrix:
 **성능 예산**:
 ```yaml
 performance_budget:
-  load_time: 
+  load_time:
     3g: < 3s
     wifi: < 1s
   bundle_size:
@@ -363,7 +363,7 @@ learning_optimization:
 ```yaml
 documentation_types:
   technical: "개발자 대상"
-  user_guide: "최종 사용자 대상"  
+  user_guide: "최종 사용자 대상"
   api_reference: "통합 개발자 대상"
   wiki: "팀 지식 공유"
 ```

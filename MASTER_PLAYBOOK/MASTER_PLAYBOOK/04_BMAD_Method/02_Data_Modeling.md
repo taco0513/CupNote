@@ -35,7 +35,7 @@ Entity: User
   - email: 로그인용 이메일
   - name: 사용자 이름
   - created_at: 가입일시
-  
+
 비즈니스 규칙:
   - email은 유니크해야 함
   - 삭제 시 관련 데이터 처리 방법
@@ -95,12 +95,12 @@ settings: JSON // 설정 정보
   id: UUID (required, unique)
   email: String (required, unique)
   password_hash: String (required)
-  
+
   // 선택 속성
   name: String (optional)
   phone: String (optional)
   avatar_url: String (optional)
-  
+
   // 시스템 속성
   created_at: Timestamp (required, auto)
   updated_at: Timestamp (required, auto)

@@ -18,7 +18,7 @@ interface TimeBasedTrigger {
     priority: 'high';
     autoExecute: true;
   };
-  
+
   // 컨텍스트별 조정된 시간 제한
   contextualLimits: {
     // 간단한 구문 오류 - 더 빠른 트리거
@@ -27,14 +27,14 @@ interface TimeBasedTrigger {
       examples: ['SyntaxError', 'TypeError', 'ReferenceError'];
       rationale: '구문 오류는 웹에서 빠르게 해결책을 찾을 수 있음';
     };
-    
+
     // 새로운 기술/라이브러리 - 즉시 트리거
     newTechnology: {
       duration: 30; // 30초
       examples: ['새로운 npm 패키지', '최신 프레임워크', '최근 업데이트'];
       rationale: '최신 기술은 공식 문서나 커뮤니티 정보가 필수';
     };
-    
+
     // 복잡한 아키텍처 문제 - 더 긴 시간 허용
     architecturalIssue: {
       duration: 300; // 5분
@@ -50,16 +50,16 @@ class ProblemSolvingTimer {
   private context: ProblemContext;
   private warningThreshold: number;
   private triggerThreshold: number;
-  
+
   constructor(context: ProblemContext) {
     this.startTime = new Date();
     this.context = context;
     this.setThresholds();
   }
-  
+
   private setThresholds(): void {
     const { problemType, technology, complexity } = this.context;
-    
+
     // 문제 유형별 임계값 설정
     if (problemType === 'syntax' || technology.isNew) {
       this.warningThreshold = 60;   // 1분
@@ -72,10 +72,10 @@ class ProblemSolvingTimer {
       this.triggerThreshold = 120;  // 2분 (기본)
     }
   }
-  
+
   checkTimeElapsed(): TriggerResult {
     const elapsed = (Date.now() - this.startTime.getTime()) / 1000;
-    
+
     if (elapsed >= this.triggerThreshold) {
       return {
         shouldTrigger: true,
@@ -91,7 +91,7 @@ class ProblemSolvingTimer {
         estimatedTrigger: this.triggerThreshold - elapsed
       };
     }
-    
+
     return { shouldTrigger: false, urgency: 'low' };
   }
 }
@@ -112,7 +112,7 @@ interface PatternBasedTrigger {
       '비슷한 구글링 키워드 반복'
     ];
   };
-  
+
   // 막다른 길 패턴 감지
   deadEndPatterns: {
     indicators: [
@@ -123,7 +123,7 @@ interface PatternBasedTrigger {
     ];
     action: '즉시 웹 검색 + 커뮤니티 검색';
   };
-  
+
   // 토큰 사용량 기반 트리거
   tokenUsagePattern: {
     threshold: 1000; // 토큰
@@ -136,17 +136,17 @@ interface PatternBasedTrigger {
 class ProblemPatternRecognizer {
   private attemptHistory: Attempt[] = [];
   private tokenUsage: number = 0;
-  
+
   recordAttempt(attempt: Attempt): void {
     this.attemptHistory.push({
       ...attempt,
       timestamp: Date.now(),
       similarity: this.calculateSimilarity(attempt)
     });
-    
+
     this.tokenUsage += attempt.tokenCost;
   }
-  
+
   checkTriggerConditions(): TriggerAnalysis {
     return {
       repetitiveAttempts: this.detectRepetitiveAttempts(),
@@ -155,61 +155,61 @@ class ProblemPatternRecognizer {
       recommendation: this.generateRecommendation()
     };
   }
-  
+
   private detectRepetitiveAttempts(): RepetitiveAnalysis {
     const recentAttempts = this.attemptHistory.slice(-5);
     const similarGroups = this.groupBySimilarity(recentAttempts, 0.8);
-    
+
     const maxGroupSize = Math.max(...similarGroups.map(g => g.length));
-    
+
     return {
       detected: maxGroupSize >= 3,
       maxRepetition: maxGroupSize,
       pattern: maxGroupSize >= 3 ? similarGroups[0][0].approach : null,
-      recommendation: maxGroupSize >= 3 ? 
-        '같은 접근법을 반복하고 있습니다. 웹 검색으로 새로운 관점을 찾아보세요.' : 
+      recommendation: maxGroupSize >= 3 ?
+        '같은 접근법을 반복하고 있습니다. 웹 검색으로 새로운 관점을 찾아보세요.' :
         null
     };
   }
-  
+
   private detectDeadEndPattern(): DeadEndAnalysis {
     const recentErrors = this.attemptHistory
       .slice(-3)
       .map(a => a.errorMessage)
       .filter(Boolean);
-    
+
     const deadEndIndicators = [
       /unknown.+error/i,
       /not found/i,
       /undefined.+method/i,
       /cannot.+find/i
     ];
-    
+
     const matchCount = recentErrors.reduce((count, error) => {
       return count + deadEndIndicators.filter(pattern => pattern.test(error)).length;
     }, 0);
-    
+
     return {
       detected: matchCount >= 2,
       confidence: matchCount / recentErrors.length,
-      indicators: deadEndIndicators.filter(pattern => 
+      indicators: deadEndIndicators.filter(pattern =>
         recentErrors.some(error => pattern.test(error))
       )
     };
   }
-  
+
   private analyzeTokenEfficiency(): TokenEfficiencyAnalysis {
     const averageTokensPerAttempt = this.tokenUsage / Math.max(this.attemptHistory.length, 1);
     const projectedContinuedCost = averageTokensPerAttempt * 10; // 10번 더 시도한다면
     const webSearchCost = 200; // 웹 검색 예상 비용
-    
+
     return {
       currentUsage: this.tokenUsage,
       projectedCost: projectedContinuedCost,
       searchAlternativeCost: webSearchCost,
       efficiencyGain: (projectedContinuedCost - webSearchCost) / projectedContinuedCost,
-      recommendation: projectedContinuedCost > webSearchCost * 2 ? 
-        '웹 검색이 더 효율적입니다' : 
+      recommendation: projectedContinuedCost > webSearchCost * 2 ?
+        '웹 검색이 더 효율적입니다' :
         '현재 방식 계속 진행'
     };
   }
@@ -236,7 +236,7 @@ interface TechnologySpecificTriggers {
         'React performance ${issue} solution'
       ];
     };
-    
+
     nextjs: {
       quickTriggers: [
         'Hydration 에러',
@@ -250,7 +250,7 @@ interface TechnologySpecificTriggers {
         'Next.js ${feature} implementation guide'
       ];
     };
-    
+
     vue: {
       quickTriggers: [
         'Composition API 에러',
@@ -264,7 +264,7 @@ interface TechnologySpecificTriggers {
       ];
     };
   };
-  
+
   // 백엔드 기술
   backend: {
     nodejs: {
@@ -280,7 +280,7 @@ interface TechnologySpecificTriggers {
         'Node.js performance optimization ${problem}'
       ];
     };
-    
+
     python: {
       quickTriggers: [
         'Import 에러',
@@ -294,7 +294,7 @@ interface TechnologySpecificTriggers {
       ];
     };
   };
-  
+
   // DevOps 도구
   devops: {
     docker: {
@@ -309,7 +309,7 @@ interface TechnologySpecificTriggers {
         'Dockerfile ${instruction} best practices'
       ];
     };
-    
+
     kubernetes: {
       quickTriggers: [
         'Pod 상태 에러',
@@ -329,23 +329,23 @@ interface TechnologySpecificTriggers {
 class ContextAwareTriggerSystem {
   private context: DevelopmentContext;
   private technologyTriggers: TechnologySpecificTriggers;
-  
+
   constructor(context: DevelopmentContext) {
     this.context = context;
     this.technologyTriggers = this.initializeTriggers();
   }
-  
+
   evaluateTriggerConditions(problemDescription: string, errorMessage?: string): TriggerDecision {
     const technology = this.identifyTechnology();
     const triggerConfig = this.getTriggerConfig(technology);
-    
+
     // 빠른 트리거 조건 확인
     const quickTrigger = this.checkQuickTriggers(
-      problemDescription, 
-      errorMessage, 
+      problemDescription,
+      errorMessage,
       triggerConfig.quickTriggers
     );
-    
+
     if (quickTrigger.matches) {
       return {
         shouldTrigger: true,
@@ -355,10 +355,10 @@ class ContextAwareTriggerSystem {
         expectedSources: ['official_docs', 'github_issues', 'stack_overflow']
       };
     }
-    
+
     // 일반적인 트리거 조건 확인
     const generalTrigger = this.checkGeneralTriggers(problemDescription, errorMessage);
-    
+
     return {
       shouldTrigger: generalTrigger.shouldTrigger,
       urgency: generalTrigger.urgency,
@@ -368,13 +368,13 @@ class ContextAwareTriggerSystem {
       fallbackStrategy: generalTrigger.fallbackStrategy
     };
   }
-  
+
   private identifyTechnology(): TechnologyStack {
     // 프로젝트 파일, 의존성, 에러 메시지 등으로 기술 스택 식별
     const packageJson = this.context.project?.packageJson;
     const errorStack = this.context.currentError?.stack;
     const fileExtensions = this.context.project?.fileExtensions;
-    
+
     return {
       frontend: this.detectFrontendFramework(packageJson, errorStack),
       backend: this.detectBackendFramework(packageJson, errorStack),
@@ -383,14 +383,14 @@ class ContextAwareTriggerSystem {
       cloud: this.detectCloudPlatform(this.context.deployment)
     };
   }
-  
+
   private generateSearchQuery(
-    technology: TechnologyStack, 
+    technology: TechnologyStack,
     trigger: QuickTrigger
   ): string {
     const patterns = this.technologyTriggers[technology.category][technology.name]?.searchPatterns;
     const bestPattern = patterns?.[0] || 'generic_pattern';
-    
+
     return this.interpolatePattern(bestPattern, {
       technology: technology.name,
       version: technology.version,
@@ -417,7 +417,7 @@ class SmartSearchQueryGenerator {
       this.getTimeComponent(),
       this.getQualityComponent()
     ].filter(Boolean);
-    
+
     return {
       query: components.join(' '),
       priority: this.calculatePriority(context),
@@ -425,34 +425,34 @@ class SmartSearchQueryGenerator {
       fallbackQueries: this.generateFallbackQueries(components)
     };
   }
-  
+
   private getTechnologyComponent(tech: Technology): string {
     // 기술명 + 버전 (버전이 중요한 경우)
     const versionImportantTechs = ['React', 'Next.js', 'Node.js', 'TypeScript'];
-    
+
     if (versionImportantTechs.includes(tech.name) && tech.version) {
       return `${tech.name} ${tech.version}`;
     }
-    
+
     return tech.name;
   }
-  
+
   private getErrorComponent(error: ErrorInfo): string {
     if (!error?.message) return '';
-    
+
     // 에러 메시지 정제
     const cleanError = error.message
       .replace(/at .+:\d+:\d+/g, '') // 파일 경로 제거
       .replace(/\s+/g, ' ') // 여러 공백 정리
       .trim();
-    
+
     // 핵심 에러 타입 추출
     const errorTypePattern = /^(\w+Error|Error \w+|\w+Exception)/;
     const match = cleanError.match(errorTypePattern);
-    
+
     return match ? match[1] : cleanError.substring(0, 50);
   }
-  
+
   private getIntentComponent(intent: ProblemIntent): string {
     const intentMap = {
       fix: 'fix solution',
@@ -461,19 +461,19 @@ class SmartSearchQueryGenerator {
       understand: 'explanation tutorial',
       configure: 'configuration setup'
     };
-    
+
     return intentMap[intent] || 'solution';
   }
-  
+
   private getTimeComponent(): string {
     return '2024'; // 최신 정보 우선
   }
-  
+
   private getQualityComponent(): string {
     // 고품질 소스 유도 키워드
     return 'official documentation best practices';
   }
-  
+
   // 백업 검색 쿼리 생성
   generateFallbackQueries(originalComponents: string[]): string[] {
     return [
@@ -498,33 +498,33 @@ class RealTimeProblemSolvingMonitor {
   private activeSession: ProblemSolvingSession;
   private triggerSystem: AutoTriggerSystem;
   private searchExecutor: SearchExecutor;
-  
+
   startMonitoring(problemDescription: string): void {
     this.activeSession = new ProblemSolvingSession({
       startTime: Date.now(),
       description: problemDescription,
       context: this.gatherContext()
     });
-    
+
     // 주기적 모니터링 시작 (10초마다)
     this.startPeriodicCheck();
   }
-  
+
   private startPeriodicCheck(): void {
     const checkInterval = setInterval(() => {
       const triggerResult = this.triggerSystem.evaluate(this.activeSession);
-      
+
       if (triggerResult.shouldTrigger) {
         this.executeAutoSearch(triggerResult);
         clearInterval(checkInterval);
       }
-      
+
       // 세션 업데이트
       this.updateSession();
-      
+
     }, 10000); // 10초마다
   }
-  
+
   private async executeAutoSearch(trigger: TriggerResult): Promise<void> {
     const searchResult = await this.searchExecutor.execute({
       query: trigger.searchQuery,
@@ -532,10 +532,10 @@ class RealTimeProblemSolvingMonitor {
       maxResults: 5,
       qualityThreshold: 0.8
     });
-    
+
     // 검색 결과 분석 및 적용
     const analysis = await this.analyzeSearchResults(searchResult);
-    
+
     // 사용자에게 결과 제시
     this.presentSolution({
       trigger: trigger,
@@ -543,11 +543,11 @@ class RealTimeProblemSolvingMonitor {
       analysis: analysis,
       recommendedActions: this.generateRecommendedActions(analysis)
     });
-    
+
     // 세션 완료
     this.completeSession(analysis.success);
   }
-  
+
   private analyzeSearchResults(searchResult: SearchResult): SolutionAnalysis {
     return {
       relevanceScore: this.calculateRelevance(searchResult),
@@ -559,10 +559,10 @@ class RealTimeProblemSolvingMonitor {
       success: this.predictSuccessRate(searchResult)
     };
   }
-  
+
   private generateRecommendedActions(analysis: SolutionAnalysis): RecommendedAction[] {
     const actions: RecommendedAction[] = [];
-    
+
     if (analysis.bestSolution) {
       actions.push({
         type: 'primary',
@@ -573,7 +573,7 @@ class RealTimeProblemSolvingMonitor {
         confidence: analysis.bestSolution.confidence
       });
     }
-    
+
     if (analysis.alternativeSolutions.length > 0) {
       actions.push({
         type: 'alternative',
@@ -586,7 +586,7 @@ class RealTimeProblemSolvingMonitor {
         }))
       });
     }
-    
+
     return actions;
   }
 }
@@ -630,7 +630,7 @@ interface AutoTriggerNotifications {
     options: ["지금 실행", "1분 더 시도", "수동 검색"];
     countdown: true;
   };
-  
+
   // 트리거 실행
   executing: {
     message: "⚡ 자동 웹 검색 실행 중...";
@@ -638,7 +638,7 @@ interface AutoTriggerNotifications {
     estimatedTime: "10-30초";
     progress: true;
   };
-  
+
   // 결과 완료
   completed: {
     message: "✅ 해결책을 찾았습니다!";

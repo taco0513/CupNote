@@ -83,14 +83,14 @@ interface LandingPageChallenge {
   timeLimit: 30; // 분
   tools: ['Next.js', 'Tailwind CSS', 'Vercel'];
   outcome: '완전히 작동하는 반응형 랜딩페이지';
-  
+
   steps: {
     setup: 5;    // 템플릿 선택 및 클론
     content: 15; // 콘텐츠 작성 및 디자인
     optimize: 5; // SEO 및 성능 최적화
     deploy: 5;   // 배포 및 도메인 연결
   };
-  
+
   guaranteedResults: [
     'Google PageSpeed 90+ 점수',
     '모바일 완벽 호환',
@@ -107,7 +107,7 @@ interface BackendChallenge {
   timeLimit: 30;
   tools: ['Express.js', 'Supabase', 'Railway'];
   outcome: 'CRUD API + 인증 + 데이터베이스';
-  
+
   features: [
     'RESTful API 엔드포인트',
     'JWT 인증 시스템',
@@ -124,7 +124,7 @@ interface PaymentChallenge {
   timeLimit: 30;
   tools: ['Stripe', 'NextAuth', 'Webhook'];
   outcome: '완전한 결제 + 구독 관리 시스템';
-  
+
   revenue_features: [
     '일회성 결제 처리',
     '월간/연간 구독',
@@ -231,7 +231,7 @@ interface AIQuickWin {
     '사용자 프로필 섹션',
     'Tailwind CSS 스타일링'
   ];
-  
+
   // AI가 자동 생성하는 것들:
   generated: [
     '완전한 React 컴포넌트',
@@ -252,7 +252,7 @@ const autoSolve = async (problem: string) => {
     getOfficialDocs(problem),
     generateAISolution(problem)
   ])
-  
+
   return {
     quickFix: solutions[0],      // 즉시 적용 가능한 해결책
     bestPractice: solutions[1],  // 장기적 베스트 프랙티스
@@ -284,7 +284,7 @@ const handlePurchase = async (priceId: string) => {
 export default async function handler(req: NextRequest) {
   const sig = req.headers.get('stripe-signature')
   const event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret)
-  
+
   if (event.type === 'checkout.session.completed') {
     // 사용자 구독 활성화
     await activateSubscription(event.data.object)
@@ -302,21 +302,21 @@ export default async function handler(req: NextRequest) {
 ```typescript
 interface QuickWinROI {
   timeInvested: 30; // 분
-  
+
   // 즉시 효과 (당일)
   immediate: {
     productivityGain: '200%';    // 개발 속도 2배
     timesSaved: '2-3 hours';     // 절약된 시간
     stresReduction: '50%';       // 스트레스 감소
   };
-  
+
   // 단기 효과 (1주일)
   shortTerm: {
     userFeedback: '5-10 responses';
     performanceImprovement: '100%';
     revenueGeneration: '$0-$100';
   };
-  
+
   // 장기 효과 (1개월)
   longTerm: {
     monthlyActiveUsers: '100+';
@@ -337,7 +337,7 @@ interface QuickWinROI {
 - [ ] 성능 지표 90+ 달성
 - [ ] 모바일 호환성 확인
 
-### 비즈니스 성과  
+### 비즈니스 성과
 - [ ] 첫 사용자/고객 획득
 - [ ] 수익 모델 검증 시작
 - [ ] 경쟁 우위 요소 확보
@@ -390,18 +390,18 @@ interface QuickWinROI {
 
 ### 🎯 첫 번째 Quick Win 추천
 
-**완전 초보자**: [30분 프로토타입](01_30min_Prototype.md)부터 시작  
-**개발 경험자**: [생산성 도구킷](03_Productivity_Toolkit.md) 즉시 적용  
-**창업자/기획자**: [수익화 가속기](04_Monetization_Accelerator.md) 우선 활용  
+**완전 초보자**: [30분 프로토타입](01_30min_Prototype.md)부터 시작
+**개발 경험자**: [생산성 도구킷](03_Productivity_Toolkit.md) 즉시 적용
+**창업자/기획자**: [수익화 가속기](04_Monetization_Accelerator.md) 우선 활용
 
 ### 💡 성공을 위한 마음가짐
 
 > ⚡ **"완벽한 계획보다 빠른 실행이 승리한다"**
-> 
+>
 > 30분의 행동이 30시간의 고민보다 더 큰 가치를 창출합니다.
 
 > 🎯 **"작은 성공이 큰 변화를 만든다"**
-> 
+>
 > 매일 하나씩의 Quick Win이 한 달 후 놀라운 결과를 가져옵니다.
 
 **오늘 당장 시작해서 30분 후 첫 번째 성과를 확인하세요!** 🌟
@@ -548,7 +548,7 @@ export default function App({ Component, pageProps }) {
 
 ### 1분 코드 생성
 ```
-You: "사용자 프로필 편집 페이지를 React로 만들어줘. 
+You: "사용자 프로필 편집 페이지를 React로 만들어줘.
      이름, 이메일, 프로필 사진 업로드 포함."
 
 AI 결과:
@@ -560,7 +560,7 @@ AI 결과:
 
 ### 즉시 문제 해결
 ```
-You: "Next.js 앱에서 이미지가 로딩되지 않는 문제가 있어. 
+You: "Next.js 앱에서 이미지가 로딩되지 않는 문제가 있어.
      next.config.js 설정으로 해결해줘."
 
 AI 해결:
@@ -572,7 +572,7 @@ AI 해결:
 
 ### 자동 최적화
 ```
-You: "웹사이트가 느린데 5분 안에 개선할 수 있는 
+You: "웹사이트가 느린데 5분 안에 개선할 수 있는
      방법들을 우선순위 순으로 알려줘."
 
 AI 제안:
@@ -595,7 +595,7 @@ const stripe = await loadStripe('pk_test_...')
 // 3. 결제 처리
 const { error } = await stripe.redirectToCheckout({
   lineItems: [{
-    price: 'price_1HExample...', 
+    price: 'price_1HExample...',
     quantity: 1
   }],
   mode: 'payment',

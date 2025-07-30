@@ -56,16 +56,16 @@ data:
       external_labels:
         cluster: 'production'
         region: 'us-west-2'
-    
+
     rule_files:
       - "/etc/prometheus/rules/*.yml"
-    
+
     alerting:
       alertmanagers:
         - static_configs:
             - targets:
               - alertmanager:9093
-    
+
     scrape_configs:
       # Kubernetes API Server
       - job_name: 'kubernetes-apiservers'
@@ -79,7 +79,7 @@ data:
           - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
             action: keep
             regex: default;kubernetes;https
-      
+
       # Kubernetes Nodes
       - job_name: 'kubernetes-nodes'
         kubernetes_sd_configs:
@@ -91,7 +91,7 @@ data:
         relabel_configs:
           - action: labelmap
             regex: __meta_kubernetes_node_label_(.+)
-      
+
       # Application Pods
       - job_name: 'kubernetes-pods'
         kubernetes_sd_configs:
@@ -172,12 +172,12 @@ spec:
 export class MetricsCollector {
   private prometheus: PrometheusRegistry;
   private customMetrics: Map<string, Metric> = new Map();
-  
+
   constructor() {
     this.prometheus = new PrometheusRegistry();
     this.setupDefaultMetrics();
   }
-  
+
   private setupDefaultMetrics(): void {
     // HTTP 요청 메트릭
     const httpRequestDuration = new Histogram({
@@ -186,7 +186,7 @@ export class MetricsCollector {
       labelNames: ['method', 'route', 'status_code'],
       buckets: [0.001, 0.01, 0.1, 0.5, 1, 2, 5, 10]
     });
-    
+
     // 비즈니스 메트릭
     const orderProcessingTime = new Histogram({
       name: 'order_processing_duration_seconds',
@@ -194,37 +194,37 @@ export class MetricsCollector {
       labelNames: ['order_type', 'payment_method'],
       buckets: [0.1, 0.5, 1, 2, 5, 10, 30]
     });
-    
+
     const activeUsers = new Gauge({
       name: 'active_users_total',
       help: 'Number of currently active users',
       labelNames: ['user_type']
     });
-    
+
     const orderTotal = new Counter({
       name: 'orders_total',
       help: 'Total number of orders processed',
       labelNames: ['status', 'product_category']
     });
-    
+
     this.customMetrics.set('http_request_duration', httpRequestDuration);
     this.customMetrics.set('order_processing_time', orderProcessingTime);
     this.customMetrics.set('active_users', activeUsers);
     this.customMetrics.set('orders_total', orderTotal);
-    
+
     // Prometheus에 등록
     this.prometheus.registerMetric(httpRequestDuration);
     this.prometheus.registerMetric(orderProcessingTime);
     this.prometheus.registerMetric(activeUsers);
     this.prometheus.registerMetric(orderTotal);
   }
-  
+
   // HTTP 미들웨어
   createHttpMetricsMiddleware(): MiddlewareFunction {
     return (req: Request, res: Response, next: NextFunction) => {
       const start = Date.now();
       const httpDuration = this.customMetrics.get('http_request_duration') as Histogram;
-      
+
       res.on('finish', () => {
         const duration = (Date.now() - start) / 1000;
         httpDuration.observe(
@@ -232,32 +232,32 @@ export class MetricsCollector {
           duration
         );
       });
-      
+
       next();
     };
   }
-  
+
   // 비즈니스 메트릭 기록
   recordOrderProcessing(orderType: string, paymentMethod: string, duration: number): void {
     const orderMetric = this.customMetrics.get('order_processing_time') as Histogram;
     orderMetric.observe({ order_type: orderType, payment_method: paymentMethod }, duration);
-    
+
     const orderCounter = this.customMetrics.get('orders_total') as Counter;
     orderCounter.inc({ status: 'completed', product_category: orderType });
   }
-  
+
   updateActiveUsers(userType: string, count: number): void {
     const activeUsersMetric = this.customMetrics.get('active_users') as Gauge;
     activeUsersMetric.set({ user_type: userType }, count);
   }
-  
+
   // 시스템 메트릭 수집
   async collectSystemMetrics(): Promise<SystemMetrics> {
     const cpuUsage = await this.getCpuUsage();
     const memoryUsage = await this.getMemoryUsage();
     const diskUsage = await this.getDiskUsage();
     const networkStats = await this.getNetworkStats();
-    
+
     return {
       cpu: cpuUsage,
       memory: memoryUsage,
@@ -266,7 +266,7 @@ export class MetricsCollector {
       timestamp: new Date()
     };
   }
-  
+
   // 메트릭 대시보드 데이터 생성
   async generateDashboardData(timeRange: TimeRange): Promise<DashboardData> {
     const queries = [
@@ -280,11 +280,11 @@ export class MetricsCollector {
       'rate(orders_total[5m])',
       'active_users_total'
     ];
-    
+
     const results = await Promise.all(
       queries.map(query => this.queryPrometheus(query, timeRange))
     );
-    
+
     return {
       responseTime: results[0],
       errorRate: results[1],
@@ -302,7 +302,7 @@ export class MetricsCollector {
 // grafana-dashboard-manager.ts
 export class GrafanaDashboardManager {
   private grafanaApi: GrafanaAPI;
-  
+
   async createApplicationDashboard(app: ApplicationConfig): Promise<Dashboard> {
     const dashboard: DashboardConfig = {
       title: `${app.name} - Application Metrics`,
@@ -310,13 +310,13 @@ export class GrafanaDashboardManager {
       refresh: '30s',
       panels: await this.generatePanels(app)
     };
-    
+
     return await this.grafanaApi.createDashboard(dashboard);
   }
-  
+
   private async generatePanels(app: ApplicationConfig): Promise<Panel[]> {
     const panels: Panel[] = [];
-    
+
     // 1. 응답 시간 패널
     panels.push({
       type: 'graph',
@@ -334,7 +334,7 @@ export class GrafanaDashboardManager {
       }],
       gridPos: { x: 0, y: 0, w: 12, h: 8 }
     });
-    
+
     // 2. 에러율 패널
     panels.push({
       type: 'stat',
@@ -357,7 +357,7 @@ export class GrafanaDashboardManager {
       },
       gridPos: { x: 12, y: 0, w: 6, h: 4 }
     });
-    
+
     // 3. 처리량 패널
     panels.push({
       type: 'stat',
@@ -373,7 +373,7 @@ export class GrafanaDashboardManager {
       },
       gridPos: { x: 18, y: 0, w: 6, h: 4 }
     });
-    
+
     // 4. 리소스 사용률 패널
     panels.push({
       type: 'graph',
@@ -391,10 +391,10 @@ export class GrafanaDashboardManager {
       }],
       gridPos: { x: 0, y: 8, w: 24, h: 8 }
     });
-    
+
     return panels;
   }
-  
+
   async setupAlertingDashboard(): Promise<Dashboard> {
     const alertDashboard: DashboardConfig = {
       title: 'System Alerts & SLA',
@@ -441,7 +441,7 @@ export class GrafanaDashboardManager {
         }
       ]
     };
-    
+
     return await this.grafanaApi.createDashboard(alertDashboard);
   }
 }
@@ -455,7 +455,7 @@ export class GrafanaDashboardManager {
 export class StructuredLogger {
   private logger: winston.Logger;
   private correlationContext: Map<string, string> = new Map();
-  
+
   constructor(serviceName: string, environment: string) {
     this.logger = winston.createLogger({
       level: process.env.LOG_LEVEL || 'info',
@@ -489,7 +489,7 @@ export class StructuredLogger {
       ]
     });
   }
-  
+
   // 비즈니스 이벤트 로깅
   logBusinessEvent(event: BusinessEvent): void {
     this.logger.info('Business event occurred', {
@@ -506,7 +506,7 @@ export class StructuredLogger {
       }
     });
   }
-  
+
   // 성능 로깅
   logPerformanceMetrics(operation: string, duration: number, metadata?: any): void {
     this.logger.info('Performance metrics', {
@@ -517,7 +517,7 @@ export class StructuredLogger {
       metadata
     });
   }
-  
+
   // 보안 이벤트 로깅
   logSecurityEvent(event: SecurityEvent): void {
     this.logger.warn('Security event detected', {
@@ -532,7 +532,7 @@ export class StructuredLogger {
       riskScore: event.riskScore
     });
   }
-  
+
   // 에러 로깅 (컨텍스트 포함)
   logError(error: Error, context?: LogContext): void {
     this.logger.error('Application error occurred', {
@@ -550,17 +550,17 @@ export class StructuredLogger {
       }
     });
   }
-  
+
   // 트랜잭션 로깅
   startTransaction(transactionId: string, type: string): TransactionLogger {
     const startTime = Date.now();
-    
+
     this.logger.info('Transaction started', {
       transactionId,
       transactionType: type,
       startTime: new Date(startTime).toISOString()
     });
-    
+
     return {
       log: (message: string, data?: any) => {
         this.logger.info('Transaction log', {
@@ -570,7 +570,7 @@ export class StructuredLogger {
           elapsed: Date.now() - startTime
         });
       },
-      
+
       complete: (result?: any) => {
         const duration = Date.now() - startTime;
         this.logger.info('Transaction completed', {
@@ -581,7 +581,7 @@ export class StructuredLogger {
           status: 'success'
         });
       },
-      
+
       fail: (error: Error) => {
         const duration = Date.now() - startTime;
         this.logger.error('Transaction failed', {
@@ -598,13 +598,13 @@ export class StructuredLogger {
       }
     };
   }
-  
+
   private sanitizeData(data: any): any {
     if (!data) return data;
-    
+
     const sensitiveFields = ['password', 'token', 'apiKey', 'secret', 'authorization'];
     const sanitized = JSON.parse(JSON.stringify(data));
-    
+
     const sanitizeObject = (obj: any): void => {
       for (const key in obj) {
         if (sensitiveFields.some(field => key.toLowerCase().includes(field))) {
@@ -614,7 +614,7 @@ export class StructuredLogger {
         }
       }
     };
-    
+
     sanitizeObject(sanitized);
     return sanitized;
   }
@@ -695,18 +695,18 @@ data:
     http.host: "0.0.0.0"
     path.config: /usr/share/logstash/pipeline
     pipeline.ecs_compatibility: v8
-  
+
   pipeline.yml: |
     - pipeline.id: main
       path.config: "/usr/share/logstash/pipeline/logstash.conf"
-  
+
   logstash.conf: |
     input {
       beats {
         port => 5044
       }
     }
-    
+
     filter {
       # JSON 파싱
       if [message] =~ /^\{.*\}$/ {
@@ -714,7 +714,7 @@ data:
           source => "message"
         }
       }
-      
+
       # 타임스탬프 파싱
       if [timestamp] {
         date {
@@ -722,14 +722,14 @@ data:
           target => "@timestamp"
         }
       }
-      
+
       # 로그 레벨 정규화
       if [level] {
         mutate {
           uppercase => [ "level" ]
         }
       }
-      
+
       # 지리적 정보 추가
       if [sourceIp] {
         geoip {
@@ -737,7 +737,7 @@ data:
           target => "geoip"
         }
       }
-      
+
       # 사용자 에이전트 파싱
       if [userAgent] {
         useragent {
@@ -745,7 +745,7 @@ data:
         }
       }
     }
-    
+
     output {
       elasticsearch {
         hosts => ["elasticsearch:9200"]
@@ -763,7 +763,7 @@ data:
 export class LogAnalyzer {
   private elasticsearchClient: ElasticsearchClient;
   private alertManager: AlertManager;
-  
+
   async analyzeErrorPatterns(timeRange: TimeRange): Promise<ErrorAnalysis> {
     const query = {
       index: 'logs-*',
@@ -799,9 +799,9 @@ export class LogAnalyzer {
         }
       }
     };
-    
+
     const result = await this.elasticsearchClient.search(query);
-    
+
     return {
       totalErrors: result.body.hits.total.value,
       patterns: result.body.aggregations.error_patterns.buckets.map(bucket => ({
@@ -813,16 +813,16 @@ export class LogAnalyzer {
       trends: await this.analyzeErrorTrends(result.body.aggregations.error_patterns.buckets)
     };
   }
-  
+
   async detectAnomalies(service: string, timeRange: TimeRange): Promise<Anomaly[]> {
     // 1. 기준선 메트릭 계산
     const baseline = await this.calculateBaseline(service, timeRange);
-    
+
     // 2. 현재 메트릭 수집
     const current = await this.getCurrentMetrics(service);
-    
+
     const anomalies: Anomaly[] = [];
-    
+
     // 에러율 이상 감지
     if (current.errorRate > baseline.errorRate * 2) {
       anomalies.push({
@@ -834,7 +834,7 @@ export class LogAnalyzer {
         description: `${service} 에러율이 기준선의 2배를 초과했습니다`
       });
     }
-    
+
     // 응답 시간 이상 감지
     if (current.responseTime > baseline.responseTime * 1.5) {
       anomalies.push({
@@ -846,16 +846,16 @@ export class LogAnalyzer {
         description: `${service} 응답 시간이 기준선의 1.5배를 초과했습니다`
       });
     }
-    
+
     // 트래픽 패턴 이상 감지
     const trafficAnomaly = await this.detectTrafficAnomaly(service, timeRange);
     if (trafficAnomaly) {
       anomalies.push(trafficAnomaly);
     }
-    
+
     return anomalies;
   }
-  
+
   async setupLogBasedAlerts(): Promise<void> {
     const alertRules: LogAlertRule[] = [
       {
@@ -883,7 +883,7 @@ export class LogAnalyzer {
         action: 'notify_business_team'
       }
     ];
-    
+
     for (const rule of alertRules) {
       await this.createLogAlert(rule);
     }
@@ -899,12 +899,12 @@ export class LogAnalyzer {
 export class DistributedTracing {
   private tracer: Tracer;
   private jaegerExporter: JaegerExporter;
-  
+
   constructor(serviceName: string) {
     this.jaegerExporter = new JaegerExporter({
       endpoint: 'http://jaeger-collector:14268/api/traces'
     });
-    
+
     this.tracer = new NodeTracer({
       serviceName,
       plugins: {
@@ -917,12 +917,12 @@ export class DistributedTracing {
         redis: true
       }
     });
-    
+
     this.tracer.addSpanProcessor(
       new BatchSpanProcessor(this.jaegerExporter)
     );
   }
-  
+
   // HTTP 요청 추적
   private httpRequestHook = (span: Span, request: IncomingMessage): void => {
     span.setAttributes({
@@ -933,13 +933,13 @@ export class DistributedTracing {
       'request.id': this.extractRequestId(request)
     });
   };
-  
+
   private httpResponseHook = (span: Span, response: ServerResponse): void => {
     span.setAttributes({
       'http.status_code': response.statusCode,
       'http.status_text': response.statusMessage
     });
-    
+
     if (response.statusCode >= 400) {
       span.setStatus({
         code: SpanStatusCode.ERROR,
@@ -947,7 +947,7 @@ export class DistributedTracing {
       });
     }
   };
-  
+
   // 비즈니스 프로세스 추적
   async traceBusinessProcess<T>(
     processName: string,
@@ -959,9 +959,9 @@ export class DistributedTracing {
         if (attributes) {
           span.setAttributes(attributes);
         }
-        
+
         const result = await operation(span);
-        
+
         span.setStatus({ code: SpanStatusCode.OK });
         return result;
       } catch (error) {
@@ -976,7 +976,7 @@ export class DistributedTracing {
       }
     });
   }
-  
+
   // 데이터베이스 쿼리 추적
   async traceDbQuery<T>(
     query: string,
@@ -989,17 +989,17 @@ export class DistributedTracing {
         'db.statement': this.sanitizeQuery(query),
         'db.operation': this.extractOperation(query)
       });
-      
+
       const start = Date.now();
-      
+
       try {
         const result = await operation();
         const duration = Date.now() - start;
-        
+
         span.setAttributes({
           'db.duration_ms': duration
         });
-        
+
         span.setStatus({ code: SpanStatusCode.OK });
         return result;
       } catch (error) {
@@ -1014,7 +1014,7 @@ export class DistributedTracing {
       }
     });
   }
-  
+
   // 외부 서비스 호출 추적
   async traceExternalCall<T>(
     serviceName: string,
@@ -1027,7 +1027,7 @@ export class DistributedTracing {
         'service.operation': operation,
         'span.kind': 'client'
       });
-      
+
       try {
         const result = await call();
         span.setStatus({ code: SpanStatusCode.OK });
@@ -1052,9 +1052,9 @@ export class DistributedTracing {
 // performance-analyzer.ts
 export class PerformanceAnalyzer {
   private jaegerClient: JaegerClient;
-  
+
   async analyzeServicePerformance(
-    service: string, 
+    service: string,
     timeRange: TimeRange
   ): Promise<ServicePerformanceAnalysis> {
     // 1. 트레이스 데이터 수집
@@ -1064,16 +1064,16 @@ export class PerformanceAnalyzer {
       end: timeRange.end,
       limit: 1000
     });
-    
+
     // 2. 성능 메트릭 계산
     const metrics = this.calculatePerformanceMetrics(traces);
-    
+
     // 3. 병목 지점 분석
     const bottlenecks = await this.identifyBottlenecks(traces);
-    
+
     // 4. 최적화 기회 식별
     const optimizations = await this.identifyOptimizations(traces, metrics);
-    
+
     return {
       service,
       timeRange,
@@ -1083,15 +1083,15 @@ export class PerformanceAnalyzer {
       recommendations: await this.generateRecommendations(metrics, bottlenecks)
     };
   }
-  
+
   private calculatePerformanceMetrics(traces: Trace[]): PerformanceMetrics {
     const durations = traces.map(trace => trace.duration);
-    const errors = traces.filter(trace => 
-      trace.spans.some(span => span.tags.some(tag => 
+    const errors = traces.filter(trace =>
+      trace.spans.some(span => span.tags.some(tag =>
         tag.key === 'error' && tag.value === true
       ))
     );
-    
+
     return {
       totalRequests: traces.length,
       errorRate: errors.length / traces.length,
@@ -1103,10 +1103,10 @@ export class PerformanceAnalyzer {
       minDuration: Math.min(...durations)
     };
   }
-  
+
   private async identifyBottlenecks(traces: Trace[]): Promise<Bottleneck[]> {
     const spanDurations: Map<string, number[]> = new Map();
-    
+
     // 스팬별 실행 시간 수집
     for (const trace of traces) {
       for (const span of trace.spans) {
@@ -1117,14 +1117,14 @@ export class PerformanceAnalyzer {
         spanDurations.get(key)!.push(span.duration);
       }
     }
-    
+
     const bottlenecks: Bottleneck[] = [];
-    
+
     // 평균 실행 시간이 긴 스팬 식별
     for (const [operation, durations] of spanDurations) {
       const avgDuration = durations.reduce((sum, d) => sum + d, 0) / durations.length;
       const p95Duration = this.percentile(durations, 0.95);
-      
+
       if (avgDuration > 1000000) { // 1초 이상
         bottlenecks.push({
           operation,
@@ -1135,7 +1135,7 @@ export class PerformanceAnalyzer {
         });
       }
     }
-    
+
     return bottlenecks.sort((a, b) => b.avgDuration - a.avgDuration);
   }
 }
@@ -1150,7 +1150,7 @@ export class SmartAlertingSystem {
   private alertManager: AlertManager;
   private mlPredictor: MLPredictor;
   private escalationManager: EscalationManager;
-  
+
   async setupSmartAlerts(): Promise<void> {
     const alertRules: SmartAlertRule[] = [
       {
@@ -1181,31 +1181,31 @@ export class SmartAlertingSystem {
         action: 'executive_notification'
       }
     ];
-    
+
     for (const rule of alertRules) {
       await this.createSmartAlert(rule);
     }
   }
-  
+
   async evaluateAlert(alert: Alert): Promise<AlertEvaluation> {
     // 1. 컨텍스트 수집
     const context = await this.gatherAlertContext(alert);
-    
+
     // 2. 중복 제거
     const isDuplicate = await this.checkDuplicate(alert, context);
     if (isDuplicate) {
       return { action: 'suppress', reason: 'duplicate' };
     }
-    
+
     // 3. 비즈니스 영향 평가
     const businessImpact = await this.assessBusinessImpact(alert, context);
-    
+
     // 4. 우선순위 계산
     const priority = this.calculatePriority(alert, businessImpact, context);
-    
+
     // 5. 에스컬레이션 경로 결정
     const escalationPath = await this.determineEscalationPath(priority, alert.service);
-    
+
     return {
       action: 'notify',
       priority,
@@ -1214,13 +1214,13 @@ export class SmartAlertingSystem {
       context
     };
   }
-  
+
   private async gatherAlertContext(alert: Alert): Promise<AlertContext> {
     const timeRange = {
       start: new Date(Date.now() - 30 * 60 * 1000), // 30분 전
       end: new Date()
     };
-    
+
     return {
       recentAlerts: await this.getRecentAlerts(alert.service, timeRange),
       systemMetrics: await this.getSystemMetrics(alert.service, timeRange),
@@ -1229,35 +1229,35 @@ export class SmartAlertingSystem {
       dependencies: await this.getDependencyStatus(alert.service)
     };
   }
-  
+
   private calculatePriority(
-    alert: Alert, 
-    businessImpact: BusinessImpact, 
+    alert: Alert,
+    businessImpact: BusinessImpact,
     context: AlertContext
   ): AlertPriority {
     let score = 0;
-    
+
     // 기본 알림 심각도
     const severityScores = { critical: 100, high: 70, medium: 40, low: 20 };
     score += severityScores[alert.severity];
-    
+
     // 비즈니스 영향
     score += businessImpact.revenueImpact * 10;
     score += businessImpact.userImpact * 5;
-    
+
     // 시스템 영향
     if (context.dependencies.some(dep => dep.status === 'down')) {
       score += 50; // 의존성 장애
     }
-    
+
     // 최근 알림 빈도
     if (context.recentAlerts.length > 5) {
       score += 30; // 알림 폭증
     }
-    
+
     // 사용자 신고
     score += context.userReports.length * 20;
-    
+
     if (score >= 150) return 'critical';
     if (score >= 100) return 'high';
     if (score >= 60) return 'medium';
@@ -1272,18 +1272,18 @@ export class SmartAlertingSystem {
 export class IncidentAutomation {
   private runbookEngine: RunbookEngine;
   private recoveryOrchestrator: RecoveryOrchestrator;
-  
+
   async handleIncident(incident: Incident): Promise<IncidentResponse> {
     // 1. 인시던트 분류
     const classification = await this.classifyIncident(incident);
-    
+
     // 2. 자동 대응 가능성 평가
     const automationLevel = await this.assessAutomationLevel(classification);
-    
+
     // 3. 런북 실행
     if (automationLevel >= AutomationLevel.PARTIAL) {
       const runbookResult = await this.executeRunbook(classification.runbook, incident);
-      
+
       if (runbookResult.success && automationLevel === AutomationLevel.FULL) {
         return {
           status: 'resolved',
@@ -1292,22 +1292,22 @@ export class IncidentAutomation {
         };
       }
     }
-    
+
     // 4. 수동 개입 필요시 에스컬레이션
     return await this.escalateToHuman(incident, classification);
   }
-  
+
   private async executeRunbook(
-    runbook: Runbook, 
+    runbook: Runbook,
     incident: Incident
   ): Promise<RunbookResult> {
     const executedActions: RunbookAction[] = [];
-    
+
     for (const step of runbook.steps) {
       try {
         const action = await this.executeRunbookStep(step, incident);
         executedActions.push(action);
-        
+
         // 각 단계 후 상황 재평가
         const reevaluation = await this.reevaluateIncident(incident);
         if (reevaluation.status === 'resolved') {
@@ -1327,7 +1327,7 @@ export class IncidentAutomation {
         };
       }
     }
-    
+
     return {
       success: false,
       actions: executedActions,
@@ -1335,47 +1335,47 @@ export class IncidentAutomation {
       duration: Date.now() - incident.startTime
     };
   }
-  
+
   private async executeRunbookStep(
-    step: RunbookStep, 
+    step: RunbookStep,
     incident: Incident
   ): Promise<RunbookAction> {
     switch (step.type) {
       case 'restart_service':
         return await this.restartService(step.target, incident);
-      
+
       case 'scale_service':
         return await this.scaleService(step.target, step.parameters);
-      
+
       case 'clear_cache':
         return await this.clearCache(step.target);
-      
+
       case 'failover':
         return await this.performFailover(step.target, step.parameters);
-      
+
       case 'run_script':
         return await this.runScript(step.script, step.parameters);
-      
+
       default:
         throw new Error(`Unknown runbook step type: ${step.type}`);
     }
   }
-  
+
   private async restartService(
-    service: string, 
+    service: string,
     incident: Incident
   ): Promise<RunbookAction> {
     const k8sApi = new KubernetesAPI();
-    
+
     // 1. 현재 상태 확인
     const deployment = await k8sApi.getDeployment(service);
-    
+
     // 2. 롤링 재시작 수행
     await k8sApi.restartDeployment(service);
-    
+
     // 3. 재시작 완료 대기
     await k8sApi.waitForDeploymentReady(service, 300000); // 5분 타임아웃
-    
+
     return {
       type: 'restart_service',
       target: service,

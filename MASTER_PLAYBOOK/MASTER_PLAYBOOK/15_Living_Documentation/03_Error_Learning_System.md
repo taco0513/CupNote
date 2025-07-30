@@ -14,12 +14,12 @@ class ErrorLearningSystem {
   private errorRepository: ErrorRepository;
   private analyzer: ErrorAnalyzer;
   private learningEngine: LearningEngine;
-  
+
   constructor() {
     this.setupGlobalErrorHandlers();
     this.setupFrameworkInterceptors();
   }
-  
+
   private setupGlobalErrorHandlers() {
     // Node.js 전역 에러 핸들러
     process.on('uncaughtException', (error) => {
@@ -29,7 +29,7 @@ class ErrorLearningSystem {
         context: this.getCurrentContext()
       });
     });
-    
+
     process.on('unhandledRejection', (reason, promise) => {
       this.captureError(new Error(String(reason)), {
         type: 'unhandled_rejection',
@@ -38,7 +38,7 @@ class ErrorLearningSystem {
       });
     });
   }
-  
+
   async captureError(
     error: Error,
     metadata: ErrorMetadata
@@ -57,11 +57,11 @@ class ErrorLearningSystem {
       context: await this.captureErrorContext(error),
       similar: await this.findSimilarErrors(error)
     };
-    
+
     // 저장 및 분석
     await this.errorRepository.save(capturedError);
     await this.analyzer.analyze(capturedError);
-    
+
     return capturedError;
   }
 }
@@ -91,7 +91,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     query: req.query,
     severity: err.name === 'ValidationError' ? 'low' : 'medium'
   });
-  
+
   res.status(500).json({ error: 'Internal Server Error' });
 });
 
@@ -122,19 +122,19 @@ class ErrorPatternAnalyzer {
       temporal: await this.analyzeTemporalPatterns(errors),
       causal: await this.analyzeCausalChains(errors)
     };
-    
+
     return {
       patterns,
       insights: this.generateInsights(patterns),
       recommendations: this.generateRecommendations(patterns)
     };
   }
-  
+
   private async findRecurringErrors(
     errors: CapturedError[]
   ): Promise<RecurringPattern[]> {
     const errorGroups = this.groupBySimilarity(errors);
-    
+
     return errorGroups
       .filter(group => group.length > 2)
       .map(group => ({
@@ -146,16 +146,16 @@ class ErrorPatternAnalyzer {
         suggestedFix: this.suggestFix(group)
       }));
   }
-  
+
   private async clusterSimilarErrors(
     errors: CapturedError[]
   ): Promise<ErrorCluster[]> {
     // 에러 메시지 벡터화
     const vectors = await this.vectorizeErrors(errors);
-    
+
     // K-means 클러스터링
     const clusters = this.performClustering(vectors);
-    
+
     return clusters.map(cluster => ({
       id: cluster.id,
       size: cluster.members.length,
@@ -178,22 +178,22 @@ class RootCauseAnalyzer {
   ): Promise<RootCauseAnalysis> {
     // 1. 스택 트레이스 분석
     const stackAnalysis = this.analyzeStackTrace(error.error.stack);
-    
+
     // 2. 코드 변경 이력 분석
     const changeHistory = await this.analyzeCodeChanges(
       stackAnalysis.files
     );
-    
+
     // 3. 의존성 분석
     const dependencies = await this.analyzeDependencies(
       stackAnalysis.files
     );
-    
+
     // 4. 환경 변화 분석
     const environmentChanges = await this.analyzeEnvironmentChanges(
       error.timestamp
     );
-    
+
     // 5. 인과 관계 추론
     const causalChain = this.inferCausalChain({
       stackAnalysis,
@@ -201,7 +201,7 @@ class RootCauseAnalyzer {
       dependencies,
       environmentChanges
     });
-    
+
     return {
       primaryCause: causalChain[0],
       contributingFactors: causalChain.slice(1),
@@ -242,28 +242,28 @@ class SolutionRepository {
       validation: await this.validateSolution(solution),
       relatedSolutions: await this.findRelatedSolutions(solution)
     };
-    
+
     await this.save(storedSolution);
     await this.indexForSearch(storedSolution);
-    
+
     return storedSolution;
   }
-  
+
   async findSolutionsForError(
     error: CapturedError
   ): Promise<SuggestedSolution[]> {
     // 1. 정확히 일치하는 에러 찾기
     const exactMatches = await this.findExactMatches(error);
-    
+
     // 2. 유사한 에러의 해결책 찾기
     const similarMatches = await this.findSimilarMatches(error);
-    
+
     // 3. 패턴 기반 매칭
     const patternMatches = await this.findPatternMatches(error);
-    
+
     // 4. 결과 랭킹 및 필터링
     const allMatches = [...exactMatches, ...similarMatches, ...patternMatches];
-    
+
     return this.rankAndFilter(allMatches, error);
   }
 }
@@ -288,21 +288,21 @@ class SolutionEffectivenessTracker {
         userFeedback: result.userFeedback
       }
     };
-    
+
     // 효과성 점수 업데이트
     await this.updateEffectivenessScore(solutionId, tracking);
-    
+
     // 부작용 기록
     if (result.sideEffects.length > 0) {
       await this.recordSideEffects(solutionId, result.sideEffects);
     }
-    
+
     // 개선 제안 생성
     if (!result.success || result.timeToResolve > 300000) { // 5분 이상
       await this.generateImprovementSuggestions(solutionId, tracking);
     }
   }
-  
+
   private async updateEffectivenessScore(
     solutionId: string,
     tracking: any
@@ -310,11 +310,11 @@ class SolutionEffectivenessTracker {
     const solution = await this.getSolution(solutionId);
     const currentScore = solution.metadata.effectiveness;
     const usageCount = solution.metadata.usageCount;
-    
+
     // 가중 평균으로 점수 업데이트
     const newScore = tracking.result.success ? 1 : 0;
     const updatedScore = (currentScore * usageCount + newScore) / (usageCount + 1);
-    
+
     await this.updateSolution(solutionId, {
       'metadata.effectiveness': updatedScore,
       'metadata.usageCount': usageCount + 1
@@ -336,27 +336,27 @@ class ErrorLearningEngine {
   ): Promise<LearningOutcome> {
     // 1. 패턴 추출
     const patterns = await this.extractPatterns(errors);
-    
+
     // 2. 효과적인 해결책 식별
     const effectiveSolutions = solutions
       .filter(s => s.metadata.effectiveness > 0.7)
       .sort((a, b) => b.metadata.effectiveness - a.metadata.effectiveness);
-    
+
     // 3. 규칙 생성
     const rules = await this.generateRules(patterns, effectiveSolutions);
-    
+
     // 4. 예방 전략 수립
     const preventionStrategies = await this.createPreventionStrategies(
       patterns,
       effectiveSolutions
     );
-    
+
     // 5. 코드 개선 제안
     const codeImprovements = await this.suggestCodeImprovements(
       patterns,
       errors
     );
-    
+
     return {
       patterns,
       rules,
@@ -365,7 +365,7 @@ class ErrorLearningEngine {
       confidence: this.calculateLearningConfidence(errors.length)
     };
   }
-  
+
   private async generateRules(
     patterns: ErrorPattern[],
     solutions: StoredSolution[]
@@ -391,32 +391,32 @@ class PreventiveMeasureManager {
     learningOutcome: LearningOutcome
   ): Promise<ImplementationResult> {
     const measures = [];
-    
+
     // 1. 코드 리뷰 체크리스트 업데이트
     measures.push(
       await this.updateCodeReviewChecklist(learningOutcome.patterns)
     );
-    
+
     // 2. 린트 규칙 추가
     measures.push(
       await this.addLintRules(learningOutcome.rules)
     );
-    
+
     // 3. 테스트 케이스 생성
     measures.push(
       await this.generateTestCases(learningOutcome.patterns)
     );
-    
+
     // 4. 모니터링 알림 설정
     measures.push(
       await this.setupMonitoringAlerts(learningOutcome.patterns)
     );
-    
+
     // 5. 문서화 업데이트
     measures.push(
       await this.updateDocumentation(learningOutcome)
     );
-    
+
     return {
       implementedMeasures: measures,
       coverage: this.calculateCoverage(measures, learningOutcome.patterns),
@@ -436,11 +436,11 @@ class ErrorReportGenerator {
   async generateWeeklyReport(): Promise<ErrorReport> {
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
-    
+
     const errors = await this.getErrorsSince(weekAgo);
     const solutions = await this.getSolutionsSince(weekAgo);
     const patterns = await this.analyzer.analyzePatterns(errors);
-    
+
     return {
       summary: {
         totalErrors: errors.length,
@@ -448,19 +448,19 @@ class ErrorReportGenerator {
         resolvedErrors: this.countResolvedErrors(errors),
         averageResolutionTime: this.calculateAverageResolutionTime(errors)
       },
-      
+
       topErrors: this.getTopErrors(errors, 5),
-      
+
       patterns: patterns.recurring.slice(0, 3),
-      
+
       effectiveSolutions: solutions
         .filter(s => s.metadata.effectiveness > 0.8)
         .slice(0, 5),
-      
+
       learnings: await this.extractWeeklyLearnings(errors, solutions),
-      
+
       actionItems: await this.generateActionItems(patterns),
-      
+
       trends: this.analyzeTrends(errors)
     };
   }

@@ -35,16 +35,16 @@ interface PairProgrammingSession {
 class AIPartnerSession {
   private context: SessionContext;
   private preferences: DeveloperPreferences;
-  
+
   constructor(context: SessionContext) {
     this.context = context;
     this.preferences = this.loadDeveloperPreferences();
   }
-  
+
   async startSession(goal: string): Promise<SessionPlan> {
     const plan = await this.generateSessionPlan(goal);
     const aiPrompt = this.createContextualPrompt(goal, plan);
-    
+
     return {
       objective: goal,
       approach: plan.approach,
@@ -53,31 +53,31 @@ class AIPartnerSession {
       aiPrompt: aiPrompt
     };
   }
-  
+
   private createContextualPrompt(goal: string, plan: SessionPlan): string {
     return `
     # AI 페어 프로그래밍 세션 시작
-    
+
     ## 목표
     ${goal}
-    
+
     ## 현재 컨텍스트
     - 프로젝트: ${this.context.projectName}
     - 기술 스택: ${this.context.techStack.join(', ')}
     - 진행 상황: ${this.context.currentPhase}
-    
+
     ## 개발자 선호사항
     - 코딩 스타일: ${this.preferences.codingStyle}
     - 테스팅 전략: ${this.preferences.testingStrategy}
     - 문서화 수준: ${this.preferences.documentationLevel}
-    
+
     ## 요청 사항
     다음 역할로 협업해주세요:
     - 코드 구현 및 최적화
     - 모범 사례 제안
     - 실시간 피드백 제공
     - 테스트 케이스 생성
-    
+
     구체적인 작업: ${plan.nextSteps.join(', ')}
     `;
   }
@@ -92,24 +92,24 @@ class LiveCodingSession {
   private codeBuffer: string = "";
   private aiSuggestions: Suggestion[] = [];
   private contextWindow: number = 50; // 라인 수
-  
+
   // 증분적 코드 개발
   async developIncremental(requirement: string): Promise<CodeDevelopment> {
     // 1단계: 요구사항 분석
     const analysis = await this.analyzeRequirement(requirement);
-    
+
     // 2단계: 아키텍처 스케치
     const architecture = await this.sketchArchitecture(analysis);
-    
+
     // 3단계: 핵심 로직 구현
     const coreLogic = await this.implementCore(architecture);
-    
+
     // 4단계: 점진적 확장
     const expandedCode = await this.expandIteratively(coreLogic);
-    
+
     // 5단계: 최적화 및 리팩토링
     const optimizedCode = await this.optimizeCode(expandedCode);
-    
+
     return {
       analysis,
       architecture,
@@ -118,31 +118,31 @@ class LiveCodingSession {
       documentation: await this.generateDocs(optimizedCode)
     };
   }
-  
+
   // 실시간 제안 시스템
   async provideLiveSuggestions(context: CodeContext): Promise<Suggestion[]> {
     const suggestions: Suggestion[] = [];
-    
+
     // 구문 완성 제안
     if (context.isIncomplete) {
       suggestions.push(await this.suggestCompletion(context));
     }
-    
+
     // 최적화 제안
     if (context.hasPerformanceIssues) {
       suggestions.push(await this.suggestOptimization(context));
     }
-    
+
     // 보안 개선 제안
     if (context.hasSecurityRisks) {
       suggestions.push(await this.suggestSecurityFix(context));
     }
-    
+
     // 테스트 케이스 제안
     if (context.needsTests) {
       suggestions.push(await this.suggestTestCases(context));
     }
-    
+
     return suggestions.sort((a, b) => b.priority - a.priority);
   }
 }
@@ -162,30 +162,30 @@ const exampleCommands = `
 class RealTimeCodeReview {
   private reviewRules: ReviewRule[] = [];
   private qualityMetrics: QualityMetrics;
-  
+
   async reviewCode(code: string, context: ReviewContext): Promise<ReviewResult> {
     const issues: Issue[] = [];
     const suggestions: Suggestion[] = [];
-    
+
     // 1. 정적 분석
     const staticAnalysis = await this.performStaticAnalysis(code);
     issues.push(...staticAnalysis.issues);
-    
+
     // 2. 패턴 검증
     const patternAnalysis = await this.checkPatterns(code, context);
     suggestions.push(...patternAnalysis.suggestions);
-    
+
     // 3. 성능 분석
     const performanceAnalysis = await this.analyzePerformance(code);
     issues.push(...performanceAnalysis.bottlenecks);
-    
+
     // 4. 보안 검증
     const securityAnalysis = await this.checkSecurity(code);
     issues.push(...securityAnalysis.vulnerabilities);
-    
+
     // 5. 테스트 커버리지 확인
     const testCoverage = await this.checkTestCoverage(code, context);
-    
+
     return {
       overallScore: this.calculateQualityScore(issues, suggestions),
       issues: this.prioritizeIssues(issues),
@@ -194,11 +194,11 @@ class RealTimeCodeReview {
       nextSteps: this.generateNextSteps(issues, suggestions)
     };
   }
-  
+
   // 개선 제안 생성
   async generateImprovements(code: string): Promise<ImprovementPlan> {
     const improvements: Improvement[] = [];
-    
+
     // 코드 구조 개선
     improvements.push({
       type: "structure",
@@ -207,7 +207,7 @@ class RealTimeCodeReview {
       effort: "medium",
       code: await this.refactorStructure(code)
     });
-    
+
     // 성능 최적화
     improvements.push({
       type: "performance",
@@ -216,7 +216,7 @@ class RealTimeCodeReview {
       effort: "low",
       code: await this.optimizeAlgorithms(code)
     });
-    
+
     // 가독성 향상
     improvements.push({
       type: "readability",
@@ -225,9 +225,9 @@ class RealTimeCodeReview {
       effort: "low",
       code: await this.improveReadability(code)
     });
-    
+
     return {
-      improvements: improvements.sort((a, b) => 
+      improvements: improvements.sort((a, b) =>
         this.calculatePriority(b) - this.calculatePriority(a)
       ),
       timeline: this.estimateTimeline(improvements),
@@ -247,13 +247,13 @@ class AITDDWorkflow {
   async redGreenRefactor(requirement: string): Promise<TDDCycle> {
     // RED: 실패하는 테스트 작성
     const failingTest = await this.writeFailingTest(requirement);
-    
+
     // GREEN: 테스트를 통과하는 최소 코드 작성
     const minimalCode = await this.writeMinimalCode(failingTest);
-    
+
     // REFACTOR: 코드 개선
     const refactoredCode = await this.refactorCode(minimalCode);
-    
+
     return {
       test: failingTest,
       implementation: refactoredCode,
@@ -261,10 +261,10 @@ class AITDDWorkflow {
       nextIteration: await this.planNextIteration(requirement)
     };
   }
-  
+
   async writeFailingTest(requirement: string): Promise<TestCase> {
     const testStructure = await this.analyzeRequirement(requirement);
-    
+
     return {
       description: testStructure.description,
       setup: testStructure.setup,
@@ -275,10 +275,10 @@ describe('${testStructure.description}', () => {
   it('${testStructure.behavior}', async () => {
     // Arrange
     ${testStructure.setup}
-    
+
     // Act
     ${testStructure.action}
-    
+
     // Assert
     ${testStructure.assertion}
   });
@@ -304,19 +304,19 @@ class PairDebugging {
   async debugCollaboratively(issue: Issue): Promise<DebugResult> {
     // 1. 문제 재현
     const reproduction = await this.reproduceIssue(issue);
-    
+
     // 2. 가설 생성 (AI + Human)
     const hypotheses = await this.generateHypotheses(issue, reproduction);
-    
+
     // 3. 체계적 검증
     const validatedHypotheses = await this.validateHypotheses(hypotheses);
-    
+
     // 4. 근본 원인 식별
     const rootCause = await this.identifyRootCause(validatedHypotheses);
-    
+
     // 5. 해결책 구현
     const solution = await this.implementSolution(rootCause);
-    
+
     return {
       issue,
       rootCause,
@@ -325,14 +325,14 @@ class PairDebugging {
       learnings: await this.extractLearnings(issue, solution)
     };
   }
-  
+
   // 인터랙티브 디버깅 세션
   async startInteractiveDebugging(
-    stackTrace: string, 
+    stackTrace: string,
     context: DebugContext
   ): Promise<DebugSession> {
     const session = new DebugSession();
-    
+
     // 초기 분석
     session.addStep({
       type: 'analysis',
@@ -340,24 +340,24 @@ class PairDebugging {
       result: await this.analyzeStackTrace(stackTrace),
       humanInput: '개발자가 추가할 컨텍스트나 관찰 사항'
     });
-    
+
     // 가설 검증 루프
     while (!session.isResolved()) {
       const hypothesis = await this.generateNextHypothesis(session);
       const verification = await this.verifyHypothesis(hypothesis, context);
-      
+
       session.addStep({
         type: 'hypothesis',
         description: hypothesis.description,
         result: verification,
         humanFeedback: '개발자의 피드백 및 추가 정보'
       });
-      
+
       if (verification.isConfirmed) {
         session.markResolved(verification.solution);
       }
     }
-    
+
     return session;
   }
 }
@@ -372,10 +372,10 @@ class CollaborativeCodeGeneration {
     specification: CodeSpecification,
     humanGuidance: HumanGuidance
   ): Promise<GeneratedCode> {
-    
+
     // 1. 요구사항 분석 및 설계
     const design = await this.createDesign(specification, humanGuidance);
-    
+
     // 2. 점진적 구현
     const implementation = await this.implementInSteps(design, {
       onStepComplete: async (step) => {
@@ -388,10 +388,10 @@ class CollaborativeCodeGeneration {
         return await this.requestHumanDecision(decision);
       }
     });
-    
+
     // 3. 검증 및 최적화
     const validated = await this.validateWithHuman(implementation);
-    
+
     return {
       specification,
       design,
@@ -401,37 +401,37 @@ class CollaborativeCodeGeneration {
       collaborationNotes: validated.humanInputs
     };
   }
-  
+
   // 실시간 코드 제안 시스템
   async provideLiveCodeSuggestions(
     currentCode: string,
     cursorPosition: number,
     intention: DeveloperIntention
   ): Promise<CodeSuggestion[]> {
-    
+
     const context = this.analyzeCodeContext(currentCode, cursorPosition);
     const suggestions: CodeSuggestion[] = [];
-    
+
     // 구문 완성
     if (context.needsCompletion) {
       suggestions.push(await this.suggestCompletion(context, intention));
     }
-    
+
     // 패턴 적용
     if (context.canApplyPattern) {
       suggestions.push(await this.suggestPattern(context, intention));
     }
-    
+
     // 리팩토링 기회
     if (context.hasRefactoringOpportunity) {
       suggestions.push(await this.suggestRefactoring(context));
     }
-    
+
     // 테스트 추가
     if (context.needsTests) {
       suggestions.push(await this.suggestTestAddition(context));
     }
-    
+
     return suggestions.filter(s => s.confidence > 0.7);
   }
 }
@@ -480,7 +480,7 @@ interface PairSession {
     };
     switchInterval: number; // 분 단위
   };
-  
+
   // 세션 진행
   phases: {
     warmup: {
@@ -508,7 +508,7 @@ interface PairSession {
       ];
     };
   };
-  
+
   // 성과 측정
   metrics: {
     codeQuality: QualityScore;
@@ -549,48 +549,48 @@ class AIInstructionPatterns {
     - 기술 스택: ${context.techStack.join(', ')}
     - 현재 단계: ${context.currentPhase}
     - 제약 사항: ${context.constraints.join(', ')}
-    
+
     요청 사항: ${task}
-    
+
     기대 결과:
     - 실행 가능한 코드
     - 테스트 케이스 포함
     - 간단한 설명 문서
-    
+
     고려사항:
     - 기존 코드 스타일 유지
     - 성능 최적화 고려
     - 보안 모범 사례 적용
     `;
   }
-  
+
   // 점진적 지시 패턴
   static incrementalInstruction(step: number, totalSteps: number, currentTask: string): string {
     return `
     단계 ${step}/${totalSteps}: ${currentTask}
-    
+
     이전 단계 결과를 바탕으로 다음을 수행해주세요:
     ${currentTask}
-    
+
     각 단계마다 확인할 점:
     - 이전 단계와의 일관성
     - 코드 품질 유지
     - 테스트 통과 여부
-    
+
     완료 후 다음 단계를 제안해주세요.
     `;
   }
-  
+
   // 피드백 요청 패턴
   static feedbackRequest(code: string, concerns: string[]): string {
     return `
     다음 코드에 대한 피드백을 요청합니다:
-    
+
     ${code}
-    
+
     특별히 검토해주실 부분:
     ${concerns.map(c => `- ${c}`).join('\n')}
-    
+
     피드백 형식:
     - 장점: 잘 구현된 부분
     - 개선점: 수정이 필요한 부분
@@ -611,10 +611,10 @@ class KnowledgeTransfer {
     targetSkill: SkillLevel,
     timeframe: number
   ): Promise<LearningPath> {
-    
+
     const gap = this.analyzeSkillGap(currentSkill, targetSkill);
     const milestones = this.createMilestones(gap, timeframe);
-    
+
     return {
       overview: {
         currentLevel: currentSkill,
@@ -636,13 +636,13 @@ class KnowledgeTransfer {
       }
     };
   }
-  
+
   // 실시간 설명 시스템
   async explainAsWeCode(
     code: string,
     complexity: "beginner" | "intermediate" | "advanced"
   ): Promise<CodeExplanation> {
-    
+
     const explanation = {
       overview: this.explainOverallPurpose(code),
       lineByLine: await this.explainLineByLine(code, complexity),
@@ -650,7 +650,7 @@ class KnowledgeTransfer {
       alternatives: await this.suggestAlternatives(code),
       learningNotes: this.extractLearningPoints(code, complexity)
     };
-    
+
     return explanation;
   }
 }
@@ -676,21 +676,21 @@ interface PairProgrammingMetrics {
     bugFixRate: BugsFixedPerDay;
     velocityIncrease: PercentageIncrease;
   };
-  
+
   quality: {
     bugDensity: BugsPerThousandLines;
     codeComplexity: CyclomaticComplexity;
     testCoverage: CoveragePercentage;
     technicalDebt: DebtRatio;
   };
-  
+
   learning: {
     skillProgression: SkillGrowthRate;
     knowledgeRetention: RetentionRate;
     bestPracticesAdoption: AdoptionRate;
     mentorshipEffectiveness: EffectivenessScore;
   };
-  
+
   collaboration: {
     communicationClarity: ClarityScore;
     decisionMakingSpeed: DecisionTime;
@@ -711,7 +711,7 @@ class MetricsCollector {
       collaborationQuality: await this.evaluateCollaboration(session)
     };
   }
-  
+
   async generateInsights(metrics: SessionMetrics[]): Promise<Insights> {
     return {
       trends: this.identifyTrends(metrics),

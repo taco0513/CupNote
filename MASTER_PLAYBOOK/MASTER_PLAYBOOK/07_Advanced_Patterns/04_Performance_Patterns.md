@@ -13,17 +13,17 @@ performance_kpis:
     target: "< 3초"
     threshold: "5초"
     critical: "10초"
-  
+
   throughput:
     target: "> 100 req/min"
     threshold: "50 req/min"
     critical: "10 req/min"
-  
+
   resource_usage:
     cpu: "< 70%"
     memory: "< 80%"
     disk: "< 90%"
-  
+
   accuracy:
     target: "> 95%"
     threshold: "90%"
@@ -52,13 +52,13 @@ cache_layers:
     size: "100MB"
     ttl: "5분"
     hit_ratio: "90%"
-  
+
   L2_redis:
     type: "분산 캐시"
     size: "1GB"
     ttl: "1시간"
     hit_ratio: "80%"
-  
+
   L3_disk:
     type: "디스크 캐시"
     size: "10GB"
@@ -84,11 +84,11 @@ invalidation_strategies:
   time_based:
     method: "TTL 만료"
     use_case: "정적 데이터"
-  
+
   event_based:
     method: "변경 감지"
     use_case: "동적 데이터"
-  
+
   manual:
     method: "명시적 무효화"
     use_case: "크리티컬 업데이트"
@@ -114,11 +114,11 @@ loading_priority:
   critical:
     items: ["core-modules", "security"]
     load_time: "immediate"
-  
+
   important:
     items: ["user-interface", "business-logic"]
     load_time: "< 1s"
-  
+
   optional:
     items: ["analytics", "reporting"]
     load_time: "background"
@@ -133,12 +133,12 @@ parallelization_strategies:
     method: "데이터를 분할하여 병렬 처리"
     use_case: "대용량 데이터 분석"
     speedup: "4-8x"
-  
+
   task_parallel:
     method: "독립적 작업을 병렬 실행"
     use_case: "멀티모듈 빌드"
     speedup: "2-4x"
-  
+
   pipeline_parallel:
     method: "파이프라인 단계 병렬화"
     use_case: "연속 처리 워크플로우"
@@ -166,12 +166,12 @@ connection_pools:
     min_connections: 5
     max_connections: 50
     idle_timeout: "30m"
-    
+
   api_clients:
     min_connections: 2
     max_connections: 20
     idle_timeout: "10m"
-    
+
   mcp_servers:
     min_connections: 1
     max_connections: 10
@@ -196,12 +196,12 @@ compression_types:
     algorithm: "gzip"
     ratio: "3:1"
     cpu_cost: "low"
-  
+
   binary_compression:
     algorithm: "lz4"
     ratio: "2:1"
     cpu_cost: "very_low"
-  
+
   semantic_compression:
     algorithm: "ai_summarization"
     ratio: "10:1"
@@ -229,12 +229,12 @@ predictive_strategies:
     method: "사용 패턴 분석"
     accuracy: "85%"
     horizon: "1-7일"
-  
+
   load_prediction:
     method: "트래픽 예측"
     accuracy: "90%"
     horizon: "1-24시간"
-  
+
   failure_prediction:
     method: "이상 감지"
     accuracy: "95%"
@@ -262,12 +262,12 @@ performance_circuit_breaker:
     threshold: "5s"
     failure_count: 5
     timeout: "30s"
-  
+
   cpu_usage:
     threshold: "90%"
     duration: "10s"
     cooldown: "60s"
-  
+
   memory_usage:
     threshold: "95%"
     duration: "5s"
@@ -296,12 +296,12 @@ monitoring_dashboard:
     - "처리량"
     - "에러율"
     - "리소스 사용률"
-  
+
   trending_analysis:
     - "성능 트렌드"
     - "용량 예측"
     - "병목지점 식별"
-  
+
   alerting:
     - "임계치 초과"
     - "성능 저하"
@@ -327,17 +327,17 @@ load_test_scenarios:
     users: 10
     duration: "10m"
     ramp_up: "1m"
-  
+
   stress:
     users: 100
     duration: "30m"
     ramp_up: "5m"
-  
+
   spike:
     users: 500
     duration: "5m"
     ramp_up: "30s"
-  
+
   endurance:
     users: 50
     duration: "4h"
@@ -365,12 +365,12 @@ optimization_workflow:
     - "현재 성능 측정"
     - "병목지점 식별"
     - "개선 목표 설정"
-  
+
   phase_2_optimize:
     - "우선순위별 최적화"
     - "점진적 개선"
     - "지속적 측정"
-  
+
   phase_3_validate:
     - "성능 검증"
     - "회귀 테스트"
@@ -398,7 +398,7 @@ memory_optimization:
     - "메모리 풀링"
     - "객체 재사용"
     - "가비지 컬렉션 튜닝"
-  
+
   techniques:
     - "스트리밍 처리"
     - "청크 기반 처리"
@@ -412,7 +412,7 @@ network_optimization:
     - "데이터 압축"
     - "요청 배칭"
     - "캐싱 극대화"
-  
+
   techniques:
     - "CDN 활용"
     - "로컬 스토리지"
@@ -429,13 +429,13 @@ diagnosis_checklist:
     - "메모리 사용률"
     - "디스크 I/O"
     - "네트워크 대역폭"
-  
+
   application_level:
     - "응답 시간 분포"
     - "에러 발생률"
     - "처리량 변화"
     - "큐 대기 시간"
-  
+
   code_level:
     - "핫스팟 식별"
     - "메모리 누수"

@@ -91,7 +91,7 @@ export class ContainerOptimizer {
   async optimizeImage(dockerfile: string): Promise<OptimizationResult> {
     const analysis = await this.analyzeDockerfile(dockerfile);
     const recommendations: Recommendation[] = [];
-    
+
     // 베이스 이미지 최적화
     if (analysis.baseImage.includes('ubuntu') || analysis.baseImage.includes('centos')) {
       recommendations.push({
@@ -101,7 +101,7 @@ export class ContainerOptimizer {
         suggestion: 'node:18-alpine 사용'
       });
     }
-    
+
     // 레이어 최적화
     if (analysis.layers > 20) {
       recommendations.push({
@@ -111,7 +111,7 @@ export class ContainerOptimizer {
         suggestion: 'RUN 명령어를 결합하여 레이어 수 감소'
       });
     }
-    
+
     // 보안 최적화
     if (analysis.runAsRoot) {
       recommendations.push({
@@ -121,24 +121,24 @@ export class ContainerOptimizer {
         suggestion: 'non-root 사용자 생성 및 사용'
       });
     }
-    
+
     return {
       originalSize: analysis.estimatedSize,
       optimizedSize: this.calculateOptimizedSize(analysis, recommendations),
       recommendations
     };
   }
-  
+
   async generateOptimizedDockerfile(
-    original: string, 
+    original: string,
     recommendations: Recommendation[]
   ): Promise<string> {
     let optimized = original;
-    
+
     for (const rec of recommendations) {
       optimized = await this.applyRecommendation(optimized, rec);
     }
-    
+
     return optimized;
   }
 }
@@ -213,29 +213,29 @@ spec:
 export class ClusterAutoscaler {
   private k8sApi: k8s.CoreV1Api;
   private metricsApi: k8s.MetricsV1beta1Api;
-  
+
   async monitorAndScale(): Promise<void> {
     while (true) {
       const metrics = await this.getClusterMetrics();
       const decision = await this.makeScalingDecision(metrics);
-      
+
       if (decision.action !== 'none') {
         await this.executeScaling(decision);
       }
-      
+
       await new Promise(resolve => setTimeout(resolve, 30000)); // 30초 간격
     }
   }
-  
+
   private async getClusterMetrics(): Promise<ClusterMetrics> {
     const nodes = await this.k8sApi.listNode();
     const pods = await this.k8sApi.listPodForAllNamespaces();
-    
+
     let totalCpuRequest = 0;
     let totalMemoryRequest = 0;
     let totalCpuLimit = 0;
     let totalMemoryLimit = 0;
-    
+
     for (const pod of pods.body.items) {
       if (pod.spec?.containers) {
         for (const container of pod.spec.containers) {
@@ -251,24 +251,24 @@ export class ClusterAutoscaler {
         }
       }
     }
-    
+
     return {
       nodeCount: nodes.body.items.length,
       totalCpuRequest,
       totalMemoryRequest,
       totalCpuLimit,
       totalMemoryLimit,
-      pendingPods: pods.body.items.filter(pod => 
+      pendingPods: pods.body.items.filter(pod =>
         pod.status?.phase === 'Pending'
       ).length
     };
   }
-  
+
   private async makeScalingDecision(metrics: ClusterMetrics): Promise<ScalingDecision> {
     // 리소스 사용률 계산
     const cpuUtilization = metrics.totalCpuRequest / (metrics.nodeCount * 2); // 노드당 2 CPU 가정
     const memoryUtilization = metrics.totalMemoryRequest / (metrics.nodeCount * 8 * 1024 * 1024 * 1024); // 노드당 8GB 가정
-    
+
     // 스케일 아웃 조건
     if (cpuUtilization > 0.8 || memoryUtilization > 0.8 || metrics.pendingPods > 0) {
       return {
@@ -277,7 +277,7 @@ export class ClusterAutoscaler {
         reason: `CPU: ${cpuUtilization.toFixed(2)}, Memory: ${memoryUtilization.toFixed(2)}, Pending: ${metrics.pendingPods}`
       };
     }
-    
+
     // 스케일 인 조건
     if (cpuUtilization < 0.3 && memoryUtilization < 0.3 && metrics.nodeCount > 1) {
       return {
@@ -286,7 +286,7 @@ export class ClusterAutoscaler {
         reason: 'Low resource utilization'
       };
     }
-    
+
     return { action: 'none' };
   }
 }
@@ -376,20 +376,20 @@ export class IstioServiceMesh {
   async setupServiceMesh(namespace: string): Promise<void> {
     // 1. Istio 사이드카 주입 활성화
     await this.enableSidecarInjection(namespace);
-    
+
     // 2. 게이트웨이 설정
     await this.createGateway(namespace);
-    
+
     // 3. 가상 서비스 설정
     await this.createVirtualService(namespace);
-    
+
     // 4. 대상 규칙 설정
     await this.createDestinationRule(namespace);
-    
+
     // 5. 보안 정책 설정
     await this.createSecurityPolicies(namespace);
   }
-  
+
   private async createVirtualService(namespace: string): Promise<void> {
     const virtualService = {
       apiVersion: 'networking.istio.io/v1beta1',
@@ -424,7 +424,7 @@ export class IstioServiceMesh {
         }]
       }
     };
-    
+
     await this.k8sApi.createNamespacedCustomObject(
       'networking.istio.io',
       'v1beta1',
@@ -433,7 +433,7 @@ export class IstioServiceMesh {
       virtualService
     );
   }
-  
+
   private async createDestinationRule(namespace: string): Promise<void> {
     const destinationRule = {
       apiVersion: 'networking.istio.io/v1beta1',
@@ -470,7 +470,7 @@ export class IstioServiceMesh {
         }]
       }
     };
-    
+
     await this.k8sApi.createNamespacedCustomObject(
       'networking.istio.io',
       'v1beta1',
@@ -542,7 +542,7 @@ spec:
 export class ServiceMeshMonitor {
   private prometheusApi: PrometheusApi;
   private jaegerApi: JaegerApi;
-  
+
   async getServiceMetrics(service: string, timeRange: string): Promise<ServiceMetrics> {
     const queries = {
       requestRate: `rate(istio_requests_total{destination_service_name="${service}"}[${timeRange}])`,
@@ -551,20 +551,20 @@ export class ServiceMeshMonitor {
       p95Latency: `histogram_quantile(0.95, rate(istio_request_duration_milliseconds_bucket{destination_service_name="${service}"}[${timeRange}]))`,
       p50Latency: `histogram_quantile(0.50, rate(istio_request_duration_milliseconds_bucket{destination_service_name="${service}"}[${timeRange}]))`
     };
-    
+
     const results = await Promise.all(
       Object.entries(queries).map(async ([metric, query]) => {
         const result = await this.prometheusApi.query(query);
         return { metric, value: result.data.result[0]?.value[1] || 0 };
       })
     );
-    
+
     return results.reduce((acc, { metric, value }) => {
       acc[metric] = parseFloat(value);
       return acc;
     }, {} as ServiceMetrics);
   }
-  
+
   async getDistributedTraces(service: string, operation?: string): Promise<Trace[]> {
     const traces = await this.jaegerApi.getTraces({
       service,
@@ -572,7 +572,7 @@ export class ServiceMeshMonitor {
       limit: 100,
       lookback: '1h'
     });
-    
+
     return traces.map(trace => ({
       traceId: trace.traceID,
       spans: trace.spans.map(span => ({
@@ -683,10 +683,10 @@ export class StorageOptimizer {
   async optimizePersistentVolumes(): Promise<OptimizationResult> {
     const pvs = await this.k8sApi.listPersistentVolume();
     const recommendations: StorageRecommendation[] = [];
-    
+
     for (const pv of pvs.body.items) {
       const usage = await this.getPVUsage(pv.metadata.name);
-      
+
       // 사용률이 낮은 볼륨 감지
       if (usage.utilizationPercent < 20) {
         recommendations.push({
@@ -697,7 +697,7 @@ export class StorageOptimizer {
           potentialSavings: this.calculateSavings(pv.spec.capacity.storage, usage)
         });
       }
-      
+
       // 사용률이 높은 볼륨 감지
       if (usage.utilizationPercent > 80) {
         recommendations.push({
@@ -709,7 +709,7 @@ export class StorageOptimizer {
         });
       }
     }
-    
+
     return {
       totalPVs: pvs.body.items.length,
       recommendations,
@@ -718,7 +718,7 @@ export class StorageOptimizer {
         .reduce((sum, r) => sum + (r.potentialSavings || 0), 0)
     };
   }
-  
+
   async implementStorageClass(name: string, config: StorageClassConfig): Promise<void> {
     const storageClass = {
       apiVersion: 'storage.k8s.io/v1',
@@ -730,7 +730,7 @@ export class StorageOptimizer {
       allowVolumeExpansion: true,
       volumeBindingMode: 'WaitForFirstConsumer'
     };
-    
+
     await this.k8sApi.createStorageClass(storageClass);
   }
 }

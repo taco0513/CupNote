@@ -31,26 +31,26 @@ class AdaptiveLearningEngine {
   private profile: LearningProfile;
   private progressTracker: ProgressTracker;
   private contentLibrary: ContentLibrary;
-  
+
   constructor(profile: LearningProfile) {
     this.profile = profile;
     this.progressTracker = new ProgressTracker();
     this.contentLibrary = new ContentLibrary();
   }
-  
+
   async createLearningPath(goal: LearningGoal): Promise<LearningPath> {
     // 현재 스킬 레벨 평가
     const currentLevel = await this.assessCurrentLevel(goal.skill);
-    
+
     // 스킬 갭 분석
     const skillGap = this.analyzeSkillGap(currentLevel, goal.targetLevel);
-    
+
     // 개인화된 커리큘럼 생성
     const curriculum = await this.generateCurriculum(skillGap, this.profile);
-    
+
     // 학습 단계 생성
     const milestones = this.createMilestones(curriculum, goal.deadline);
-    
+
     return {
       goal,
       currentLevel,
@@ -62,32 +62,32 @@ class AdaptiveLearningEngine {
       assessments: this.generateAssessments(milestones)
     };
   }
-  
+
   // 실시간 학습 조정
   async adaptLearningPath(
     currentPath: LearningPath,
     progress: LearningProgress
   ): Promise<AdaptedLearningPath> {
-    
+
     const performance = this.analyzePerformance(progress);
-    
+
     // 학습 속도 조정
     if (performance.comprehensionRate < 0.7) {
       return await this.slowDownPace(currentPath, performance);
     } else if (performance.comprehensionRate > 0.9) {
       return await this.acceleratePace(currentPath, performance);
     }
-    
+
     // 학습 방식 조정
     if (performance.engagementLevel < 0.6) {
       return await this.adjustLearningStyle(currentPath, performance);
     }
-    
+
     // 추가 리소스 제안
     if (performance.hasStruggleAreas) {
       return await this.addSupplementaryResources(currentPath, performance.struggleAreas);
     }
-    
+
     return { ...currentPath, lastAdapted: new Date() };
   }
 }
@@ -103,18 +103,18 @@ class HandsOnProjectGenerator {
     level: SkillLevel,
     interests: string[]
   ): Promise<LearningProject> {
-    
+
     // 프로젝트 템플릿 선택
     const template = await this.selectProjectTemplate(skill, level, interests);
-    
+
     // 단계별 프로젝트 분해
     const phases = this.breakDownIntoPhases(template);
-    
+
     // 각 단계별 가이드 생성
     const phasesWithGuides = await Promise.all(
       phases.map(phase => this.generatePhaseGuide(phase, level))
     );
-    
+
     return {
       title: template.title,
       description: template.description,
@@ -126,7 +126,7 @@ class HandsOnProjectGenerator {
       extensions: await this.suggestExtensions(template, level)
     };
   }
-  
+
   // React 학습 프로젝트 예시
   private generateReactLearningProject(level: SkillLevel): LearningProject {
     const projects = {
@@ -216,7 +216,7 @@ interface Todo {
   priority: 'low' | 'medium' | 'high';
 }
 
-type TodoAction = 
+type TodoAction =
   | { type: 'ADD_TODO'; payload: { text: string; priority: Todo['priority'] } }
   | { type: 'TOGGLE_TODO'; payload: { id: string } }
   | { type: 'DELETE_TODO'; payload: { id: string } }
@@ -240,7 +240,7 @@ const todoReducer = (state: TodoState, action: TodoAction): TodoState => {
       return {
         ...state,
         todos: state.todos.map(todo =>
-          todo.id === action.payload.id 
+          todo.id === action.payload.id
             ? { ...todo, completed: !todo.completed }
             : todo
         )
@@ -259,7 +259,7 @@ const todoReducer = (state: TodoState, action: TodoAction): TodoState => {
         ]
       }
     };
-    
+
     return projects[level];
   }
 }
@@ -273,30 +273,30 @@ class AIMentor {
   private expertise: string[];
   private teachingStyle: TeachingStyle;
   private studentModel: StudentModel;
-  
+
   constructor(expertise: string[], teachingStyle: TeachingStyle) {
     this.expertise = expertise;
     this.teachingStyle = teachingStyle;
     this.studentModel = new StudentModel();
   }
-  
+
   async provideMentorship(
     question: string,
     context: LearningContext
   ): Promise<MentorshipResponse> {
-    
+
     // 질문 분석
     const questionAnalysis = await this.analyzeQuestion(question, context);
-    
+
     // 학생 수준에 맞는 설명 준비
     const explanation = await this.prepareExplanation(questionAnalysis, this.studentModel);
-    
+
     // 실습 예제 생성
     const examples = await this.generateExamples(questionAnalysis);
-    
+
     // 추가 학습 리소스 제안
     const resources = await this.suggestResources(questionAnalysis);
-    
+
     return {
       explanation,
       examples,
@@ -306,15 +306,15 @@ class AIMentor {
       assessmentQuiz: await this.generateQuiz(questionAnalysis)
     };
   }
-  
+
   // 소크라테스식 질문법
   async applySocraticMethod(
     studentAnswer: string,
     originalQuestion: string
   ): Promise<SocraticResponse> {
-    
+
     const answerAnalysis = await this.analyzeStudentAnswer(studentAnswer);
-    
+
     if (answerAnalysis.isCorrect) {
       return {
         feedback: "훌륭합니다! 정확히 이해하셨네요.",
@@ -322,13 +322,13 @@ class AIMentor {
         encouragement: "이제 이 개념을 더 복잡한 시나리오에 적용해볼까요?"
       };
     }
-    
+
     // 오답인 경우 유도 질문
     const guidingQuestions = await this.generateGuidingQuestions(
       answerAnalysis.misconceptions,
       originalQuestion
     );
-    
+
     return {
       feedback: "좋은 시도입니다. 함께 다시 생각해볼까요?",
       guidingQuestions,
@@ -336,15 +336,15 @@ class AIMentor {
       encouragement: "조금 더 깊이 생각해보시면 답을 찾으실 수 있을 거예요."
     };
   }
-  
+
   // 코드 리뷰 멘토링
   async provideCodeMentorship(
     code: string,
     learningObjective: string
   ): Promise<CodeMentorshipResponse> {
-    
+
     const codeAnalysis = await this.analyzeStudentCode(code);
-    
+
     return {
       strengths: this.identifyStrengths(codeAnalysis),
       improvementAreas: this.identifyImprovements(codeAnalysis),
@@ -368,25 +368,25 @@ class ConceptVisualizer {
     concept: string,
     complexity: ComplexityLevel
   ): Promise<VisualizationResult> {
-    
+
     const conceptData = await this.analyzeConcept(concept);
-    
+
     // 다양한 시각화 방법 생성
     const visualizations = {
       mindMap: await this.generateMindMap(conceptData),
       flowChart: await this.generateFlowChart(conceptData),
       diagram: await this.generateDiagram(conceptData),
-      timeline: conceptData.hasTemporalAspect 
+      timeline: conceptData.hasTemporalAspect
         ? await this.generateTimeline(conceptData)
         : null,
       comparison: conceptData.hasAlternatives
         ? await this.generateComparisonChart(conceptData)
         : null
     };
-    
+
     // 인터랙티브 요소 추가
     const interactiveElements = await this.addInteractiveElements(visualizations, complexity);
-    
+
     return {
       concept,
       visualizations,
@@ -395,7 +395,7 @@ class ConceptVisualizer {
       practiceActivities: await this.generatePracticeActivities(conceptData)
     };
   }
-  
+
   // React Virtual DOM 시각화 예시
   private async visualizeReactVirtualDOM(): Promise<VisualizationResult> {
     return {
@@ -436,10 +436,10 @@ class ConceptVisualizer {
           code: `
 function VirtualDOMDemo() {
   const [count, setCount] = useState(0);
-  
+
   // 이 상태 변경이 Virtual DOM 프로세스를 트리거합니다
   const increment = () => setCount(count + 1);
-  
+
   return (
     <div>
       <h1>Count: {count}</h1>
@@ -464,21 +464,21 @@ function VirtualDOMDemo() {
 class RealTimeFeedbackSystem {
   private learningAnalytics: LearningAnalytics;
   private feedbackEngine: FeedbackEngine;
-  
+
   async provideFeedback(
     learningActivity: LearningActivity,
     studentResponse: StudentResponse
   ): Promise<Feedback> {
-    
+
     // 실시간 성과 분석
     const performance = await this.analyzePerformance(studentResponse);
-    
+
     // 이해도 평가
     const comprehension = await this.assessComprehension(learningActivity, studentResponse);
-    
+
     // 개인화된 피드백 생성
     const feedback = await this.generatePersonalizedFeedback(performance, comprehension);
-    
+
     return {
       immediate: {
         correctness: performance.correctness,
@@ -497,19 +497,19 @@ class RealTimeFeedbackSystem {
       }
     };
   }
-  
+
   // 코딩 실습 실시간 피드백
   async provideCodeFeedback(
     code: string,
     exercise: CodingExercise
   ): Promise<CodeFeedback> {
-    
+
     // 실시간 코드 분석
     const analysis = await this.analyzeCodeInRealTime(code);
-    
+
     // 예상 의도 파악
     const intent = await this.inferStudentIntent(code, exercise);
-    
+
     // 단계별 피드백
     const feedback: CodeFeedback = {
       syntax: this.checkSyntax(code),
@@ -518,12 +518,12 @@ class RealTimeFeedbackSystem {
       performance: await this.analyzePerformance(code),
       suggestions: await this.generateSuggestions(analysis, intent)
     };
-    
+
     // 실시간 힌트 제공
     if (analysis.needsHelp) {
       feedback.hints = await this.generateContextualHints(analysis, exercise);
     }
-    
+
     return feedback;
   }
 }
@@ -547,10 +547,10 @@ class SkillMasterySystem {
     targetSkill: string,
     currentLevel: SkillLevel
   ): Promise<MasteryPath> {
-    
+
     const roadmap = await this.getSkillRoadmap(targetSkill);
     const startingPoint = this.findStartingPoint(roadmap, currentLevel);
-    
+
     const masterySteps = roadmap.levels.slice(startingPoint).map(level => ({
       level,
       objectives: this.getLevelObjectives(level),
@@ -559,7 +559,7 @@ class SkillMasterySystem {
       resources: this.getLevelResources(level),
       timeEstimate: this.estimateLevelTime(level, currentLevel)
     }));
-    
+
     return {
       skill: targetSkill,
       currentLevel,
@@ -570,7 +570,7 @@ class SkillMasterySystem {
       certificationPath: await this.suggestCertifications(targetSkill)
     };
   }
-  
+
   // TypeScript 마스터링 예시
   private createTypeScriptMasteryPath(): MasteryPath {
     return {
@@ -632,13 +632,13 @@ class SkillMasterySystem {
       ]
     };
   }
-  
+
   // 실습 프로젝트 가이드 생성
   async generateProjectGuide(
     project: LearningProject,
     studentLevel: SkillLevel
   ): Promise<ProjectGuide> {
-    
+
     return {
       overview: {
         title: project.name,
@@ -647,7 +647,7 @@ class SkillMasterySystem {
         difficulty: project.difficulty,
         prerequisites: project.prerequisites
       },
-      
+
       phases: await Promise.all(
         project.phases.map(async phase => ({
           name: phase.name,
@@ -659,13 +659,13 @@ class SkillMasterySystem {
           testing: await this.generateTestingGuide(phase)
         }))
       ),
-      
+
       resources: {
         documentation: await this.gatherDocumentation(project.skills),
         tutorials: await this.findRelevantTutorials(project.skills),
         community: await this.suggestCommunityResources(project.skills)
       },
-      
+
       assessment: {
         checkpoints: this.createCheckpoints(project.phases),
         finalEvaluation: await this.createFinalEvaluation(project),
@@ -686,7 +686,7 @@ class RealWorldProjectSimulator {
     role: "junior" | "mid" | "senior",
     domain: string
   ): Promise<ProjectSimulation> {
-    
+
     const simulation = {
       scenario: await this.generateScenario(projectType, role, domain),
       team: await this.generateTeamMembers(projectType, role),
@@ -695,10 +695,10 @@ class RealWorldProjectSimulator {
       timeline: this.generateTimeline(projectType),
       resources: this.generateResources(projectType)
     };
-    
+
     return simulation;
   }
-  
+
   // 스타트업 환경 시뮬레이션
   private generateStartupSimulation(): ProjectSimulation {
     return {
@@ -710,18 +710,18 @@ class RealWorldProjectSimulator {
         urgency: "high",
         constraints: ["제한된 예산", "빠른 출시", "스케일링 준비"]
       },
-      
+
       role: {
         title: "Full Stack Developer",
         responsibilities: [
           "사용자 인증 시스템 구현",
-          "AI 모델 통합 API 개발", 
+          "AI 모델 통합 API 개발",
           "프론트엔드 대시보드 구현",
           "데이터베이스 최적화"
         ],
         stakeholders: ["CTO", "Product Manager", "UX Designer", "DevOps Engineer"]
       },
-      
+
       challenges: [
         {
           type: "technical",
@@ -736,7 +736,7 @@ class RealWorldProjectSimulator {
           constraints: ["최소 기능으로 시작", "확장 가능한 구조", "사용자 피드백 수집"]
         }
       ],
-      
+
       learningObjectives: [
         "실제 비즈니스 압박 하에서의 개발 경험",
         "레거시 시스템과의 통합 경험",
@@ -745,29 +745,29 @@ class RealWorldProjectSimulator {
       ]
     };
   }
-  
+
   // 진행상황 추적 및 피드백
   async trackProgress(
     simulation: ProjectSimulation,
     studentActions: StudentAction[]
   ): Promise<ProgressReport> {
-    
+
     const evaluation = await this.evaluateActions(studentActions, simulation);
-    
+
     return {
       overallProgress: evaluation.completionPercentage,
       skillDemonstration: evaluation.skillsUsed,
       decisionQuality: evaluation.decisionAnalysis,
       collaboration: evaluation.collaborationScore,
       technicalExecution: evaluation.technicalScore,
-      
+
       feedback: {
         strengths: evaluation.identifiedStrengths,
         improvements: evaluation.improvementAreas,
         industryInsights: await this.generateIndustryInsights(evaluation),
         nextSteps: await this.suggestNextSteps(evaluation)
       },
-      
+
       realWorldComparison: await this.compareWithRealWorld(evaluation, simulation)
     };
   }
@@ -819,10 +819,10 @@ class LearningAnalytics {
     learner: Learner,
     timeframe: TimeFrame
   ): Promise<LearningAnalyticsReport> {
-    
+
     const activities = await this.getLearningActivities(learner.id, timeframe);
     const assessments = await this.getAssessmentResults(learner.id, timeframe);
-    
+
     return {
       summary: {
         totalStudyTime: this.calculateStudyTime(activities),
@@ -830,21 +830,21 @@ class LearningAnalytics {
         projectsCompleted: this.countCompletedProjects(activities),
         skillProgression: await this.analyzeSkillProgression(learner.id, timeframe)
       },
-      
+
       patterns: {
         learningPeakTimes: this.identifyPeakLearningTimes(activities),
         preferredContentTypes: this.analyzeContentPreferences(activities),
         struggleAreas: this.identifyStruggleAreas(assessments),
         strengths: this.identifyStrengths(assessments)
       },
-      
+
       predictions: {
         nextMilestone: await this.predictNextMilestone(learner),
         riskOfDropout: this.calculateDropoutRisk(activities),
         optimalLearningSchedule: await this.optimizeLearningSchedule(learner),
         careerReadiness: await this.assessCareerReadiness(learner)
       },
-      
+
       recommendations: {
         immediateActions: await this.generateImmediateRecommendations(learner),
         skillGapAnalysis: await this.analyzeSkillGaps(learner),
@@ -853,27 +853,27 @@ class LearningAnalytics {
       }
     };
   }
-  
+
   // 개인화된 학습 최적화
   async optimizeLearningExperience(
     analytics: LearningAnalyticsReport,
     learnerGoals: LearnerGoal[]
   ): Promise<OptimizationPlan> {
-    
+
     return {
       contentPersonalization: {
         recommendedFormats: this.recommendContentFormats(analytics.patterns),
         difficultyAdjustments: this.calculateDifficultyAdjustments(analytics),
         topicSequencing: await this.optimizeTopicSequence(analytics, learnerGoals)
       },
-      
+
       scheduleOptimization: {
         optimalSessionLength: this.calculateOptimalSessionLength(analytics),
         bestStudyTimes: this.identifyBestStudyTimes(analytics),
         breakIntervals: this.optimizeBreakIntervals(analytics),
         reviewSchedule: await this.createSpacedRepetitionSchedule(analytics)
       },
-      
+
       motivationBoosts: {
         achievementTriggers: this.identifyAchievementTriggers(analytics),
         challengeLevel: this.optimizeChallengeLevel(analytics),
@@ -894,9 +894,9 @@ class LearningImprovementSystem {
     currentPerformance: PerformanceMetrics,
     targetPerformance: TargetMetrics
   ): Promise<ImprovementPlan> {
-    
+
     const gaps = this.identifyPerformanceGaps(currentPerformance, targetPerformance);
-    
+
     return {
       prioritizedGaps: this.prioritizeGaps(gaps),
       interventions: await this.designInterventions(gaps),
@@ -906,7 +906,7 @@ class LearningImprovementSystem {
       adaptationStrategy: await this.createAdaptationStrategy(gaps)
     };
   }
-  
+
   // 메타 학습 (학습하는 방법 학습)
   async teachMetaLearning(learner: Learner): Promise<MetaLearningCurriculum> {
     return {
@@ -918,7 +918,7 @@ class LearningImprovementSystem {
           "학습 패턴 분석"
         ]
       },
-      
+
       strategicPlanning: {
         objectives: ["효과적인 학습 계획 수립", "목표 설정과 우선순위", "시간 관리"],
         activities: [
@@ -927,7 +927,7 @@ class LearningImprovementSystem {
           "시간 블록킹 기법"
         ]
       },
-      
+
       activeStrategies: {
         objectives: ["능동적 학습 기법", "기억 향상 전략", "이해 깊이 증진"],
         activities: [
@@ -936,7 +936,7 @@ class LearningImprovementSystem {
           "연상 기법과 기억 궁전"
         ]
       },
-      
+
       adaptiveThinking: {
         objectives: ["문제 해결 사고", "비판적 사고", "창의적 사고"],
         activities: [

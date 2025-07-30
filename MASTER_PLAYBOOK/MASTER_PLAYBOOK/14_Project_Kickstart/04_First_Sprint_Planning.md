@@ -16,29 +16,29 @@ class SprintPlanningManager {
     team: Team,
     duration: number = 14 // days
   ): Promise<SprintPlan> {
-    
+
     // 1. MVP 범위 정의
     const mvpScope = await this.defineMVPScope(project);
-    
+
     // 2. 사용자 스토리 작성
     const userStories = await this.createUserStories(mvpScope);
-    
+
     // 3. 태스크 분해
     const tasks = await this.breakdownIntoTasks(userStories);
-    
+
     // 4. 예상 시간 산정
     const estimatedTasks = await this.estimateTasks(tasks, team);
-    
+
     // 5. 스프린트 백로그 구성
     const sprintBacklog = await this.createSprintBacklog(
       estimatedTasks,
       team.velocity,
       duration
     );
-    
+
     // 6. 스프린트 목표 설정
     const sprintGoal = await this.defineSprintGoal(sprintBacklog);
-    
+
     return {
       goal: sprintGoal,
       backlog: sprintBacklog,
@@ -98,7 +98,7 @@ class MVPScopeDefiner {
         estimatedDays: 4
       }
     ];
-    
+
     // 사용자 플로우 정의
     const userFlows = [
       {
@@ -123,7 +123,7 @@ class MVPScopeDefiner {
         priority: 'Critical'
       }
     ];
-    
+
     // 성공 기준
     const successCriteria = [
       {
@@ -142,7 +142,7 @@ class MVPScopeDefiner {
         measurement: 'Lighthouse 측정'
       }
     ];
-    
+
     // 범위 외 항목
     const outOfScope = [
       '고급 분석 기능',
@@ -151,7 +151,7 @@ class MVPScopeDefiner {
       '다국어 지원',
       'API 공개'
     ];
-    
+
     return {
       coreFeatures,
       userFlows,
@@ -186,7 +186,7 @@ class UserStoryGenerator {
       dependencies: []
     };
   }
-  
+
   // 첫 스프린트 핵심 스토리
   getFirstSprintStories(): UserStory[] {
     return [
@@ -256,7 +256,7 @@ class AcceptanceCriteriaBuilder {
     userStory: UserStory,
     type: 'functional' | 'performance' | 'security'
   ): AcceptanceCriteria[] {
-    
+
     const criteriaTemplates = {
       functional: [
         {
@@ -295,7 +295,7 @@ class AcceptanceCriteriaBuilder {
         }
       ]
     };
-    
+
     return criteriaTemplates[type].map(template => ({
       ...template,
       testable: true,
@@ -316,31 +316,31 @@ class TaskBreakdownService {
     userStory: UserStory
   ): Promise<Task[]> {
     const tasks: Task[] = [];
-    
+
     // 프론트엔드 태스크
     if (this.requiresFrontend(userStory)) {
       tasks.push(...this.createFrontendTasks(userStory));
     }
-    
+
     // 백엔드 태스크
     if (this.requiresBackend(userStory)) {
       tasks.push(...this.createBackendTasks(userStory));
     }
-    
+
     // 데이터베이스 태스크
     if (this.requiresDatabase(userStory)) {
       tasks.push(...this.createDatabaseTasks(userStory));
     }
-    
+
     // 테스트 태스크
     tasks.push(...this.createTestTasks(userStory));
-    
+
     // 문서화 태스크
     tasks.push(...this.createDocumentationTasks(userStory));
-    
+
     return tasks;
   }
-  
+
   private createFrontendTasks(story: UserStory): Task[] {
     return [
       {
@@ -384,7 +384,7 @@ class TaskBreakdownService {
 // 플래닝 포커 예상
 class PlanningPokerEstimator {
   private readonly fibonacciSequence = [1, 2, 3, 5, 8, 13, 21];
-  
+
   async estimateTask(
     task: Task,
     team: TeamMember[]
@@ -393,11 +393,11 @@ class PlanningPokerEstimator {
     const estimates = await Promise.all(
       team.map(member => this.getMemberEstimate(member, task))
     );
-    
+
     // 평균과 표준편차 계산
     const average = this.calculateAverage(estimates);
     const stdDev = this.calculateStandardDeviation(estimates);
-    
+
     // 합의 필요 여부 판단
     if (stdDev > 5) {
       // 큰 차이가 있으면 토론 필요
@@ -408,10 +408,10 @@ class PlanningPokerEstimator {
         confidence: 'Low'
       };
     }
-    
+
     // 가장 가까운 피보나치 수로 반올림
     const finalEstimate = this.roundToFibonacci(average);
-    
+
     return {
       needsDiscussion: false,
       estimates,
@@ -419,15 +419,15 @@ class PlanningPokerEstimator {
       confidence: this.calculateConfidence(stdDev)
     };
   }
-  
+
   // 벨로시티 계산
   calculateTeamVelocity(
     completedSprints: Sprint[]
   ): VelocityMetrics {
-    const velocities = completedSprints.map(sprint => 
+    const velocities = completedSprints.map(sprint =>
       sprint.completedPoints
     );
-    
+
     return {
       average: this.calculateAverage(velocities),
       recent: velocities.slice(-3), // 최근 3개 스프린트
@@ -450,21 +450,21 @@ class SprintBacklogManager {
     velocity: number,
     sprintDuration: number
   ): Promise<SprintBacklog> {
-    
+
     // 우선순위 기반 정렬
     const prioritizedTasks = this.prioritizeTasks(estimatedTasks);
-    
+
     // 벨로시티에 맞춰 태스크 선택
     const selectedTasks: EstimatedTask[] = [];
     let totalPoints = 0;
-    
+
     for (const task of prioritizedTasks) {
       if (totalPoints + task.estimation <= velocity) {
         selectedTasks.push(task);
         totalPoints += task.estimation;
       }
     }
-    
+
     // 백로그 구성
     return {
       tasks: selectedTasks,
@@ -475,22 +475,22 @@ class SprintBacklogManager {
       risks: this.identifyRisks(selectedTasks)
     };
   }
-  
+
   // 우선순위 결정 알고리즘
   private prioritizeTasks(tasks: EstimatedTask[]): EstimatedTask[] {
     return tasks.sort((a, b) => {
       // 1. 비즈니스 가치
       const valueScore = b.businessValue - a.businessValue;
       if (valueScore !== 0) return valueScore;
-      
+
       // 2. 의존성
       const depScore = a.dependencies.length - b.dependencies.length;
       if (depScore !== 0) return depScore;
-      
+
       // 3. 리스크
       const riskScore = b.risk - a.risk;
       if (riskScore !== 0) return riskScore;
-      
+
       // 4. 크기 (작은 것 우선)
       return a.estimation - b.estimation;
     });
@@ -513,18 +513,18 @@ class BurndownChartGenerator {
       sprint.totalPoints,
       sprint.duration
     );
-    
+
     const actualLine = dailyProgress.map(day => ({
       date: day.date,
       remainingPoints: day.remainingPoints,
       completedPoints: sprint.totalPoints - day.remainingPoints
     }));
-    
+
     const forecast = this.forecastCompletion(
       actualLine,
       sprint.endDate
     );
-    
+
     return {
       ideal: idealLine,
       actual: actualLine,
@@ -552,7 +552,7 @@ class DailyScrumTemplate {
       blockers: '진행을 방해하는 요소가 있나요?'
     };
   }
-  
+
   async recordDailyScrum(
     team: TeamMember[],
     date: Date
@@ -560,11 +560,11 @@ class DailyScrumTemplate {
     const updates = await Promise.all(
       team.map(member => this.getMemberUpdate(member))
     );
-    
+
     const blockers = updates
       .filter(update => update.blockers.length > 0)
       .flatMap(update => update.blockers);
-    
+
     return {
       date,
       attendees: team,
@@ -587,7 +587,7 @@ class SprintRetrospective {
   async conductRetrospective(
     sprint: CompletedSprint
   ): Promise<RetrospectiveResults> {
-    
+
     // 정량적 분석
     const metrics = {
       plannedPoints: sprint.plannedPoints,
@@ -596,14 +596,14 @@ class SprintRetrospective {
       velocity: sprint.completedPoints / sprint.duration,
       qualityMetrics: await this.analyzeQuality(sprint)
     };
-    
+
     // 정성적 피드백
     const feedback = {
       whatWentWell: [],
       whatCouldBeImproved: [],
       actionItems: []
     };
-    
+
     // 개선 사항
     const improvements = [
       {
@@ -619,7 +619,7 @@ class SprintRetrospective {
         action: '일일 스크럼 참여율 향상'
       }
     ];
-    
+
     return {
       sprint: sprint.id,
       metrics,

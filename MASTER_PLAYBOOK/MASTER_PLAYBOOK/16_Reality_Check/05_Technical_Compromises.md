@@ -23,7 +23,7 @@ class TechStackDecisionMaker {
         timeline: "6-9개월",
         risk: "높음"
       },
-      
+
       // 현실적인 검증된 스택
       realisticStack: {
         frontend: "React + TypeScript + CSS Modules",
@@ -34,17 +34,17 @@ class TechStackDecisionMaker {
         timeline: "3-4개월",
         risk: "낮음"
       },
-      
+
       // 제약 조건별 추천
       constraints_based: this.evaluateConstraints(constraints)
     };
-    
+
     return this.selectBestOption(options, constraints);
   }
-  
+
   private evaluateConstraints(constraints: ProjectConstraints): StackOptions {
     const recommendations = [];
-    
+
     // 시간 제약이 큰 경우
     if (constraints.timeline < 3) {
       recommendations.push({
@@ -53,8 +53,8 @@ class TechStackDecisionMaker {
         tradeoffs: ["벤더 락인", "제한된 커스터마이징"]
       });
     }
-    
-    // 예산 제약이 큰 경우  
+
+    // 예산 제약이 큰 경우
     if (constraints.budget < 10000) {
       recommendations.push({
         stack: "Supabase + Next.js + shadcn/ui",
@@ -62,7 +62,7 @@ class TechStackDecisionMaker {
         tradeoffs: ["확장성 제한", "기능 제약"]
       });
     }
-    
+
     // 혼자 개발하는 경우
     if (constraints.teamSize === 1) {
       recommendations.push({
@@ -71,7 +71,7 @@ class TechStackDecisionMaker {
         tradeoffs: ["특정 패턴 강제", "유연성 감소"]
       });
     }
-    
+
     return recommendations;
   }
 }
@@ -91,7 +91,7 @@ class TechnicalDebtDecision {
         revenueImpact: feature.revenueImpact,
         competitiveAdvantage: feature.competitiveAdvantage
       },
-      
+
       // 기술적 요소
       technicalFactors: {
         complexity: this.assessComplexity(feature),
@@ -99,7 +99,7 @@ class TechnicalDebtDecision {
         maintainability: this.assessMaintainability(feature),
         testability: this.assessTestability(feature)
       },
-      
+
       // 프로젝트 상황
       projectContext: {
         timelineUrgency: context.timelineUrgency,
@@ -108,10 +108,10 @@ class TechnicalDebtDecision {
         userBase: context.currentUserBase
       }
     };
-    
+
     return this.calculateOptimalApproach(criteria);
   }
-  
+
   calculateOptimalApproach(criteria: DecisionCriteria): DebtDecision {
     // 허용 가능한 기술 부채
     const acceptableDebt = {
@@ -122,7 +122,7 @@ class TechnicalDebtDecision {
         "수동 배포 프로세스",
         "단순한 데이터 검증"
       ],
-      
+
       growthPhase: [
         "성능 최적화 지연",
         "완벽하지 않은 UI/UX",
@@ -130,7 +130,7 @@ class TechnicalDebtDecision {
         "기본적인 모니터링"
       ]
     };
-    
+
     // 절대 타협할 수 없는 영역
     const unacceptableDebt = [
       "보안 취약점",
@@ -139,7 +139,7 @@ class TechnicalDebtDecision {
       "확장성 근본적 제약",
       "복구 불가능한 설계"
     ];
-    
+
     return {
       recommendation: this.generateRecommendation(criteria),
       acceptableCompromises: acceptableDebt[criteria.projectContext.phase],
@@ -160,7 +160,7 @@ class PerformanceOptimizationPlanner {
   planOptimization(app: Application): OptimizationPlan {
     const currentMetrics = this.measureCurrentPerformance(app);
     const userExperience = this.assessUserExperience(currentMetrics);
-    
+
     return {
       // 즉시 필요한 최적화 (사용성 임계점)
       critical: {
@@ -175,12 +175,12 @@ class PerformanceOptimizationPlanner {
           {
             issue: "API 응답 > 3초",
             impact: "사용자 좌절감",
-            priority: "최우선", 
+            priority: "최우선",
             solution: "캐싱, 데이터베이스 최적화"
           }
         ]
       },
-      
+
       // 점진적 개선 (경쟁력)
       important: {
         threshold: "시장 경쟁력 확보",
@@ -199,7 +199,7 @@ class PerformanceOptimizationPlanner {
           }
         ]
       },
-      
+
       // 나중에 해도 되는 최적화
       nice_to_have: {
         threshold: "완벽주의적 개선",
@@ -212,7 +212,7 @@ class PerformanceOptimizationPlanner {
           }
         ]
       },
-      
+
       // 최적화 전략
       strategy: {
         measurement: "최적화 전 반드시 측정",
@@ -221,7 +221,7 @@ class PerformanceOptimizationPlanner {
       }
     };
   }
-  
+
   // 성능 vs 기능 트레이드오프
   evaluateTradeoffs(): TradeoffAnalysis {
     return {
@@ -262,7 +262,7 @@ class ScalabilityDecisionFramework {
         good_for: "MVP, 프로토타입, 소규모 팀",
         user_limit: "~10K 사용자"
       },
-      
+
       // 예상 성장 고려
       growth_ready: {
         approach: "모듈화된 모놀리식",
@@ -271,7 +271,7 @@ class ScalabilityDecisionFramework {
         good_for: "성장 기대하는 제품",
         user_limit: "~100K 사용자"
       },
-      
+
       // 대규모 확장 대비
       scale_first: {
         approach: "마이크로서비스",
@@ -281,25 +281,25 @@ class ScalabilityDecisionFramework {
         user_limit: "1M+ 사용자"
       }
     };
-    
+
     // 현실적 선택 가이드
     const decision_guide = {
       team_size_1: "current_focus",
-      team_size_2_5: "growth_ready", 
+      team_size_2_5: "growth_ready",
       team_size_6_plus: "scale_first",
-      
+
       budget_low: "current_focus",
       budget_medium: "growth_ready",
       budget_high: "scale_first",
-      
+
       timeline_urgent: "current_focus",
       timeline_normal: "growth_ready",
       timeline_flexible: "scale_first"
     };
-    
+
     return this.selectArchitecture(requirements, scenarios, decision_guide);
   }
-  
+
   // 확장성 함정 피하기
   avoidScalabilityTraps(): ScalabilityGuidelines {
     return {
@@ -311,7 +311,7 @@ class ScalabilityDecisionFramework {
         },
         {
           mistake: "모든 것을 캐시하기",
-          why_bad: "캐시 무효화 문제, 복잡도 증가", 
+          why_bad: "캐시 무효화 문제, 복잡도 증가",
           alternative: "병목점 측정 후 선택적 적용"
         },
         {
@@ -320,7 +320,7 @@ class ScalabilityDecisionFramework {
           alternative: "읽기 복제본 → 수직 확장 → 샤딩"
         }
       ],
-      
+
       pragmatic_approach: [
         "현재 문제에 집중",
         "실제 데이터 기반 결정",
@@ -354,7 +354,7 @@ class SecurityUsabilityBalancer {
         usability_cost: "높음",
         user_friction: "상당함"
       },
-      
+
       // 중간 보안
       medium_security: {
         examples: ["업무 도구", "커뮤니티", "콘텐츠 플랫폼"],
@@ -367,7 +367,7 @@ class SecurityUsabilityBalancer {
         usability_cost: "중간",
         user_friction: "적당함"
       },
-      
+
       // 기본 보안
       basic_security: {
         examples: ["뉴스레터", "블로그", "정보 사이트"],
@@ -380,10 +380,10 @@ class SecurityUsabilityBalancer {
         user_friction: "최소"
       }
     };
-    
+
     return this.createSecurityPlan(context, risk_levels);
   }
-  
+
   // 단계적 보안 구현
   createProgressiveSecurity(): ProgressiveSecurityPlan {
     return {
@@ -399,7 +399,7 @@ class SecurityUsabilityBalancer {
         effort: "낮음",
         user_impact: "없음"
       },
-      
+
       // Phase 2: 강화 보안 (성장기)
       phase2: {
         should_have: [
@@ -412,7 +412,7 @@ class SecurityUsabilityBalancer {
         effort: "중간",
         user_impact: "미미함"
       },
-      
+
       // Phase 3: 고급 보안 (확장기)
       phase3: {
         nice_to_have: [
@@ -455,7 +455,7 @@ class PrivacyFunctionalityBalancer {
           }
         ]
       },
-      
+
       // 사용자 제어권 제공
       user_control: {
         basic: [
@@ -469,7 +469,7 @@ class PrivacyFunctionalityBalancer {
           "자동 삭제 설정"
         ]
       },
-      
+
       // 비즈니스 임팩트 고려
       business_impact: {
         high_privacy: {
@@ -510,7 +510,7 @@ class InfrastructureCostOptimizer {
         ],
         good_for: "MVP, 검증 단계"
       },
-      
+
       // 합리적 비용 (성장 초기)
       reasonable_cost: {
         hosting: "VPS / Managed services",
@@ -526,7 +526,7 @@ class InfrastructureCostOptimizer {
         ],
         good_for: "초기 사용자 확보 단계"
       },
-      
+
       // 품질 우선 (성장 후기)
       quality_first: {
         hosting: "Auto-scaling cloud",
@@ -543,10 +543,10 @@ class InfrastructureCostOptimizer {
         good_for: "확장 단계, 수익 창출 후"
       }
     };
-    
+
     return this.selectOption(requirements, options);
   }
-  
+
   // 단계적 인프라 업그레이드
   createUpgradePath(): UpgradePath {
     return {
@@ -567,7 +567,7 @@ class InfrastructureCostOptimizer {
           cost_increase: "$200/월"
         }
       ],
-      
+
       cost_optimization: [
         "Reserved instances 활용",
         "사용량 기반 자동 스케일링",
@@ -598,7 +598,7 @@ class DevelopmentToolInvestment {
         ],
         impact: "기본 개발 가능"
       },
-      
+
       // 생산성 도구 (효율성 증대)
       productivity: {
         budget: "$100-300/월",
@@ -611,7 +611,7 @@ class DevelopmentToolInvestment {
         ],
         impact: "30-50% 생산성 향상"
       },
-      
+
       // 고급 도구 (품질/확장성)
       advanced: {
         budget: "$300-1000/월",
@@ -624,7 +624,7 @@ class DevelopmentToolInvestment {
         ],
         impact: "품질 향상, 확장 가능"
       },
-      
+
       // ROI 계산
       roi_analysis: {
         developer_time_saved: "월 20시간",
@@ -653,7 +653,7 @@ class DevelopmentToolInvestment {
 # 확장성 결정
 /decide-scalability --team-size --growth-plan
 
-# 보안 수준 결정  
+# 보안 수준 결정
 /balance-security-usability --risk-level --user-friction
 
 # 개인정보보호 계획

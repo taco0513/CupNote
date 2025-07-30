@@ -16,30 +16,30 @@
     "github.copilot",
     "github.copilot-chat",
     "continue.continue",
-    
+
     // 개발 효율성
     "bradlc.vscode-tailwindcss",
     "esbenp.prettier-vscode",
     "ms-vscode.vscode-typescript-next",
     "formulahendry.auto-rename-tag",
     "christian-kohler.path-intellisense",
-    
+
     // Git 통합
     "eamodio.gitlens",
     "mhutchie.git-graph",
     "github.vscode-pull-request-github",
-    
+
     // 프로젝트 관리
     "ms-vscode-remote.remote-containers",
     "ms-vscode.remote-repositories",
     "gruntfuggly.todo-tree",
-    
+
     // 언어별 지원
     "bradlc.vscode-tailwindcss",
     "prisma.prisma",
     "graphql.vscode-graphql",
     "ms-python.python",
-    
+
     // 유틸리티
     "wayou.vscode-todo-highlight",
     "alefragnani.bookmarks",
@@ -103,7 +103,7 @@ echo "✅ All extensions installed!"
   "github.copilot.advanced": {
     "debug.overrideEngine": "codex"
   },
-  
+
   // 편집기 최적화
   "editor.fontSize": 14,
   "editor.fontFamily": "'JetBrains Mono', 'Fira Code', Consolas, monospace",
@@ -115,7 +115,7 @@ echo "✅ All extensions installed!"
   "editor.wordWrap": "on",
   "editor.minimap.enabled": true,
   "editor.minimap.maxColumn": 80,
-  
+
   // 자동 완성 최적화
   "editor.quickSuggestions": {
     "other": true,
@@ -125,7 +125,7 @@ echo "✅ All extensions installed!"
   "editor.acceptSuggestionOnCommitCharacter": false,
   "editor.acceptSuggestionOnEnter": "on",
   "editor.suggestSelection": "first",
-  
+
   // 자동 저장 및 포맷팅
   "files.autoSave": "onFocusChange",
   "editor.formatOnSave": true,
@@ -134,13 +134,13 @@ echo "✅ All extensions installed!"
     "source.fixAll": true,
     "source.organizeImports": true
   },
-  
+
   // Git 최적화
   "git.autofetch": true,
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
   "git.postCommitCommand": "push",
-  
+
   // 파일 탐색 최적화
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
@@ -152,20 +152,20 @@ echo "✅ All extensions installed!"
     "**/build": true,
     "**/.next": true
   },
-  
+
   // 터미널 최적화
   "terminal.integrated.fontSize": 13,
   "terminal.integrated.fontFamily": "'JetBrains Mono', monospace",
   "terminal.integrated.cursorStyle": "line",
   "terminal.integrated.cursorBlinking": true,
-  
+
   // 작업영역 최적화
   "workbench.startupEditor": "newUntitledFile",
   "workbench.editor.enablePreview": false,
   "workbench.editor.closeOnFileDelete": true,
   "workbench.activityBar.visible": true,
   "workbench.statusBar.visible": true,
-  
+
   // 언어별 설정
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -185,7 +185,7 @@ echo "✅ All extensions installed!"
   "[scss]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  
+
   // Tailwind CSS 최적화
   "tailwindCSS.includeLanguages": {
     "typescript": "javascript",
@@ -241,7 +241,7 @@ case $PROJECT_TYPE in
   "nextjs")
     echo -e "${YELLOW}🔧 Setting up Next.js project...${NC}"
     npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias "@/*"
-    
+
     # 추가 패키지 설치
     if command -v bun &> /dev/null && [ "$PACKAGE_MANAGER" = "bun" ]; then
       bun add @radix-ui/react-slot lucide-react clsx tailwind-merge
@@ -251,33 +251,33 @@ case $PROJECT_TYPE in
       npm install -D @types/node
     fi
     ;;
-    
+
   "react")
     echo -e "${YELLOW}🔧 Setting up React project...${NC}"
     npx create-react-app . --template typescript
-    
+
     # Tailwind CSS 설정
     npm install -D tailwindcss postcss autoprefixer
     npx tailwindcss init -p
     ;;
-    
+
   "node")
     echo -e "${YELLOW}🔧 Setting up Node.js project...${NC}"
     npm init -y
-    
+
     # TypeScript 및 필수 패키지 설정
     npm install express cors helmet morgan dotenv
     npm install -D typescript @types/node @types/express nodemon ts-node
-    
+
     # tsconfig.json 생성
     npx tsc --init
     ;;
-    
+
   "python")
     echo -e "${YELLOW}🔧 Setting up Python project...${NC}"
     python3 -m venv venv
     source venv/bin/activate
-    
+
     # requirements.txt 생성
     cat > requirements.txt << EOF
 fastapi==0.104.1
@@ -290,10 +290,10 @@ python-dotenv==1.0.0
 sqlalchemy==2.0.23
 alembic==1.13.0
 EOF
-    
+
     pip install -r requirements.txt
     ;;
-    
+
   *)
     echo -e "${RED}❌ Unknown project type: $PROJECT_TYPE${NC}"
     exit 1
@@ -417,7 +417,7 @@ pids
 .node_repl_history
 EOF
     ;;
-    
+
   "python")
     cat >> .gitignore << EOF
 
@@ -564,11 +564,11 @@ echo "🌅 Good morning! Starting your dev environment..."
 echo "📦 Checking Git status..."
 if [ -d ".git" ]; then
     git fetch origin
-    
+
     # 현재 브랜치 확인
     CURRENT_BRANCH=$(git branch --show-current)
     echo "Current branch: $CURRENT_BRANCH"
-    
+
     # 업스트림 변경사항 확인
     BEHIND=$(git rev-list HEAD..origin/$CURRENT_BRANCH --count)
     if [ "$BEHIND" -gt 0 ]; then
@@ -587,7 +587,7 @@ if [ -f "package.json" ]; then
     if command -v bun &> /dev/null; then
         echo "Using Bun..."
         bun install
-        
+
         # 보안 취약점 체크
         if command -v bunx &> /dev/null; then
             bunx audit
@@ -625,7 +625,7 @@ if [ -f ".env" ] || [ -f ".env.local" ]; then
         echo "📊 PostgreSQL database detected"
         # 실제 연결 테스트는 프로젝트에 따라 다름
     fi
-    
+
     # MongoDB 연결 테스트
     if grep -q "mongodb://" .env* 2>/dev/null; then
         echo "📊 MongoDB database detected"
@@ -659,7 +659,7 @@ if [ -f "package.json" ]; then
             npx eslint . --ext .ts,.tsx,.js,.jsx --fix 2>/dev/null || echo "⚠️ ESLint issues found"
         fi
     fi
-    
+
     # Prettier
     if grep -q "prettier" package.json; then
         if command -v bun &> /dev/null; then
@@ -673,7 +673,7 @@ elif [ -f "pyproject.toml" ]; then
     if command -v black &> /dev/null; then
         black . 2>/dev/null || echo "⚠️ Black formatting applied"
     fi
-    
+
     # isort (Python import sorter)
     if command -v isort &> /dev/null; then
         isort . 2>/dev/null || echo "⚠️ Import sorting applied"
@@ -708,7 +708,7 @@ fi
 if command -v df &> /dev/null; then
     DISK_USAGE=$(df -h . | tail -1 | awk '{print $5}' | sed 's/%//')
     echo "💿 Disk usage: ${DISK_USAGE}%"
-    
+
     if [ "$DISK_USAGE" -gt 80 ]; then
         echo "⚠️ Disk usage is high. Consider cleaning up:"
         echo "   - node_modules: find . -name 'node_modules' -type d -prune -exec du -sh {} +"
@@ -754,7 +754,7 @@ echo "⏰ Remember to take breaks every 90 minutes"
     "key": "ctrl+alt+shift+n",
     "command": "explorer.newFolder"
   },
-  
+
   // 터미널 관리
   {
     "key": "ctrl+`",
@@ -764,7 +764,7 @@ echo "⏰ Remember to take breaks every 90 minutes"
     "key": "ctrl+shift+`",
     "command": "workbench.action.terminal.new"
   },
-  
+
   // 코드 네비게이션
   {
     "key": "ctrl+shift+f",
@@ -774,7 +774,7 @@ echo "⏰ Remember to take breaks every 90 minutes"
     "key": "ctrl+shift+h",
     "command": "workbench.action.replaceInFiles"
   },
-  
+
   // AI 도우미
   {
     "key": "ctrl+shift+a",
@@ -784,7 +784,7 @@ echo "⏰ Remember to take breaks every 90 minutes"
     "key": "ctrl+shift+c",
     "command": "workbench.panel.chatSidebar.copilot"
   },
-  
+
   // Git 작업
   {
     "key": "ctrl+shift+g",
@@ -794,7 +794,7 @@ echo "⏰ Remember to take breaks every 90 minutes"
     "key": "ctrl+k ctrl+c",
     "command": "git.commitAll"
   },
-  
+
   // 레이아웃 관리
   {
     "key": "ctrl+\\",
@@ -808,7 +808,7 @@ echo "⏰ Remember to take breaks every 90 minutes"
     "key": "ctrl+2",
     "command": "workbench.action.focusSecondEditorGroup"
   },
-  
+
   // 빠른 리팩토링
   {
     "key": "f2",
@@ -843,7 +843,7 @@ echo "⏰ Remember to take breaks every 90 minutes"
     ],
     "description": "Create a React functional component with TypeScript"
   },
-  
+
   "API Route Handler": {
     "prefix": "api",
     "body": [
@@ -865,7 +865,7 @@ echo "⏰ Remember to take breaks every 90 minutes"
     ],
     "description": "Create a Next.js API route handler"
   },
-  
+
   "Async Function with Error Handling": {
     "prefix": "asyncfn",
     "body": [
@@ -880,7 +880,7 @@ echo "⏰ Remember to take breaks every 90 minutes"
     ],
     "description": "Create an async function with error handling"
   },
-  
+
   "Custom Hook": {
     "prefix": "hook",
     "body": [
@@ -906,7 +906,7 @@ echo "⏰ Remember to take breaks every 90 minutes"
     ],
     "description": "Create a custom React hook"
   },
-  
+
   "Zustand Store": {
     "prefix": "zustand",
     "body": [
@@ -987,7 +987,7 @@ interface ProductivityMetrics {
     testsWritten: number;
     bugsFixed: number;
   };
-  
+
   timeMetrics: {
     codingTime: number;        // 실제 코딩 시간
     debuggingTime: number;     // 디버깅 시간
@@ -995,14 +995,14 @@ interface ProductivityMetrics {
     learningTime: number;      // 학습 시간
     breakTime: number;         // 휴식 시간
   };
-  
+
   qualityMetrics: {
     testCoverage: number;      // 테스트 커버리지
     codeReviewScore: number;   // 코드 리뷰 점수
     bugRate: number;           // 버그 발생률
     refactoringRate: number;   // 리팩토링 비율
   };
-  
+
   collaborationMetrics: {
     pullRequests: number;      // PR 수
     codeReviews: number;       // 리뷰한 코드 수
@@ -1013,16 +1013,16 @@ interface ProductivityMetrics {
 
 class ProductivityTracker {
   private metrics: ProductivityMetrics;
-  
+
   constructor() {
     this.metrics = this.initializeMetrics();
   }
-  
+
   // Git 데이터에서 메트릭 추출
   async analyzeGitActivity(days: number = 30): Promise<GitMetrics> {
     const commits = await this.getRecentCommits(days);
     const diffStats = await this.analyzeDiffs(commits);
-    
+
     return {
       commitsCount: commits.length,
       linesAdded: diffStats.additions,
@@ -1032,7 +1032,7 @@ class ProductivityTracker {
       commitFrequency: commits.length / days
     };
   }
-  
+
   // VS Code 활동 분석
   analyzeCodeActivity(): CodeActivityMetrics {
     // VS Code 확장프로그램을 통한 활동 데이터 수집
@@ -1044,11 +1044,11 @@ class ProductivityTracker {
       focusTime: this.calculateFocusTime()
     };
   }
-  
+
   // 생산성 개선 제안
   generateImprovementSuggestions(): ProductivitySuggestion[] {
     const suggestions: ProductivitySuggestion[] = [];
-    
+
     // 코딩 시간 분석
     if (this.metrics.timeMetrics.debuggingTime > this.metrics.timeMetrics.codingTime * 0.5) {
       suggestions.push({
@@ -1056,7 +1056,7 @@ class ProductivityTracker {
         title: '디버깅 시간 최적화',
         description: '디버깅 시간이 코딩 시간의 50%를 초과합니다.',
         actions: [
-          '더 많은 단위 테스트 작성',  
+          '더 많은 단위 테스트 작성',
           '타입 안전성 강화',
           '로깅 시스템 개선',
           'IDE 디버거 활용도 증가'
@@ -1064,7 +1064,7 @@ class ProductivityTracker {
         expectedImprovement: '20-30% 디버깅 시간 단축'
       });
     }
-    
+
     // 테스트 커버리지 분석
     if (this.metrics.qualityMetrics.testCoverage < 80) {
       suggestions.push({
@@ -1079,10 +1079,10 @@ class ProductivityTracker {
         expectedImprovement: '버그 발생률 40% 감소'
       });
     }
-    
+
     return suggestions;
   }
-  
+
   // 주간 생산성 리포트
   generateWeeklyReport(): ProductivityReport {
     return {
@@ -1123,10 +1123,10 @@ stop_tracking() {
         DURATION=$((END_TIME - WORK_START))
         HOURS=$((DURATION / 3600))
         MINUTES=$(((DURATION % 3600) / 60))
-        
+
         echo "$(date '+%Y-%m-%d %H:%M:%S') - Work ended - Duration: ${HOURS}h ${MINUTES}m" >> ~/.time_tracker.log
         rm ~/.current_session
-        
+
         echo "⏰ Session ended. Duration: ${HOURS}h ${MINUTES}m"
     else
         echo "❌ No active session found"
@@ -1152,19 +1152,19 @@ today_total() {
 pomodoro() {
     WORK_TIME=${1:-25}  # 기본 25분
     BREAK_TIME=${2:-5}  # 기본 5분
-    
+
     echo "🍅 Starting Pomodoro: ${WORK_TIME}min work, ${BREAK_TIME}min break"
-    
+
     # 작업 시간
     echo "💼 Work time started!"
     sleep $((WORK_TIME * 60))
-    
+
     # 알림
     echo "🔔 Work time finished! Take a ${BREAK_TIME} minute break."
     if command -v osascript &> /dev/null; then
         osascript -e "display notification \"Work session completed!\" with title \"Pomodoro Timer\""
     fi
-    
+
     # 휴식 시간
     sleep $((BREAK_TIME * 60))
     echo "🔔 Break time finished! Ready for next session."

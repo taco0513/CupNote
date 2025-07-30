@@ -235,7 +235,7 @@ Context7 활용:
 
 ### 1. 조합 요청
 ```
-You: "Next.js + Supabase + Tailwind로 
+You: "Next.js + Supabase + Tailwind로
      실시간 협업 도구 만들어줘"
 
 Context7가 조합:
@@ -258,7 +258,7 @@ Context7가 분석:
 
 ### 3. 최신 기능 활용
 ```
-You: "React의 최신 기능들 사용해서 
+You: "React의 최신 기능들 사용해서
      모던한 앱 구조 보여줘"
 
 Context7가 적용:

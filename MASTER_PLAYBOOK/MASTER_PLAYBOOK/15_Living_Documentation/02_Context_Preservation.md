@@ -17,7 +17,7 @@ class ProjectContextManager {
     session: 'current session context',
     file: 'file-specific context'
   };
-  
+
   async captureContext(
     level: keyof typeof this.contextLayers
   ): Promise<Context> {
@@ -32,7 +32,7 @@ class ProjectContextManager {
         return this.captureFileContext();
     }
   }
-  
+
   private async captureGlobalContext(): Promise<GlobalContext> {
     return {
       projectName: await this.getProjectName(),
@@ -69,17 +69,17 @@ class ADRManager {
       alternatives: [],
       relatedFiles: await this.findRelatedFiles(title)
     };
-    
+
     // 마크다운 파일로 저장
     const content = this.formatADR(adr);
     const filename = `docs/decisions/${adr.id}-${this.slugify(title)}.md`;
-    
+
     await this.saveFile(filename, content);
     await this.updateIndex(adr);
-    
+
     return adr;
   }
-  
+
   private formatADR(adr: ADR): string {
     return `# ${adr.id}: ${adr.title}
 
@@ -114,7 +114,7 @@ ${adr.relatedFiles.map(f => `- ${f}`).join('\n')}
 // 코딩 세션 컨텍스트 수집기
 class CodingSessionTracker {
   private session: CodingSession;
-  
+
   startSession(purpose: string) {
     this.session = {
       id: uuid(),
@@ -125,22 +125,22 @@ class CodingSessionTracker {
       errors: [],
       learnings: []
     };
-    
+
     // 파일 변경 감지
     this.watchFileChanges();
-    
+
     // 에러 수집
     this.captureErrors();
-    
+
     // 터미널 명령어 추적
     this.trackCommands();
   }
-  
+
   private watchFileChanges() {
     const watcher = chokidar.watch('src/**/*', {
       ignored: /node_modules/
     });
-    
+
     watcher.on('change', (path) => {
       this.session.filesModified.push({
         path,
@@ -149,7 +149,7 @@ class CodingSessionTracker {
       });
     });
   }
-  
+
   async endSession(): Promise<SessionSummary> {
     const summary = {
       ...this.session,
@@ -158,10 +158,10 @@ class CodingSessionTracker {
       impact: await this.analyzeImpact(),
       nextSteps: this.suggestNextSteps()
     };
-    
+
     // AI용 컨텍스트 파일 생성
     await this.saveSessionContext(summary);
-    
+
     return summary;
   }
 }
@@ -194,21 +194,21 @@ class ErrorContextCollector {
       recentActions: await this.getRecentActions(),
       additionalInfo
     };
-    
+
     // 자동으로 에러 문서 생성
     await this.createErrorDocument(context);
-    
+
     // AI 친화적 형식으로 저장
     await this.saveForAI(context);
-    
+
     return context;
   }
-  
+
   private async findRelatedFiles(error: Error): Promise<string[]> {
     const stackFiles = this.extractFilesFromStack(error.stack);
     const recentlyModified = await this.getRecentlyModifiedFiles();
     const imports = await this.findImportChain(stackFiles[0]);
-    
+
     return [...new Set([...stackFiles, ...recentlyModified, ...imports])];
   }
 }
@@ -226,33 +226,33 @@ class FileRelationshipAnalyzer {
   ): Promise<FileRelationshipGraph> {
     const graph = new Graph();
     const visited = new Set<string>();
-    
+
     const analyze = async (file: string) => {
       if (visited.has(file)) return;
       visited.add(file);
-      
+
       const content = await fs.readFile(file, 'utf-8');
-      
+
       // Import 분석
       const imports = this.extractImports(content);
       for (const imp of imports) {
         graph.addEdge(file, imp.source, 'imports');
         await analyze(imp.source);
       }
-      
+
       // Export 분석
       const exports = this.extractExports(content);
       graph.setNodeData(file, { exports });
-      
+
       // 주석에서 관계 추출
       const relatedFiles = this.extractRelatedFromComments(content);
       for (const related of relatedFiles) {
         graph.addEdge(file, related, 'related');
       }
     };
-    
+
     await analyze(rootFile);
-    
+
     return {
       graph,
       clusters: this.identifyClusters(graph),
@@ -273,16 +273,16 @@ class TemporalContextLinker {
   ): Promise<TemporalContext> {
     // Git 커밋 히스토리
     const commits = await this.getCommitsInRange(timeRange);
-    
+
     // 에러 로그
     const errors = await this.getErrorsInRange(timeRange);
-    
+
     // 결정 사항
     const decisions = await this.getDecisionsInRange(timeRange);
-    
+
     // 파일 변경
     const fileChanges = await this.getFileChangesInRange(timeRange);
-    
+
     // 시간순 이벤트 구성
     const timeline = this.constructTimeline([
       ...commits.map(c => ({ type: 'commit', ...c })),
@@ -290,7 +290,7 @@ class TemporalContextLinker {
       ...decisions.map(d => ({ type: 'decision', ...d })),
       ...fileChanges.map(f => ({ type: 'file_change', ...f }))
     ]);
-    
+
     return {
       timeRange,
       timeline,
@@ -318,7 +318,7 @@ class AIContextFormatter {
         how: this.extractApproach(context),
         when: this.extractTimeline(context)
       },
-      
+
       // 구조화된 데이터
       structured: {
         files: this.formatFileList(context.files),
@@ -326,7 +326,7 @@ class AIContextFormatter {
         patterns: this.formatPatterns(context.patterns),
         constraints: this.formatConstraints(context.constraints)
       },
-      
+
       // 관계 정보
       relationships: {
         imports: this.formatImportGraph(context.imports),
@@ -334,7 +334,7 @@ class AIContextFormatter {
         related: this.formatRelatedFiles(context.related),
         impacts: this.formatImpactAnalysis(context.impacts)
       },
-      
+
       // 히스토리
       history: {
         recentChanges: this.formatRecentChanges(context.changes),
@@ -342,7 +342,7 @@ class AIContextFormatter {
         errors: this.formatErrors(context.errors),
         learnings: this.formatLearnings(context.learnings)
       },
-      
+
       // 액션 가능한 정보
       actionable: {
         currentFocus: context.currentFocus,
@@ -372,23 +372,23 @@ class ContextPriorityManager {
       .sort((a, b) => b.priority - a.priority)
       .slice(0, 10); // 상위 10개만
   }
-  
+
   private calculatePriority(context: Context): number {
     let score = 0;
-    
+
     // 최신성 (0-40점)
     const age = Date.now() - context.timestamp.getTime();
     score += Math.max(0, 40 - (age / (1000 * 60 * 60 * 24))); // 일 단위
-    
+
     // 영향도 (0-30점)
     score += context.impactedFiles.length * 3;
-    
+
     // 관련성 (0-20점)
     if (context.relatedToCurrentWork) score += 20;
-    
+
     // 중요도 (0-10점)
     if (context.critical) score += 10;
-    
+
     return score;
   }
 }
@@ -412,16 +412,16 @@ class ContextSearchEngine {
       this.searchErrors(query),
       this.searchDocumentation(query)
     ];
-    
+
     const results = await Promise.all(indices);
-    
+
     // 결과 통합 및 랭킹
     const merged = this.mergeResults(results);
     const ranked = this.rankResults(merged, query);
-    
+
     // AI를 위한 컨텍스트 구성
     const context = this.buildContextFromResults(ranked);
-    
+
     return {
       results: ranked,
       context,

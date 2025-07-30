@@ -33,6 +33,17 @@ This is the AI Workflow Playbook repository containing comprehensive guides for 
 ## Common Development Tasks
 
 ### Initialize a New Project
+
+**🚀 빠른 시작 (추천)**:
+```
+새 프로젝트에 AI Workflow Playbook 적용하기:
+
+1. cp -r MASTER_PLAYBOOK ./
+2. @MASTER_PLAYBOOK/00_Getting_Started/00_Installation_Guide.md 의 학습 프롬프트 사용
+3. 30분 프로토타입부터 시작
+```
+
+**기존 방식**:
 ```bash
 # SuperClaude approach
 /design "project description" --think-hard
@@ -53,7 +64,7 @@ This is the AI Workflow Playbook repository containing comprehensive guides for 
 ```bash
 # SuperClaude commands
 /analyze --think                    # Standard analysis (~4K tokens)
-/analyze --think-hard              # Deep analysis (~10K tokens)  
+/analyze --think-hard              # Deep analysis (~10K tokens)
 /analyze --ultrathink              # Architecture analysis (~32K tokens)
 /analyze --focus [performance|security|quality|mobile]
 

@@ -19,13 +19,13 @@
   --blue-500: #3B82F6;
   --blue-600: #2563EB;
   --blue-900: #1E3A8A;
-  
+
   /* 회색 스케일 */
   --gray-50: #F9FAFB;
   --gray-100: #F3F4F6;
   --gray-500: #6B7280;
   --gray-900: #111827;
-  
+
   /* 간격 단위 */
   --space-1: 0.25rem; /* 4px */
   --space-2: 0.5rem;  /* 8px */
@@ -39,18 +39,18 @@
   --color-primary: var(--blue-600);
   --color-primary-light: var(--blue-500);
   --color-primary-dark: var(--blue-900);
-  
+
   /* 상태 색상 */
   --color-success: #10B981;
   --color-warning: #F59E0B;
   --color-error: #EF4444;
   --color-info: var(--blue-500);
-  
+
   /* 텍스트 색상 */
   --text-primary: var(--gray-900);
   --text-secondary: var(--gray-500);
   --text-inverse: var(--gray-50);
-  
+
   /* 배경 색상 */
   --bg-primary: #FFFFFF;
   --bg-secondary: var(--gray-50);
@@ -66,7 +66,7 @@
   --button-padding-x: var(--space-4);
   --button-padding-y: var(--space-2);
   --button-border-radius: 0.375rem;
-  
+
   /* 카드 토큰 */
   --card-bg: var(--bg-primary);
   --card-border: var(--gray-100);
@@ -83,7 +83,7 @@
 interface TokenNamingConvention {
   // 구조: [category]-[property]-[variant]-[state]
   pattern: string;
-  
+
   examples: {
     // 색상 토큰
     color: [
@@ -93,7 +93,7 @@ interface TokenNamingConvention {
       "--text-primary",            // 기본 텍스트 색상
       "--bg-secondary"             // 보조 배경 색상
     ],
-    
+
     // 간격 토큰
     spacing: [
       "--space-xs",    // 매우 작은 간격
@@ -102,7 +102,7 @@ interface TokenNamingConvention {
       "--space-lg",    // 큰 간격
       "--space-xl"     // 매우 큰 간격
     ],
-    
+
     // 타이포그래피 토큰
     typography: [
       "--text-xs",     // 12px
@@ -136,7 +136,7 @@ interface TokenNamingConvention {
   --primary-800: #3730A3;
   --primary-900: #312E81;
   --primary-950: #1E1B4B;
-  
+
   /* Secondary 보조 색상 */
   --secondary-50: #F8FAFC;
   --secondary-100: #F1F5F9;
@@ -162,19 +162,19 @@ interface TokenNamingConvention {
   --color-success-500: #10B981;
   --color-success-600: #059669;
   --color-success-900: #064E3B;
-  
+
   /* 경고 상태 */
   --color-warning-50: #FFFBEB;
   --color-warning-500: #F59E0B;
   --color-warning-600: #D97706;
   --color-warning-900: #78350F;
-  
+
   /* 오류 상태 */
   --color-error-50: #FEF2F2;
   --color-error-500: #EF4444;
   --color-error-600: #DC2626;
   --color-error-900: #7F1D1D;
-  
+
   /* 정보 상태 */
   --color-info-50: #EFF6FF;
   --color-info-500: #3B82F6;
@@ -188,7 +188,7 @@ interface TokenNamingConvention {
   --color-warning: var(--color-warning-500);
   --color-error: var(--color-error-500);
   --color-info: var(--color-info-500);
-  
+
   --color-success-bg: var(--color-success-50);
   --color-success-border: var(--color-success-200);
   --color-success-text: var(--color-success-800);
@@ -203,11 +203,11 @@ interface TokenNamingConvention {
   --text-primary: #111827;
   --text-secondary: #6B7280;
   --text-muted: #9CA3AF;
-  
+
   --bg-primary: #FFFFFF;
   --bg-secondary: #F9FAFB;
   --bg-tertiary: #F3F4F6;
-  
+
   --border-primary: #E5E7EB;
   --border-secondary: #D1D5DB;
 }
@@ -217,11 +217,11 @@ interface TokenNamingConvention {
   --text-primary: #F9FAFB;
   --text-secondary: #D1D5DB;
   --text-muted: #9CA3AF;
-  
+
   --bg-primary: #111827;
   --bg-secondary: #1F2937;
   --bg-tertiary: #374151;
-  
+
   --border-primary: #374151;
   --border-secondary: #4B5563;
 }
@@ -232,11 +232,11 @@ interface TokenNamingConvention {
     --text-primary: #F9FAFB;
     --text-secondary: #D1D5DB;
     --text-muted: #9CA3AF;
-    
+
     --bg-primary: #111827;
     --bg-secondary: #1F2937;
     --bg-tertiary: #374151;
-    
+
     --border-primary: #374151;
     --border-secondary: #4B5563;
   }
@@ -250,14 +250,14 @@ interface TokenNamingConvention {
 ```css
 /* 폰트 패밀리 */
 :root {
-  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 
-               "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", 
-               sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", 
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+               "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+               sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
                "Noto Color Emoji";
   --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, 
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas,
                "Liberation Mono", Menlo, monospace;
-  
+
   /* 브랜드 폰트 (선택사항) */
   --font-heading: "Inter", var(--font-sans);
   --font-body: var(--font-sans);
@@ -276,7 +276,7 @@ interface TokenNamingConvention {
   --text-4xl: 2.25rem;    /* 36px */
   --text-5xl: 3rem;       /* 48px */
   --text-6xl: 3.75rem;    /* 60px */
-  
+
   /* 라인 하이트 */
   --leading-none: 1;
   --leading-tight: 1.25;
@@ -284,7 +284,7 @@ interface TokenNamingConvention {
   --leading-normal: 1.5;
   --leading-relaxed: 1.625;
   --leading-loose: 2;
-  
+
   /* 폰트 웨이트 */
   --font-thin: 100;
   --font-light: 300;
@@ -442,7 +442,7 @@ interface TokenNamingConvention {
   --space-2xl: var(--space-12);  /* 48px */
   --space-3xl: var(--space-16);  /* 64px */
   --space-4xl: var(--space-24);  /* 96px */
-  
+
   /* 레이아웃 간격 */
   --space-section: var(--space-16);    /* 섹션 간 간격 */
   --space-component: var(--space-8);   /* 컴포넌트 간 간격 */
@@ -463,7 +463,7 @@ interface TokenNamingConvention {
   --space-fluid-lg: clamp(1.5rem, 6vw, 3rem);         /* 24px - 48px */
   --space-fluid-xl: clamp(2rem, 8vw, 4rem);           /* 32px - 64px */
   --space-fluid-2xl: clamp(3rem, 12vw, 6rem);         /* 48px - 96px */
-  
+
   /* 컨테이너 간격 */
   --container-padding: clamp(1rem, 4vw, 2rem);
   --container-margin: clamp(2rem, 8vw, 4rem);
@@ -500,7 +500,7 @@ interface TokenNamingConvention {
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
   --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
-  
+
   /* 컬러 그림자 */
   --shadow-primary: 0 4px 14px 0 rgb(79 70 229 / 0.25);
   --shadow-success: 0 4px 14px 0 rgb(16 185 129 / 0.25);
@@ -534,7 +534,7 @@ interface TokenNamingConvention {
   --radius-3xl: 1rem;         /* 16px */
   --radius-4xl: 1.5rem;       /* 24px */
   --radius-full: 9999px;      /* 완전한 원형 */
-  
+
   /* 의미적 radius */
   --radius-button: var(--radius-lg);
   --radius-card: var(--radius-xl);
@@ -581,7 +581,7 @@ StyleDictionary.registerFormat({
     const tokens = dictionary.allTokens
       .map(token => `  '${token.name}': '${token.value}'`)
       .join(',\n');
-    
+
     return `export const tokens = {\n${tokens}\n} as const;\n\nexport type TokenName = keyof typeof tokens;`;
   }
 });
@@ -661,14 +661,14 @@ module.exports = {
   --size-medium: var(--space-4);
   --size-large: var(--space-6);
   --size-huge: var(--space-8);
-  
+
   /* 상황별 토큰 */
   --padding-button: var(--space-3) var(--space-4);
   --padding-card: var(--space-6);
   --padding-input: var(--space-3);
   --margin-section: var(--space-16);
   --gap-grid: var(--space-4);
-  
+
   /* 상태별 색상 */
   --color-interactive: var(--primary-600);
   --color-interactive-hover: var(--primary-700);

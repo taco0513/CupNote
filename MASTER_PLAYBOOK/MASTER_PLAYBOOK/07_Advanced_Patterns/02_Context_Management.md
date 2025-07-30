@@ -51,12 +51,12 @@ loading_stages:
     content: "파일 목록, 요약"
     tokens: "~1K"
     use_case: "초기 탐색"
-  
+
   stage_2:
     content: "핵심 파일, 인터페이스"
     tokens: "~5K"
     use_case: "일반 개발"
-  
+
   stage_3:
     content: "전체 구현, 테스트"
     tokens: "~20K"
@@ -89,7 +89,7 @@ window_management:
     important: "3 윈도우 유지"
     normal: "1 윈도우 유지"
     low: "즉시 제거"
-  
+
   compression:
     old_context: "요약으로 대체"
     repetitive: "참조로 대체"
@@ -127,12 +127,12 @@ hierarchy_density:
     info: "아키텍처, 의존성"
     density: "low"
     tokens: "~2K"
-  
+
   module:
     info: "인터페이스, 주요 로직"
     density: "medium"
     tokens: "~5K"
-  
+
   component:
     info: "전체 구현"
     density: "high"
@@ -148,12 +148,12 @@ compression_techniques:
     method: "핵심 내용 추출"
     ratio: "10:1"
     quality: "85%"
-  
+
   symbolization:
     method: "심볼로 대체"
     ratio: "3:1"
     quality: "95%"
-  
+
   referencing:
     method: "참조 ID 사용"
     ratio: "20:1"
@@ -212,11 +212,11 @@ chunk_priority:
   current_task:
     relevance: "100%"
     retention: "session"
-  
+
   related_task:
     relevance: "70%"
     retention: "3 operations"
-  
+
   general_context:
     relevance: "30%"
     retention: "1 operation"
@@ -231,12 +231,12 @@ cache_levels:
     location: "active memory"
     access: "instant"
     size: "5K tokens"
-  
+
   L2_warm:
     location: "ready cache"
     access: "1 operation"
     size: "20K tokens"
-  
+
   L3_cold:
     location: "storage"
     access: "load required"
@@ -325,7 +325,7 @@ monitoring_metrics:
     current: "실시간 사용량"
     average: "평균 사용량"
     peak: "최대 사용량"
-  
+
   efficiency:
     hit_rate: "캐시 적중률"
     compression: "압축 효율"
@@ -360,7 +360,7 @@ templates:
   debugging:
     include: ["error_logs", "stack_traces", "recent_changes"]
     exclude: ["documentation", "tests"]
-  
+
   feature_development:
     include: ["interfaces", "related_modules", "tests"]
     exclude: ["implementation_details", "legacy_code"]

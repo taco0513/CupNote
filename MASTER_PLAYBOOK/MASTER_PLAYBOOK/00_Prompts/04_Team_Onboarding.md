@@ -8,11 +8,11 @@
 
 ## 🎯 이런 상황에 사용하세요
 
-👥 **새로운 팀원이 합류했을 때**  
-👥 **AI 개발 방식이 처음인 개발자를 위해**  
-👥 **팀의 개발 표준을 통일하고 싶을 때**  
-👥 **기존 팀원들도 베스트 프랙티스를 재학습하고 싶을 때**  
-👥 **프로젝트별 맞춤 표준을 정립하고 싶을 때**  
+👥 **새로운 팀원이 합류했을 때**
+👥 **AI 개발 방식이 처음인 개발자를 위해**
+👥 **팀의 개발 표준을 통일하고 싶을 때**
+👥 **기존 팀원들도 베스트 프랙티스를 재학습하고 싶을 때**
+👥 **프로젝트별 맞춤 표준을 정립하고 싶을 때**
 
 ---
 
@@ -112,13 +112,13 @@ interface UserProfile {
 const createUserProfile = async (userData: UserData): Promise<UserProfile> => {
   // 입력 데이터 검증
   const validatedData = validateUserData(userData);
-  
+
   // 사용자 프로필 생성
   const profile = await userRepository.create(validatedData);
-  
+
   // 기본 설정 적용
   const profileWithDefaults = applyDefaultPreferences(profile);
-  
+
   return profileWithDefaults;
 };
 

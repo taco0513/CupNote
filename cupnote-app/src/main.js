@@ -1,7 +1,5 @@
-// CupNote 스타일
-import './assets/design-tokens.css'
-import './assets/components.css' 
-import './assets/style.css'
+// CupNote 스타일 시스템
+import './assets/styles/index.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'

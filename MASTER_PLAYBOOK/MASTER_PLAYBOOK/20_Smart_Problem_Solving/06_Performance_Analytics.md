@@ -21,14 +21,14 @@ interface EfficiencyMetrics {
       byTechnology: Record<Technology, number>;
       trend: TimeTrend;          // 시간별 변화 추이
     };
-    
+
     // 첫 번째 시도 성공률
     firstAttemptSuccessRate: {
       rate: number;              // 0-1 사이 값
       improvement: number;       // 이전 기간 대비 개선도
       byCategory: Record<string, number>;
     };
-    
+
     // 에스컬레이션 효율성
     escalationEfficiency: {
       averageEscalationTime: number;
@@ -36,7 +36,7 @@ interface EfficiencyMetrics {
       optimalEscalationPoint: number; // 최적 에스컬레이션 시점
       unnecessaryEscalations: number; // 불필요한 에스컬레이션 비율
     };
-    
+
     // 자동화 효과
     automationImpact: {
       timesSaved: number;        // 절약된 시간 (초)
@@ -47,7 +47,7 @@ interface EfficiencyMetrics {
       };
     };
   };
-  
+
   // 리소스 효율성
   resourceEfficiency: {
     // 토큰 사용량 최적화
@@ -60,7 +60,7 @@ interface EfficiencyMetrics {
       };
       tokenUsageByLevel: Record<EscalationLevel, number>;
     };
-    
+
     // API 호출 효율성
     apiEfficiency: {
       callsPerProblem: number;
@@ -68,7 +68,7 @@ interface EfficiencyMetrics {
       redundantCalls: number;
       costEfficiency: number;
     };
-    
+
     // 시스템 자원 활용
     systemResourceUsage: {
       cpuUtilization: number;
@@ -77,7 +77,7 @@ interface EfficiencyMetrics {
       storageUtilization: number;
     };
   };
-  
+
   // 품질 효율성
   qualityEfficiency: {
     // 솔루션 품질 점수
@@ -86,14 +86,14 @@ interface EfficiencyMetrics {
       distribution: QualityDistribution;
       improvementTrend: QualityTrend;
     };
-    
+
     // 재발 방지 효과
     recurrencePrevention: {
       recurrenceRate: number;    // 같은 문제 재발율
       preventionSuccess: number; // 예방 성공률
       knowledgeRetention: number; // 지식 보존율
     };
-    
+
     // 학습 효과
     learningEffectiveness: {
       patternRecognitionAccuracy: number;
@@ -108,27 +108,27 @@ class EfficiencyAnalyzer {
   private metricsCollector: MetricsCollector;
   private trendAnalyzer: TrendAnalyzer;
   private benchmarkComparator: BenchmarkComparator;
-  
+
   async analyzeEfficiency(timeframe: TimeFrame): Promise<EfficiencyAnalysis> {
     // 기본 메트릭 수집
     const rawMetrics = await this.metricsCollector.collect(timeframe);
-    
+
     // 메트릭 계산 및 정규화
     const calculatedMetrics = await this.calculateMetrics(rawMetrics);
-    
+
     // 트렌드 분석
     const trendAnalysis = await this.trendAnalyzer.analyze(calculatedMetrics, timeframe);
-    
+
     // 벤치마크 비교
     const benchmarkComparison = await this.benchmarkComparator.compare(calculatedMetrics);
-    
+
     // 개선 기회 식별
     const improvementOpportunities = await this.identifyImprovementOpportunities(
       calculatedMetrics,
       trendAnalysis,
       benchmarkComparison
     );
-    
+
     return {
       timeframe,
       metrics: calculatedMetrics,
@@ -139,7 +139,7 @@ class EfficiencyAnalyzer {
       recommendations: this.generateRecommendations(improvementOpportunities)
     };
   }
-  
+
   private async calculateMetrics(rawData: RawMetricsData): Promise<CalculatedMetrics> {
     return {
       // 시간 효율성 계산
@@ -149,14 +149,14 @@ class EfficiencyAnalyzer {
         escalationEfficiency: this.calculateEscalationEfficiency(rawData.escalations),
         automationImpact: this.calculateAutomationImpact(rawData.automatedVsManual)
       },
-      
+
       // 리소스 효율성 계산
       resourceEfficiency: {
         tokenOptimization: this.calculateTokenOptimization(rawData.tokenUsage),
         apiEfficiency: this.calculateAPIEfficiency(rawData.apiCalls),
         systemResourceUsage: this.calculateSystemUsage(rawData.systemMetrics)
       },
-      
+
       // 품질 효율성 계산
       qualityEfficiency: {
         solutionQualityScore: this.calculateQualityScore(rawData.solutions),
@@ -165,10 +165,10 @@ class EfficiencyAnalyzer {
       }
     };
   }
-  
+
   private calculateAverageResolutionTime(problems: ProblemData[]): TimeMetrics {
     const resolutionTimes = problems.map(p => p.resolutionTime).filter(t => t > 0);
-    
+
     return {
       overall: this.mean(resolutionTimes),
       byProblemType: this.groupBy(problems, 'type', p => p.resolutionTime),
@@ -203,7 +203,7 @@ interface UserSatisfactionMetrics {
       byResolutionTime: Record<TimeRange, number>;
     };
   };
-  
+
   // 세부 만족도 요소
   satisfactionComponents: {
     // 해결 품질 만족도
@@ -213,7 +213,7 @@ interface UserSatisfactionMetrics {
       applicability: number;    // 실제 적용 가능성
       clarity: number;          // 설명의 명확성
     };
-    
+
     // 프로세스 만족도
     processEfficiency: {
       speed: number;            // 해결 속도
@@ -221,7 +221,7 @@ interface UserSatisfactionMetrics {
       automation: number;       // 자동화 수준
       communication: number;    // 의사소통 품질
     };
-    
+
     // 학습 효과 만족도
     learningValue: {
       knowledgeGain: number;    // 지식 습득
@@ -230,7 +230,7 @@ interface UserSatisfactionMetrics {
       confidenceBoost: number;  // 자신감 향상
     };
   };
-  
+
   // 사용자 행동 지표
   behaviorMetrics: {
     // 재사용률
@@ -239,14 +239,14 @@ interface UserSatisfactionMetrics {
       frequencyOfUse: number;   // 사용 빈도
       featureAdoption: Record<FeatureName, number>; // 기능별 채택률
     };
-    
+
     // 추천 의향
     recommendation: {
       netPromoterScore: number; // NPS 점수
       referralRate: number;     // 추천률
       testimonials: number;     // 추천사 수
     };
-    
+
     // 피드백 품질
     feedbackQuality: {
       detailedFeedback: number; // 상세 피드백 비율
@@ -261,19 +261,19 @@ class UserSatisfactionAnalyzer {
   async analyzeSatisfaction(period: AnalysisPeriod): Promise<SatisfactionAnalysis> {
     // 직접 피드백 수집
     const directFeedback = await this.collectDirectFeedback(period);
-    
+
     // 간접 지표 분석
     const behaviorAnalysis = await this.analyzeBehaviorPatterns(period);
-    
+
     // 감정 분석
     const sentimentAnalysis = await this.analyzeSentiment(directFeedback.textualFeedback);
-    
+
     // 만족도 예측 모델 적용
     const predictedSatisfaction = await this.predictSatisfaction(behaviorAnalysis);
-    
+
     // 세그먼트별 분석
     const segmentAnalysis = await this.analyzeBySegments(directFeedback, behaviorAnalysis);
-    
+
     return {
       period,
       overallScore: this.calculateOverallSatisfaction(directFeedback, behaviorAnalysis),
@@ -290,20 +290,20 @@ class UserSatisfactionAnalyzer {
       })
     };
   }
-  
+
   private async collectDirectFeedback(period: AnalysisPeriod): Promise<DirectFeedback> {
     // 설문조사 데이터
     const surveyData = await this.getSurveyData(period);
-    
+
     // 평점 데이터
     const ratingData = await this.getRatingData(period);
-    
+
     // 텍스트 피드백
     const textualFeedback = await this.getTextualFeedback(period);
-    
+
     // 인터뷰 데이터 (있는 경우)
     const interviewData = await this.getInterviewData(period);
-    
+
     return {
       surveys: surveyData,
       ratings: ratingData,
@@ -313,20 +313,20 @@ class UserSatisfactionAnalyzer {
       dataQuality: this.assessDataQuality([surveyData, ratingData, textualFeedback])
     };
   }
-  
+
   private async analyzeBehaviorPatterns(period: AnalysisPeriod): Promise<BehaviorAnalysis> {
     // 사용 패턴 분석
     const usagePatterns = await this.analyzeUsagePatterns(period);
-    
+
     // 이탈 분석
     const churnAnalysis = await this.analyzeChurn(period);
-    
+
     // 기능 채택 분석
     const featureAdoption = await this.analyzeFeatureAdoption(period);
-    
+
     // 성과 지표와 만족도 상관관계
     const performanceCorrelation = await this.analyzePerformanceCorrelation(period);
-    
+
     return {
       usage: usagePatterns,
       churn: churnAnalysis,
@@ -340,13 +340,13 @@ class UserSatisfactionAnalyzer {
       })
     };
   }
-  
+
   private generateActionableInsights(analysisData: AnalysisData): ActionableInsight[] {
     const insights: ActionableInsight[] = [];
-    
+
     // 낮은 만족도 영역 식별
     const lowSatisfactionAreas = this.identifyLowSatisfactionAreas(analysisData);
-    
+
     for (const area of lowSatisfactionAreas) {
       insights.push({
         category: 'improvement_opportunity',
@@ -359,10 +359,10 @@ class UserSatisfactionAnalyzer {
         timeline: this.estimateImprovementTimeline(area)
       });
     }
-    
+
     // 높은 성과 영역 식별 및 확산 기회
     const highPerformanceAreas = this.identifyHighPerformanceAreas(analysisData);
-    
+
     for (const area of highPerformanceAreas) {
       insights.push({
         category: 'scaling_opportunity',
@@ -373,7 +373,7 @@ class UserSatisfactionAnalyzer {
         recommendations: this.generateScalingRecommendations(area)
       });
     }
-    
+
     return insights.sort((a, b) => b.impact.score - a.impact.score);
   }
 }
@@ -389,47 +389,47 @@ class RealTimePerformanceDashboard {
   private websocketConnections: Map<string, WebSocket>;
   private metricsStream: MetricsStream;
   private alertManager: AlertManager;
-  
+
   constructor() {
     this.websocketConnections = new Map();
     this.metricsStream = new MetricsStream();
     this.alertManager = new AlertManager();
     this.initializeRealTimeMonitoring();
   }
-  
+
   private initializeRealTimeMonitoring(): void {
     // 실시간 메트릭 스트림 설정
     this.metricsStream.on('newMetric', (metric) => {
       this.processNewMetric(metric);
     });
-    
+
     // 알림 시스템 설정
     this.alertManager.on('alert', (alert) => {
       this.broadcastAlert(alert);
     });
-    
+
     // 주기적 성능 검사
     setInterval(() => {
       this.performHealthCheck();
     }, 30000); // 30초마다
   }
-  
+
   async generateDashboardData(): Promise<DashboardData> {
     // 실시간 핵심 지표
     const coreMetrics = await this.getCoreMetrics();
-    
+
     // 성능 트렌드
     const performanceTrends = await this.getPerformanceTrends();
-    
+
     // 시스템 상태
     const systemHealth = await this.getSystemHealth();
-    
+
     // 사용자 활동
     const userActivity = await this.getUserActivity();
-    
+
     // 문제 해결 현황
     const problemSolvingStatus = await this.getProblemSolvingStatus();
-    
+
     return {
       timestamp: new Date(),
       coreMetrics: {
@@ -439,7 +439,7 @@ class RealTimePerformanceDashboard {
         averageResolutionTime: coreMetrics.avgResolutionTime,
         successRate: coreMetrics.successRate,
         systemLoad: coreMetrics.systemLoad,
-        
+
         // 24시간 누적 지표
         dailyStats: {
           problemsSolved: coreMetrics.dailyProblemsSolved,
@@ -448,24 +448,24 @@ class RealTimePerformanceDashboard {
           automationRate: coreMetrics.dailyAutomationRate
         }
       },
-      
+
       trends: performanceTrends,
       systemHealth,
       userActivity,
       problemSolvingStatus,
-      
+
       // 실시간 알림 및 경고
       alerts: await this.getActiveAlerts(),
-      
+
       // 예측 지표
       predictions: await this.getPredictiveMetrics()
     };
   }
-  
+
   private async getCoreMetrics(): Promise<CoreMetrics> {
     const now = new Date();
     const last24Hours = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-    
+
     return {
       // 실시간 지표
       activeUsers: await this.countActiveUsers(),
@@ -473,7 +473,7 @@ class RealTimePerformanceDashboard {
       avgResolutionTime: await this.calculateCurrentAvgResolutionTime(),
       successRate: await this.calculateCurrentSuccessRate(),
       systemLoad: await this.getCurrentSystemLoad(),
-      
+
       // 24시간 누적 지표
       dailyProblemsSolved: await this.countProblemsSolved(last24Hours, now),
       dailyTimeSaved: await this.calculateTimeSaved(last24Hours, now),
@@ -481,19 +481,19 @@ class RealTimePerformanceDashboard {
       dailyAutomationRate: await this.calculateAutomationRate(last24Hours, now)
     };
   }
-  
+
   private async processNewMetric(metric: Metric): void {
     // 메트릭 검증
     if (!this.validateMetric(metric)) {
       return;
     }
-    
+
     // 실시간 대시보드 업데이트
     await this.updateDashboard(metric);
-    
+
     // 임계값 검사
     const thresholdCheck = await this.checkThresholds(metric);
-    
+
     if (thresholdCheck.violated) {
       // 알림 발생
       await this.alertManager.triggerAlert({
@@ -505,28 +505,28 @@ class RealTimePerformanceDashboard {
         timestamp: new Date()
       });
     }
-    
+
     // 트렌드 분석 업데이트
     await this.updateTrendAnalysis(metric);
-    
+
     // 예측 모델 입력
     await this.feedPredictionModel(metric);
   }
-  
+
   async generatePerformanceReport(period: ReportPeriod): Promise<PerformanceReport> {
     // 종합 성능 분석
     const comprehensiveAnalysis = await this.performComprehensiveAnalysis(period);
-    
+
     // 개선 기회 식별
     const improvementOpportunities = await this.identifyImprovementOpportunities(period);
-    
+
     // 예측 및 권장사항
     const predictionsAndRecommendations = await this.generatePredictionsAndRecommendations(period);
-    
+
     return {
       period,
       generatedAt: new Date(),
-      
+
       // 실행 요약
       executiveSummary: {
         overallPerformance: comprehensiveAnalysis.overallScore,
@@ -534,7 +534,7 @@ class RealTimePerformanceDashboard {
         majorChallenges: comprehensiveAnalysis.majorChallenges,
         priorityRecommendations: predictionsAndRecommendations.priorityRecommendations
       },
-      
+
       // 상세 분석
       detailedAnalysis: {
         efficiency: comprehensiveAnalysis.efficiency,
@@ -542,14 +542,14 @@ class RealTimePerformanceDashboard {
         systemPerformance: comprehensiveAnalysis.systemPerformance,
         costEffectiveness: comprehensiveAnalysis.costEffectiveness
       },
-      
+
       // 트렌드 및 패턴
       trendsAndPatterns: {
         performanceTrends: comprehensiveAnalysis.trends,
         seasonalPatterns: comprehensiveAnalysis.seasonalPatterns,
         anomalies: comprehensiveAnalysis.anomalies
       },
-      
+
       // 개선 계획
       improvementPlan: {
         opportunities: improvementOpportunities,
@@ -570,7 +570,7 @@ class PredictivePerformanceAnalyzer {
   private forecastingModels: Map<string, ForecastingModel>;
   private anomalyDetector: AnomalyDetector;
   private optimizationEngine: OptimizationEngine;
-  
+
   async performPredictiveAnalysis(
     historicalData: HistoricalPerformanceData,
     currentMetrics: CurrentMetrics
@@ -580,22 +580,22 @@ class PredictivePerformanceAnalyzer {
       historicalData,
       currentMetrics
     );
-    
+
     // 이상 징후 탐지
     const anomalyDetection = await this.detectAnomalies(currentMetrics);
-    
+
     // 용량 계획
     const capacityPlanning = await this.performCapacityPlanning(
       performanceForecasts,
       currentMetrics
     );
-    
+
     // 최적화 기회
     const optimizationOpportunities = await this.identifyOptimizationOpportunities(
       historicalData,
       performanceForecasts
     );
-    
+
     return {
       forecasts: performanceForecasts,
       anomalies: anomalyDetection,
@@ -609,13 +609,13 @@ class PredictivePerformanceAnalyzer {
       })
     };
   }
-  
+
   private async generatePerformanceForecasts(
     historical: HistoricalPerformanceData,
     current: CurrentMetrics
   ): Promise<PerformanceForecasts> {
     const forecasts: PerformanceForecasts = {};
-    
+
     // 주요 메트릭별 예측
     const keyMetrics = [
       'resolution_time',
@@ -624,17 +624,17 @@ class PredictivePerformanceAnalyzer {
       'system_load',
       'cost_per_resolution'
     ];
-    
+
     for (const metric of keyMetrics) {
       const model = this.forecastingModels.get(metric);
-      
+
       if (model) {
         const forecast = await model.forecast({
           historical: historical[metric],
           current: current[metric],
           horizon: 30 // 30일 예측
         });
-        
+
         forecasts[metric] = {
           predictions: forecast.predictions,
           confidence: forecast.confidence,
@@ -644,21 +644,21 @@ class PredictivePerformanceAnalyzer {
         };
       }
     }
-    
+
     // 시나리오 기반 예측
     const scenarios = await this.generateScenarioForecasts(historical, current);
     forecasts.scenarios = scenarios;
-    
+
     return forecasts;
   }
-  
+
   private async detectAnomalies(currentMetrics: CurrentMetrics): Promise<AnomalyDetection> {
     const anomalies: DetectedAnomaly[] = [];
-    
+
     // 메트릭별 이상 탐지
     for (const [metricName, value] of Object.entries(currentMetrics)) {
       const anomalyScore = await this.anomalyDetector.detect(metricName, value);
-      
+
       if (anomalyScore.isAnomalous) {
         anomalies.push({
           metric: metricName,
@@ -671,34 +671,34 @@ class PredictivePerformanceAnalyzer {
         });
       }
     }
-    
+
     // 패턴 기반 이상 탐지
     const patternAnomalies = await this.detectPatternAnomalies(currentMetrics);
     anomalies.push(...patternAnomalies);
-    
+
     return {
       anomalies,
       riskLevel: this.calculateOverallRiskLevel(anomalies),
       recommendations: this.generateAnomalyRecommendations(anomalies)
     };
   }
-  
+
   private async performCapacityPlanning(
     forecasts: PerformanceForecasts,
     current: CurrentMetrics
   ): Promise<CapacityPlan> {
     // 리소스 사용량 예측
     const resourceForecasts = await this.forecastResourceUsage(forecasts, current);
-    
+
     // 병목점 식별
     const bottlenecks = await this.identifyBottlenecks(resourceForecasts);
-    
+
     // 확장 요구사항 계산
     const scalingRequirements = await this.calculateScalingRequirements(
       resourceForecasts,
       bottlenecks
     );
-    
+
     return {
       currentCapacity: this.assessCurrentCapacity(current),
       forecastedDemand: resourceForecasts,
@@ -709,41 +709,41 @@ class PredictivePerformanceAnalyzer {
       riskAssessment: this.assessCapacityRisks(resourceForecasts, bottlenecks)
     };
   }
-  
+
   private async identifyOptimizationOpportunities(
     historical: HistoricalPerformanceData,
     forecasts: PerformanceForecasts
   ): Promise<OptimizationOpportunity[]> {
     const opportunities: OptimizationOpportunity[] = [];
-    
+
     // 성능 개선 기회
     const performanceOptimizations = await this.identifyPerformanceOptimizations(
       historical,
       forecasts
     );
     opportunities.push(...performanceOptimizations);
-    
+
     // 비용 최적화 기회
     const costOptimizations = await this.identifyCostOptimizations(
       historical,
       forecasts
     );
     opportunities.push(...costOptimizations);
-    
+
     // 사용자 경험 개선 기회
     const uxOptimizations = await this.identifyUXOptimizations(
       historical,
       forecasts
     );
     opportunities.push(...uxOptimizations);
-    
+
     // 자동화 기회
     const automationOptimizations = await this.identifyAutomationOpportunities(
       historical,
       forecasts
     );
     opportunities.push(...automationOptimizations);
-    
+
     return opportunities.sort((a, b) => b.impact.score - a.impact.score);
   }
 }
@@ -759,7 +759,7 @@ class IndustryBenchmarkAnalyzer {
   private benchmarkDatabase: BenchmarkDatabase;
   private peerGroupIdentifier: PeerGroupIdentifier;
   private competitiveAnalyzer: CompetitiveAnalyzer;
-  
+
   async performBenchmarkAnalysis(
     currentPerformance: PerformanceMetrics
   ): Promise<BenchmarkAnalysis> {
@@ -770,22 +770,22 @@ class IndustryBenchmarkAnalyzer {
       technologyStack: currentPerformance.context.technologyStack,
       problemComplexity: currentPerformance.context.avgComplexity
     });
-    
+
     // 벤치마크 데이터 수집
     const benchmarkData = await this.benchmarkDatabase.getBenchmarks(peerGroups);
-    
+
     // 성능 비교 분석
     const comparison = await this.performComparison(currentPerformance, benchmarkData);
-    
+
     // 경쟁력 분석
     const competitivePosition = await this.competitiveAnalyzer.analyze(
       currentPerformance,
       benchmarkData
     );
-    
+
     // 개선 기회 식별
     const improvementTargets = await this.identifyImprovementTargets(comparison);
-    
+
     return {
       peerGroups,
       benchmarkData,
@@ -796,13 +796,13 @@ class IndustryBenchmarkAnalyzer {
       insights: this.extractBenchmarkInsights(comparison, competitivePosition)
     };
   }
-  
+
   private async performComparison(
     current: PerformanceMetrics,
     benchmarks: BenchmarkData
   ): Promise<PerformanceComparison> {
     const comparison: PerformanceComparison = {};
-    
+
     // 핵심 메트릭별 비교
     const keyMetrics = [
       'averageResolutionTime',
@@ -811,17 +811,17 @@ class IndustryBenchmarkAnalyzer {
       'costPerResolution',
       'automationRate'
     ];
-    
+
     for (const metric of keyMetrics) {
       const currentValue = current[metric];
       const benchmarkStats = benchmarks[metric];
-      
+
       comparison[metric] = {
         current: currentValue,
         benchmark: {
           min: benchmarkStats.min,
           q25: benchmarkStats.percentile25,
-          median: benchmarkStats.median, 
+          median: benchmarkStats.median,
           q75: benchmarkStats.percentile75,
           max: benchmarkStats.max,
           average: benchmarkStats.mean
@@ -835,10 +835,10 @@ class IndustryBenchmarkAnalyzer {
         performanceCategory: this.categorizePerformance(currentValue, benchmarkStats)
       };
     }
-    
+
     return comparison;
   }
-  
+
   private categorizePerformance(
     currentValue: number,
     benchmarkStats: BenchmarkStats
@@ -853,12 +853,12 @@ class IndustryBenchmarkAnalyzer {
       return 'below_average';
     }
   }
-  
+
   private async identifyImprovementTargets(
     comparison: PerformanceComparison
   ): Promise<ImprovementTarget[]> {
     const targets: ImprovementTarget[] = [];
-    
+
     for (const [metric, comp] of Object.entries(comparison)) {
       if (comp.performanceCategory === 'below_average') {
         targets.push({
@@ -886,7 +886,7 @@ class IndustryBenchmarkAnalyzer {
         });
       }
     }
-    
+
     return targets.sort((a, b) => {
       const priorityWeight = { high: 3, medium: 2, low: 1 };
       return priorityWeight[b.priority] - priorityWeight[a.priority];

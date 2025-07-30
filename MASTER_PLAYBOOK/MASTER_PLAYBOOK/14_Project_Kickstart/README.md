@@ -36,7 +36,7 @@
 # Claude와 함께 아이디어 구체화
 claude
 
-You: "할일 관리 앱을 만들고 싶은데, 
+You: "할일 관리 앱을 만들고 싶은데,
      사용자 인증, CRUD 기능, 실시간 동기화가 필요해.
      어떤 기술 스택이 좋을까?"
 
@@ -146,17 +146,17 @@ You: "다음 구조로 모바일 소셜 앱 HTML 프로토타입을 만들어줘
   --color-primary: #4F46E5;
   --color-secondary: #10B981;
   --color-accent: #F59E0B;
-  
+
   /* UI Colors */
   --color-background: #FFFFFF;
   --color-surface: #F9FAFB;
   --color-border: #E5E7EB;
-  
+
   /* Text Colors */
   --text-primary: #111827;
   --text-secondary: #6B7280;
   --text-muted: #9CA3AF;
-  
+
   /* Spacing (8px grid) */
   --space-1: 0.25rem; /* 4px */
   --space-2: 0.5rem;  /* 8px */
@@ -165,13 +165,13 @@ You: "다음 구조로 모바일 소셜 앱 HTML 프로토타입을 만들어줘
   --space-5: 1.25rem; /* 20px */
   --space-6: 1.5rem;  /* 24px */
   --space-8: 2rem;    /* 32px */
-  
+
   /* Typography */
   --text-sm: 0.875rem;  /* 14px */
   --text-base: 1rem;    /* 16px */
   --text-lg: 1.125rem;  /* 18px */
   --text-xl: 1.25rem;   /* 20px */
-  
+
   /* Border & Effects */
   --radius-sm: 0.25rem; /* 4px */
   --radius-md: 0.375rem; /* 6px */
@@ -360,7 +360,7 @@ You: "다음 구조로 모바일 소셜 앱 HTML 프로토타입을 만들어줘
 ```
 
 **Android 네이티브 변환:**
-```bash  
+```bash
 # Jetpack Compose로 변환
 /convert @mobile-prototype --platform android --compose --material3 --design-tokens @17_Design_System
 
@@ -420,7 +420,7 @@ static let spacing4: CGFloat = 16
             <h1 class="title">Social</h1>
             <button class="icon-btn">⋮</button>
         </header>
-        
+
         <!-- 메인 콘텐츠 -->
         <main class="content" id="main-content">
             <div class="feed">
@@ -438,7 +438,7 @@ static let spacing4: CGFloat = 16
                 </div>
             </div>
         </main>
-        
+
         <!-- 하단 탭 -->
         <nav class="bottom-tabs">
             <button class="tab active" onclick="switchTab('home')">🏠</button>
@@ -446,7 +446,7 @@ static let spacing4: CGFloat = 16
             <button class="tab" onclick="switchTab('profile')">👤</button>
         </nav>
     </div>
-    
+
     <script src="script.js"></script>
 </body>
 </html>
@@ -624,10 +624,10 @@ function switchTab(tabName) {
         tab.classList.remove('active');
     });
     event.target.classList.add('active');
-    
+
     // 콘텐츠 변경 (시뮬레이션)
     const content = document.getElementById('main-content');
-    
+
     switch(tabName) {
         case 'home':
             content.innerHTML = generateHomeFeed();
@@ -682,7 +682,7 @@ document.addEventListener('touchmove', function(e) {
     // 스크롤 제스처 처리
     const currentY = e.touches[0].clientY;
     const diff = startY - currentY;
-    
+
     if (Math.abs(diff) > 10) {
         // 스크롤 방향에 따른 처리
         if (diff > 0) {
@@ -790,15 +790,15 @@ export default function App() {
         <View style={styles.feed}>
           <View style={styles.post}>
             <View style={styles.postHeader}>
-              <Image 
-                source={{uri: 'https://via.placeholder.com/40'}} 
-                style={styles.avatar} 
+              <Image
+                source={{uri: 'https://via.placeholder.com/40'}}
+                style={styles.avatar}
               />
               <Text style={styles.username}>사용자명</Text>
             </View>
-            <Image 
-              source={{uri: 'https://via.placeholder.com/300x200'}} 
-              style={styles.postImage} 
+            <Image
+              source={{uri: 'https://via.placeholder.com/300x200'}}
+              style={styles.postImage}
             />
             <View style={styles.postActions}>
               <TouchableOpacity style={styles.actionBtn}>
@@ -817,19 +817,19 @@ export default function App() {
 
       {/* 하단 탭 */}
       <View style={styles.bottomTabs}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.tab, activeTab === 'home' && styles.activeTab]}
           onPress={() => setActiveTab('home')}
         >
           <Text style={styles.tabText}>🏠</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.tab, activeTab === 'search' && styles.activeTab]}
           onPress={() => setActiveTab('search')}
         >
           <Text style={styles.tabText}>🔍</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.tab, activeTab === 'profile' && styles.activeTab]}
           onPress={() => setActiveTab('profile')}
         >
@@ -988,8 +988,8 @@ claude "위의 HTML 구조를 Flutter로 변환해줘:
 
 **Claude 명령어 예시:**
 ```bash
-/upgrade-design-system @design-tokens.css 
-  --level 2 
+/upgrade-design-system @design-tokens.css
+  --level 2
   --features "brand-colors,dark-mode,responsive,accessibility"
   --components "navigation,forms,feedback,modals"
 ```
@@ -1011,7 +1011,7 @@ cat > .env.example << 'EOF'
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=your-secret-here
 
-# Database  
+# Database
 DATABASE_URL="postgresql://username:password@localhost:5432/dbname"
 
 # OAuth
@@ -1167,8 +1167,8 @@ You: "베타 런칭 전 체크리스트를 만들어줘:
 
 **Claude 명령어 예시:**
 ```bash
-/production-design-system @design-tokens.css 
-  --level 3 
+/production-design-system @design-tokens.css
+  --level 3
   --automation "style-dictionary,storybook,visual-testing"
   --package-name "@company/design-system"
   --cicd-integration vercel
@@ -1352,7 +1352,7 @@ You: "프로덕션 고객 지원 체계를 구축해줘:
 ### 시나리오 2: 스타트업 팀
 ```bash
 # Day 1: 프로토타입 (팀 내부 검증)
-# Week 1: 베타 (타겟 고객 50명 테스트)  
+# Week 1: 베타 (타겟 고객 50명 테스트)
 # Month 1: 프로덕션 (정식 서비스 런칭)
 
 목표: MVP 검증 → 투자 유치

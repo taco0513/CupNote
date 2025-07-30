@@ -14,7 +14,7 @@ business_requirements:
     - "결제 시스템 통합"
     - "재고 관리"
     - "주문 추적"
-  
+
   non_functional:
     - "동시 사용자 10,000명"
     - "99.9% 가용성"
@@ -31,14 +31,14 @@ technology_stack:
     styling: "Tailwind CSS"
     state: "Zustand"
     testing: "Jest + React Testing Library"
-  
+
   backend:
     runtime: "Node.js + TypeScript"
     framework: "Express.js / Fastify"
     database: "PostgreSQL + Redis"
     search: "Elasticsearch"
     message_queue: "Redis / RabbitMQ"
-  
+
   infrastructure:
     cloud: "AWS / Azure"
     containers: "Docker + Kubernetes"
@@ -70,13 +70,13 @@ system_architecture:
     - "React.js SPA"
     - "Admin Dashboard"
     - "Mobile App (React Native)"
-  
+
   api_gateway:
     - "인증/인가"
     - "Rate Limiting"
     - "API 버전 관리"
     - "로드 밸런싱"
-  
+
   application_layer:
     - "User Service"
     - "Product Service"
@@ -84,7 +84,7 @@ system_architecture:
     - "Payment Service"
     - "Inventory Service"
     - "Notification Service"
-  
+
   data_layer:
     - "PostgreSQL (Primary)"
     - "Redis (Cache)"
@@ -159,58 +159,58 @@ class AuthService {
   async register(userData) {
     // 입력 데이터 검증
     const validatedData = await this.validateRegistrationData(userData);
-    
+
     // 비밀번호 해싱
     const hashedPassword = await bcrypt.hash(validatedData.password, 12);
-    
+
     // 사용자 생성
     const user = await User.create({
       ...validatedData,
       password: hashedPassword
     });
-    
+
     // 이메일 인증 토큰 생성
     const verificationToken = this.generateVerificationToken(user.id);
     await this.sendVerificationEmail(user.email, verificationToken);
-    
+
     return { user: this.sanitizeUser(user), message: '인증 이메일을 확인해주세요' };
   }
-  
+
   async login(email, password) {
     // 사용자 조회
     const user = await User.findOne({ email });
     if (!user) {
       throw new AuthenticationError('잘못된 이메일 또는 비밀번호입니다');
     }
-    
+
     // 비밀번호 검증
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
       throw new AuthenticationError('잘못된 이메일 또는 비밀번호입니다');
     }
-    
+
     // JWT 토큰 생성
     const tokens = this.generateTokens(user);
-    
+
     // 로그인 기록
     await this.logLoginActivity(user.id);
-    
+
     return { user: this.sanitizeUser(user), tokens };
   }
-  
+
   generateTokens(user) {
     const accessToken = jwt.sign(
       { userId: user.id, email: user.email },
       process.env.JWT_SECRET,
       { expiresIn: '15m' }
     );
-    
+
     const refreshToken = jwt.sign(
       { userId: user.id },
       process.env.JWT_REFRESH_SECRET,
       { expiresIn: '7d' }
     );
-    
+
     return { accessToken, refreshToken };
   }
 }
@@ -222,27 +222,27 @@ class AuthService {
 class ProductController {
   async getProducts(req, res) {
     const { page = 1, limit = 20, category, search, sortBy = 'created_at' } = req.query;
-    
+
     let query = Product.query();
-    
+
     // 필터링
     if (category) {
       query = query.where('category_id', category);
     }
-    
+
     if (search) {
       query = query.where(builder => {
         builder.where('name', 'ilike', `%${search}%`)
                .orWhere('description', 'ilike', `%${search}%`);
       });
     }
-    
+
     // 정렬
     query = query.orderBy(sortBy, 'desc');
-    
+
     // 페이지네이션
     const results = await query.page(page - 1, limit);
-    
+
     res.json({
       products: results.results,
       pagination: {
@@ -252,27 +252,27 @@ class ProductController {
       }
     });
   }
-  
+
   async createProduct(req, res) {
     const productData = req.body;
-    
+
     // 유효성 검사
     const { error, value } = productSchema.validate(productData);
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
     }
-    
+
     // SKU 중복 확인
     const existingSKU = await Product.query().where('sku', value.sku).first();
     if (existingSKU) {
       return res.status(409).json({ error: 'SKU가 이미 존재합니다' });
     }
-    
+
     const product = await Product.query().insert(value);
-    
+
     // 이벤트 발행
     await eventBus.publish('product.created', { productId: product.id });
-    
+
     res.status(201).json(product);
   }
 }
@@ -284,19 +284,19 @@ class ProductController {
 class OrderService {
   async createOrder(userId, orderData) {
     const transaction = await Order.startTransaction();
-    
+
     try {
       // 1. 재고 확인
       for (const item of orderData.items) {
         const product = await Product.query(transaction)
           .findById(item.productId)
           .forUpdate();
-        
+
         if (product.stock < item.quantity) {
           throw new InsufficientStockError(`상품 ${product.name}의 재고가 부족합니다`);
         }
       }
-      
+
       // 2. 주문 생성
       const order = await Order.query(transaction).insert({
         userId,
@@ -305,7 +305,7 @@ class OrderService {
         shippingAddress: orderData.shippingAddress,
         billingAddress: orderData.billingAddress
       });
-      
+
       // 3. 주문 아이템 생성
       const orderItems = orderData.items.map(item => ({
         orderId: order.id,
@@ -313,27 +313,27 @@ class OrderService {
         quantity: item.quantity,
         price: item.price
       }));
-      
+
       await OrderItem.query(transaction).insert(orderItems);
-      
+
       // 4. 재고 차감
       for (const item of orderData.items) {
         await Product.query(transaction)
           .findById(item.productId)
           .decrement('stock', item.quantity);
       }
-      
+
       await transaction.commit();
-      
+
       // 5. 이벤트 발행
       await eventBus.publish('order.created', {
         orderId: order.id,
         userId,
         totalAmount: order.totalAmount
       });
-      
+
       return order;
-      
+
     } catch (error) {
       await transaction.rollback();
       throw error;
@@ -388,7 +388,7 @@ export const ProductList: React.FC<ProductListProps> = ({
   hasMore
 }) => {
   const [view, setView] = useState<'grid' | 'list'>('grid');
-  
+
   return (
     <div className="space-y-6">
       {/* 뷰 토글 */}
@@ -409,9 +409,9 @@ export const ProductList: React.FC<ProductListProps> = ({
           </button>
         </div>
       </div>
-      
+
       {/* 상품 그리드/리스트 */}
-      <div className={view === 'grid' 
+      <div className={view === 'grid'
         ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'
         : 'space-y-4'
       }>
@@ -423,14 +423,14 @@ export const ProductList: React.FC<ProductListProps> = ({
           />
         ))}
       </div>
-      
+
       {/* 로딩 스피너 */}
       {loading && (
         <div className="flex justify-center py-8">
           <Spinner size="lg" />
         </div>
       )}
-      
+
       {/* 더보기 버튼 */}
       {hasMore && !loading && (
         <div className="flex justify-center">
@@ -479,11 +479,11 @@ export const useCartStore = create<CartStore>()(
       items: [],
       total: 0,
       itemCount: 0,
-      
+
       addItem: (product, quantity = 1) => {
         const { items } = get();
         const existingItem = items.find(item => item.productId === product.id);
-        
+
         if (existingItem) {
           get().updateQuantity(product.id, existingItem.quantity + quantity);
         } else {
@@ -495,28 +495,28 @@ export const useCartStore = create<CartStore>()(
             quantity,
             image: product.image
           };
-          
+
           set((state) => ({
             items: [...state.items, newItem]
           }));
         }
-        
+
         get().calculateTotal();
       },
-      
+
       removeItem: (productId) => {
         set((state) => ({
           items: state.items.filter(item => item.productId !== productId)
         }));
         get().calculateTotal();
       },
-      
+
       updateQuantity: (productId, quantity) => {
         if (quantity <= 0) {
           get().removeItem(productId);
           return;
         }
-        
+
         set((state) => ({
           items: state.items.map(item =>
             item.productId === productId
@@ -526,16 +526,16 @@ export const useCartStore = create<CartStore>()(
         }));
         get().calculateTotal();
       },
-      
+
       clearCart: () => {
         set({ items: [], total: 0, itemCount: 0 });
       },
-      
+
       calculateTotal: () => {
         const { items } = get();
         const total = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-        
+
         set({ total, itemCount });
       }
     }),
@@ -556,7 +556,7 @@ class PaymentService {
   constructor() {
     this.stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
   }
-  
+
   async createPaymentIntent(orderId, amount, currency = 'krw') {
     try {
       const paymentIntent = await this.stripe.paymentIntents.create({
@@ -567,7 +567,7 @@ class PaymentService {
           enabled: true
         }
       });
-      
+
       // 결제 의도 저장
       await Payment.query().insert({
         id: paymentIntent.id,
@@ -578,17 +578,17 @@ class PaymentService {
         provider: 'stripe',
         metadata: paymentIntent
       });
-      
+
       return {
         clientSecret: paymentIntent.client_secret,
         paymentIntentId: paymentIntent.id
       };
-      
+
     } catch (error) {
       throw new PaymentError('결제 생성 실패', error);
     }
   }
-  
+
   async handleWebhook(signature, payload) {
     try {
       const event = this.stripe.webhooks.constructEvent(
@@ -596,41 +596,41 @@ class PaymentService {
         signature,
         process.env.STRIPE_WEBHOOK_SECRET
       );
-      
+
       switch (event.type) {
         case 'payment_intent.succeeded':
           await this.handlePaymentSuccess(event.data.object);
           break;
-          
+
         case 'payment_intent.payment_failed':
           await this.handlePaymentFailure(event.data.object);
           break;
-          
+
         default:
           console.log(`처리되지 않은 이벤트 타입: ${event.type}`);
       }
-      
+
     } catch (error) {
       console.error('웹훅 처리 실패:', error);
       throw error;
     }
   }
-  
+
   async handlePaymentSuccess(paymentIntent) {
     const { orderId } = paymentIntent.metadata;
-    
+
     await Promise.all([
       // 결제 상태 업데이트
       Payment.query()
         .where('id', paymentIntent.id)
         .patch({ status: 'completed' }),
-      
+
       // 주문 상태 업데이트
       Order.query()
         .findById(orderId)
         .patch({ status: 'paid' })
     ]);
-    
+
     // 주문 확인 이벤트 발행
     await eventBus.publish('order.paid', { orderId });
   }
@@ -648,19 +648,19 @@ export const CheckoutForm: React.FC<{ order: Order }> = ({ order }) => {
   const elements = useElements();
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    
+
     if (!stripe || !elements) return;
-    
+
     setProcessing(true);
     setError(null);
-    
+
     try {
       // 결제 의도 생성
       const { clientSecret } = await createPaymentIntent(order.id, order.total);
-      
+
       // 결제 확인
       const { error: stripeError } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
@@ -677,21 +677,21 @@ export const CheckoutForm: React.FC<{ order: Order }> = ({ order }) => {
           }
         }
       });
-      
+
       if (stripeError) {
         setError(stripeError.message || '결제 처리 중 오류가 발생했습니다.');
       } else {
         // 결제 성공
         window.location.href = `/orders/${order.id}/success`;
       }
-      
+
     } catch (err) {
       setError('결제 처리 중 오류가 발생했습니다.');
     } finally {
       setProcessing(false);
     }
   };
-  
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="p-4 border rounded-lg">
@@ -709,13 +709,13 @@ export const CheckoutForm: React.FC<{ order: Order }> = ({ order }) => {
           }}
         />
       </div>
-      
+
       {error && (
         <div className="p-3 text-red-700 bg-red-100 rounded">
           {error}
         </div>
       )}
-      
+
       <button
         type="submit"
         disabled={!stripe || processing}
@@ -758,10 +758,10 @@ const logger = winston.createLogger({
 // 성능 모니터링 미들웨어
 const performanceMonitor = (req, res, next) => {
   const start = Date.now();
-  
+
   res.on('finish', () => {
     const duration = Date.now() - start;
-    
+
     logger.info('API Request', {
       method: req.method,
       url: req.url,
@@ -770,7 +770,7 @@ const performanceMonitor = (req, res, next) => {
       userAgent: req.get('User-Agent'),
       ip: req.ip
     });
-    
+
     // 느린 요청 알림
     if (duration > 3000) {
       logger.warn('Slow Request', {
@@ -780,7 +780,7 @@ const performanceMonitor = (req, res, next) => {
       });
     }
   });
-  
+
   next();
 };
 ```

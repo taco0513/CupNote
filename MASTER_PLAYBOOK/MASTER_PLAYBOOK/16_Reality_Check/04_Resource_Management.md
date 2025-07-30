@@ -14,36 +14,36 @@ class RealisticTimeEstimator {
   estimateTask(task: Task): TimeEstimate {
     // 기본 추정
     const baseEstimate = this.calculateBaseTime(task);
-    
+
     // 현실 배수 적용
     const realityMultipliers = {
       // 새로운 기술 사용
       newTech: task.useNewTech ? 1.5 : 1.0,
-      
+
       // 외부 의존성
       externalDeps: task.externalDeps.length * 0.3 + 1.0,
-      
+
       // 불명확한 요구사항
       requirements: task.clarityScore < 0.7 ? 1.8 : 1.0,
-      
+
       // 팀 경험도
       teamExperience: this.getExperienceMultiplier(task.domain),
-      
+
       // 중간 변경 가능성
       changeRisk: task.changeRisk * 0.4 + 1.0,
-      
+
       // 디버깅 및 테스트
       testingBuffer: 1.3,
-      
+
       // 커뮤니케이션 오버헤드
       communication: this.getTeamSize() > 3 ? 1.2 : 1.0
     };
-    
+
     const totalMultiplier = Object.values(realityMultipliers)
       .reduce((acc, mult) => acc * mult, 1.0);
-    
+
     const realisticEstimate = baseEstimate * totalMultiplier;
-    
+
     return {
       optimistic: baseEstimate,
       realistic: realisticEstimate,
@@ -58,7 +58,7 @@ class RealisticTimeEstimator {
       risks: this.identifyTimeRisks(task)
     };
   }
-  
+
   // 일반적인 시간 함정들
   getCommonTimeTraps(): TimeTraps {
     return {
@@ -72,7 +72,7 @@ class RealisticTimeEstimator {
         {
           task: "결제 연동",
           commonEstimate: "1주",
-          reality: "2-3주", 
+          reality: "2-3주",
           reasons: ["결제사 문서", "테스트 환경", "에러 처리", "환불 로직"]
         },
         {
@@ -82,7 +82,7 @@ class RealisticTimeEstimator {
           reasons: ["여러 채널", "템플릿 관리", "발송 실패 처리"]
         }
       ],
-      
+
       hiddenTimeConsumers: [
         "환경 설정 및 배포 설정",
         "서드파티 서비스 연동",
@@ -105,13 +105,13 @@ class RealScheduleManager {
     // 1. 핵심 기능 우선순위
     const coreFeatures = this.identifyCoreFeatures(project);
     const niceToHave = this.identifyNiceToHave(project);
-    
+
     // 2. 의존성 분석
     const dependencies = this.analyzeDependencies([...coreFeatures, ...niceToHave]);
-    
+
     // 3. 버퍼 시간 계산
     const bufferTime = this.calculateBufferTime(project);
-    
+
     return {
       // Phase 1: MVP (70% 기능)
       phase1: {
@@ -120,7 +120,7 @@ class RealScheduleManager {
         milestone: "사용 가능한 기본 제품",
         risks: this.identifyPhase1Risks()
       },
-      
+
       // Phase 2: 개선 (20% 추가 기능)
       phase2: {
         duration: this.estimatePhase(niceToHave.slice(0, 3)) * 1.3,
@@ -128,7 +128,7 @@ class RealScheduleManager {
         milestone: "사용자 만족도 향상",
         risks: this.identifyPhase2Risks()
       },
-      
+
       // Phase 3: 확장 (10% 고도화)
       phase3: {
         duration: this.estimatePhase(niceToHave.slice(3)) * 1.2,
@@ -136,17 +136,17 @@ class RealScheduleManager {
         milestone: "시장 경쟁력 확보",
         risks: this.identifyPhase3Risks()
       },
-      
+
       // 전체 일정
       total: {
         optimistic: "6개월",
-        realistic: "9개월", 
+        realistic: "9개월",
         withPivot: "12개월",
         bufferStrategy: this.getBufferStrategy()
       }
     };
   }
-  
+
   // 일정 지연 대응 전략
   handleDelays(delay: Delay): ResponsePlan {
     const strategies = {
@@ -158,7 +158,7 @@ class RealScheduleManager {
           "성능 최적화 단계적 적용"
         ]
       },
-      
+
       majorDelay: { // 1개월 이상 지연
         action: "전략적 재검토",
         options: [
@@ -168,7 +168,7 @@ class RealScheduleManager {
           "출시 일정 공식 연기"
         ]
       },
-      
+
       criticalDelay: { // 2개월 이상 지연
         action: "프로젝트 피벗",
         options: [
@@ -178,7 +178,7 @@ class RealScheduleManager {
         ]
       }
     };
-    
+
     return this.createResponsePlan(delay.severity, strategies);
   }
 }
@@ -205,7 +205,7 @@ class TeamCompositionAnalyzer {
         },
         timeline: "6개월"
       },
-      
+
       realisticTeam: {
         size: 3,
         composition: {
@@ -221,7 +221,7 @@ class TeamCompositionAnalyzer {
         ],
         timeline: "9개월"
       },
-      
+
       soloTeam: {
         size: 1,
         composition: {
@@ -242,7 +242,7 @@ class TeamCompositionAnalyzer {
       }
     };
   }
-  
+
   // 팀 생산성 현실
   calculateRealProductivity(teamSize: number): ProductivityAnalysis {
     // Brooks의 법칙: 인력 추가가 항상 생산성 향상을 의미하지 않음
@@ -254,7 +254,7 @@ class TeamCompositionAnalyzer {
       5: { productivity: 2.6, communication: 2.4 },
       6: { productivity: 2.5, communication: 3.5 }
     };
-    
+
     return {
       effectiveProductivity: productivityCurve[teamSize]?.productivity || 2.0,
       communicationOverhead: productivityCurve[teamSize]?.communication || 4.0,
@@ -278,7 +278,7 @@ class OutsourcingDecisionMaker {
       timeline: this.assessTimelinePressure(task),
       budget: this.assessBudgetConstraint(task)
     };
-    
+
     return {
       recommendation: this.makeRecommendation(criteria),
       options: {
@@ -297,7 +297,7 @@ class OutsourcingDecisionMaker {
           cost: this.calculateInhouseCost(task),
           timeline: this.estimateInhouseTimeline(task)
         },
-        
+
         outsourcing: {
           pros: [
             "전문성 활용",
@@ -314,7 +314,7 @@ class OutsourcingDecisionMaker {
           cost: this.calculateOutsourcingCost(task),
           timeline: this.estimateOutsourcingTimeline(task)
         },
-        
+
         hybrid: {
           description: "핵심은 내부, 보조는 외주",
           strategy: [
@@ -350,7 +350,7 @@ class HiddenCostTracker {
         equipment: "노트북, 모니터, 소프트웨어 라이센스",
         workspace: "사무실 또는 코워킹 스페이스"
       },
-      
+
       // 인프라 비용 (예상보다 높음)
       infrastructureCosts: {
         development: {
@@ -367,7 +367,7 @@ class HiddenCostTracker {
           backups: "월 $50-200"
         }
       },
-      
+
       // 서드파티 서비스
       thirdPartyServices: {
         authentication: "월 $0-100 (Auth0, Firebase)",
@@ -377,7 +377,7 @@ class HiddenCostTracker {
         customerSupport: "월 $59-199 (Intercom, Zendesk)",
         errorTracking: "월 $0-100 (Sentry, Bugsnag)"
       },
-      
+
       // 숨겨진 비용들
       hiddenCosts: {
         legal: "이용약관, 개인정보처리방침 검토 $1000-5000",
@@ -387,28 +387,28 @@ class HiddenCostTracker {
         marketing: "초기 사용자 확보 $2000-10000",
         customerAcquisition: "광고비, CPA 최소 $1000/월"
       },
-      
+
       // 예상치 못한 비용
       unexpectedCosts: {
         scalingCosts: "트래픽 증가시 인프라 비용 급증",
         securityIncidents: "해킹, 데이터 유출 대응 비용",
-        legalIssues: "지적재산권, 개인정보 관련 법적 분쟁", 
+        legalIssues: "지적재산권, 개인정보 관련 법적 분쟁",
         teamExpansion: "성장시 인력 채용 및 온보딩 비용",
         platformChanges: "Apple, Google 정책 변경 대응"
       }
     };
   }
-  
+
   // 예산 계획 vs 현실
   compareBudgetVsReality(): BudgetComparison {
     return {
       plannedBudget: {
         development: "70%",
-        infrastructure: "10%", 
+        infrastructure: "10%",
         marketing: "15%",
         miscellaneous: "5%"
       },
-      
+
       actualBudget: {
         development: "50%", // 다른 업무로 시간 분산
         infrastructure: "20%", // 예상보다 높은 운영비
@@ -416,7 +416,7 @@ class HiddenCostTracker {
         operations: "10%", // 고객 지원, 관리 업무
         miscellaneous: "5%" // 각종 예상치 못한 비용
       },
-      
+
       recommendations: [
         "인프라 비용을 2배로 잡기",
         "운영 비용 별도 책정",
@@ -455,7 +455,7 @@ class FundingRealityGuide {
           "빠른 수익 창출 모델"
         ]
       },
-      
+
       // 정부 지원
       government_support: {
         pros: [
@@ -476,7 +476,7 @@ class FundingRealityGuide {
           "창업도약패키지: 최대 3억원"
         ]
       },
-      
+
       // 엔젤 투자
       angel_investment: {
         pros: [
@@ -497,7 +497,7 @@ class FundingRealityGuide {
           "명확한 시장 기회"
         ]
       },
-      
+
       // 현실적 조언
       reality_check: {
         harsh_truths: [
@@ -538,7 +538,7 @@ class TechnicalDebtManager {
           timeline: "MVP 출시 후 3개월 내 해결",
           risk: "낮음"
         },
-        
+
         time_constraints: {
           examples: [
             "임시 데이터 구조",
@@ -549,7 +549,7 @@ class TechnicalDebtManager {
           risk: "중간"
         }
       },
-      
+
       // 위험한 기술 부채
       dangerousDebt: {
         security_shortcuts: {
@@ -561,7 +561,7 @@ class TechnicalDebtManager {
           timeline: "즉시 해결",
           risk: "매우 높음"
         },
-        
+
         scalability_issues: {
           examples: [
             "N+1 쿼리 문제",
@@ -572,7 +572,7 @@ class TechnicalDebtManager {
           risk: "높음"
         }
       },
-      
+
       // 부채 상환 전략
       repayment_strategy: {
         priority_matrix: this.createPriorityMatrix(),

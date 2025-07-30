@@ -83,14 +83,14 @@ class ApiService {
 
   // 상품 관련 API
   products = {
-    list: (params?: ProductParams) => 
+    list: (params?: ProductParams) =>
       this.request<ProductList>('/products', {
         params: new URLSearchParams(params),
       }),
-    
-    get: (id: string) => 
+
+    get: (id: string) =>
       this.request<Product>(`/products/${id}`),
-    
+
     create: (data: CreateProductDto) =>
       this.request<Product>('/products', {
         method: 'POST',
@@ -112,7 +112,7 @@ interface ProductsState {
   products: Product[];
   loading: boolean;
   error: string | null;
-  
+
   fetchProducts: () => Promise<void>;
   createProduct: (data: CreateProductDto) => Promise<void>;
 }
@@ -165,7 +165,7 @@ export const useProducts = (params?: ProductParams) => {
 // 상품 생성
 export const useCreateProduct = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: api.products.create,
     onSuccess: () => {
@@ -218,7 +218,7 @@ export const handleApiError = (error: unknown): string => {
         return error.message;
     }
   }
-  
+
   return '알 수 없는 오류가 발생했습니다';
 };
 ```
@@ -270,7 +270,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       }
       setLoading(false);
     };
-    
+
     checkAuth();
   }, []);
 
@@ -331,7 +331,7 @@ describe('ProductCard', () => {
 
   it('renders product information', () => {
     render(<ProductCard product={mockProduct} />);
-    
+
     expect(screen.getByText('Test Product')).toBeInTheDocument();
     expect(screen.getByText('₩10,000')).toBeInTheDocument();
   });
@@ -349,7 +349,7 @@ describe('Products API', () => {
     const response = await request(app)
       .get('/api/products')
       .expect(200);
-      
+
     expect(response.body).toHaveProperty('data');
     expect(Array.isArray(response.body.data)).toBe(true);
   });
@@ -363,13 +363,13 @@ import { test, expect } from '@playwright/test';
 
 test('user can view and purchase product', async ({ page }) => {
   await page.goto('/');
-  
+
   // 상품 클릭
   await page.click('[data-testid="product-card"]');
-  
+
   // 장바구니 추가
   await page.click('[data-testid="add-to-cart"]');
-  
+
   // 장바구니 확인
   await page.goto('/cart');
   await expect(page.locator('[data-testid="cart-item"]')).toBeVisible();

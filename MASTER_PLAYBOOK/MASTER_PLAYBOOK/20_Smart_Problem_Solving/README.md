@@ -35,7 +35,7 @@
 ```bash
 # 체계적 디버깅
 - 에러 메시지 패턴 분석
-- 로그 파일 체계적 검토  
+- 로그 파일 체계적 검토
 - 의존성/환경/버전 체크
 - 재현 가능한 최소 케이스 생성
 ```
@@ -44,7 +44,7 @@
 ```bash
 # 자동 조건 (하나라도 해당하면 즉시 검색)
 - ⏰ 2분 이상 해결 안 될 때
-- 🔄 동일한 접근법 3번 시도했을 때  
+- 🔄 동일한 접근법 3번 시도했을 때
 - ❌ "unknown error" 또는 "not found" 메시지
 - 🆕 새로운 라이브러리/도구 관련 이슈
 - 💰 토큰 사용량 1000개 초과
@@ -142,7 +142,7 @@
 "React Native iOS build error Xcode 15 solution"
 "Docker compose PostgreSQL connection refused Ubuntu 2024"
 
-# ❌ 비효율적인 검색 쿼리  
+# ❌ 비효율적인 검색 쿼리
 "Next.js error help"
 "React not working"
 "Database problem"
@@ -178,10 +178,10 @@ const AutoSearchTrigger = {
       context.tokenUsage > 1000,
       context.isNewTechnology
     ];
-    
+
     return indicators.filter(Boolean).length >= 1;
   },
-  
+
   // 최적화된 검색 쿼리 생성
   generateQuery: (error, tech, context) => {
     const parts = [
@@ -190,7 +190,7 @@ const AutoSearchTrigger = {
       context.os && `${context.os}`,
       'solution fix 2024'
     ].filter(Boolean);
-    
+
     return parts.join(' ');
   }
 };
@@ -209,7 +209,7 @@ const AutoSearchTrigger = {
 
 자동 추천:
 🔍 즉시 명령어: /search "${technology} ${error} solution 2024"
-🤖 전문가 호출: Web Research Expert + Domain Expert  
+🤖 전문가 호출: Web Research Expert + Domain Expert
 📋 검색 체크리스트: 공식 문서 → GitHub Issues → Stack Overflow → 커뮤니티
 📚 관련 가이드: 20_Smart_Problem_Solving/README.md
 
@@ -237,7 +237,7 @@ const AutoSearchTrigger = {
 # 패턴 3: 성능 문제
 /search "[기술명] performance optimization best practices 2024"
 
-# 패턴 4: 배포 문제  
+# 패턴 4: 배포 문제
 /search "[플랫폼명] deployment [에러타입] solution 2024"
 ```
 
@@ -251,7 +251,7 @@ Claude: 🔍 자동 검색 실행 중...
 # 2단계: 검색 결과 분석
 Claude: 검색 결과 분석 완료! 3가지 해결책을 찾았습니다:
 1. 공식 문서 해결책 (권장)
-2. GitHub Issue 해결책  
+2. GitHub Issue 해결책
 3. Stack Overflow 해결책
 
 # 3단계: 솔루션 적용
@@ -264,7 +264,7 @@ Claude: 가장 적합한 해결책을 적용하겠습니다...
 ```yaml
 기존 방식 (Claude 혼자 삽질):
 - 시간: 30분
-- 토큰: 5000개  
+- 토큰: 5000개
 - 성공률: 60%
 - 사용자 스트레스: 높음
 
@@ -276,7 +276,7 @@ Claude: 가장 적합한 해결책을 적용하겠습니다...
 
 효율성 개선:
 - ⚡ 시간 90% 단축
-- 💰 토큰 94% 절약  
+- 💰 토큰 94% 절약
 - 🎯 성공률 35% 향상
 ```
 
@@ -306,7 +306,7 @@ Claude: 가장 적합한 해결책을 적용하겠습니다...
 ```bash
 # 전문가별 검색 전략
 Frontend Expert → React/Vue 특화 검색
-Backend Expert → Node.js/Python 특화 검색  
+Backend Expert → Node.js/Python 특화 검색
 DevOps Expert → 배포/인프라 특화 검색
 ```
 

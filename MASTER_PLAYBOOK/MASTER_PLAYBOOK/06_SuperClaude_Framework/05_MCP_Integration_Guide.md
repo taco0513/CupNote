@@ -183,7 +183,7 @@ auto_activation:
       - "문서 요청"
       - "코드 예제"
     confidence: 95%
-  
+
   sequential:
     triggers:
       - "복잡한 디버깅"
@@ -191,7 +191,7 @@ auto_activation:
       - "--think 플래그"
       - "다단계 문제"
     confidence: 90%
-  
+
   magic:
     triggers:
       - "UI 컴포넌트"
@@ -199,7 +199,7 @@ auto_activation:
       - "frontend 페르소나"
       - "컴포넌트 생성"
     confidence: 85%
-  
+
   playwright:
     triggers:
       - "E2E 테스트"
@@ -271,17 +271,17 @@ caching_strategy:
     type: "버전 인식 캐싱"
     ttl: "세션 동안"
     savings: "2-5K 토큰/쿼리"
-  
+
   sequential:
     type: "분석 결과 캐싱"
     ttl: "컨텍스트 변경까지"
     savings: "패턴 재사용"
-  
+
   magic:
     type: "컴포넌트 패턴"
     ttl: "프로젝트 동안"
     savings: "디자인 일관성"
-  
+
   playwright:
     type: "테스트 결과"
     ttl: "코드 변경까지"
@@ -297,17 +297,17 @@ error_scenarios:
     fallback: "WebSearch"
     action: "문서 검색"
     limitation: "비공식 소스"
-  
+
   sequential_timeout:
     fallback: "Native 분석"
     action: "기본 도구 사용"
     limitation: "깊이 제한"
-  
+
   magic_failure:
     fallback: "기본 생성"
     action: "수동 개선 제안"
     limitation: "디자인 품질"
-  
+
   playwright_disconnect:
     fallback: "수동 테스트"
     action: "테스트 케이스 제공"
@@ -321,12 +321,12 @@ recovery_strategies:
     initial: 1s
     max: 30s
     factor: 2
-  
+
   circuit_breaker:
     threshold: 3
     timeout: 60s
     half_open: 30s
-  
+
   graceful_degradation:
     levels:
       - "전체 기능"
@@ -357,11 +357,11 @@ performance_tips:
     sequential: "~10K/분석"
     magic: "~3K/컴포넌트"
     playwright: "~2K/테스트"
-  
+
   response_time:
     context7: "1-3초"
     sequential: "5-15초"
-    magic: "2-5초"  
+    magic: "2-5초"
     playwright: "10-30초"
 ```
 

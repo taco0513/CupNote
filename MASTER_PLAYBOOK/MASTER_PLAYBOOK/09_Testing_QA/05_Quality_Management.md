@@ -12,17 +12,17 @@ quality_dimensions:
     description: "기능적 요구사항 충족도"
     metrics: ["기능 완성도", "요구사항 추적성", "버그 밀도"]
     tools: ["요구사항 추적", "기능 테스트", "사용자 인수 테스트"]
-    
+
   structural_quality:
     description: "코드 구조와 아키텍처 품질"
     metrics: ["복잡도", "응집도", "결합도", "기술 부채"]
     tools: ["정적 분석", "아키텍처 검증", "코드 리뷰"]
-    
+
   process_quality:
     description: "개발 프로세스의 효율성"
     metrics: ["개발 속도", "배포 빈도", "리드 타임", "장애 복구 시간"]
     tools: ["CI/CD 메트릭", "DevOps 지표", "프로세스 모니터링"]
-    
+
   user_experience_quality:
     description: "사용자 경험의 우수성"
     metrics: ["성능", "접근성", "사용성", "만족도"]
@@ -118,7 +118,7 @@ const codeReviewGuidelines: CodeReviewGuidelines = {
       "학습 기회로 활용",
       "일관된 기준 적용"
     ],
-    
+
     focusAreas: [
       {
         area: "기능성",
@@ -161,7 +161,7 @@ const codeReviewGuidelines: CodeReviewGuidelines = {
         ]
       }
     ],
-    
+
     reviewTechniques: [
       {
         name: "라인별 리뷰",
@@ -180,7 +180,7 @@ const codeReviewGuidelines: CodeReviewGuidelines = {
       }
     ]
   },
-  
+
   author: {
     preparation: [
       "자체 리뷰 먼저 수행",
@@ -188,7 +188,7 @@ const codeReviewGuidelines: CodeReviewGuidelines = {
       "적절한 크기로 PR 분할",
       "테스트 및 문서 포함"
     ],
-    
+
     responseToBeedback: [
       "모든 피드백에 응답",
       "변경사항 명시적 커뮤니케이션",
@@ -196,14 +196,14 @@ const codeReviewGuidelines: CodeReviewGuidelines = {
       "감사 표현"
     ]
   },
-  
+
   process: {
     timing: {
       responseTime: "24시간 이내",
       reviewCompletionTime: "48시간 이내",
       followUpTime: "즉시"
     },
-    
+
     approval: {
       requiredApprovers: 2,
       blockingIssues: [
@@ -212,7 +212,7 @@ const codeReviewGuidelines: CodeReviewGuidelines = {
         "성능 저하",
         "테스트 실패"
       ],
-      
+
       nonBlockingIssues: [
         "스타일 개선",
         "변수명 제안",
@@ -238,25 +238,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: ESLint Check
         run: npm run lint:check
-      
+
       - name: TypeScript Check
         run: npm run type-check
-      
+
       - name: Prettier Check
         run: npm run format:check
-      
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
@@ -267,14 +267,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/node@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           args: --severity-threshold=high
-      
+
       - name: CodeQL Analysis
         uses: github/codeql-action/analyze@v2
         with:
@@ -284,26 +284,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run tests with coverage
         run: npm run test:coverage
-      
+
       - name: Coverage Report
         uses: codecov/codecov-action@v3
         with:
           file: ./coverage/lcov.info
           flags: unittests
           fail_ci_if_error: true
-      
+
       - name: Comment Coverage
         uses: 5monkeys/cobertura-action@master
         with:
@@ -317,24 +317,24 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Build application
         run: npm run build
-      
+
       - name: Bundle Analysis
         run: |
           npm run analyze:bundle
           npm run analyze:performance
-      
+
       - name: Comment Bundle Size
         uses: andresz1/size-limit-action@v1
         with:
@@ -389,7 +389,7 @@ module.exports = {
     'plugin:security/recommended',
     'plugin:sonarjs/recommended'
   ],
-  
+
   rules: {
     // 코드 품질 규칙
     'complexity': ['error', { max: 10 }],
@@ -401,7 +401,7 @@ module.exports = {
     'no-debugger': 'error',
     'no-duplicate-imports': 'error',
     'no-unused-vars': 'error',
-    
+
     // TypeScript 규칙
     '@typescript-eslint/no-any': 'error',
     '@typescript-eslint/no-explicit-any': 'error',
@@ -409,26 +409,26 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'error',
     '@typescript-eslint/prefer-nullish-coalescing': 'error',
     '@typescript-eslint/prefer-optional-chain': 'error',
-    
+
     // React 규칙
     'react/prop-types': 'off', // TypeScript 사용시 불필요
     'react/react-in-jsx-scope': 'off', // React 17+에서 불필요
     'react-hooks/exhaustive-deps': 'error',
-    
+
     // 접근성 규칙
     'jsx-a11y/anchor-is-valid': 'error',
     'jsx-a11y/img-redundant-alt': 'error',
-    
+
     // 보안 규칙
     'security/detect-object-injection': 'error',
     'security/detect-non-literal-regexp': 'error',
     'security/detect-unsafe-regex': 'error',
-    
+
     // SonarJS 규칙
     'sonarjs/cognitive-complexity': ['error', 15],
     'sonarjs/no-duplicate-string': ['error', 5],
     'sonarjs/no-identical-functions': 'error',
-    
+
     // Import 규칙
     'import/order': [
       'error',
@@ -448,7 +448,7 @@ module.exports = {
     'import/no-unresolved': 'error',
     'import/no-cycle': 'error'
   },
-  
+
   overrides: [
     {
       files: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts'],
@@ -491,42 +491,42 @@ module.exports = {
       }
     ]
   },
-  
+
   create(context) {
     const options = context.getOptions()[0] || {};
     const allowedStrings = options.allowedStrings || [];
     const ignoreAttribute = options.ignoreAttribute || false;
-    
+
     function checkStringLiteral(node) {
       if (typeof node.value !== 'string') return;
-      
+
       // 허용된 문자열 체크
       if (allowedStrings.includes(node.value)) return;
-      
+
       // 빈 문자열이나 단일 문자는 허용
       if (node.value.length <= 1) return;
-      
+
       // 속성 무시 옵션
       if (ignoreAttribute && isAttributeValue(node)) return;
-      
+
       // 테스트 파일에서는 허용
       if (context.getFilename().includes('.test.')) return;
-      
+
       context.report({
         node,
         message: `하드코딩된 문자열 "${node.value}"을 사용하지 마세요. 상수나 국제화 키를 사용하세요.`
       });
     }
-    
+
     function isAttributeValue(node) {
       const parent = node.parent;
       return parent && (
         parent.type === 'JSXAttribute' ||
-        (parent.type === 'Property' && parent.key && 
+        (parent.type === 'Property' && parent.key &&
          ['className', 'id', 'data-testid'].includes(parent.key.name))
       );
     }
-    
+
     return {
       Literal: checkStringLiteral,
       TemplateLiteral(node) {
@@ -546,13 +546,13 @@ module.exports = {
 ```typescript
 // src/quality/QualityDashboard.tsx
 import React, { useState, useEffect } from 'react';
-import { 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   Legend,
   BarChart,
   Bar,
@@ -628,17 +628,17 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({
 
   const getQualityScore = (metric: QualityMetrics): number => {
     const { codeQuality } = metric;
-    
+
     // 품질 점수 계산 (0-100)
     const complexityScore = Math.max(0, 100 - (codeQuality.complexity - 1) * 10);
     const duplicationScore = Math.max(0, 100 - codeQuality.duplication * 10);
     const coverageScore = codeQuality.coverage;
     const maintainabilityScore = codeQuality.maintainabilityIndex;
-    
+
     return Math.round(
-      (complexityScore * 0.25 + 
-       duplicationScore * 0.25 + 
-       coverageScore * 0.25 + 
+      (complexityScore * 0.25 +
+       duplicationScore * 0.25 +
+       coverageScore * 0.25 +
        maintainabilityScore * 0.25)
     );
   };
@@ -665,24 +665,24 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({
           <YAxis />
           <Tooltip />
           <Legend />
-          <Line 
-            type="monotone" 
-            dataKey="quality" 
-            stroke="#8884d8" 
+          <Line
+            type="monotone"
+            dataKey="quality"
+            stroke="#8884d8"
             strokeWidth={2}
             name="품질 점수"
           />
-          <Line 
-            type="monotone" 
-            dataKey="coverage" 
-            stroke="#82ca9d" 
+          <Line
+            type="monotone"
+            dataKey="coverage"
+            stroke="#82ca9d"
             strokeWidth={2}
             name="테스트 커버리지"
           />
-          <Line 
-            type="monotone" 
-            dataKey="complexity" 
-            stroke="#ffc658" 
+          <Line
+            type="monotone"
+            dataKey="complexity"
+            stroke="#ffc658"
             strokeWidth={2}
             name="복잡도"
           />
@@ -743,22 +743,22 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({
           <YAxis />
           <Tooltip />
           <Legend />
-          <Line 
-            type="monotone" 
-            dataKey="buildTime" 
-            stroke="#8884d8" 
+          <Line
+            type="monotone"
+            dataKey="buildTime"
+            stroke="#8884d8"
             name="빌드 시간 (초)"
           />
-          <Line 
-            type="monotone" 
-            dataKey="bundleSize" 
-            stroke="#82ca9d" 
+          <Line
+            type="monotone"
+            dataKey="bundleSize"
+            stroke="#82ca9d"
             name="번들 크기 (KB)"
           />
-          <Line 
-            type="monotone" 
-            dataKey="loadTime" 
-            stroke="#ffc658" 
+          <Line
+            type="monotone"
+            dataKey="loadTime"
+            stroke="#ffc658"
             name="로딩 시간 (초)"
           />
         </LineChart>
@@ -833,25 +833,25 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({
       <div className="dashboard-header">
         <h2>품질 대시보드</h2>
         <div className="metric-tabs">
-          <button 
+          <button
             className={selectedMetric === 'quality' ? 'active' : ''}
             onClick={() => setSelectedMetric('quality')}
           >
             코드 품질
           </button>
-          <button 
+          <button
             className={selectedMetric === 'test' ? 'active' : ''}
             onClick={() => setSelectedMetric('test')}
           >
             테스트
           </button>
-          <button 
+          <button
             className={selectedMetric === 'performance' ? 'active' : ''}
             onClick={() => setSelectedMetric('performance')}
           >
             성능
           </button>
-          <button 
+          <button
             className={selectedMetric === 'security' ? 'active' : ''}
             onClick={() => setSelectedMetric('security')}
           >
@@ -859,7 +859,7 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({
           </button>
         </div>
       </div>
-      
+
       <div className="dashboard-content">
         {renderMetricContent()}
       </div>
@@ -963,7 +963,7 @@ export class QualityGate {
 
       const actualValue = metrics[rule.metric] ?? 0;
       const passed = this.evaluateRule(rule, actualValue);
-      
+
       if (passed) {
         passedCount++;
       } else if (rule.severity === 'ERROR') {
@@ -1011,7 +1011,7 @@ export class QualityGate {
   private generateMessage(rule: QualityGateRule, actualValue: number, passed: boolean): string {
     const status = passed ? '✅ 통과' : '❌ 실패';
     const comparison = this.getComparisonText(rule.operator);
-    
+
     return `${status}: ${rule.name} - ${actualValue} ${comparison} ${rule.threshold}`;
   }
 
@@ -1024,7 +1024,7 @@ export class QualityGate {
       'EQ': '==',
       'NE': '!='
     };
-    
+
     return operatorMap[operator] || operator;
   }
 
@@ -1064,18 +1064,18 @@ export class QualityGateService {
   async checkQuality(projectId: string): Promise<QualityGateResult> {
     // 각종 도구에서 메트릭 수집
     const metrics = await this.collectMetrics(projectId);
-    
+
     // 품질 게이트 평가
     const result = await this.qualityGate.evaluate(metrics);
-    
+
     // 결과 저장
     await this.saveQualityGateResult(projectId, result);
-    
+
     // 알림 발송 (실패 시)
     if (!result.passed) {
       await this.notifyQualityGateFailure(projectId, result);
     }
-    
+
     return result;
   }
 
@@ -1129,7 +1129,7 @@ export class QualityGateService {
 
   private async getPerformanceMetrics(projectId: string): Promise<any> {
     // Webpack Bundle Analyzer, 빌드 시간 로그 파싱
-    return { 
+    return {
       buildTime: 120, // 초
       bundleSize: 2048000 // 바이트
     };
@@ -1195,16 +1195,16 @@ export class QualityImprovementService {
   async generateImprovementPlan(projectId: string): Promise<QualityImprovementPlan> {
     // 1. 모든 품질 이슈 수집
     const issues = await this.collectQualityIssues(projectId);
-    
+
     // 2. 이슈 우선순위 계산
     const prioritizedIssues = this.prioritizeIssues(issues);
-    
+
     // 3. 총 작업량 계산
     const totalEffort = issues.reduce((sum, issue) => sum + issue.estimatedEffort, 0);
-    
+
     // 4. 마일스톤 생성
     const milestones = this.createMilestones(prioritizedIssues);
-    
+
     return {
       issues,
       totalEffort,
@@ -1311,7 +1311,7 @@ export class QualityImprovementService {
     const plan = await this.getImprovementPlan(planId);
     const resolvedIssues = plan.issues.filter(issue => issue.status === 'resolved');
     const totalIssues = plan.issues.length;
-    
+
     return {
       completionRate: (resolvedIssues.length / totalIssues) * 100,
       resolvedIssues: resolvedIssues.length,
@@ -1327,11 +1327,11 @@ export class QualityImprovementService {
   }
 
   private estimateCompletion(plan: QualityImprovementPlan): Date {
-    const remainingIssues = plan.issues.filter(issue => 
+    const remainingIssues = plan.issues.filter(issue =>
       issue.status !== 'resolved' && issue.status !== 'wont-fix'
     );
     const remainingEffort = remainingIssues.reduce((sum, issue) => sum + issue.estimatedEffort, 0);
-    
+
     // 하루 4시간 작업 가정
     const daysNeeded = Math.ceil(remainingEffort / (4 * 60));
     return new Date(Date.now() + daysNeeded * 24 * 60 * 60 * 1000);

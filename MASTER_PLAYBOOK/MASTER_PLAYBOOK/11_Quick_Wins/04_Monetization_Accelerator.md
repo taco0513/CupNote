@@ -59,7 +59,7 @@ import { stripe, createCheckoutSession } from '@/lib/stripe';
 export async function POST(request: NextRequest) {
   try {
     const { priceId, productName } = await request.json();
-    
+
     const session = await createCheckoutSession(
       priceId,
       `${process.env.NEXT_PUBLIC_BASE_URL}/success`,
@@ -210,7 +210,7 @@ export const createSubscription = async (data: SubscriptionData) => {
 // 구독 상태 관리
 export const handleSubscriptionChange = async (subscription: Stripe.Subscription) => {
   const userId = subscription.metadata.userId;
-  
+
   switch (subscription.status) {
     case 'active':
       await updateUserSubscription(userId, {
@@ -219,14 +219,14 @@ export const handleSubscriptionChange = async (subscription: Stripe.Subscription
         planId: subscription.items.data[0].price.id
       });
       break;
-      
+
     case 'canceled':
       await updateUserSubscription(userId, {
         status: 'canceled',
         canceledAt: new Date()
       });
       break;
-      
+
     case 'past_due':
       await sendPaymentFailureNotification(userId);
       break;
@@ -237,11 +237,11 @@ export const handleSubscriptionChange = async (subscription: Stripe.Subscription
 export const scheduleRenewalReminders = async (subscriptionId: string) => {
   const subscription = await stripe.subscriptions.retrieve(subscriptionId);
   const renewalDate = new Date(subscription.current_period_end * 1000);
-  
+
   // 7일 전 알림
   const reminder7Days = new Date(renewalDate.getTime() - 7 * 24 * 60 * 60 * 1000);
   scheduleEmail(subscription.customer as string, 'renewal-7days', reminder7Days);
-  
+
   // 1일 전 알림
   const reminder1Day = new Date(renewalDate.getTime() - 24 * 60 * 60 * 1000);
   scheduleEmail(subscription.customer as string, 'renewal-1day', reminder1Day);
@@ -321,13 +321,13 @@ async function handleSuccessfulPayment(paymentIntent: Stripe.PaymentIntent) {
   // 결제 성공 후 처리 로직
   const customerId = paymentIntent.customer as string;
   const amount = paymentIntent.amount / 100;
-  
+
   // 사용자에게 알림 발송
   await sendPaymentConfirmation(customerId, amount);
-  
+
   // 기능 활성화
   await activatePaidFeatures(customerId);
-  
+
   // 분석 데이터 기록
   await recordRevenue(amount, paymentIntent.metadata);
 }
@@ -353,7 +353,7 @@ export class DigitalProductManager {
   // 제품 구매 후 자동 배송
   async deliverProduct(productId: string, customerEmail: string, paymentId: string) {
     const product = await this.getProduct(productId);
-    
+
     switch (product.type) {
       case 'ebook':
         return await this.deliverEbook(product, customerEmail, paymentId);
@@ -372,7 +372,7 @@ export class DigitalProductManager {
     // 다운로드 링크 생성 (1회용, 24시간 유효)
     const downloadToken = this.generateSecureToken();
     const downloadUrl = `${process.env.BASE_URL}/download/${downloadToken}`;
-    
+
     // 다운로드 정보 저장
     await this.storeDownloadInfo({
       token: downloadToken,
@@ -398,12 +398,12 @@ export class DigitalProductManager {
   private async grantCourseAccess(product: DigitalProduct, email: string) {
     // 학습 플랫폼 계정 생성 또는 업데이트
     const accessKey = this.generateAccessKey();
-    
+
     await this.createCourseAccess({
       email,
       courseId: product.id,
       accessKey,
-      validUntil: product.expiresIn 
+      validUntil: product.expiresIn
         ? new Date(Date.now() + product.expiresIn * 24 * 60 * 60 * 1000)
         : null // 평생 접근
     });
@@ -421,7 +421,7 @@ export class DigitalProductManager {
 
   private async generateLicenseKey(product: DigitalProduct, email: string) {
     const licenseKey = this.generateLicenseKey();
-    
+
     await this.storeLicense({
       key: licenseKey,
       productId: product.id,
@@ -541,10 +541,10 @@ export class EmailAutomation {
     delayHours?: number;
     data: any;
   }) {
-    const delay = options.delayDays 
+    const delay = options.delayDays
       ? options.delayDays * 24 * 60 * 60 * 1000
       : options.delayHours! * 60 * 60 * 1000;
-    
+
     // 실제 구현에서는 큐 시스템 (Redis, Bull 등) 사용
     setTimeout(async () => {
       await resend.emails.send({
@@ -590,7 +590,7 @@ export class RevenueAnalytics {
   async getDashboardMetrics(period: 'day' | 'week' | 'month' = 'day'): Promise<RevenueMetrics> {
     const now = new Date();
     const startDate = this.getStartDate(now, period);
-    
+
     const [payments, subscriptions, refunds] = await Promise.all([
       this.getPayments(startDate, now),
       this.getSubscriptions(startDate, now),
@@ -620,7 +620,7 @@ export class RevenueAnalytics {
     variant: { price: number; features: string[] };
   }) {
     const testId = this.generateTestId();
-    
+
     await this.storeABTest({
       id: testId,
       name: testName,
@@ -642,7 +642,7 @@ export class RevenueAnalytics {
     // 낮은 전환율 제품 분석
     for (const [productId, product] of Object.entries(metrics.products)) {
       const conversionRate = await this.getProductConversionRate(productId);
-      
+
       if (conversionRate < 2) { // 2% 미만
         suggestions.push({
           productId,

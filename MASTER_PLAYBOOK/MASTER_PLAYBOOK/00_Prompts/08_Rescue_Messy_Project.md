@@ -8,11 +8,11 @@
 
 ## 🎯 이런 상황에 사용하세요
 
-🆘 **빌드조차 되지 않아서 개발을 못하는 상황**  
-🆘 **의존성 충돌로 새로운 패키지 설치가 불가능한 경우**  
-🆘 **코드가 스파게티화되어 수정할 곳을 찾기 어려운 상황**  
-🆘 **팀원이 바뀌면서 아무도 프로젝트 구조를 이해하지 못하는 경우**  
-🆘 **새로운 기능 추가마다 기존 기능이 망가지는 상황**  
+🆘 **빌드조차 되지 않아서 개발을 못하는 상황**
+🆘 **의존성 충돌로 새로운 패키지 설치가 불가능한 경우**
+🆘 **코드가 스파게티화되어 수정할 곳을 찾기 어려운 상황**
+🆘 **팀원이 바뀌면서 아무도 프로젝트 구조를 이해하지 못하는 경우**
+🆘 **새로운 기능 추가마다 기존 기능이 망가지는 상황**
 
 ---
 
@@ -222,9 +222,9 @@ interface CoreFeature {
 
 const identifyCoreFeatures = (project: any): CoreFeature[] => {
   // 1. 사용자가 가장 많이 사용하는 기능
-  // 2. 비즈니스에 가장 중요한 기능  
+  // 2. 비즈니스에 가장 중요한 기능
   // 3. 다른 기능들의 기반이 되는 기능
-  
+
   return [
     {
       name: "User Authentication",
@@ -235,7 +235,7 @@ const identifyCoreFeatures = (project: any): CoreFeature[] => {
     },
     {
       name: "Main Dashboard",
-      priority: 2, 
+      priority: 2,
       dependencies: ["auth", "api"],
       complexity: "simple",
       businessValue: "high"
@@ -269,26 +269,26 @@ const testDatabaseConnection = async () => {
     // 연결 테스트
     const connection = await connectToDatabase();
     console.log('✅ Database connection successful');
-    
+
     // 기본 테이블 존재 확인
     const tables = await connection.query("SHOW TABLES");
     console.log(`📊 Found ${tables.length} tables`);
-    
+
     // 핵심 테이블 데이터 확인
     const userCount = await connection.query("SELECT COUNT(*) FROM users");
     console.log(`👥 Users in database: ${userCount[0].count}`);
-    
+
     return true;
   } catch (error) {
     console.error('❌ Database connection failed:', error.message);
-    
+
     // 자동 복구 시도
     if (error.code === 'ENOTFOUND') {
       console.log('🔧 Attempting to use local database...');
       process.env.DATABASE_URL = 'postgresql://localhost:5432/backup_db';
       return testDatabaseConnection();
     }
-    
+
     return false;
   }
 };
@@ -370,7 +370,7 @@ echo "📋 Progressive feature restoration plan:"
 
 features=(
   "authentication:high:2d"
-  "user-dashboard:high:1d"  
+  "user-dashboard:high:1d"
   "data-management:medium:3d"
   "reporting:medium:2d"
   "advanced-features:low:3d"
@@ -385,7 +385,7 @@ done
 restore_feature() {
   local feature_name=$1
   echo "🔄 Restoring $feature_name..."
-  
+
   # 기능 활성화
   # 테스트 실행
   # 통합 확인
@@ -448,7 +448,7 @@ const generateSearchQuery = (error: Error) => {
   const framework = detectFramework();
   const errorType = error.name;
   const errorMessage = error.message.slice(0, 50);
-  
+
   return `${framework} ${errorType} "${errorMessage}" fix 2024`;
 };
 ```
@@ -532,7 +532,7 @@ class RecoveryValidator {
     const successRate = results.filter(r => r).length / results.length;
 
     console.log(`📊 Recovery success rate: ${successRate * 100}%`);
-    
+
     if (successRate >= 0.8) {
       console.log('🎉 Recovery completed successfully!');
       await this.generateRecoveryReport();

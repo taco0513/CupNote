@@ -79,7 +79,7 @@ function calc(a, b) {
   return a + b
 }
 
-// After  
+// After
 function calculateSum(firstNumber, secondNumber) {
   if (typeof firstNumber !== 'number' || typeof secondNumber !== 'number') {
     throw new Error('숫자만 입력 가능합니다')
@@ -193,11 +193,11 @@ Test Engineer: 포괄적인 테스트를 작성하겠습니다.
   - 유효한 로그인
   - 잘못된 비밀번호
   - 존재하지 않는 사용자
-  
+
 ✅ 통합 테스트 (8개)
   - API 연동
   - 세션 관리
-  
+
 ✅ E2E 테스트 (5개)
   - 전체 로그인 플로우
   - 에러 시나리오

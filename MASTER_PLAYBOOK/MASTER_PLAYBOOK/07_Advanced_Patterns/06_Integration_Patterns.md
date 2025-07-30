@@ -13,12 +13,12 @@ point_to_point:
     - "직접 연결"
     - "낮은 지연시간"
     - "단순한 구조"
-  
+
   use_cases:
     - "소규모 시스템"
     - "단순한 데이터 교환"
     - "실시간 통신"
-  
+
   challenges:
     - "확장성 제한"
     - "유지보수 복잡성"
@@ -32,12 +32,12 @@ hub_and_spoke:
     - "중앙 허브 방식"
     - "표준화된 인터페이스"
     - "중앙 집중 관리"
-  
+
   components:
     hub: "Enterprise Service Bus (ESB)"
     spokes: "개별 시스템/서비스"
     adapters: "프로토콜 변환기"
-  
+
   benefits:
     - "관리 용이성"
     - "표준화"
@@ -51,12 +51,12 @@ microservices:
     - "분산 아키텍처"
     - "독립적 배포"
     - "기술 다양성"
-  
+
   integration_patterns:
     - "API Gateway"
     - "Service Mesh"
     - "Event-Driven Architecture"
-  
+
   challenges:
     - "네트워크 복잡성"
     - "데이터 일관성"
@@ -74,7 +74,7 @@ api_gateway:
     rate_limiting: "속도 제한"
     transformation: "데이터 변환"
     monitoring: "요청/응답 모니터링"
-  
+
   benefits:
     - "단일 진입점"
     - "횡단 관심사 처리"
@@ -93,12 +93,12 @@ const gateway = {
       middleware: ['auth', 'rateLimit', 'logging']
     },
     {
-      path: '/api/orders/*', 
+      path: '/api/orders/*',
       target: 'http://order-service:3002',
       middleware: ['auth', 'validation', 'transformation']
     }
   ],
-  
+
   middleware: {
     auth: async (req, res, next) => {
       // JWT 토큰 검증
@@ -107,7 +107,7 @@ const gateway = {
       req.user = user;
       next();
     },
-    
+
     rateLimit: rateLimiter({
       windowMs: 15 * 60 * 1000, // 15분
       max: 100 // 요청 제한
@@ -138,7 +138,7 @@ event_architecture:
     brokers: "메시지 브로커 (Kafka, RabbitMQ)"
     consumers: "이벤트 소비자"
     store: "이벤트 저장소"
-  
+
   patterns:
     publish_subscribe: "1:N 통신"
     event_sourcing: "이벤트 기반 상태 관리"
@@ -156,7 +156,7 @@ event_design:
     version: "스키마 버전"
     payload: "이벤트 데이터"
     metadata: "추가 정보"
-  
+
   naming_convention:
     format: "domain.entity.action"
     examples:
@@ -171,7 +171,7 @@ event_design:
 class OrderService {
   async createOrder(orderData) {
     const order = await this.repository.save(orderData);
-    
+
     // 이벤트 발행
     await this.eventBus.publish({
       type: 'order.created',
@@ -183,7 +183,7 @@ class OrderService {
         amount: order.amount
       }
     });
-    
+
     return order;
   }
 }
@@ -206,11 +206,11 @@ adapter_types:
   protocol_adapter:
     purpose: "프로토콜 변환"
     examples: ["REST to GraphQL", "SOAP to REST"]
-  
+
   data_adapter:
     purpose: "데이터 형식 변환"
     examples: ["JSON to XML", "CSV to Database"]
-  
+
   interface_adapter:
     purpose: "인터페이스 통합"
     examples: ["Legacy to Modern API", "Third-party Integration"]
@@ -223,12 +223,12 @@ class LegacySystemAdapter {
   constructor(legacyClient) {
     this.legacyClient = legacyClient;
   }
-  
+
   // 현대적 인터페이스 제공
   async getCustomer(id) {
     // 레거시 시스템 호출
     const legacyData = await this.legacyClient.GETCUST(id);
-    
+
     // 데이터 변환
     return {
       id: legacyData.CUST_ID,
@@ -237,7 +237,7 @@ class LegacySystemAdapter {
       createdAt: this.parseDate(legacyData.CREATE_DT)
     };
   }
-  
+
   async createCustomer(customerData) {
     // 현대적 형식을 레거시 형식으로 변환
     const legacyFormat = {
@@ -245,7 +245,7 @@ class LegacySystemAdapter {
       EMAIL_ADDR: customerData.email,
       PHONE_NO: customerData.phone
     };
-    
+
     return await this.legacyClient.ADDCUST(legacyFormat);
   }
 }
@@ -257,13 +257,13 @@ class LegacySystemAdapter {
 ```yaml
 strangler_fig:
   concept: "레거시 시스템을 점진적으로 교체"
-  
+
   phases:
     intercept: "요청 가로채기"
     redirect: "새 시스템으로 라우팅"
     replace: "레거시 기능 교체"
     remove: "레거시 코드 제거"
-  
+
   benefits:
     - "위험 최소화"
     - "점진적 마이그레이션"
@@ -278,10 +278,10 @@ class StranglerFigRouter {
     this.migrationRules = new Map();
     this.featureFlags = new FeatureFlags();
   }
-  
+
   async routeRequest(request) {
     const feature = this.extractFeature(request);
-    
+
     // 기능별 마이그레이션 상태 확인
     if (this.featureFlags.isEnabled(`new_${feature}`)) {
       return await this.routeToNewSystem(request);
@@ -289,7 +289,7 @@ class StranglerFigRouter {
       return await this.routeToLegacySystem(request);
     }
   }
-  
+
   // 점진적 트래픽 이동
   async gradualMigration(feature, percentage) {
     await this.featureFlags.setPercentage(`new_${feature}`, percentage);
@@ -306,7 +306,7 @@ circuit_breaker:
     closed: "정상 호출"
     open: "호출 차단"
     half_open: "제한적 호출"
-  
+
   configuration:
     failure_threshold: 5      # 실패 임계치
     timeout: 60000           # 타임아웃 (ms)
@@ -323,7 +323,7 @@ class IntegrationCircuitBreaker {
     this.state = 'CLOSED';
     this.options = options;
   }
-  
+
   async call(operation) {
     if (this.state === 'OPEN') {
       if (this.shouldAttemptReset()) {
@@ -332,7 +332,7 @@ class IntegrationCircuitBreaker {
         throw new Error('Circuit breaker is OPEN');
       }
     }
-    
+
     try {
       const result = await operation();
       this.onSuccess();
@@ -342,16 +342,16 @@ class IntegrationCircuitBreaker {
       throw error;
     }
   }
-  
+
   onSuccess() {
     this.failureCount = 0;
     this.state = 'CLOSED';
   }
-  
+
   onFailure() {
     this.failureCount++;
     this.lastFailureTime = Date.now();
-    
+
     if (this.failureCount >= this.options.failureThreshold) {
       this.state = 'OPEN';
     }
@@ -369,13 +369,13 @@ sync_strategies:
     tools: ["Change Data Capture", "Event Streaming"]
     latency: "< 1초"
     complexity: "높음"
-  
+
   near_real_time:
     method: "준실시간 동기화"
     tools: ["Message Queue", "Polling"]
     latency: "1-10초"
     complexity: "중간"
-  
+
   batch:
     method: "배치 동기화"
     tools: ["ETL Jobs", "File Transfer"]
@@ -390,12 +390,12 @@ conflict_resolution:
     description: "마지막 쓰기 승리"
     use_case: "단순한 데이터"
     risk: "데이터 손실 가능"
-  
+
   version_based:
     description: "버전 기반 해결"
     use_case: "중요한 데이터"
     mechanism: "Vector Clock, Version Vector"
-  
+
   application_level:
     description: "애플리케이션 수준 해결"
     use_case: "비즈니스 규칙 적용"
@@ -410,10 +410,10 @@ class DataSyncManager {
     this.syncRules = new Map();
     this.conflictResolver = new ConflictResolver();
   }
-  
+
   async synchronize(sourceData, targetData) {
     const differences = this.detectChanges(sourceData, targetData);
-    
+
     for (const diff of differences) {
       if (diff.type === 'conflict') {
         const resolution = await this.conflictResolver.resolve(diff);
@@ -423,7 +423,7 @@ class DataSyncManager {
       }
     }
   }
-  
+
   detectChanges(source, target) {
     // 변경사항 감지 로직
     return this.diffAlgorithm.compare(source, target);
@@ -439,7 +439,7 @@ service_mesh:
   components:
     data_plane: "사이드카 프록시 (Envoy)"
     control_plane: "관리 컴포넌트 (Istio, Linkerd)"
-  
+
   features:
     traffic_management: "로드 밸런싱, 라우팅"
     security: "mTLS, 인증/인가"
@@ -501,7 +501,7 @@ contract_testing:
     tool: "Pact"
     process: "소비자가 계약 정의"
     validation: "제공자가 계약 검증"
-  
+
   schema_based:
     tool: "OpenAPI, GraphQL Schema"
     process: "스키마 기반 검증"
@@ -517,19 +517,19 @@ describe('Integration Tests', () => {
     await testContainer.start();
     await seedTestData();
   });
-  
+
   test('User service integration', async () => {
     // Given
     const userId = 'test-user-123';
-    
+
     // When
     const response = await apiGateway.get(`/users/${userId}`);
-    
+
     // Then
     expect(response.status).toBe(200);
     expect(response.data).toMatchSchema(userSchema);
   });
-  
+
   afterAll(async () => {
     await testContainer.stop();
   });
@@ -545,7 +545,7 @@ distributed_tracing:
     - "Jaeger"
     - "Zipkin"
     - "AWS X-Ray"
-  
+
   benefits:
     - "요청 흐름 시각화"
     - "성능 병목지점 식별"
@@ -559,12 +559,12 @@ integration_metrics:
     - "서비스 가동시간"
     - "응답률"
     - "에러율"
-  
+
   performance:
     - "응답 시간"
     - "처리량"
     - "큐 대기 시간"
-  
+
   business:
     - "트랜잭션 성공률"
     - "데이터 품질"

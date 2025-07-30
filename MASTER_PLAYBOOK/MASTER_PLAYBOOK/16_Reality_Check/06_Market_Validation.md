@@ -24,7 +24,7 @@ class MarketAssumptionValidator {
         ],
         realistic_approach: "접근 가능한 틈새 시장부터 시작"
       },
-      
+
       // 문제 심각성 과대평가
       problem_severity_inflation: {
         assumption: "모든 사람이 이 문제로 고민함",
@@ -36,7 +36,7 @@ class MarketAssumptionValidator {
         ],
         validation_method: "실제 행동 관찰, 지불 의향 확인"
       },
-      
+
       // 솔루션 적합성 과신
       solution_fit_overconfidence: {
         assumption: "우리 솔루션이 완벽함",
@@ -49,10 +49,10 @@ class MarketAssumptionValidator {
         testing_approach: "최소 기능으로 실제 사용 테스트"
       }
     };
-    
+
     return this.analyzeAssumptions(assumptions, commonMistakes);
   }
-  
+
   // 현실적 시장 검증 단계
   createRealisticValidationPlan(): ValidationPlan {
     return {
@@ -75,7 +75,7 @@ class MarketAssumptionValidator {
           "현재 방법으로 만족"
         ]
       },
-      
+
       // 2단계: 솔루션 검증
       solution_validation: {
         methods: [
@@ -90,7 +90,7 @@ class MarketAssumptionValidator {
           "실제 사용 의향 표현"
         ]
       },
-      
+
       // 3단계: 비즈니스 모델 검증
       business_model_validation: {
         methods: [
@@ -137,16 +137,16 @@ class SurveyRealityChecker {
           }
         ]
       },
-      
+
       // 더 나은 검증 방법
       better_validation: {
         behavioral_evidence: [
           "실제 돈을 지불하는 행동",
-          "시간을 투자하는 행동", 
+          "시간을 투자하는 행동",
           "다른 사람에게 추천하는 행동",
           "경쟁 제품을 찾아보는 행동"
         ],
-        
+
         concrete_tests: [
           "프리오더 받기",
           "베타 테스터 모집",
@@ -156,7 +156,7 @@ class SurveyRealityChecker {
       }
     };
   }
-  
+
   // 현실적 시장 조사 방법
   createRealisticResearch(): ResearchPlan {
     return {
@@ -177,7 +177,7 @@ class SurveyRealityChecker {
           "유도 질문"
         ]
       },
-      
+
       // 정량적 검증 (규모)
       quantitative_validation: {
         landing_page_test: {
@@ -186,7 +186,7 @@ class SurveyRealityChecker {
           duration: "2-4주",
           budget: "$500-2000"
         },
-        
+
         prototype_test: {
           method: "간단한 MVP로 실제 사용 측정",
           metrics: "재방문율, 사용 시간, 완료율",
@@ -229,7 +229,7 @@ class UserBehaviorAnalyzer {
           action: "모바일 우선 개발로 전환"
         }
       ],
-      
+
       // 사용자 세그먼트 발견
       discovered_segments: [
         {
@@ -253,7 +253,7 @@ class UserBehaviorAnalyzer {
       ]
     };
   }
-  
+
   // 데이터 기반 의사결정
   createDataDrivenDecision(): DecisionFramework {
     return {
@@ -261,7 +261,7 @@ class UserBehaviorAnalyzer {
       key_metrics: {
         user_engagement: [
           "Daily/Monthly Active Users",
-          "Session duration", 
+          "Session duration",
           "Feature adoption rate",
           "Retention rate (Day 1, 7, 30)"
         ],
@@ -278,7 +278,7 @@ class UserBehaviorAnalyzer {
           "Performance metrics"
         ]
       },
-      
+
       // 데이터 해석 가이드
       interpretation_guide: {
         positive_signals: [
@@ -332,7 +332,7 @@ class PivotDecisionFramework {
           action: "비즈니스 모델 재검토"
         }
       ],
-      
+
       // 약한 피벗 신호 (개선 먼저)
       weak_signals: [
         {
@@ -344,15 +344,15 @@ class PivotDecisionFramework {
         {
           signal: "경쟁사 대비 열세",
           threshold: "시장 점유율 감소",
-          urgency: "중간", 
+          urgency: "중간",
           action: "차별화 포인트 강화"
         }
       ]
     };
-    
+
     return this.analyzePivotOptions(productMetrics, pivotSignals);
   }
-  
+
   // 피벗 유형별 가이드
   getPivotTypes(): PivotTypes {
     return {
@@ -364,7 +364,7 @@ class PivotDecisionFramework {
         risk: "낮음",
         timeline: "2-3개월"
       },
-      
+
       // 문제 피벗
       problem_pivot: {
         description: "같은 고객, 다른 문제 해결",
@@ -373,7 +373,7 @@ class PivotDecisionFramework {
         risk: "중간",
         timeline: "3-6개월"
       },
-      
+
       // 솔루션 피벗
       solution_pivot: {
         description: "같은 문제, 다른 해결 방법",
@@ -382,7 +382,7 @@ class PivotDecisionFramework {
         risk: "높음",
         timeline: "6-12개월"
       },
-      
+
       // 비즈니스 모델 피벗
       business_model_pivot: {
         description: "수익 창출 방식 변경",
@@ -423,7 +423,7 @@ class CompetitorAnalysisReality {
           example: "Google, Apple의 기본 앱들"
         }
       ],
-      
+
       // 실제 경쟁 요소들
       competition_factors: {
         direct_competitors: {
@@ -431,19 +431,19 @@ class CompetitorAnalysisReality {
           monitoring: "주간 단위",
           focus: "기능, 가격, 마케팅 전략"
         },
-        
+
         indirect_competitors: {
           threat_level: "중간",
-          monitoring: "월간 단위", 
+          monitoring: "월간 단위",
           focus: "사용자 시간, 예산 경쟁"
         },
-        
+
         potential_competitors: {
           threat_level: "미지수",
           monitoring: "분기 단위",
           focus: "시장 진입 가능성, 자원"
         },
-        
+
         substitute_solutions: {
           threat_level: "높음",
           monitoring: "지속적",
@@ -452,7 +452,7 @@ class CompetitorAnalysisReality {
       }
     };
   }
-  
+
   // 경쟁 우위 현실 체크
   assessCompetitiveAdvantage(): AdvantageAssessment {
     return {
@@ -477,7 +477,7 @@ class CompetitorAnalysisReality {
           examples: "ERP, CRM 시스템"
         }
       ],
-      
+
       // 약한 경쟁 우위 (쉽게 복사됨)
       weak_advantages: [
         {
@@ -529,7 +529,7 @@ class MarketTimingAnalyzer {
           "미래 준비하며 기다리기"
         ]
       },
-      
+
       // 적절한 시장 타이밍
       right_timing: {
         signals: [
@@ -545,7 +545,7 @@ class MarketTimingAnalyzer {
         ],
         action: "빠르게 실행, 시장 선점"
       },
-      
+
       // 너무 늦은 시장 진입
       too_late: {
         signals: [
@@ -562,7 +562,7 @@ class MarketTimingAnalyzer {
       }
     };
   }
-  
+
   // 타이밍 최적화 전략
   optimizeTiming(): TimingStrategy {
     return {
@@ -574,7 +574,7 @@ class MarketTimingAnalyzer {
         "대기업의 관련 사업 발표",
         "규제 변화 예고"
       ],
-      
+
       // 타이밍 전략
       timing_strategies: {
         early_market: {
@@ -582,13 +582,13 @@ class MarketTimingAnalyzer {
           budget_allocation: "마케팅 60%, 개발 40%",
           success_metric: "사용자 인식 변화"
         },
-        
+
         growing_market: {
           strategy: "빠른 확장 및 시장 점유",
           budget_allocation: "개발 40%, 마케팅 40%, 운영 20%",
           success_metric: "시장 점유율"
         },
-        
+
         mature_market: {
           strategy: "차별화 및 틈새 공략",
           budget_allocation: "개발 50%, 마케팅 30%, 운영 20%",

@@ -13,16 +13,16 @@ AI가 이해하고 생성하기 쉬운 디자인 패턴을 정의합니다. Clau
 interface PredictableComponentStructure {
   // 1. 명확한 네이밍
   componentName: string; // PascalCase로 명명
-  
+
   // 2. 표준화된 Props
   props: {
     variant?: string;      // 시각적 변형
-    size?: string;         // 크기 변형  
+    size?: string;         // 크기 변형
     state?: string;        // 상태 (disabled, loading, active)
     children?: ReactNode;  // 컨텐츠
     className?: string;    // 추가 스타일링
   };
-  
+
   // 3. 일관된 CSS 클래스 구조
   cssPattern: {
     base: string;          // 기본 클래스
@@ -30,7 +30,7 @@ interface PredictableComponentStructure {
     size: string;          // 크기별 클래스
     state: string;         // 상태별 클래스
   };
-  
+
   // 4. 표준화된 이벤트 핸들러
   events: {
     onClick?: () => void;
@@ -54,7 +54,7 @@ class AIPatternMatcher {
         layout: 'vertical-stack',
         spacing: 'form-spacing'
       },
-      
+
       // 카드 그리드 패턴
       cardGrid: {
         triggers: ['grid', 'cards', 'list', 'gallery'],
@@ -62,7 +62,7 @@ class AIPatternMatcher {
         layout: 'responsive-grid',
         spacing: 'grid-gap'
       },
-      
+
       // 네비게이션 패턴
       navigation: {
         triggers: ['nav', 'menu', 'header', 'sidebar'],
@@ -70,7 +70,7 @@ class AIPatternMatcher {
         layout: 'horizontal-flex',
         spacing: 'nav-spacing'
       },
-      
+
       // 대시보드 패턴
       dashboard: {
         triggers: ['dashboard', 'metrics', 'stats', 'charts'],
@@ -79,17 +79,17 @@ class AIPatternMatcher {
         spacing: 'dashboard-gap'
       }
     };
-    
+
     return this.matchBestPattern(context, patterns);
   }
-  
+
   private matchBestPattern(context: UIContext, patterns: PatternMap): DesignPattern {
     const scores = Object.entries(patterns).map(([name, pattern]) => ({
       name,
       pattern,
       score: this.calculatePatternScore(context, pattern)
     }));
-    
+
     return scores.sort((a, b) => b.score - a.score)[0].pattern;
   }
 }
@@ -117,7 +117,7 @@ const FormPatterns = {
         </FormActions>
       </Form>
     `,
-    
+
     cssClasses: {
       form: 'space-y-6',
       formGroup: 'space-y-2',
@@ -126,7 +126,7 @@ const FormPatterns = {
       error: 'mt-1 text-sm text-red-600',
       actions: 'flex justify-end space-x-3 pt-6'
     },
-    
+
     aiPromptPattern: `
       Create a form with the following fields: {fieldList}
       Use consistent spacing and validation states
@@ -134,7 +134,7 @@ const FormPatterns = {
       Apply form design tokens
     `
   },
-  
+
   // 인라인 폼 패턴 (검색, 뉴스레터 등)
   inlineForm: {
     structure: `
@@ -143,14 +143,14 @@ const FormPatterns = {
         <Button variant="primary">Subscribe</Button>
       </Form>
     `,
-    
+
     cssClasses: {
       form: 'flex space-x-3',
       input: 'flex-1 min-w-0',
       button: 'flex-shrink-0'
     }
   },
-  
+
   // 다단계 폼 패턴
   multiStepForm: {
     structure: `
@@ -165,7 +165,7 @@ const FormPatterns = {
         </FormNavigation>
       </Form>
     `,
-    
+
     cssClasses: {
       stepIndicator: 'mb-8',
       formContent: 'min-h-[300px] space-y-6',
@@ -189,7 +189,7 @@ const CardPatterns = {
         ))}
       </Grid>
     `,
-    
+
     cardStructure: `
       <Card>
         <CardImage src={product.image} alt={product.name} />
@@ -203,7 +203,7 @@ const CardPatterns = {
         </CardFooter>
       </Card>
     `,
-    
+
     aiPromptPattern: `
       Create a product grid with {columns} columns
       Each card should include: {cardElements}
@@ -211,7 +211,7 @@ const CardPatterns = {
       Apply consistent spacing and shadows
     `
   },
-  
+
   // 대시보드 메트릭 카드
   metricsGrid: {
     structure: `
@@ -221,7 +221,7 @@ const CardPatterns = {
         ))}
       </Grid>
     `,
-    
+
     cardStructure: `
       <Card variant="elevated">
         <CardBody>
@@ -237,7 +237,7 @@ const CardPatterns = {
       </Card>
     `
   },
-  
+
   // 블로그/아티클 카드
   articleGrid: {
     structure: `
@@ -247,7 +247,7 @@ const CardPatterns = {
         ))}
       </Grid>
     `,
-    
+
     cardStructure: `
       <Card variant="outlined">
         <CardImage src={article.coverImage} aspectRatio="16:9" />
@@ -291,7 +291,7 @@ const NavigationPatterns = {
         </Container>
       </Header>
     `,
-    
+
     cssClasses: {
       header: 'bg-white shadow-sm border-b',
       container: 'px-4 sm:px-6 lg:px-8',
@@ -299,7 +299,7 @@ const NavigationPatterns = {
       navigation: 'hidden md:flex space-x-8',
       navItem: 'text-gray-700 hover:text-gray-900 px-3 py-2'
     },
-    
+
     mobilePattern: `
       <MobileMenu isOpen={isMenuOpen}>
         <Stack direction="column" gap="none">
@@ -310,7 +310,7 @@ const NavigationPatterns = {
       </MobileMenu>
     `
   },
-  
+
   // 사이드바 네비게이션
   sidebarNav: {
     structure: `
@@ -330,7 +330,7 @@ const NavigationPatterns = {
         </SidebarFooter>
       </Sidebar>
     `,
-    
+
     cssClasses: {
       sidebar: 'w-64 h-screen bg-gray-900 text-white flex flex-col',
       header: 'p-4 border-b border-gray-800',
@@ -340,7 +340,7 @@ const NavigationPatterns = {
       footer: 'p-4 border-t border-gray-800'
     }
   },
-  
+
   // 탭 네비게이션
   tabNavigation: {
     structure: `
@@ -357,7 +357,7 @@ const NavigationPatterns = {
         </TabContent>
       </TabContainer>
     `,
-    
+
     cssClasses: {
       tabList: 'flex border-b border-gray-200',
       tab: 'px-4 py-2 font-medium text-sm border-b-2 border-transparent',
@@ -381,25 +381,25 @@ const DashboardPatterns = {
           <PageTitle>Dashboard</PageTitle>
           <DateRangePicker />
         </DashboardHeader>
-        
+
         <MetricsRow>
           <MetricCard title="Total Users" value="12,345" trend="+5.2%" />
           <MetricCard title="Revenue" value="$45,678" trend="+12.3%" />
           <MetricCard title="Orders" value="1,234" trend="-2.1%" />
           <MetricCard title="Conversion" value="3.4%" trend="+0.8%" />
         </MetricsRow>
-        
+
         <ChartsRow>
           <ChartCard title="Revenue Over Time" type="line" />
           <ChartCard title="Top Products" type="bar" />
         </ChartsRow>
-        
+
         <TablesRow>
           <TableCard title="Recent Orders" />
         </TablesRow>
       </DashboardLayout>
     `,
-    
+
     gridLayout: `
       .dashboard-grid {
         display: grid;
@@ -412,7 +412,7 @@ const DashboardPatterns = {
         gap: 1.5rem;
       }
     `,
-    
+
     aiPromptPattern: `
       Create an admin dashboard with:
       - 4 metric cards showing {metricNames}
@@ -422,7 +422,7 @@ const DashboardPatterns = {
       - Consistent card styling
     `
   },
-  
+
   // 애널리틱스 대시보드
   analyticsDashboard: {
     structure: `
@@ -432,7 +432,7 @@ const DashboardPatterns = {
           <DateRangePicker />
           <MetricSelector />
         </DashboardSidebar>
-        
+
         <DashboardMain>
           <KPIRow>
             <KPICard primary title="Sessions" value="23,456" />
@@ -440,11 +440,11 @@ const DashboardPatterns = {
             <KPICard title="Bounce Rate" value="34.2%" />
             <KPICard title="Avg. Duration" value="2:34" />
           </KPIRow>
-          
+
           <ChartSection>
             <TimeSeriesChart title="Traffic Over Time" />
           </ChartSection>
-          
+
           <InsightsGrid>
             <TopPagesCard />
             <TrafficSourcesCard />
@@ -478,14 +478,14 @@ const LoadingPatterns = {
         <ActualContent />
       )}
     `,
-    
+
     implementation: `
       const SkeletonLoader = ({ children }) => (
         <div className="animate-pulse space-y-4">
           {children}
         </div>
       );
-      
+
       const SkeletonText = ({ lines = 1 }) => (
         <div className="space-y-2">
           {Array(lines).fill(0).map((_, i) => (
@@ -495,7 +495,7 @@ const LoadingPatterns = {
       );
     `
   },
-  
+
   // 인라인 로딩 (버튼, 폼 등)
   inlineLoading: {
     pattern: `
@@ -503,7 +503,7 @@ const LoadingPatterns = {
         {isSubmitting ? 'Saving...' : 'Save Changes'}
       </Button>
     `,
-    
+
     implementation: `
       const Button = ({ loading, children, ...props }) => (
         <button {...props}>
@@ -513,7 +513,7 @@ const LoadingPatterns = {
       );
     `
   },
-  
+
   // 페이지 레벨 로딩
   pageLoading: {
     pattern: `
@@ -526,7 +526,7 @@ const LoadingPatterns = {
         <PageContent />
       )}
     `,
-    
+
     implementation: `
       const PageLoader = ({ children }) => (
         <div className="min-h-screen flex items-center justify-center">
@@ -555,7 +555,7 @@ const ErrorPatterns = {
         )}
       </FormField>
     `,
-    
+
     implementation: `
       const ErrorMessage = ({ children }) => (
         <div className="mt-1 flex items-center text-sm text-red-600">
@@ -565,7 +565,7 @@ const ErrorPatterns = {
       );
     `
   },
-  
+
   // 페이지 레벨 에러
   pageError: {
     pattern: `
@@ -579,7 +579,7 @@ const ErrorPatterns = {
         />
       </ErrorBoundary>
     `,
-    
+
     implementation: `
       const ErrorState = ({ title, description, action, illustration }) => (
         <div className="min-h-screen flex items-center justify-center">
@@ -595,7 +595,7 @@ const ErrorPatterns = {
       );
     `
   },
-  
+
   // 네트워크 에러
   networkError: {
     pattern: `
@@ -630,7 +630,7 @@ const EmptyStatePatterns = {
       />
     `
   },
-  
+
   // 검색 결과 없음
   noSearchResults: {
     pattern: `
@@ -646,7 +646,7 @@ const EmptyStatePatterns = {
       />
     `
   },
-  
+
   // 권한 없음
   noPermission: {
     pattern: `

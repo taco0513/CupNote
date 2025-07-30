@@ -248,7 +248,7 @@
 ---
 
 ### ⚡ 빠른 시작을 원한다면:
-### 👉 [프로젝트 템플릿 선택하기](../06_Project_Templates/README.md)
+### 👉 [프로젝트 템플릿 선택하기](../14_Project_Kickstart/README.md)
 
 ---
 

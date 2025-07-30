@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import { useAuthStore } from './stores/auth'
-import NotificationToast from './components/NotificationToast.vue'
+import NotificationToast from './components/common/NotificationToast.vue'
 
 const authStore = useAuthStore()
 </script>

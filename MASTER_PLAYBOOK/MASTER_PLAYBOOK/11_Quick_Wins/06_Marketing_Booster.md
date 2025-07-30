@@ -59,7 +59,7 @@ export class SocialMediaManager {
 
   private async publishToTwitter(post: SocialPost) {
     const twitterContent = this.formatForTwitter(post);
-    
+
     // Twitter API v2 사용
     const response = await fetch('https://api.twitter.com/2/tweets', {
       method: 'POST',
@@ -78,7 +78,7 @@ export class SocialMediaManager {
 
   private async publishToLinkedIn(post: SocialPost) {
     const linkedinContent = this.formatForLinkedIn(post);
-    
+
     const response = await fetch('https://api.linkedin.com/v2/ugcPosts', {
       method: 'POST',
       headers: {
@@ -108,7 +108,7 @@ export class SocialMediaManager {
   // 컨텐츠 스케줄링
   async schedulePost(post: SocialPost): Promise<string> {
     const scheduledId = this.generateScheduleId();
-    
+
     // 데이터베이스에 스케줄 저장
     await this.saveScheduledPost({
       id: scheduledId,
@@ -146,7 +146,7 @@ export class SocialMediaManager {
   // 최적 발행 시간 분석
   async getOptimalPostTime(platform: string): Promise<Date> {
     const analytics = await this.getAudienceAnalytics(platform);
-    
+
     // 플랫폼별 최적 시간
     const optimalTimes = {
       twitter: { hour: 12, minute: 0 }, // 점심시간
@@ -158,9 +158,9 @@ export class SocialMediaManager {
     const baseTime = optimalTimes[platform] || { hour: 12, minute: 0 };
     const now = new Date();
     const scheduledTime = new Date(now);
-    
+
     scheduledTime.setHours(baseTime.hour, baseTime.minute, 0, 0);
-    
+
     // 이미 지난 시간이면 다음날로 설정
     if (scheduledTime <= now) {
       scheduledTime.setDate(scheduledTime.getDate() + 1);
@@ -172,11 +172,11 @@ export class SocialMediaManager {
   private formatForTwitter(post: SocialPost): string {
     const maxLength = 280;
     let content = post.content;
-    
+
     if (post.hashtags.length > 0) {
       const hashtags = post.hashtags.join(' ');
       const contentWithHashtags = `${content} ${hashtags}`;
-      
+
       if (contentWithHashtags.length <= maxLength) {
         content = contentWithHashtags;
       } else {
@@ -193,10 +193,10 @@ export class SocialMediaManager {
   private formatForLinkedIn(post: SocialPost): string {
     // LinkedIn은 더 긴 내용과 전문적인 톤 선호
     let content = post.content;
-    
+
     // 전문적인 언어로 변환
     content = this.makeProfessional(content);
-    
+
     if (post.hashtags.length > 0) {
       content += '\n\n' + post.hashtags.join(' ');
     }
@@ -225,8 +225,8 @@ export class InfluencerFinder {
   }
 
   private async searchInfluencersByPlatform(
-    platform: string, 
-    keywords: string[], 
+    platform: string,
+    keywords: string[],
     minFollowers: number
   ): Promise<Influencer[]> {
     switch (platform) {
@@ -265,17 +265,17 @@ export class InfluencerFinder {
   // 자동 아웃리치 메시지 생성
   generateOutreachMessage(influencer: Influencer, product: ProductInfo): string {
     const templates = {
-      micro: `안녕하세요 ${influencer.name}님! 
-              ${influencer.niche} 분야의 훌륭한 콘텐츠를 항상 잘 보고 있습니다. 
+      micro: `안녕하세요 ${influencer.name}님!
+              ${influencer.niche} 분야의 훌륭한 콘텐츠를 항상 잘 보고 있습니다.
               저희 ${product.name}이 ${influencer.name}님의 팔로워분들께 도움이 될 것 같아 연락드립니다.
               간단한 협업 제안을 드리고 싶은데, 시간 되실 때 답변 주시면 감사하겠습니다!`,
-      
+
       macro: `${influencer.name}님께,
-              ${product.name} 팀에서 인사드립니다. 
+              ${product.name} 팀에서 인사드립니다.
               ${influencer.niche} 분야에서 ${influencer.name}님의 영향력과 전문성을 높이 평가하고 있습니다.
               저희 제품이 ${influencer.name}님의 오디언스에게 가치를 제공할 수 있을 것 같아 파트너십을 제안드리고 싶습니다.
               자세한 내용은 이메일로 공유드리겠습니다.`,
-      
+
       celebrity: `${influencer.name}님의 팀 관계자분께,
                   ${product.name}의 마케팅 담당자입니다.
                   브랜드 콜라보레이션 제안서를 보내드리고 싶습니다.
@@ -290,7 +290,7 @@ export class InfluencerFinder {
 
   // 자동 아웃리치 실행
   async executeOutreach(
-    influencers: Influencer[], 
+    influencers: Influencer[],
     product: ProductInfo,
     maxPerDay: number = 10
   ): Promise<OutreachResult[]> {
@@ -303,7 +303,7 @@ export class InfluencerFinder {
       try {
         const message = this.generateOutreachMessage(influencer, product);
         const sent = await this.sendDirectMessage(influencer, message);
-        
+
         if (sent) {
           sentToday++;
           results.push({
@@ -374,7 +374,7 @@ export class SEOOptimizer {
   // 제목 최적화 (60자 이내, 키워드 포함)
   private optimizeTitle(title: string): string {
     const maxLength = 60;
-    
+
     if (title.length <= maxLength) {
       return title;
     }
@@ -397,7 +397,7 @@ export class SEOOptimizer {
   // 설명 최적화 (160자 이내, 액션 유도)
   private optimizeDescription(description: string): string {
     const maxLength = 160;
-    
+
     if (description.length <= maxLength) {
       return description;
     }
@@ -405,7 +405,7 @@ export class SEOOptimizer {
     // 마지막 완전한 문장에서 자르기
     const truncated = description.substring(0, maxLength);
     const lastSentence = truncated.lastIndexOf('. ');
-    
+
     if (lastSentence > maxLength * 0.7) {
       return truncated.substring(0, lastSentence + 1);
     }
@@ -511,7 +511,7 @@ Sitemap: ${config.sitemapUrl}`;
     linkMap.forEach((url, keyword) => {
       const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
       const replacement = `<a href="${url}" title="${keyword}">${keyword}</a>`;
-      
+
       // 첫 번째 발견에만 링크 추가 (과도한 링크 방지)
       optimizedContent = optimizedContent.replace(regex, replacement);
     });
@@ -530,7 +530,7 @@ export class ContentSEOOptimizer {
   optimizeHeadingStructure(content: string): string {
     const headings = this.extractHeadings(content);
     const optimizedHeadings = this.createOptimalHeadingHierarchy(headings);
-    
+
     return this.replaceHeadings(content, optimizedHeadings);
   }
 
@@ -579,7 +579,7 @@ export class ContentSEOOptimizer {
   private generateContextualAltText(keywords: string, context: string): string {
     // 주변 텍스트를 분석하여 관련성 높은 ALT 텍스트 생성
     const contextWords = context.toLowerCase().split(/\W+/);
-    const relevantWords = contextWords.filter(word => 
+    const relevantWords = contextWords.filter(word =>
       word.length > 3 && !this.isStopWord(word)
     ).slice(0, 3);
 
@@ -668,7 +668,7 @@ export class ContentSEOOptimizer {
   async analyzePageSpeed(url: string): Promise<SpeedOptimizationSuggestions> {
     // 실제로는 Google PageSpeed Insights API 사용
     const mockResults = await this.getPageSpeedMetrics(url);
-    
+
     return {
       currentScore: mockResults.score,
       suggestions: this.generateSpeedSuggestions(mockResults),
@@ -713,7 +713,7 @@ export class ContentSEOOptimizer {
 // lib/email-marketing.ts - 이메일 마케팅 자동화
 export class EmailMarketingAutomation {
   private emailProvider: 'resend' | 'sendgrid' | 'mailgun';
-  
+
   // 웰컴 시리즈 자동화
   async createWelcomeSeries(subscriber: Subscriber): Promise<void> {
     const welcomeSequence = [
@@ -820,7 +820,7 @@ export class EmailMarketingAutomation {
         content: campaign.contentA
       },
       {
-        name: 'B', 
+        name: 'B',
         subject: campaign.subjectB,
         content: campaign.contentB
       }
@@ -856,7 +856,7 @@ export class EmailMarketingAutomation {
   // 이메일 성과 분석
   async analyzeEmailPerformance(campaignId: string): Promise<EmailAnalytics> {
     const metrics = await this.getCampaignMetrics(campaignId);
-    
+
     return {
       sent: metrics.sent,
       delivered: metrics.delivered,
@@ -864,18 +864,18 @@ export class EmailMarketingAutomation {
       clicked: metrics.clicked,
       unsubscribed: metrics.unsubscribed,
       bounced: metrics.bounced,
-      
+
       // 계산된 지표
       deliveryRate: (metrics.delivered / metrics.sent) * 100,
       openRate: (metrics.opened / metrics.delivered) * 100,
       clickRate: (metrics.clicked / metrics.delivered) * 100,
       clickToOpenRate: (metrics.clicked / metrics.opened) * 100,
       unsubscribeRate: (metrics.unsubscribed / metrics.delivered) * 100,
-      
+
       // 시간별 분석
       opensByHour: await this.getOpensByHour(campaignId),
       clicksByDay: await this.getClicksByDay(campaignId),
-      
+
       // 개선 제안
       recommendations: this.generateImprovementSuggestions(metrics)
     };
@@ -883,22 +883,22 @@ export class EmailMarketingAutomation {
 
   private generateImprovementSuggestions(metrics: EmailMetrics): string[] {
     const suggestions: string[] = [];
-    
+
     const openRate = (metrics.opened / metrics.delivered) * 100;
     const clickRate = (metrics.clicked / metrics.delivered) * 100;
-    
+
     if (openRate < 20) {
       suggestions.push('제목 개선 필요: A/B 테스트로 더 매력적인 제목 찾기');
     }
-    
+
     if (clickRate < 2) {
       suggestions.push('콘텐츠 개선 필요: CTA 버튼 최적화 및 개인화 강화');
     }
-    
+
     if (metrics.unsubscribed / metrics.delivered > 0.005) {
       suggestions.push('구독 취소율 높음: 콘텐츠 관련성 및 빈도 재검토');
     }
-    
+
     return suggestions;
   }
 }

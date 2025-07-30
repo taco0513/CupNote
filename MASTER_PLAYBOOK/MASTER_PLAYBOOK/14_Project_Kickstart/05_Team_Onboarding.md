@@ -53,7 +53,7 @@ class FirstDayOnboarding {
           '테스트 실행'
         ]
       },
-      
+
       // 오후 (13:00 - 18:00)
       {
         time: '13:00',
@@ -94,10 +94,10 @@ class FirstDayOnboarding {
         ]
       }
     ];
-    
+
     // 실행 및 추적
     const results = await this.executeTasks(tasks, newMember);
-    
+
     return {
       member: newMember,
       completedTasks: results.filter(r => r.completed),
@@ -243,7 +243,7 @@ class ProjectContextBuilder {
         startDate: project.startDate,
         currentPhase: project.currentPhase
       },
-      
+
       businessContext: {
         problem: '해결하려는 문제',
         solution: '우리의 해결책',
@@ -271,7 +271,7 @@ class ProjectContextBuilder {
           }
         ]
       },
-      
+
       technicalContext: {
         architecture: {
           type: 'Microservices',
@@ -293,14 +293,14 @@ class ProjectContextBuilder {
             services: ['ECS', 'RDS', 'ElastiCache', 'S3']
           }
         },
-        
+
         techStack: {
           frontend: ['React', 'Next.js', 'TypeScript'],
           backend: ['Node.js', 'Express', 'GraphQL'],
           database: ['PostgreSQL', 'Redis'],
           devOps: ['Docker', 'Kubernetes', 'GitHub Actions']
         },
-        
+
         integrations: [
           {
             service: 'Stripe',
@@ -314,7 +314,7 @@ class ProjectContextBuilder {
           }
         ]
       },
-      
+
       teamStructure: {
         teams: [
           {
@@ -330,7 +330,7 @@ class ProjectContextBuilder {
             responsibilities: ['API', 'Business logic', 'Database']
           }
         ],
-        
+
         communicationChannels: [
           {
             channel: 'Slack #general',
@@ -341,7 +341,7 @@ class ProjectContextBuilder {
             purpose: '개발 관련 논의'
           }
         ],
-        
+
         meetings: [
           {
             name: 'Daily Standup',
@@ -372,20 +372,20 @@ class TechStackLearningPath {
   ): LearningPath {
     const requiredSkills = this.identifyRequiredSkills(role, projectStack);
     const skillGaps = this.findSkillGaps(currentSkills, requiredSkills);
-    
+
     return {
       overview: {
         role,
         estimatedTime: this.estimateLearningTime(skillGaps),
         priority: this.prioritizeSkills(skillGaps)
       },
-      
+
       learningModules: skillGaps.map(skill => ({
         skill: skill.name,
         importance: skill.importance,
         currentLevel: skill.currentLevel || 'Beginner',
         targetLevel: skill.targetLevel,
-        
+
         resources: [
           {
             type: 'documentation',
@@ -406,7 +406,7 @@ class TechStackLearningPath {
             estimatedTime: '8-16 hours'
           }
         ],
-        
+
         practiceExercises: [
           {
             title: `Basic ${skill.name} Exercise`,
@@ -420,7 +420,7 @@ class TechStackLearningPath {
             description: skill.intermediateExercise
           }
         ],
-        
+
         realProjectExamples: [
           {
             file: skill.exampleFile,
@@ -446,13 +446,13 @@ class BuddySystem {
     team: Team
   ): Promise<BuddyAssignment> {
     // 최적의 버디 선택
-    const availableBuddies = team.members.filter(member => 
-      member.canBeBuddy && 
+    const availableBuddies = team.members.filter(member =>
+      member.canBeBuddy &&
       member.currentBuddyCount < 2
     );
-    
+
     const buddy = this.selectBestBuddy(newMember, availableBuddies);
-    
+
     // 버디 가이드 생성
     const buddyGuide = {
       forBuddy: {
@@ -463,7 +463,7 @@ class BuddySystem {
           '팀 문화 안내',
           '점심 함께 하기 (첫 주)'
         ],
-        
+
         checkpoints: [
           {
             day: 1,
@@ -491,7 +491,7 @@ class BuddySystem {
           }
         ]
       },
-      
+
       forNewMember: {
         buddyInfo: {
           name: buddy.name,
@@ -500,7 +500,7 @@ class BuddySystem {
           contactInfo: buddy.contactInfo,
           availability: buddy.workingHours
         },
-        
+
         expectations: [
           '부담 없이 질문하기',
           '매일 진행 상황 공유',
@@ -509,7 +509,7 @@ class BuddySystem {
         ]
       }
     };
-    
+
     return {
       newMember,
       buddy,
@@ -563,7 +563,7 @@ class OnboardingSessionManager {
           }
         ]
       },
-      
+
       // Week 2: 심화 세션
       {
         week: 2,
@@ -593,7 +593,7 @@ class OnboardingSessionManager {
         ]
       }
     ];
-    
+
     return sessions.find(s => s.week === week)?.sessions || [];
   }
 }
@@ -611,13 +611,13 @@ class StarterTaskManager {
     availableTasks: Task[]
   ): StarterTask {
     // 적합한 태스크 필터링
-    const suitableTasks = availableTasks.filter(task => 
+    const suitableTasks = availableTasks.filter(task =>
       task.difficulty <= 'Medium' &&
       task.estimatedHours <= 16 &&
       task.dependencies.length === 0 &&
       !task.requiresProductionAccess
     );
-    
+
     // 역할별 추천 태스크
     const roleBasedTasks = {
       frontend: [
@@ -632,7 +632,7 @@ class StarterTaskManager {
           ]
         }
       ],
-      
+
       backend: [
         {
           title: 'API 엔드포인트 추가',
@@ -645,7 +645,7 @@ class StarterTaskManager {
           ]
         }
       ],
-      
+
       fullstack: [
         {
           title: '기능 버그 수정',
@@ -659,12 +659,12 @@ class StarterTaskManager {
         }
       ]
     };
-    
+
     const recommendedTask = roleBasedTasks[member.role]?.[0] || suitableTasks[0];
-    
+
     return {
       task: recommendedTask,
-      
+
       setupGuide: {
         steps: [
           '저장소에서 새 브랜치 생성',
@@ -674,7 +674,7 @@ class StarterTaskManager {
           '테스트 작성',
           'PR 생성'
         ],
-        
+
         resources: [
           {
             type: 'documentation',
@@ -686,14 +686,14 @@ class StarterTaskManager {
           }
         ]
       },
-      
+
       successCriteria: [
         '기능이 정상 작동함',
         '테스트가 통과함',
         '코드 리뷰 통과',
         '문서화 완료'
       ],
-      
+
       estimatedTime: '2-3 days',
       buddy: member.buddy
     };
@@ -721,7 +721,7 @@ class OnboardingProgressTracker {
           { task: '팀 미팅 참석', required: false }
         ]
       },
-      
+
       // Day 3
       {
         day: 3,
@@ -732,7 +732,7 @@ class OnboardingProgressTracker {
           { task: '스타터 태스크 진행', required: true }
         ]
       },
-      
+
       // Week 1
       {
         day: 7,
@@ -743,7 +743,7 @@ class OnboardingProgressTracker {
           { task: '두 번째 태스크 시작', required: false }
         ]
       },
-      
+
       // Week 2
       {
         day: 14,
@@ -755,32 +755,32 @@ class OnboardingProgressTracker {
         ]
       }
     ];
-    
+
     const currentCheckpoint = checkpoints.find(cp => cp.day === day);
     const completed = await this.getCompletedTasks(member);
-    
+
     return {
       member,
       day,
-      
+
       progress: {
         completed: completed.length,
         total: currentCheckpoint?.milestones.length || 0,
         percentage: this.calculateProgress(completed, currentCheckpoint)
       },
-      
+
       status: {
         onTrack: this.isOnTrack(completed, currentCheckpoint),
         blockers: await this.identifyBlockers(member),
         achievements: this.identifyAchievements(completed)
       },
-      
+
       feedback: {
         fromBuddy: await this.getBuddyFeedback(member),
         fromManager: await this.getManagerFeedback(member),
         selfAssessment: await this.getSelfAssessment(member)
       },
-      
+
       nextSteps: this.generateNextSteps(member, completed)
     };
   }
@@ -825,7 +825,7 @@ class TeamCultureGuide {
           ]
         }
       ],
-      
+
       practices: [
         {
           practice: 'Daily Standup',
@@ -846,7 +846,7 @@ class TeamCultureGuide {
           why: '지식 전달 및 품질 향상'
         }
       ],
-      
+
       communication: {
         channels: [
           {
@@ -868,14 +868,14 @@ class TeamCultureGuide {
             ]
           }
         ],
-        
+
         responseTime: {
           urgent: '1시간 이내',
           normal: '24시간 이내',
           lowPriority: '48시간 이내'
         }
       },
-      
+
       workLifeBalance: [
         '유연 근무 시간',
         '원격 근무 가능',

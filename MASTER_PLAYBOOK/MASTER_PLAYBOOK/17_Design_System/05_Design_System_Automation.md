@@ -20,7 +20,7 @@ on:
       - 'packages/design-system/**'
   pull_request:
     paths:
-      - 'design-tokens/**' 
+      - 'design-tokens/**'
       - 'components/**'
       - 'packages/design-system/**'
 
@@ -30,29 +30,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Validate design tokens
         run: |
           npm run tokens:validate
           npm run tokens:lint
-      
+
       - name: Check token schema
         run: npm run tokens:schema-check
-      
+
       - name: Generate token diff
         run: |
           npm run tokens:diff
           echo "Token changes detected"
-  
+
   # 2. 크로스 플랫폼 토큰 생성
   generate-tokens:
     needs: validate-tokens
@@ -62,59 +62,59 @@ jobs:
         platform: [web, ios, android, flutter]
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Generate tokens for ${{ matrix.platform }}
         run: npm run tokens:build:${{ matrix.platform }}
-      
+
       - name: Upload tokens artifacts
         uses: actions/upload-artifact@v3
         with:
           name: tokens-${{ matrix.platform }}
           path: dist/${{ matrix.platform }}/
-  
+
   # 3. 컴포넌트 빌드 및 테스트
   build-components:
     needs: generate-tokens
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Download token artifacts
         uses: actions/download-artifact@v3
         with:
           name: tokens-web
           path: dist/web/
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Build components
         run: npm run build:components
-      
+
       - name: Run component tests
         run: npm run test:components
-      
+
       - name: Run visual regression tests
         run: npm run test:visual
-      
+
       - name: Generate component documentation
         run: npm run docs:generate
-  
+
   # 4. Storybook 배포
   deploy-storybook:
     needs: build-components
@@ -122,25 +122,25 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Build Storybook
         run: npm run storybook:build
-      
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./storybook-static
-  
+
   # 5. NPM 패키지 배포
   publish-package:
     needs: [build-components, deploy-storybook]
@@ -148,25 +148,25 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
           cache: 'npm'
           registry-url: 'https://registry.npmjs.org'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Build package
         run: npm run build:package
-      
+
       - name: Publish to NPM
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      
+
       - name: Create GitHub Release
         uses: actions/create-release@v1
         env:
@@ -193,7 +193,7 @@ class DesignTokenBuilder {
     this.setupTransforms();
     this.setupFormats();
   }
-  
+
   setupTransforms() {
     // 색상 변환
     StyleDictionary.registerTransform({
@@ -202,7 +202,7 @@ class DesignTokenBuilder {
       matcher: (token) => token.type === 'color',
       transformer: (token) => `var(--${token.name})`
     });
-    
+
     // 간격 변환
     StyleDictionary.registerTransform({
       name: 'size/px',
@@ -215,7 +215,7 @@ class DesignTokenBuilder {
         return token.original.value;
       }
     });
-    
+
     // iOS 색상 변환
     StyleDictionary.registerTransform({
       name: 'color/ios-swift',
@@ -230,7 +230,7 @@ class DesignTokenBuilder {
       }
     });
   }
-  
+
   setupFormats() {
     // CSS 사용자 정의 속성
     StyleDictionary.registerFormat({
@@ -239,32 +239,32 @@ class DesignTokenBuilder {
         const tokens = dictionary.allTokens
           .map(token => `  --${token.name}: ${token.value};`)
           .join('\n');
-        
+
         return `:root {\n${tokens}\n}\n\n/* Dark theme overrides */\n[data-theme="dark"] {\n  /* Add dark theme tokens here */\n}`;
       }
     });
-    
+
     // TypeScript 인터페이스
     StyleDictionary.registerFormat({
       name: 'typescript/interfaces',
       formatter: function(dictionary, config) {
         const tokenTypes = [...new Set(dictionary.allTokens.map(t => t.type))];
-        
+
         const interfaces = tokenTypes.map(type => {
           const tokens = dictionary.allTokens.filter(t => t.type === type);
           const properties = tokens.map(t => `  ${t.name}: string;`).join('\n');
-          
+
           return `export interface ${type.charAt(0).toUpperCase() + type.slice(1)}Tokens {\n${properties}\n}`;
         }).join('\n\n');
-        
+
         const allTokens = dictionary.allTokens
           .map(t => `  ${t.name}: '${t.value}'`)
           .join(',\n');
-        
+
         return `${interfaces}\n\nexport const tokens = {\n${allTokens}\n} as const;\n\nexport type TokenName = keyof typeof tokens;`;
       }
     });
-    
+
     // React 테마 provider
     StyleDictionary.registerFormat({
       name: 'react/theme-provider',
@@ -272,7 +272,7 @@ class DesignTokenBuilder {
         const tokens = dictionary.allTokens
           .map(token => `  ${token.name}: '${token.value}'`)
           .join(',\n');
-        
+
         return `import React, { createContext, useContext } from 'react';
 
 export const theme = {
@@ -299,18 +299,18 @@ export const useTheme = () => {
       }
     });
   }
-  
+
   async buildAllPlatforms() {
     const platforms = ['web', 'ios', 'android', 'react-native'];
-    
+
     for (const platform of platforms) {
       console.log(`Building tokens for ${platform}...`);
       await this.buildPlatform(platform);
     }
-    
+
     console.log('✅ All platforms built successfully');
   }
-  
+
   async buildPlatform(platform) {
     const config = {
       source: ['design-tokens/**/*.json'],
@@ -318,11 +318,11 @@ export const useTheme = () => {
         [platform]: this.getPlatformConfig(platform)
       }
     };
-    
+
     const styleDictionary = StyleDictionary.extend(config);
     return styleDictionary.buildPlatform(platform);
   }
-  
+
   getPlatformConfig(platform) {
     const configs = {
       web: {
@@ -343,7 +343,7 @@ export const useTheme = () => {
           }
         ]
       },
-      
+
       react: {
         transformGroup: 'js',
         buildPath: 'dist/react/',
@@ -354,7 +354,7 @@ export const useTheme = () => {
           }
         ]
       },
-      
+
       ios: {
         transformGroup: 'ios',
         buildPath: 'dist/ios/',
@@ -365,7 +365,7 @@ export const useTheme = () => {
           }
         ]
       },
-      
+
       android: {
         transformGroup: 'android',
         buildPath: 'dist/android/res/values/',
@@ -383,19 +383,19 @@ export const useTheme = () => {
         ]
       }
     };
-    
+
     return configs[platform];
   }
-  
+
   // 파일 감시 및 자동 재빌드
   watch() {
     console.log('👀 Watching for token changes...');
-    
+
     const watcher = chokidar.watch('design-tokens/**/*.json', {
       ignored: /node_modules/,
       persistent: true
     });
-    
+
     watcher.on('change', async (path) => {
       console.log(`📝 Token file changed: ${path}`);
       try {
@@ -412,7 +412,7 @@ export const useTheme = () => {
 if (require.main === module) {
   const builder = new DesignTokenBuilder();
   const command = process.argv[2];
-  
+
   switch (command) {
     case 'build':
       builder.buildAllPlatforms();
@@ -450,7 +450,7 @@ class ComponentGenerator {
   constructor() {
     this.setupTemplates();
   }
-  
+
   setupTemplates() {
     // React 컴포넌트 템플릿
     this.templates = {
@@ -491,14 +491,14 @@ export const {{componentName}}: React.FC<{{componentName}}Props> = ({
     {{this}}: '{{this}}-size',
     {{/each}}
   };
-  
+
   const combinedClasses = [
     baseClasses,
     variantClasses[variant],
     sizeClasses[size],
     className
   ].filter(Boolean).join(' ');
-  
+
   return (
     <{{element}} className={combinedClasses} {...props}>
       {children}
@@ -508,7 +508,7 @@ export const {{componentName}}: React.FC<{{componentName}}Props> = ({
 
 export default {{componentName}};
         `,
-        
+
         styles: `
 .{{cssClass}} {
   /* Base styles */
@@ -535,7 +535,7 @@ export default {{componentName}};
 }
 {{/each}}
         `,
-        
+
         stories: `
 import type { Meta, StoryObj } from '@storybook/react';
 import { {{componentName}} } from './{{componentName}}';
@@ -582,7 +582,7 @@ export const AllSizes: Story = {
   ),
 };
         `,
-        
+
         test: `
 import { render, screen } from '@testing-library/react';
 import { {{componentName}} } from './{{componentName}}';
@@ -620,13 +620,13 @@ describe('{{componentName}}', () => {
         `
       }
     };
-    
+
     // Handlebars 헬퍼 등록
     handlebars.registerHelper('pascalCase', function(str) {
       return str.charAt(0).toUpperCase() + str.slice(1);
     });
   }
-  
+
   async generateComponent(config) {
     const {
       name,
@@ -638,10 +638,10 @@ describe('{{componentName}}', () => {
       baseClasses = `${name.toLowerCase()}`,
       props = []
     } = config;
-    
+
     const componentDir = path.join('src/components', name);
     await fs.ensureDir(componentDir);
-    
+
     const templateData = {
       componentName: name,
       cssClass: name.toLowerCase(),
@@ -657,7 +657,7 @@ describe('{{componentName}}', () => {
       variantStyles: this.generateVariantStyles(config),
       sizeStyles: this.generateSizeStyles(config)
     };
-    
+
     // 컴포넌트 파일들 생성
     const files = {
       [`${name}.tsx`]: this.templates[type].component,
@@ -666,18 +666,18 @@ describe('{{componentName}}', () => {
       [`${name}.test.tsx`]: this.templates[type].test,
       'index.ts': `export { ${name} } from './${name}';`
     };
-    
+
     for (const [filename, template] of Object.entries(files)) {
       const content = handlebars.compile(template)(templateData);
       await fs.writeFile(path.join(componentDir, filename), content);
     }
-    
+
     // 인덱스 파일 업데이트
     await this.updateIndexFile(name);
-    
+
     console.log(`✅ Component '${name}' generated successfully`);
   }
-  
+
   generateBaseStyles(config) {
     const baseStyles = [
       { property: 'display', value: 'inline-flex' },
@@ -687,14 +687,14 @@ describe('{{componentName}}', () => {
       { property: 'cursor', value: 'pointer' },
       { property: 'transition', value: 'all 0.2s ease' }
     ];
-    
+
     if (config.baseStyles) {
       baseStyles.push(...config.baseStyles);
     }
-    
+
     return baseStyles;
   }
-  
+
   generateVariantStyles(config) {
     const variantMap = {
       primary: [
@@ -710,13 +710,13 @@ describe('{{componentName}}', () => {
         { property: 'color', value: 'var(--color-primary)' }
       ]
     };
-    
+
     return config.variants.map(variant => ({
       name: variant,
       styles: variantMap[variant] || []
     }));
   }
-  
+
   generateSizeStyles(config) {
     const sizeMap = {
       sm: [
@@ -732,25 +732,25 @@ describe('{{componentName}}', () => {
         { property: 'font-size', value: 'var(--text-lg)' }
       ]
     };
-    
+
     return config.sizes.map(size => ({
       name: size,
       styles: sizeMap[size] || []
     }));
   }
-  
+
   async updateIndexFile(componentName) {
     const indexPath = 'src/components/index.ts';
     let content = '';
-    
+
     try {
       content = await fs.readFile(indexPath, 'utf8');
     } catch (error) {
       // 파일이 없으면 새로 생성
     }
-    
+
     const exportLine = `export { ${componentName} } from './${componentName}';`;
-    
+
     if (!content.includes(exportLine)) {
       content += `${exportLine}\n`;
       await fs.writeFile(indexPath, content);
@@ -762,12 +762,12 @@ describe('{{componentName}}', () => {
 if (require.main === module) {
   const generator = new ComponentGenerator();
   const config = JSON.parse(process.argv[2] || '{}');
-  
+
   if (!config.name) {
     console.error('Please provide component name: node generate-component.js \'{"name": "Button"}\'');
     process.exit(1);
   }
-  
+
   generator.generateComponent(config);
 }
 
@@ -788,57 +788,57 @@ class DocumentationGenerator {
   constructor() {
     this.outputDir = 'docs/components';
   }
-  
+
   async generateAllDocs() {
     // 컴포넌트 파일 찾기
     const componentFiles = glob.sync('src/components/**/index.ts');
-    
+
     for (const file of componentFiles) {
       const componentDir = path.dirname(file);
       const componentName = path.basename(componentDir);
-      
+
       await this.generateComponentDoc(componentName, componentDir);
     }
-    
+
     // 인덱스 문서 생성
     await this.generateIndexDoc(componentFiles);
   }
-  
+
   async generateComponentDoc(name, componentDir) {
     const componentFile = path.join(componentDir, `${name}.tsx`);
     const storyFile = path.join(componentDir, `${name}.stories.tsx`);
-    
+
     if (!await fs.pathExists(componentFile)) {
       return;
     }
-    
+
     const componentSource = await fs.readFile(componentFile, 'utf8');
     const propsInterface = this.extractPropsInterface(componentSource);
     const examples = await this.extractExamples(storyFile);
-    
+
     const docContent = this.generateMarkdown({
       name,
       props: propsInterface,
       examples,
       usage: this.generateUsageExamples(name, propsInterface)
     });
-    
+
     const docPath = path.join(this.outputDir, `${name}.md`);
     await fs.ensureDir(path.dirname(docPath));
     await fs.writeFile(docPath, docContent);
   }
-  
+
   extractPropsInterface(source) {
     const interfaceMatch = source.match(/export interface (\w+Props) \{([\s\S]*?)\}/);
     if (!interfaceMatch) return [];
-    
+
     const interfaceBody = interfaceMatch[2];
     const propMatches = interfaceBody.match(/(\w+)\??: ([^;]+);/g) || [];
-    
+
     return propMatches.map(match => {
       const [, name, type] = match.match(/(\w+)\??: ([^;]+);/) || [];
       const optional = match.includes('?:');
-      
+
       return {
         name,
         type: type.trim(),
@@ -847,25 +847,25 @@ class DocumentationGenerator {
       };
     });
   }
-  
+
   extractPropDescription(source, propName) {
     // JSDoc 코멘트에서 설명 추출
     const commentMatch = source.match(new RegExp(`/\\*\\*[\\s\\S]*?\\* @param ${propName} ([^\\n]+)`));
     return commentMatch ? commentMatch[1].trim() : '';
   }
-  
+
   async extractExamples(storyFile) {
     if (!await fs.pathExists(storyFile)) {
       return [];
     }
-    
+
     const storySource = await fs.readFile(storyFile, 'utf8');
     const exportMatches = storySource.match(/export const (\w+): Story = \{([\s\S]*?)\};/g) || [];
-    
+
     return exportMatches.map(match => {
       const [, name] = match.match(/export const (\w+):/) || [];
       const argsMatch = match.match(/args: \{([\s\S]*?)\}/);
-      
+
       return {
         name,
         args: argsMatch ? argsMatch[1] : '',
@@ -873,10 +873,10 @@ class DocumentationGenerator {
       };
     });
   }
-  
+
   generateExampleCode(storyName, argsMatch) {
     if (!argsMatch) return '';
-    
+
     const args = argsMatch[1]
       .split(',')
       .map(line => line.trim())
@@ -886,16 +886,16 @@ class DocumentationGenerator {
         return `${key}=${value}`;
       })
       .join(' ');
-    
+
     return `<ComponentName ${args}>Content</ComponentName>`;
   }
-  
+
   generateUsageExamples(name, props) {
     const requiredProps = props.filter(p => !p.optional);
     const optionalProps = props.filter(p => p.optional);
-    
+
     const examples = [];
-    
+
     // 기본 사용법
     examples.push({
       title: 'Basic Usage',
@@ -905,7 +905,7 @@ class DocumentationGenerator {
   Default ${name}
 </${name}>`
     });
-    
+
     // Props와 함께 사용
     if (props.length > 0) {
       const propExamples = requiredProps.slice(0, 2)
@@ -915,7 +915,7 @@ class DocumentationGenerator {
           return `${p.name}=${exampleValue}`;
         })
         .join(' ');
-      
+
       examples.push({
         title: 'With Props',
         code: `<${name} ${propExamples}>
@@ -923,10 +923,10 @@ class DocumentationGenerator {
 </${name}>`
       });
     }
-    
+
     return examples;
   }
-  
+
   getExampleValue(type) {
     const typeMap = {
       'string': '"example"',
@@ -935,16 +935,16 @@ class DocumentationGenerator {
       'React.ReactNode': '{<span>Content</span>}',
       'function': '{() => console.log("clicked")}'
     };
-    
+
     // Union type 처리 (예: 'primary' | 'secondary')
     if (type.includes('|')) {
       const firstOption = type.split('|')[0].trim().replace(/'/g, '');
       return `"${firstOption}"`;
     }
-    
+
     return typeMap[type] || '{}';
   }
-  
+
   generateMarkdown({ name, props, examples, usage }) {
     let markdown = `# ${name}
 
@@ -972,7 +972,7 @@ ${example.code}
 
 | Name | Type | Default | Required | Description |
 |------|------|---------|----------|-------------|
-${props.map(prop => 
+${props.map(prop =>
   `| ${prop.name} | \`${prop.type}\` | - | ${prop.optional ? 'No' : 'Yes'} | ${prop.description} |`
 ).join('\n')}
 
@@ -1000,14 +1000,14 @@ ${example.code}
 
     return markdown;
   }
-  
+
   async generateIndexDoc(componentFiles) {
     const components = componentFiles.map(file => {
       const componentDir = path.dirname(file);
       const componentName = path.basename(componentDir);
       return componentName;
     }).sort();
-    
+
     const indexContent = `# Component Library
 
 ## Available Components

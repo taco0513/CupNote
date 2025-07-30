@@ -18,21 +18,21 @@ API 위에 **사용자가 실제로 상호작용하는 인터페이스**를 설�
 1. 랜딩 페이지 도착
    → 문제 인식
    → 솔루션 이해
-   
+
 2. 회원가입
    → 이메일 입력
    → 비밀번호 설정
    → 이메일 인증
-   
+
 3. 온보딩
    → 기본 설정
    → 튜토리얼
    → 첫 사용
-   
+
 4. 핵심 기능 사용
    → 가치 경험
    → 습관 형성
-   
+
 5. 유료 전환
    → 제한 도달
    → 업그레이드
@@ -72,7 +72,7 @@ API 위에 **사용자가 실제로 상호작용하는 인터페이스**를 설�
 ### 반응형 그리드
 ```
 Mobile (< 768px):    1 column
-Tablet (768-1024px): 2 columns  
+Tablet (768-1024px): 2 columns
 Desktop (> 1024px):  3-4 columns
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
@@ -120,7 +120,7 @@ Desktop (> 1024px):  3-4 columns
 ### 컴포넌트 라이브러리
 ```jsx
 // Button Component
-<Button 
+<Button
   variant="primary|secondary|ghost"
   size="sm|md|lg"
   loading={false}

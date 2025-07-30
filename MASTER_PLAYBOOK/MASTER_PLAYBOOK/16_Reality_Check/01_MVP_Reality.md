@@ -37,7 +37,7 @@ class MVPSuccessCriteria {
     ],
     minimumThreshold: "60% 사용자가 문제 해결 인정"
   };
-  
+
   // 2. 사용성
   usability = {
     firstTimeSuccess: "80% 사용자가 도움 없이 핵심 기능 사용",
@@ -45,7 +45,7 @@ class MVPSuccessCriteria {
     errorRate: "10% 미만의 사용자 오류",
     completionRate: "70% 이상 태스크 완료율"
   };
-  
+
   // 3. 기술적 안정성
   technicalStability = {
     uptime: "99% 이상",
@@ -53,7 +53,7 @@ class MVPSuccessCriteria {
     errorHandling: "모든 예상 오류 처리",
     dataIntegrity: "데이터 손실 0%"
   };
-  
+
   // 4. 비즈니스 검증
   businessValidation = {
     willingToPay: "10% 사용자가 결제 의향 표현",
@@ -74,7 +74,7 @@ class FeaturePrioritization {
   prioritizeFeatures(features: Feature[]): PrioritizedFeature[] {
     return features.map(feature => {
       const score = this.calculateScore(feature);
-      
+
       return {
         ...feature,
         score,
@@ -83,17 +83,17 @@ class FeaturePrioritization {
       };
     }).sort((a, b) => b.score - a.score);
   }
-  
+
   private calculateScore(feature: Feature): number {
     // RICE 프레임워크
     const reach = feature.potentialUsers; // 영향 받는 사용자 수
     const impact = feature.impact; // 1-5 스케일
     const confidence = feature.confidence; // 0-100%
     const effort = feature.effort; // 개발 시간(주)
-    
+
     return (reach * impact * confidence) / effort;
   }
-  
+
   private getMVPStatus(feature: Feature, score: number): MVPStatus {
     if (feature.isCoreProblemSolver && score > 50) {
       return 'MUST_HAVE';
@@ -123,19 +123,19 @@ const todoAppMVP = {
     "할 일 완료 표시", // 핵심 기능
     "데이터 저장 (로컬)" // 기술적 필수
   ],
-  
+
   shouldHave: [
     "할 일 수정", // 사용성 향상
     "할 일 삭제", // 사용성 향상
     "기본 정렬" // UX 개선
   ],
-  
+
   niceToHave: [
     "마감일 설정", // 추가 가치
     "카테고리 분류", // 조직화
     "검색 기능" // 편의 기능
   ],
-  
+
   postMVP: [
     "클라우드 동기화", // 복잡도 높음
     "팀 공유", // 새로운 사용 사례
@@ -172,7 +172,7 @@ class TechnicalDebtTracker {
         plan: "트래픽 증가 시 마이그레이션"
       }
     ],
-    
+
     // 절대 피해야 할 부채
     unacceptable: [
       {
@@ -192,26 +192,26 @@ class TechnicalDebtTracker {
       }
     ]
   };
-  
+
   trackDebt(debt: TechnicalDebt): DebtDecision {
     const impact = this.assessImpact(debt);
     const urgency = this.assessUrgency(debt);
     const cost = this.estimateCost(debt);
-    
+
     if (impact === 'critical' || urgency === 'immediate') {
       return {
         decision: 'FIX_NOW',
         reason: '핵심 기능 영향'
       };
     }
-    
+
     if (cost < 2 && impact === 'medium') {
       return {
         decision: 'FIX_IN_MVP',
         reason: '빠른 해결 가능'
       };
     }
-    
+
     return {
       decision: 'DOCUMENT_AND_DEFER',
       reason: 'MVP 후 처리',
@@ -240,7 +240,7 @@ class FeedbackRealityChecker {
       ],
       action: "UX 개선 우선"
     },
-    
+
     // 예상: "디자인이 예쁘면 좋겠어요"
     // 현실: "작동하기만 하면 돼요"
     functionalityFirst: {
@@ -252,7 +252,7 @@ class FeedbackRealityChecker {
       ],
       action: "안정성 및 성능 최우선"
     },
-    
+
     // 예상: "모바일 앱이 필요해요"
     // 현실: "모바일 웹도 잘 안 돼요"
     mobileWebFirst: {
@@ -265,12 +265,12 @@ class FeedbackRealityChecker {
       action: "반응형 웹 우선"
     }
   };
-  
+
   analyzeFeedback(feedback: UserFeedback[]): FeedbackInsights {
     const categorized = this.categorizeFeedback(feedback);
     const patterns = this.identifyPatterns(categorized);
     const priorities = this.generatePriorities(patterns);
-    
+
     return {
       topIssues: this.getTopIssues(categorized),
       hiddenProblems: this.findHiddenProblems(feedback),
@@ -326,28 +326,28 @@ class MVPReleaseChecklist {
       ]
     }
   ];
-  
+
   validateRelease(): ReleaseReadiness {
     const results = this.preReleaseChecks.map(category => {
-      const completed = category.items.filter(item => 
+      const completed = category.items.filter(item =>
         this.isCompleted(item)
       ).length;
-      
+
       return {
         category: category.category,
         completionRate: (completed / category.items.length) * 100,
-        blockers: category.items.filter(item => 
+        blockers: category.items.filter(item =>
           !this.isCompleted(item) && this.isBlocker(item)
         )
       };
     });
-    
+
     const overallReadiness = results.reduce(
       (sum, r) => sum + r.completionRate, 0
     ) / results.length;
-    
+
     return {
-      isReady: overallReadiness >= 80 && 
+      isReady: overallReadiness >= 80 &&
                results.every(r => r.blockers.length === 0),
       readinessScore: overallReadiness,
       blockers: results.flatMap(r => r.blockers),

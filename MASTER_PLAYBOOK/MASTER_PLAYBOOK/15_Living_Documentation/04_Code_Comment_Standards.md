@@ -13,7 +13,7 @@
  * @file user.service.ts
  * @purpose 사용자 관리 핵심 비즈니스 로직
  * @layer Service Layer
- * @dependencies 
+ * @dependencies
  *   - user.repository.ts: 데이터 액세스
  *   - auth.util.ts: 인증 유틸리티
  *   - notification.service.ts: 알림 발송
@@ -34,23 +34,23 @@
 ```typescript
 /**
  * 사용자 관리 서비스
- * 
+ *
  * @class UserService
  * @implements IUserService
- * 
+ *
  * @description
  * 사용자 생성, 수정, 삭제 등 핵심 비즈니스 로직을 담당합니다.
  * Repository 패턴을 사용하여 데이터 액세스와 분리되어 있습니다.
- * 
+ *
  * @example
  * const userService = new UserService(userRepo, authUtil);
  * const user = await userService.createUser(userData);
- * 
+ *
  * @patterns
  * - Repository Pattern: 데이터 액세스 추상화
  * - Strategy Pattern: 인증 방식 선택
  * - Observer Pattern: 사용자 이벤트 발행
- * 
+ *
  * @events
  * - user.created: 사용자 생성 완료
  * - user.updated: 사용자 정보 수정
@@ -98,7 +98,7 @@ const ACCESS_TOKEN_EXPIRY = '15m';
 
 // ARCHITECTURE: 이벤트 기반 알림 시스템
 // PATTERN: Pub/Sub를 통한 느슨한 결합
-// BENEFITS: 
+// BENEFITS:
 //   - 알림 로직 변경시 서비스 코드 수정 불필요
 //   - 새로운 알림 채널 추가 용이
 // TRADEOFFS:
@@ -118,17 +118,17 @@ this.eventBus.publish('user.registered', {
 ```typescript
 /**
  * 사용자 권한 계산 로직
- * 
+ *
  * ALGORITHM:
  * 1. 기본 역할 권한 로드
  * 2. 사용자별 추가 권한 병합
  * 3. 임시 권한 적용 (시간 제한)
  * 4. 차단된 권한 제거
- * 
+ *
  * COMPLEXITY: O(n*m) - n:권한수, m:역할수
- * 
+ *
  * CACHE: 5분간 메모리 캐시, Redis 백업
- * 
+ *
  * @param userId 사용자 ID
  * @returns 최종 권한 세트
  */
@@ -136,30 +136,30 @@ async calculatePermissions(userId: string): Promise<Permission[]> {
   // STEP 1: 캐시 확인
   const cached = await this.cache.get(`permissions:${userId}`);
   if (cached) return cached;
-  
+
   // STEP 2: 기본 권한 계산
   // NOTE: 역할은 상속 관계를 가질 수 있음
   const roles = await this.getUserRoles(userId);
   const basePermissions = await this.getPermissionsForRoles(roles);
-  
+
   // STEP 3: 사용자 특정 권한 추가
   // GOTCHA: 추가 권한은 역할 권한을 오버라이드할 수 있음
   const userPermissions = await this.getUserSpecificPermissions(userId);
-  
+
   // STEP 4: 시간 제한 권한 필터링
   // WHY: 임시 승급된 권한은 만료 시간 체크 필요
   const activePermissions = this.filterExpiredPermissions([
     ...basePermissions,
     ...userPermissions
   ]);
-  
+
   // STEP 5: 차단 목록 적용
   // SECURITY: 명시적으로 차단된 권한은 모든 것에 우선
   const finalPermissions = this.applyBlocklist(activePermissions, userId);
-  
+
   // STEP 6: 캐시 저장
   await this.cache.set(`permissions:${userId}`, finalPermissions, 300);
-  
+
   return finalPermissions;
 }
 ```
@@ -176,7 +176,7 @@ try {
   //   - 4xx: 클라이언트 에러 → 사용자에게 전달
   //   - 5xx: 서버 에러 → 재시도
   //   - Network: 연결 에러 → 폴백 처리
-  
+
   if (error.response?.status >= 400 && error.response?.status < 500) {
     // CLIENT_ERROR: 입력 데이터 문제
     // ACTION: 사용자에게 구체적 에러 메시지 제공
@@ -212,7 +212,7 @@ async function* streamLargeDataset(query: Query) {
   // WHY: Offset 방식은 대량 데이터에서 O(n) 성능 저하
   let cursor = null;
   const batchSize = 1000; // TUNED: 메모리/속도 최적 균형점
-  
+
   while (true) {
     // QUERY_OPTIMIZATION: 인덱스 활용
     // INDEX: idx_created_at_status (created_at DESC, status)
@@ -221,14 +221,14 @@ async function* streamLargeDataset(query: Query) {
       cursor,
       limit: batchSize
     });
-    
+
     if (batch.length === 0) break;
-    
+
     // MEMORY_OPTIMIZATION: 즉시 처리 후 해제
     for (const item of batch) {
       yield processItem(item);
     }
-    
+
     cursor = batch[batch.length - 1].id;
   }
 }
@@ -255,17 +255,17 @@ const cachedData = await this.multiLevelCache.get(key, async () => {
  * TECHNOLOGIES: WebSocket, Redis Pub/Sub
  * SCALABILITY: 10K 동시 연결 지원
  * RELIABILITY: 메시지 전달 보장 (at-least-once)
- * 
+ *
  * @ai-patterns
  * - Circuit Breaker: 외부 서비스 장애 대응
  * - Retry with Backoff: 일시적 실패 처리
  * - Message Queue: 비동기 처리 및 부하 분산
- * 
+ *
  * @ai-dependencies
  * - notification.queue.ts: 메시지 큐 관리
  * - websocket.manager.ts: 연결 관리
  * - redis.pubsub.ts: 이벤트 버스
- * 
+ *
  * @ai-gotchas
  * - WebSocket 재연결시 미전달 메시지 처리 필요
  * - Redis 연결 끊김시 로컬 큐 사용

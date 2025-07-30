@@ -16,13 +16,13 @@
 ```
 1. Resource 중심 설계
    /users (not /getUsers)
-   
+
 2. HTTP 메서드 활용
    GET: 조회
    POST: 생성
    PUT/PATCH: 수정
    DELETE: 삭제
-   
+
 3. 상태 코드 활용
    200: 성공
    201: 생성됨
@@ -383,12 +383,12 @@ router.use(rateLimit);
 // 상품 목록
 router.get('/', async (req, res) => {
   const { page = 1, limit = 20, category } = req.query;
-  
+
   try {
     const products = await Product.find({ category })
       .limit(limit)
       .skip((page - 1) * limit);
-      
+
     res.json({
       success: true,
       data: products,
@@ -414,7 +414,7 @@ router.post('/', authorize('products:create'), async (req, res) => {
   try {
     const product = new Product(req.body);
     await product.save();
-    
+
     res.status(201).json({
       success: true,
       data: product

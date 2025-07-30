@@ -334,7 +334,7 @@ const users = await User.findByIds(orderUserIds);
 ### AI 도움 활용
 ```
 Claude/ChatGPT 프롬프트:
-"[구체적 에러 메시지]가 발생했습니다. 
+"[구체적 에러 메시지]가 발생했습니다.
 환경: [기술 스택]
 시도한 것: [시도한 해결책]
 단계별 해결 방법을 알려주세요."

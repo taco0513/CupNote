@@ -218,21 +218,21 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']),
   PORT: z.string().default('3000'),
   APP_URL: z.string().url(),
-  
+
   // 데이터베이스
   DATABASE_URL: z.string(),
   DATABASE_POOL_MIN: z.string().default('2'),
   DATABASE_POOL_MAX: z.string().default('10'),
-  
+
   // 인증
   JWT_SECRET: z.string().min(32),
   JWT_EXPIRES_IN: z.string().default('7d'),
-  
+
   // 외부 서비스
   STRIPE_SECRET_KEY: z.string().optional(),
   SENDGRID_API_KEY: z.string().optional(),
   OPENAI_API_KEY: z.string().optional(),
-  
+
   // 모니터링
   SENTRY_DSN: z.string().optional(),
   POSTHOG_API_KEY: z.string().optional(),
@@ -241,13 +241,13 @@ const envSchema = z.object({
 // 환경 변수 검증 및 로드
 export const env = (() => {
   const parsed = envSchema.safeParse(process.env);
-  
+
   if (!parsed.success) {
     console.error('❌ 환경 변수 오류:');
     console.error(parsed.error.flatten());
     throw new Error('환경 변수 설정이 올바르지 않습니다.');
   }
-  
+
   return parsed.data;
 })();
 
@@ -302,14 +302,14 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'error',
     '@typescript-eslint/no-explicit-any': 'warn',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    
+
     // React
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
-    
+
     // 미사용 import 자동 제거
     'unused-imports/no-unused-imports': 'error',
-    
+
     // 일반 규칙
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     'prefer-const': 'error',
@@ -491,38 +491,38 @@ import * as path from 'path';
 class TeamEnvironmentSetup {
   async setupForNewMember(memberName: string) {
     console.log(`🎉 ${memberName}님을 위한 환경 설정 시작...`);
-    
+
     // 1. 필수 도구 확인
     this.checkRequiredTools();
-    
+
     // 2. 저장소 클론
     this.cloneRepository();
-    
+
     // 3. 의존성 설치
     this.installDependencies();
-    
+
     // 4. 환경 변수 설정
     this.setupEnvironmentVariables();
-    
+
     // 5. 데이터베이스 초기화
     this.initializeDatabase();
-    
+
     // 6. IDE 설정
     this.configureIDE();
-    
+
     // 7. 팀 규칙 안내
     this.showTeamGuidelines();
-    
+
     console.log('✅ 환경 설정 완료!');
   }
-  
+
   private checkRequiredTools() {
     const tools = [
       { name: 'Node.js', command: 'node --version', minVersion: '18' },
       { name: 'Git', command: 'git --version', minVersion: '2.30' },
       { name: 'Docker', command: 'docker --version', minVersion: '20' },
     ];
-    
+
     tools.forEach(tool => {
       try {
         const version = execSync(tool.command, { encoding: 'utf8' });

@@ -62,7 +62,7 @@ coordination:
     - "API 계약 정의"
     - "데이터 모델 확정"
     - "통합 테스트"
-  
+
   communication:
     - shared_context: "project_spec.md"
     - message_queue: "updates.log"
@@ -103,12 +103,12 @@ delegation_rules:
     - "전체 아키텍처 결정"
     - "주요 기술 스택 선택"
     - "일정 및 우선순위"
-  
+
   team_lead:
     - "세부 설계 결정"
     - "코드 리뷰"
     - "팀 내 조정"
-  
+
   developer:
     - "구현 세부사항"
     - "단위 테스트"
@@ -144,12 +144,12 @@ collaboration_matrix:
     - "XSS 방지"
     - "CSRF 토큰"
     - "안전한 인증 UI"
-  
+
   backend_devops:
     - "컨테이너 설정"
     - "환경 변수"
     - "배포 스크립트"
-  
+
   frontend_performance:
     - "번들 최적화"
     - "레이지 로딩"
@@ -185,7 +185,7 @@ feedback_integration:
     high: "다음 반복에 포함"
     medium: "백로그 추가"
     low: "향후 고려"
-  
+
   validation:
     - "모든 critical 해결"
     - "테스트 통과율 95%+"
@@ -217,7 +217,7 @@ consensus_mechanism:
     - "각 에이전트 투표"
     - "가중치 적용"
     - "과반수 결정"
-  
+
   conflict_resolution:
     - "전문가 에이전트 중재"
     - "증거 기반 평가"
@@ -256,7 +256,7 @@ protocols:
     - "정기 체크포인트"
     - "블로킹 이슈 즉시 공유"
     - "결정사항 문서화"
-  
+
   async_communication:
     - "작업 큐 사용"
     - "상태 업데이트"
@@ -270,12 +270,12 @@ quality_gates:
     - "명확한 요구사항"
     - "리소스 할당"
     - "역할 정의"
-  
+
   process:
     - "정기 검증"
     - "진행 상황 추적"
     - "이슈 해결"
-  
+
   exit:
     - "통합 테스트"
     - "문서 완성"
@@ -334,12 +334,12 @@ metrics:
     - "작업 완료 속도"
     - "병렬 처리 효율"
     - "리소스 활용률"
-  
+
   quality:
     - "오류 발생률"
     - "재작업 비율"
     - "테스트 통과율"
-  
+
   coordination:
     - "통신 오버헤드"
     - "대기 시간"

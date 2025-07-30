@@ -14,7 +14,7 @@ BMAD Method를 활용한 **실제 프로젝트 사례**들을 단계별로 살�
 
 타겟: 중소 온라인 패션몰
 
-수익 모델: 
+수익 모델:
 - Basic: 월 5만원 (1,000건)
 - Pro: 월 20만원 (10,000건)
 - Enterprise: 맞춤 견적
@@ -64,7 +64,7 @@ POST /api/measurements
 # 추천 API
 GET /api/recommendations/{productId}
   headers: { Authorization: Bearer token }
-  response: { 
+  response: {
     size: string,
     confidence: number,
     fit_description: string
@@ -72,7 +72,7 @@ GET /api/recommendations/{productId}
 
 # 피드백 API
 POST /api/feedback
-  body: { 
+  body: {
     recommendation_id: string,
     actual_fit: 'small' | 'perfect' | 'large'
   }
@@ -132,10 +132,10 @@ POST /api/feedback
 const createQuickInvoice = async (data: QuickInvoiceDto) => {
   // 이전 거래처 자동완성
   const client = await findOrCreateClient(data.clientEmail);
-  
+
   // 인보이스 번호 자동 생성
   const invoiceNumber = generateInvoiceNumber();
-  
+
   // PDF 생성
   const pdf = await generatePDF({
     ...data,
@@ -143,10 +143,10 @@ const createQuickInvoice = async (data: QuickInvoiceDto) => {
     invoiceNumber,
     template: user.preferredTemplate
   });
-  
+
   // 이메일 발송
   await sendInvoice(client.email, pdf);
-  
+
   return { invoiceId, trackingUrl };
 };
 ```
@@ -185,7 +185,7 @@ if (invoice.daysOverdue > 7) {
 ```
 
 ### 성장 해킹
-1. **바이럴 기능**: 인보이스에 "Powered by QuickInvoice" 
+1. **바이럴 기능**: 인보이스에 "Powered by QuickInvoice"
 2. **추천 프로그램**: 추천당 1개월 무료
 3. **템플릿 마켓**: 디자이너 템플릿 판매
 4. **회계 SW 연동**: QuickBooks, Xero 연동
@@ -218,7 +218,7 @@ if (invoice.daysOverdue > 7) {
 const findBestMeetingTime = (members: TeamMember[]) => {
   const timezones = members.map(m => m.timezone);
   const workingHours = members.map(m => m.workingHours);
-  
+
   // 모든 멤버의 근무 시간이 겹치는 시간 찾기
   return calculateOverlap(timezones, workingHours);
 };
@@ -230,9 +230,9 @@ interface AsyncStandup {
     "오늘 무엇을 할 예정인가요?",
     "블로커가 있나요?"
   ];
-  
+
   submitDeadline: "매일 오전 10시 (각자 시간대)";
-  
+
   digest: {
     frequency: "daily",
     time: "팀 전체가 볼 수 있는 시간",
@@ -248,7 +248,7 @@ const ContextThread = () => {
         API 개발 완료. PR #123 리뷰 부탁.
         <Attachment type="pr" id="123" />
       </Update>
-      
+
       <Update author="Sarah" timezone="KST">
         리뷰 완료! 몇 가지 코멘트 남겼어요.
         <TimeAgo time={update.createdAt} />
@@ -300,7 +300,7 @@ const ContextThread = () => {
 #### 실수 1: 과도한 기능
 ```
 문제: "이것도 넣고 저것도 넣고..."
-해결: 
+해결:
 - 한 문장으로 설명 가능한 기능만
 - 나머지는 v2로
 - 사용자가 요청하면 추가
@@ -371,7 +371,7 @@ Week 3 (Day 15-17):
 ### 격려의 말
 > "모든 유니콘도 처음엔 MVP였다"
 
-당신의 아이디어도 17일 후엔 실제 서비스가 될 수 있습니다. 
+당신의 아이디어도 17일 후엔 실제 서비스가 될 수 있습니다.
 
 **지금 시작하세요! 🚀**
 

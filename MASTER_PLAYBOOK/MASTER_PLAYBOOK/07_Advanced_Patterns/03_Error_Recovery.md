@@ -13,17 +13,17 @@ error_levels:
     impact: "전체 시스템 중단"
     examples: ["메모리 부족", "네트워크 완전 차단"]
     response_time: "즉시"
-  
+
   high:
     impact: "주요 기능 장애"
     examples: ["API 응답 없음", "데이터베이스 연결 실패"]
     response_time: "1분 이내"
-  
+
   medium:
     impact: "일부 기능 제한"
     examples: ["느린 응답", "일부 서비스 불안정"]
     response_time: "5분 이내"
-  
+
   low:
     impact: "사용자 경험 저하"
     examples: ["UI 깜빡임", "로딩 지연"]
@@ -37,17 +37,17 @@ error_types:
     - "연결 타임아웃"
     - "서버 응답 없음"
     - "대역폭 제한"
-  
+
   computational:
     - "메모리 부족"
     - "CPU 과부하"
     - "디스크 공간 부족"
-  
+
   logical:
     - "무한 루프"
     - "잘못된 입력"
     - "논리적 모순"
-  
+
   integration:
     - "API 버전 불일치"
     - "인증 실패"
@@ -66,7 +66,7 @@ circuit_breaker:
     closed: "정상 작동"
     open: "장애 감지, 대안 실행"
     half_open: "복구 시도 중"
-  
+
   thresholds:
     failure_rate: "50% 실패시 open"
     timeout: "30초 후 half_open"
@@ -107,12 +107,12 @@ retry_matrix:
     max_retries: 5
     backoff: "exponential"
     base_delay: 1s
-  
+
   api_rate_limit:
     max_retries: 3
     backoff: "linear"
     base_delay: 5s
-  
+
   temporary_failure:
     max_retries: 2
     backoff: "fixed"
@@ -128,12 +128,12 @@ service_priority:
     services: ["핵심 기능", "데이터 일관성"]
     availability: "99.9%"
     fallback: "없음"
-  
+
   tier_2:
     services: ["고급 기능", "최적화"]
     availability: "95%"
     fallback: "기본 모드"
-  
+
   tier_3:
     services: ["편의 기능", "부가 서비스"]
     availability: "90%"
@@ -161,7 +161,7 @@ checkpoint_strategy:
     auto: "중요 작업 전후"
     manual: "사용자 요청시"
     scheduled: "1시간마다"
-  
+
   retention:
     recent: "24시간 (1시간 간격)"
     daily: "7일 (1일 간격)"
@@ -187,12 +187,12 @@ rollback_scenarios:
     trigger: "빌드 실패"
     action: "마지막 성공 지점으로 롤백"
     verification: "빌드 재실행"
-  
+
   performance_regression:
     trigger: "성능 임계치 초과"
     action: "성능 기준 만족 지점으로 롤백"
     verification: "성능 테스트"
-  
+
   security_issue:
     trigger: "보안 스캔 실패"
     action: "보안 기준 만족 지점으로 롤백"
@@ -208,12 +208,12 @@ alternative_paths:
     method: "AI 자동 생성"
     confidence: "high"
     speed: "fast"
-  
+
   secondary:
     method: "템플릿 기반"
     confidence: "medium"
     speed: "medium"
-  
+
   fallback:
     method: "수동 가이드"
     confidence: "guaranteed"
@@ -241,12 +241,12 @@ backup_strategy:
     method: "증분 백업"
     frequency: "변경시마다"
     retention: "24시간"
-  
+
   snapshot:
     method: "전체 백업"
     frequency: "일일"
     retention: "30일"
-  
+
   archive:
     method: "압축 백업"
     frequency: "주간"
@@ -274,12 +274,12 @@ health_checks:
     - "메모리 사용률"
     - "CPU 사용률"
     - "네트워크 연결"
-  
+
   application:
     - "응답 시간"
     - "에러 발생률"
     - "처리량"
-  
+
   integration:
     - "외부 API 상태"
     - "데이터베이스 연결"
@@ -305,17 +305,17 @@ recovery_sequence:
     - "문제 식별"
     - "심각도 평가"
     - "영향 범위 확인"
-  
+
   isolation:
     - "문제 격리"
     - "확산 방지"
     - "리소스 보호"
-  
+
   recovery:
     - "복구 전략 선택"
     - "복구 실행"
     - "결과 검증"
-  
+
   post_recovery:
     - "근본 원인 분석"
     - "예방 조치"
@@ -340,11 +340,11 @@ error_reporting:
   user_message:
     level: "사용자 친화적"
     content: "문제 요약 및 예상 해결 시간"
-  
+
   technical_log:
     level: "상세 기술 정보"
     content: "스택 트레이스, 시스템 상태"
-  
+
   recovery_status:
     level: "진행 상황"
     content: "복구 단계 및 완료 예상 시간"
@@ -368,12 +368,12 @@ recovery_testing:
     - "임의 서비스 중단"
     - "네트워크 지연 주입"
     - "리소스 제한"
-  
+
   failure_injection:
     - "특정 에러 강제 발생"
     - "복구 메커니즘 검증"
     - "성능 측정"
-  
+
   disaster_recovery:
     - "전체 시스템 복구"
     - "데이터 일관성 검증"
@@ -387,7 +387,7 @@ verification_checklist:
     - "모든 기능 정상 작동"
     - "데이터 무결성 확인"
     - "성능 기준 충족"
-  
+
   non_functional:
     - "보안 설정 유지"
     - "로그 기록 완전성"
