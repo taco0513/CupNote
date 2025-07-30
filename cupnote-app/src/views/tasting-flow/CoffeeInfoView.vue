@@ -213,9 +213,9 @@
         </div>
       </section>
 
-      <!-- Lab Data (Lab Mode Only) -->
-      <section v-if="currentMode === 'lab'" class="form-section">
-        <h3 class="section-title">실험 데이터</h3>
+      <!-- Pro Data (Pro Mode Only) -->
+      <section v-if="currentMode === 'pro'" class="form-section">
+        <h3 class="section-title">Pro 데이터</h3>
         
         <div class="lab-controls">
           <div class="input-group">
@@ -301,9 +301,11 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTastingSessionStore } from '../../stores/tastingSession'
+import { useFlowNavigation } from '../../composables/useFlowNavigation'
 
 const router = useRouter()
 const tastingSessionStore = useTastingSessionStore()
+const { navigateNext, validateSession } = useFlowNavigation()
 
 // Mode Labels
 const modeLabels = {
@@ -357,7 +359,7 @@ const ratios = [
 
 // Computed Properties
 const showBrewSettings = computed(() => 
-  currentMode.value === 'homecafe' || currentMode.value === 'lab'
+  currentMode.value === 'homecafe' || currentMode.value === 'pro'
 )
 
 const calculatedWater = computed(() => 
@@ -392,14 +394,14 @@ const handleSubmit = () => {
     ? formData.value.cafeName 
     : currentMode.value === 'homecafe' 
       ? '홈카페' 
-      : '랩'
+      : 'Pro'
   
   // Create brewing method string
   let brewingMethod = `${currentMode.value === 'cafe' ? '카페' : formData.value.dripper || '기타'}`
   
   if (currentMode.value !== 'cafe') {
     brewingMethod += ` - ${formData.value.coffeeAmount}g, 1:${formData.value.ratio}`
-    if (currentMode.value === 'lab' && formData.value.waterTemp) {
+    if (currentMode.value === 'pro' && formData.value.waterTemp) {
       brewingMethod += `, ${formData.value.waterTemp}°C`
     }
   }
@@ -419,21 +421,13 @@ const handleSubmit = () => {
   
   console.log('Coffee setup saved:', tastingSessionStore.currentSession)
   
-  // Navigate based on mode
-  if (currentMode.value === 'cafe') {
-    router.push('/flavor-selection')
-  } else if (currentMode.value === 'homecafe') {
-    router.push('/home-cafe')
-  } else if (currentMode.value === 'lab') {
-    router.push('/home-cafe') // Lab mode also goes to HomeCafe first
-  }
+  // Navigate to next step using the flow navigation
+  navigateNext('coffee-info', ['coffeeInfo'])
 }
 
 // Initialize mode from route if coming back
 onMounted(() => {
-  if (!tastingSessionStore.currentSession.mode) {
-    router.push('/mode-selection')
-  }
+  validateSession()
 })
 </script>
 

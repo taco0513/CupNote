@@ -28,31 +28,31 @@ const router = createRouter({
       path: '/coffee-info',
       name: 'coffee-info',
       component: () => import('../views/tasting-flow/CoffeeInfoView.vue'),
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, requiresSession: true }
     },
     {
       path: '/home-cafe',
       name: 'home-cafe',
       component: () => import('../views/tasting-flow/HomeCafeView.vue'),
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, requiresSession: true }
     },
     {
       path: '/pro-brewing',
       name: 'pro-brewing', 
       component: () => import('../views/tasting-flow/ProBrewingView.vue'),
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, requiresSession: true, allowedModes: ['pro'] }
     },
     {
       path: '/qc-measurement',
       name: 'qc-measurement',
       component: () => import('../views/tasting-flow/QcMeasurementView.vue'),
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, requiresSession: true, allowedModes: ['pro'] }
     },
     {
       path: '/pro-qc-report',
       name: 'pro-qc-report',
       component: () => import('../views/tasting-flow/ProQcReportView.vue'),
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, requiresSession: true, allowedModes: ['pro'] }
     },
     {
       path: '/flavor-selection',
@@ -70,7 +70,7 @@ const router = createRouter({
       path: '/sensory-slider',
       name: 'sensory-slider',
       component: () => import('../views/tasting-flow/SensorySliderView.vue'),
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, requiresSession: true, allowedModes: ['pro'] }
     },
     {
       path: '/personal-comment',
@@ -221,6 +221,8 @@ router.beforeEach(async (to, from, next) => {
   
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   const requiresGuest = to.matched.some(record => record.meta.requiresGuest)
+  const requiresSession = to.matched.some(record => record.meta.requiresSession)
+  const allowedModes = to.matched.find(record => record.meta.allowedModes)?.meta.allowedModes
   const isAuthenticated = authStore.isAuthenticated
   
   // Check mode access for protected routes
@@ -236,6 +238,30 @@ router.beforeEach(async (to, from, next) => {
         query: { ...to.query, mode: redirectMode }
       })
       return
+    }
+  }
+  
+  // Check session requirements for tasting flow
+  if (requiresSession && isAuthenticated) {
+    const { useTastingSessionStore } = await import('../stores/tastingSession')
+    const tastingSessionStore = useTastingSessionStore()
+    const currentSession = tastingSessionStore.currentSession
+    
+    // Skip session check for mode-selection as it creates the session
+    if (to.name !== 'mode-selection') {
+      if (!currentSession.mode) {
+        console.warn('No session found, redirecting to mode selection')
+        next('/mode-selection')
+        return
+      }
+      
+      // Check if current mode is allowed for this route
+      if (allowedModes && !allowedModes.includes(currentSession.mode)) {
+        console.warn(`Mode ${currentSession.mode} not allowed for route ${to.name}`)
+        // Redirect to mode selection to choose appropriate mode
+        next('/mode-selection')
+        return
+      }
     }
   }
   

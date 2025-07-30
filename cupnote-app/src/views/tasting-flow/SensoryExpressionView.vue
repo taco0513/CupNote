@@ -298,7 +298,7 @@ const handleNext = () => {
   const currentMode = tastingSessionStore.currentSession.mode || 'homecafe'
   
   // Navigate based on mode
-  if (currentMode === 'lab') {
+  if (currentMode === 'pro') {
     router.push('/sensory-slider')
   } else {
     router.push('/personal-comment')
