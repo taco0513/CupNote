@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Navigation from '@/components/Navigation'
+import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import {
   Download,
   Upload,
@@ -166,9 +167,10 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100">
-      <div className="container mx-auto px-4 py-4 md:py-8 max-w-4xl">
-        <Navigation showBackButton currentPage="settings" />
+    <ProtectedRoute>
+      <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100">
+        <div className="container mx-auto px-4 py-4 md:py-8 max-w-4xl">
+          <Navigation showBackButton currentPage="settings" />
 
         {/* 헤더 */}
         <div className="mb-6 md:mb-8">
@@ -432,6 +434,6 @@ export default function SettingsPage() {
           </div>
         </div>
       </div>
-    </div>
+    </ProtectedRoute>
   )
 }

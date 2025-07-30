@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Navigation from '@/components/Navigation'
+import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import { SupabaseStorage } from '@/lib/supabase-storage'
 import { UserStats, Achievement } from '@/types/achievement'
 import { Trophy, Target, TrendingUp, Award, Star, Zap, Users, Crown } from 'lucide-react'
@@ -98,9 +99,10 @@ export default function AchievementsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100">
-      <div className="container mx-auto px-4 py-4 md:py-8 max-w-4xl">
-        <Navigation showBackButton currentPage="achievements" />
+    <ProtectedRoute>
+      <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100">
+        <div className="container mx-auto px-4 py-4 md:py-8 max-w-4xl">
+          <Navigation showBackButton currentPage="achievements" />
 
         {/* 헤더 */}
         <div className="text-center mb-6 md:mb-8">
@@ -300,7 +302,8 @@ export default function AchievementsPage() {
             <p className="text-coffee-500">이 카테고리에는 성취가 없어요</p>
           </div>
         )}
+        </div>
       </div>
-    </div>
+    </ProtectedRoute>
   )
 }

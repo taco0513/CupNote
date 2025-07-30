@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Navigation from '@/components/Navigation'
+import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import HelpTooltip from '@/components/HelpTooltip'
 import { Coffee, ArrowRight, Calendar, MapPin } from 'lucide-react'
 
@@ -228,7 +229,8 @@ function RecordStep1Content() {
 
 export default function RecordStep1Page() {
   return (
-    <Suspense
+    <ProtectedRoute>
+      <Suspense
       fallback={
         <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100 flex items-center justify-center">
           <div className="text-center">
@@ -240,5 +242,6 @@ export default function RecordStep1Page() {
     >
       <RecordStep1Content />
     </Suspense>
+    </ProtectedRoute>
   )
 }
