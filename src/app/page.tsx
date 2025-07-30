@@ -14,7 +14,7 @@ export default function HomePage() {
         <h1 className="text-5xl font-bold text-coffee-800 mb-4">☕ CupNote</h1>
         <p className="text-xl text-coffee-600 mb-8">나만의 커피 여정을 기록하는 온라인 커피 일기</p>
         <Link
-          href="/record"
+          href="/mode-selection"
           className="inline-block bg-coffee-600 text-white px-8 py-3 rounded-full hover:bg-coffee-700 transition-colors text-lg font-medium"
         >
           첫 커피 기록하기

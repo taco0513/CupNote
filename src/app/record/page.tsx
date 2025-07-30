@@ -10,16 +10,39 @@ export default function RecordPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const editId = searchParams.get('edit')
+  const selectedMode = searchParams.get('mode') as 'cafe' | 'homecafe' | 'lab' | null
 
   const [mode, setMode] = useState<TasteMode>('simple')
+  const [coffeeMode, setCoffeeMode] = useState<'cafe' | 'homecafe' | 'lab'>('cafe')
   const [record, setRecord] = useState<Partial<CoffeeRecord>>({
     date: new Date().toISOString().split('T')[0],
     tasteMode: 'simple',
+    mode: 'cafe'
   })
   const [isEditMode, setIsEditMode] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const [submitting, setSubmitting] = useState(false)
+
+  // 모드 파라미터 처리
+  useEffect(() => {
+    if (selectedMode && !isEditMode) {
+      setCoffeeMode(selectedMode)
+      setRecord(prev => ({ ...prev, mode: selectedMode }))
+      
+      // 모드별 기본 tasteMode 설정
+      if (selectedMode === 'cafe') {
+        setMode('simple')
+        setRecord(prev => ({ ...prev, tasteMode: 'simple' }))
+      } else if (selectedMode === 'homecafe') {
+        setMode('simple')
+        setRecord(prev => ({ ...prev, tasteMode: 'simple' }))
+      } else if (selectedMode === 'lab') {
+        setMode('advanced')
+        setRecord(prev => ({ ...prev, tasteMode: 'advanced' }))
+      }
+    }
+  }, [selectedMode, isEditMode])
 
   // 편집 모드인 경우 기존 기록 로드
   useEffect(() => {
@@ -74,11 +97,11 @@ export default function RecordPage() {
       // 다른 컴포넌트에 변경사항 알림
       window.dispatchEvent(new CustomEvent('cupnote-record-added'))
 
-      // 편집 모드면 상세 페이지로, 추가 모드면 홈으로 이동
+      // 편집 모드면 상세 페이지로, 추가 모드면 결과 페이지로 이동
       if (isEditMode && editId) {
         router.push(`/coffee/${editId}`)
       } else {
-        router.push('/')
+        router.push(`/result?id=${savedRecord.id}`)
       }
     } catch (error) {
       console.error('기록 저장 오류:', error)
@@ -105,16 +128,40 @@ export default function RecordPage() {
         <Navigation showBackButton currentPage="record" />
         
         {/* 헤더 */}
-        <div className="flex items-center mb-8">
-          <button
-            onClick={() => (isEditMode ? router.push(`/coffee/${editId}`) : router.push('/'))}
-            className="mr-4 p-2 hover:bg-white/20 rounded-full transition-colors"
-          >
-            ← 뒤로
-          </button>
-          <h1 className="text-3xl font-bold text-coffee-800">
-            {isEditMode ? '커피 기록 편집' : '새 커피 기록'}
-          </h1>
+        <div className="mb-8">
+          <div className="flex items-center mb-4">
+            <button
+              onClick={() => (isEditMode ? router.push(`/coffee/${editId}`) : router.push('/mode-selection'))}
+              className="mr-4 p-2 hover:bg-white/20 rounded-full transition-colors"
+            >
+              ← 뒤로
+            </button>
+            <h1 className="text-3xl font-bold text-coffee-800">
+              {isEditMode ? '커피 기록 편집' : '새 커피 기록'}
+            </h1>
+          </div>
+          
+          {/* 선택된 모드 표시 */}
+          {!isEditMode && selectedMode && (
+            <div className="flex items-center space-x-3">
+              <div className={`
+                flex items-center px-4 py-2 rounded-full text-sm font-medium
+                ${coffeeMode === 'cafe' ? 'bg-blue-100 text-blue-800' :
+                  coffeeMode === 'homecafe' ? 'bg-green-100 text-green-800' :
+                  'bg-purple-100 text-purple-800'}
+              `}>
+                {coffeeMode === 'cafe' && '☕ 카페 모드'}
+                {coffeeMode === 'homecafe' && '🏠 홈카페 모드'}
+                {coffeeMode === 'lab' && '🔬 랩 모드'}
+              </div>
+              <span className="text-coffee-600 text-sm">
+                {coffeeMode === 'cafe' && '카페에서 간단히 기록'}
+                {coffeeMode === 'homecafe' && '집에서 내린 커피 + 레시피'}
+                {coffeeMode === 'lab' && '전문적인 분석과 평가'}
+              </span>
+            </div>
+          )}
+        </div>
         </div>
 
         {/* 메인 폼 */}

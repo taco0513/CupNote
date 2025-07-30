@@ -4,7 +4,7 @@ import { BarChart3, Settings, Plus, ArrowLeft } from 'lucide-react'
 interface NavigationProps {
   showBackButton?: boolean
   backHref?: string
-  currentPage?: 'home' | 'stats' | 'settings' | 'record' | 'detail'
+  currentPage?: 'home' | 'stats' | 'settings' | 'record' | 'detail' | 'result'
 }
 
 export default function Navigation({ 
@@ -53,7 +53,7 @@ export default function Navigation({
           설정
         </Link>
         <Link
-          href="/record"
+          href="/mode-selection"
           className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
             isActive('record')
               ? 'bg-coffee-700 text-white'
