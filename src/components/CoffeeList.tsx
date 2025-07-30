@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from 'react'
 import { CoffeeRecord } from '@/types/coffee'
-import { LocalStorage } from '@/lib/storage'
+import { SupabaseStorage } from '@/lib/supabase-storage'
 import SearchBar from './SearchBar'
 import FilterPanel, { FilterOptions } from './FilterPanel'
 
@@ -17,13 +17,11 @@ export default function CoffeeList() {
     loadRecords()
   }, [])
 
-  const loadRecords = () => {
+  const loadRecords = async () => {
     try {
       setLoading(true)
-      // 첫 방문시 샘플 데이터 초기화
-      LocalStorage.initializeSampleData()
-      // 로컬 스토리지에서 기록 로드
-      const data = LocalStorage.getRecords()
+      // Supabase에서 기록 로드
+      const data = await SupabaseStorage.getRecords()
       setRecords(data)
     } catch (error) {
       console.error('기록 로드 오류:', error)
@@ -35,17 +33,19 @@ export default function CoffeeList() {
 
   // 외부에서 새 기록 추가시 목록 새로고침
   useEffect(() => {
-    const handleStorageChange = () => {
+    const handleRecordChange = () => {
       loadRecords()
     }
 
-    window.addEventListener('storage', handleStorageChange)
-    // 같은 탭에서 변경사항 감지를 위한 커스텀 이벤트
-    window.addEventListener('cupnote-record-added', handleStorageChange)
+    // Supabase 변경사항 감지를 위한 커스텀 이벤트
+    window.addEventListener('cupnote-record-added', handleRecordChange)
+    window.addEventListener('cupnote-record-updated', handleRecordChange)
+    window.addEventListener('cupnote-record-deleted', handleRecordChange)
 
     return () => {
-      window.removeEventListener('storage', handleStorageChange)
-      window.removeEventListener('cupnote-record-added', handleStorageChange)
+      window.removeEventListener('cupnote-record-added', handleRecordChange)
+      window.removeEventListener('cupnote-record-updated', handleRecordChange)
+      window.removeEventListener('cupnote-record-deleted', handleRecordChange)
     }
   }, [])
 
@@ -133,9 +133,9 @@ export default function CoffeeList() {
 
   if (loading) {
     return (
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {[1, 2, 3].map(i => (
-          <div key={i} className="bg-white rounded-xl shadow-sm p-6 animate-pulse">
+          <div key={i} className="bg-white rounded-xl shadow-sm p-4 md:p-6 animate-pulse">
             <div className="h-4 bg-gray-200 rounded mb-2"></div>
             <div className="h-3 bg-gray-200 rounded mb-4 w-2/3"></div>
             <div className="space-y-2">
@@ -201,7 +201,7 @@ export default function CoffeeList() {
           <p className="text-gray-500">다른 검색어나 필터를 시도해보세요</p>
         </div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {filteredRecords.map(record => (
             <CoffeeCard key={record.id} record={record} />
           ))}
@@ -229,7 +229,7 @@ function CoffeeCard({ record }: { record: CoffeeRecord }) {
   return (
     <a
       href={`/coffee/${record.id}`}
-      className="block bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-6 cursor-pointer"
+      className="block bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-4 md:p-6 cursor-pointer"
     >
       <div className="mb-4">
         <div className="flex items-start justify-between mb-2">

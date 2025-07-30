@@ -45,7 +45,7 @@ interface CuppingEvaluation {
   sessionId: string
   participantId: string
   coffeeId: string
-  
+
   // 커핑 표준 평가 항목
   aroma: number // 1-10
   flavor: number // 1-10
@@ -54,17 +54,17 @@ interface CuppingEvaluation {
   body: number // 1-10
   balance: number // 1-10
   overall: number // 1-10
-  
+
   // 선택적 상세 평가
   sweetness?: number
   uniformity?: number
   cleanliness?: number
-  
+
   // 주관적 평가
   flavorNotes: string[]
   personalNotes: string
   defects?: string[]
-  
+
   submittedAt: Date
   isPublic: boolean
 }
@@ -112,12 +112,8 @@ stateDiagram-v2
 ```tsx
 // 진행 중인 세션들을 카드 형태로 표시
 <CuppingSessionCard>
-  - 세션 제목 및 설명
-  - 커피 정보 (이름, 원산지)
-  - 호스트 정보
-  - 참여자 수 / 최대 인원
-  - 세션 상태 (모집중/진행중/완료)
-  - 참여 버튼
+  - 세션 제목 및 설명 - 커피 정보 (이름, 원산지) - 호스트 정보 - 참여자 수 / 최대 인원 - 세션 상태
+  (모집중/진행중/완료) - 참여 버튼
 </CuppingSessionCard>
 ```
 
@@ -125,13 +121,8 @@ stateDiagram-v2
 
 ```tsx
 <CreateSessionForm>
-  - 세션 기본 정보 (제목, 설명)
-  - 커피 선택 (기존 기록에서 선택 또는 새로 입력)
-  - 세션 설정
-    - 공개/비공개/초대제
-    - 최대 참여자 수
-    - 예약 시간 설정
-    - 평가 시간 제한
+  - 세션 기본 정보 (제목, 설명) - 커피 선택 (기존 기록에서 선택 또는 새로 입력) - 세션 설정 -
+  공개/비공개/초대제 - 최대 참여자 수 - 예약 시간 설정 - 평가 시간 제한
 </CreateSessionForm>
 ```
 
@@ -139,11 +130,8 @@ stateDiagram-v2
 
 ```tsx
 <SessionLobby>
-  - 커피 정보 표시
-  - 참여자 목록 (실시간 업데이트)
-  - 채팅 기능 (선택사항)
-  - 호스트 전용: 세션 시작 버튼
-  - 참여자: 준비 완료 상태 토글
+  - 커피 정보 표시 - 참여자 목록 (실시간 업데이트) - 채팅 기능 (선택사항) - 호스트 전용: 세션 시작
+  버튼 - 참여자: 준비 완료 상태 토글
 </SessionLobby>
 ```
 
@@ -151,13 +139,8 @@ stateDiagram-v2
 
 ```tsx
 <CuppingEvaluationForm>
-  - 표준 커핑 폼 (SCA 기준)
-  - 점수 슬라이더 (1-10)
-  - 향미 노트 입력
-  - 개인 메모
-  - 실시간 타이머
-  - 임시 저장 기능
-  - 최종 제출 버튼
+  - 표준 커핑 폼 (SCA 기준) - 점수 슬라이더 (1-10) - 향미 노트 입력 - 개인 메모 - 실시간 타이머 -
+  임시 저장 기능 - 최종 제출 버튼
 </CuppingEvaluationForm>
 ```
 
@@ -165,13 +148,8 @@ stateDiagram-v2
 
 ```tsx
 <SessionResults>
-  - 전체 평균 점수
-  - 개별 참여자 점수 비교
-  - 레이더 차트 (평가 항목별)
-  - 공통 향미 노트 워드클라우드
-  - 점수 분포 히스토그램
-  - 개별 평가 상세보기
-  - 결과 공유 기능
+  - 전체 평균 점수 - 개별 참여자 점수 비교 - 레이더 차트 (평가 항목별) - 공통 향미 노트 워드클라우드
+  - 점수 분포 히스토그램 - 개별 평가 상세보기 - 결과 공유 기능
 </SessionResults>
 ```
 
@@ -180,6 +158,7 @@ stateDiagram-v2
 ### 데이터 저장 전략
 
 **Phase 1: 로컬 기반 (MVP)**
+
 ```typescript
 // 로컬 스토리지 + 간단한 공유 기능
 const localCuppingSessions = {
@@ -193,6 +172,7 @@ const shareableUrl = `/community/shared/${sessionId}?data=${encodedData}`
 ```
 
 **Phase 2: 실시간 동기화 (확장)**
+
 ```typescript
 // WebSocket 또는 실시간 DB 연동
 interface RealtimeEvents {
@@ -243,44 +223,44 @@ const cuppingCriteria = {
   aroma: {
     weight: 1.0,
     description: '향기 (건조/습식)',
-    scale: '1-10'
+    scale: '1-10',
   },
   flavor: {
     weight: 2.0,
     description: '맛 (전체적인 풍미)',
-    scale: '1-10'
+    scale: '1-10',
   },
   aftertaste: {
     weight: 1.0,
     description: '여운 (마신 후 남는 느낌)',
-    scale: '1-10'
+    scale: '1-10',
   },
   acidity: {
     weight: 1.0,
     description: '산미 (신맛의 강도와 질)',
-    scale: '1-10'
+    scale: '1-10',
   },
   body: {
     weight: 1.0,
     description: '바디감 (입안의 무게감)',
-    scale: '1-10'
+    scale: '1-10',
   },
   balance: {
     weight: 1.0,
     description: '밸런스 (전체적인 조화)',
-    scale: '1-10'
+    scale: '1-10',
   },
   overall: {
     weight: 1.0,
     description: '전체 평가 (개인적 선호)',
-    scale: '1-10'
-  }
+    scale: '1-10',
+  },
 }
 
 // 총점 계산
 const totalScore = (scores: CuppingScores) => {
   return Object.entries(cuppingCriteria).reduce((total, [key, criteria]) => {
-    return total + (scores[key] * criteria.weight)
+    return total + scores[key] * criteria.weight
   }, 0)
 }
 ```
@@ -294,10 +274,10 @@ const calculateConsensus = (evaluations: CuppingEvaluation[]) => {
   const mean = scores.reduce((a, b) => a + b) / scores.length
   const variance = scores.reduce((sum, score) => sum + Math.pow(score - mean, 2), 0) / scores.length
   const standardDeviation = Math.sqrt(variance)
-  
+
   return {
-    agreement: Math.max(0, 1 - (standardDeviation / 3)), // 0-1 scale
-    confidence: evaluations.length >= 5 ? 'high' : evaluations.length >= 3 ? 'medium' : 'low'
+    agreement: Math.max(0, 1 - standardDeviation / 3), // 0-1 scale
+    confidence: evaluations.length >= 5 ? 'high' : evaluations.length >= 3 ? 'medium' : 'low',
   }
 }
 
@@ -309,7 +289,7 @@ const extractCommonFlavors = (evaluations: CuppingEvaluation[]) => {
       flavorCounts[flavor] = (flavorCounts[flavor] || 0) + 1
     })
   })
-  
+
   const threshold = Math.ceil(evaluations.length * 0.3) // 30% 이상 언급
   return Object.entries(flavorCounts)
     .filter(([_, count]) => count >= threshold)
@@ -321,6 +301,7 @@ const extractCommonFlavors = (evaluations: CuppingEvaluation[]) => {
 ## 🚀 구현 계획
 
 ### Phase 1: 기본 MVP (2주)
+
 - [x] 데이터 모델 설계
 - [ ] 세션 생성/참여 기능
 - [ ] 기본 평가 폼
@@ -328,18 +309,21 @@ const extractCommonFlavors = (evaluations: CuppingEvaluation[]) => {
 - [ ] URL 기반 결과 공유
 
 ### Phase 2: 향상된 UX (2주)
+
 - [ ] 실시간 참여자 상태
 - [ ] 고급 결과 분석 (차트, 통계)
 - [ ] 향미 자동완성
 - [ ] 모바일 최적화
 
 ### Phase 3: 소셜 기능 (3주)
+
 - [ ] 사용자 프로필
 - [ ] 세션 히스토리
 - [ ] 평가 비교 및 학습
 - [ ] 커뮤니티 랭킹
 
 ### Phase 4: 실시간 동기화 (4주)
+
 - [ ] WebSocket 연동
 - [ ] 실시간 채팅
 - [ ] 푸시 알림
@@ -348,6 +332,7 @@ const extractCommonFlavors = (evaluations: CuppingEvaluation[]) => {
 ## 📱 사용자 여정
 
 ### 호스트 여정
+
 1. 커뮤니티 메뉴 접근
 2. "새 세션 만들기" 클릭
 3. 커피 정보 및 세션 설정 입력
@@ -358,6 +343,7 @@ const extractCommonFlavors = (evaluations: CuppingEvaluation[]) => {
 8. 결과 공유 또는 아카이브
 
 ### 참여자 여정
+
 1. 커뮤니티 메뉴에서 활성 세션 검색
 2. 원하는 세션 선택 후 참여
 3. 대기실에서 다른 참여자들과 대기

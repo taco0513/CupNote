@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { CoffeeRecord, FlavorProfile, SensoryExpression } from '@/types/coffee'
-import { LocalStorage } from '@/lib/storage'
+import { SupabaseStorage } from '@/lib/supabase-storage'
 import { FLAVOR_COLORS, SENSORY_CATEGORY_NAMES } from '@/lib/flavorData'
 import Navigation from '@/components/Navigation'
 
@@ -14,12 +14,16 @@ export default function CoffeeDetailPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const id = params.id as string
-    if (id) {
-      const foundRecord = LocalStorage.getRecordById(id)
-      setRecord(foundRecord)
-      setLoading(false)
+    const loadRecord = async () => {
+      const id = params.id as string
+      if (id) {
+        const foundRecord = await SupabaseStorage.getRecordById(id)
+        setRecord(foundRecord)
+        setLoading(false)
+      }
     }
+    
+    loadRecord()
   }, [params.id])
 
   if (loading) {
@@ -38,7 +42,9 @@ export default function CoffeeDetailPage() {
       <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100 flex items-center justify-center">
         <div className="text-center">
           <div className="text-6xl mb-4">☕</div>
-          <h1 className="text-2xl font-bold text-coffee-800 mb-2">기록을 찾을 수 없습니다</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-coffee-800 mb-2">
+            기록을 찾을 수 없습니다
+          </h1>
           <p className="text-coffee-600 mb-6">요청하신 커피 기록이 존재하지 않습니다.</p>
           <button
             onClick={() => router.push('/')}
@@ -55,7 +61,7 @@ export default function CoffeeDetailPage() {
     <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100">
       <div className="container mx-auto px-4 py-4 max-w-6xl">
         <Navigation showBackButton currentPage="detail" />
-        
+
         {/* 헤더 */}
         <HeaderSection record={record} router={router} />
 
@@ -481,11 +487,15 @@ function ActionButtonsSection({ record, router }: { record: CoffeeRecord; router
           📝 편집하기
         </button>
         <button
-          onClick={() => {
+          onClick={async () => {
             if (confirm('정말 이 기록을 삭제하시겠습니까?')) {
-              LocalStorage.deleteRecord(record.id)
-              window.dispatchEvent(new CustomEvent('cupnote-record-added'))
-              router.push('/')
+              const success = await SupabaseStorage.deleteRecord(record.id)
+              if (success) {
+                window.dispatchEvent(new CustomEvent('cupnote-record-deleted'))
+                router.push('/')
+              } else {
+                alert('삭제 중 오류가 발생했습니다.')
+              }
             }
           }}
           className="flex items-center justify-center px-6 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors font-medium"

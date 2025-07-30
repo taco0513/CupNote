@@ -1,7 +1,10 @@
 import { CoffeeRecord } from '@/types/coffee'
+import { UserStats } from '@/types/achievement'
+import { AchievementSystem } from './achievements'
 import { generateSampleFlavorProfile, generateSampleSensoryExpressions } from './flavorData'
 
 const STORAGE_KEY = 'cupnote-records'
+const ACHIEVEMENTS_KEY = 'cupnote-achievements'
 
 export class LocalStorage {
   // 모든 기록 가져오기
@@ -191,5 +194,70 @@ export class LocalStorage {
       console.error('데이터 가져오기 오류:', error)
       return false
     }
+  }
+
+  // 사용자 통계 및 성취 가져오기
+  static getUserStats(): UserStats {
+    const records = this.getRecords()
+    return AchievementSystem.calculateUserStats(records)
+  }
+
+  // 성취 캐시 저장/불러오기 (성능 최적화용)
+  static getCachedAchievements(): UserStats | null {
+    if (typeof window === 'undefined') return null
+
+    try {
+      const cached = localStorage.getItem(ACHIEVEMENTS_KEY)
+      if (!cached) return null
+
+      const data = JSON.parse(cached)
+      // 캐시가 1시간 이내면 사용
+      const cacheTime = new Date(data.cacheTime).getTime()
+      const now = new Date().getTime()
+      if (now - cacheTime < 3600000) {
+        // 1시간
+        return data.stats
+      }
+    } catch (error) {
+      console.error('성취 캐시 읽기 오류:', error)
+    }
+
+    return null
+  }
+
+  static setCachedAchievements(stats: UserStats): void {
+    if (typeof window === 'undefined') return
+
+    try {
+      const cacheData = {
+        stats,
+        cacheTime: new Date().toISOString(),
+      }
+      localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(cacheData))
+    } catch (error) {
+      console.error('성취 캐시 저장 오류:', error)
+    }
+  }
+
+  // 새 기록 추가시 성취 체크
+  static addRecordWithAchievements(record: Omit<CoffeeRecord, 'id' | 'userId' | 'createdAt'>): {
+    record: CoffeeRecord
+    newAchievements: string[]
+  } {
+    const oldStats = this.getUserStats()
+    const newRecord = this.addRecord(record)
+    const newStats = this.getUserStats()
+
+    // 새로 달성한 성취 찾기
+    const newAchievements = newStats.achievements
+      .filter(
+        a => a.unlocked && !oldStats.achievements.find(old => old.id === a.id && old.unlocked)
+      )
+      .map(a => a.id)
+
+    // 캐시 업데이트
+    this.setCachedAchievements(newStats)
+
+    return { record: newRecord, newAchievements }
   }
 }

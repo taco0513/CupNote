@@ -2,17 +2,17 @@
 
 import { useState, useEffect } from 'react'
 import Navigation from '@/components/Navigation'
-import { 
-  Download, 
-  Upload, 
-  Trash2, 
+import {
+  Download,
+  Upload,
+  Trash2,
   AlertTriangle,
   CheckCircle,
   Coffee,
   Settings as SettingsIcon,
   User,
   Database,
-  Palette
+  Palette,
 } from 'lucide-react'
 import { CoffeeRecord } from '@/types/coffee'
 
@@ -31,7 +31,7 @@ const defaultSettings: UserSettings = {
   defaultTasteMode: 'simple',
   autoSaveEnabled: true,
   showRatingInList: true,
-  compactView: false
+  compactView: false,
 }
 
 export default function SettingsPage() {
@@ -96,14 +96,14 @@ export default function SettingsPage() {
         records,
         settings,
         exportedAt: new Date().toISOString(),
-        version: '1.0'
+        version: '1.0',
       }
-      
-      const blob = new Blob([JSON.stringify(data, null, 2)], { 
-        type: 'application/json' 
+
+      const blob = new Blob([JSON.stringify(data, null, 2)], {
+        type: 'application/json',
       })
       const url = URL.createObjectURL(blob)
-      
+
       const a = document.createElement('a')
       a.href = url
       a.download = `cupnote-backup-${new Date().toISOString().slice(0, 10)}.json`
@@ -111,7 +111,7 @@ export default function SettingsPage() {
       a.click()
       document.body.removeChild(a)
       URL.revokeObjectURL(url)
-      
+
       showNotification('success', '데이터가 내보내기되었습니다.')
     } catch (error) {
       console.error('Export failed:', error)
@@ -124,23 +124,23 @@ export default function SettingsPage() {
     if (!file) return
 
     const reader = new FileReader()
-    reader.onload = (e) => {
+    reader.onload = e => {
       try {
         const data = JSON.parse(e.target?.result as string)
-        
+
         if (data.records && Array.isArray(data.records)) {
           localStorage.setItem('coffeeRecords', JSON.stringify(data.records))
           setRecords(data.records)
         }
-        
+
         if (data.settings) {
           const importedSettings = { ...defaultSettings, ...data.settings }
           localStorage.setItem('userSettings', JSON.stringify(importedSettings))
           setSettings(importedSettings)
         }
-        
+
         showNotification('success', '데이터가 가져오기되었습니다.')
-        
+
         // 페이지 새로고침으로 변경사항 반영
         setTimeout(() => window.location.reload(), 1000)
       } catch (error) {
@@ -166,48 +166,48 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-coffee-50 p-4">
-      <div className="max-w-4xl mx-auto pt-4">
+    <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100">
+      <div className="container mx-auto px-4 py-4 md:py-8 max-w-4xl">
         <Navigation showBackButton currentPage="settings" />
-        
+
         {/* 헤더 */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-coffee-800 flex items-center">
-            <SettingsIcon className="h-8 w-8 mr-3" />
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-3xl font-bold text-coffee-800 flex items-center">
+            <SettingsIcon className="h-6 w-6 md:h-8 md:w-8 mr-2 md:mr-3" />
             설정
           </h1>
-          <p className="text-coffee-600 mt-1">앱 설정 및 데이터 관리</p>
+          <p className="text-base md:text-lg text-coffee-600 mt-1">앱 설정 및 데이터 관리</p>
         </div>
 
         {/* 알림 */}
         {notification && (
-          <div className={`mb-6 p-4 rounded-lg flex items-center ${
-            notification.type === 'success' 
-              ? 'bg-green-50 text-green-800 border border-green-200' 
-              : 'bg-red-50 text-red-800 border border-red-200'
-          }`}>
+          <div
+            className={`mb-6 p-4 rounded-lg flex items-center ${
+              notification.type === 'success'
+                ? 'bg-green-50 text-green-800 border border-green-200'
+                : 'bg-red-50 text-red-800 border border-red-200'
+            }`}
+          >
             <CheckCircle className="h-5 w-5 mr-2" />
             {notification.message}
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
           {/* 개인 설정 */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-coffee-100">
-            <h2 className="text-xl font-semibold text-coffee-800 mb-4 flex items-center">
+          <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm border border-coffee-100">
+            <h2 className="text-lg md:text-xl font-semibold text-coffee-800 mb-4 flex items-center">
               <User className="h-5 w-5 mr-2" />
               개인 설정
             </h2>
-            
+
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-coffee-700 mb-2">
-                  표시 이름
-                </label>
+                <label className="block text-sm font-medium text-coffee-700 mb-2">표시 이름</label>
                 <input
                   type="text"
                   value={settings.displayName}
-                  onChange={(e) => setSettings(prev => ({ ...prev, displayName: e.target.value }))}
+                  onChange={e => setSettings(prev => ({ ...prev, displayName: e.target.value }))}
                   onBlur={() => saveSettings(settings)}
                   className="w-full px-3 py-2 border border-coffee-300 rounded-lg focus:outline-none focus:border-coffee-500"
                   placeholder="이름을 입력하세요"
@@ -220,8 +220,11 @@ export default function SettingsPage() {
                 </label>
                 <select
                   value={settings.preferredUnits}
-                  onChange={(e) => {
-                    const newSettings = { ...settings, preferredUnits: e.target.value as 'metric' | 'imperial' }
+                  onChange={e => {
+                    const newSettings = {
+                      ...settings,
+                      preferredUnits: e.target.value as 'metric' | 'imperial',
+                    }
                     saveSettings(newSettings)
                   }}
                   className="w-full px-3 py-2 border border-coffee-300 rounded-lg focus:outline-none focus:border-coffee-500"
@@ -237,8 +240,11 @@ export default function SettingsPage() {
                 </label>
                 <select
                   value={settings.defaultTasteMode}
-                  onChange={(e) => {
-                    const newSettings = { ...settings, defaultTasteMode: e.target.value as 'simple' | 'advanced' }
+                  onChange={e => {
+                    const newSettings = {
+                      ...settings,
+                      defaultTasteMode: e.target.value as 'simple' | 'advanced',
+                    }
                     saveSettings(newSettings)
                   }}
                   className="w-full px-3 py-2 border border-coffee-300 rounded-lg focus:outline-none focus:border-coffee-500"
@@ -251,12 +257,11 @@ export default function SettingsPage() {
           </div>
 
           {/* 앱 설정 */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-coffee-100">
-            <h2 className="text-xl font-semibold text-coffee-800 mb-4 flex items-center">
-              <Palette className="h-5 w-5 mr-2" />
-              앱 설정
+          <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm border border-coffee-100">
+            <h2 className="text-lg md:text-xl font-semibold text-coffee-800 mb-4 flex items-center">
+              <Palette className="h-5 w-5 mr-2" />앱 설정
             </h2>
-            
+
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -267,7 +272,7 @@ export default function SettingsPage() {
                   <input
                     type="checkbox"
                     checked={settings.autoSaveEnabled}
-                    onChange={(e) => {
+                    onChange={e => {
                       const newSettings = { ...settings, autoSaveEnabled: e.target.checked }
                       saveSettings(newSettings)
                     }}
@@ -286,7 +291,7 @@ export default function SettingsPage() {
                   <input
                     type="checkbox"
                     checked={settings.showRatingInList}
-                    onChange={(e) => {
+                    onChange={e => {
                       const newSettings = { ...settings, showRatingInList: e.target.checked }
                       saveSettings(newSettings)
                     }}
@@ -305,7 +310,7 @@ export default function SettingsPage() {
                   <input
                     type="checkbox"
                     checked={settings.compactView}
-                    onChange={(e) => {
+                    onChange={e => {
                       const newSettings = { ...settings, compactView: e.target.checked }
                       saveSettings(newSettings)
                     }}
@@ -318,12 +323,12 @@ export default function SettingsPage() {
           </div>
 
           {/* 데이터 관리 */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-coffee-100">
-            <h2 className="text-xl font-semibold text-coffee-800 mb-4 flex items-center">
+          <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm border border-coffee-100">
+            <h2 className="text-lg md:text-xl font-semibold text-coffee-800 mb-4 flex items-center">
               <Database className="h-5 w-5 mr-2" />
               데이터 관리
             </h2>
-            
+
             <div className="space-y-4">
               <div className="text-sm text-coffee-600 mb-4">
                 현재 <strong>{records.length}개</strong>의 커피 기록이 있습니다.
@@ -357,12 +362,12 @@ export default function SettingsPage() {
           </div>
 
           {/* 위험한 작업 */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-red-200">
-            <h2 className="text-xl font-semibold text-red-700 mb-4 flex items-center">
+          <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm border border-red-200">
+            <h2 className="text-lg md:text-xl font-semibold text-red-700 mb-4 flex items-center">
               <AlertTriangle className="h-5 w-5 mr-2" />
               위험한 작업
             </h2>
-            
+
             <div className="space-y-4">
               <div className="text-sm text-coffee-600 mb-4">
                 이 작업들은 되돌릴 수 없습니다. 신중히 진행해주세요.
@@ -407,10 +412,9 @@ export default function SettingsPage() {
         </div>
 
         {/* 앱 정보 */}
-        <div className="mt-8 bg-white rounded-xl p-6 shadow-sm border border-coffee-100">
-          <h2 className="text-xl font-semibold text-coffee-800 mb-4 flex items-center">
-            <Coffee className="h-5 w-5 mr-2" />
-            앱 정보
+        <div className="mt-6 md:mt-8 bg-white rounded-xl p-4 md:p-6 shadow-sm border border-coffee-100">
+          <h2 className="text-lg md:text-xl font-semibold text-coffee-800 mb-4 flex items-center">
+            <Coffee className="h-5 w-5 mr-2" />앱 정보
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-coffee-600">
             <div>

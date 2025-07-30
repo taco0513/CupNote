@@ -308,7 +308,6 @@ const MemoizedExpensiveComponent = () => {
 
 // 3. 가상화 리스트 사용
 import { FlashList } from '@shopify/flash-list'
-
 ;<FlashList
   data={data}
   renderItem={renderItem}

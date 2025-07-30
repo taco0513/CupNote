@@ -2,7 +2,7 @@
 
 **일시**: 2025-01-30  
 **세션**: Foundation UX 플로우 구현  
-**상태**: ✅ Phase 1 완료  
+**상태**: ✅ Phase 1 완료
 
 ## 📍 주요 성과
 
@@ -36,11 +36,13 @@
 ## 📊 파일 변경 사항
 
 ### 새로 생성된 파일
+
 - `src/app/result/page.tsx` - Match Score 결과 페이지 (305줄)
 - `src/app/mode-selection/page.tsx` - 모드 선택 페이지 (186줄)
 - `ROADMAP.md` - Option A 점진적 개선 계획
 
 ### 수정된 파일
+
 - `src/app/record/page.tsx` - 결과 페이지 리다이렉트 추가
 - `src/components/Navigation.tsx` - result 페이지 타입 추가
 - `src/app/page.tsx` - 모드 선택으로 링크 업데이트
@@ -48,6 +50,7 @@
 ## 🎯 다음 단계 (Phase 2)
 
 ### 단계별 플로우 분리 계획
+
 현재 단일 페이지 기록 폼을 다음과 같이 분리:
 
 1. **기본 정보 입력** (커피명, 로스터리, 날짜)
@@ -56,6 +59,7 @@
 4. **최종 검토** → 결과 페이지
 
 ### 예상 효과
+
 - 사용자 친화적인 단계별 진행
 - Foundation 디자인 패턴과 일치
 - 모드별 맞춤형 경험 제공

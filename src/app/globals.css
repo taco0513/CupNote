@@ -19,3 +19,62 @@
     @apply bg-white text-gray-900;
   }
 }
+
+/* Mobile-specific styles */
+@layer utilities {
+  /* Prevent text selection on interactive elements */
+  .no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  /* Touch feedback */
+  .touch-active {
+    @apply scale-95 opacity-80;
+  }
+
+  /* Smooth scrolling for mobile */
+  .smooth-scroll {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+  }
+
+  /* Prevent zoom on input focus for mobile */
+  @media (max-width: 768px) {
+    input[type='text'],
+    input[type='email'],
+    input[type='number'],
+    input[type='date'],
+    input[type='tel'],
+    textarea,
+    select {
+      font-size: 16px !important;
+    }
+  }
+
+  /* Safe area insets for modern phones */
+  .safe-area-inset {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Mobile tap highlight removal */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Improve button touch targets on mobile */
+  @media (max-width: 768px) {
+    button,
+    a {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+
+  /* Smooth transitions for mobile interactions */
+  .transition-mobile {
+    @apply transition-all duration-200 ease-out;
+  }
+}

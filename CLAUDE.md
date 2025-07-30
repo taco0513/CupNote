@@ -15,7 +15,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Framework**: Next.js 15.4.5 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS v4
-- **Package Manager**: npm (stable and reliable)
+- **Package Manager**: npm (IMPORTANT: Always use npm, NOT bun or yarn)
 - **State Management**: React hooks (Zustand 예정)
 - **Database**: PostgreSQL + Prisma (예정)
 - **Authentication**: NextAuth.js (예정)
@@ -91,14 +91,28 @@ npm install                  # Install all dependencies
 
 - Next.js project setup with TypeScript
 - Basic routing structure
-- Coffee record form UI
-- Coffee list component
+- Coffee record form UI (4-step flow)
+- Coffee list component with filtering
 - Type definitions
 - Tailwind CSS configuration
+- Mobile-first responsive design
+- Bottom navigation for mobile
+- Achievement system (badges, levels, milestones)
+- Onboarding flow for new users
+- Help tooltips and user guides
+- Mode selection (Cafe, HomeCafe, Lab)
+- Match Score visualization in results
+- Stats and analytics page
+- Settings page with export functionality
+- LocalStorage data persistence
+- SessionStorage for multi-step forms
+- PWA-ready setup
 
 🔄 **In Progress**:
 
-- 30-minute prototype completion
+- PWA manifest and service worker
+- Performance optimization
+- Testing implementation
 
 📋 **Pending**:
 
@@ -107,7 +121,8 @@ npm install                  # Install all dependencies
 - API routes implementation
 - Community features
 - Image upload functionality
-- Testing setup
+- Push notifications
+- Offline sync
 
 ## AI Development Approach
 

@@ -51,7 +51,7 @@ export interface CuppingScores {
   body: number // 1-10
   balance: number // 1-10
   overall: number // 1-10
-  
+
   // 선택적 추가 평가 항목
   sweetness?: number
   uniformity?: number
@@ -64,15 +64,15 @@ export interface CuppingEvaluation {
   sessionId: string
   participantId: string
   coffeeId: string
-  
+
   // 커핑 점수
   scores: CuppingScores
-  
+
   // 주관적 평가
   flavorNotes: string[]
   personalNotes: string
   defects?: string[]
-  
+
   submittedAt: Date
   isPublic: boolean
 }
@@ -124,7 +124,7 @@ export interface CreateSessionData {
 }
 
 // 실시간 이벤트 타입
-export type RealtimeEventType = 
+export type RealtimeEventType =
   | 'participant-joined'
   | 'participant-left'
   | 'session-started'
