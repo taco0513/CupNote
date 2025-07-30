@@ -85,8 +85,9 @@ export default function RecordStep4Page() {
         ...(step2Data || {}),
       }
 
-      // Supabase에 저장
-      const savedRecord = await SupabaseStorage.addRecord(recordToSubmit)
+      // Supabase에 저장 (성취 시스템 포함)
+      const result = await SupabaseStorage.addRecordWithAchievements(recordToSubmit)
+      const savedRecord = result.record
       
       if (!savedRecord) {
         throw new Error('기록 저장에 실패했습니다')

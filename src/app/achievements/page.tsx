@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Navigation from '@/components/Navigation'
-import { LocalStorage } from '@/lib/storage'
+import { SupabaseStorage } from '@/lib/supabase-storage'
 import { UserStats, Achievement } from '@/types/achievement'
 import { Trophy, Target, TrendingUp, Award, Star, Zap, Users, Crown } from 'lucide-react'
 
@@ -12,19 +12,16 @@ export default function AchievementsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
 
   useEffect(() => {
-    const loadStats = () => {
-      // 캐시된 데이터 먼저 확인
-      const cached = LocalStorage.getCachedAchievements()
-      if (cached) {
-        setUserStats(cached)
+    const loadStats = async () => {
+      try {
+        setLoading(true)
+        const stats = await SupabaseStorage.getUserStats()
+        setUserStats(stats)
+      } catch (error) {
+        console.error('성취 데이터 로드 오류:', error)
+      } finally {
         setLoading(false)
       }
-
-      // 최신 데이터 가져오기
-      const stats = LocalStorage.getUserStats()
-      setUserStats(stats)
-      LocalStorage.setCachedAchievements(stats)
-      setLoading(false)
     }
 
     loadStats()

@@ -2,6 +2,7 @@
 
 import { createClient } from '@supabase/supabase-js'
 import { CoffeeRecord } from '@/types/coffee'
+import { SupabaseAchievements } from './supabase-achievements'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -116,6 +117,36 @@ export class SupabaseStorage {
     } catch (error) {
       console.error('Supabase 단일 기록 가져오기 오류:', error)
       return null
+    }
+  }
+
+  // 새 기록 추가 (성취 시스템 포함)
+  static async addRecordWithAchievements(record: Omit<CoffeeRecord, 'id' | 'userId' | 'createdAt'>): Promise<{
+    record: CoffeeRecord | null
+    newAchievements: string[]
+  }> {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        throw new Error('사용자가 로그인되어 있지 않습니다')
+      }
+
+      // Initialize achievements for new users
+      await SupabaseAchievements.initializeUserAchievements(user.id)
+
+      // Add the record
+      const newRecord = await this.addRecord(record)
+      if (!newRecord) {
+        return { record: null, newAchievements: [] }
+      }
+
+      // Update achievements
+      const newAchievements = await SupabaseAchievements.updateAchievements(user.id)
+
+      return { record: newRecord, newAchievements }
+    } catch (error) {
+      console.error('기록 추가 및 성취 업데이트 오류:', error)
+      return { record: null, newAchievements: [] }
     }
   }
 
@@ -330,5 +361,10 @@ export class SupabaseStorage {
       console.error('Supabase 기록 삭제 오류:', error)
       return false
     }
+  }
+
+  // 사용자 통계 및 성취 정보 가져오기
+  static async getUserStats() {
+    return await SupabaseAchievements.getUserStats()
   }
 }
