@@ -62,83 +62,126 @@ const handleClick = (event) => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   border: none;
-  border-radius: 8px;
-  font-weight: 600;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-semibold);
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-base);
   white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ripple effect */
+.base-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.base-button:active::before {
+  width: 300px;
+  height: 300px;
 }
 
 /* Sizes */
 .base-button--small {
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
   min-height: 36px;
 }
 
 .base-button--medium {
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--text-base);
   min-height: 44px;
 }
 
 .base-button--large {
-  padding: 1rem 2rem;
-  font-size: 1.125rem;
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--text-lg);
   min-height: 52px;
 }
 
 /* Variants */
 .base-button--primary {
-  background: linear-gradient(135deg, #7C5842 0%, #A0796A 100%);
-  color: white;
+  background: var(--gradient-primary);
+  color: var(--text-on-primary);
+  box-shadow: var(--shadow-sm);
 }
 
 .base-button--primary:hover:not(.base-button--disabled) {
-  background: linear-gradient(135deg, #6B4A37 0%, #8D6A5B 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(124, 88, 66, 0.3);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.base-button--primary:active:not(.base-button--disabled) {
+  transform: translateY(0);
+  box-shadow: var(--shadow-md);
 }
 
 .base-button--secondary {
-  background: #F5F0E8;
-  color: #7C5842;
-  border: 2px solid #E8DDD0;
+  background: var(--bg-secondary);
+  color: var(--color-primary);
+  border: 2px solid var(--border-color);
+  box-shadow: var(--shadow-xs);
 }
 
 .base-button--secondary:hover:not(.base-button--disabled) {
-  background: #F0E5D8;
-  border-color: #D4C4B0;
+  background: var(--bg-tertiary);
+  border-color: var(--color-primary-light);
   transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.base-button--secondary:active:not(.base-button--disabled) {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 .base-button--outline {
   background: transparent;
-  color: #7C5842;
-  border: 2px solid #7C5842;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
 }
 
 .base-button--outline:hover:not(.base-button--disabled) {
-  background: #7C5842;
-  color: white;
+  background: var(--color-primary);
+  color: var(--text-on-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.base-button--outline:active:not(.base-button--disabled) {
+  box-shadow: none;
 }
 
 .base-button--text {
   background: transparent;
-  color: #7C5842;
-  padding: 0.5rem;
+  color: var(--color-primary);
+  padding: var(--space-2);
 }
 
 .base-button--text:hover:not(.base-button--disabled) {
-  background: rgba(124, 88, 66, 0.1);
+  background: rgba(124, 88, 66, 0.08);
+  box-shadow: none;
+}
+
+.base-button--text:active:not(.base-button--disabled) {
+  background: rgba(124, 88, 66, 0.12);
 }
 
 /* States */
 .base-button--disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
   transform: none !important;
   box-shadow: none !important;
@@ -152,12 +195,24 @@ const handleClick = (event) => {
   width: 100%;
 }
 
+/* Loading spinner with coffee bean icon */
 .loading-spinner {
+  display: inline-block;
   animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+/* Focus states for accessibility */
+.base-button:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.base-button--primary:focus-visible {
+  box-shadow: var(--shadow-sm), var(--focus-ring);
 }
 </style>

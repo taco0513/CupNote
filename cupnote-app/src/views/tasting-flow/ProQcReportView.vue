@@ -399,16 +399,16 @@ const complianceGradeClass = computed(() => {
 
 // Extraction Analysis
 const yieldStatusClass = computed(() => {
-  const yield = extractionYield.value
-  if (yield < 18) return 'under'
-  if (yield >= 18 && yield <= 22) return 'optimal'
+  const yieldValue = extractionYield.value
+  if (yieldValue < 18) return 'under'
+  if (yieldValue >= 18 && yieldValue <= 22) return 'optimal'
   return 'over'
 })
 
 const yieldStatusText = computed(() => {
-  const yield = extractionYield.value
-  if (yield < 18) return '미추출'
-  if (yield >= 18 && yield <= 22) return '적정'
+  const yieldValue = extractionYield.value
+  if (yieldValue < 18) return '미추출'
+  if (yieldValue >= 18 && yieldValue <= 22) return '적정'
   return '과추출'
 })
 
@@ -451,11 +451,11 @@ const qualityFactors = computed(() => {
   }
   
   if (tdsEnabled.value && tdsValue.value) {
-    const eval = evaluateExtractionYield(extractionYield.value)
-    if (eval.status === 'optimal') {
+    const evaluation = evaluateExtractionYield(extractionYield.value)
+    if (evaluation.status === 'optimal') {
       factors.push('최적 추출 수율')
     } else {
-      factors.push(eval.description)
+      factors.push(evaluation.description)
     }
   }
   

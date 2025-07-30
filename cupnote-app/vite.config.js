@@ -63,23 +63,8 @@ export default defineConfig({
     },
   },
   build: {
-    // 빌드 최적화
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          'vendor': ['vue', 'vue-router', 'pinia'],
-          'supabase': ['@supabase/supabase-js'],
-        },
-      },
-    },
-    // 압축 설정
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-      },
-    },
+    // 단순화된 빌드 설정
+    minify: 'esbuild',
     // 청크 크기 경고 임계값
     chunkSizeWarningLimit: 1000,
   },

@@ -309,31 +309,31 @@ const extractionYield = computed(() => {
     return '0.00'
   }
   
-  const yield = (tdsValue.value * brewVolume.value) / coffeeAmount.value
-  return yield.toFixed(2)
+  const yieldValue = (tdsValue.value * brewVolume.value) / coffeeAmount.value
+  return yieldValue.toFixed(2)
 })
 
 // Yield Status
 const yieldStatusClass = computed(() => {
-  const yield = parseFloat(extractionYield.value)
-  if (yield < 18) return 'under'
-  if (yield >= 18 && yield <= 22) return 'optimal'
+  const yieldValue = parseFloat(extractionYield.value)
+  if (yieldValue < 18) return 'under'
+  if (yieldValue >= 18 && yieldValue <= 22) return 'optimal'
   return 'over'
 })
 
 const yieldStatusText = computed(() => {
-  const yield = parseFloat(extractionYield.value)
-  if (yield < 18) return '미추출'
-  if (yield >= 18 && yield <= 22) return '적정'
+  const yieldValue = parseFloat(extractionYield.value)
+  if (yieldValue < 18) return '미추출'
+  if (yieldValue >= 18 && yieldValue <= 22) return '적정'
   return '과추출'
 })
 
 // Yield Position for Chart
 const yieldPosition = computed(() => {
-  const yield = parseFloat(extractionYield.value)
-  if (yield <= 18) return (yield / 18) * 33.33
-  if (yield <= 22) return 33.33 + ((yield - 18) / 4) * 33.33
-  return 66.66 + Math.min(((yield - 22) / 8) * 33.33, 33.33)
+  const yieldValue = parseFloat(extractionYield.value)
+  if (yieldValue <= 18) return (yieldValue / 18) * 33.33
+  if (yieldValue <= 22) return 33.33 + ((yieldValue - 18) / 4) * 33.33
+  return 66.66 + Math.min(((yieldValue - 22) / 8) * 33.33, 33.33)
 })
 
 // SCA Compliance Score
@@ -369,10 +369,10 @@ const predictedQuality = computed(() => {
   
   // TDS contribution
   if (tdsEnabled.value && tdsValue.value) {
-    const yield = parseFloat(extractionYield.value)
-    if (yield >= 18 && yield <= 22) {
+    const yieldValue = parseFloat(extractionYield.value)
+    if (yieldValue >= 18 && yieldValue <= 22) {
       score += 0.5
-    } else if (yield >= 16 && yield <= 24) {
+    } else if (yieldValue >= 16 && yieldValue <= 24) {
       score += 0.2
     } else {
       score -= 0.3

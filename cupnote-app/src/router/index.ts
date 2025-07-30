@@ -164,12 +164,12 @@ const router = createRouter({
 // Navigation guards
 router.beforeEach(async (to, from, next) => {
   // Import auth store dynamically to avoid circular dependency
-  const { useAuthStore } = await import('../stores/auth')
+  const { useAuthStore } = await import('../stores/auth.js')
   const authStore = useAuthStore()
   
   // Initialize auth if not already done
-  if (!authStore.initialized) {
-    await authStore.initializeAuth()
+  if (!(authStore as any).initialized) {
+    await (authStore as any).initializeAuth()
   }
   
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
@@ -179,9 +179,9 @@ router.beforeEach(async (to, from, next) => {
   // Check mode access for protected routes
   if (requiresAuth && isAuthenticated) {
     const mode = to.query.mode || to.params.mode
-    if (mode && !authStore.hasAccess(mode)) {
+    if (mode && !(authStore as any).hasAccess(mode)) {
       // Redirect to appropriate mode based on user experience
-      const experience = authStore.userMetadata.coffee_experience || 'beginner'
+      const experience = (authStore as any).userMetadata?.coffee_experience || 'beginner'
       const redirectMode = experience === 'beginner' ? 'cafe' : 'homecafe'
       
       next({
@@ -200,8 +200,8 @@ router.beforeEach(async (to, from, next) => {
     })
   } else if (requiresGuest && isAuthenticated) {
     // Redirect authenticated users away from auth pages
-    const redirectPath = to.query.redirect || '/'
-    next(redirectPath)
+    const redirectPath = Array.isArray(to.query.redirect) ? to.query.redirect[0] : to.query.redirect || '/'
+    next(redirectPath as string)
   } else {
     next()
   }

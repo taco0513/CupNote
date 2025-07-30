@@ -82,146 +82,226 @@ const selectMode = (mode) => {
 
 <style scoped>
 .mode-selection-view {
-  max-width: 600px;
+  width: 100%;
+  max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 2rem 1rem;
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5F0E8 100%);
+  padding: var(--space-8) var(--space-4);
+  background: var(--gradient-subtle);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+/* Subtle background pattern */
+.mode-selection-view::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(124, 88, 66, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(124, 88, 66, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(124, 88, 66, 0.03) 0%, transparent 50%);
+  pointer-events: none;
 }
 
 .mode-header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: var(--space-12);
+  position: relative;
+  z-index: 1;
 }
 
 .mode-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #7C5842;
-  margin-bottom: 0.5rem;
+  font-size: var(--text-5xl);
+  font-weight: var(--font-extrabold);
+  color: var(--color-primary);
+  margin-bottom: var(--space-2);
+  letter-spacing: var(--tracking-tight);
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .mode-subtitle {
-  color: #A0796A;
-  font-size: 1.2rem;
+  color: var(--text-secondary);
+  font-size: var(--text-xl);
+  font-weight: var(--font-medium);
+  line-height: var(--leading-relaxed);
 }
 
 /* Mode Cards */
 .mode-cards {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--space-6);
   flex: 1;
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-8);
+  position: relative;
+  z-index: 1;
 }
 
 .mode-card {
-  background: white;
-  border: 3px solid #E8D5C4;
-  border-radius: 16px;
-  padding: 2rem;
+  background: var(--bg-card);
+  border: 3px solid var(--border-color-light);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
   text-align: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-slow);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-3);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Card glow effect */
+.mode-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--gradient-primary);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  z-index: -1;
 }
 
 .mode-card:hover {
-  border-color: #D4B896;
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(124, 88, 66, 0.2);
+  border-color: var(--color-accent);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-2xl);
+}
+
+.mode-card:hover::before {
+  opacity: 0.02;
 }
 
 .mode-card:active {
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.01);
 }
 
 .mode-icon {
-  font-size: 3rem;
+  font-size: var(--text-5xl);
   line-height: 1;
+  margin-bottom: var(--space-2);
+  filter: drop-shadow(0 2px 4px rgba(124, 88, 66, 0.1));
 }
 
 .mode-name {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #7C5842;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  letter-spacing: var(--tracking-tight);
 }
 
 .mode-desc {
-  font-size: 1rem;
-  color: #A0796A;
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-2);
 }
 
 .mode-time {
-  font-size: 0.9rem;
-  color: #D4B896;
-  font-weight: 500;
-  background: #FFF8F0;
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
+  font-size: var(--text-sm);
+  color: var(--color-accent);
+  font-weight: var(--font-semibold);
+  background: var(--gradient-accent);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-xs);
+  backdrop-filter: blur(10px);
 }
 
 /* Action Buttons */
 .action-buttons {
   display: flex;
-  gap: 1rem;
+  gap: var(--space-4);
   justify-content: center;
   margin-top: auto;
-  padding-top: 2rem;
+  padding-top: var(--space-8);
+  position: relative;
+  z-index: 1;
 }
 
 .btn-secondary {
-  background: white;
-  color: #7C5842;
-  border: 2px solid #E8D5C4;
-  padding: 0.75rem 2rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
+  background: var(--bg-card);
+  color: var(--color-primary);
+  border: 2px solid var(--border-color);
+  padding: var(--space-3) var(--space-8);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-base);
   min-width: 120px;
+  box-shadow: var(--shadow-xs);
 }
 
 .btn-secondary:hover {
-  border-color: #D4B896;
+  border-color: var(--color-accent);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(124, 88, 66, 0.1);
+  box-shadow: var(--shadow-md);
+  background: var(--bg-secondary);
+}
+
+.btn-secondary:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-sm), var(--focus-ring);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .mode-selection-view {
-    padding: 1.5rem 1rem;
+    padding: var(--space-6) var(--space-4);
+  }
+  
+  .mode-header {
+    margin-bottom: var(--space-8);
   }
   
   .mode-title {
-    font-size: 2rem;
+    font-size: var(--text-4xl);
   }
   
   .mode-subtitle {
-    font-size: 1.1rem;
+    font-size: var(--text-lg);
   }
   
   .mode-cards {
-    gap: 1rem;
+    gap: var(--space-4);
   }
   
   .mode-card {
-    padding: 1.5rem;
+    padding: var(--space-6);
   }
   
   .mode-icon {
-    font-size: 2.5rem;
+    font-size: var(--text-4xl);
   }
   
   .mode-name {
-    font-size: 1.25rem;
+    font-size: var(--text-xl);
   }
 }
-</style>
+
+/* Add entrance animation */
+@media (prefers-reduced-motion: no-preference) {
+  .mode-card {
+    animation: fadeIn 0.6s ease-out forwards;
+    opacity: 0;
+  }
+  
+  .mode-card:nth-child(1) { animation-delay: 0.1s; }
+  .mode-card:nth-child(2) { animation-delay: 0.2s; }
+  .mode-card:nth-child(3) { animation-delay: 0.3s; }
+}</style>
