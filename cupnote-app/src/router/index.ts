@@ -55,9 +55,9 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: '/unified-flavor',
-      name: 'unified-flavor',
-      component: () => import('../views/tasting-flow/UnifiedFlavorView.vue'),
+      path: '/flavor-selection',
+      name: 'flavor-selection',
+      component: () => import('../views/tasting-flow/FlavorSelectionView.vue'),
       meta: { requiresAuth: true }
     },
     {
@@ -104,9 +104,9 @@ const router = createRouter({
       meta: { isDemo: true }
     },
     {
-      path: '/demo/unified-flavor',
-      name: 'demo-unified-flavor',
-      component: () => import('../views/tasting-flow/UnifiedFlavorView.vue'),
+      path: '/demo/flavor-selection',
+      name: 'demo-flavor-selection',
+      component: () => import('../views/tasting-flow/FlavorSelectionView.vue'),
       meta: { isDemo: true }
     },
     {
@@ -137,10 +137,6 @@ const router = createRouter({
     {
       path: '/coffee-setup',
       redirect: '/mode-selection'
-    },
-    {
-      path: '/flavor-selection',
-      redirect: '/unified-flavor'
     },
     {
       path: '/personal-notes',

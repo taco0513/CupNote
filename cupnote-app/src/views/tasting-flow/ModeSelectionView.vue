@@ -36,11 +36,11 @@
 
 <script setup>
 import { useRouter, useRoute } from 'vue-router'
-import { useCoffeeRecordStore } from '../../stores/coffeeRecord'
+import { useTastingSessionStore } from '../../stores/tastingSession'
 
 const router = useRouter()
 const route = useRoute()
-const coffeeRecordStore = useCoffeeRecordStore()
+const tastingSessionStore = useTastingSessionStore()
 
 // Mode options
 const modes = [
@@ -69,10 +69,8 @@ const modes = [
 
 // Methods
 const selectMode = (mode) => {
-  // Save selected mode to store
-  coffeeRecordStore.updateCoffeeSetup({
-    mode: mode
-  })
+  // Start new session with selected mode
+  tastingSessionStore.startNewSession(mode)
   
   console.log('Selected mode:', mode)
   

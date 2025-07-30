@@ -127,8 +127,8 @@
             <div v-for="tasting in recentTastings" :key="tasting.id" class="activity-item">
               <div class="activity-avatar">{{ tasting.userInitial }}</div>
               <div class="activity-content">
-                <div class="activity-main">{{ tasting.coffeeName }}</div>
-                <div class="activity-sub">{{ tasting.cafeName }} · {{ tasting.timeAgo }}</div>
+                <div class="activity-main">{{ tasting.coffee_info?.coffee_name || 'Unknown Coffee' }}</div>
+                <div class="activity-sub">{{ tasting.coffee_info?.cafe_name || 'Unknown Cafe' }} · {{ tasting.timeAgo }}</div>
               </div>
               <div class="activity-score" :class="getScoreClass(tasting.matchScore)">
                 {{ tasting.matchScore }}점

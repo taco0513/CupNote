@@ -282,10 +282,10 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCoffeeRecordStore } from '../../stores/coffeeRecord'
+import { useTastingSessionStore } from '../../stores/tastingSession'
 
 const router = useRouter()
-const coffeeRecordStore = useCoffeeRecordStore()
+const tastingSessionStore = useTastingSessionStore()
 
 // SCA-compliant extraction methods
 const extractionMethods = [
@@ -339,7 +339,7 @@ const equipmentNotes = ref('')
 
 // Get coffee amount from store
 const coffeeAmount = computed(() => {
-  return coffeeRecordStore.currentSession.homeCafeData?.recipe?.coffee_amount || 20
+  return tastingSessionStore.currentSession.brewSettings?.recipe?.coffee_amount || 20
 })
 
 // Calculate water amount based on ratio
@@ -396,10 +396,7 @@ const handleNext = () => {
     }
   }
   
-  coffeeRecordStore.updateCoffeeSetup({
-    ...coffeeRecordStore.currentSession,
-    proBrewingData: proBrewingData
-  })
+  tastingSessionStore.updateProBrewingData(proBrewingData)
   
   // Navigate to QC measurement
   router.push('/qc-measurement')

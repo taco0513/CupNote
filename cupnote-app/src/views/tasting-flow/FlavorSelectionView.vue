@@ -214,10 +214,10 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCoffeeRecordStore } from '../../stores/coffeeRecord'
+import { useTastingSessionStore } from '../../stores/tastingSession'
 
 const router = useRouter()
-const coffeeRecordStore = useCoffeeRecordStore()
+const tastingSessionStore = useTastingSessionStore()
 
 // State
 const searchQuery = ref('')
@@ -755,7 +755,7 @@ const handleNext = () => {
   }))
   
   // Save to store
-  coffeeRecordStore.updateFlavorSelection(simplifiedFlavors)
+  tastingSessionStore.updateFlavorSelection(simplifiedFlavors)
   
   console.log('Flavors saved:', simplifiedFlavors)
   

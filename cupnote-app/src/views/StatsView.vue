@@ -219,7 +219,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
-import { useCoffeeRecordStore } from '../stores/coffeeRecord'
+import { useTastingSessionStore } from '../stores/tastingSession'
 import { useUserStatsStore } from '../stores/userStats'
 import { useGoalsStore } from '../stores/goals'
 import LineChart from '../components/charts/LineChart.vue'
@@ -228,7 +228,7 @@ import BarChart from '../components/charts/BarChart.vue'
 import GoalsDashboard from '../components/goals/GoalsDashboard.vue'
 
 const authStore = useAuthStore()
-const coffeeRecordStore = useCoffeeRecordStore()
+const tastingSessionStore = useTastingSessionStore()
 const userStatsStore = useUserStatsStore()
 const goalsStore = useGoalsStore()
 
@@ -237,7 +237,7 @@ const isLoading = ref(false)
 const selectedPeriod = ref('month')
 
 // Computed - Real user statistics from userStatsStore
-const records = computed(() => coffeeRecordStore.records)
+const records = computed(() => tastingSessionStore.records)
 const userLevel = computed(() => userStatsStore.userLevel)
 const totalPoints = computed(() => userStatsStore.totalPoints)
 const nextLevelProgress = computed(() => userStatsStore.nextLevelProgress)
@@ -532,7 +532,7 @@ onMounted(async () => {
       
       // Fetch coffee records if not available
       if (filteredRecords.value.length === 0) {
-        await coffeeRecordStore.fetchUserRecords(authStore.userId)
+        await tastingSessionStore.fetchUserRecords(authStore.userId)
       }
     } catch (err) {
       console.error('Failed to initialize stats view:', err)

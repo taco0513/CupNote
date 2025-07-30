@@ -41,73 +41,134 @@ export interface Database {
           updated_at?: string
         }
       }
-      coffee_records: {
+      tastings: {
         Row: {
           id: string
           user_id: string
-          coffee_name: string
-          cafe_name: string
-          location: string
-          brewing_method: string
-          origin: string | null
-          variety: string | null
-          altitude: string | null
-          process: string | null
-          roast_level: string | null
+          coffee_id: string | null
+          mode: 'cafe' | 'homecafe' | 'pro'
+          session_id: string | null
+          coffee_info: Json
+          brew_settings: Json | null
+          experimental_data: Json | null
           selected_flavors: Json
-          selected_sensory: Json
-          personal_notes: string | null
+          sensory_expressions: Json
+          personal_comment: string | null
           roaster_notes: string | null
-          roaster_notes_level: number
-          flavor_match_score: number | null
-          sensory_match_score: number | null
-          total_match_score: number | null
+          match_score: Json | null
+          total_duration: number | null
+          sensory_skipped: boolean
+          completed_at: string | null
           created_at: string
           updated_at: string
         }
         Insert: {
           id?: string
           user_id: string
-          coffee_name: string
-          cafe_name: string
-          location: string
-          brewing_method: string
-          origin?: string | null
-          variety?: string | null
-          altitude?: string | null
-          process?: string | null
-          roast_level?: string | null
+          coffee_id?: string | null
+          mode: 'cafe' | 'homecafe' | 'pro'
+          session_id?: string | null
+          coffee_info: Json
+          brew_settings?: Json | null
+          experimental_data?: Json | null
           selected_flavors?: Json
-          selected_sensory?: Json
-          personal_notes?: string | null
+          sensory_expressions?: Json
+          personal_comment?: string | null
           roaster_notes?: string | null
-          roaster_notes_level?: number
-          flavor_match_score?: number | null
-          sensory_match_score?: number | null
-          total_match_score?: number | null
+          match_score?: Json | null
+          total_duration?: number | null
+          sensory_skipped?: boolean
+          completed_at?: string | null
           created_at?: string
           updated_at?: string
         }
         Update: {
           id?: string
           user_id?: string
-          coffee_name?: string
-          cafe_name?: string
-          location?: string
-          brewing_method?: string
-          origin?: string | null
-          variety?: string | null
-          altitude?: string | null
-          process?: string | null
-          roast_level?: string | null
+          coffee_id?: string | null
+          mode?: 'cafe' | 'homecafe' | 'pro'
+          session_id?: string | null
+          coffee_info?: Json
+          brew_settings?: Json | null
+          experimental_data?: Json | null
           selected_flavors?: Json
-          selected_sensory?: Json
-          personal_notes?: string | null
+          sensory_expressions?: Json
+          personal_comment?: string | null
           roaster_notes?: string | null
-          roaster_notes_level?: number
-          flavor_match_score?: number | null
-          sensory_match_score?: number | null
-          total_match_score?: number | null
+          match_score?: Json | null
+          total_duration?: number | null
+          sensory_skipped?: boolean
+          completed_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      coffees: {
+        Row: {
+          id: string
+          name: string
+          roaster: string | null
+          origin: string | null
+          roast_level: string | null
+          processing_method: string | null
+          variety: string | null
+          farm: string | null
+          altitude: number | null
+          notes: string | null
+          created_at: string
+          created_by: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          roaster?: string | null
+          origin?: string | null
+          roast_level?: string | null
+          processing_method?: string | null
+          variety?: string | null
+          farm?: string | null
+          altitude?: number | null
+          notes?: string | null
+          created_at?: string
+          created_by: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          roaster?: string | null
+          origin?: string | null
+          roast_level?: string | null
+          processing_method?: string | null
+          variety?: string | null
+          farm?: string | null
+          altitude?: number | null
+          notes?: string | null
+          created_at?: string
+          created_by?: string
+        }
+      }
+      profiles: {
+        Row: {
+          id: string
+          username: string | null
+          display_name: string | null
+          avatar_url: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          username?: string | null
+          display_name?: string | null
+          avatar_url?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          username?: string | null
+          display_name?: string | null
+          avatar_url?: string | null
           created_at?: string
           updated_at?: string
         }

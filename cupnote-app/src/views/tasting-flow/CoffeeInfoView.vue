@@ -300,10 +300,10 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCoffeeRecordStore } from '../../stores/coffeeRecord'
+import { useTastingSessionStore } from '../../stores/tastingSession'
 
 const router = useRouter()
-const coffeeRecordStore = useCoffeeRecordStore()
+const tastingSessionStore = useTastingSessionStore()
 
 // Mode Labels
 const modeLabels = {
@@ -313,7 +313,7 @@ const modeLabels = {
 }
 
 // State
-const currentMode = computed(() => coffeeRecordStore.currentSession.mode || 'cafe')
+const currentMode = computed(() => tastingSessionStore.currentSession.mode || 'cafe')
 const showOptionalFields = ref(false)
 
 // Form Data
@@ -405,11 +405,11 @@ const handleSubmit = () => {
   }
   
   // Save to store with altitude
-  coffeeRecordStore.updateCoffeeSetup({
-    coffeeName: formData.value.coffeeName,
-    cafeName: formData.value.cafeName,
+  tastingSessionStore.updateCoffeeSetup({
+    coffee_name: formData.value.coffeeName,
+    cafe_name: formData.value.cafeName,
     location: location,
-    brewingMethod: brewingMethod,
+    brewing_method: brewingMethod,
     origin: formData.value.origin,
     variety: formData.value.variety,
     altitude: formData.value.altitude,
@@ -417,11 +417,11 @@ const handleSubmit = () => {
     roastLevel: formData.value.roastLevel
   })
   
-  console.log('Coffee setup saved:', coffeeRecordStore.currentSession)
+  console.log('Coffee setup saved:', tastingSessionStore.currentSession)
   
   // Navigate based on mode
   if (currentMode.value === 'cafe') {
-    router.push('/unified-flavor')
+    router.push('/flavor-selection')
   } else if (currentMode.value === 'homecafe') {
     router.push('/home-cafe')
   } else if (currentMode.value === 'lab') {
@@ -431,7 +431,7 @@ const handleSubmit = () => {
 
 // Initialize mode from route if coming back
 onMounted(() => {
-  if (!coffeeRecordStore.currentSession.mode) {
+  if (!tastingSessionStore.currentSession.mode) {
     router.push('/mode-selection')
   }
 })

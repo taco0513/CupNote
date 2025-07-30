@@ -222,11 +222,11 @@
 import { ref, computed, onMounted } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
-import { useCoffeeRecordStore } from '../stores/coffeeRecord'
+import { useTastingSessionStore } from '../stores/tastingSession'
 
 const router = useRouter()
 const authStore = useAuthStore()
-const coffeeRecordStore = useCoffeeRecordStore()
+const tastingSessionStore = useTastingSessionStore()
 
 // State
 const showSuccess = ref(false)
@@ -244,7 +244,7 @@ const passwordForm = ref({
 
 // Computed
 const userProfile = computed(() => authStore.userProfile)
-const coffeeRecords = computed(() => coffeeRecordStore.records)
+const coffeeRecords = computed(() => tastingSessionStore.records)
 
 const avatarText = computed(() => {
   const name = userProfile.value?.display_name || authStore.user?.email || 'U'
@@ -361,7 +361,7 @@ onMounted(async () => {
 
   // Load coffee records if not already loaded
   if (coffeeRecords.value.length === 0 && authStore.userId) {
-    await coffeeRecordStore.fetchUserRecords(authStore.userId)
+    await tastingSessionStore.fetchUserRecords(authStore.userId)
   }
 })
 </script>

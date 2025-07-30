@@ -184,10 +184,10 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCoffeeRecordStore } from '../../stores/coffeeRecord'
+import { useTastingSessionStore } from '../../stores/tastingSession'
 
 const router = useRouter()
-const coffeeRecordStore = useCoffeeRecordStore()
+const tastingSessionStore = useTastingSessionStore()
 
 // Dripper options
 const drippers = [
@@ -231,7 +231,7 @@ let timerInterval = null
 // Computed
 const waterAmount = computed(() => Math.round(coffeeAmount.value * ratio.value))
 
-const currentMode = computed(() => coffeeRecordStore.currentSession.mode || 'homecafe')
+const currentMode = computed(() => tastingSessionStore.currentSession.mode || 'homecafe')
 
 // Methods
 const adjustCoffeeAmount = (delta) => {
@@ -321,17 +321,19 @@ const handleNext = () => {
   const dripperName = drippers.find(d => d.value === selectedDripper.value)?.name || selectedDripper.value
   const brewingMethod = `${dripperName} - ${coffeeAmount.value}g, 1:${ratio.value}, ${waterTemp.value}°C`
   
-  coffeeRecordStore.updateCoffeeSetup({
-    ...coffeeRecordStore.currentSession,
-    brewingMethod: brewingMethod,
-    homeCafeData: homeCafeData
+  // Update coffee info with brewing method
+  tastingSessionStore.updateCoffeeSetup({
+    brewing_method: brewingMethod
   })
+  
+  // Update HomeCafe specific data
+  tastingSessionStore.updateHomeCafeData(homeCafeData)
   
   // Navigate based on mode
   if (currentMode.value === 'pro') {
     router.push('/pro-brewing')
   } else {
-    router.push('/unified-flavor')
+    router.push('/flavor-selection')
   }
 }
 

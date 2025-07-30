@@ -170,31 +170,31 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCoffeeRecordStore } from '../../stores/coffeeRecord'
+import { useTastingSessionStore } from '../../stores/tastingSession'
 
 const router = useRouter()
-const coffeeRecordStore = useCoffeeRecordStore()
+const tastingSessionStore = useTastingSessionStore()
 
 // State
 const showAchievement = ref(false)
 const achievementMessage = ref('')
 
 // Get data from store
-const currentSession = computed(() => coffeeRecordStore.currentSession)
+const currentSession = computed(() => tastingSessionStore.currentSession)
 
 const mockCoffeeInfo = computed(() => ({
-  name: currentSession.value.coffeeName || '커피 이름 없음',
-  cafe: currentSession.value.cafeName || '카페 이름 없음',
-  method: currentSession.value.brewingMethod || '브루잉 방법 없음'
+  name: currentSession.value.coffeeInfo?.coffee_name || '커피 이름 없음',
+  cafe: currentSession.value.coffeeInfo?.cafe_name || '카페 이름 없음',
+  method: currentSession.value.coffeeInfo?.brewing_method || '브루잉 방법 없음'
 }))
 
 const selectedFlavors = computed(() => currentSession.value.selectedFlavors || [])
-const selectedSensory = computed(() => currentSession.value.selectedSensory || [])
-const personalNotes = computed(() => currentSession.value.personalNotes || '')
+const selectedSensory = computed(() => currentSession.value.sensoryExpressions || [])
+const personalNotes = computed(() => currentSession.value.personalComment || '')
 const roasterNoteBonus = computed(() => currentSession.value.roasterNotesLevel === 2 ? 10 : 0)
 
 // Score calculation (get from store)
-const scores = computed(() => coffeeRecordStore.calculateMatchScores())
+const scores = computed(() => tastingSessionStore.calculateMatchScores())
 const flavorMatchScore = computed(() => scores.value.flavorMatchScore)
 const sensoryMatchScore = computed(() => scores.value.sensoryMatchScore)
 const matchScore = computed(() => scores.value.totalMatchScore)
@@ -276,7 +276,7 @@ const showAchievementPopup = (message) => {
 // Initialize
 onMounted(async () => {
   // Check if we have complete session data
-  if (!coffeeRecordStore.hasCompleteSession) {
+  if (!tastingSessionStore.currentSession.coffeeInfo || !tastingSessionStore.currentSession.selectedFlavors) {
     console.error('Incomplete session data, redirecting to home')
     router.push('/')
     return
@@ -287,11 +287,11 @@ onMounted(async () => {
   
   try {
     // Save the coffee record
-    const savedRecord = await coffeeRecordStore.saveCurrentSession(mockUserId)
+    const savedRecord = await tastingSessionStore.saveCurrentSession(mockUserId)
     console.log('Coffee record saved:', savedRecord)
     
     // Get coffee statistics
-    const stats = await coffeeRecordStore.getCoffeeStatistics(currentSession.value.coffeeName)
+    const stats = await tastingSessionStore.getCoffeeStatistics(currentSession.value.coffeeInfo?.coffee_name)
     if (stats) {
       communityData.value.totalUsers = stats.total_records
       communityData.value.averageScore = Math.round(stats.average_score)

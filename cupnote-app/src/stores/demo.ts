@@ -41,7 +41,7 @@ export const useDemoStore = defineStore('demo', () => {
   const demoSteps = [
     { name: 'mode-selection', path: '/demo', title: '모드 선택', progress: 0 },
     { name: 'coffee-info', path: '/demo/coffee-info', title: '커피 정보', progress: 25 },
-    { name: 'unified-flavor', path: '/demo/unified-flavor', title: '향미 선택', progress: 50 },
+    { name: 'flavor-selection', path: '/demo/flavor-selection', title: '향미 선택', progress: 50 },
     { name: 'sensory-expression', path: '/demo/sensory-expression', title: '감각 표현', progress: 70 },
     { name: 'personal-comment', path: '/demo/personal-comment', title: '개인 평가', progress: 85 },
     { name: 'roaster-notes', path: '/demo/roaster-notes', title: '로스터 노트', progress: 95 },
@@ -104,7 +104,7 @@ export const useDemoStore = defineStore('demo', () => {
         title: '☕ 커피 정보를 확인하세요',
         message: '데모용 커피 정보가 미리 입력되어 있습니다. 실제 사용시에는 직접 입력하실 수 있어요!'
       },
-      'unified-flavor': {
+      'flavor-selection': {
         title: '🍓 향미를 선택해보세요',
         message: '느껴지는 향과 맛을 선택해주세요. 최대 5개까지 선택할 수 있습니다!'
       },

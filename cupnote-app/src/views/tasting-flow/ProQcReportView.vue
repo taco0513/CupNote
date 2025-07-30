@@ -276,7 +276,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCoffeeRecordStore } from '../../stores/coffeeRecord'
+import { useTastingSessionStore } from '../../stores/tastingSession'
 import { 
   calculateScaComplianceScore, 
   predictQualityScore, 
@@ -295,13 +295,13 @@ import {
 } from '../../utils/reportGenerator'
 
 const router = useRouter()
-const coffeeRecordStore = useCoffeeRecordStore()
+const tastingSessionStore = useTastingSessionStore()
 
 // UI State
 const showExportMenu = ref(false)
 
 // Get data from store
-const currentSession = computed(() => coffeeRecordStore.currentSession)
+const currentSession = computed(() => tastingSessionStore.currentSession)
 const proBrewingData = computed(() => currentSession.value.proBrewingData || {})
 const qcMeasurementData = computed(() => currentSession.value.qcMeasurementData || {})
 const coffeeInfo = computed(() => currentSession.value.coffeeInfo || {})
@@ -559,10 +559,7 @@ const saveReport = async () => {
       confidenceLevel: confidenceLevel.value
     }
     
-    coffeeRecordStore.updateCoffeeSetup({
-      ...currentSession.value,
-      proQcReport: reportData
-    })
+    tastingSessionStore.updateProQcReport(reportData)
     
     // Show success message (could implement toast notification)
     alert('QC 리포트가 저장되었습니다.')

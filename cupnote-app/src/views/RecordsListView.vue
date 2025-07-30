@@ -134,18 +134,18 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCoffeeRecordStore } from '../stores/coffeeRecord'
+import { useTastingSessionStore } from '../stores/tastingSession'
 
 const router = useRouter()
-const coffeeRecordStore = useCoffeeRecordStore()
+const tastingSessionStore = useTastingSessionStore()
 
 // State
 const sortBy = ref('recent')
 
 // Get data from store
-const records = computed(() => coffeeRecordStore.records)
-const isLoading = computed(() => coffeeRecordStore.isLoading)
-const error = computed(() => coffeeRecordStore.error)
+const records = computed(() => tastingSessionStore.records)
+const isLoading = computed(() => tastingSessionStore.isLoading)
+const error = computed(() => tastingSessionStore.error)
 
 // Computed properties
 const totalRecords = computed(() => records.value.length)
@@ -224,14 +224,14 @@ const startNewTasting = () => {
 const retry = async () => {
   // TODO: Get real user ID from auth
   const mockUserId = 'mock-user-id-123'
-  await coffeeRecordStore.fetchUserRecords(mockUserId)
+  await tastingSessionStore.fetchUserRecords(mockUserId)
 }
 
 // Initialize
 onMounted(async () => {
   // TODO: Get real user ID from auth
   const mockUserId = 'mock-user-id-123'
-  await coffeeRecordStore.fetchUserRecords(mockUserId)
+  await tastingSessionStore.fetchUserRecords(mockUserId)
 })
 </script>
 

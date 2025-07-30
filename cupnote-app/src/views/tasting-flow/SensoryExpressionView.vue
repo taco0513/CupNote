@@ -126,10 +126,10 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCoffeeRecordStore } from '../../stores/coffeeRecord'
+import { useTastingSessionStore } from '../../stores/tastingSession'
 
 const router = useRouter()
-const coffeeRecordStore = useCoffeeRecordStore()
+const tastingSessionStore = useTastingSessionStore()
 
 // State
 const selectedExpressions = ref({})
@@ -290,12 +290,12 @@ const handleNext = () => {
   })
   
   // Save to store
-  coffeeRecordStore.updateSensoryExpression(sensoryArray)
+  tastingSessionStore.updateSensoryExpression(sensoryArray)
   
   console.log('Sensory expressions saved:', sensoryArray)
   
   // Get current mode from store
-  const currentMode = coffeeRecordStore.currentSession.mode || 'homecafe'
+  const currentMode = tastingSessionStore.currentSession.mode || 'homecafe'
   
   // Navigate based on mode
   if (currentMode === 'lab') {

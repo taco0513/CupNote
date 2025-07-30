@@ -272,10 +272,10 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCoffeeRecordStore } from '../../stores/coffeeRecord'
+import { useTastingSessionStore } from '../../stores/tastingSession'
 
 const router = useRouter()
-const coffeeRecordStore = useCoffeeRecordStore()
+const tastingSessionStore = useTastingSessionStore()
 
 // State
 const tdsEnabled = ref(true)
@@ -290,11 +290,11 @@ const qcNotes = ref('')
 
 // Get data from store
 const coffeeAmount = computed(() => {
-  return coffeeRecordStore.currentSession.homeCafeData?.recipe?.coffee_amount || 20
+  return tastingSessionStore.currentSession.brewSettings?.recipe?.coffee_amount || 20
 })
 
 const proBrewingData = computed(() => {
-  return coffeeRecordStore.currentSession.proBrewingData || {}
+  return tastingSessionStore.currentSession.experimentalData || {}
 })
 
 // TDS Validation
@@ -415,13 +415,10 @@ const handleNext = () => {
     qc_notes: qcNotes.value
   }
   
-  coffeeRecordStore.updateCoffeeSetup({
-    ...coffeeRecordStore.currentSession,
-    qcMeasurementData: qcMeasurementData
-  })
+  tastingSessionStore.updateQcMeasurementData(qcMeasurementData)
   
   // Navigate to unified flavor (SCA flavor wheel will be integrated later)
-  router.push('/unified-flavor')
+  router.push('/flavor-selection')
 }
 
 // Watch for TDS toggle

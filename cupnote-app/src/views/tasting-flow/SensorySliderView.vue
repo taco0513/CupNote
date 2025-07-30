@@ -99,10 +99,10 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCoffeeRecordStore } from '../../stores/coffeeRecord'
+import { useTastingSessionStore } from '../../stores/tastingSession'
 
 const router = useRouter()
-const coffeeRecordStore = useCoffeeRecordStore()
+const tastingSessionStore = useTastingSessionStore()
 
 // Sensory attributes
 const sensoryAttributes = [
@@ -205,10 +205,7 @@ const handleNext = () => {
     quick_notes: quickNotes.value
   }
   
-  coffeeRecordStore.updateCoffeeSetup({
-    ...coffeeRecordStore.currentSession,
-    sensorySliderData: sensorySliderData
-  })
+  tastingSessionStore.updateSensorySliderData(sensorySliderData)
   
   // Navigate to personal comment
   router.push('/personal-comment')

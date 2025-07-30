@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import { useCoffeeRecordStore } from '../coffeeRecord'
+import { useTastingSessionStore } from '../tastingSession'
 
 // Mock Supabase
 vi.mock('../../lib/supabase', () => ({
@@ -31,12 +31,12 @@ const mockRecord = {
   created_at: new Date().toISOString()
 }
 
-describe('CoffeeRecord Store', () => {
-  let store: ReturnType<typeof useCoffeeRecordStore>
+describe('TastingSession Store', () => {
+  let store: ReturnType<typeof useTastingSessionStore>
 
   beforeEach(() => {
     setActivePinia(createPinia())
-    store = useCoffeeRecordStore()
+    store = useTastingSessionStore()
   })
 
   describe('Session Management', () => {

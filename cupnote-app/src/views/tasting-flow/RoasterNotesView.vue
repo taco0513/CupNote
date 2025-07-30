@@ -217,10 +217,10 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCoffeeRecordStore } from '../../stores/coffeeRecord'
+import { useTastingSessionStore } from '../../stores/tastingSession'
 
 const router = useRouter()
-const coffeeRecordStore = useCoffeeRecordStore()
+const tastingSessionStore = useTastingSessionStore()
 
 // State
 const inputMethod = ref('text') // 'text', 'photo', 'skip'
@@ -274,7 +274,7 @@ const handleNext = () => {
   const level = inputMethod.value === 'skip' ? 1 : 2
   
   // Save to store
-  coffeeRecordStore.updateRoasterNotes(notes, level)
+  tastingSessionStore.updateRoasterNotes(notes, level)
   
   console.log('Roaster notes saved:', { notes, level })
   

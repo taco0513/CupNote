@@ -127,18 +127,18 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCoffeeRecordStore } from '../../stores/coffeeRecord'
+import { useTastingSessionStore } from '../../stores/tastingSession'
 
 const router = useRouter()
-const coffeeRecordStore = useCoffeeRecordStore()
+const tastingSessionStore = useTastingSessionStore()
 
 // State
 const personalNotes = ref('')
 const usedSelections = ref([])
 
 // Get data from store
-const mockFlavors = computed(() => coffeeRecordStore.currentSession.selectedFlavors || [])
-const mockSensoryExpressions = computed(() => coffeeRecordStore.currentSession.selectedSensory || [])
+const mockFlavors = computed(() => tastingSessionStore.currentSession.selectedFlavors || [])
+const mockSensoryExpressions = computed(() => tastingSessionStore.currentSession.sensoryExpressions || [])
 
 
 // Smart Suggestions based on selections
@@ -223,7 +223,7 @@ const clearNotes = () => {
 
 const handleNext = () => {
   // Save to store
-  coffeeRecordStore.updatePersonalNotes(personalNotes.value)
+  tastingSessionStore.updatePersonalComment(personalNotes.value)
   
   console.log('Personal notes saved:', personalNotes.value)
   
