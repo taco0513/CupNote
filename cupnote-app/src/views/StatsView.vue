@@ -8,18 +8,70 @@
           홈으로
         </RouterLink>
         <h1 class="stats-title">통계 분석</h1>
-        <div class="period-selector">
-          <select v-model="selectedPeriod" @change="refreshData" class="period-select">
-            <option value="week">최근 1주</option>
-            <option value="month">최근 1개월</option>
-            <option value="quarter">최근 3개월</option>
-            <option value="all">전체 기간</option>
-          </select>
+        <div class="header-actions">
+          <RouterLink to="/achievements" class="achievements-link">
+            🏆 배지 보기
+          </RouterLink>
+          <div class="period-selector">
+            <select v-model="selectedPeriod" @change="refreshData" class="period-select">
+              <option value="week">최근 1주</option>
+              <option value="month">최근 1개월</option>
+              <option value="quarter">최근 3개월</option>
+              <option value="all">전체 기간</option>
+            </select>
+          </div>
         </div>
       </div>
     </header>
 
     <div class="stats-container">
+      <!-- User Level Section -->
+      <section class="user-level-section" v-if="userLevel && totalPoints > 0">
+        <div class="level-card">
+          <div class="level-info">
+            <div class="level-icon">{{ userLevel.icon }}</div>
+            <div class="level-details">
+              <h3 class="level-title">{{ userLevel.title }}</h3>
+              <div class="level-points">{{ totalPoints }}포인트 • Lv.{{ userLevel.level }}</div>
+            </div>
+          </div>
+          <div class="level-progress" v-if="nextLevelProgress && userLevel.level < 10">
+            <div class="progress-info">
+              <span class="progress-text">다음 레벨까지</span>
+              <span class="progress-needed">{{ nextLevelProgress.needed }}포인트 남음</span>
+            </div>
+            <div class="progress-bar">
+              <div 
+                class="progress-fill"
+                :style="{ width: `${nextLevelProgress.progress}%` }"
+              ></div>
+            </div>
+          </div>
+          <div class="achievements-preview" v-if="earnedAchievements && earnedAchievements.length > 0">
+            <span class="achievements-count">🏆 {{ earnedAchievements.length }}개 배지 획득</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Insights Section -->
+      <section class="insights-section" v-if="insights && insights.length > 0">
+        <h3 class="section-title">🧠 개인화된 인사이트</h3>
+        <div class="insights-grid">
+          <div 
+            v-for="insight in insights" 
+            :key="insight.type + insight.title"
+            class="insight-card"
+            :style="{ borderColor: insight.color }"
+          >
+            <div class="insight-icon">{{ insight.icon }}</div>
+            <div class="insight-content">
+              <h4 class="insight-title">{{ insight.title }}</h4>
+              <p class="insight-message">{{ insight.message }}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- Overview Cards -->
       <section class="overview-section">
         <div class="stats-grid">
@@ -227,16 +279,25 @@ import { ref, computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { useCoffeeRecordStore } from '../stores/coffeeRecord'
+import { useUserStatsStore } from '../stores/userStats'
 
 const authStore = useAuthStore()
 const coffeeRecordStore = useCoffeeRecordStore()
+const userStatsStore = useUserStatsStore()
 
 // State
 const isLoading = ref(false)
 const selectedPeriod = ref('month')
 
-// Computed
+// Computed - Real user statistics from userStatsStore
 const records = computed(() => coffeeRecordStore.records)
+const userLevel = computed(() => userStatsStore.userLevel)
+const totalPoints = computed(() => userStatsStore.totalPoints)
+const nextLevelProgress = computed(() => userStatsStore.nextLevelProgress)
+const earnedAchievements = computed(() => userStatsStore.earnedAchievements)
+const weeklyGoals = computed(() => userStatsStore.weeklyGoals)
+const monthlyGoals = computed(() => userStatsStore.monthlyGoals)
+const insights = computed(() => userStatsStore.generateInsights)
 
 const filteredRecords = computed(() => {
   const now = new Date()
@@ -262,12 +323,14 @@ const filteredRecords = computed(() => {
   )
 })
 
-const totalRecords = computed(() => filteredRecords.value.length)
+const totalRecords = computed(() => userStatsStore.totalTastings || filteredRecords.value.length)
 
 const averageScore = computed(() => {
-  if (filteredRecords.value.length === 0) return 0
-  const sum = filteredRecords.value.reduce((acc, record) => acc + (record.total_match_score || 0), 0)
-  return Math.round(sum / filteredRecords.value.length)
+  return userStatsStore.averageScaScore || (() => {
+    if (filteredRecords.value.length === 0) return 0
+    const sum = filteredRecords.value.reduce((acc, record) => acc + (record.total_match_score || 0), 0)
+    return Math.round(sum / filteredRecords.value.length)
+  })()
 })
 
 const recordsChange = computed(() => {
@@ -300,20 +363,22 @@ const scoreTrendText = computed(() => {
 })
 
 const favoriteOrigin = computed(() => {
-  if (filteredRecords.value.length === 0) return 'N/A'
-  
-  const origins = {}
-  filteredRecords.value.forEach(record => {
-    const origin = record.origin || '기타'
-    origins[origin] = (origins[origin] || 0) + 1
-  })
-  
-  const topOrigin = Object.entries(origins).sort((a, b) => b[1] - a[1])[0]
-  return topOrigin ? topOrigin[0] : 'N/A'
+  return userStatsStore.favoriteOrigin || (() => {
+    if (filteredRecords.value.length === 0) return 'N/A'
+    
+    const origins = {}
+    filteredRecords.value.forEach(record => {
+      const origin = record.origin || '기타'
+      origins[origin] = (origins[origin] || 0) + 1
+    })
+    
+    const topOrigin = Object.entries(origins).sort((a, b) => b[1] - a[1])[0]
+    return topOrigin ? topOrigin[0] : 'N/A'
+  })()
 })
 
 const favoriteOriginCount = computed(() => {
-  if (filteredRecords.value.length === 0) return 0
+  if (favoriteOrigin.value === 'N/A') return 0
   
   const origins = {}
   filteredRecords.value.forEach(record => {
@@ -326,8 +391,7 @@ const favoriteOriginCount = computed(() => {
 })
 
 const currentStreak = computed(() => {
-  // Simple streak calculation - consecutive days with records
-  return Math.min(filteredRecords.value.length, 7)
+  return userStatsStore.currentStreak || Math.min(filteredRecords.value.length, 7)
 })
 
 const streakDescription = computed(() => {
@@ -452,37 +516,48 @@ const recentImprovements = computed(() => [
   }
 ])
 
-const goals = computed(() => [
-  {
-    id: 1,
-    icon: '☕',
-    title: '월간 테이스팅',
-    current: filteredRecords.value.filter(r => {
-      const recordDate = new Date(r.created_at)
-      const thisMonth = new Date()
-      return recordDate.getMonth() === thisMonth.getMonth() && 
-             recordDate.getFullYear() === thisMonth.getFullYear()
-    }).length,
-    target: 20,
-    unit: '회'
-  },
-  {
-    id: 2,
-    icon: '🎯',
-    title: '평균 점수',
-    current: averageScore.value,
-    target: 85,
-    unit: '점'
-  },
-  {
-    id: 3,
-    icon: '🔥',
-    title: '연속 기록',
-    current: currentStreak.value,
-    target: 7,
-    unit: '일'
-  }
-])
+const goals = computed(() => {
+  // Combine weekly and monthly goals from userStatsStore
+  const weeklyGoalsList = weeklyGoals.value || []
+  const monthlyGoalsList = monthlyGoals.value || []
+  
+  // Fallback to computed goals if userStats not available
+  const fallbackGoals = [
+    {
+      id: 1,
+      icon: '☕',
+      title: '월간 테이스팅',
+      current: filteredRecords.value.filter(r => {
+        const recordDate = new Date(r.created_at)
+        const thisMonth = new Date()
+        return recordDate.getMonth() === thisMonth.getMonth() && 
+               recordDate.getFullYear() === thisMonth.getFullYear()
+      }).length,
+      target: 20,
+      unit: '회'
+    },
+    {
+      id: 2,
+      icon: '🎯',
+      title: '평균 점수',
+      current: averageScore.value,
+      target: 85,
+      unit: '점'
+    },
+    {
+      id: 3,
+      icon: '🔥',
+      title: '연속 기록',
+      current: currentStreak.value,
+      target: 7,
+      unit: '일'
+    }
+  ]
+  
+  return [...weeklyGoalsList, ...monthlyGoalsList].length > 0 
+    ? [...weeklyGoalsList, ...monthlyGoalsList]
+    : fallbackGoals
+})
 
 // Methods
 const formatChartDate = (dateString) => {
@@ -505,10 +580,18 @@ const refreshData = async () => {
 
 // Initialize
 onMounted(async () => {
-  if (authStore.userId && filteredRecords.value.length === 0) {
+  if (authStore.userId) {
     isLoading.value = true
     try {
-      await coffeeRecordStore.fetchUserRecords(authStore.userId)
+      // Initialize user statistics
+      await userStatsStore.initializeUserStats(authStore.userId)
+      
+      // Fetch coffee records if not available
+      if (filteredRecords.value.length === 0) {
+        await coffeeRecordStore.fetchUserRecords(authStore.userId)
+      }
+    } catch (err) {
+      console.error('Failed to initialize stats view:', err)
     } finally {
       isLoading.value = false
     }
@@ -566,6 +649,33 @@ onMounted(async () => {
   margin: 0;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.achievements-link {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #7C5842;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border: 2px solid #E8D5C4;
+  border-radius: 8px;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.achievements-link:hover {
+  border-color: #7C5842;
+  background: #F8F4F0;
+  transform: translateY(-1px);
+}
+
 .period-selector {
   display: flex;
   align-items: center;
@@ -592,6 +702,146 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+}
+
+/* User Level Section */
+.user-level-section {
+  margin-bottom: 1rem;
+}
+
+.level-card {
+  background: linear-gradient(135deg, #7C5842 0%, #A0796A 100%);
+  border-radius: 16px;
+  padding: 2rem;
+  color: white;
+  box-shadow: 0 4px 20px rgba(124, 88, 66, 0.3);
+}
+
+.level-info {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.level-icon {
+  font-size: 3rem;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  backdrop-filter: blur(10px);
+}
+
+.level-details {
+  flex: 1;
+}
+
+.level-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.level-points {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.level-progress {
+  margin-bottom: 1rem;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.progress-text {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.progress-needed {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.progress-bar {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FFF, #F0E8DC);
+  border-radius: 8px;
+  transition: width 0.3s ease;
+}
+
+.achievements-preview {
+  text-align: center;
+}
+
+.achievements-count {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+}
+
+/* Insights Section */
+.insights-section {
+  margin-bottom: 1rem;
+}
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.insight-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(124, 88, 66, 0.1);
+  border-left: 4px solid #7C5842;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.insight-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.insight-content {
+  flex: 1;
+}
+
+.insight-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #7C5842;
+  margin-bottom: 0.5rem;
+}
+
+.insight-message {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
 }
 
 /* Overview Section */
@@ -1100,6 +1350,37 @@ onMounted(async () => {
   .header-content {
     flex-direction: column;
     gap: 1rem;
+    text-align: center;
+  }
+  
+  .header-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+  
+  .achievements-link {
+    justify-content: center;
+  }
+  
+  .level-info {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .level-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+  }
+  
+  .insights-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .insight-card {
+    flex-direction: column;
     text-align: center;
   }
   
