@@ -3,14 +3,10 @@
     <!-- Hero Section -->
     <section class="hero-section">
       <div class="hero-content">
-        <h1 class="hero-title">
-          ☕ 환영합니다!
-        </h1>
-        <p class="hero-subtitle">
-          나의 커피 감각 저널, <strong>CupNote</strong>
-        </p>
+        <h1 class="hero-title">☕ 환영합니다!</h1>
+        <p class="hero-subtitle">나의 커피 감각 저널, <strong>CupNote</strong></p>
         <p class="hero-description">
-          전문가 표현을 참고하되 내 언어로 기록하고,<br>
+          전문가 표현을 참고하되 내 언어로 기록하고,<br />
           함께 나누며 감각을 키워보세요.
         </p>
       </div>
@@ -27,7 +23,7 @@
     <!-- Features Preview -->
     <section class="features-section">
       <h2 class="features-title">CupNote와 함께하면</h2>
-      
+
       <div class="features-grid">
         <div class="feature-card">
           <div class="feature-icon">👅</div>
@@ -48,17 +44,13 @@
         <div class="feature-card">
           <div class="feature-icon">🌱</div>
           <h3 class="feature-title">성장 추적</h3>
-          <p class="feature-description">
-            통계와 배지 시스템으로 커피 여정의 발전을 시각화하세요.
-          </p>
+          <p class="feature-description">통계와 배지 시스템으로 커피 여정의 발전을 시각화하세요.</p>
         </div>
 
         <div class="feature-card">
           <div class="feature-icon">👥</div>
           <h3 class="feature-title">함께 성장</h3>
-          <p class="feature-description">
-            다른 사용자들의 기록을 참고해 새로운 관점을 발견하세요.
-          </p>
+          <p class="feature-description">다른 사용자들의 기록을 참고해 새로운 관점을 발견하세요.</p>
         </div>
       </div>
     </section>
@@ -67,12 +59,8 @@
     <section class="cta-section">
       <div class="cta-content">
         <h3 class="cta-title">오늘의 커피는 어떤 맛일까요?</h3>
-        <p class="cta-description">
-          첫 번째 테이스팅으로 커피 감각 여정을 시작해보세요.
-        </p>
-        <router-link to="/coffee-setup" class="cta-button">
-          지금 시작하기 →
-        </router-link>
+        <p class="cta-description">첫 번째 테이스팅으로 커피 감각 여정을 시작해보세요.</p>
+        <router-link to="/coffee-setup" class="cta-button"> 지금 시작하기 → </router-link>
       </div>
     </section>
 
@@ -83,7 +71,7 @@
         <span class="status-text">MVP 개발 중</span>
       </div>
       <p class="status-description">
-        현재 커피 기록과 테이스팅 기능을 개발하고 있습니다.<br>
+        현재 커피 기록과 테이스팅 기능을 개발하고 있습니다.<br />
         더 많은 기능이 곧 추가될 예정입니다!
       </p>
     </section>
@@ -111,14 +99,14 @@
 .hero-title {
   font-size: 3rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1rem;
   text-shadow: 0 2px 4px rgba(124, 88, 66, 0.1);
 }
 
 .hero-subtitle {
   font-size: 1.5rem;
-  color: #A0796A;
+  color: #a0796a;
   margin-bottom: 1rem;
 }
 
@@ -141,7 +129,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  background: linear-gradient(135deg, #7C5842 0%, #A0796A 100%);
+  background: linear-gradient(135deg, #7c5842 0%, #a0796a 100%);
   color: white;
   text-decoration: none;
   padding: 1rem 2rem;
@@ -179,7 +167,7 @@
   text-align: center;
   font-size: 2rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 2rem;
 }
 
@@ -195,7 +183,7 @@
   padding: 2rem;
   text-align: center;
   box-shadow: 0 4px 20px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
   transition: all 0.3s ease;
 }
 
@@ -212,7 +200,7 @@
 .feature-title {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1rem;
 }
 
@@ -224,18 +212,18 @@
 
 /* CTA Section */
 .cta-section {
-  background: linear-gradient(135deg, #F8F4F0 0%, #F0E8DC 100%);
+  background: linear-gradient(135deg, #f8f4f0 0%, #f0e8dc 100%);
   border-radius: 20px;
   padding: 3rem 2rem;
   text-align: center;
   margin-bottom: 3rem;
-  border: 1px solid #E8D5C4;
+  border: 1px solid #e8d5c4;
 }
 
 .cta-title {
   font-size: 1.8rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1rem;
 }
 
@@ -248,7 +236,7 @@
 
 .cta-button {
   display: inline-block;
-  background: #7C5842;
+  background: #7c5842;
   color: white;
   text-decoration: none;
   padding: 0.75rem 1.5rem;
@@ -258,7 +246,7 @@
 }
 
 .cta-button:hover {
-  background: #5D3F2E;
+  background: #5d3f2e;
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(124, 88, 66, 0.3);
 }
@@ -267,17 +255,17 @@
 .status-section {
   text-align: center;
   padding: 2rem;
-  background: #FFF8F0;
+  background: #fff8f0;
   border-radius: 12px;
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .status-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: #FFE4B5;
-  color: #D2691E;
+  background: #ffe4b5;
+  color: #d2691e;
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-weight: 600;
@@ -290,7 +278,7 @@
 }
 
 .status-description {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.95rem;
   line-height: 1.6;
   margin: 0;
@@ -301,37 +289,37 @@
   .welcome-container {
     padding: 1rem 0.5rem;
   }
-  
+
   .hero-title {
     font-size: 2.2rem;
   }
-  
+
   .hero-subtitle {
     font-size: 1.3rem;
   }
-  
+
   .hero-description {
     font-size: 1rem;
   }
-  
+
   .start-button {
     padding: 0.875rem 1.5rem;
     font-size: 1.1rem;
   }
-  
+
   .features-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
+
   .feature-card {
     padding: 1.5rem;
   }
-  
+
   .cta-section {
     padding: 2rem 1.5rem;
   }
-  
+
   .cta-title {
     font-size: 1.5rem;
   }
@@ -341,24 +329,24 @@
   .hero-title {
     font-size: 1.8rem;
   }
-  
+
   .hero-subtitle {
     font-size: 1.1rem;
   }
-  
+
   .start-button {
     padding: 0.75rem 1.25rem;
     font-size: 1rem;
   }
-  
+
   .features-title {
     font-size: 1.6rem;
   }
-  
+
   .cta-title {
     font-size: 1.3rem;
   }
-  
+
   .cta-description {
     font-size: 1rem;
   }

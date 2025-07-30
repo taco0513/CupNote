@@ -25,9 +25,7 @@
 
       <!-- Actions -->
       <div class="actions-bar">
-        <RouterLink to="/stats" class="stats-link">
-          📊 자세한 통계 보기
-        </RouterLink>
+        <RouterLink to="/stats" class="stats-link"> 📊 자세한 통계 보기 </RouterLink>
       </div>
 
       <!-- Sort Options -->
@@ -72,9 +70,12 @@
           </div>
 
           <!-- Flavor Preview -->
-          <div v-if="record.selected_flavors && record.selected_flavors.length > 0" class="flavor-preview">
-            <span 
-              v-for="(flavor, index) in record.selected_flavors.slice(0, 3)" 
+          <div
+            v-if="record.selected_flavors && record.selected_flavors.length > 0"
+            class="flavor-preview"
+          >
+            <span
+              v-for="(flavor, index) in record.selected_flavors.slice(0, 3)"
               :key="`${record.id}-flavor-${index}`"
               class="flavor-tag"
             >
@@ -87,7 +88,10 @@
 
           <!-- Roaster Note Level -->
           <div class="level-indicator">
-            <span class="level-badge" :class="record.roaster_notes_level === 2 ? 'level-2' : 'level-1'">
+            <span
+              class="level-badge"
+              :class="record.roaster_notes_level === 2 ? 'level-2' : 'level-1'"
+            >
               Level {{ record.roaster_notes_level }}
             </span>
           </div>
@@ -100,12 +104,10 @@
       <div class="empty-icon">☕</div>
       <h3 class="empty-title">아직 기록이 없어요</h3>
       <p class="empty-description">
-        첫 번째 커피를 기록하고<br>
+        첫 번째 커피를 기록하고<br />
         당신의 커피 여정을 시작해보세요!
       </p>
-      <button type="button" class="btn-primary" @click="startNewTasting">
-        첫 커피 기록하기
-      </button>
+      <button type="button" class="btn-primary" @click="startNewTasting">첫 커피 기록하기</button>
     </section>
 
     <!-- Loading State -->
@@ -114,12 +116,12 @@
       <div class="stats-cards">
         <SkeletonLoader type="card" v-for="i in 3" :key="i" />
       </div>
-      
+
       <!-- Loading Records Grid -->
       <div class="records-grid">
         <SkeletonLoader type="card" v-for="i in 6" :key="i" />
       </div>
-      
+
       <div class="loading-message">
         <LoadingSpinner size="medium" message="기록을 불러오는 중..." />
       </div>
@@ -130,9 +132,7 @@
       <div class="error-icon">⚠️</div>
       <h3 class="error-title">오류가 발생했어요</h3>
       <p class="error-description">{{ error }}</p>
-      <button type="button" class="btn-secondary" @click="retry">
-        다시 시도
-      </button>
+      <button type="button" class="btn-secondary" @click="retry">다시 시도</button>
     </section>
 
     <!-- Floating Action Button -->
@@ -173,9 +173,9 @@ const averageScore = computed(() => {
 
 const favoriteFlavorCount = computed(() => {
   const flavorMap = new Map()
-  records.value.forEach(record => {
+  records.value.forEach((record) => {
     if (record.selected_flavors) {
-      record.selected_flavors.forEach(flavor => {
+      record.selected_flavors.forEach((flavor) => {
         const count = flavorMap.get(flavor.text) || 0
         flavorMap.set(flavor.text, count + 1)
       })
@@ -187,7 +187,7 @@ const favoriteFlavorCount = computed(() => {
 
 const sortedRecords = computed(() => {
   const sorted = [...records.value]
-  
+
   switch (sortBy.value) {
     case 'recent':
       return sorted.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
@@ -214,15 +214,15 @@ const formatDate = (dateString) => {
   const today = new Date()
   const diffTime = Math.abs(today - date)
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
-  
+
   if (diffDays === 0) return '오늘'
   if (diffDays === 1) return '어제'
   if (diffDays < 7) return `${diffDays}일 전`
   if (diffDays < 30) return `${Math.floor(diffDays / 7)}주 전`
-  
-  return date.toLocaleDateString('ko-KR', { 
-    month: 'long', 
-    day: 'numeric' 
+
+  return date.toLocaleDateString('ko-KR', {
+    month: 'long',
+    day: 'numeric',
   })
 }
 
@@ -239,24 +239,30 @@ const startNewTasting = () => {
 const retry = async () => {
   // TODO: Get real user ID from auth
   const mockUserId = 'mock-user-id-123'
-  await withErrorHandling(async () => {
-    await tastingSessionStore.fetchUserRecords(mockUserId)
-  }, {
-    operation: 'retryFetchRecords',
-    component: 'RecordsListView'
-  })
+  await withErrorHandling(
+    async () => {
+      await tastingSessionStore.fetchUserRecords(mockUserId)
+    },
+    {
+      operation: 'retryFetchRecords',
+      component: 'RecordsListView',
+    },
+  )
 }
 
 // Initialize
 onMounted(async () => {
   // TODO: Get real user ID from auth
   const mockUserId = 'mock-user-id-123'
-  await withErrorHandling(async () => {
-    await tastingSessionStore.fetchUserRecords(mockUserId)
-  }, {
-    operation: 'fetchRecords',
-    component: 'RecordsListView'
-  })
+  await withErrorHandling(
+    async () => {
+      await tastingSessionStore.fetchUserRecords(mockUserId)
+    },
+    {
+      operation: 'fetchRecords',
+      component: 'RecordsListView',
+    },
+  )
 })
 </script>
 
@@ -265,7 +271,7 @@ onMounted(async () => {
   max-width: 1200px;
   margin: 0 auto;
   padding: 1rem;
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5F0E8 100%);
+  background: linear-gradient(135deg, #fff8f0 0%, #f5f0e8 100%);
   min-height: 100vh;
   position: relative;
   padding-bottom: 100px; /* Space for FAB */
@@ -280,12 +286,12 @@ onMounted(async () => {
 .records-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .records-subtitle {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 1.1rem;
 }
 
@@ -307,18 +313,18 @@ onMounted(async () => {
   padding: 1.5rem;
   text-align: center;
   box-shadow: 0 2px 10px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .stat-number {
   font-size: 2rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.25rem;
 }
 
 .stat-label {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.9rem;
 }
 
@@ -334,7 +340,7 @@ onMounted(async () => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #7C5842, #A0796A);
+  background: linear-gradient(135deg, #7c5842, #a0796a);
   color: white;
   text-decoration: none;
   border-radius: 12px;
@@ -356,17 +362,17 @@ onMounted(async () => {
 
 .sort-select {
   padding: 0.5rem 1rem;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   background: white;
-  color: #7C5842;
+  color: #7c5842;
   font-size: 1rem;
   cursor: pointer;
 }
 
 .sort-select:focus {
   outline: none;
-  border-color: #7C5842;
+  border-color: #7c5842;
 }
 
 /* Records Grid */
@@ -381,7 +387,7 @@ onMounted(async () => {
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
@@ -391,7 +397,7 @@ onMounted(async () => {
 .record-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 30px rgba(124, 88, 66, 0.2);
-  border-color: #D4B896;
+  border-color: #d4b896;
 }
 
 /* Score Badge */
@@ -420,23 +426,23 @@ onMounted(async () => {
 }
 
 .score-excellent {
-  background: linear-gradient(135deg, #FFD700, #FFA500);
+  background: linear-gradient(135deg, #ffd700, #ffa500);
 }
 
 .score-great {
-  background: linear-gradient(135deg, #10B981, #059669);
+  background: linear-gradient(135deg, #10b981, #059669);
 }
 
 .score-good {
-  background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
 }
 
 .score-okay {
-  background: linear-gradient(135deg, #F59E0B, #D97706);
+  background: linear-gradient(135deg, #f59e0b, #d97706);
 }
 
 .score-needs-improvement {
-  background: linear-gradient(135deg, #EF4444, #DC2626);
+  background: linear-gradient(135deg, #ef4444, #dc2626);
 }
 
 /* Coffee Info */
@@ -448,12 +454,12 @@ onMounted(async () => {
 .coffee-name {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.25rem;
 }
 
 .cafe-name {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 1rem;
   margin-bottom: 0.5rem;
 }
@@ -484,21 +490,21 @@ onMounted(async () => {
 }
 
 .flavor-tag {
-  background: #F8F4F0;
-  border: 1px solid #E8D5C4;
+  background: #f8f4f0;
+  border: 1px solid #e8d5c4;
   border-radius: 16px;
   padding: 0.25rem 0.75rem;
   font-size: 0.85rem;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .more-tag {
-  background: #E8D5C4;
-  border: 1px solid #D4B896;
+  background: #e8d5c4;
+  border: 1px solid #d4b896;
   border-radius: 16px;
   padding: 0.25rem 0.75rem;
   font-size: 0.85rem;
-  color: #7C5842;
+  color: #7c5842;
   font-weight: 500;
 }
 
@@ -518,12 +524,12 @@ onMounted(async () => {
 }
 
 .level-1 {
-  background: #E8D5C4;
-  color: #7C5842;
+  background: #e8d5c4;
+  color: #7c5842;
 }
 
 .level-2 {
-  background: #7C5842;
+  background: #7c5842;
   color: white;
 }
 
@@ -542,12 +548,12 @@ onMounted(async () => {
 .empty-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .empty-description {
-  color: #A0796A;
+  color: #a0796a;
   margin-bottom: 2rem;
   line-height: 1.6;
 }
@@ -582,12 +588,12 @@ onMounted(async () => {
 .error-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .error-description {
-  color: #A0796A;
+  color: #a0796a;
   margin-bottom: 2rem;
 }
 
@@ -599,7 +605,7 @@ onMounted(async () => {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #7C5842, #A0796A);
+  background: linear-gradient(135deg, #7c5842, #a0796a);
   color: white;
   border: none;
   box-shadow: 0 6px 20px rgba(124, 88, 66, 0.3);
@@ -634,23 +640,23 @@ onMounted(async () => {
 }
 
 .btn-primary {
-  background: #7C5842;
+  background: #7c5842;
   color: white;
 }
 
 .btn-primary:hover {
-  background: #5D3F2E;
+  background: #5d3f2e;
   transform: translateY(-1px);
 }
 
 .btn-secondary {
   background: white;
-  color: #7C5842;
-  border: 2px solid #E8D5C4;
+  color: #7c5842;
+  border: 2px solid #e8d5c4;
 }
 
 .btn-secondary:hover {
-  border-color: #D4B896;
+  border-color: #d4b896;
   transform: translateY(-1px);
 }
 
@@ -681,11 +687,11 @@ onMounted(async () => {
   .records-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .stats-cards {
     grid-template-columns: 1fr;
   }
-  
+
   .fab {
     bottom: 1rem;
     right: 1rem;

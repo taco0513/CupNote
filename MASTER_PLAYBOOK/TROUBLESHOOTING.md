@@ -7,6 +7,7 @@
 ### 즉시 해결이 필요한 문제들
 
 #### 🔥 Claude Code가 완전히 응답하지 않음
+
 ```bash
 # 1. 서비스 재시작
 claude restart
@@ -24,6 +25,7 @@ curl -sSf https://claude.ai/code/install.sh | sh
 ```
 
 #### 🔥 프로젝트가 완전히 망가짐
+
 ```bash
 # Git이 설정되어 있다면
 git status
@@ -35,6 +37,7 @@ git checkout -- .  # 모든 변경사항 되돌리기
 ```
 
 #### 🔥 배포된 사이트가 다운됨
+
 ```bash
 # Vercel인 경우
 vercel --prod  # 재배포
@@ -51,6 +54,7 @@ netlify deploy --prod
 ### Claude Code CLI 설치 실패
 
 #### 문제: "Permission denied" 오류
+
 ```bash
 # 해결책 1: sudo 사용
 sudo curl -sSf https://claude.ai/code/install.sh | sh
@@ -65,6 +69,7 @@ curl -sSf https://claude.ai/code/install.sh | sh -s -- --user
 ```
 
 #### 문제: "Command not found: claude"
+
 ```bash
 # 해결책 1: PATH 확인
 echo $PATH
@@ -79,6 +84,7 @@ source ~/.zshrc
 ```
 
 #### 문제: Windows에서 설치 실패
+
 ```powershell
 # 해결책 1: PowerShell 관리자 권한으로 실행
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
@@ -96,6 +102,7 @@ wsl --install
 ### API 연결 문제
 
 #### 문제: "Authentication failed" 오류
+
 ```bash
 # 해결책 1: 재로그인
 claude auth logout
@@ -110,6 +117,7 @@ claude auth configure
 ```
 
 #### 문제: "Rate limit exceeded" 오류
+
 ```bash
 # 해결책 1: 잠시 대기 (보통 1-5분)
 sleep 300  # 5분 대기
@@ -126,6 +134,7 @@ sleep 300  # 5분 대기
 ### Claude가 이해하지 못하는 경우
 
 #### 문제: 요청이 너무 모호함
+
 ```
 ❌ 나쁜 예:
 "웹사이트 만들어줘"
@@ -139,6 +148,7 @@ sleep 300  # 5분 대기
 ```
 
 #### 문제: 기술적인 설명을 이해하지 못함
+
 ```
 ❌ 나쁜 예:
 "RESTful API와 JWT 인증을 구현해줘"
@@ -150,6 +160,7 @@ sleep 300  # 5분 대기
 ```
 
 #### 문제: 복잡한 요청을 한 번에 처리하려 함
+
 ```
 ❌ 나쁜 예:
 "쇼핑몰 전체를 한 번에 만들어줘"
@@ -163,6 +174,7 @@ sleep 300  # 5분 대기
 ### AI 응답이 이상한 경우
 
 #### 문제: 오래된 정보나 잘못된 코드 제공
+
 ```
 해결책:
 "이 코드가 최신 버전인지 확인해줘"
@@ -171,6 +183,7 @@ sleep 300  # 5분 대기
 ```
 
 #### 문제: 코드가 작동하지 않음
+
 ```
 해결책:
 "에러가 발생했어요: [에러 메시지 전체 복사]
@@ -185,6 +198,7 @@ sleep 300  # 5분 대기
 ### VSCode/Cursor 관련
 
 #### 문제: 확장 프로그램이 작동하지 않음
+
 ```json
 // settings.json에 추가
 {
@@ -195,6 +209,7 @@ sleep 300  # 5분 대기
 ```
 
 #### 문제: 자동완성이 나타나지 않음
+
 ```
 해결책:
 1. Ctrl+Space (수동 트리거)
@@ -203,6 +218,7 @@ sleep 300  # 5분 대기
 ```
 
 #### 문제: 터미널이 작동하지 않음
+
 ```bash
 # Windows Git Bash 설정
 "terminal.integrated.defaultProfile.windows": "Git Bash"
@@ -214,6 +230,7 @@ sleep 300  # 5분 대기
 ### Node.js 및 패키지 관리
 
 #### 문제: "npm command not found"
+
 ```bash
 # Node.js 설치 확인
 node --version
@@ -227,6 +244,7 @@ choco install nodejs  # Windows
 ```
 
 #### 문제: "Permission denied" (npm 글로벌 설치)
+
 ```bash
 # macOS/Linux
 sudo npm install -g package-name
@@ -237,6 +255,7 @@ echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
 ```
 
 #### 문제: 패키지 설치 실패
+
 ```bash
 # 캐시 클리어
 npm cache clean --force
@@ -253,6 +272,7 @@ yarn install
 ### Git 관련 문제
 
 #### 문제: "Git is not installed"
+
 ```bash
 # 설치 확인
 git --version
@@ -263,12 +283,14 @@ git --version
 ```
 
 #### 문제: Git 사용자 정보 설정
+
 ```bash
 git config --global user.name "Your Name"
 git config --global user.email "your.email@example.com"
 ```
 
 #### 문제: 커밋 메시지 에디터 문제
+
 ```bash
 # 기본 에디터를 nano로 설정
 git config --global core.editor "nano"
@@ -282,24 +304,27 @@ git config --global core.editor "code --wait"
 ### HTML/CSS 렌더링 문제
 
 #### 문제: 스타일이 적용되지 않음
+
 ```html
 <!-- CSS 파일 경로 확인 -->
-<link rel="stylesheet" href="./styles.css">
+<link rel="stylesheet" href="./styles.css" />
 
 <!-- 브라우저 캐시 클리어 -->
 <!-- Ctrl+F5 (하드 리프레시) -->
 ```
 
 #### 문제: 모바일에서 레이아웃 깨짐
+
 ```html
 <!-- viewport 메타 태그 추가 -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 ```
 
 #### 문제: 이미지가 표시되지 않음
+
 ```html
 <!-- 이미지 경로 확인 -->
-<img src="./images/photo.jpg" alt="Description">
+<img src="./images/photo.jpg" alt="Description" />
 
 <!-- 파일 확장자 대소문자 확인 -->
 <!-- photo.JPG vs photo.jpg -->
@@ -308,6 +333,7 @@ git config --global core.editor "code --wait"
 ### JavaScript 오류
 
 #### 문제: "Uncaught ReferenceError"
+
 ```javascript
 // 변수나 함수가 정의되기 전에 사용됨
 // 해결: 선언 순서 확인
@@ -318,28 +344,31 @@ git config --global core.editor "code --wait"
 ```
 
 #### 문제: "Cannot read property of undefined"
+
 ```javascript
 // null 체크 추가
 if (element && element.textContent) {
-    element.textContent = "New text";
+  element.textContent = 'New text'
 }
 
 // 또는 옵셔널 체이닝 사용 (최신 브라우저)
-element?.textContent = "New text";
+element?.textContent = 'New text'
 ```
 
 #### 문제: 이벤트 리스너가 작동하지 않음
+
 ```javascript
 // DOM이 로드된 후 실행
-document.addEventListener('DOMContentLoaded', function() {
-    // 이벤트 리스너 등록
-    button.addEventListener('click', handleClick);
-});
+document.addEventListener('DOMContentLoaded', function () {
+  // 이벤트 리스너 등록
+  button.addEventListener('click', handleClick)
+})
 ```
 
 ### API 연동 문제
 
 #### 문제: CORS 오류
+
 ```javascript
 // 개발 환경에서 프록시 설정
 // package.json에 추가
@@ -354,6 +383,7 @@ app.use(cors({
 ```
 
 #### 문제: API 키 노출
+
 ```javascript
 // 환경 변수 사용
 // .env 파일
@@ -371,6 +401,7 @@ echo ".env" >> .gitignore
 ### Vercel 배포 실패
 
 #### 문제: Build 실패
+
 ```bash
 # 로컬에서 빌드 테스트
 npm run build
@@ -391,6 +422,7 @@ npm install --save-dev @types/node
 ```
 
 #### 문제: 환경 변수 설정
+
 ```
 1. Vercel 대시보드 → Project → Settings → Environment Variables
 2. 환경 변수 추가:
@@ -403,6 +435,7 @@ npm install --save-dev @types/node
 ### Netlify 배포 문제
 
 #### 문제: 404 오류 (SPA)
+
 ```toml
 # netlify.toml 파일 생성
 [[redirects]]
@@ -412,6 +445,7 @@ npm install --save-dev @types/node
 ```
 
 #### 문제: 빌드 명령어 설정
+
 ```
 Build command: npm run build
 Publish directory: build (React) 또는 dist (Vite)
@@ -420,6 +454,7 @@ Publish directory: build (React) 또는 dist (Vite)
 ### 도메인 연결 문제
 
 #### 문제: DNS 설정
+
 ```
 # Vercel 커스텀 도메인 설정
 1. Vercel → Project → Settings → Domains
@@ -440,6 +475,7 @@ Publish directory: build (React) 또는 dist (Vite)
 ### 인증 시스템 오류
 
 #### 문제: JWT 토큰 만료
+
 ```javascript
 // 토큰 갱신 로직 추가
 const refreshToken = async () => {
@@ -447,44 +483,46 @@ const refreshToken = async () => {
     const response = await fetch('/api/refresh', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${refreshToken}`
-      }
-    });
-    const data = await response.json();
-    localStorage.setItem('token', data.accessToken);
+        Authorization: `Bearer ${refreshToken}`,
+      },
+    })
+    const data = await response.json()
+    localStorage.setItem('token', data.accessToken)
   } catch (error) {
     // 로그인 페이지로 리다이렉트
-    window.location.href = '/login';
+    window.location.href = '/login'
   }
-};
+}
 ```
 
 #### 문제: 세션 관리
+
 ```javascript
 // 로그인 상태 확인
 const checkAuth = () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token')
   if (!token) {
-    window.location.href = '/login';
-    return;
+    window.location.href = '/login'
+    return
   }
 
   try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
+    const payload = JSON.parse(atob(token.split('.')[1]))
     if (payload.exp * 1000 < Date.now()) {
-      localStorage.removeItem('token');
-      window.location.href = '/login';
+      localStorage.removeItem('token')
+      window.location.href = '/login'
     }
   } catch (error) {
-    localStorage.removeItem('token');
-    window.location.href = '/login';
+    localStorage.removeItem('token')
+    window.location.href = '/login'
   }
-};
+}
 ```
 
 ### HTTPS 인증서 문제
 
 #### 문제: Mixed Content 오류
+
 ```javascript
 // HTTP API를 HTTPS 사이트에서 호출할 때
 // API 서버도 HTTPS로 설정하거나
@@ -499,6 +537,7 @@ const checkAuth = () => {
 ### 모바일 호환성
 
 #### 문제: 모바일에서 터치 이벤트
+
 ```css
 /* 터치 영역 최소 크기 */
 .button {
@@ -513,6 +552,7 @@ const checkAuth = () => {
 ```
 
 #### 문제: 모바일 키보드로 인한 레이아웃 변화
+
 ```css
 /* iOS Safari에서 100vh 문제 */
 .full-height {
@@ -533,30 +573,28 @@ const checkAuth = () => {
 ### 로딩 속도 개선
 
 #### 문제: 이미지 로딩 느림
+
 ```html
 <!-- 이미지 최적화 -->
-<img src="image.webp"
-     alt="Description"
-     loading="lazy"
-     width="400"
-     height="300">
+<img src="image.webp" alt="Description" loading="lazy" width="400" height="300" />
 
 <!-- 반응형 이미지 -->
 <picture>
-  <source media="(max-width: 799px)" srcset="small.webp">
-  <source media="(min-width: 800px)" srcset="large.webp">
-  <img src="fallback.jpg" alt="Description">
+  <source media="(max-width: 799px)" srcset="small.webp" />
+  <source media="(min-width: 800px)" srcset="large.webp" />
+  <img src="fallback.jpg" alt="Description" />
 </picture>
 ```
 
 #### 문제: JavaScript 번들 크기
+
 ```javascript
 // 코드 스플리팅 (React)
-const LazyComponent = lazy(() => import('./LazyComponent'));
+const LazyComponent = lazy(() => import('./LazyComponent'))
 
 // 트리 쉐이킹을 위한 named import
-import { debounce } from 'lodash-es';  // ✅
-import _ from 'lodash';  // ❌ 전체 라이브러리 로드
+import { debounce } from 'lodash-es' // ✅
+import _ from 'lodash' // ❌ 전체 라이브러리 로드
 ```
 
 ## 🆘 최후 수단
@@ -564,6 +602,7 @@ import _ from 'lodash';  // ❌ 전체 라이브러리 로드
 ### 모든 방법이 실패했을 때
 
 #### 1. 프로젝트 완전 재시작
+
 ```bash
 # 새 디렉토리에서 시작
 mkdir new-project
@@ -576,6 +615,7 @@ cd new-project
 ```
 
 #### 2. 단순화된 버전으로 시작
+
 ```
 "지금은 너무 복잡한 것 같아요.
 가장 핵심적인 기능 하나만 먼저 완벽하게 만들어주세요.
@@ -583,11 +623,13 @@ cd new-project
 ```
 
 #### 3. 커뮤니티 도움 요청
+
 - GitHub Issues에 상세한 문제 상황 작성
 - Stack Overflow에서 유사한 문제 검색
 - Discord나 Slack 개발자 커뮤니티 참여
 
 #### 4. 전문가 상담
+
 ```
 "이 문제가 너무 복잡해서 혼자 해결하기 어려워요.
 전문가의 도움이 필요한 것 같아요.
@@ -619,11 +661,13 @@ Node.js 버전: [node --version 결과]
 ## 🌟 문제 예방 팁
 
 ### 정기적인 유지보수
+
 - 매주 `npm update` 실행
 - 월 1회 전체 의존성 검토
 - 중요한 변경 전 Git 커밋
 
 ### 좋은 습관
+
 - 작은 단위로 자주 테스트
 - 에러 메시지를 정확히 읽기
 - 변경사항을 단계별로 적용

@@ -5,12 +5,14 @@ AI Workflow Playbook을 위한 지능형 자동 문서화 도구입니다. 파�
 ## ✨ 주요 기능
 
 ### 📝 핵심 자동화 기능
+
 - 🔍 **실시간 파일 변경 감지**: chokidar 기반 파일 시스템 모니터링
 - 📚 **자동 문서 생성**: README, CHANGELOG, PROGRESS, API 문서 자동 생성
 - 🎯 **SuperClaude 연동**: /checkpoint 명령어와 완벽 연동
 - 📋 **누락 문서 탐지**: 필요한 문서들을 자동으로 발견하고 알림
 
 ### 🔍 **NEW! 문서 품질 리뷰 시스템**
+
 - 🏥 **기본 품질 검사**: 맞춤법, 문법, 마크다운 문법, 링크 유효성 검사
 - 🧠 **AI 기반 스마트 리뷰**: Context7, Sequential MCP 서버 활용
 - 📊 **품질 점수 및 등급**: 100점 만점 점수와 A~D 등급 시스템
@@ -18,6 +20,7 @@ AI Workflow Playbook을 위한 지능형 자동 문서화 도구입니다. 파�
 - 📈 **일관성 검사**: 프로젝트명, 버전, API 문서 동기화 확인
 
 ### 🛠️ 추가 기능
+
 - 🌐 **다국어 지원**: 한국어/영어 템플릿 제공
 - ⚙️ **유연한 설정**: YAML 기반 사용자 정의 설정
 - 🔄 **Git 연동**: 자동 커밋 및 변경 사항 추적
@@ -143,6 +146,7 @@ notifications:
 ## 📊 생성되는 문서들
 
 ### 1. README.md (자동 생성/업데이트)
+
 - 프로젝트 개요 및 설명
 - 빠른 시작 가이드
 - 프로젝트 구조
@@ -150,18 +154,21 @@ notifications:
 - 최근 변경 사항
 
 ### 2. CHANGELOG.md
+
 - 시간순 변경 기록
 - 파일별 변경 사항 추적
 - Git 상태 기반 업데이트
 - 체크포인트 연동
 
 ### 3. PROGRESS.md
+
 - 프로젝트 진행 상황
 - 스프린트 목표 및 달성도
 - 완료/진행/예정 작업 관리
 - 이슈 및 블로커 추적
 
 ### 4. docs/missing-docs-report.md
+
 - 누락된 문서 목록
 - 자동 생성 제안
 - 프로젝트 구조 분석 결과
@@ -169,18 +176,21 @@ notifications:
 ## 🎯 고급 기능
 
 ### 1. 스마트 변수 시스템
+
 - package.json 자동 분석
 - 프로젝트 구조 자동 감지
 - 기술 스택 자동 추론
 - 기존 문서에서 정보 추출
 
 ### 2. 템플릿 시스템
+
 - 한국어/영어 다국어 지원
 - 프로젝트 타입별 맞춤 템플릿
 - 사용자 정의 템플릿 지원
 - 동적 변수 치환
 
 ### 3. 누락 문서 탐지
+
 - 프로젝트 구조 분석
 - 필수 문서 확인
 - 폴더별 README 검사
@@ -203,6 +213,7 @@ auto-docs/
 ### 확장 방법
 
 1. **새로운 템플릿 추가**:
+
    ```javascript
    // templates.js에서
    getMyCustomTemplate() {
@@ -211,6 +222,7 @@ auto-docs/
    ```
 
 2. **새로운 파일 타입 지원**:
+
    ```javascript
    // index.js에서 handleFileChange 메서드 확장
    ```
@@ -225,6 +237,7 @@ auto-docs/
 ### 자주 발생하는 문제
 
 1. **파일 감시가 작동하지 않음**
+
    ```bash
    # 권한 확인
    ls -la .auto-docs.yml
@@ -234,6 +247,7 @@ auto-docs/
    ```
 
 2. **문서가 생성되지 않음**
+
    ```bash
    # 상태 확인
    auto-docs status
@@ -243,6 +257,7 @@ auto-docs/
    ```
 
 3. **Git 자동 커밋 실패**
+
    ```bash
    # Git 설정 확인
    git config --list
@@ -270,4 +285,4 @@ MIT License - 자세한 내용은 LICENSE 파일을 참조하세요.
 
 ---
 
-*이 문서는 Auto-Docs 시스템에 의해 관리되며, AI Workflow Playbook의 일부입니다.*
+_이 문서는 Auto-Docs 시스템에 의해 관리되며, AI Workflow Playbook의 일부입니다._

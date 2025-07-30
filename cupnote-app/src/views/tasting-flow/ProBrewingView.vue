@@ -2,9 +2,7 @@
   <div class="pro-brewing-view">
     <!-- Header -->
     <header class="screen-header">
-      <button class="back-btn" @click="$router.push('/home-cafe')">
-        ←
-      </button>
+      <button class="back-btn" @click="$router.push('/home-cafe')">←</button>
       <h1 class="screen-title">Pro 추출 프로토콜</h1>
       <div class="progress-bar">
         <div class="progress-fill" :style="{ width: '43%' }"></div>
@@ -42,7 +40,7 @@
       <!-- SCA Brewing Parameters -->
       <section class="data-section">
         <h2 class="section-title">SCA 추출 파라미터</h2>
-        
+
         <!-- Brew Ratio -->
         <div class="parameter-group">
           <h3 class="parameter-title">원두:물 비율 (SCA 권장: 1:15-1:17)</h3>
@@ -251,15 +249,15 @@
       <section class="compliance-status">
         <h3 class="compliance-title">SCA 표준 준수 상태</h3>
         <div class="compliance-grid">
-          <div class="compliance-item" :class="{ 'compliant': isScaRatio }">
+          <div class="compliance-item" :class="{ compliant: isScaRatio }">
             <span class="compliance-label">추출 비율</span>
             <span class="compliance-status">{{ isScaRatio ? '✓' : '⚠' }}</span>
           </div>
-          <div class="compliance-item" :class="{ 'compliant': isScaTemp }">
+          <div class="compliance-item" :class="{ compliant: isScaTemp }">
             <span class="compliance-label">물 온도</span>
             <span class="compliance-status">{{ isScaTemp ? '✓' : '⚠' }}</span>
           </div>
-          <div class="compliance-item" :class="{ 'compliant': isScaWater }">
+          <div class="compliance-item" :class="{ compliant: isScaWater }">
             <span class="compliance-label">물 품질</span>
             <span class="compliance-status">{{ isScaWater ? '✓' : '⚠' }}</span>
           </div>
@@ -269,12 +267,8 @@
 
     <!-- Action Buttons -->
     <div class="action-buttons">
-      <button type="button" class="btn-secondary" @click="$router.push('/home-cafe')">
-        이전
-      </button>
-      <button type="button" class="btn-primary" @click="handleNext">
-        다음: QC 측정
-      </button>
+      <button type="button" class="btn-secondary" @click="$router.push('/home-cafe')">이전</button>
+      <button type="button" class="btn-primary" @click="handleNext">다음: QC 측정</button>
     </div>
   </div>
 </template>
@@ -291,37 +285,37 @@ const tastingSessionStore = useTastingSessionStore()
 
 // SCA-compliant extraction methods
 const extractionMethods = [
-  { 
-    value: 'pourover', 
-    name: 'Pour Over', 
-    icon: '☕', 
-    scaStandard: 'V60, Chemex' 
+  {
+    value: 'pourover',
+    name: 'Pour Over',
+    icon: '☕',
+    scaStandard: 'V60, Chemex',
   },
-  { 
-    value: 'immersion', 
-    name: 'Immersion', 
-    icon: '🫖', 
-    scaStandard: 'French Press, AeroPress' 
+  {
+    value: 'immersion',
+    name: 'Immersion',
+    icon: '🫖',
+    scaStandard: 'French Press, AeroPress',
   },
-  { 
-    value: 'pressure', 
-    name: 'Pressure', 
-    icon: '💨', 
-    scaStandard: 'Espresso' 
+  {
+    value: 'pressure',
+    name: 'Pressure',
+    icon: '💨',
+    scaStandard: 'Espresso',
   },
-  { 
-    value: 'cold-brew', 
-    name: 'Cold Brew', 
-    icon: '🧊', 
-    scaStandard: 'Cold Extraction' 
-  }
+  {
+    value: 'cold-brew',
+    name: 'Cold Brew',
+    icon: '🧊',
+    scaStandard: 'Cold Extraction',
+  },
 ]
 
 // SCA ratios
 const scaRatios = [
   { value: 15, description: '진한 맛' },
   { value: 16, description: '균형' },
-  { value: 17, description: '밝은 맛' }
+  { value: 17, description: '밝은 맛' },
 ]
 
 // State
@@ -389,17 +383,17 @@ const handleNext = () => {
     grinder_model: grinderModel.value,
     filter_type: filterType.value,
     equipment_notes: equipmentNotes.value,
-    
+
     // SCA compliance status
     sca_compliance: {
       ratio: isScaRatio.value,
       temperature: isScaTemp.value,
-      water_quality: isScaWater.value
-    }
+      water_quality: isScaWater.value,
+    },
   }
-  
+
   tastingSessionStore.updateProBrewingData(proBrewingData)
-  
+
   // Navigate to QC measurement
   router.push('/qc-measurement')
 }
@@ -410,7 +404,7 @@ const handleNext = () => {
   max-width: 800px;
   margin: 0 auto;
   padding: 1rem;
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5F0E8 100%);
+  background: linear-gradient(135deg, #fff8f0 0%, #f5f0e8 100%);
   min-height: 100vh;
 }
 
@@ -429,7 +423,7 @@ const handleNext = () => {
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: #7C5842;
+  color: #7c5842;
   cursor: pointer;
   width: 40px;
   height: 40px;
@@ -447,14 +441,14 @@ const handleNext = () => {
 .screen-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .progress-bar {
   max-width: 300px;
   height: 4px;
-  background: #E8D5C4;
+  background: #e8d5c4;
   border-radius: 2px;
   margin: 1rem auto 0;
   overflow: hidden;
@@ -462,13 +456,13 @@ const handleNext = () => {
 
 .progress-fill {
   height: 100%;
-  background: #7C5842;
+  background: #7c5842;
   transition: width 0.3s ease;
 }
 
 /* SCA Notice */
 .sca-notice {
-  background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
   color: white;
   border-radius: 16px;
   padding: 1.5rem;
@@ -511,15 +505,15 @@ const handleNext = () => {
   padding: 1.5rem;
   margin-bottom: 1.5rem;
   box-shadow: 0 2px 10px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .section-title {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1rem;
-  border-bottom: 2px solid #F8F4F0;
+  border-bottom: 2px solid #f8f4f0;
   padding-bottom: 0.5rem;
 }
 
@@ -532,7 +526,7 @@ const handleNext = () => {
 
 .method-btn {
   background: white;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 12px;
   padding: 1rem;
   text-align: center;
@@ -545,14 +539,14 @@ const handleNext = () => {
 }
 
 .method-btn:hover {
-  border-color: #D4B896;
+  border-color: #d4b896;
   transform: translateY(-1px);
 }
 
 .method-btn.active {
-  border-color: #2196F3;
-  background: #E3F2FD;
-  color: #1976D2;
+  border-color: #2196f3;
+  background: #e3f2fd;
+  color: #1976d2;
 }
 
 .method-icon {
@@ -578,7 +572,7 @@ const handleNext = () => {
 .parameter-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1rem;
 }
 
@@ -591,7 +585,7 @@ const handleNext = () => {
 
 .ratio-btn {
   background: white;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   padding: 0.75rem 1rem;
   cursor: pointer;
@@ -604,13 +598,13 @@ const handleNext = () => {
 }
 
 .ratio-btn:hover {
-  border-color: #D4B896;
+  border-color: #d4b896;
 }
 
 .ratio-btn.active {
-  border-color: #2196F3;
-  background: #E3F2FD;
-  color: #1976D2;
+  border-color: #2196f3;
+  background: #e3f2fd;
+  color: #1976d2;
 }
 
 .ratio-value {
@@ -641,13 +635,13 @@ const handleNext = () => {
   height: 8px;
   -webkit-appearance: none;
   appearance: none;
-  background: linear-gradient(to right, #FF5722 0%, #FFC107 50%, #4CAF50 100%);
+  background: linear-gradient(to right, #ff5722 0%, #ffc107 50%, #4caf50 100%);
   border-radius: 4px;
   outline: none;
 }
 
 .temp-slider.sca-compliant {
-  background: linear-gradient(to right, #E0E0E0 0%, #4CAF50 37%, #4CAF50 62%, #E0E0E0 100%);
+  background: linear-gradient(to right, #e0e0e0 0%, #4caf50 37%, #4caf50 62%, #e0e0e0 100%);
 }
 
 .temp-slider::-webkit-slider-thumb {
@@ -655,7 +649,7 @@ const handleNext = () => {
   appearance: none;
   width: 24px;
   height: 24px;
-  background: #2196F3;
+  background: #2196f3;
   border: 3px solid white;
   border-radius: 50%;
   cursor: pointer;
@@ -672,7 +666,7 @@ const handleNext = () => {
 .temp-value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .temp-status {
@@ -680,13 +674,13 @@ const handleNext = () => {
   border-radius: 20px;
   font-size: 0.8rem;
   font-weight: 600;
-  background: #FFE4E1;
-  color: #D32F2F;
+  background: #ffe4e1;
+  color: #d32f2f;
 }
 
 .temp-status.sca-ok {
-  background: #E8F5E9;
-  color: #388E3C;
+  background: #e8f5e9;
+  color: #388e3c;
 }
 
 /* Grind Control */
@@ -705,7 +699,7 @@ const handleNext = () => {
   height: 8px;
   -webkit-appearance: none;
   appearance: none;
-  background: linear-gradient(to right, #8D6E63 0%, #BCAAA4 100%);
+  background: linear-gradient(to right, #8d6e63 0%, #bcaaa4 100%);
   border-radius: 4px;
   outline: none;
 }
@@ -715,7 +709,7 @@ const handleNext = () => {
   appearance: none;
   width: 24px;
   height: 24px;
-  background: #7C5842;
+  background: #7c5842;
   border: 3px solid white;
   border-radius: 50%;
   cursor: pointer;
@@ -727,7 +721,7 @@ const handleNext = () => {
   justify-content: space-between;
   margin-top: 0.5rem;
   font-size: 0.8rem;
-  color: #A0796A;
+  color: #a0796a;
 }
 
 .grind-display {
@@ -736,19 +730,19 @@ const handleNext = () => {
   justify-content: center;
   gap: 1rem;
   padding: 1rem;
-  background: #F8F4F0;
+  background: #f8f4f0;
   border-radius: 8px;
 }
 
 .grind-value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .grind-description {
   font-size: 0.9rem;
-  color: #A0796A;
+  color: #a0796a;
 }
 
 /* Water Quality */
@@ -766,7 +760,7 @@ const handleNext = () => {
 
 .water-label {
   font-size: 0.9rem;
-  color: #7C5842;
+  color: #7c5842;
   font-weight: 500;
 }
 
@@ -779,7 +773,7 @@ const handleNext = () => {
 .water-input {
   flex: 1;
   padding: 0.5rem;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   font-size: 1rem;
   text-align: center;
@@ -787,12 +781,12 @@ const handleNext = () => {
 
 .water-input:focus {
   outline: none;
-  border-color: #2196F3;
+  border-color: #2196f3;
 }
 
 .water-unit {
   font-size: 0.9rem;
-  color: #A0796A;
+  color: #a0796a;
 }
 
 .water-hint {
@@ -816,7 +810,7 @@ const handleNext = () => {
 
 .timing-label {
   font-size: 0.85rem;
-  color: #7C5842;
+  color: #7c5842;
   font-weight: 500;
 }
 
@@ -829,19 +823,19 @@ const handleNext = () => {
 .timing-input {
   flex: 1;
   padding: 0.5rem;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   font-size: 0.95rem;
 }
 
 .timing-input:focus {
   outline: none;
-  border-color: #2196F3;
+  border-color: #2196f3;
 }
 
 .timing-unit {
   font-size: 0.8rem;
-  color: #A0796A;
+  color: #a0796a;
 }
 
 .timing-hint {
@@ -866,14 +860,14 @@ const handleNext = () => {
 
 .equipment-label {
   font-size: 0.9rem;
-  color: #7C5842;
+  color: #7c5842;
   font-weight: 500;
 }
 
 .equipment-input,
 .equipment-select {
   padding: 0.5rem;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   font-size: 0.95rem;
 }
@@ -881,7 +875,7 @@ const handleNext = () => {
 .equipment-input:focus,
 .equipment-select:focus {
   outline: none;
-  border-color: #2196F3;
+  border-color: #2196f3;
 }
 
 .equipment-notes {
@@ -893,7 +887,7 @@ const handleNext = () => {
 .equipment-textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   font-size: 0.95rem;
   resize: vertical;
@@ -902,22 +896,22 @@ const handleNext = () => {
 
 .equipment-textarea:focus {
   outline: none;
-  border-color: #2196F3;
+  border-color: #2196f3;
 }
 
 /* Compliance Status */
 .compliance-status {
-  background: #F8F4F0;
+  background: #f8f4f0;
   border-radius: 12px;
   padding: 1.5rem;
   margin-top: 1rem;
-  border: 1px solid #E8D5C4;
+  border: 1px solid #e8d5c4;
 }
 
 .compliance-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1rem;
   text-align: center;
 }
@@ -936,12 +930,12 @@ const handleNext = () => {
   padding: 1rem;
   background: white;
   border-radius: 8px;
-  border: 2px solid #FFE4E1;
+  border: 2px solid #ffe4e1;
 }
 
 .compliance-item.compliant {
-  border-color: #E8F5E9;
-  background: #F1F8E9;
+  border-color: #e8f5e9;
+  background: #f1f8e9;
 }
 
 .compliance-label {
@@ -953,11 +947,11 @@ const handleNext = () => {
 .compliance-status {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #D32F2F;
+  color: #d32f2f;
 }
 
 .compliance-item.compliant .compliance-status {
-  color: #388E3C;
+  color: #388e3c;
 }
 
 /* Action Buttons */
@@ -985,25 +979,25 @@ const handleNext = () => {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #2196F3, #1976D2);
+  background: linear-gradient(135deg, #2196f3, #1976d2);
   color: white;
-  border: 2px solid #2196F3;
+  border: 2px solid #2196f3;
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #1976D2, #1565C0);
-  border-color: #1976D2;
+  background: linear-gradient(135deg, #1976d2, #1565c0);
+  border-color: #1976d2;
   transform: translateY(-1px);
 }
 
 .btn-secondary {
   background: white;
-  color: #7C5842;
-  border: 2px solid #E8D5C4;
+  color: #7c5842;
+  border: 2px solid #e8d5c4;
 }
 
 .btn-secondary:hover {
-  border-color: #D4B896;
+  border-color: #d4b896;
   transform: translateY(-1px);
 }
 
@@ -1012,21 +1006,21 @@ const handleNext = () => {
   .extraction-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .ratio-controls {
     flex-direction: column;
   }
-  
+
   .water-grid,
   .timing-grid,
   .equipment-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .compliance-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .action-buttons {
     flex-direction: column;
   }

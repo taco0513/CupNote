@@ -1,28 +1,32 @@
 # CupNote Database Documentation
 
 ## Overview
+
 CupNote uses PostgreSQL with Supabase as the backend. The database schema has been designed to support multiple tasting modes (Cafe, HomeCafe, Pro) with flexible JSONB storage for mode-specific data.
 
 ## Migration Guide
 
 ### From coffee_records to tastings
 
-The database has been migrated from the legacy `coffee_records` table to the new `tastings` table structure. 
+The database has been migrated from the legacy `coffee_records` table to the new `tastings` table structure.
 
 #### Running the Migration
 
 1. **Backup your data first**:
+
 ```sql
 CREATE TABLE coffee_records_backup AS SELECT * FROM coffee_records;
 ```
 
 2. **Run the migration**:
+
 ```sql
 -- Execute the migration script
 \i migrations/001_coffee_records_to_tastings.sql
 ```
 
 3. **Verify the migration**:
+
 ```sql
 -- Check migration results
 SELECT COUNT(*) FROM coffee_records;
@@ -30,6 +34,7 @@ SELECT COUNT(*) FROM tastings WHERE mode = 'homecafe';
 ```
 
 4. **If rollback is needed**:
+
 ```sql
 -- Execute the rollback script
 \i migrations/001_rollback_tastings_to_coffee_records.sql
@@ -41,30 +46,31 @@ SELECT COUNT(*) FROM tastings WHERE mode = 'homecafe';
 
 The main table for storing all tasting records across different modes.
 
-| Column | Type | Description |
-|--------|------|-------------|
-| id | UUID | Primary key |
-| user_id | UUID | Reference to auth.users |
-| coffee_id | UUID | Optional reference to coffees table |
-| mode | VARCHAR(20) | 'cafe', 'homecafe', or 'pro' |
-| session_id | UUID | Session identifier |
-| coffee_info | JSONB | Coffee details (name, cafe, origin, etc.) |
-| brew_settings | JSONB | HomeCafe/Pro brewing parameters |
-| experimental_data | JSONB | Pro mode specific data |
-| selected_flavors | JSONB | Array of selected flavors |
-| sensory_expressions | JSONB | Sensory evaluation data |
-| personal_comment | TEXT | User's personal notes |
-| roaster_notes | TEXT | Roaster's tasting notes |
-| match_score | JSONB | Calculated match scores |
-| total_duration | INTEGER | Session duration in seconds |
-| sensory_skipped | BOOLEAN | Whether sensory evaluation was skipped |
-| completed_at | TIMESTAMP | When the tasting was completed |
-| created_at | TIMESTAMP | Record creation time |
-| updated_at | TIMESTAMP | Last update time |
+| Column              | Type        | Description                               |
+| ------------------- | ----------- | ----------------------------------------- |
+| id                  | UUID        | Primary key                               |
+| user_id             | UUID        | Reference to auth.users                   |
+| coffee_id           | UUID        | Optional reference to coffees table       |
+| mode                | VARCHAR(20) | 'cafe', 'homecafe', or 'pro'              |
+| session_id          | UUID        | Session identifier                        |
+| coffee_info         | JSONB       | Coffee details (name, cafe, origin, etc.) |
+| brew_settings       | JSONB       | HomeCafe/Pro brewing parameters           |
+| experimental_data   | JSONB       | Pro mode specific data                    |
+| selected_flavors    | JSONB       | Array of selected flavors                 |
+| sensory_expressions | JSONB       | Sensory evaluation data                   |
+| personal_comment    | TEXT        | User's personal notes                     |
+| roaster_notes       | TEXT        | Roaster's tasting notes                   |
+| match_score         | JSONB       | Calculated match scores                   |
+| total_duration      | INTEGER     | Session duration in seconds               |
+| sensory_skipped     | BOOLEAN     | Whether sensory evaluation was skipped    |
+| completed_at        | TIMESTAMP   | When the tasting was completed            |
+| created_at          | TIMESTAMP   | Record creation time                      |
+| updated_at          | TIMESTAMP   | Last update time                          |
 
 ### JSONB Structure Examples
 
 #### coffee_info
+
 ```json
 {
   "coffee_name": "Ethiopia Yirgacheffe",
@@ -80,6 +86,7 @@ The main table for storing all tasting records across different modes.
 ```
 
 #### brew_settings (HomeCafe/Pro)
+
 ```json
 {
   "dripper": "V60",
@@ -96,6 +103,7 @@ The main table for storing all tasting records across different modes.
 ```
 
 #### experimental_data (Pro Mode)
+
 ```json
 {
   "extraction_method": "Cupping",
@@ -117,6 +125,7 @@ The main table for storing all tasting records across different modes.
 ```
 
 #### match_score
+
 ```json
 {
   "flavor_match": 85,
@@ -153,23 +162,26 @@ CREATE INDEX idx_tastings_created_at ON tastings (created_at DESC);
 ## Query Examples
 
 ### Get user's recent tastings
+
 ```sql
-SELECT * FROM tastings 
+SELECT * FROM tastings
 WHERE user_id = 'user-uuid'
 ORDER BY created_at DESC
 LIMIT 10;
 ```
 
 ### Find all tastings for a specific coffee
+
 ```sql
-SELECT * FROM tastings 
+SELECT * FROM tastings
 WHERE coffee_info->>'coffee_name' = 'Ethiopia Yirgacheffe'
 ORDER BY created_at DESC;
 ```
 
 ### Calculate average score for a coffee
+
 ```sql
-SELECT 
+SELECT
   coffee_info->>'coffee_name' as coffee_name,
   AVG((match_score->>'total')::numeric) as avg_score,
   COUNT(*) as total_tastings
@@ -179,6 +191,7 @@ GROUP BY coffee_info->>'coffee_name';
 ```
 
 ### Get Pro mode tastings with high TDS
+
 ```sql
 SELECT * FROM tastings
 WHERE mode = 'pro'

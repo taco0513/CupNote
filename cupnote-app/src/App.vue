@@ -14,11 +14,11 @@ const authStore = useAuthStore()
           ☕ CupNote
           <span class="subtitle">나의 커피 감각 저널</span>
         </h1>
-        
+
         <nav class="main-nav">
           <RouterLink to="/" class="nav-link">홈</RouterLink>
           <RouterLink to="/about" class="nav-link">소개</RouterLink>
-          
+
           <!-- Authenticated User Navigation -->
           <template v-if="authStore.isAuthenticated">
             <RouterLink to="/records" class="nav-link">기록</RouterLink>
@@ -26,7 +26,7 @@ const authStore = useAuthStore()
             <RouterLink to="/admin" class="nav-link admin-link">📊 관리자</RouterLink>
             <RouterLink to="/profile" class="nav-link">프로필</RouterLink>
           </template>
-          
+
           <!-- Guest Navigation -->
           <template v-else>
             <RouterLink to="/auth/login" class="nav-link auth-link">로그인</RouterLink>
@@ -41,7 +41,7 @@ const authStore = useAuthStore()
         <RouterView />
       </div>
     </main>
-    
+
     <!-- 알림 토스트 -->
     <NotificationToast />
   </div>
@@ -50,11 +50,11 @@ const authStore = useAuthStore()
 <style scoped>
 #app {
   min-height: 100vh;
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5F0E8 100%);
+  background: linear-gradient(135deg, #fff8f0 0%, #f5f0e8 100%);
 }
 
 .app-header {
-  background: linear-gradient(135deg, #7C5842 0%, #A0796A 100%);
+  background: linear-gradient(135deg, #7c5842 0%, #a0796a 100%);
   color: white;
   box-shadow: 0 2px 10px rgba(124, 88, 66, 0.3);
 }
@@ -144,18 +144,18 @@ const authStore = useAuthStore()
     flex-direction: column;
     gap: 1rem;
   }
-  
+
   .app-title {
     font-size: 1.5rem;
     text-align: center;
   }
-  
+
   .subtitle {
     display: block;
     margin-left: 0;
     margin-top: 0.25rem;
   }
-  
+
   .main-nav {
     justify-content: center;
   }

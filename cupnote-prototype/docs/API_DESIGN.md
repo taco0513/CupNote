@@ -7,11 +7,13 @@ RESTful API design for CupNote following BMAD Method principles. JWT-based authe
 ## 🔒 Authentication Endpoints
 
 ### Register
+
 ```http
 POST /api/auth/register
 ```
 
 **Request:**
+
 ```json
 {
   "email": "user@example.com",
@@ -21,6 +23,7 @@ POST /api/auth/register
 ```
 
 **Response (201):**
+
 ```json
 {
   "success": true,
@@ -40,11 +43,13 @@ POST /api/auth/register
 ```
 
 ### Login
+
 ```http
 POST /api/auth/login
 ```
 
 **Request:**
+
 ```json
 {
   "email": "user@example.com",
@@ -53,11 +58,13 @@ POST /api/auth/login
 ```
 
 ### Refresh Token
+
 ```http
 POST /api/auth/refresh
 ```
 
 **Request:**
+
 ```json
 {
   "refresh_token": "eyJhbGciOiJIUzI1NiIs..."
@@ -67,11 +74,13 @@ POST /api/auth/refresh
 ## ☕ Coffee Endpoints
 
 ### List Coffees
+
 ```http
 GET /api/coffees
 ```
 
 **Query Parameters:**
+
 - `page` (integer): Page number (default: 1)
 - `limit` (integer): Items per page (default: 20)
 - `roaster` (string): Filter by roaster name
@@ -79,6 +88,7 @@ GET /api/coffees
 - `search` (string): Search in name and roaster
 
 **Response (200):**
+
 ```json
 {
   "success": true,
@@ -103,17 +113,20 @@ GET /api/coffees
 ```
 
 ### Get Coffee Details
+
 ```http
 GET /api/coffees/:id
 ```
 
 ### Create Coffee
+
 ```http
 POST /api/coffees
 Authorization: Bearer {token}
 ```
 
 **Request:**
+
 ```json
 {
   "name": "Colombia Geisha",
@@ -128,6 +141,7 @@ Authorization: Bearer {token}
 ```
 
 ### Update Coffee
+
 ```http
 PATCH /api/coffees/:id
 Authorization: Bearer {token}
@@ -136,12 +150,14 @@ Authorization: Bearer {token}
 ## 📝 Tasting Note Endpoints
 
 ### List My Tasting Notes
+
 ```http
 GET /api/tasting-notes
 Authorization: Bearer {token}
 ```
 
 **Query Parameters:**
+
 - `mode` (string): Filter by mode (cafe|brew|lab)
 - `coffee_id` (string): Filter by coffee
 - `start_date` (string): Filter by date range
@@ -149,18 +165,21 @@ Authorization: Bearer {token}
 - `sort` (string): Sort by field (created_at|-created_at|overall_score)
 
 ### Get Tasting Note
+
 ```http
 GET /api/tasting-notes/:id
 Authorization: Bearer {token}
 ```
 
 ### Create Tasting Note
+
 ```http
 POST /api/tasting-notes
 Authorization: Bearer {token}
 ```
 
 **Request (Cafe Mode):**
+
 ```json
 {
   "coffee_id": "123e4567-e89b-12d3-a456",
@@ -181,6 +200,7 @@ Authorization: Bearer {token}
 ```
 
 **Request (Brew Mode):**
+
 ```json
 {
   "coffee_id": "123e4567-e89b-12d3-a456",
@@ -219,12 +239,14 @@ Authorization: Bearer {token}
 ```
 
 ### Update Tasting Note
+
 ```http
 PATCH /api/tasting-notes/:id
 Authorization: Bearer {token}
 ```
 
 ### Delete Tasting Note
+
 ```http
 DELETE /api/tasting-notes/:id
 Authorization: Bearer {token}
@@ -233,29 +255,34 @@ Authorization: Bearer {token}
 ## 📖 Recipe Endpoints
 
 ### List My Recipes
+
 ```http
 GET /api/recipes
 Authorization: Bearer {token}
 ```
 
 **Query Parameters:**
+
 - `is_favorite` (boolean): Filter favorites only
 - `brew_method` (string): Filter by brew method
 - `coffee_id` (string): Filter by coffee
 
 ### Get Recipe
+
 ```http
 GET /api/recipes/:id
 Authorization: Bearer {token}
 ```
 
 ### Create Recipe
+
 ```http
 POST /api/recipes
 Authorization: Bearer {token}
 ```
 
 **Request:**
+
 ```json
 {
   "name": "My Perfect V60",
@@ -294,18 +321,21 @@ Authorization: Bearer {token}
 ```
 
 ### Update Recipe
+
 ```http
 PATCH /api/recipes/:id
 Authorization: Bearer {token}
 ```
 
 ### Delete Recipe
+
 ```http
 DELETE /api/recipes/:id
 Authorization: Bearer {token}
 ```
 
 ### Use Recipe (increment usage count)
+
 ```http
 POST /api/recipes/:id/use
 Authorization: Bearer {token}
@@ -314,17 +344,20 @@ Authorization: Bearer {token}
 ## 🏆 Achievement Endpoints
 
 ### List All Achievements
+
 ```http
 GET /api/achievements
 ```
 
 ### Get My Achievements
+
 ```http
 GET /api/users/me/achievements
 Authorization: Bearer {token}
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -360,12 +393,14 @@ Authorization: Bearer {token}
 ## 📊 Statistics Endpoints
 
 ### Get My Statistics
+
 ```http
 GET /api/users/me/stats
 Authorization: Bearer {token}
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -397,18 +432,21 @@ Authorization: Bearer {token}
 ## 🔍 Search Endpoints
 
 ### Global Search
+
 ```http
 GET /api/search
 Authorization: Bearer {token}
 ```
 
 **Query Parameters:**
+
 - `q` (string): Search query
 - `type` (string): Filter by type (coffee|note|recipe)
 
 ## 📷 Photo Upload
 
 ### Upload Photo
+
 ```http
 POST /api/upload/photo
 Authorization: Bearer {token}
@@ -416,6 +454,7 @@ Content-Type: multipart/form-data
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -429,6 +468,7 @@ Content-Type: multipart/form-data
 ## 🔐 Error Responses
 
 ### Standard Error Format
+
 ```json
 {
   "success": false,
@@ -448,6 +488,7 @@ Content-Type: multipart/form-data
 ```
 
 ### Error Codes
+
 - `UNAUTHORIZED`: 401 - Authentication required
 - `FORBIDDEN`: 403 - Insufficient permissions
 - `NOT_FOUND`: 404 - Resource not found
@@ -462,6 +503,7 @@ Content-Type: multipart/form-data
 - **Premium**: 10000 requests per hour
 
 **Headers:**
+
 ```
 X-RateLimit-Limit: 1000
 X-RateLimit-Remaining: 998
@@ -471,12 +513,14 @@ X-RateLimit-Reset: 1642255200
 ## 📋 API Versioning
 
 **URL Versioning:**
+
 ```
 /api/v1/coffees
 /api/v2/coffees  # Future version
 ```
 
 **Deprecation Policy:**
+
 - 6 months notice before deprecation
 - Sunset header in responses
 - Migration guide provided

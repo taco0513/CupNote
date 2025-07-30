@@ -93,7 +93,8 @@
   opacity: 0.6;
 }
 
-.submit-btn, .action-btn {
+.submit-btn,
+.action-btn {
   width: 100%;
   padding: var(--space-4) var(--space-6);
   font-size: var(--text-lg);

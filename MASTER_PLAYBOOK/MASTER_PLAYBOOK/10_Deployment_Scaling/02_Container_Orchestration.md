@@ -3,6 +3,7 @@
 > "컨테이너는 배송 상자, 오케스트레이션은 물류 시스템이다. SuperClaude로 완벽한 물류를 구축하자."
 
 ## 📋 목차
+
 1. [컨테이너 오케스트레이션 개요](#컨테이너-오케스트레이션-개요)
 2. [Docker 컨테이너 최적화](#docker-컨테이너-최적화)
 3. [Kubernetes 클러스터 관리](#kubernetes-클러스터-관리)
@@ -13,17 +14,19 @@
 ## 컨테이너 오케스트레이션 개요
 
 ### 핵심 개념
+
 ```yaml
 # container-orchestration-principles.yml
 orchestration_principles:
-  scalability: "자동 스케일링으로 탄력적 운영"
-  resilience: "장애 복구 및 자가 치유"
-  efficiency: "리소스 최적화 및 비용 절감"
-  observability: "완전한 가시성과 모니터링"
-  security: "컨테이너 및 클러스터 보안"
+  scalability: '자동 스케일링으로 탄력적 운영'
+  resilience: '장애 복구 및 자가 치유'
+  efficiency: '리소스 최적화 및 비용 절감'
+  observability: '완전한 가시성과 모니터링'
+  security: '컨테이너 및 클러스터 보안'
 ```
 
 ### SuperClaude 오케스트레이션 명령어
+
 ```bash
 # 컨테이너 분석
 /analyze containers --focus performance --think
@@ -41,6 +44,7 @@ orchestration_principles:
 ## Docker 컨테이너 최적화
 
 ### 1. 멀티스테이지 빌드 최적화
+
 ```dockerfile
 # Dockerfile.optimized
 # 1단계: 의존성 설치 및 빌드
@@ -85,12 +89,13 @@ CMD ["node", "server.js"]
 ```
 
 ### 2. 컨테이너 최적화 도구
+
 ```typescript
 // container-optimizer.ts
 export class ContainerOptimizer {
   async optimizeImage(dockerfile: string): Promise<OptimizationResult> {
-    const analysis = await this.analyzeDockerfile(dockerfile);
-    const recommendations: Recommendation[] = [];
+    const analysis = await this.analyzeDockerfile(dockerfile)
+    const recommendations: Recommendation[] = []
 
     // 베이스 이미지 최적화
     if (analysis.baseImage.includes('ubuntu') || analysis.baseImage.includes('centos')) {
@@ -98,8 +103,8 @@ export class ContainerOptimizer {
         type: 'base_image',
         severity: 'medium',
         message: 'Alpine 기반 이미지 사용을 권장합니다',
-        suggestion: 'node:18-alpine 사용'
-      });
+        suggestion: 'node:18-alpine 사용',
+      })
     }
 
     // 레이어 최적화
@@ -108,8 +113,8 @@ export class ContainerOptimizer {
         type: 'layer_count',
         severity: 'high',
         message: '레이어 수가 너무 많습니다',
-        suggestion: 'RUN 명령어를 결합하여 레이어 수 감소'
-      });
+        suggestion: 'RUN 명령어를 결합하여 레이어 수 감소',
+      })
     }
 
     // 보안 최적화
@@ -118,33 +123,34 @@ export class ContainerOptimizer {
         type: 'security',
         severity: 'high',
         message: 'root 사용자로 실행됩니다',
-        suggestion: 'non-root 사용자 생성 및 사용'
-      });
+        suggestion: 'non-root 사용자 생성 및 사용',
+      })
     }
 
     return {
       originalSize: analysis.estimatedSize,
       optimizedSize: this.calculateOptimizedSize(analysis, recommendations),
-      recommendations
-    };
+      recommendations,
+    }
   }
 
   async generateOptimizedDockerfile(
     original: string,
     recommendations: Recommendation[]
   ): Promise<string> {
-    let optimized = original;
+    let optimized = original
 
     for (const rec of recommendations) {
-      optimized = await this.applyRecommendation(optimized, rec);
+      optimized = await this.applyRecommendation(optimized, rec)
     }
 
-    return optimized;
+    return optimized
   }
 }
 ```
 
 ### 3. 컨테이너 리소스 관리
+
 ```yaml
 # deployment.yml
 apiVersion: apps/v1
@@ -164,89 +170,90 @@ spec:
         app: web-app
     spec:
       containers:
-      - name: web-app
-        image: web-app:latest
-        ports:
-        - containerPort: 3000
-        # 리소스 제한 설정
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
-        # 라이브니스 프로브
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 3000
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 3
-        # 레디니스 프로브
-        readinessProbe:
-          httpGet:
-            path: /ready
-            port: 3000
-          initialDelaySeconds: 5
-          periodSeconds: 5
-          timeoutSeconds: 3
-          failureThreshold: 3
-        # 환경 변수
-        env:
-        - name: NODE_ENV
-          value: "production"
-        - name: DATABASE_URL
-          valueFrom:
-            secretKeyRef:
-              name: db-secret
-              key: url
+        - name: web-app
+          image: web-app:latest
+          ports:
+            - containerPort: 3000
+          # 리소스 제한 설정
+          resources:
+            requests:
+              memory: '256Mi'
+              cpu: '250m'
+            limits:
+              memory: '512Mi'
+              cpu: '500m'
+          # 라이브니스 프로브
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          # 레디니스 프로브
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          # 환경 변수
+          env:
+            - name: NODE_ENV
+              value: 'production'
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: url
 ```
 
 ## Kubernetes 클러스터 관리
 
 ### 1. 클러스터 자동 스케일링
+
 ```typescript
 // cluster-autoscaler.ts
 export class ClusterAutoscaler {
-  private k8sApi: k8s.CoreV1Api;
-  private metricsApi: k8s.MetricsV1beta1Api;
+  private k8sApi: k8s.CoreV1Api
+  private metricsApi: k8s.MetricsV1beta1Api
 
   async monitorAndScale(): Promise<void> {
     while (true) {
-      const metrics = await this.getClusterMetrics();
-      const decision = await this.makeScalingDecision(metrics);
+      const metrics = await this.getClusterMetrics()
+      const decision = await this.makeScalingDecision(metrics)
 
       if (decision.action !== 'none') {
-        await this.executeScaling(decision);
+        await this.executeScaling(decision)
       }
 
-      await new Promise(resolve => setTimeout(resolve, 30000)); // 30초 간격
+      await new Promise(resolve => setTimeout(resolve, 30000)) // 30초 간격
     }
   }
 
   private async getClusterMetrics(): Promise<ClusterMetrics> {
-    const nodes = await this.k8sApi.listNode();
-    const pods = await this.k8sApi.listPodForAllNamespaces();
+    const nodes = await this.k8sApi.listNode()
+    const pods = await this.k8sApi.listPodForAllNamespaces()
 
-    let totalCpuRequest = 0;
-    let totalMemoryRequest = 0;
-    let totalCpuLimit = 0;
-    let totalMemoryLimit = 0;
+    let totalCpuRequest = 0
+    let totalMemoryRequest = 0
+    let totalCpuLimit = 0
+    let totalMemoryLimit = 0
 
     for (const pod of pods.body.items) {
       if (pod.spec?.containers) {
         for (const container of pod.spec.containers) {
-          const resources = container.resources;
+          const resources = container.resources
           if (resources?.requests) {
-            totalCpuRequest += this.parseCpu(resources.requests.cpu);
-            totalMemoryRequest += this.parseMemory(resources.requests.memory);
+            totalCpuRequest += this.parseCpu(resources.requests.cpu)
+            totalMemoryRequest += this.parseMemory(resources.requests.memory)
           }
           if (resources?.limits) {
-            totalCpuLimit += this.parseCpu(resources.limits.cpu);
-            totalMemoryLimit += this.parseMemory(resources.limits.memory);
+            totalCpuLimit += this.parseCpu(resources.limits.cpu)
+            totalMemoryLimit += this.parseMemory(resources.limits.memory)
           }
         }
       }
@@ -258,24 +265,23 @@ export class ClusterAutoscaler {
       totalMemoryRequest,
       totalCpuLimit,
       totalMemoryLimit,
-      pendingPods: pods.body.items.filter(pod =>
-        pod.status?.phase === 'Pending'
-      ).length
-    };
+      pendingPods: pods.body.items.filter(pod => pod.status?.phase === 'Pending').length,
+    }
   }
 
   private async makeScalingDecision(metrics: ClusterMetrics): Promise<ScalingDecision> {
     // 리소스 사용률 계산
-    const cpuUtilization = metrics.totalCpuRequest / (metrics.nodeCount * 2); // 노드당 2 CPU 가정
-    const memoryUtilization = metrics.totalMemoryRequest / (metrics.nodeCount * 8 * 1024 * 1024 * 1024); // 노드당 8GB 가정
+    const cpuUtilization = metrics.totalCpuRequest / (metrics.nodeCount * 2) // 노드당 2 CPU 가정
+    const memoryUtilization =
+      metrics.totalMemoryRequest / (metrics.nodeCount * 8 * 1024 * 1024 * 1024) // 노드당 8GB 가정
 
     // 스케일 아웃 조건
     if (cpuUtilization > 0.8 || memoryUtilization > 0.8 || metrics.pendingPods > 0) {
       return {
         action: 'scale_out',
         targetNodeCount: metrics.nodeCount + 1,
-        reason: `CPU: ${cpuUtilization.toFixed(2)}, Memory: ${memoryUtilization.toFixed(2)}, Pending: ${metrics.pendingPods}`
-      };
+        reason: `CPU: ${cpuUtilization.toFixed(2)}, Memory: ${memoryUtilization.toFixed(2)}, Pending: ${metrics.pendingPods}`,
+      }
     }
 
     // 스케일 인 조건
@@ -283,16 +289,17 @@ export class ClusterAutoscaler {
       return {
         action: 'scale_in',
         targetNodeCount: metrics.nodeCount - 1,
-        reason: 'Low resource utilization'
-      };
+        reason: 'Low resource utilization',
+      }
     }
 
-    return { action: 'none' };
+    return { action: 'none' }
   }
 }
 ```
 
 ### 2. Pod 자동 스케일링 (HPA)
+
 ```yaml
 # hpa.yml
 apiVersion: autoscaling/v2
@@ -307,41 +314,42 @@ spec:
   minReplicas: 2
   maxReplicas: 10
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 70
-  - type: Resource
-    resource:
-      name: memory
-      target:
-        type: Utilization
-        averageUtilization: 80
-  - type: Pods
-    pods:
-      metric:
-        name: custom_requests_per_second
-      target:
-        type: AverageValue
-        averageValue: "100"
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Pods
+      pods:
+        metric:
+          name: custom_requests_per_second
+        target:
+          type: AverageValue
+          averageValue: '100'
   behavior:
     scaleUp:
       stabilizationWindowSeconds: 60
       policies:
-      - type: Percent
-        value: 100
-        periodSeconds: 15
+        - type: Percent
+          value: 100
+          periodSeconds: 15
     scaleDown:
       stabilizationWindowSeconds: 300
       policies:
-      - type: Percent
-        value: 50
-        periodSeconds: 60
+        - type: Percent
+          value: 50
+          periodSeconds: 60
 ```
 
 ### 3. 수직 Pod 자동 스케일링 (VPA)
+
 ```yaml
 # vpa.yml
 apiVersion: autoscaling.k8s.io/v1
@@ -354,40 +362,41 @@ spec:
     kind: Deployment
     name: web-app
   updatePolicy:
-    updateMode: "Auto"  # Off, Initial, Auto
+    updateMode: 'Auto' # Off, Initial, Auto
   resourcePolicy:
     containerPolicies:
-    - containerName: web-app
-      maxAllowed:
-        cpu: 1
-        memory: 2Gi
-      minAllowed:
-        cpu: 100m
-        memory: 128Mi
-      controlledResources: ["cpu", "memory"]
+      - containerName: web-app
+        maxAllowed:
+          cpu: 1
+          memory: 2Gi
+        minAllowed:
+          cpu: 100m
+          memory: 128Mi
+        controlledResources: ['cpu', 'memory']
 ```
 
 ## 서비스 메시 구현
 
 ### 1. Istio 서비스 메시
+
 ```typescript
 // istio-service-mesh.ts
 export class IstioServiceMesh {
   async setupServiceMesh(namespace: string): Promise<void> {
     // 1. Istio 사이드카 주입 활성화
-    await this.enableSidecarInjection(namespace);
+    await this.enableSidecarInjection(namespace)
 
     // 2. 게이트웨이 설정
-    await this.createGateway(namespace);
+    await this.createGateway(namespace)
 
     // 3. 가상 서비스 설정
-    await this.createVirtualService(namespace);
+    await this.createVirtualService(namespace)
 
     // 4. 대상 규칙 설정
-    await this.createDestinationRule(namespace);
+    await this.createDestinationRule(namespace)
 
     // 5. 보안 정책 설정
-    await this.createSecurityPolicies(namespace);
+    await this.createSecurityPolicies(namespace)
   }
 
   private async createVirtualService(namespace: string): Promise<void> {
@@ -396,34 +405,41 @@ export class IstioServiceMesh {
       kind: 'VirtualService',
       metadata: {
         name: 'web-app-vs',
-        namespace
+        namespace,
       },
       spec: {
-        http: [{
-          match: [{
-            uri: { prefix: '/api' }
-          }],
-          route: [{
-            destination: {
-              host: 'api-service',
-              subset: 'v1'
+        http: [
+          {
+            match: [
+              {
+                uri: { prefix: '/api' },
+              },
+            ],
+            route: [
+              {
+                destination: {
+                  host: 'api-service',
+                  subset: 'v1',
+                },
+                weight: 90,
+              },
+              {
+                destination: {
+                  host: 'api-service',
+                  subset: 'v2',
+                },
+                weight: 10,
+              },
+            ],
+            timeout: '10s',
+            retries: {
+              attempts: 3,
+              perTryTimeout: '3s',
             },
-            weight: 90
-          }, {
-            destination: {
-              host: 'api-service',
-              subset: 'v2'
-            },
-            weight: 10
-          }],
-          timeout: '10s',
-          retries: {
-            attempts: 3,
-            perTryTimeout: '3s'
-          }
-        }]
-      }
-    };
+          },
+        ],
+      },
+    }
 
     await this.k8sApi.createNamespacedCustomObject(
       'networking.istio.io',
@@ -431,7 +447,7 @@ export class IstioServiceMesh {
       namespace,
       'virtualservices',
       virtualService
-    );
+    )
   }
 
   private async createDestinationRule(namespace: string): Promise<void> {
@@ -440,36 +456,39 @@ export class IstioServiceMesh {
       kind: 'DestinationRule',
       metadata: {
         name: 'api-service-dr',
-        namespace
+        namespace,
       },
       spec: {
         host: 'api-service',
         trafficPolicy: {
           connectionPool: {
             tcp: {
-              maxConnections: 100
+              maxConnections: 100,
             },
             http: {
               http1MaxPendingRequests: 50,
-              maxRequestsPerConnection: 10
-            }
+              maxRequestsPerConnection: 10,
+            },
           },
           circuitBreaker: {
             consecutiveErrors: 5,
             interval: '30s',
             baseEjectionTime: '30s',
-            maxEjectionPercent: 50
-          }
+            maxEjectionPercent: 50,
+          },
         },
-        subsets: [{
-          name: 'v1',
-          labels: { version: 'v1' }
-        }, {
-          name: 'v2',
-          labels: { version: 'v2' }
-        }]
-      }
-    };
+        subsets: [
+          {
+            name: 'v1',
+            labels: { version: 'v1' },
+          },
+          {
+            name: 'v2',
+            labels: { version: 'v2' },
+          },
+        ],
+      },
+    }
 
     await this.k8sApi.createNamespacedCustomObject(
       'networking.istio.io',
@@ -477,12 +496,13 @@ export class IstioServiceMesh {
       namespace,
       'destinationrules',
       destinationRule
-    );
+    )
   }
 }
 ```
 
 ### 2. 트래픽 관리
+
 ```yaml
 # traffic-management.yml
 # A/B 테스트를 위한 트래픽 분할
@@ -492,23 +512,23 @@ metadata:
   name: ab-test-vs
 spec:
   http:
-  - match:
-    - headers:
-        user-type:
-          exact: "premium"
-    route:
-    - destination:
-        host: web-app-service
-        subset: premium
-  - route:
-    - destination:
-        host: web-app-service
-        subset: standard
-      weight: 80
-    - destination:
-        host: web-app-service
-        subset: beta
-      weight: 20
+    - match:
+        - headers:
+            user-type:
+              exact: 'premium'
+      route:
+        - destination:
+            host: web-app-service
+            subset: premium
+    - route:
+        - destination:
+            host: web-app-service
+            subset: standard
+          weight: 80
+        - destination:
+            host: web-app-service
+            subset: beta
+          weight: 20
 ---
 # 카나리 배포를 위한 트래픽 분할
 apiVersion: networking.istio.io/v1beta1
@@ -517,31 +537,32 @@ metadata:
   name: canary-vs
 spec:
   http:
-  - match:
-    - headers:
-        canary:
-          exact: "true"
-    route:
-    - destination:
-        host: web-app-service
-        subset: canary
-  - route:
-    - destination:
-        host: web-app-service
-        subset: stable
-      weight: 95
-    - destination:
-        host: web-app-service
-        subset: canary
-      weight: 5
+    - match:
+        - headers:
+            canary:
+              exact: 'true'
+      route:
+        - destination:
+            host: web-app-service
+            subset: canary
+    - route:
+        - destination:
+            host: web-app-service
+            subset: stable
+          weight: 95
+        - destination:
+            host: web-app-service
+            subset: canary
+          weight: 5
 ```
 
 ### 3. 서비스 메시 모니터링
+
 ```typescript
 // mesh-monitoring.ts
 export class ServiceMeshMonitor {
-  private prometheusApi: PrometheusApi;
-  private jaegerApi: JaegerApi;
+  private prometheusApi: PrometheusApi
+  private jaegerApi: JaegerApi
 
   async getServiceMetrics(service: string, timeRange: string): Promise<ServiceMetrics> {
     const queries = {
@@ -549,20 +570,20 @@ export class ServiceMeshMonitor {
       errorRate: `rate(istio_requests_total{destination_service_name="${service}",response_code!~"2.."}[${timeRange}])`,
       p99Latency: `histogram_quantile(0.99, rate(istio_request_duration_milliseconds_bucket{destination_service_name="${service}"}[${timeRange}]))`,
       p95Latency: `histogram_quantile(0.95, rate(istio_request_duration_milliseconds_bucket{destination_service_name="${service}"}[${timeRange}]))`,
-      p50Latency: `histogram_quantile(0.50, rate(istio_request_duration_milliseconds_bucket{destination_service_name="${service}"}[${timeRange}]))`
-    };
+      p50Latency: `histogram_quantile(0.50, rate(istio_request_duration_milliseconds_bucket{destination_service_name="${service}"}[${timeRange}]))`,
+    }
 
     const results = await Promise.all(
       Object.entries(queries).map(async ([metric, query]) => {
-        const result = await this.prometheusApi.query(query);
-        return { metric, value: result.data.result[0]?.value[1] || 0 };
+        const result = await this.prometheusApi.query(query)
+        return { metric, value: result.data.result[0]?.value[1] || 0 }
       })
-    );
+    )
 
     return results.reduce((acc, { metric, value }) => {
-      acc[metric] = parseFloat(value);
-      return acc;
-    }, {} as ServiceMetrics);
+      acc[metric] = parseFloat(value)
+      return acc
+    }, {} as ServiceMetrics)
   }
 
   async getDistributedTraces(service: string, operation?: string): Promise<Trace[]> {
@@ -570,8 +591,8 @@ export class ServiceMeshMonitor {
       service,
       operation,
       limit: 100,
-      lookback: '1h'
-    });
+      lookback: '1h',
+    })
 
     return traces.map(trace => ({
       traceId: trace.traceID,
@@ -580,9 +601,9 @@ export class ServiceMeshMonitor {
         operation: span.operationName,
         service: span.process.serviceName,
         duration: span.duration,
-        tags: span.tags
-      }))
-    }));
+        tags: span.tags,
+      })),
+    }))
   }
 }
 ```
@@ -590,6 +611,7 @@ export class ServiceMeshMonitor {
 ## 리소스 관리 및 최적화
 
 ### 1. 리소스 할당량 관리
+
 ```yaml
 # resource-quota.yml
 apiVersion: v1
@@ -599,15 +621,15 @@ metadata:
   namespace: development
 spec:
   hard:
-    requests.cpu: "10"
+    requests.cpu: '10'
     requests.memory: 20Gi
-    limits.cpu: "20"
+    limits.cpu: '20'
     limits.memory: 40Gi
-    persistentvolumeclaims: "10"
-    pods: "20"
-    services: "10"
-    secrets: "20"
-    configmaps: "20"
+    persistentvolumeclaims: '10'
+    pods: '20'
+    services: '10'
+    secrets: '20'
+    configmaps: '20'
 ---
 apiVersion: v1
 kind: LimitRange
@@ -616,23 +638,24 @@ metadata:
   namespace: development
 spec:
   limits:
-  - default:
-      cpu: "500m"
-      memory: "1Gi"
-    defaultRequest:
-      cpu: "100m"
-      memory: "128Mi"
-    type: Container
-  - max:
-      cpu: "2"
-      memory: "4Gi"
-    min:
-      cpu: "50m"
-      memory: "64Mi"
-    type: Container
+    - default:
+        cpu: '500m'
+        memory: '1Gi'
+      defaultRequest:
+        cpu: '100m'
+        memory: '128Mi'
+      type: Container
+    - max:
+        cpu: '2'
+        memory: '4Gi'
+      min:
+        cpu: '50m'
+        memory: '64Mi'
+      type: Container
 ```
 
 ### 2. 네트워크 정책
+
 ```yaml
 # network-policy.yml
 apiVersion: networking.k8s.io/v1
@@ -645,47 +668,48 @@ spec:
     matchLabels:
       app: web-app
   policyTypes:
-  - Ingress
-  - Egress
+    - Ingress
+    - Egress
   ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          name: ingress-nginx
-    - podSelector:
-        matchLabels:
-          app: nginx
-    ports:
-    - protocol: TCP
-      port: 3000
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+        - podSelector:
+            matchLabels:
+              app: nginx
+      ports:
+        - protocol: TCP
+          port: 3000
   egress:
-  - to:
-    - podSelector:
-        matchLabels:
-          app: database
-    ports:
-    - protocol: TCP
-      port: 5432
-  - to: []
-    ports:
-    - protocol: TCP
-      port: 443
-    - protocol: TCP
-      port: 80
-    - protocol: UDP
-      port: 53
+    - to:
+        - podSelector:
+            matchLabels:
+              app: database
+      ports:
+        - protocol: TCP
+          port: 5432
+    - to: []
+      ports:
+        - protocol: TCP
+          port: 443
+        - protocol: TCP
+          port: 80
+        - protocol: UDP
+          port: 53
 ```
 
 ### 3. 스토리지 최적화
+
 ```typescript
 // storage-optimizer.ts
 export class StorageOptimizer {
   async optimizePersistentVolumes(): Promise<OptimizationResult> {
-    const pvs = await this.k8sApi.listPersistentVolume();
-    const recommendations: StorageRecommendation[] = [];
+    const pvs = await this.k8sApi.listPersistentVolume()
+    const recommendations: StorageRecommendation[] = []
 
     for (const pv of pvs.body.items) {
-      const usage = await this.getPVUsage(pv.metadata.name);
+      const usage = await this.getPVUsage(pv.metadata.name)
 
       // 사용률이 낮은 볼륨 감지
       if (usage.utilizationPercent < 20) {
@@ -694,8 +718,8 @@ export class StorageOptimizer {
           pv: pv.metadata.name,
           currentSize: pv.spec.capacity.storage,
           recommendedSize: this.calculateOptimalSize(usage),
-          potentialSavings: this.calculateSavings(pv.spec.capacity.storage, usage)
-        });
+          potentialSavings: this.calculateSavings(pv.spec.capacity.storage, usage),
+        })
       }
 
       // 사용률이 높은 볼륨 감지
@@ -705,8 +729,8 @@ export class StorageOptimizer {
           pv: pv.metadata.name,
           currentSize: pv.spec.capacity.storage,
           recommendedSize: this.calculateExpandedSize(usage),
-          urgency: usage.utilizationPercent > 90 ? 'high' : 'medium'
-        });
+          urgency: usage.utilizationPercent > 90 ? 'high' : 'medium',
+        })
       }
     }
 
@@ -715,8 +739,8 @@ export class StorageOptimizer {
       recommendations,
       potentialMonthlySavings: recommendations
         .filter(r => r.type === 'downsize')
-        .reduce((sum, r) => sum + (r.potentialSavings || 0), 0)
-    };
+        .reduce((sum, r) => sum + (r.potentialSavings || 0), 0),
+    }
   }
 
   async implementStorageClass(name: string, config: StorageClassConfig): Promise<void> {
@@ -728,10 +752,10 @@ export class StorageOptimizer {
       parameters: config.parameters,
       reclaimPolicy: config.reclaimPolicy,
       allowVolumeExpansion: true,
-      volumeBindingMode: 'WaitForFirstConsumer'
-    };
+      volumeBindingMode: 'WaitForFirstConsumer',
+    }
 
-    await this.k8sApi.createStorageClass(storageClass);
+    await this.k8sApi.createStorageClass(storageClass)
   }
 }
 ```
@@ -739,6 +763,7 @@ export class StorageOptimizer {
 ## SuperClaude 활용법
 
 ### 1. 컨테이너 최적화
+
 ```bash
 # Docker 이미지 분석 및 최적화
 /analyze dockerfile --focus efficiency --think
@@ -756,6 +781,7 @@ export class StorageOptimizer {
 ```
 
 ### 2. Kubernetes 클러스터 관리
+
 ```bash
 # 클러스터 설계 및 구성
 /design k8s-cluster --persona-devops --wave-mode
@@ -773,6 +799,7 @@ export class StorageOptimizer {
 ```
 
 ### 3. 오케스트레이션 문제 해결
+
 ```bash
 # 클러스터 이슈 진단
 /troubleshoot k8s-cluster --think-hard --seq
@@ -790,6 +817,7 @@ export class StorageOptimizer {
 ```
 
 ### 4. 자동화 구현
+
 ```bash
 # CI/CD 파이프라인 구축
 /build k8s-cicd --type automation --magic

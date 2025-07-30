@@ -13,7 +13,7 @@ const localStorageMock = {
   removeItem: vi.fn(),
   clear: vi.fn(),
   length: 0,
-  key: vi.fn()
+  key: vi.fn(),
 }
 global.localStorage = localStorageMock as Storage
 
@@ -24,7 +24,7 @@ const sessionStorageMock = {
   removeItem: vi.fn(),
   clear: vi.fn(),
   length: 0,
-  key: vi.fn()
+  key: vi.fn(),
 }
 global.sessionStorage = sessionStorageMock as Storage
 
@@ -35,20 +35,20 @@ global.fetch = vi.fn()
 global.IntersectionObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
-  disconnect: vi.fn()
+  disconnect: vi.fn(),
 }))
 
 // ResizeObserver 모킹
 global.ResizeObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
-  disconnect: vi.fn()
+  disconnect: vi.fn(),
 }))
 
 // window.matchMedia 모킹
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: vi.fn().mockImplementation(query => ({
+  value: vi.fn().mockImplementation((query) => ({
     matches: false,
     media: query,
     onchange: null,
@@ -56,8 +56,8 @@ Object.defineProperty(window, 'matchMedia', {
     removeListener: vi.fn(), // deprecated
     addEventListener: vi.fn(),
     removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn()
-  }))
+    dispatchEvent: vi.fn(),
+  })),
 })
 
 // URL.createObjectURL 모킹
@@ -74,7 +74,7 @@ vi.mock('@supabase/supabase-js', () => {
         signUp: vi.fn(),
         session: vi.fn(),
         user: vi.fn(),
-        onAuthStateChange: vi.fn()
+        onAuthStateChange: vi.fn(),
       },
       from: vi.fn(() => ({
         select: vi.fn().mockReturnThis(),
@@ -82,9 +82,9 @@ vi.mock('@supabase/supabase-js', () => {
         update: vi.fn().mockReturnThis(),
         delete: vi.fn().mockReturnThis(),
         eq: vi.fn().mockReturnThis(),
-        single: vi.fn().mockReturnThis()
-      }))
-    }))
+        single: vi.fn().mockReturnThis(),
+      })),
+    })),
   }
 })
 

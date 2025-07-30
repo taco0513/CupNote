@@ -1,101 +1,99 @@
-# CupNote Living Documentation
+# CupNote 문서화
 
-이 디렉토리는 CupNote 프로젝트의 살아있는 문서화 시스템입니다.
+> 나만의 커피 여정을 기록하는 온라인 커피 일기 - 개발 문서
 
-## 📂 구조
+## 📚 문서 구조
 
-```
-docs/
-├── decisions/      # 아키텍처 및 기술 결정사항
-├── errors/         # 에러 로그 및 해결 과정
-├── patterns/       # 재사용 가능한 코드 패턴
-├── context/        # 파일별 상세 컨텍스트
-├── trace/          # 코드 변경 이력 추적
-└── living-doc-helper.sh  # 문서화 헬퍼 스크립트
-```
+### 🎯 [기능 문서](./features/)
+
+구현된 기능들의 상세 설명과 사용법
+
+- [검색 및 필터링](./features/SEARCH_AND_FILTER.md) - 커피 기록 검색/필터링 시스템 ✅
+- [상세 페이지](./features/DETAIL_PAGE.md) - Foundation 기반 완전한 상세 보기 ✅
+- [데이터 저장](./features/LOCAL_STORAGE.md) - 로컬 스토리지 기반 데이터 관리 ✅
+- [커뮤니티 커핑](./features/COMMUNITY_CUPPING.md) - 그룹 커핑 세션 및 평가 비교 🚧
+
+### 🛠️ [API 문서](./api/)
+
+컴포넌트와 함수들의 기술적 명세
+
+- [컴포넌트 API](./api/COMPONENTS.md) - React 컴포넌트 사용법
+- [타입 정의](./api/TYPES.md) - TypeScript 인터페이스
+- [유틸리티 함수](./api/UTILITIES.md) - 헬퍼 함수들
+
+### 📖 [개발 가이드](./guides/)
+
+개발자를 위한 가이드 문서
+
+- [시작하기](./guides/GETTING_STARTED.md) - 프로젝트 설정 가이드
+- [기여 가이드](./guides/CONTRIBUTING.md) - 개발 참여 방법
+- [코딩 컨벤션](./guides/CODING_CONVENTIONS.md) - 코드 스타일 가이드
+
+### 📝 [변경사항](./changelog/)
+
+버전별 업데이트 내역
+
+- [CHANGELOG.md](./changelog/CHANGELOG.md) - 전체 변경사항 ✅
+- [릴리즈 노트](./changelog/RELEASES.md) - 주요 릴리즈
 
 ## 🚀 빠른 시작
 
-### 1. 헬퍼 스크립트 로드
+1. **프로젝트 클론**
+
 ```bash
-source docs/living-doc-helper.sh
+git clone <repository-url>
+cd CupNote
 ```
 
-### 2. 주요 명령어
+2. **의존성 설치**
 
-#### 새 기능 시작
 ```bash
-start_feature "커피 테이스팅 기록" "사용자가 커피 테이스팅 노트를 작성하고 저장하는 기능"
+npm install
 ```
 
-#### 에러 기록
+3. **개발 서버 실행**
+
 ```bash
-log_error "TypeError: Cannot read property 'name' of undefined" "src/services/coffee.service.ts"
+npm run dev
 ```
 
-#### 해결책 기록
-```bash
-solved_error "null 체크 추가로 해결" "사용자 입력은 항상 검증 필요"
+4. **브라우저에서 확인**
+
+```
+http://localhost:3001
 ```
 
-#### 결정사항 기록
-```bash
-record_decision "프론트엔드 프레임워크 선택" "React Native vs Flutter 중 선택 필요"
-```
+## 🏗️ 기술 스택
 
-#### Claude 세션 시작
-```bash
-claude_start
-```
+- **Frontend**: Next.js 15.4.5, React 19, TypeScript
+- **Styling**: Tailwind CSS 3.4.1
+- **데이터**: Local Storage API
+- **빌드**: npm scripts
+- **배포**: 미정
 
-#### 문서화 품질 체크
-```bash
-check_docs
-```
+## 📊 프로젝트 현황
 
-## 📝 문서화 규칙
+- ✅ 기본 커피 기록 시스템
+- ✅ 검색 및 필터링 기능
+- ✅ Foundation 기반 상세 페이지
+- ✅ 로컬 스토리지 데이터 관리
+- ✅ 코드 품질 도구 (ESLint/Prettier)
+- ✅ 통계 페이지 (데이터 시각화 및 분석)
+- ✅ 설정 페이지 (개인화 및 데이터 관리)
+- ✅ 네비게이션 시스템 (통합 UI/UX)
+- 🚧 커뮤니티 커핑 기능 (설계 완료, 구현 준비)
+- 📋 모바일 최적화 (예정)
 
-### 코드 주석
-```typescript
-// WHY: 비즈니스 요구사항이나 기술적 이유
-// TRIED: 시도했던 다른 방법들
-// CONTEXT: 관련 문서나 파일 참조
-// GOTCHAS: 주의사항
-```
+## 🤝 기여하기
 
-### 파일 헤더
-```typescript
-// PURPOSE: 이 파일의 주요 목적
-// ARCHITECTURE: 시스템 내 위치 (Controller, Service, Model 등)
-// RELATED: 관련된 다른 파일들
-// GOTCHAS: 특별히 주의할 점
-```
+이 프로젝트에 기여하고 싶으시다면 [기여 가이드](./guides/CONTRIBUTING.md)를 참고해주세요.
 
-## 🤖 AI 협업 팁
+## 📞 문의
 
-1. **항상 컨텍스트 포함하기**
-   ```
-   "이 에러를 해결해줘 @docs/errors/2025-01.md @src/services/coffee.service.ts"
-   ```
+프로젝트 관련 문의사항이 있으시면 이슈를 생성해주세요.
 
-2. **학습 내용 기록하기**
-   - 문제 해결 후 `.claude/learned-patterns.md`에 추가
-   - 패턴 발견시 `docs/patterns/`에 문서화
+---
 
-3. **정기적인 품질 체크**
-   - 매주 `check_docs` 실행
-   - 70% 이상 유지 목표
-
-## 💡 Best Practices
-
-1. **즉시 기록**: 나중에 하면 잊어버림
-2. **5초 투자**: 간단하게라도 기록
-3. **컨텍스트 중심**: WHY가 가장 중요
-4. **에러는 자산**: 실패 경험도 문서화
-5. **패턴 추출**: 반복되는 것은 패턴으로
-
-## 🔗 관련 문서
-
-- [프로젝트 컨텍스트](../.claude/project-context.md)
-- [현재 작업 포커스](../.claude/current-focus.md)
-- [학습된 패턴](../.claude/learned-patterns.md)
+**문서 버전**: 1.0  
+**최종 업데이트**: 2025-01-30  
+**관리자**: CupNote Team

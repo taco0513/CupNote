@@ -9,21 +9,21 @@ SuperClaude AI 워크플로우를 활용하여 테스트가 완전히 통합된 
 ```yaml
 cicd_test_strategy:
   continuous_integration:
-    triggers: ["push", "pull_request", "schedule"]
-    stages: ["lint", "test", "build", "security", "quality-gate"]
+    triggers: ['push', 'pull_request', 'schedule']
+    stages: ['lint', 'test', 'build', 'security', 'quality-gate']
     parallelization: true
     early_feedback: true
 
   continuous_delivery:
-    environments: ["staging", "pre-production"]
-    deployment_tests: ["smoke", "integration", "e2e"]
+    environments: ['staging', 'pre-production']
+    deployment_tests: ['smoke', 'integration', 'e2e']
     rollback_capability: true
     monitoring_integration: true
 
   continuous_deployment:
-    environments: ["production"]
-    deployment_strategy: ["blue-green", "canary", "rolling"]
-    post_deployment_tests: ["health-check", "monitoring"]
+    environments: ['production']
+    deployment_strategy: ['blue-green', 'canary', 'rolling']
+    post_deployment_tests: ['health-check', 'monitoring']
     automated_rollback: true
 ```
 
@@ -557,7 +557,7 @@ module.exports = {
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',
     '!src/**/*.stories.{ts,tsx}',
-    '!src/**/index.ts'
+    '!src/**/index.ts',
   ],
 
   // 프로젝트별 설정으로 병렬 실행
@@ -566,7 +566,7 @@ module.exports = {
       displayName: 'unit',
       testMatch: ['<rootDir>/src/**/*.test.{ts,tsx}'],
       setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'],
-      testEnvironment: 'jsdom'
+      testEnvironment: 'jsdom',
     },
     {
       displayName: 'integration',
@@ -574,8 +574,8 @@ module.exports = {
       setupFilesAfterEnv: ['<rootDir>/test/integration/setup.ts'],
       testEnvironment: 'node',
       // 통합 테스트는 순차 실행
-      maxWorkers: 1
-    }
+      maxWorkers: 1,
+    },
   ],
 
   // 커버리지 임계값
@@ -584,8 +584,8 @@ module.exports = {
       statements: 80,
       branches: 75,
       functions: 85,
-      lines: 80
-    }
+      lines: 80,
+    },
   },
 
   // CI에서 성능 최적화
@@ -593,16 +593,16 @@ module.exports = {
     maxWorkers: 2,
     coverageReporters: ['text', 'lcov'],
     verbose: false,
-    silent: true
-  })
-};
+    silent: true,
+  }),
+}
 ```
 
 ### Playwright 테스트 샤딩
 
 ```typescript
 // playwright.config.ts
-import { defineConfig } from '@playwright/test';
+import { defineConfig } from '@playwright/test'
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -613,10 +613,12 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
 
   // 테스트 샤딩 설정
-  shard: process.env.SHARD ? {
-    current: parseInt(process.env.SHARD.split('/')[0]),
-    total: parseInt(process.env.SHARD.split('/')[1])
-  } : undefined,
+  shard: process.env.SHARD
+    ? {
+        current: parseInt(process.env.SHARD.split('/')[0]),
+        total: parseInt(process.env.SHARD.split('/')[1]),
+      }
+    : undefined,
 
   // 타임아웃 설정
   timeout: 30000,
@@ -635,8 +637,8 @@ export default defineConfig({
     // CI 최적화
     ...(process.env.CI && {
       video: 'off',
-      screenshot: 'off'
-    })
+      screenshot: 'off',
+    }),
   },
 
   // 브라우저별 프로젝트 설정
@@ -657,54 +659,56 @@ export default defineConfig({
     {
       name: 'mobile-chrome',
       use: { ...devices['Pixel 5'] },
-      testMatch: /critical\.spec\.ts/
-    }
+      testMatch: /critical\.spec\.ts/,
+    },
   ],
 
   // 리포터 설정
   reporter: [
     ['html', { open: 'never' }],
     ['junit', { outputFile: 'test-results/junit.xml' }],
-    ...(process.env.CI ? [['github']] : [])
+    ...(process.env.CI ? [['github']] : []),
   ],
 
   // 웹 서버 설정
-  webServer: process.env.CI ? undefined : {
-    command: 'npm start',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI
-  }
-});
+  webServer: process.env.CI
+    ? undefined
+    : {
+        command: 'npm start',
+        url: 'http://localhost:3000',
+        reuseExistingServer: !process.env.CI,
+      },
+})
 ```
 
 ### 테스트 결과 집계
 
 ```typescript
 // scripts/aggregate-test-results.ts
-import { promises as fs } from 'fs';
-import path from 'path';
-import { glob } from 'glob';
+import { promises as fs } from 'fs'
+import path from 'path'
+import { glob } from 'glob'
 
 interface TestResult {
-  type: 'unit' | 'integration' | 'e2e';
-  passed: number;
-  failed: number;
-  skipped: number;
-  total: number;
-  duration: number;
-  coverage?: number;
+  type: 'unit' | 'integration' | 'e2e'
+  passed: number
+  failed: number
+  skipped: number
+  total: number
+  duration: number
+  coverage?: number
 }
 
 interface AggregatedResults {
   summary: {
-    totalTests: number;
-    totalPassed: number;
-    totalFailed: number;
-    totalDuration: number;
-    overallCoverage: number;
-  };
-  byType: TestResult[];
-  details: any[];
+    totalTests: number
+    totalPassed: number
+    totalFailed: number
+    totalDuration: number
+    overallCoverage: number
+  }
+  byType: TestResult[]
+  details: any[]
 }
 
 export class TestResultAggregator {
@@ -715,46 +719,46 @@ export class TestResultAggregator {
         totalPassed: 0,
         totalFailed: 0,
         totalDuration: 0,
-        overallCoverage: 0
+        overallCoverage: 0,
       },
       byType: [],
-      details: []
-    };
+      details: [],
+    }
 
     // Jest 결과 수집
-    const jestResults = await this.collectJestResults();
+    const jestResults = await this.collectJestResults()
     if (jestResults) {
-      results.byType.push(jestResults);
-      results.details.push({ type: 'jest', data: jestResults });
+      results.byType.push(jestResults)
+      results.details.push({ type: 'jest', data: jestResults })
     }
 
     // Playwright 결과 수집
-    const playwrightResults = await this.collectPlaywrightResults();
+    const playwrightResults = await this.collectPlaywrightResults()
     if (playwrightResults) {
-      results.byType.push(playwrightResults);
-      results.details.push({ type: 'playwright', data: playwrightResults });
+      results.byType.push(playwrightResults)
+      results.details.push({ type: 'playwright', data: playwrightResults })
     }
 
     // 커버리지 정보 수집
-    const coverage = await this.collectCoverageInfo();
+    const coverage = await this.collectCoverageInfo()
     if (coverage) {
-      results.summary.overallCoverage = coverage.overall;
-      results.details.push({ type: 'coverage', data: coverage });
+      results.summary.overallCoverage = coverage.overall
+      results.details.push({ type: 'coverage', data: coverage })
     }
 
     // 전체 요약 계산
-    results.summary = this.calculateSummary(results.byType, coverage);
+    results.summary = this.calculateSummary(results.byType, coverage)
 
     // 결과 저장
-    await this.saveAggregatedResults(results);
+    await this.saveAggregatedResults(results)
 
-    return results;
+    return results
   }
 
   private async collectJestResults(): Promise<TestResult | null> {
     try {
-      const jestOutput = await fs.readFile('test-results/jest-results.json', 'utf-8');
-      const jestData = JSON.parse(jestOutput);
+      const jestOutput = await fs.readFile('test-results/jest-results.json', 'utf-8')
+      const jestData = JSON.parse(jestOutput)
 
       return {
         type: 'unit',
@@ -762,30 +766,30 @@ export class TestResultAggregator {
         failed: jestData.numFailedTests,
         skipped: jestData.numPendingTests,
         total: jestData.numTotalTests,
-        duration: jestData.testRunTime || 0
-      };
+        duration: jestData.testRunTime || 0,
+      }
     } catch (error) {
-      console.warn('Jest 결과를 찾을 수 없습니다:', error.message);
-      return null;
+      console.warn('Jest 결과를 찾을 수 없습니다:', error.message)
+      return null
     }
   }
 
   private async collectPlaywrightResults(): Promise<TestResult | null> {
     try {
-      const playwrightFiles = await glob('test-results/**/results.json');
-      let totalPassed = 0;
-      let totalFailed = 0;
-      let totalSkipped = 0;
-      let totalDuration = 0;
+      const playwrightFiles = await glob('test-results/**/results.json')
+      let totalPassed = 0
+      let totalFailed = 0
+      let totalSkipped = 0
+      let totalDuration = 0
 
       for (const file of playwrightFiles) {
-        const content = await fs.readFile(file, 'utf-8');
-        const data = JSON.parse(content);
+        const content = await fs.readFile(file, 'utf-8')
+        const data = JSON.parse(content)
 
-        totalPassed += data.stats?.expected || 0;
-        totalFailed += data.stats?.unexpected || 0;
-        totalSkipped += data.stats?.skipped || 0;
-        totalDuration += data.stats?.duration || 0;
+        totalPassed += data.stats?.expected || 0
+        totalFailed += data.stats?.unexpected || 0
+        totalSkipped += data.stats?.skipped || 0
+        totalDuration += data.stats?.duration || 0
       }
 
       return {
@@ -794,29 +798,29 @@ export class TestResultAggregator {
         failed: totalFailed,
         skipped: totalSkipped,
         total: totalPassed + totalFailed + totalSkipped,
-        duration: totalDuration
-      };
+        duration: totalDuration,
+      }
     } catch (error) {
-      console.warn('Playwright 결과를 찾을 수 없습니다:', error.message);
-      return null;
+      console.warn('Playwright 결과를 찾을 수 없습니다:', error.message)
+      return null
     }
   }
 
   private async collectCoverageInfo(): Promise<any> {
     try {
-      const coverageFile = await fs.readFile('coverage/coverage-summary.json', 'utf-8');
-      const coverage = JSON.parse(coverageFile);
+      const coverageFile = await fs.readFile('coverage/coverage-summary.json', 'utf-8')
+      const coverage = JSON.parse(coverageFile)
 
       return {
         overall: coverage.total.lines.pct,
         statements: coverage.total.statements.pct,
         branches: coverage.total.branches.pct,
         functions: coverage.total.functions.pct,
-        lines: coverage.total.lines.pct
-      };
+        lines: coverage.total.lines.pct,
+      }
     } catch (error) {
-      console.warn('커버리지 정보를 찾을 수 없습니다:', error.message);
-      return null;
+      console.warn('커버리지 정보를 찾을 수 없습니다:', error.message)
+      return null
     }
   }
 
@@ -826,80 +830,77 @@ export class TestResultAggregator {
       totalPassed: 0,
       totalFailed: 0,
       totalDuration: 0,
-      overallCoverage: coverage?.overall || 0
-    };
-
-    for (const result of results) {
-      summary.totalTests += result.total;
-      summary.totalPassed += result.passed;
-      summary.totalFailed += result.failed;
-      summary.totalDuration += result.duration;
+      overallCoverage: coverage?.overall || 0,
     }
 
-    return summary;
+    for (const result of results) {
+      summary.totalTests += result.total
+      summary.totalPassed += result.passed
+      summary.totalFailed += result.failed
+      summary.totalDuration += result.duration
+    }
+
+    return summary
   }
 
   private async saveAggregatedResults(results: AggregatedResults): Promise<void> {
-    await fs.writeFile(
-      'test-results/aggregated-results.json',
-      JSON.stringify(results, null, 2)
-    );
+    await fs.writeFile('test-results/aggregated-results.json', JSON.stringify(results, null, 2))
 
     // 사람이 읽기 쉬운 요약 생성
-    const summary = this.generateHumanReadableSummary(results);
-    await fs.writeFile('test-results/test-summary.md', summary);
+    const summary = this.generateHumanReadableSummary(results)
+    await fs.writeFile('test-results/test-summary.md', summary)
 
-    console.log('📊 테스트 결과 집계 완료');
-    console.log(`총 테스트: ${results.summary.totalTests}`);
-    console.log(`통과: ${results.summary.totalPassed}`);
-    console.log(`실패: ${results.summary.totalFailed}`);
-    console.log(`커버리지: ${results.summary.overallCoverage.toFixed(1)}%`);
+    console.log('📊 테스트 결과 집계 완료')
+    console.log(`총 테스트: ${results.summary.totalTests}`)
+    console.log(`통과: ${results.summary.totalPassed}`)
+    console.log(`실패: ${results.summary.totalFailed}`)
+    console.log(`커버리지: ${results.summary.overallCoverage.toFixed(1)}%`)
   }
 
   private generateHumanReadableSummary(results: AggregatedResults): string {
-    const { summary, byType } = results;
-    const passRate = ((summary.totalPassed / summary.totalTests) * 100).toFixed(1);
+    const { summary, byType } = results
+    const passRate = ((summary.totalPassed / summary.totalTests) * 100).toFixed(1)
 
-    let markdown = `# 테스트 결과 요약\n\n`;
-    markdown += `## 전체 요약\n\n`;
-    markdown += `- **총 테스트**: ${summary.totalTests}\n`;
-    markdown += `- **통과**: ${summary.totalPassed} (${passRate}%)\n`;
-    markdown += `- **실패**: ${summary.totalFailed}\n`;
-    markdown += `- **실행 시간**: ${(summary.totalDuration / 1000).toFixed(1)}초\n`;
-    markdown += `- **커버리지**: ${summary.overallCoverage.toFixed(1)}%\n\n`;
+    let markdown = `# 테스트 결과 요약\n\n`
+    markdown += `## 전체 요약\n\n`
+    markdown += `- **총 테스트**: ${summary.totalTests}\n`
+    markdown += `- **통과**: ${summary.totalPassed} (${passRate}%)\n`
+    markdown += `- **실패**: ${summary.totalFailed}\n`
+    markdown += `- **실행 시간**: ${(summary.totalDuration / 1000).toFixed(1)}초\n`
+    markdown += `- **커버리지**: ${summary.overallCoverage.toFixed(1)}%\n\n`
 
-    markdown += `## 테스트 유형별 결과\n\n`;
+    markdown += `## 테스트 유형별 결과\n\n`
 
     for (const result of byType) {
-      const typePassRate = ((result.passed / result.total) * 100).toFixed(1);
-      markdown += `### ${result.type.toUpperCase()} 테스트\n\n`;
-      markdown += `- 통과: ${result.passed}\n`;
-      markdown += `- 실패: ${result.failed}\n`;
-      markdown += `- 건너뜀: ${result.skipped}\n`;
-      markdown += `- 성공률: ${typePassRate}%\n`;
-      markdown += `- 실행 시간: ${(result.duration / 1000).toFixed(1)}초\n\n`;
+      const typePassRate = ((result.passed / result.total) * 100).toFixed(1)
+      markdown += `### ${result.type.toUpperCase()} 테스트\n\n`
+      markdown += `- 통과: ${result.passed}\n`
+      markdown += `- 실패: ${result.failed}\n`
+      markdown += `- 건너뜀: ${result.skipped}\n`
+      markdown += `- 성공률: ${typePassRate}%\n`
+      markdown += `- 실행 시간: ${(result.duration / 1000).toFixed(1)}초\n\n`
     }
 
     // 실패한 테스트가 있으면 경고 추가
     if (summary.totalFailed > 0) {
-      markdown += `## ⚠️ 주의사항\n\n`;
-      markdown += `${summary.totalFailed}개의 테스트가 실패했습니다. 상세 내용을 확인하고 수정해주세요.\n\n`;
+      markdown += `## ⚠️ 주의사항\n\n`
+      markdown += `${summary.totalFailed}개의 테스트가 실패했습니다. 상세 내용을 확인하고 수정해주세요.\n\n`
     }
 
     // 커버리지가 낮으면 경고 추가
     if (summary.overallCoverage < 80) {
-      markdown += `## 📊 커버리지 개선 필요\n\n`;
-      markdown += `현재 커버리지가 ${summary.overallCoverage.toFixed(1)}%입니다. 80% 이상을 목표로 테스트를 추가해주세요.\n\n`;
+      markdown += `## 📊 커버리지 개선 필요\n\n`
+      markdown += `현재 커버리지가 ${summary.overallCoverage.toFixed(1)}%입니다. 80% 이상을 목표로 테스트를 추가해주세요.\n\n`
     }
 
-    return markdown;
+    return markdown
   }
 }
 
 // 스크립트 실행
 if (require.main === module) {
-  const aggregator = new TestResultAggregator();
-  aggregator.aggregateResults().catch(console.error);
+  const aggregator = new TestResultAggregator()
+  aggregator.aggregateResults().catch(console.error)
 }
 ```
 
@@ -910,17 +911,17 @@ if (require.main === module) {
 ```typescript
 // scripts/blue-green-deployment.ts
 interface DeploymentEnvironment {
-  name: 'blue' | 'green';
-  url: string;
-  version: string;
-  healthy: boolean;
+  name: 'blue' | 'green'
+  url: string
+  version: string
+  healthy: boolean
 }
 
 interface DeploymentConfig {
-  healthCheckTimeout: number;
-  smokeTestTimeout: number;
-  rollbackTimeout: number;
-  trafficSwitchDelay: number;
+  healthCheckTimeout: number
+  smokeTestTimeout: number
+  rollbackTimeout: number
+  trafficSwitchDelay: number
 }
 
 export class BlueGreenDeployment {
@@ -928,241 +929,250 @@ export class BlueGreenDeployment {
     healthCheckTimeout: 300000, // 5분
     smokeTestTimeout: 600000, // 10분
     rollbackTimeout: 180000, // 3분
-    trafficSwitchDelay: 30000 // 30초
-  };
+    trafficSwitchDelay: 30000, // 30초
+  }
 
   async deploy(newVersion: string): Promise<boolean> {
-    console.log(`🚀 Blue-Green 배포 시작: ${newVersion}`);
+    console.log(`🚀 Blue-Green 배포 시작: ${newVersion}`)
 
     try {
       // 1. 현재 활성 환경 확인
-      const activeEnv = await this.getActiveEnvironment();
-      const inactiveEnv = activeEnv.name === 'blue' ? 'green' : 'blue';
+      const activeEnv = await this.getActiveEnvironment()
+      const inactiveEnv = activeEnv.name === 'blue' ? 'green' : 'blue'
 
-      console.log(`현재 활성 환경: ${activeEnv.name}`);
-      console.log(`배포 대상 환경: ${inactiveEnv}`);
+      console.log(`현재 활성 환경: ${activeEnv.name}`)
+      console.log(`배포 대상 환경: ${inactiveEnv}`)
 
       // 2. 비활성 환경에 새 버전 배포
-      await this.deployToEnvironment(inactiveEnv, newVersion);
+      await this.deployToEnvironment(inactiveEnv, newVersion)
 
       // 3. 건강성 검사
-      const healthCheckPassed = await this.performHealthCheck(inactiveEnv);
+      const healthCheckPassed = await this.performHealthCheck(inactiveEnv)
       if (!healthCheckPassed) {
-        throw new Error('건강성 검사 실패');
+        throw new Error('건강성 검사 실패')
       }
 
       // 4. 스모크 테스트 실행
-      const smokeTestPassed = await this.runSmokeTests(inactiveEnv);
+      const smokeTestPassed = await this.runSmokeTests(inactiveEnv)
       if (!smokeTestPassed) {
-        throw new Error('스모크 테스트 실패');
+        throw new Error('스모크 테스트 실패')
       }
 
       // 5. 트래픽 전환
-      await this.switchTraffic(activeEnv.name, inactiveEnv);
+      await this.switchTraffic(activeEnv.name, inactiveEnv)
 
       // 6. 전환 후 검증
-      await this.postSwitchValidation(inactiveEnv);
+      await this.postSwitchValidation(inactiveEnv)
 
-      console.log(`✅ 배포 완료: ${newVersion}`);
-      return true;
-
+      console.log(`✅ 배포 완료: ${newVersion}`)
+      return true
     } catch (error) {
-      console.error(`❌ 배포 실패: ${error.message}`);
-      await this.rollback();
-      return false;
+      console.error(`❌ 배포 실패: ${error.message}`)
+      await this.rollback()
+      return false
     }
   }
 
   private async getActiveEnvironment(): Promise<DeploymentEnvironment> {
     // 로드 밸런서에서 현재 활성 환경 조회
-    const response = await fetch('/api/deployment/active');
-    return await response.json();
+    const response = await fetch('/api/deployment/active')
+    return await response.json()
   }
 
   private async deployToEnvironment(environment: string, version: string): Promise<void> {
-    console.log(`📦 ${environment} 환경에 ${version} 배포 중...`);
+    console.log(`📦 ${environment} 환경에 ${version} 배포 중...`)
 
     // 실제 배포 로직 (Kubernetes, Docker Swarm 등)
-    const deployCommand = `kubectl set image deployment/app-${environment} app=myapp:${version}`;
-    await this.executeCommand(deployCommand);
+    const deployCommand = `kubectl set image deployment/app-${environment} app=myapp:${version}`
+    await this.executeCommand(deployCommand)
 
     // 배포 완료 대기
-    await this.waitForDeployment(environment, version);
+    await this.waitForDeployment(environment, version)
   }
 
   private async performHealthCheck(environment: string): Promise<boolean> {
-    console.log(`🏥 ${environment} 환경 건강성 검사 중...`);
+    console.log(`🏥 ${environment} 환경 건강성 검사 중...`)
 
-    const startTime = Date.now();
-    const timeout = this.config.healthCheckTimeout;
+    const startTime = Date.now()
+    const timeout = this.config.healthCheckTimeout
 
     while (Date.now() - startTime < timeout) {
       try {
-        const response = await fetch(`https://${environment}.myapp.com/health`);
-        const health = await response.json();
+        const response = await fetch(`https://${environment}.myapp.com/health`)
+        const health = await response.json()
 
         if (health.status === 'healthy' && health.database && health.redis) {
-          console.log(`✅ ${environment} 환경 건강성 검사 통과`);
-          return true;
+          console.log(`✅ ${environment} 환경 건강성 검사 통과`)
+          return true
         }
 
-        console.log(`⏳ ${environment} 환경 준비 중... (${health.status})`);
-        await this.sleep(5000); // 5초 대기
-
+        console.log(`⏳ ${environment} 환경 준비 중... (${health.status})`)
+        await this.sleep(5000) // 5초 대기
       } catch (error) {
-        console.log(`⏳ ${environment} 환경 연결 대기 중...`);
-        await this.sleep(5000);
+        console.log(`⏳ ${environment} 환경 연결 대기 중...`)
+        await this.sleep(5000)
       }
     }
 
-    console.log(`❌ ${environment} 환경 건강성 검사 타임아웃`);
-    return false;
+    console.log(`❌ ${environment} 환경 건강성 검사 타임아웃`)
+    return false
   }
 
   private async runSmokeTests(environment: string): Promise<boolean> {
-    console.log(`🧪 ${environment} 환경에서 스모크 테스트 실행 중...`);
+    console.log(`🧪 ${environment} 환경에서 스모크 테스트 실행 중...`)
 
     try {
       // Playwright로 핵심 기능 테스트
-      const testCommand = `npx playwright test smoke --config=playwright.smoke.config.ts`;
+      const testCommand = `npx playwright test smoke --config=playwright.smoke.config.ts`
       const testEnv = {
         ...process.env,
         BASE_URL: `https://${environment}.myapp.com`,
-        TEST_TIMEOUT: '30000'
-      };
-
-      const result = await this.executeCommand(testCommand, testEnv);
-
-      if (result.exitCode === 0) {
-        console.log(`✅ ${environment} 환경 스모크 테스트 통과`);
-        return true;
-      } else {
-        console.log(`❌ ${environment} 환경 스모크 테스트 실패`);
-        console.log(result.stderr);
-        return false;
+        TEST_TIMEOUT: '30000',
       }
 
+      const result = await this.executeCommand(testCommand, testEnv)
+
+      if (result.exitCode === 0) {
+        console.log(`✅ ${environment} 환경 스모크 테스트 통과`)
+        return true
+      } else {
+        console.log(`❌ ${environment} 환경 스모크 테스트 실패`)
+        console.log(result.stderr)
+        return false
+      }
     } catch (error) {
-      console.log(`❌ 스모크 테스트 실행 오류: ${error.message}`);
-      return false;
+      console.log(`❌ 스모크 테스트 실행 오류: ${error.message}`)
+      return false
     }
   }
 
   private async switchTraffic(from: string, to: string): Promise<void> {
-    console.log(`🔄 트래픽 전환: ${from} → ${to}`);
+    console.log(`🔄 트래픽 전환: ${from} → ${to}`)
 
     // 점진적 트래픽 전환 (Canary 방식)
-    const steps = [10, 25, 50, 75, 100];
+    const steps = [10, 25, 50, 75, 100]
 
     for (const percentage of steps) {
-      console.log(`📊 ${to} 환경으로 ${percentage}% 트래픽 전환`);
+      console.log(`📊 ${to} 환경으로 ${percentage}% 트래픽 전환`)
 
-      await this.updateLoadBalancer(to, percentage);
-      await this.sleep(this.config.trafficSwitchDelay);
+      await this.updateLoadBalancer(to, percentage)
+      await this.sleep(this.config.trafficSwitchDelay)
 
       // 각 단계마다 에러율 확인
-      const errorRate = await this.checkErrorRate(to);
-      if (errorRate > 1) { // 1% 초과 시 롤백
-        throw new Error(`높은 에러율 감지: ${errorRate}%`);
+      const errorRate = await this.checkErrorRate(to)
+      if (errorRate > 1) {
+        // 1% 초과 시 롤백
+        throw new Error(`높은 에러율 감지: ${errorRate}%`)
       }
     }
 
-    console.log(`✅ 트래픽 전환 완료`);
+    console.log(`✅ 트래픽 전환 완료`)
   }
 
   private async postSwitchValidation(environment: string): Promise<void> {
-    console.log(`🔍 전환 후 검증 실행 중...`);
+    console.log(`🔍 전환 후 검증 실행 중...`)
 
     // 1분간 메트릭 모니터링
     for (let i = 0; i < 12; i++) {
-      const metrics = await this.getMetrics(environment);
+      const metrics = await this.getMetrics(environment)
 
       if (metrics.errorRate > 1 || metrics.responseTime > 2000) {
-        throw new Error(`성능 저하 감지: 에러율 ${metrics.errorRate}%, 응답시간 ${metrics.responseTime}ms`);
+        throw new Error(
+          `성능 저하 감지: 에러율 ${metrics.errorRate}%, 응답시간 ${metrics.responseTime}ms`
+        )
       }
 
-      await this.sleep(5000);
+      await this.sleep(5000)
     }
 
-    console.log(`✅ 전환 후 검증 완료`);
+    console.log(`✅ 전환 후 검증 완료`)
   }
 
   private async rollback(): Promise<void> {
-    console.log(`🔙 롤백 실행 중...`);
+    console.log(`🔙 롤백 실행 중...`)
 
     try {
       // 이전 환경으로 트래픽 복원
-      const currentActive = await this.getActiveEnvironment();
-      const previousEnv = currentActive.name === 'blue' ? 'green' : 'blue';
+      const currentActive = await this.getActiveEnvironment()
+      const previousEnv = currentActive.name === 'blue' ? 'green' : 'blue'
 
-      await this.updateLoadBalancer(previousEnv, 100);
+      await this.updateLoadBalancer(previousEnv, 100)
 
       // 롤백 검증
-      await this.sleep(10000); // 10초 대기
-      const metrics = await this.getMetrics(previousEnv);
+      await this.sleep(10000) // 10초 대기
+      const metrics = await this.getMetrics(previousEnv)
 
       if (metrics.errorRate < 1) {
-        console.log(`✅ 롤백 완료`);
+        console.log(`✅ 롤백 완료`)
       } else {
-        console.log(`❌ 롤백 후에도 문제 지속`);
+        console.log(`❌ 롤백 후에도 문제 지속`)
       }
-
     } catch (error) {
-      console.error(`❌ 롤백 실패: ${error.message}`);
+      console.error(`❌ 롤백 실패: ${error.message}`)
     }
   }
 
   private async executeCommand(command: string, env?: any): Promise<any> {
-    const { exec } = require('child_process');
-    const { promisify } = require('util');
-    const execAsync = promisify(exec);
+    const { exec } = require('child_process')
+    const { promisify } = require('util')
+    const execAsync = promisify(exec)
 
-    return await execAsync(command, { env: env || process.env });
+    return await execAsync(command, { env: env || process.env })
   }
 
   private async updateLoadBalancer(environment: string, percentage: number): Promise<void> {
     // 로드 밸런서 설정 업데이트 (예: AWS ALB, Nginx 등)
     const config = {
-      blue: percentage === 100 && environment === 'blue' ? 100 : (environment === 'blue' ? percentage : 100 - percentage),
-      green: percentage === 100 && environment === 'green' ? 100 : (environment === 'green' ? percentage : 100 - percentage)
-    };
+      blue:
+        percentage === 100 && environment === 'blue'
+          ? 100
+          : environment === 'blue'
+            ? percentage
+            : 100 - percentage,
+      green:
+        percentage === 100 && environment === 'green'
+          ? 100
+          : environment === 'green'
+            ? percentage
+            : 100 - percentage,
+    }
 
     // 실제 로드 밸런서 API 호출
-    console.log(`Load balancer updated: Blue ${config.blue}%, Green ${config.green}%`);
+    console.log(`Load balancer updated: Blue ${config.blue}%, Green ${config.green}%`)
   }
 
   private async checkErrorRate(environment: string): Promise<number> {
     // APM 도구에서 에러율 조회 (예: DataDog, New Relic)
-    const response = await fetch(`/api/metrics/error-rate?env=${environment}&duration=1m`);
-    const data = await response.json();
-    return data.errorRate;
+    const response = await fetch(`/api/metrics/error-rate?env=${environment}&duration=1m`)
+    const data = await response.json()
+    return data.errorRate
   }
 
   private async getMetrics(environment: string): Promise<any> {
     // 성능 메트릭 조회
-    const response = await fetch(`/api/metrics?env=${environment}&duration=1m`);
-    return await response.json();
+    const response = await fetch(`/api/metrics?env=${environment}&duration=1m`)
+    return await response.json()
   }
 
   private async waitForDeployment(environment: string, version: string): Promise<void> {
     // Kubernetes 배포 완료 대기
-    const command = `kubectl rollout status deployment/app-${environment} --timeout=300s`;
-    await this.executeCommand(command);
+    const command = `kubectl rollout status deployment/app-${environment} --timeout=300s`
+    await this.executeCommand(command)
   }
 
   private sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise(resolve => setTimeout(resolve, ms))
   }
 }
 
 // 스크립트 실행
 if (require.main === module) {
-  const deployment = new BlueGreenDeployment();
-  const version = process.argv[2] || 'latest';
+  const deployment = new BlueGreenDeployment()
+  const version = process.argv[2] || 'latest'
 
   deployment.deploy(version).then(success => {
-    process.exit(success ? 0 : 1);
-  });
+    process.exit(success ? 0 : 1)
+  })
 }
 ```
 
@@ -1171,14 +1181,14 @@ if (require.main === module) {
 ```typescript
 // scripts/post-deployment-monitoring.ts
 interface MonitoringConfig {
-  checkInterval: number; // 체크 간격 (ms)
+  checkInterval: number // 체크 간격 (ms)
   alertThresholds: {
-    errorRate: number; // %
-    responseTime: number; // ms
-    cpuUsage: number; // %
-    memoryUsage: number; // %
-  };
-  notificationChannels: string[];
+    errorRate: number // %
+    responseTime: number // ms
+    cpuUsage: number // %
+    memoryUsage: number // %
+  }
+  notificationChannels: string[]
 }
 
 export class PostDeploymentMonitoring {
@@ -1188,54 +1198,48 @@ export class PostDeploymentMonitoring {
       errorRate: 1, // 1%
       responseTime: 2000, // 2초
       cpuUsage: 80, // 80%
-      memoryUsage: 85 // 85%
+      memoryUsage: 85, // 85%
     },
-    notificationChannels: ['slack', 'email']
-  };
+    notificationChannels: ['slack', 'email'],
+  }
 
   async startMonitoring(environment: string, duration: number = 3600000): Promise<void> {
-    console.log(`📊 배포 후 모니터링 시작: ${environment} (${duration / 1000}초)`);
+    console.log(`📊 배포 후 모니터링 시작: ${environment} (${duration / 1000}초)`)
 
-    const startTime = Date.now();
-    const alerts: any[] = [];
+    const startTime = Date.now()
+    const alerts: any[] = []
 
     while (Date.now() - startTime < duration) {
       try {
-        const metrics = await this.collectMetrics(environment);
-        const issues = this.analyzeMetrics(metrics);
+        const metrics = await this.collectMetrics(environment)
+        const issues = this.analyzeMetrics(metrics)
 
         if (issues.length > 0) {
-          alerts.push(...issues);
-          await this.sendAlerts(issues, environment);
+          alerts.push(...issues)
+          await this.sendAlerts(issues, environment)
         }
 
         // 메트릭 로그
-        this.logMetrics(metrics);
+        this.logMetrics(metrics)
 
-        await this.sleep(this.config.checkInterval);
-
+        await this.sleep(this.config.checkInterval)
       } catch (error) {
-        console.error(`모니터링 오류: ${error.message}`);
-        await this.sleep(this.config.checkInterval);
+        console.error(`모니터링 오류: ${error.message}`)
+        await this.sleep(this.config.checkInterval)
       }
     }
 
     // 모니터링 완료 보고서
-    await this.generateMonitoringReport(environment, alerts, duration);
+    await this.generateMonitoringReport(environment, alerts, duration)
   }
 
   private async collectMetrics(environment: string): Promise<any> {
-    const [
-      healthMetrics,
-      performanceMetrics,
-      systemMetrics,
-      businessMetrics
-    ] = await Promise.all([
+    const [healthMetrics, performanceMetrics, systemMetrics, businessMetrics] = await Promise.all([
       this.getHealthMetrics(environment),
       this.getPerformanceMetrics(environment),
       this.getSystemMetrics(environment),
-      this.getBusinessMetrics(environment)
-    ]);
+      this.getBusinessMetrics(environment),
+    ])
 
     return {
       timestamp: new Date(),
@@ -1243,12 +1247,12 @@ export class PostDeploymentMonitoring {
       health: healthMetrics,
       performance: performanceMetrics,
       system: systemMetrics,
-      business: businessMetrics
-    };
+      business: businessMetrics,
+    }
   }
 
   private analyzeMetrics(metrics: any): any[] {
-    const issues: any[] = [];
+    const issues: any[] = []
 
     // 에러율 체크
     if (metrics.performance.errorRate > this.config.alertThresholds.errorRate) {
@@ -1257,8 +1261,8 @@ export class PostDeploymentMonitoring {
         severity: 'high',
         message: `높은 에러율: ${metrics.performance.errorRate}%`,
         threshold: this.config.alertThresholds.errorRate,
-        current: metrics.performance.errorRate
-      });
+        current: metrics.performance.errorRate,
+      })
     }
 
     // 응답 시간 체크
@@ -1268,8 +1272,8 @@ export class PostDeploymentMonitoring {
         severity: 'medium',
         message: `응답 시간 지연: ${metrics.performance.responseTime}ms`,
         threshold: this.config.alertThresholds.responseTime,
-        current: metrics.performance.responseTime
-      });
+        current: metrics.performance.responseTime,
+      })
     }
 
     // CPU 사용률 체크
@@ -1279,8 +1283,8 @@ export class PostDeploymentMonitoring {
         severity: 'medium',
         message: `높은 CPU 사용률: ${metrics.system.cpuUsage}%`,
         threshold: this.config.alertThresholds.cpuUsage,
-        current: metrics.system.cpuUsage
-      });
+        current: metrics.system.cpuUsage,
+      })
     }
 
     // 메모리 사용률 체크
@@ -1290,59 +1294,63 @@ export class PostDeploymentMonitoring {
         severity: 'high',
         message: `높은 메모리 사용률: ${metrics.system.memoryUsage}%`,
         threshold: this.config.alertThresholds.memoryUsage,
-        current: metrics.system.memoryUsage
-      });
+        current: metrics.system.memoryUsage,
+      })
     }
 
-    return issues;
+    return issues
   }
 
   private async sendAlerts(issues: any[], environment: string): Promise<void> {
     for (const issue of issues) {
-      const message = `🚨 [${environment.toUpperCase()}] ${issue.message}`;
+      const message = `🚨 [${environment.toUpperCase()}] ${issue.message}`
 
       if (this.config.notificationChannels.includes('slack')) {
-        await this.sendSlackAlert(message, issue.severity);
+        await this.sendSlackAlert(message, issue.severity)
       }
 
       if (this.config.notificationChannels.includes('email')) {
-        await this.sendEmailAlert(message, issue);
+        await this.sendEmailAlert(message, issue)
       }
     }
   }
 
   private logMetrics(metrics: any): void {
-    console.log(`[${metrics.timestamp.toISOString()}] ${metrics.environment}:`);
-    console.log(`  Health: ${metrics.health.status}`);
-    console.log(`  Error Rate: ${metrics.performance.errorRate}%`);
-    console.log(`  Response Time: ${metrics.performance.responseTime}ms`);
-    console.log(`  CPU: ${metrics.system.cpuUsage}%`);
-    console.log(`  Memory: ${metrics.system.memoryUsage}%`);
+    console.log(`[${metrics.timestamp.toISOString()}] ${metrics.environment}:`)
+    console.log(`  Health: ${metrics.health.status}`)
+    console.log(`  Error Rate: ${metrics.performance.errorRate}%`)
+    console.log(`  Response Time: ${metrics.performance.responseTime}ms`)
+    console.log(`  CPU: ${metrics.system.cpuUsage}%`)
+    console.log(`  Memory: ${metrics.system.memoryUsage}%`)
   }
 
-  private async generateMonitoringReport(environment: string, alerts: any[], duration: number): Promise<void> {
+  private async generateMonitoringReport(
+    environment: string,
+    alerts: any[],
+    duration: number
+  ): Promise<void> {
     const report = {
       environment,
       duration: duration / 1000,
       totalAlerts: alerts.length,
       alertsByType: this.groupAlertsByType(alerts),
       alertsBySeverity: this.groupAlertsBySeverity(alerts),
-      recommendation: this.generateRecommendation(alerts)
-    };
+      recommendation: this.generateRecommendation(alerts),
+    }
 
     // 보고서 저장
     await fs.writeFile(
       `monitoring-report-${environment}-${Date.now()}.json`,
       JSON.stringify(report, null, 2)
-    );
+    )
 
-    console.log(`📋 모니터링 보고서 생성 완료: ${environment}`);
-    console.log(`총 알림: ${report.totalAlerts}건`);
+    console.log(`📋 모니터링 보고서 생성 완료: ${environment}`)
+    console.log(`총 알림: ${report.totalAlerts}건`)
 
     if (report.totalAlerts === 0) {
-      console.log(`✅ 배포 후 모니터링 완료: 문제 없음`);
+      console.log(`✅ 배포 후 모니터링 완료: 문제 없음`)
     } else {
-      console.log(`⚠️ 배포 후 모니터링 완료: ${report.totalAlerts}건의 문제 감지`);
+      console.log(`⚠️ 배포 후 모니터링 완료: ${report.totalAlerts}건의 문제 감지`)
     }
   }
 }

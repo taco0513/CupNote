@@ -11,68 +11,58 @@
 ```typescript
 // 컨텍스트 관리 시스템
 interface ContextHierarchy {
-  global: GlobalContext;
-  project: ProjectContext;
-  module: ModuleContext;
-  session: SessionContext;
-  immediate: ImmediateContext;
+  global: GlobalContext
+  project: ProjectContext
+  module: ModuleContext
+  session: SessionContext
+  immediate: ImmediateContext
 }
 
 interface GlobalContext {
-  projectOverview: ProjectOverview;
-  architecturePatterns: ArchitecturePattern[];
-  teamConventions: CodingConventions;
-  businessDomain: DomainKnowledge;
-  technicalStack: TechnologyStack;
+  projectOverview: ProjectOverview
+  architecturePatterns: ArchitecturePattern[]
+  teamConventions: CodingConventions
+  businessDomain: DomainKnowledge
+  technicalStack: TechnologyStack
 }
 
 class ContextManager {
-  private contextLayers: ContextHierarchy;
-  private priorityEngine: ContextPriorityEngine;
-  private compressionEngine: ContextCompressionEngine;
+  private contextLayers: ContextHierarchy
+  private priorityEngine: ContextPriorityEngine
+  private compressionEngine: ContextCompressionEngine
 
   constructor() {
-    this.contextLayers = this.initializeContextLayers();
-    this.priorityEngine = new ContextPriorityEngine();
-    this.compressionEngine = new ContextCompressionEngine();
+    this.contextLayers = this.initializeContextLayers()
+    this.priorityEngine = new ContextPriorityEngine()
+    this.compressionEngine = new ContextCompressionEngine()
   }
 
   async optimizeContextForTask(
     task: DevelopmentTask,
     availableTokens: number
   ): Promise<OptimizedContext> {
-
     // 1. 태스크 분석 및 필요 컨텍스트 식별
-    const requiredContext = await this.analyzeTaskRequirements(task);
+    const requiredContext = await this.analyzeTaskRequirements(task)
 
     // 2. 컨텍스트 우선순위 계산
     const prioritizedContext = await this.prioritizeContext(
       requiredContext,
       task.priority,
       task.complexity
-    );
+    )
 
     // 3. 토큰 예산에 맞춰 컨텍스트 압축
-    const compressedContext = await this.compressContext(
-      prioritizedContext,
-      availableTokens
-    );
+    const compressedContext = await this.compressContext(prioritizedContext, availableTokens)
 
     // 4. 컨텍스트 구조화
-    const structuredContext = await this.structureContext(compressedContext);
+    const structuredContext = await this.structureContext(compressedContext)
 
     return {
       context: structuredContext,
       tokenUsage: await this.calculateTokenUsage(structuredContext),
-      compressionRatio: this.calculateCompressionRatio(
-        requiredContext,
-        compressedContext
-      ),
-      missingContext: this.identifyMissingContext(
-        requiredContext,
-        compressedContext
-      )
-    };
+      compressionRatio: this.calculateCompressionRatio(requiredContext, compressedContext),
+      missingContext: this.identifyMissingContext(requiredContext, compressedContext),
+    }
   }
 
   // 동적 컨텍스트 로딩
@@ -80,36 +70,32 @@ class ContextManager {
     currentContext: Context,
     newRequirement: ContextRequirement
   ): Promise<UpdatedContext> {
-
     // 현재 컨텍스트 분석
-    const contextAnalysis = await this.analyzeCurrentContext(currentContext);
+    const contextAnalysis = await this.analyzeCurrentContext(currentContext)
 
     // 새로운 요구사항과의 관련성 평가
-    const relevanceScore = await this.calculateRelevance(
-      contextAnalysis,
-      newRequirement
-    );
+    const relevanceScore = await this.calculateRelevance(contextAnalysis, newRequirement)
 
     // 컨텍스트 교체 전략 결정
     const replacementStrategy = await this.determineReplacementStrategy(
       contextAnalysis,
       newRequirement,
       relevanceScore
-    );
+    )
 
     // 컨텍스트 업데이트 실행
     const updatedContext = await this.executeContextUpdate(
       currentContext,
       newRequirement,
       replacementStrategy
-    );
+    )
 
     return {
       context: updatedContext,
       changes: this.documentChanges(currentContext, updatedContext),
       rationale: replacementStrategy.rationale,
-      impact: await this.assessUpdateImpact(currentContext, updatedContext)
-    };
+      impact: await this.assessUpdateImpact(currentContext, updatedContext),
+    }
   }
 }
 ```
@@ -119,40 +105,33 @@ class ContextManager {
 ```typescript
 // 지능형 컨텍스트 압축
 class IntelligentContextCompression {
-  private semanticAnalyzer: SemanticAnalyzer;
-  private redundancyDetector: RedundancyDetector;
-  private importanceRanker: ImportanceRanker;
+  private semanticAnalyzer: SemanticAnalyzer
+  private redundancyDetector: RedundancyDetector
+  private importanceRanker: ImportanceRanker
 
   async compressContext(
     fullContext: FullContext,
     targetTokens: number
   ): Promise<CompressedContext> {
-
     // 1. 의미적 중복 제거
-    const deduplicatedContext = await this.removeSemanticDuplicates(fullContext);
+    const deduplicatedContext = await this.removeSemanticDuplicates(fullContext)
 
     // 2. 중요도 기반 순위 매기기
-    const rankedContext = await this.rankByImportance(deduplicatedContext);
+    const rankedContext = await this.rankByImportance(deduplicatedContext)
 
     // 3. 점진적 압축
-    const compressedContext = await this.performProgressiveCompression(
-      rankedContext,
-      targetTokens
-    );
+    const compressedContext = await this.performProgressiveCompression(rankedContext, targetTokens)
 
     // 4. 압축 품질 검증
-    const qualityCheck = await this.validateCompressionQuality(
-      fullContext,
-      compressedContext
-    );
+    const qualityCheck = await this.validateCompressionQuality(fullContext, compressedContext)
 
     return {
       compressed: compressedContext,
       compressionRatio: this.calculateCompressionRatio(fullContext, compressedContext),
       qualityMetrics: qualityCheck,
       preservedElements: this.identifyPreservedElements(fullContext, compressedContext),
-      compressionLog: this.generateCompressionLog(fullContext, compressedContext)
-    };
+      compressionLog: this.generateCompressionLog(fullContext, compressedContext),
+    }
   }
 
   // 적응형 압축 알고리즘
@@ -160,51 +139,50 @@ class IntelligentContextCompression {
     rankedContext: RankedContext,
     targetTokens: number
   ): Promise<Context> {
-
-    let currentContext = rankedContext.context;
-    let currentTokens = await this.calculateTokens(currentContext);
+    let currentContext = rankedContext.context
+    let currentTokens = await this.calculateTokens(currentContext)
 
     const compressionSteps: CompressionStep[] = [
       // 1. 예제 코드 압축
       {
-        name: "code-examples",
+        name: 'code-examples',
         ratio: 0.7,
-        handler: this.compressCodeExamples.bind(this)
+        handler: this.compressCodeExamples.bind(this),
       },
       // 2. 상세 설명 요약
       {
-        name: "detailed-descriptions",
+        name: 'detailed-descriptions',
         ratio: 0.6,
-        handler: this.summarizeDescriptions.bind(this)
+        handler: this.summarizeDescriptions.bind(this),
       },
       // 3. 중복 정보 제거
       {
-        name: "redundant-information",
+        name: 'redundant-information',
         ratio: 0.5,
-        handler: this.removeRedundancy.bind(this)
+        handler: this.removeRedundancy.bind(this),
       },
       // 4. 키워드 기반 압축
       {
-        name: "keyword-compression",
+        name: 'keyword-compression',
         ratio: 0.4,
-        handler: this.compressToKeywords.bind(this)
-      }
-    ];
+        handler: this.compressToKeywords.bind(this),
+      },
+    ]
 
     for (const step of compressionSteps) {
-      if (currentTokens <= targetTokens) break;
+      if (currentTokens <= targetTokens) break
 
-      const stepResult = await step.handler(currentContext, step.ratio);
-      currentContext = stepResult.compressed;
-      currentTokens = stepResult.tokenCount;
+      const stepResult = await step.handler(currentContext, step.ratio)
+      currentContext = stepResult.compressed
+      currentTokens = stepResult.tokenCount
 
       // 압축 품질이 임계값 이하로 떨어지면 중단
       if (stepResult.qualityScore < 0.7) {
-        break;
+        break
       }
     }
 
-    return currentContext;
+    return currentContext
   }
 
   // 코드 예제 지능형 압축
@@ -212,32 +190,31 @@ class IntelligentContextCompression {
     context: Context,
     targetRatio: number
   ): Promise<CompressionResult> {
-
-    const codeBlocks = this.extractCodeBlocks(context);
-    const compressedBlocks: CompressedCodeBlock[] = [];
+    const codeBlocks = this.extractCodeBlocks(context)
+    const compressedBlocks: CompressedCodeBlock[] = []
 
     for (const block of codeBlocks) {
       // 핵심 로직 식별
-      const coreLogic = await this.identifyCoreLogic(block);
+      const coreLogic = await this.identifyCoreLogic(block)
 
       // 보일러플레이트 제거
-      const withoutBoilerplate = this.removeBoilerplate(block, coreLogic);
+      const withoutBoilerplate = this.removeBoilerplate(block, coreLogic)
 
       // 주석을 간결한 설명으로 변환
-      const withCompressedComments = await this.compressComments(withoutBoilerplate);
+      const withCompressedComments = await this.compressComments(withoutBoilerplate)
 
       // 변수명 축약 (의미 보존)
-      const withShortVariables = this.abbreviateVariables(withCompressedComments);
+      const withShortVariables = this.abbreviateVariables(withCompressedComments)
 
       compressedBlocks.push({
         original: block,
         compressed: withShortVariables,
         compressionRatio: this.calculateBlockCompressionRatio(block, withShortVariables),
-        preservedMeaning: await this.verifyMeaningPreservation(block, withShortVariables)
-      });
+        preservedMeaning: await this.verifyMeaningPreservation(block, withShortVariables),
+      })
     }
 
-    const compressedContext = this.replaceCodeBlocks(context, compressedBlocks);
+    const compressedContext = this.replaceCodeBlocks(context, compressedBlocks)
 
     return {
       compressed: compressedContext,
@@ -246,9 +223,9 @@ class IntelligentContextCompression {
       details: {
         originalBlocks: codeBlocks.length,
         compressedBlocks: compressedBlocks.length,
-        averageCompressionRatio: this.calculateAverageRatio(compressedBlocks)
-      }
-    };
+        averageCompressionRatio: this.calculateAverageRatio(compressedBlocks),
+      },
+    }
   }
 }
 ```
@@ -260,38 +237,30 @@ class IntelligentContextCompression {
 ```typescript
 // 대용량 프로젝트 관리
 class LargeProjectContextManager {
-  private projectStructure: ProjectStructure;
-  private dependencyGraph: DependencyGraph;
-  private contextCache: ContextCache;
+  private projectStructure: ProjectStructure
+  private dependencyGraph: DependencyGraph
+  private contextCache: ContextCache
 
-  async manageEnterpriseProject(
-    project: EnterpriseProject
-  ): Promise<ProjectContextStrategy> {
-
+  async manageEnterpriseProject(project: EnterpriseProject): Promise<ProjectContextStrategy> {
     // 1. 프로젝트 구조 분석
-    const structureAnalysis = await this.analyzeProjectStructure(project);
+    const structureAnalysis = await this.analyzeProjectStructure(project)
 
     // 2. 모듈 의존성 매핑
-    const dependencyMap = await this.buildDependencyMap(structureAnalysis);
+    const dependencyMap = await this.buildDependencyMap(structureAnalysis)
 
     // 3. 컨텍스트 경계 정의
-    const contextBoundaries = await this.defineContextBoundaries(
-      structureAnalysis,
-      dependencyMap
-    );
+    const contextBoundaries = await this.defineContextBoundaries(structureAnalysis, dependencyMap)
 
     // 4. 동적 로딩 전략 수립
-    const loadingStrategy = await this.createDynamicLoadingStrategy(
-      contextBoundaries
-    );
+    const loadingStrategy = await this.createDynamicLoadingStrategy(contextBoundaries)
 
     return {
       structure: structureAnalysis,
       boundaries: contextBoundaries,
       loadingStrategy,
       cacheStrategy: await this.designCacheStrategy(contextBoundaries),
-      synchronizationPlan: await this.createSyncPlan(contextBoundaries)
-    };
+      synchronizationPlan: await this.createSyncPlan(contextBoundaries),
+    }
   }
 
   // 컨텍스트 경계 식별
@@ -299,80 +268,67 @@ class LargeProjectContextManager {
     structure: ProjectStructure,
     dependencies: DependencyGraph
   ): Promise<ContextBoundary[]> {
-
-    const boundaries: ContextBoundary[] = [];
+    const boundaries: ContextBoundary[] = []
 
     // 1. 도메인 경계
-    const domainBoundaries = await this.identifyDomainBoundaries(structure);
-    boundaries.push(...domainBoundaries);
+    const domainBoundaries = await this.identifyDomainBoundaries(structure)
+    boundaries.push(...domainBoundaries)
 
     // 2. 기술적 경계
-    const technicalBoundaries = await this.identifyTechnicalBoundaries(structure);
-    boundaries.push(...technicalBoundaries);
+    const technicalBoundaries = await this.identifyTechnicalBoundaries(structure)
+    boundaries.push(...technicalBoundaries)
 
     // 3. 팀 경계
-    const teamBoundaries = await this.identifyTeamBoundaries(structure);
-    boundaries.push(...teamBoundaries);
+    const teamBoundaries = await this.identifyTeamBoundaries(structure)
+    boundaries.push(...teamBoundaries)
 
     // 4. 의존성 기반 경계
-    const dependencyBoundaries = await this.identifyDependencyBoundaries(
-      dependencies
-    );
-    boundaries.push(...dependencyBoundaries);
+    const dependencyBoundaries = await this.identifyDependencyBoundaries(dependencies)
+    boundaries.push(...dependencyBoundaries)
 
     // 경계 최적화
-    const optimizedBoundaries = await this.optimizeBoundaries(
-      boundaries,
-      dependencies
-    );
+    const optimizedBoundaries = await this.optimizeBoundaries(boundaries, dependencies)
 
-    return optimizedBoundaries;
+    return optimizedBoundaries
   }
 
   // 지능형 캐싱 시스템
-  async implementIntelligentCaching(
-    contextBoundaries: ContextBoundary[]
-  ): Promise<CachingSystem> {
-
+  async implementIntelligentCaching(contextBoundaries: ContextBoundary[]): Promise<CachingSystem> {
     const cachingLayers: CachingLayer[] = [
       {
-        name: "hot-cache",
-        capacity: "10MB",
-        ttl: "1h",
-        evictionPolicy: "LRU",
-        content: "actively-used-contexts"
+        name: 'hot-cache',
+        capacity: '10MB',
+        ttl: '1h',
+        evictionPolicy: 'LRU',
+        content: 'actively-used-contexts',
       },
       {
-        name: "warm-cache",
-        capacity: "50MB",
-        ttl: "4h",
-        evictionPolicy: "LFU",
-        content: "recently-accessed-contexts"
+        name: 'warm-cache',
+        capacity: '50MB',
+        ttl: '4h',
+        evictionPolicy: 'LFU',
+        content: 'recently-accessed-contexts',
       },
       {
-        name: "cold-cache",
-        capacity: "200MB",
-        ttl: "24h",
-        evictionPolicy: "FIFO",
-        content: "historical-contexts"
-      }
-    ];
+        name: 'cold-cache',
+        capacity: '200MB',
+        ttl: '24h',
+        evictionPolicy: 'FIFO',
+        content: 'historical-contexts',
+      },
+    ]
 
-    const prefetchingStrategy = await this.designPrefetchingStrategy(
-      contextBoundaries
-    );
+    const prefetchingStrategy = await this.designPrefetchingStrategy(contextBoundaries)
 
-    const invalidationRules = await this.createInvalidationRules(
-      contextBoundaries
-    );
+    const invalidationRules = await this.createInvalidationRules(contextBoundaries)
 
     return {
       layers: cachingLayers,
       prefetching: prefetchingStrategy,
       invalidation: invalidationRules,
       metrics: await this.defineCacheMetrics(),
-      optimization: await this.createCacheOptimizer()
-    };
+      optimization: await this.createCacheOptimizer(),
+    }
   }
 }
 ```
@@ -382,75 +338,68 @@ class LargeProjectContextManager {
 ```typescript
 // 실시간 컨텍스트 동기화
 class RealTimeContextSync {
-  private syncChannels: Map<string, SyncChannel> = new Map();
-  private conflictResolver: ConflictResolver;
-  private versionTracker: VersionTracker;
+  private syncChannels: Map<string, SyncChannel> = new Map()
+  private conflictResolver: ConflictResolver
+  private versionTracker: VersionTracker
 
-  async synchronizeContexts(
-    contexts: Context[],
-    syncPolicy: SyncPolicy
-  ): Promise<SyncResult> {
-
+  async synchronizeContexts(contexts: Context[], syncPolicy: SyncPolicy): Promise<SyncResult> {
     // 1. 컨텍스트 변경 감지
-    const changes = await this.detectContextChanges(contexts);
+    const changes = await this.detectContextChanges(contexts)
 
     // 2. 충돌 해결
-    const resolvedChanges = await this.resolveConflicts(changes);
+    const resolvedChanges = await this.resolveConflicts(changes)
 
     // 3. 동기화 실행
     const syncResults = await Promise.all(
       resolvedChanges.map(change => this.applySyncChange(change, syncPolicy))
-    );
+    )
 
     // 4. 일관성 검증
-    const consistencyCheck = await this.validateConsistency(contexts, syncResults);
+    const consistencyCheck = await this.validateConsistency(contexts, syncResults)
 
     return {
       appliedChanges: syncResults,
       conflicts: this.getResolvedConflicts(),
       consistency: consistencyCheck,
-      performance: this.getSyncPerformanceMetrics()
-    };
+      performance: this.getSyncPerformanceMetrics(),
+    }
   }
 
   // 충돌 해결 알고리즘
-  private async resolveConflicts(
-    changes: ContextChange[]
-  ): Promise<ResolvedChange[]> {
-
-    const conflicts = this.identifyConflicts(changes);
-    const resolvedChanges: ResolvedChange[] = [];
+  private async resolveConflicts(changes: ContextChange[]): Promise<ResolvedChange[]> {
+    const conflicts = this.identifyConflicts(changes)
+    const resolvedChanges: ResolvedChange[] = []
 
     for (const conflict of conflicts) {
       const resolution = await this.conflictResolver.resolve(conflict, {
         strategy: 'semantic-merge',
         fallback: 'user-prompt',
-        timeout: 30000
-      });
+        timeout: 30000,
+      })
 
       resolvedChanges.push({
         original: conflict,
         resolution: resolution.decision,
         rationale: resolution.rationale,
-        confidence: resolution.confidence
-      });
+        confidence: resolution.confidence,
+      })
     }
 
     // 충돌 없는 변경사항 추가
     const nonConflictingChanges = changes.filter(
-      change => !conflicts.some(conflict =>
-        this.changesOverlap(change, conflict)
-      )
-    );
+      change => !conflicts.some(conflict => this.changesOverlap(change, conflict))
+    )
 
-    resolvedChanges.push(...nonConflictingChanges.map(change => ({
-      original: change,
-      resolution: 'accept',
-      rationale: 'no-conflict',
-      confidence: 1.0
-    })));
+    resolvedChanges.push(
+      ...nonConflictingChanges.map(change => ({
+        original: change,
+        resolution: 'accept',
+        rationale: 'no-conflict',
+        confidence: 1.0,
+      }))
+    )
 
-    return resolvedChanges;
+    return resolvedChanges
   }
 }
 ```
@@ -462,36 +411,25 @@ class RealTimeContextSync {
 ```typescript
 // 정보 아키텍처 최적화
 class InformationArchitecture {
-  private taxonomyBuilder: TaxonomyBuilder;
-  private relationshipMapper: RelationshipMapper;
-  private accessPatternAnalyzer: AccessPatternAnalyzer;
+  private taxonomyBuilder: TaxonomyBuilder
+  private relationshipMapper: RelationshipMapper
+  private accessPatternAnalyzer: AccessPatternAnalyzer
 
   async designOptimalStructure(
     information: InformationSet,
     usagePatterns: UsagePattern[]
   ): Promise<OptimalStructure> {
-
     // 1. 정보 분류 체계 구축
-    const taxonomy = await this.buildInformationTaxonomy(information);
+    const taxonomy = await this.buildInformationTaxonomy(information)
 
     // 2. 관계 매핑
-    const relationships = await this.mapInformationRelationships(
-      information,
-      taxonomy
-    );
+    const relationships = await this.mapInformationRelationships(information, taxonomy)
 
     // 3. 접근 패턴 분석
-    const accessAnalysis = await this.analyzeAccessPatterns(
-      usagePatterns,
-      relationships
-    );
+    const accessAnalysis = await this.analyzeAccessPatterns(usagePatterns, relationships)
 
     // 4. 구조 최적화
-    const optimizedStructure = await this.optimizeStructure(
-      taxonomy,
-      relationships,
-      accessAnalysis
-    );
+    const optimizedStructure = await this.optimizeStructure(taxonomy, relationships, accessAnalysis)
 
     return {
       taxonomy,
@@ -499,10 +437,8 @@ class InformationArchitecture {
       accessAnalysis,
       structure: optimizedStructure,
       performance: await this.predictPerformance(optimizedStructure),
-      recommendations: await this.generateOptimizationRecommendations(
-        optimizedStructure
-      )
-    };
+      recommendations: await this.generateOptimizationRecommendations(optimizedStructure),
+    }
   }
 
   // 적응형 정보 구조
@@ -510,39 +446,38 @@ class InformationArchitecture {
     baseStructure: InformationStructure,
     contextRequirements: ContextRequirement[]
   ): Promise<AdaptiveStructure> {
-
     const adaptationRules: AdaptationRule[] = [
       {
         trigger: 'high-frequency-access',
         action: 'promote-to-top-level',
-        weight: 0.8
+        weight: 0.8,
       },
       {
         trigger: 'related-information-clustering',
         action: 'group-related-items',
-        weight: 0.7
+        weight: 0.7,
       },
       {
         trigger: 'temporal-locality',
         action: 'cache-recent-access',
-        weight: 0.6
+        weight: 0.6,
       },
       {
         trigger: 'context-relevance',
         action: 'prioritize-relevant-info',
-        weight: 0.9
-      }
-    ];
+        weight: 0.9,
+      },
+    ]
 
-    const adaptiveLogic = await this.buildAdaptationLogic(adaptationRules);
+    const adaptiveLogic = await this.buildAdaptationLogic(adaptationRules)
 
     return {
       baseStructure,
       adaptationRules,
       adaptiveLogic,
       monitor: await this.createStructureMonitor(),
-      optimizer: await this.createStructureOptimizer()
-    };
+      optimizer: await this.createStructureOptimizer(),
+    }
   }
 }
 ```
@@ -552,55 +487,51 @@ class InformationArchitecture {
 ```typescript
 // 컨텍스트 품질 보증
 class ContextQualityManager {
-  private qualityMetrics: QualityMetric[];
-  private validator: ContextValidator;
-  private improver: ContextImprover;
+  private qualityMetrics: QualityMetric[]
+  private validator: ContextValidator
+  private improver: ContextImprover
 
   async assessContextQuality(
     context: Context,
     qualityStandards: QualityStandard[]
   ): Promise<QualityAssessment> {
-
     const assessments: QualityDimension[] = [
       {
         dimension: 'completeness',
         score: await this.assessCompleteness(context),
-        weight: 0.25
+        weight: 0.25,
       },
       {
         dimension: 'accuracy',
         score: await this.assessAccuracy(context),
-        weight: 0.30
+        weight: 0.3,
       },
       {
         dimension: 'relevance',
         score: await this.assessRelevance(context),
-        weight: 0.20
+        weight: 0.2,
       },
       {
         dimension: 'clarity',
         score: await this.assessClarity(context),
-        weight: 0.15
+        weight: 0.15,
       },
       {
         dimension: 'consistency',
         score: await this.assessConsistency(context),
-        weight: 0.10
-      }
-    ];
+        weight: 0.1,
+      },
+    ]
 
-    const overallScore = this.calculateWeightedScore(assessments);
+    const overallScore = this.calculateWeightedScore(assessments)
 
     return {
       overallScore,
       dimensions: assessments,
       issues: await this.identifyQualityIssues(context, assessments),
-      recommendations: await this.generateQualityRecommendations(
-        context,
-        assessments
-      ),
-      improvement: await this.suggestQualityImprovements(context, assessments)
-    };
+      recommendations: await this.generateQualityRecommendations(context, assessments),
+      improvement: await this.suggestQualityImprovements(context, assessments),
+    }
   }
 
   // 자동 품질 개선
@@ -608,46 +539,42 @@ class ContextQualityManager {
     context: Context,
     qualityAssessment: QualityAssessment
   ): Promise<ImprovedContext> {
-
-    const improvements: QualityImprovement[] = [];
+    const improvements: QualityImprovement[] = []
 
     // 완성도 개선
     if (qualityAssessment.dimensions.find(d => d.dimension === 'completeness')?.score < 0.8) {
-      const completenessImprovements = await this.improveCompleteness(context);
-      improvements.push(...completenessImprovements);
+      const completenessImprovements = await this.improveCompleteness(context)
+      improvements.push(...completenessImprovements)
     }
 
     // 정확성 개선
     if (qualityAssessment.dimensions.find(d => d.dimension === 'accuracy')?.score < 0.8) {
-      const accuracyImprovements = await this.improveAccuracy(context);
-      improvements.push(...accuracyImprovements);
+      const accuracyImprovements = await this.improveAccuracy(context)
+      improvements.push(...accuracyImprovements)
     }
 
     // 관련성 개선
     if (qualityAssessment.dimensions.find(d => d.dimension === 'relevance')?.score < 0.8) {
-      const relevanceImprovements = await this.improveRelevance(context);
-      improvements.push(...relevanceImprovements);
+      const relevanceImprovements = await this.improveRelevance(context)
+      improvements.push(...relevanceImprovements)
     }
 
     // 개선사항 적용
-    const improvedContext = await this.applyImprovements(context, improvements);
+    const improvedContext = await this.applyImprovements(context, improvements)
 
     // 개선 효과 검증
     const postImprovementAssessment = await this.assessContextQuality(
       improvedContext,
       qualityAssessment.standards
-    );
+    )
 
     return {
       original: context,
       improved: improvedContext,
       improvements,
-      qualityGain: this.calculateQualityGain(
-        qualityAssessment,
-        postImprovementAssessment
-      ),
-      verification: postImprovementAssessment
-    };
+      qualityGain: this.calculateQualityGain(qualityAssessment, postImprovementAssessment),
+      verification: postImprovementAssessment,
+    }
   }
 }
 ```

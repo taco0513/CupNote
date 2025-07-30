@@ -9,34 +9,34 @@ SuperClaude AI 워크플로우를 활용하여 체계적이고 효율적인 테�
 ```yaml
 testing_pyramid:
   unit_tests:
-    coverage: "70%"
-    purpose: "개별 함수/컴포넌트 검증"
-    tools: ["Jest", "Vitest", "pytest", "JUnit"]
+    coverage: '70%'
+    purpose: '개별 함수/컴포넌트 검증'
+    tools: ['Jest', 'Vitest', 'pytest', 'JUnit']
     characteristics:
-      - "빠른 실행 속도 (< 1초)"
-      - "높은 격리성"
-      - "세밀한 테스트"
-      - "높은 유지보수성"
+      - '빠른 실행 속도 (< 1초)'
+      - '높은 격리성'
+      - '세밀한 테스트'
+      - '높은 유지보수성'
 
   integration_tests:
-    coverage: "20%"
-    purpose: "모듈 간 상호작용 검증"
-    tools: ["Supertest", "TestContainers", "Cypress", "REST Assured"]
+    coverage: '20%'
+    purpose: '모듈 간 상호작용 검증'
+    tools: ['Supertest', 'TestContainers', 'Cypress', 'REST Assured']
     characteristics:
-      - "중간 실행 속도 (1-10초)"
-      - "실제 환경 시뮬레이션"
-      - "API/DB 연동 테스트"
-      - "계약 기반 테스트"
+      - '중간 실행 속도 (1-10초)'
+      - '실제 환경 시뮬레이션'
+      - 'API/DB 연동 테스트'
+      - '계약 기반 테스트'
 
   e2e_tests:
-    coverage: "10%"
-    purpose: "전체 사용자 시나리오 검증"
-    tools: ["Playwright", "Cypress", "Selenium", "Puppeteer"]
+    coverage: '10%'
+    purpose: '전체 사용자 시나리오 검증'
+    tools: ['Playwright', 'Cypress', 'Selenium', 'Puppeteer']
     characteristics:
-      - "느린 실행 속도 (10초+)"
-      - "실제 사용자 환경"
-      - "비즈니스 크리티컬 플로우"
-      - "브라우저 호환성"
+      - '느린 실행 속도 (10초+)'
+      - '실제 사용자 환경'
+      - '비즈니스 크리티컬 플로우'
+      - '브라우저 호환성'
 ```
 
 ### SuperClaude를 활용한 테스트 전략 설계
@@ -62,12 +62,12 @@ testing_pyramid:
 ```typescript
 // test-strategy.config.ts
 interface TestStrategy {
-  projectType: 'web-app' | 'api' | 'mobile' | 'microservice';
-  testTypes: TestType[];
-  environments: Environment[];
-  tools: TestingTools;
-  coverage: CoverageGoals;
-  automation: AutomationStrategy;
+  projectType: 'web-app' | 'api' | 'mobile' | 'microservice'
+  testTypes: TestType[]
+  environments: Environment[]
+  tools: TestingTools
+  coverage: CoverageGoals
+  automation: AutomationStrategy
 }
 
 const webAppStrategy: TestStrategy = {
@@ -78,81 +78,81 @@ const webAppStrategy: TestStrategy = {
       scope: ['components', 'hooks', 'utils', 'services'],
       tools: ['Jest', 'React Testing Library'],
       coverage: 85,
-      priority: 'high'
+      priority: 'high',
     },
     {
       type: 'integration',
       scope: ['api-integration', 'component-integration'],
       tools: ['MSW', 'Supertest'],
       coverage: 70,
-      priority: 'medium'
+      priority: 'medium',
     },
     {
       type: 'e2e',
       scope: ['critical-paths', 'user-journeys'],
       tools: ['Playwright'],
       coverage: 100, // 모든 크리티컬 패스
-      priority: 'high'
+      priority: 'high',
     },
     {
       type: 'visual',
       scope: ['ui-components', 'responsive-design'],
       tools: ['Chromatic', 'Percy'],
       coverage: 80,
-      priority: 'medium'
+      priority: 'medium',
     },
     {
       type: 'accessibility',
       scope: ['wcag-compliance', 'keyboard-navigation'],
       tools: ['jest-axe', 'Lighthouse CI'],
       coverage: 100,
-      priority: 'high'
+      priority: 'high',
     },
     {
       type: 'performance',
       scope: ['page-load', 'bundle-size', 'runtime-performance'],
       tools: ['Lighthouse', 'WebPageTest', 'Bundle Analyzer'],
       coverage: 90,
-      priority: 'medium'
-    }
+      priority: 'medium',
+    },
   ],
   environments: [
     {
       name: 'local',
       purpose: 'development',
-      config: 'docker-compose.test.yml'
+      config: 'docker-compose.test.yml',
     },
     {
       name: 'ci',
       purpose: 'continuous-integration',
-      config: 'ci-test-environment'
+      config: 'ci-test-environment',
     },
     {
       name: 'staging',
       purpose: 'pre-production-testing',
-      config: 'staging-environment'
-    }
+      config: 'staging-environment',
+    },
   ],
   tools: {
     testRunner: 'Jest',
     e2eFramework: 'Playwright',
     mockingLibrary: 'MSW',
     testData: 'Faker.js',
-    reporting: 'Allure'
+    reporting: 'Allure',
   },
   coverage: {
     statements: 80,
     branches: 75,
     functions: 85,
-    lines: 80
+    lines: 80,
   },
   automation: {
     ciIntegration: true,
     parallelExecution: true,
     flakytestRetry: 3,
-    reportGeneration: true
-  }
-};
+    reportGeneration: true,
+  },
+}
 ```
 
 ### API 서비스 테스트 전략
@@ -166,74 +166,74 @@ const apiServiceStrategy: TestStrategy = {
       scope: ['controllers', 'services', 'models', 'utils'],
       tools: ['Jest', 'Supertest'],
       coverage: 90,
-      priority: 'high'
+      priority: 'high',
     },
     {
       type: 'integration',
       scope: ['database', 'external-apis', 'middleware'],
       tools: ['Testcontainers', 'WireMock'],
       coverage: 80,
-      priority: 'high'
+      priority: 'high',
     },
     {
       type: 'contract',
       scope: ['api-contracts', 'schema-validation'],
       tools: ['Pact', 'OpenAPI-validator'],
       coverage: 100,
-      priority: 'high'
+      priority: 'high',
     },
     {
       type: 'security',
       scope: ['authentication', 'authorization', 'input-validation'],
       tools: ['OWASP ZAP', 'Snyk'],
       coverage: 100,
-      priority: 'critical'
+      priority: 'critical',
     },
     {
       type: 'performance',
       scope: ['load-testing', 'stress-testing', 'endurance'],
       tools: ['K6', 'Artillery', 'JMeter'],
       coverage: 90,
-      priority: 'medium'
-    }
+      priority: 'medium',
+    },
   ],
   environments: [
     {
       name: 'unit',
       purpose: 'isolated-testing',
-      config: 'in-memory-database'
+      config: 'in-memory-database',
     },
     {
       name: 'integration',
       purpose: 'service-integration',
-      config: 'docker-test-environment'
+      config: 'docker-test-environment',
     },
     {
       name: 'load-test',
       purpose: 'performance-testing',
-      config: 'load-test-environment'
-    }
+      config: 'load-test-environment',
+    },
   ],
   tools: {
     testRunner: 'Jest',
     apiTesting: 'Supertest',
     databaseTesting: 'Testcontainers',
     loadTesting: 'K6',
-    securityTesting: 'OWASP ZAP'
+    securityTesting: 'OWASP ZAP',
   },
   coverage: {
     statements: 85,
     branches: 80,
     functions: 90,
-    lines: 85
+    lines: 85,
   },
   automation: {
     ciIntegration: true,
     parallelExecution: true,
     environmentProvisioning: true,
-    securityScanning: true
-  }
-};
+    securityScanning: true,
+  },
+}
 ```
 
 ## 테스트 환경 구성
@@ -266,14 +266,14 @@ services:
       POSTGRES_USER: test_user
       POSTGRES_PASSWORD: test_pass
     ports:
-      - "5433:5432"
+      - '5433:5432'
     tmpfs:
       - /var/lib/postgresql/data
 
   redis-test:
     image: redis:7-alpine
     ports:
-      - "6380:6379"
+      - '6380:6379'
     tmpfs:
       - /data
 
@@ -298,15 +298,15 @@ networks:
 
 ```typescript
 // test/setup/testcontainers.ts
-import { GenericContainer, StartedTestContainer } from 'testcontainers';
-import { Pool } from 'pg';
-import Redis from 'ioredis';
+import { GenericContainer, StartedTestContainer } from 'testcontainers'
+import { Pool } from 'pg'
+import Redis from 'ioredis'
 
 export class TestEnvironment {
-  private postgresContainer: StartedTestContainer;
-  private redisContainer: StartedTestContainer;
-  private pgPool: Pool;
-  private redisClient: Redis;
+  private postgresContainer: StartedTestContainer
+  private redisContainer: StartedTestContainer
+  private pgPool: Pool
+  private redisClient: Redis
 
   async setup(): Promise<void> {
     // PostgreSQL 컨테이너 시작
@@ -314,17 +314,17 @@ export class TestEnvironment {
       .withEnvironment({
         POSTGRES_DB: 'test_db',
         POSTGRES_USER: 'test_user',
-        POSTGRES_PASSWORD: 'test_pass'
+        POSTGRES_PASSWORD: 'test_pass',
       })
       .withExposedPorts(5432)
       .withTmpFs({ '/var/lib/postgresql/data': 'rw' })
-      .start();
+      .start()
 
     // Redis 컨테이너 시작
     this.redisContainer = await new GenericContainer('redis:7-alpine')
       .withExposedPorts(6379)
       .withTmpFs({ '/data': 'rw' })
-      .start();
+      .start()
 
     // 데이터베이스 연결 설정
     this.pgPool = new Pool({
@@ -332,24 +332,24 @@ export class TestEnvironment {
       port: this.postgresContainer.getMappedPort(5432),
       database: 'test_db',
       user: 'test_user',
-      password: 'test_pass'
-    });
+      password: 'test_pass',
+    })
 
     // Redis 연결 설정
     this.redisClient = new Redis({
       host: this.redisContainer.getHost(),
-      port: this.redisContainer.getMappedPort(6379)
-    });
+      port: this.redisContainer.getMappedPort(6379),
+    })
 
     // 데이터베이스 마이그레이션 실행
-    await this.runMigrations();
+    await this.runMigrations()
   }
 
   async teardown(): Promise<void> {
-    await this.pgPool?.end();
-    await this.redisClient?.disconnect();
-    await this.postgresContainer?.stop();
-    await this.redisContainer?.stop();
+    await this.pgPool?.end()
+    await this.redisClient?.disconnect()
+    await this.postgresContainer?.stop()
+    await this.redisContainer?.stop()
   }
 
   private async runMigrations(): Promise<void> {
@@ -366,41 +366,41 @@ export class TestEnvironment {
         name VARCHAR(255) NOT NULL,
         price DECIMAL(10,2) NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )`
-    ];
+      )`,
+    ]
 
     for (const query of migrationQueries) {
-      await this.pgPool.query(query);
+      await this.pgPool.query(query)
     }
   }
 
   getDbConnection(): Pool {
-    return this.pgPool;
+    return this.pgPool
   }
 
   getRedisClient(): Redis {
-    return this.redisClient;
+    return this.redisClient
   }
 }
 
 // Jest 글로벌 설정
 // jest.setup.ts
-import { TestEnvironment } from './test/setup/testcontainers';
+import { TestEnvironment } from './test/setup/testcontainers'
 
-let testEnv: TestEnvironment;
+let testEnv: TestEnvironment
 
 beforeAll(async () => {
-  testEnv = new TestEnvironment();
-  await testEnv.setup();
+  testEnv = new TestEnvironment()
+  await testEnv.setup()
 
   // 글로벌 변수로 설정
-  global.testDb = testEnv.getDbConnection();
-  global.testRedis = testEnv.getRedisClient();
-}, 60000); // 60초 타임아웃
+  global.testDb = testEnv.getDbConnection()
+  global.testRedis = testEnv.getRedisClient()
+}, 60000) // 60초 타임아웃
 
 afterAll(async () => {
-  await testEnv.teardown();
-}, 30000);
+  await testEnv.teardown()
+}, 30000)
 ```
 
 ## 테스트 데이터 관리
@@ -409,15 +409,15 @@ afterAll(async () => {
 
 ```typescript
 // test/factories/user.factory.ts
-import { faker } from '@faker-js/faker';
-import { User } from '../../src/models/User';
+import { faker } from '@faker-js/faker'
+import { User } from '../../src/models/User'
 
 interface UserFactoryOptions {
-  email?: string;
-  firstName?: string;
-  lastName?: string;
-  role?: 'user' | 'admin' | 'moderator';
-  isActive?: boolean;
+  email?: string
+  firstName?: string
+  lastName?: string
+  role?: 'user' | 'admin' | 'moderator'
+  isActive?: boolean
 }
 
 export class UserFactory {
@@ -435,34 +435,34 @@ export class UserFactory {
         city: faker.location.city(),
         state: faker.location.state(),
         zipCode: faker.location.zipCode(),
-        country: faker.location.country()
+        country: faker.location.country(),
       },
       preferences: {
         newsletter: faker.datatype.boolean(),
         notifications: faker.datatype.boolean(),
-        theme: faker.helpers.arrayElement(['light', 'dark', 'auto'])
+        theme: faker.helpers.arrayElement(['light', 'dark', 'auto']),
       },
       metadata: {
         lastLoginAt: faker.date.recent(),
         registrationSource: faker.helpers.arrayElement(['web', 'mobile', 'api']),
-        referralCode: faker.string.alphanumeric(8)
-      }
-    };
+        referralCode: faker.string.alphanumeric(8),
+      },
+    }
   }
 
   static createMany(count: number, options: UserFactoryOptions = {}): Partial<User>[] {
-    return Array.from({ length: count }, () => this.create(options));
+    return Array.from({ length: count }, () => this.create(options))
   }
 
   static async createInDb(options: UserFactoryOptions = {}): Promise<User> {
-    const userData = this.create(options);
-    const user = new User(userData);
-    return await user.save();
+    const userData = this.create(options)
+    const user = new User(userData)
+    return await user.save()
   }
 
   static async createManyInDb(count: number, options: UserFactoryOptions = {}): Promise<User[]> {
-    const promises = Array.from({ length: count }, () => this.createInDb(options));
-    return await Promise.all(promises);
+    const promises = Array.from({ length: count }, () => this.createInDb(options))
+    return await Promise.all(promises)
   }
 
   // 특정 시나리오용 팩토리 메서드
@@ -470,15 +470,15 @@ export class UserFactory {
     return this.create({
       role: 'admin',
       email: faker.internet.email({ provider: 'company.com' }),
-      isActive: true
-    });
+      isActive: true,
+    })
   }
 
   static createInactiveUser(): Partial<User> {
     return this.create({
       isActive: false,
-      role: 'user'
-    });
+      role: 'user',
+    })
   }
 
   static createWithPurchaseHistory(): Partial<User> {
@@ -488,9 +488,9 @@ export class UserFactory {
         orderId: faker.string.uuid(),
         amount: faker.number.float({ min: 10, max: 1000, fractionDigits: 2 }),
         date: faker.date.past(),
-        status: faker.helpers.arrayElement(['completed', 'pending', 'cancelled'])
-      }))
-    };
+        status: faker.helpers.arrayElement(['completed', 'pending', 'cancelled']),
+      })),
+    }
   }
 }
 
@@ -506,24 +506,27 @@ export class ProductFactory {
       inStock: options.inStock ?? faker.datatype.boolean(),
       stockQuantity: options.stockQuantity || faker.number.int({ min: 0, max: 100 }),
       images: options.images || Array.from({ length: 3 }, () => faker.image.url()),
-      tags: options.tags || faker.helpers.arrayElements([
-        'popular', 'new', 'sale', 'featured', 'organic', 'premium'
-      ], { min: 1, max: 3 }),
+      tags:
+        options.tags ||
+        faker.helpers.arrayElements(['popular', 'new', 'sale', 'featured', 'organic', 'premium'], {
+          min: 1,
+          max: 3,
+        }),
       specifications: {
         weight: faker.number.float({ min: 0.1, max: 10, fractionDigits: 2 }),
         dimensions: {
           length: faker.number.float({ min: 1, max: 100, fractionDigits: 1 }),
           width: faker.number.float({ min: 1, max: 100, fractionDigits: 1 }),
-          height: faker.number.float({ min: 1, max: 100, fractionDigits: 1 })
+          height: faker.number.float({ min: 1, max: 100, fractionDigits: 1 }),
         },
         material: faker.commerce.productMaterial(),
-        color: faker.color.human()
+        color: faker.color.human(),
       },
       ratings: {
         average: faker.number.float({ min: 1, max: 5, fractionDigits: 1 }),
-        count: faker.number.int({ min: 0, max: 1000 })
-      }
-    };
+        count: faker.number.int({ min: 0, max: 1000 }),
+      },
+    }
   }
 
   static createElectronics(): any {
@@ -534,16 +537,16 @@ export class ProductFactory {
         ...this.create().specifications,
         warranty: `${faker.number.int({ min: 1, max: 5 })} years`,
         powerConsumption: `${faker.number.int({ min: 5, max: 500 })}W`,
-        compatibility: faker.helpers.arrayElements(['iOS', 'Android', 'Windows', 'macOS'])
-      }
-    });
+        compatibility: faker.helpers.arrayElements(['iOS', 'Android', 'Windows', 'macOS']),
+      },
+    })
   }
 
   static createOutOfStock(): any {
     return this.create({
       inStock: false,
-      stockQuantity: 0
-    });
+      stockQuantity: 0,
+    })
   }
 }
 ```
@@ -559,11 +562,11 @@ export const testScenarios = {
       cart: {
         items: [
           { product: ProductFactory.create(), quantity: 2 },
-          { product: ProductFactory.create(), quantity: 1 }
+          { product: ProductFactory.create(), quantity: 1 },
         ],
-        total: 150.00,
-        discount: 15.00
-      }
+        total: 150.0,
+        discount: 15.0,
+      },
     },
 
     completedOrder: {
@@ -575,23 +578,27 @@ export const testScenarios = {
         shippingAddress: {
           street: faker.location.streetAddress(),
           city: faker.location.city(),
-          postalCode: faker.location.zipCode()
+          postalCode: faker.location.zipCode(),
         },
         paymentMethod: 'credit_card',
         total: 299.99,
-        createdAt: faker.date.recent()
-      }
-    }
+        createdAt: faker.date.recent(),
+      },
+    },
   },
 
   userManagement: {
     adminWithPermissions: {
       user: UserFactory.createAdmin(),
       permissions: [
-        'users.read', 'users.write', 'users.delete',
-        'products.read', 'products.write',
-        'orders.read', 'orders.manage'
-      ]
+        'users.read',
+        'users.write',
+        'users.delete',
+        'products.read',
+        'products.write',
+        'orders.read',
+        'orders.manage',
+      ],
     },
 
     userWithSubscription: {
@@ -601,25 +608,25 @@ export const testScenarios = {
         status: 'active',
         startDate: faker.date.past(),
         endDate: faker.date.future(),
-        features: ['unlimited_storage', 'priority_support', 'advanced_analytics']
-      }
-    }
-  }
-};
+        features: ['unlimited_storage', 'priority_support', 'advanced_analytics'],
+      },
+    },
+  },
+}
 
 // 테스트에서 사용
 describe('Order Processing', () => {
   it('should process completed order correctly', async () => {
-    const scenario = testScenarios.ecommerce.completedOrder;
+    const scenario = testScenarios.ecommerce.completedOrder
 
     // 시나리오 데이터로 테스트 실행
-    const user = await UserFactory.createInDb(scenario.user);
-    const order = await createOrder(user.id, scenario.order);
+    const user = await UserFactory.createInDb(scenario.user)
+    const order = await createOrder(user.id, scenario.order)
 
-    expect(order.status).toBe('completed');
-    expect(order.total).toBe(scenario.order.total);
-  });
-});
+    expect(order.status).toBe('completed')
+    expect(order.total).toBe(scenario.order.total)
+  })
+})
 ```
 
 ## 테스트 자동화 전략
@@ -804,39 +811,39 @@ module.exports = {
     {
       displayName: 'unit',
       testMatch: ['<rootDir>/src/**/*.test.ts'],
-      setupFilesAfterEnv: ['<rootDir>/test/setup/unit.setup.ts']
+      setupFilesAfterEnv: ['<rootDir>/test/setup/unit.setup.ts'],
     },
     {
       displayName: 'integration',
       testMatch: ['<rootDir>/test/integration/**/*.test.ts'],
       setupFilesAfterEnv: ['<rootDir>/test/setup/integration.setup.ts'],
       maxWorkers: 2, // 통합 테스트는 동시성 제한
-    }
+    },
   ],
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',
     '!src/**/*.stories.{ts,tsx}',
-    '!src/**/index.ts'
+    '!src/**/index.ts',
   ],
   coverageThreshold: {
     global: {
       statements: 80,
       branches: 75,
       functions: 85,
-      lines: 80
+      lines: 80,
     },
     './src/utils/': {
       statements: 90,
       branches: 85,
       functions: 95,
-      lines: 90
-    }
-  }
-};
+      lines: 90,
+    },
+  },
+}
 
 // playwright.config.ts
-import { defineConfig } from '@playwright/test';
+import { defineConfig } from '@playwright/test'
 
 export default defineConfig({
   testDir: './test/e2e',
@@ -864,16 +871,16 @@ export default defineConfig({
     {
       name: 'Mobile Safari',
       use: { ...devices['iPhone 12'] },
-    }
+    },
   ],
 
   use: {
     baseURL: process.env.BASE_URL || 'http://localhost:3000',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
-    video: 'retain-on-failure'
-  }
-});
+    video: 'retain-on-failure',
+  },
+})
 ```
 
 ## 테스트 품질 지표
@@ -882,20 +889,20 @@ export default defineConfig({
 
 ```typescript
 // test/coverage/coverage-analysis.ts
-import { exec } from 'child_process';
-import { promises as fs } from 'fs';
-import path from 'path';
+import { exec } from 'child_process'
+import { promises as fs } from 'fs'
+import path from 'path'
 
 interface CoverageData {
-  statements: { pct: number; total: number; covered: number };
-  branches: { pct: number; total: number; covered: number };
-  functions: { pct: number; total: number; covered: number };
-  lines: { pct: number; total: number; covered: number };
+  statements: { pct: number; total: number; covered: number }
+  branches: { pct: number; total: number; covered: number }
+  functions: { pct: number; total: number; covered: number }
+  lines: { pct: number; total: number; covered: number }
 }
 
 interface CoverageReport {
-  total: CoverageData;
-  files: Record<string, CoverageData>;
+  total: CoverageData
+  files: Record<string, CoverageData>
 }
 
 export class CoverageAnalyzer {
@@ -903,84 +910,94 @@ export class CoverageAnalyzer {
     statements: 80,
     branches: 75,
     functions: 85,
-    lines: 80
-  };
+    lines: 80,
+  }
 
   async generateCoverageReport(): Promise<CoverageReport> {
     // Jest 커버리지 데이터 읽기
     const coverageData = await fs.readFile(
       path.join(process.cwd(), 'coverage/coverage-summary.json'),
       'utf-8'
-    );
+    )
 
-    return JSON.parse(coverageData);
+    return JSON.parse(coverageData)
   }
 
   async analyzeCoverage(): Promise<void> {
-    const report = await this.generateCoverageReport();
+    const report = await this.generateCoverageReport()
 
-    console.log('\n📊 커버리지 분석 결과');
-    console.log('='.repeat(50));
+    console.log('\n📊 커버리지 분석 결과')
+    console.log('='.repeat(50))
 
     // 전체 커버리지 분석
-    this.printCoverageMetrics('전체', report.total);
+    this.printCoverageMetrics('전체', report.total)
 
     // 임계값 미달 파일 찾기
-    const lowCoverageFiles = this.findLowCoverageFiles(report.files);
+    const lowCoverageFiles = this.findLowCoverageFiles(report.files)
 
     if (lowCoverageFiles.length > 0) {
-      console.log('\n⚠️  커버리지 임계값 미달 파일:');
+      console.log('\n⚠️  커버리지 임계값 미달 파일:')
       lowCoverageFiles.forEach(({ file, metrics }) => {
-        console.log(`  ${file}`);
+        console.log(`  ${file}`)
         Object.entries(metrics).forEach(([type, pct]) => {
           if (pct < this.coverageThresholds[type as keyof typeof this.coverageThresholds]) {
-            console.log(`    ${type}: ${pct}% (임계값: ${this.coverageThresholds[type as keyof typeof this.coverageThresholds]}%)`);
+            console.log(
+              `    ${type}: ${pct}% (임계값: ${this.coverageThresholds[type as keyof typeof this.coverageThresholds]}%)`
+            )
           }
-        });
-      });
+        })
+      })
     }
 
     // 커버리지 트렌드 분석
-    await this.trackCoverageTrend(report.total);
+    await this.trackCoverageTrend(report.total)
   }
 
   private printCoverageMetrics(label: string, data: CoverageData): void {
-    console.log(`\n${label}:`);
-    console.log(`  구문(Statements): ${data.statements.pct}% (${data.statements.covered}/${data.statements.total})`);
-    console.log(`  분기(Branches): ${data.branches.pct}% (${data.branches.covered}/${data.branches.total})`);
-    console.log(`  함수(Functions): ${data.functions.pct}% (${data.functions.covered}/${data.functions.total})`);
-    console.log(`  라인(Lines): ${data.lines.pct}% (${data.lines.covered}/${data.lines.total})`);
+    console.log(`\n${label}:`)
+    console.log(
+      `  구문(Statements): ${data.statements.pct}% (${data.statements.covered}/${data.statements.total})`
+    )
+    console.log(
+      `  분기(Branches): ${data.branches.pct}% (${data.branches.covered}/${data.branches.total})`
+    )
+    console.log(
+      `  함수(Functions): ${data.functions.pct}% (${data.functions.covered}/${data.functions.total})`
+    )
+    console.log(`  라인(Lines): ${data.lines.pct}% (${data.lines.covered}/${data.lines.total})`)
   }
 
-  private findLowCoverageFiles(files: Record<string, CoverageData>): Array<{file: string, metrics: Record<string, number>}> {
-    const lowCoverageFiles: Array<{file: string, metrics: Record<string, number>}> = [];
+  private findLowCoverageFiles(
+    files: Record<string, CoverageData>
+  ): Array<{ file: string; metrics: Record<string, number> }> {
+    const lowCoverageFiles: Array<{ file: string; metrics: Record<string, number> }> = []
 
     Object.entries(files).forEach(([file, data]) => {
       const metrics: Record<string, number> = {
         statements: data.statements.pct,
         branches: data.branches.pct,
         functions: data.functions.pct,
-        lines: data.lines.pct
-      };
+        lines: data.lines.pct,
+      }
 
-      const hasLowCoverage = Object.entries(metrics).some(([type, pct]) =>
-        pct < this.coverageThresholds[type as keyof typeof this.coverageThresholds]
-      );
+      const hasLowCoverage = Object.entries(metrics).some(
+        ([type, pct]) => pct < this.coverageThresholds[type as keyof typeof this.coverageThresholds]
+      )
 
       if (hasLowCoverage) {
-        lowCoverageFiles.push({ file, metrics });
+        lowCoverageFiles.push({ file, metrics })
       }
-    });
+    })
 
-    return lowCoverageFiles;
+    return lowCoverageFiles
   }
 
   private async trackCoverageTrend(currentCoverage: CoverageData): Promise<void> {
-    const trendFile = path.join(process.cwd(), 'coverage/trend.json');
+    const trendFile = path.join(process.cwd(), 'coverage/trend.json')
 
     try {
-      const existingTrend = await fs.readFile(trendFile, 'utf-8');
-      const trend = JSON.parse(existingTrend);
+      const existingTrend = await fs.readFile(trendFile, 'utf-8')
+      const trend = JSON.parse(existingTrend)
 
       // 새로운 데이터 추가
       trend.push({
@@ -988,55 +1005,56 @@ export class CoverageAnalyzer {
         statements: currentCoverage.statements.pct,
         branches: currentCoverage.branches.pct,
         functions: currentCoverage.functions.pct,
-        lines: currentCoverage.lines.pct
-      });
+        lines: currentCoverage.lines.pct,
+      })
 
       // 최근 30개 항목만 유지
       if (trend.length > 30) {
-        trend.splice(0, trend.length - 30);
+        trend.splice(0, trend.length - 30)
       }
 
-      await fs.writeFile(trendFile, JSON.stringify(trend, null, 2));
+      await fs.writeFile(trendFile, JSON.stringify(trend, null, 2))
 
       // 트렌드 분석
       if (trend.length >= 2) {
-        const previous = trend[trend.length - 2];
-        const current = trend[trend.length - 1];
+        const previous = trend[trend.length - 2]
+        const current = trend[trend.length - 1]
 
-        console.log('\n📈 커버리지 트렌드:');
-        this.printTrendAnalysis('구문', previous.statements, current.statements);
-        this.printTrendAnalysis('분기', previous.branches, current.branches);
-        this.printTrendAnalysis('함수', previous.functions, current.functions);
-        this.printTrendAnalysis('라인', previous.lines, current.lines);
+        console.log('\n📈 커버리지 트렌드:')
+        this.printTrendAnalysis('구문', previous.statements, current.statements)
+        this.printTrendAnalysis('분기', previous.branches, current.branches)
+        this.printTrendAnalysis('함수', previous.functions, current.functions)
+        this.printTrendAnalysis('라인', previous.lines, current.lines)
       }
-
     } catch (error) {
       // 첫 번째 실행인 경우 새 파일 생성
-      const initialTrend = [{
-        date: new Date().toISOString(),
-        statements: currentCoverage.statements.pct,
-        branches: currentCoverage.branches.pct,
-        functions: currentCoverage.functions.pct,
-        lines: currentCoverage.lines.pct
-      }];
+      const initialTrend = [
+        {
+          date: new Date().toISOString(),
+          statements: currentCoverage.statements.pct,
+          branches: currentCoverage.branches.pct,
+          functions: currentCoverage.functions.pct,
+          lines: currentCoverage.lines.pct,
+        },
+      ]
 
-      await fs.writeFile(trendFile, JSON.stringify(initialTrend, null, 2));
+      await fs.writeFile(trendFile, JSON.stringify(initialTrend, null, 2))
     }
   }
 
   private printTrendAnalysis(type: string, previous: number, current: number): void {
-    const diff = current - previous;
-    const arrow = diff > 0 ? '↗️' : diff < 0 ? '↘️' : '➡️';
-    const diffStr = diff !== 0 ? ` (${diff > 0 ? '+' : ''}${diff.toFixed(1)}%)` : '';
+    const diff = current - previous
+    const arrow = diff > 0 ? '↗️' : diff < 0 ? '↘️' : '➡️'
+    const diffStr = diff !== 0 ? ` (${diff > 0 ? '+' : ''}${diff.toFixed(1)}%)` : ''
 
-    console.log(`  ${type}: ${current.toFixed(1)}% ${arrow}${diffStr}`);
+    console.log(`  ${type}: ${current.toFixed(1)}% ${arrow}${diffStr}`)
   }
 }
 
 // 스크립트 실행
 if (require.main === module) {
-  const analyzer = new CoverageAnalyzer();
-  analyzer.analyzeCoverage().catch(console.error);
+  const analyzer = new CoverageAnalyzer()
+  analyzer.analyzeCoverage().catch(console.error)
 }
 ```
 

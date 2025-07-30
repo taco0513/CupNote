@@ -1,160 +1,125 @@
-# ☕ CupNote - 나의 커피 감각 저널
+# ☕ CupNote
 
-<div align="center">
-  <img src="cupnote-app/public/icons/icon-512x512.png" alt="CupNote Logo" width="200" />
-  
-  **당신의 커피 감각을 기록하고, 로스터의 의도를 이해하며, 커피 여정을 성장시키세요**
+> 누구나 전문가처럼, 그러나 자기만의 방식으로 커피를 기록하고 나눌 수 있는 공간
 
-  [![Deploy](https://img.shields.io/github/actions/workflow/status/taco0513/CupNote/deploy.yml?label=Deploy)](https://github.com/taco0513/CupNote/actions)
-  [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-  [![Vue](https://img.shields.io/badge/Vue-3.5+-brightgreen.svg)](https://vuejs.org/)
-  [![TypeScript](https://img.shields.io/badge/TypeScript-5.8+-blue.svg)](https://www.typescriptlang.org/)
-</div>
+## 🎯 프로젝트 소개
 
-## 🌟 CupNote란?
+CupNote는 스페셜티 커피 애호가들을 위한 개인화된 커피 기록 & 커뮤니티 플랫폼입니다.
 
-CupNote는 커피 애호가들이 자신의 테이스팅 경험을 기록하고, 로스터의 의도와 비교하며, 감각을 발전시킬 수 있도록 도와주는 웹 애플리케이션입니다.
+전문가의 복잡한 용어에 부담을 느끼지 않고, 자신만의 언어로 커피를 기록하고 다른 사람들과 경험을 나눌 수 있습니다.
 
-### 🎯 핵심 기능
+### 핵심 가치
 
-- **📝 테이스팅 기록**: 향미, 감각, 균형을 체계적으로 기록
-- **🎯 Match Score**: 로스터 노트와의 일치도를 AI가 분석
-- **📊 성장 추적**: 시간에 따른 감각 발전을 시각화
-- **🏆 게이미피케이션**: 배지와 레벨로 동기부여
-- **👥 커뮤니티**: 다른 사람들의 테이스팅 경험과 비교
+- 🌱 **기록** — 기록할수록 더 섬세하게 느낀다
+- 💬 **표현** — 내 언어로 편하게 말하면 된다
+- 🤝 **공유** — 다른 사람 것도 보면 재밌고 배운다
+- 📈 **성장** — 이 과정을 즐기다 보면 어느새 늘어있다
 
 ## 🚀 시작하기
 
-### 온라인으로 사용하기
-[https://cupnote.vercel.app](https://cupnote.vercel.app) 에서 바로 사용할 수 있습니다.
+### 필요 환경
 
-### 로컬 개발 환경
+- Node.js 18.17 이상
+- npm 또는 yarn
 
-#### 필요 사항
-- Node.js 20+ 또는 Bun 1.0+
-- Git
-
-#### 설치 및 실행
+### 설치 및 실행
 
 ```bash
 # 저장소 클론
-git clone https://github.com/taco0513/CupNote.git
-cd CupNote
+git clone https://github.com/your-username/cupnote.git
+cd cupnote/cupnote
 
-# 의존성 설치 (Bun 사용 시 - 권장)
-cd cupnote-app
-bun install
-
-# 또는 npm 사용 시
+# 의존성 설치
 npm install
 
-# 개발 서버 실행
-bun dev
-# 또는
+# 환경 변수 설정
+cp .env.example .env.local
+
+# 개발 서버 실행 (http://localhost:5173)
 npm run dev
 ```
 
-브라우저에서 `http://localhost:5173` 접속
+### 프로덕션 빌드
 
-## 🛠️ 기술 스택
+```bash
+# 빌드
+npm run build
 
-### Frontend
-- **Framework**: Vue 3 (Composition API)
-- **Build Tool**: Vite
+# 프로덕션 실행
+npm start
+```
+
+## 🛠 기술 스택
+
+- **Framework**: Next.js 15.4.5 (App Router)
 - **Language**: TypeScript
-- **State Management**: Pinia
-- **Styling**: CSS with modern features
-- **PWA**: Capacitor + Vite PWA
+- **Styling**: Tailwind CSS v4
+- **Package Manager**: npm
+- **Database**: PostgreSQL + Prisma (예정)
+- **Authentication**: NextAuth.js (예정)
+- **Image Storage**: Cloudinary (예정)
 
-### Backend & Services
-- **Database**: Supabase (PostgreSQL)
-- **Authentication**: Supabase Auth
-- **Hosting**: Vercel
-- **CI/CD**: GitHub Actions
+## 📱 주요 기능
 
-### Development Tools
-- **Package Manager**: Bun (30x faster than npm)
-- **Testing**: Vitest + Playwright
-- **Linting**: ESLint + Prettier
-- **Version Control**: Git + GitHub
+### 1. 개인 커피 일기
 
-## 📁 프로젝트 구조
+- 나만의 언어로 커피 맛 기록
+- 로스터 노트와 내 느낌 비교
+- 사진, 날짜, 장소, 함께한 사람 기록
+
+### 2. 맛 표현 시스템
+
+- **편하게 쓰기 모드**: "새콤달콤한 사탕 같아요"
+- **전문가 모드**: "자몽, 베르가못, 꿀, 밝은 산미"
+- 두 모드를 자유롭게 전환
+
+### 3. 커뮤니티 커핑 (예정)
+
+- 같은 원두를 마신 사람들의 기록 비교
+- 온라인 블라인드 테이스팅
+- 서로의 표현 공유 & 학습
+
+### 4. 성장 트래킹 (예정)
+
+- 감각 발달 과정 시각화
+- 선호도 패턴 분석
+- 커피 여정 타임라인
+
+## 📂 프로젝트 구조
 
 ```
-CupNote/
-├── cupnote-app/          # Vue 애플리케이션
-│   ├── src/
-│   │   ├── components/   # 재사용 가능한 컴포넌트
-│   │   ├── views/        # 페이지 컴포넌트
-│   │   ├── stores/       # Pinia 상태 관리
-│   │   ├── utils/        # 유틸리티 함수
-│   │   └── assets/       # 정적 자원
-│   ├── e2e/             # E2E 테스트
-│   └── tests/           # 단위 테스트
-├── docs/                # 프로젝트 문서
-├── Foundation/          # 기획 문서
-├── MASTER_PLAYBOOK/     # AI 개발 가이드
-└── checkpoints/         # 개발 진행 기록
+cupnote/
+├── src/
+│   ├── app/            # Next.js App Router
+│   ├── components/     # React 컴포넌트
+│   ├── types/         # TypeScript 타입 정의
+│   ├── lib/           # 유틸리티 함수
+│   ├── hooks/         # Custom React hooks
+│   └── utils/         # 헬퍼 함수
+├── public/            # 정적 파일
+├── prisma/            # DB 스키마 (예정)
+└── tests/             # 테스트 파일 (예정)
 ```
-
-## 🧪 테스트
-
-```bash
-# 단위 테스트 실행
-bun test:unit
-
-# E2E 테스트 실행
-bun test:e2e
-
-# 테스트 커버리지
-bun test:coverage
-```
-
-## 🚀 배포
-
-### 자동 배포
-- `main` 브랜치에 push 시 자동으로 프로덕션 배포
-- Pull Request 생성 시 미리보기 배포
-
-### 수동 배포
-```bash
-# Vercel CLI로 배포
-vercel --prod
-```
-
-## 📖 문서
-
-- [배포 가이드](docs/deployment-guide.md)
-- [개발 가이드](docs/development-guide.md)
-- [아키텍처 문서](docs/architecture.md)
-- [API 문서](docs/api-reference.md)
 
 ## 🤝 기여하기
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
+CupNote는 오픈소스 프로젝트입니다. 기여를 환영합니다!
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📜 라이센스
+## 📝 라이선스
 
-이 프로젝트는 MIT 라이센스 하에 배포됩니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
+이 프로젝트는 MIT 라이선스 하에 배포됩니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
 
-## 👥 팀
+## 📧 문의
 
-- **개발**: [@taco0513](https://github.com/taco0513)
-- **AI 협업**: Claude Code by Anthropic
-
-## 🙏 감사의 말
-
-- Vue.js 팀과 커뮤니티
-- Supabase 팀
-- 모든 오픈소스 기여자들
-- 커피를 사랑하는 모든 분들
+- 이메일: contact@cupnote.com
+- 웹사이트: https://cupnote.com (예정)
 
 ---
 
-<div align="center">
-  Made with ☕ and ❤️ by CupNote Team
-</div>
+**언젠가 우리 모두가 전문가처럼 자신만의 언어로 커피를 이야기하는 날을 꿈꾸며.**

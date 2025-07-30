@@ -1,11 +1,15 @@
 /**
  * Report Generation Utilities
- * 
+ *
  * This module provides functions for generating different types of reports
  * from coffee tasting and QC data, including PDF and CSV exports.
  */
 
-import { calculateScaComplianceScore, predictQualityScore, evaluateExtractionYield } from './scaCalculations'
+import {
+  calculateScaComplianceScore,
+  predictQualityScore,
+  evaluateExtractionYield,
+} from './scaCalculations'
 
 /**
  * Generate comprehensive report data
@@ -20,16 +24,16 @@ export function generateReportData(sessionData) {
     qcMeasurementData = {},
     sensorySliderData = {},
     personalCommentData = {},
-    roasterNotesData = {}
+    roasterNotesData = {},
   } = sessionData
 
   const reportData = {
     metadata: {
       generatedAt: new Date().toISOString(),
       reportType: 'pro-qc-comprehensive',
-      version: '1.0.0'
+      version: '1.0.0',
     },
-    
+
     coffee: {
       name: coffeeInfo.name || 'Unknown Coffee',
       origin: coffeeInfo.origin || 'Unknown Origin',
@@ -39,9 +43,9 @@ export function generateReportData(sessionData) {
       variety: coffeeInfo.variety || 'Unknown',
       process: coffeeInfo.process || 'Unknown',
       altitude: coffeeInfo.altitude || null,
-      notes: coffeeInfo.notes || ''
+      notes: coffeeInfo.notes || '',
     },
-    
+
     brewing: {
       mode: sessionData.mode || 'pro',
       recipe: homeCafeData.recipe || {},
@@ -52,56 +56,56 @@ export function generateReportData(sessionData) {
       grindSize: proBrewingData.grind_size || 6,
       waterQuality: {
         tds: proBrewingData.water_tds || 150,
-        ph: proBrewingData.water_ph || 7.0
+        ph: proBrewingData.water_ph || 7.0,
       },
       timing: {
         bloom: proBrewingData.bloom_time || 30,
-        total: proBrewingData.total_time || '2:30'
+        total: proBrewingData.total_time || '2:30',
       },
       equipment: {
         grinder: proBrewingData.grinder_model || null,
         filter: proBrewingData.filter_type || null,
-        notes: proBrewingData.equipment_notes || ''
-      }
+        notes: proBrewingData.equipment_notes || '',
+      },
     },
-    
+
     qualityControl: {
       tds: {
         enabled: qcMeasurementData.tds_enabled || false,
         value: qcMeasurementData.tds_value || null,
-        device: qcMeasurementData.tds_device || null
+        device: qcMeasurementData.tds_device || null,
       },
       extraction: {
         yield: qcMeasurementData.extraction_yield || null,
-        status: qcMeasurementData.yield_status || null
+        status: qcMeasurementData.yield_status || null,
       },
       measurements: {
         brewVolume: qcMeasurementData.brew_volume || null,
         dripLoss: qcMeasurementData.drip_loss || null,
         roomTemp: qcMeasurementData.room_temp || null,
-        humidity: qcMeasurementData.humidity || null
+        humidity: qcMeasurementData.humidity || null,
       },
       predictions: {
         quality: qcMeasurementData.predicted_quality || null,
-        confidence: null // Will be calculated
+        confidence: null, // Will be calculated
       },
-      notes: qcMeasurementData.qc_notes || ''
+      notes: qcMeasurementData.qc_notes || '',
     },
-    
+
     sensoryEvaluation: {
       scores: sensorySliderData || {},
       expressions: sensorySliderData.expressions || [],
       personalComments: personalCommentData.comment || '',
       personalRating: personalCommentData.rating || null,
-      roasterNotes: roasterNotesData || {}
+      roasterNotes: roasterNotesData || {},
     },
-    
+
     analysis: {
       scaCompliance: null, // Will be calculated
       overallQuality: null, // Will be calculated
       recommendations: [], // Will be calculated
-      summary: '' // Will be generated
-    }
+      summary: '', // Will be generated
+    },
   }
 
   // Calculate SCA compliance
@@ -111,9 +115,9 @@ export function generateReportData(sessionData) {
       waterAmount: (homeCafeData.recipe?.coffee_amount || 20) * (proBrewingData.brew_ratio || 16),
       waterTemp: proBrewingData.water_temp,
       waterTds: proBrewingData.water_tds,
-      waterPh: proBrewingData.water_ph
+      waterPh: proBrewingData.water_ph,
     }
-    
+
     reportData.analysis.scaCompliance = calculateScaComplianceScore(brewingParams)
   }
 
@@ -124,9 +128,9 @@ export function generateReportData(sessionData) {
       brewVolume: qcMeasurementData.brew_volume,
       coffeeAmount: homeCafeData.recipe?.coffee_amount,
       scaComplianceScore: reportData.analysis.scaCompliance?.score,
-      extractionYield: qcMeasurementData.extraction_yield
+      extractionYield: qcMeasurementData.extraction_yield,
     }
-    
+
     const qualityPrediction = predictQualityScore(qualityParams)
     reportData.analysis.overallQuality = qualityPrediction
     reportData.qualityControl.predictions.confidence = qualityPrediction.confidence?.percentage
@@ -150,32 +154,32 @@ export function generateReportData(sessionData) {
  */
 function generateSummaryText(reportData) {
   const parts = []
-  
+
   // Coffee info
   parts.push(`${reportData.coffee.name} (${reportData.coffee.origin})`)
-  
+
   // Brewing method
   parts.push(`${getMethodName(reportData.brewing.method)} 추출 (1:${reportData.brewing.ratio})`)
-  
+
   // SCA compliance
   if (reportData.analysis.scaCompliance) {
     const score = reportData.analysis.scaCompliance.score
     parts.push(`SCA 준수율 ${score}%`)
   }
-  
+
   // Quality prediction
   if (reportData.analysis.overallQuality) {
     const quality = reportData.analysis.overallQuality.score
     parts.push(`예상 품질 ${quality}/5.0`)
   }
-  
+
   // Extraction status
   if (reportData.qualityControl.extraction.yield) {
     const yield_ = reportData.qualityControl.extraction.yield
     const status = reportData.qualityControl.extraction.status
     parts.push(`추출 수율 ${yield_}% (${status})`)
   }
-  
+
   return parts.join(' | ')
 }
 
@@ -189,7 +193,7 @@ function getMethodName(method) {
     pourover: 'Pour Over',
     immersion: 'Immersion',
     pressure: 'Pressure',
-    'cold-brew': 'Cold Brew'
+    'cold-brew': 'Cold Brew',
   }
   return names[method] || method
 }
@@ -201,16 +205,16 @@ function getMethodName(method) {
  */
 export function generateCSV(reportData) {
   const rows = []
-  
+
   // Header
   rows.push(['Category', 'Parameter', 'Value', 'Unit', 'Status'])
-  
+
   // Coffee Information
   rows.push(['Coffee', 'Name', reportData.coffee.name, '', ''])
   rows.push(['Coffee', 'Origin', reportData.coffee.origin, '', ''])
   rows.push(['Coffee', 'Roaster', reportData.coffee.roaster, '', ''])
   rows.push(['Coffee', 'Roast Level', reportData.coffee.roastLevel, '', ''])
-  
+
   // Brewing Parameters
   rows.push(['Brewing', 'Method', getMethodName(reportData.brewing.method), '', ''])
   rows.push(['Brewing', 'Ratio', `1:${reportData.brewing.ratio}`, '', ''])
@@ -218,35 +222,57 @@ export function generateCSV(reportData) {
   rows.push(['Brewing', 'Grind Size', reportData.brewing.grindSize, '', ''])
   rows.push(['Brewing', 'Water TDS', reportData.brewing.waterQuality.tds, 'ppm', ''])
   rows.push(['Brewing', 'Water pH', reportData.brewing.waterQuality.ph, '', ''])
-  
+
   // Quality Control
   if (reportData.qualityControl.tds.enabled) {
     rows.push(['QC', 'TDS', reportData.qualityControl.tds.value, '%', ''])
   }
   if (reportData.qualityControl.extraction.yield) {
-    rows.push(['QC', 'Extraction Yield', reportData.qualityControl.extraction.yield, '%', reportData.qualityControl.extraction.status])
+    rows.push([
+      'QC',
+      'Extraction Yield',
+      reportData.qualityControl.extraction.yield,
+      '%',
+      reportData.qualityControl.extraction.status,
+    ])
   }
   if (reportData.qualityControl.measurements.brewVolume) {
     rows.push(['QC', 'Brew Volume', reportData.qualityControl.measurements.brewVolume, 'ml', ''])
   }
-  
+
   // Analysis Results
   if (reportData.analysis.scaCompliance) {
-    rows.push(['Analysis', 'SCA Compliance', reportData.analysis.scaCompliance.score, '%', reportData.analysis.scaCompliance.grade.description])
+    rows.push([
+      'Analysis',
+      'SCA Compliance',
+      reportData.analysis.scaCompliance.score,
+      '%',
+      reportData.analysis.scaCompliance.grade.description,
+    ])
   }
   if (reportData.analysis.overallQuality) {
-    rows.push(['Analysis', 'Overall Quality', reportData.analysis.overallQuality.score, '/5.0', reportData.analysis.overallQuality.description])
+    rows.push([
+      'Analysis',
+      'Overall Quality',
+      reportData.analysis.overallQuality.score,
+      '/5.0',
+      reportData.analysis.overallQuality.description,
+    ])
   }
-  
+
   // Convert to CSV string
-  return rows.map(row => 
-    row.map(cell => 
-      // Escape cells containing commas or quotes
-      typeof cell === 'string' && (cell.includes(',') || cell.includes('"'))
-        ? `"${cell.replace(/"/g, '""')}"` 
-        : cell
-    ).join(',')
-  ).join('\n')
+  return rows
+    .map((row) =>
+      row
+        .map((cell) =>
+          // Escape cells containing commas or quotes
+          typeof cell === 'string' && (cell.includes(',') || cell.includes('"'))
+            ? `"${cell.replace(/"/g, '""')}"`
+            : cell,
+        )
+        .join(','),
+    )
+    .join('\n')
 }
 
 /**
@@ -267,16 +293,16 @@ export function generateJSON(reportData) {
 export function downloadFile(content, filename, mimeType = 'text/plain') {
   const blob = new Blob([content], { type: mimeType })
   const url = URL.createObjectURL(blob)
-  
+
   const link = document.createElement('a')
   link.href = url
   link.download = filename
   link.style.display = 'none'
-  
+
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
-  
+
   URL.revokeObjectURL(url)
 }
 
@@ -287,11 +313,8 @@ export function downloadFile(content, filename, mimeType = 'text/plain') {
  * @returns {string} Filename with timestamp
  */
 export function generateFilename(base, extension) {
-  const timestamp = new Date().toISOString()
-    .replace(/[:.]/g, '-')
-    .replace('T', '_')
-    .slice(0, 19)
-  
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-').replace('T', '_').slice(0, 19)
+
   return `${base}_${timestamp}.${extension}`
 }
 
@@ -303,21 +326,21 @@ export function generateFilename(base, extension) {
 export function exportReport(sessionData, formats = ['json']) {
   const reportData = generateReportData(sessionData)
   const baseFilename = `cupnote_pro_report_${reportData.coffee.name.replace(/[^a-zA-Z0-9]/g, '_')}`
-  
-  formats.forEach(format => {
+
+  formats.forEach((format) => {
     switch (format) {
       case 'csv':
         const csvContent = generateCSV(reportData)
         const csvFilename = generateFilename(baseFilename, 'csv')
         downloadFile(csvContent, csvFilename, 'text/csv')
         break
-        
+
       case 'json':
         const jsonContent = generateJSON(reportData)
         const jsonFilename = generateFilename(baseFilename, 'json')
         downloadFile(jsonContent, jsonFilename, 'application/json')
         break
-        
+
       default:
         console.warn(`Unsupported export format: ${format}`)
     }
@@ -332,10 +355,10 @@ export function exportReport(sessionData, formats = ['json']) {
 export function generatePDFContent(reportData) {
   const timestamp = new Date().toLocaleString('ko-KR', {
     year: 'numeric',
-    month: 'long', 
+    month: 'long',
     day: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   })
 
   return `
@@ -561,7 +584,9 @@ export function generatePDFContent(reportData) {
         </div>
     </div>
     
-    ${reportData.analysis.scaCompliance ? `
+    ${
+      reportData.analysis.scaCompliance
+        ? `
     <div class="section">
         <h3>SCA 표준 준수 분석</h3>
         <div class="metrics-grid">
@@ -576,17 +601,25 @@ export function generatePDFContent(reportData) {
         </div>
         
         <div class="compliance-grid">
-            ${Object.entries(reportData.analysis.scaCompliance.evaluations).map(([key, eval_]) => `
+            ${Object.entries(reportData.analysis.scaCompliance.evaluations)
+              .map(
+                ([key, eval_]) => `
                 <div class="compliance-item ${eval_.compliant ? 'compliant' : ''}">
                     <div style="font-weight: 600; margin-bottom: 5px;">${getComplianceLabel(key)}</div>
                     <div style="font-size: 12px;">${eval_.compliant ? '✓ 적합' : '⚠ 부적합'}</div>
                 </div>
-            `).join('')}
+            `,
+              )
+              .join('')}
         </div>
     </div>
-    ` : ''}
+    `
+        : ''
+    }
     
-    ${reportData.qualityControl.extraction.yield ? `
+    ${
+      reportData.qualityControl.extraction.yield
+        ? `
     <div class="section">
         <h3>추출 분석</h3>
         <div class="metrics-grid">
@@ -600,9 +633,13 @@ export function generatePDFContent(reportData) {
             </div>
         </div>
     </div>
-    ` : ''}
+    `
+        : ''
+    }
     
-    ${reportData.analysis.overallQuality ? `
+    ${
+      reportData.analysis.overallQuality
+        ? `
     <div class="section">
         <h3>품질 예측</h3>
         <div class="metrics-grid">
@@ -616,21 +653,31 @@ export function generatePDFContent(reportData) {
             </div>
         </div>
     </div>
-    ` : ''}
+    `
+        : ''
+    }
     
-    ${reportData.analysis.recommendations.length > 0 ? `
+    ${
+      reportData.analysis.recommendations.length > 0
+        ? `
     <div class="section">
         <div class="recommendations">
             <h4>개선 제안</h4>
-            ${reportData.analysis.recommendations.map(rec => `
+            ${reportData.analysis.recommendations
+              .map(
+                (rec) => `
                 <div class="recommendation-item">
                     <strong>${rec.category}:</strong> ${rec.action}
                     <div style="font-size: 12px; color: #666; margin-top: 5px;">${rec.reason}</div>
                 </div>
-            `).join('')}
+            `,
+              )
+              .join('')}
         </div>
     </div>
-    ` : ''}
+    `
+        : ''
+    }
     
     <div class="footer">
         <div>Generated by CupNote Pro QC System</div>
@@ -650,7 +697,7 @@ function getComplianceLabel(key) {
   const labels = {
     ratio: '추출 비율',
     temperature: '물 온도',
-    waterQuality: '물 품질'
+    waterQuality: '물 품질',
   }
   return labels[key] || key
 }
@@ -661,12 +708,12 @@ function getComplianceLabel(key) {
  */
 export function printPDFReport(reportData) {
   const htmlContent = generatePDFContent(reportData)
-  
+
   // Create a new window for printing
   const printWindow = window.open('', '_blank')
   printWindow.document.write(htmlContent)
   printWindow.document.close()
-  
+
   // Wait for content to load, then print
   printWindow.onload = () => {
     printWindow.print()
@@ -682,5 +729,5 @@ export default {
   downloadFile,
   generateFilename,
   exportReport,
-  printPDFReport
+  printPDFReport,
 }

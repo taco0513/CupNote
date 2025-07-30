@@ -8,13 +8,9 @@
         <div class="golden-zone" :style="goldenZoneStyle">
           <span class="zone-label">SCA Golden Cup</span>
         </div>
-        
+
         <!-- Current Point -->
-        <div 
-          class="current-point" 
-          :style="currentPointStyle"
-          v-if="tds && extractionYield"
-        >
+        <div class="current-point" :style="currentPointStyle" v-if="tds && extractionYield">
           <div class="point-marker"></div>
           <div class="point-tooltip">
             <span class="tooltip-title">현재 추출</span>
@@ -22,7 +18,7 @@
             <span class="tooltip-value">수율: {{ extractionYield }}%</span>
           </div>
         </div>
-        
+
         <!-- Axes -->
         <div class="x-axis">
           <span class="axis-label">TDS (%)</span>
@@ -38,14 +34,14 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Brewing Profile -->
     <div class="profile-container">
       <h3 class="chart-title">⏱️ 추출 프로파일</h3>
       <div class="brewing-timeline">
         <div class="timeline-track">
-          <div 
-            v-for="(phase, index) in brewingPhases" 
+          <div
+            v-for="(phase, index) in brewingPhases"
             :key="phase.name"
             class="phase-segment"
             :style="{ width: phase.percentage + '%' }"
@@ -55,11 +51,11 @@
             <span class="phase-time">{{ phase.time }}s</span>
           </div>
         </div>
-        
+
         <!-- Pouring Points -->
         <div class="pouring-points">
-          <div 
-            v-for="pour in pourPoints" 
+          <div
+            v-for="pour in pourPoints"
             :key="pour.time"
             class="pour-marker"
             :style="{ left: pour.position + '%' }"
@@ -70,11 +66,11 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Quality Indicators -->
     <div class="quality-indicators">
-      <div 
-        v-for="indicator in qualityIndicators" 
+      <div
+        v-for="indicator in qualityIndicators"
         :key="indicator.name"
         class="indicator-card"
         :class="indicator.status"
@@ -83,10 +79,7 @@
         <span class="indicator-name">{{ indicator.name }}</span>
         <span class="indicator-value">{{ indicator.value }}</span>
         <div class="indicator-bar">
-          <div 
-            class="indicator-fill" 
-            :style="{ width: indicator.percentage + '%' }"
-          ></div>
+          <div class="indicator-fill" :style="{ width: indicator.percentage + '%' }"></div>
         </div>
       </div>
     </div>
@@ -99,32 +92,32 @@ import { computed } from 'vue'
 const props = defineProps({
   tds: {
     type: Number,
-    default: null
+    default: null,
   },
   extractionYield: {
     type: Number,
-    default: null
+    default: null,
   },
   brewTime: {
     type: Number,
-    default: 240
+    default: 240,
   },
   lapTimes: {
     type: Array,
-    default: () => []
+    default: () => [],
   },
   coffeeAmount: {
     type: Number,
-    default: 20
+    default: 20,
   },
   waterAmount: {
     type: Number,
-    default: 340
+    default: 340,
   },
   waterTemp: {
     type: Number,
-    default: 93
-  }
+    default: 93,
+  },
 })
 
 // Chart configuration
@@ -136,7 +129,7 @@ const goldenCupBounds = {
   tdsMin: 1.15,
   tdsMax: 1.35,
   yieldMin: 18,
-  yieldMax: 22
+  yieldMax: 22,
 }
 
 // Calculate positions
@@ -145,24 +138,24 @@ const goldenZoneStyle = computed(() => {
   const width = ((goldenCupBounds.tdsMax - goldenCupBounds.tdsMin) / 1.0) * 100
   const bottom = ((goldenCupBounds.yieldMin - 16) / 8) * 100
   const height = ((goldenCupBounds.yieldMax - goldenCupBounds.yieldMin) / 8) * 100
-  
+
   return {
     left: `${left}%`,
     width: `${width}%`,
     bottom: `${bottom}%`,
-    height: `${height}%`
+    height: `${height}%`,
   }
 })
 
 const currentPointStyle = computed(() => {
   if (!props.tds || !props.extractionYield) return null
-  
+
   const x = ((props.tds - 0.8) / 1.0) * 100
   const y = ((props.extractionYield - 16) / 8) * 100
-  
+
   return {
     left: `${x}%`,
-    bottom: `${y}%`
+    bottom: `${y}%`,
   }
 })
 
@@ -170,7 +163,7 @@ const currentPointStyle = computed(() => {
 const brewingPhases = computed(() => {
   const phases = []
   let lastTime = 0
-  
+
   // Blooming phase (first 30-45s)
   if (props.lapTimes.length > 0) {
     const bloomTime = Math.min(props.lapTimes[0], 45)
@@ -178,11 +171,11 @@ const brewingPhases = computed(() => {
       name: '블루밍',
       time: bloomTime,
       percentage: (bloomTime / props.brewTime) * 100,
-      class: 'phase-bloom'
+      class: 'phase-bloom',
     })
     lastTime = bloomTime
   }
-  
+
   // Main pour phases
   if (props.lapTimes.length > 1) {
     for (let i = 1; i < props.lapTimes.length; i++) {
@@ -191,22 +184,22 @@ const brewingPhases = computed(() => {
         name: `${i}차 추출`,
         time: phaseTime,
         percentage: (phaseTime / props.brewTime) * 100,
-        class: `phase-pour-${i}`
+        class: `phase-pour-${i}`,
       })
       lastTime = props.lapTimes[i]
     }
   }
-  
+
   // Dripping phase
   if (lastTime < props.brewTime) {
     phases.push({
       name: '드리핑',
       time: props.brewTime - lastTime,
       percentage: ((props.brewTime - lastTime) / props.brewTime) * 100,
-      class: 'phase-drip'
+      class: 'phase-drip',
     })
   }
-  
+
   return phases
 })
 
@@ -214,36 +207,36 @@ const brewingPhases = computed(() => {
 const pourPoints = computed(() => {
   const ratio = props.waterAmount / props.coffeeAmount
   const points = []
-  
+
   // Calculate pour amounts based on common patterns
   if (props.lapTimes.length > 0) {
     // Bloom (usually 2x coffee weight)
     points.push({
       time: props.lapTimes[0],
       amount: Math.round(props.coffeeAmount * 2),
-      position: (props.lapTimes[0] / props.brewTime) * 100
+      position: (props.lapTimes[0] / props.brewTime) * 100,
     })
-    
+
     // Subsequent pours
-    const remainingWater = props.waterAmount - (props.coffeeAmount * 2)
+    const remainingWater = props.waterAmount - props.coffeeAmount * 2
     const remainingPours = props.lapTimes.length - 1
-    
+
     for (let i = 1; i < props.lapTimes.length; i++) {
       points.push({
         time: props.lapTimes[i],
         amount: Math.round(remainingWater / remainingPours),
-        position: (props.lapTimes[i] / props.brewTime) * 100
+        position: (props.lapTimes[i] / props.brewTime) * 100,
       })
     }
   }
-  
+
   return points
 })
 
 // Quality indicators
 const qualityIndicators = computed(() => {
   const indicators = []
-  
+
   // TDS indicator
   if (props.tds) {
     const tdsOptimal = props.tds >= goldenCupBounds.tdsMin && props.tds <= goldenCupBounds.tdsMax
@@ -252,23 +245,28 @@ const qualityIndicators = computed(() => {
       icon: '💧',
       value: `${props.tds}%`,
       percentage: Math.min((props.tds / 2) * 100, 100),
-      status: tdsOptimal ? 'optimal' : props.tds < goldenCupBounds.tdsMin ? 'low' : 'high'
+      status: tdsOptimal ? 'optimal' : props.tds < goldenCupBounds.tdsMin ? 'low' : 'high',
     })
   }
-  
+
   // Extraction Yield indicator
   if (props.extractionYield) {
-    const yieldOptimal = props.extractionYield >= goldenCupBounds.yieldMin && 
-                        props.extractionYield <= goldenCupBounds.yieldMax
+    const yieldOptimal =
+      props.extractionYield >= goldenCupBounds.yieldMin &&
+      props.extractionYield <= goldenCupBounds.yieldMax
     indicators.push({
       name: '추출 수율',
       icon: '📊',
       value: `${props.extractionYield}%`,
       percentage: Math.min((props.extractionYield / 30) * 100, 100),
-      status: yieldOptimal ? 'optimal' : props.extractionYield < goldenCupBounds.yieldMin ? 'low' : 'high'
+      status: yieldOptimal
+        ? 'optimal'
+        : props.extractionYield < goldenCupBounds.yieldMin
+          ? 'low'
+          : 'high',
     })
   }
-  
+
   // Water temperature indicator
   const tempOptimal = props.waterTemp >= 90 && props.waterTemp <= 96
   indicators.push({
@@ -276,9 +274,9 @@ const qualityIndicators = computed(() => {
     icon: '🌡️',
     value: `${props.waterTemp}°C`,
     percentage: ((props.waterTemp - 80) / 20) * 100,
-    status: tempOptimal ? 'optimal' : props.waterTemp < 90 ? 'low' : 'high'
+    status: tempOptimal ? 'optimal' : props.waterTemp < 90 ? 'low' : 'high',
   })
-  
+
   // Brew ratio indicator
   const ratio = props.waterAmount / props.coffeeAmount
   const ratioOptimal = ratio >= 15 && ratio <= 17
@@ -287,9 +285,9 @@ const qualityIndicators = computed(() => {
     icon: '⚖️',
     value: `1:${ratio.toFixed(1)}`,
     percentage: Math.min((ratio / 20) * 100, 100),
-    status: ratioOptimal ? 'optimal' : ratio < 15 ? 'low' : 'high'
+    status: ratioOptimal ? 'optimal' : ratio < 15 ? 'low' : 'high',
   })
-  
+
   return indicators
 })
 </script>
@@ -324,8 +322,9 @@ const qualityIndicators = computed(() => {
   position: relative;
   width: 100%;
   height: 300px;
-  background: linear-gradient(to top, var(--bg-secondary) 1px, transparent 1px),
-              linear-gradient(to right, var(--bg-secondary) 1px, transparent 1px);
+  background:
+    linear-gradient(to top, var(--bg-secondary) 1px, transparent 1px),
+    linear-gradient(to right, var(--bg-secondary) 1px, transparent 1px);
   background-size: 10% 10%;
   border-left: 2px solid var(--border-color);
   border-bottom: 2px solid var(--border-color);
@@ -394,7 +393,8 @@ const qualityIndicators = computed(() => {
 }
 
 /* Axes */
-.x-axis, .y-axis {
+.x-axis,
+.y-axis {
   position: absolute;
   display: flex;
   align-items: center;
@@ -480,11 +480,26 @@ const qualityIndicators = computed(() => {
   transition: all var(--transition-base);
 }
 
-.phase-bloom { background: var(--color-info); opacity: 0.7; }
-.phase-pour-1 { background: var(--color-primary); opacity: 0.8; }
-.phase-pour-2 { background: var(--color-primary); opacity: 0.7; }
-.phase-pour-3 { background: var(--color-primary); opacity: 0.6; }
-.phase-drip { background: var(--color-accent); opacity: 0.5; }
+.phase-bloom {
+  background: var(--color-info);
+  opacity: 0.7;
+}
+.phase-pour-1 {
+  background: var(--color-primary);
+  opacity: 0.8;
+}
+.phase-pour-2 {
+  background: var(--color-primary);
+  opacity: 0.7;
+}
+.phase-pour-3 {
+  background: var(--color-primary);
+  opacity: 0.6;
+}
+.phase-drip {
+  background: var(--color-accent);
+  opacity: 0.5;
+}
 
 .phase-label {
   font-size: var(--text-xs);
@@ -597,16 +612,22 @@ const qualityIndicators = computed(() => {
   transition: width var(--transition-slow);
 }
 
-.optimal .indicator-fill { background: var(--color-success); }
-.low .indicator-fill { background: var(--color-warning); }
-.high .indicator-fill { background: var(--color-error); }
+.optimal .indicator-fill {
+  background: var(--color-success);
+}
+.low .indicator-fill {
+  background: var(--color-warning);
+}
+.high .indicator-fill {
+  background: var(--color-error);
+}
 
 /* Responsive */
 @media (max-width: 768px) {
   .extraction-chart {
     height: 250px;
   }
-  
+
   .quality-indicators {
     grid-template-columns: repeat(2, 1fr);
   }

@@ -19,8 +19,8 @@
     <div class="chart-section">
       <h3 class="section-title">🎨 플레이버 분포</h3>
       <div class="flavor-wheel-mini">
-        <div 
-          v-for="category in flavorCategories" 
+        <div
+          v-for="category in flavorCategories"
           :key="category.id"
           class="flavor-category"
           :style="{ background: category.color }"
@@ -38,15 +38,15 @@
         <div class="analytic-card">
           <span class="analytic-label">추출 강도</span>
           <div class="strength-meter">
-            <div 
-              class="strength-fill" 
+            <div
+              class="strength-fill"
               :style="{ width: extractionStrength + '%' }"
               :class="strengthClass"
             ></div>
           </div>
           <span class="analytic-value">{{ extractionStrengthLabel }}</span>
         </div>
-        
+
         <div class="analytic-card">
           <span class="analytic-label">균형도</span>
           <div class="balance-chart">
@@ -73,23 +73,19 @@
           <span class="score-value">{{ totalScore.toFixed(2) }}</span>
           <span class="score-grade">{{ getGrade(totalScore) }}</span>
         </div>
-        
+
         <div class="score-components">
-          <div 
-            v-for="component in scoreComponents" 
-            :key="component.name"
-            class="score-component"
-          >
+          <div v-for="component in scoreComponents" :key="component.name" class="score-component">
             <div class="component-header">
               <span class="component-name">{{ component.name }}</span>
               <span class="component-score">{{ component.score }}/{{ component.max }}</span>
             </div>
             <div class="component-bar">
-              <div 
-                class="component-fill" 
-                :style="{ 
-                  width: (component.score / component.max * 100) + '%',
-                  background: component.color
+              <div
+                class="component-fill"
+                :style="{
+                  width: (component.score / component.max) * 100 + '%',
+                  background: component.color,
                 }"
               ></div>
             </div>
@@ -106,20 +102,20 @@ import { ref, computed, onMounted, watch } from 'vue'
 const props = defineProps({
   sensorySliderData: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
   },
   selectedFlavors: {
     type: Array,
-    default: () => []
+    default: () => [],
   },
   tds: {
     type: Number,
-    default: null
+    default: null,
   },
   extractionYield: {
     type: Number,
-    default: null
-  }
+    default: null,
+  },
 })
 
 const spiderCanvas = ref(null)
@@ -136,14 +132,14 @@ const sensoryData = computed(() => {
     balance: ratings.balance || 0,
     uniformity: ratings.uniformity || 0,
     clean_cup: ratings.clean_cup || 0,
-    sweetness: ratings.sweetness || 0
+    sweetness: ratings.sweetness || 0,
   }
 })
 
 // Flavor categories
 const flavorCategories = computed(() => {
   const categoryMap = new Map()
-  
+
   // Predefined categories with colors
   const categories = [
     { id: 'fruity', name: '과일', color: '#FF6B6B' },
@@ -152,11 +148,11 @@ const flavorCategories = computed(() => {
     { id: 'nutty', name: '견과', color: '#8D6E63' },
     { id: 'spices', name: '향신료', color: '#A1887F' },
     { id: 'roasted', name: '로스팅', color: '#6D4C41' },
-    { id: 'other', name: '기타', color: '#90A4AE' }
+    { id: 'other', name: '기타', color: '#90A4AE' },
   ]
-  
+
   // Count flavors by category
-  props.selectedFlavors.forEach(flavor => {
+  props.selectedFlavors.forEach((flavor) => {
     // Simple category detection based on flavor id
     let categoryId = 'other'
     if (flavor.id.includes('fruit') || flavor.id.includes('berry')) categoryId = 'fruity'
@@ -165,15 +161,17 @@ const flavorCategories = computed(() => {
     else if (flavor.id.includes('nut') || flavor.id.includes('cocoa')) categoryId = 'nutty'
     else if (flavor.id.includes('spice') || flavor.id.includes('herb')) categoryId = 'spices'
     else if (flavor.id.includes('roast') || flavor.id.includes('smoke')) categoryId = 'roasted'
-    
+
     categoryMap.set(categoryId, (categoryMap.get(categoryId) || 0) + 1)
   })
-  
+
   // Return categories with counts
-  return categories.map(cat => ({
-    ...cat,
-    count: categoryMap.get(cat.id) || 0
-  })).filter(cat => cat.count > 0)
+  return categories
+    .map((cat) => ({
+      ...cat,
+      count: categoryMap.get(cat.id) || 0,
+    }))
+    .filter((cat) => cat.count > 0)
 })
 
 // Extraction analytics
@@ -222,7 +220,7 @@ const scoreComponents = computed(() => {
     { name: '균형', score: ratings.balance || 0, max: 10, color: '#795548' },
     { name: '균일성', score: ratings.uniformity || 0, max: 10, color: '#607D8B' },
     { name: '깨끗함', score: ratings.clean_cup || 0, max: 10, color: '#00ACC1' },
-    { name: '단맛', score: ratings.sweetness || 0, max: 10, color: '#FFC107' }
+    { name: '단맛', score: ratings.sweetness || 0, max: 10, color: '#FFC107' },
   ]
 })
 
@@ -237,7 +235,7 @@ const getSensoryLabel = (key) => {
     balance: '균형',
     uniformity: '균일성',
     clean_cup: '깨끗함',
-    sweetness: '단맛'
+    sweetness: '단맛',
   }
   return labels[key] || key
 }
@@ -261,7 +259,7 @@ const getGrade = (score) => {
 // Draw spider chart
 const drawSpiderChart = () => {
   if (!spiderCanvas.value) return
-  
+
   const ctx = spiderCanvas.value.getContext('2d')
   const centerX = 150
   const centerY = 150
@@ -269,79 +267,79 @@ const drawSpiderChart = () => {
   const data = Object.values(sensoryData.value)
   const labels = Object.keys(sensoryData.value)
   const angleStep = (Math.PI * 2) / data.length
-  
+
   // Clear canvas
   ctx.clearRect(0, 0, 300, 300)
-  
+
   // Draw grid
   for (let i = 1; i <= 5; i++) {
     ctx.beginPath()
     ctx.strokeStyle = '#E0E0E0'
     ctx.lineWidth = 1
-    
+
     for (let j = 0; j < data.length; j++) {
       const angle = j * angleStep - Math.PI / 2
-      const x = centerX + Math.cos(angle) * (radius * i / 5)
-      const y = centerY + Math.sin(angle) * (radius * i / 5)
-      
+      const x = centerX + Math.cos(angle) * ((radius * i) / 5)
+      const y = centerY + Math.sin(angle) * ((radius * i) / 5)
+
       if (j === 0) ctx.moveTo(x, y)
       else ctx.lineTo(x, y)
     }
-    
+
     ctx.closePath()
     ctx.stroke()
   }
-  
+
   // Draw axes
   for (let i = 0; i < data.length; i++) {
     const angle = i * angleStep - Math.PI / 2
     const x = centerX + Math.cos(angle) * radius
     const y = centerY + Math.sin(angle) * radius
-    
+
     ctx.beginPath()
     ctx.moveTo(centerX, centerY)
     ctx.lineTo(x, y)
     ctx.strokeStyle = '#E0E0E0'
     ctx.stroke()
-    
+
     // Draw labels
     const labelX = centerX + Math.cos(angle) * (radius + 20)
     const labelY = centerY + Math.sin(angle) * (radius + 20)
-    
+
     ctx.font = '12px sans-serif'
     ctx.fillStyle = '#666'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.fillText(getSensoryLabel(labels[i]), labelX, labelY)
   }
-  
+
   // Draw data
   ctx.beginPath()
   ctx.fillStyle = 'rgba(124, 88, 66, 0.3)'
   ctx.strokeStyle = '#7C5842'
   ctx.lineWidth = 2
-  
+
   for (let i = 0; i < data.length; i++) {
     const angle = i * angleStep - Math.PI / 2
     const value = data[i] / 10 // Normalize to 0-1
     const x = centerX + Math.cos(angle) * (radius * value)
     const y = centerY + Math.sin(angle) * (radius * value)
-    
+
     if (i === 0) ctx.moveTo(x, y)
     else ctx.lineTo(x, y)
   }
-  
+
   ctx.closePath()
   ctx.fill()
   ctx.stroke()
-  
+
   // Draw points
   for (let i = 0; i < data.length; i++) {
     const angle = i * angleStep - Math.PI / 2
     const value = data[i] / 10
     const x = centerX + Math.cos(angle) * (radius * value)
     const y = centerY + Math.sin(angle) * (radius * value)
-    
+
     ctx.beginPath()
     ctx.arc(x, y, 4, 0, Math.PI * 2)
     ctx.fillStyle = '#7C5842'
@@ -350,9 +348,13 @@ const drawSpiderChart = () => {
 }
 
 // Watch for data changes
-watch(() => props.sensorySliderData, () => {
-  drawSpiderChart()
-}, { deep: true })
+watch(
+  () => props.sensorySliderData,
+  () => {
+    drawSpiderChart()
+  },
+  { deep: true },
+)
 
 onMounted(() => {
   drawSpiderChart()
@@ -489,9 +491,15 @@ onMounted(() => {
   background: var(--color-warning);
 }
 
-.strength-fill.weak { background: var(--color-info); }
-.strength-fill.optimal { background: var(--color-success); }
-.strength-fill.strong { background: var(--color-error); }
+.strength-fill.weak {
+  background: var(--color-info);
+}
+.strength-fill.optimal {
+  background: var(--color-success);
+}
+.strength-fill.strong {
+  background: var(--color-error);
+}
 
 /* Balance Chart */
 .balance-chart {
@@ -515,9 +523,15 @@ onMounted(() => {
   transition: height var(--transition-slow);
 }
 
-.balance-bar.acidity { background: linear-gradient(to top, #4CAF50, #8BC34A); }
-.balance-bar.sweetness { background: linear-gradient(to top, #FFC107, #FFD54F); }
-.balance-bar.bitterness { background: linear-gradient(to top, #795548, #A1887F); }
+.balance-bar.acidity {
+  background: linear-gradient(to top, #4caf50, #8bc34a);
+}
+.balance-bar.sweetness {
+  background: linear-gradient(to top, #ffc107, #ffd54f);
+}
+.balance-bar.bitterness {
+  background: linear-gradient(to top, #795548, #a1887f);
+}
 
 .bar-label {
   font-size: var(--text-xs);
@@ -611,7 +625,7 @@ onMounted(() => {
   .pro-data-visualizer {
     grid-template-columns: 1fr;
   }
-  
+
   .spider-legend {
     grid-template-columns: repeat(2, 1fr);
   }

@@ -486,7 +486,7 @@ body {
   color: var(--color-primary);
   font-family: 'Courier New', monospace;
   margin-bottom: var(--space-2);
-  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .timer-desc {
@@ -996,22 +996,22 @@ body {
   .content {
     padding: var(--space-4);
   }
-  
+
   .mode-cards {
     padding: var(--space-6) var(--space-4);
   }
-  
+
   .result-card {
     padding: var(--space-6);
   }
 }
 
 /* Dark Mode Support (Future) */
-[data-theme="dark"] {
+[data-theme='dark'] {
   .mode-cards {
     background: var(--bg-primary);
   }
-  
+
   .sensory-options {
     background: var(--bg-secondary);
   }
@@ -1027,7 +1027,10 @@ body {
 }
 
 /* Touch Optimization */
-button, .mode-card, .sensory-option, .tab-btn {
+button,
+.mode-card,
+.sensory-option,
+.tab-btn {
   touch-action: manipulation;
   -webkit-user-select: none;
   user-select: none;

@@ -15,154 +15,152 @@ interface CommunitySourceRanking {
   official: {
     sources: [
       {
-        name: 'Official Documentation';
-        reliability: 0.95;
-        freshness: 0.8;
-        coverage: 0.7;
-        searchPattern: '${tech} official documentation ${problem}';
-        pros: ['정확성', '완전성', '보안'];
-        cons: ['때로 복잡함', '업데이트 지연'];
+        name: 'Official Documentation'
+        reliability: 0.95
+        freshness: 0.8
+        coverage: 0.7
+        searchPattern: '${tech} official documentation ${problem}'
+        pros: ['정확성', '완전성', '보안']
+        cons: ['때로 복잡함', '업데이트 지연']
       },
       {
-        name: 'GitHub Official Repos';
-        reliability: 0.9;
-        freshness: 0.9;
-        coverage: 0.8;
-        searchPattern: 'site:github.com/${org}/${repo} ${issue}';
-        pros: ['최신성', '실제 코드', '메인테이너 답변'];
-        cons: ['영어 위주', '기술적 깊이'];
-      }
-    ];
-  };
+        name: 'GitHub Official Repos'
+        reliability: 0.9
+        freshness: 0.9
+        coverage: 0.8
+        searchPattern: 'site:github.com/${org}/${repo} ${issue}'
+        pros: ['최신성', '실제 코드', '메인테이너 답변']
+        cons: ['영어 위주', '기술적 깊이']
+      },
+    ]
+  }
 
   // Tier 2: 커뮤니티 검증 소스
   communityVerified: {
     sources: [
       {
-        name: 'Stack Overflow';
-        reliability: 0.85;
-        freshness: 0.85;
-        coverage: 0.95;
-        searchPattern: 'site:stackoverflow.com ${tech} ${error} ${year}';
-        pros: ['광범위한 커버리지', '투표 시스템', '빠른 답변'];
-        cons: ['품질 편차', '중복 답변'];
-        qualityIndicators: ['높은 투표수', '체크마크', '최근 업데이트'];
+        name: 'Stack Overflow'
+        reliability: 0.85
+        freshness: 0.85
+        coverage: 0.95
+        searchPattern: 'site:stackoverflow.com ${tech} ${error} ${year}'
+        pros: ['광범위한 커버리지', '투표 시스템', '빠른 답변']
+        cons: ['품질 편차', '중복 답변']
+        qualityIndicators: ['높은 투표수', '체크마크', '최근 업데이트']
       },
       {
-        name: 'GitHub Issues';
-        reliability: 0.8;
-        freshness: 0.9;
-        coverage: 0.75;
-        searchPattern: 'site:github.com ${tech} issues ${problem}';
-        pros: ['실제 사용자 경험', '상세한 컨텍스트', '해결 과정'];
-        cons: ['품질 편차', '기술적 배경 필요'];
-        qualityIndicators: ['라벨 태그', '메인테이너 참여', '해결됨 표시'];
-      }
-    ];
-  };
+        name: 'GitHub Issues'
+        reliability: 0.8
+        freshness: 0.9
+        coverage: 0.75
+        searchPattern: 'site:github.com ${tech} issues ${problem}'
+        pros: ['실제 사용자 경험', '상세한 컨텍스트', '해결 과정']
+        cons: ['품질 편차', '기술적 배경 필요']
+        qualityIndicators: ['라벨 태그', '메인테이너 참여', '해결됨 표시']
+      },
+    ]
+  }
 
   // Tier 3: 커뮤니티 토론 소스
   communityDiscussion: {
     sources: [
       {
-        name: 'Reddit Programming Communities';
-        reliability: 0.7;
-        freshness: 0.9;
-        coverage: 0.8;
-        searchPattern: 'site:reddit.com/r/${subreddit} ${problem}';
-        pros: ['다양한 관점', '실무 경험', '최신 트렌드'];
-        cons: ['비공식적', '품질 편차'];
-        bestSubreddits: ['r/programming', 'r/webdev', 'r/reactjs', 'r/node'];
+        name: 'Reddit Programming Communities'
+        reliability: 0.7
+        freshness: 0.9
+        coverage: 0.8
+        searchPattern: 'site:reddit.com/r/${subreddit} ${problem}'
+        pros: ['다양한 관점', '실무 경험', '최신 트렌드']
+        cons: ['비공식적', '품질 편차']
+        bestSubreddits: ['r/programming', 'r/webdev', 'r/reactjs', 'r/node']
       },
       {
-        name: 'Discord/Slack Communities';
-        reliability: 0.65;
-        freshness: 0.95;
-        coverage: 0.6;
-        searchPattern: 'discord gg/${server} OR slack ${workspace}';
-        pros: ['실시간 도움', '활발한 커뮤니티', '전문가 직접 소통'];
-        cons: ['검색 어려움', '임시성', '접근성'];
-      }
-    ];
-  };
+        name: 'Discord/Slack Communities'
+        reliability: 0.65
+        freshness: 0.95
+        coverage: 0.6
+        searchPattern: 'discord gg/${server} OR slack ${workspace}'
+        pros: ['실시간 도움', '활발한 커뮤니티', '전문가 직접 소통']
+        cons: ['검색 어려움', '임시성', '접근성']
+      },
+    ]
+  }
 
   // Tier 4: 블로그 및 튜토리얼
   educational: {
     sources: [
       {
-        name: 'Dev.to';
-        reliability: 0.75;
-        freshness: 0.8;
-        coverage: 0.7;
-        searchPattern: 'site:dev.to ${tech} ${topic} tutorial';
-        pros: ['실용적 예제', '단계별 설명', '커뮤니티 피드백'];
-        cons: ['품질 편차', '개인 의견'];
+        name: 'Dev.to'
+        reliability: 0.75
+        freshness: 0.8
+        coverage: 0.7
+        searchPattern: 'site:dev.to ${tech} ${topic} tutorial'
+        pros: ['실용적 예제', '단계별 설명', '커뮤니티 피드백']
+        cons: ['품질 편차', '개인 의견']
       },
       {
-        name: 'Medium';
-        reliability: 0.7;
-        freshness: 0.75;
-        coverage: 0.8;
-        searchPattern: 'site:medium.com ${tech} ${problem} solution';
-        pros: ['상세한 설명', '실무 사례', '다양한 접근법'];
-        cons: ['페이월', '품질 편차', '업데이트 부족'];
-      }
-    ];
-  };
+        name: 'Medium'
+        reliability: 0.7
+        freshness: 0.75
+        coverage: 0.8
+        searchPattern: 'site:medium.com ${tech} ${problem} solution'
+        pros: ['상세한 설명', '실무 사례', '다양한 접근법']
+        cons: ['페이월', '품질 편차', '업데이트 부족']
+      },
+    ]
+  }
 }
 
 // 소스별 검색 전략
 class CommunitySourceManager {
-  private sourceConfig: CommunitySourceRanking;
+  private sourceConfig: CommunitySourceRanking
 
   async searchBestSolution(problem: ProblemDescription): Promise<CommunitySearchResult> {
-    const searchPlan = this.createSearchPlan(problem);
-    const results: SourceResult[] = [];
+    const searchPlan = this.createSearchPlan(problem)
+    const results: SourceResult[] = []
 
     // 병렬 검색 실행
-    const searches = searchPlan.sources.map(source =>
-      this.searchSource(source, problem)
-    );
+    const searches = searchPlan.sources.map(source => this.searchSource(source, problem))
 
-    const searchResults = await Promise.allSettled(searches);
+    const searchResults = await Promise.allSettled(searches)
 
     // 결과 통합 및 순위 매기기
-    const rankedResults = this.rankAndMergeResults(searchResults);
+    const rankedResults = this.rankAndMergeResults(searchResults)
 
     return {
       bestSolution: rankedResults[0],
       alternatives: rankedResults.slice(1, 4),
       sourceDistribution: this.analyzeSourceDistribution(rankedResults),
-      confidence: this.calculateOverallConfidence(rankedResults)
-    };
+      confidence: this.calculateOverallConfidence(rankedResults),
+    }
   }
 
   private createSearchPlan(problem: ProblemDescription): SearchPlan {
-    const { technology, errorType, urgency, complexity } = problem;
+    const { technology, errorType, urgency, complexity } = problem
 
     // 문제 특성에 따른 소스 우선순위 조정
-    let sourceOrder: SourceCategory[];
+    let sourceOrder: SourceCategory[]
 
     if (urgency === 'high' && errorType === 'syntax') {
       // 급한 문법 오류 - Stack Overflow 우선
-      sourceOrder = ['communityVerified', 'official', 'educational'];
+      sourceOrder = ['communityVerified', 'official', 'educational']
     } else if (complexity === 'high') {
       // 복잡한 문제 - 공식 문서 우선
-      sourceOrder = ['official', 'communityVerified', 'communityDiscussion'];
+      sourceOrder = ['official', 'communityVerified', 'communityDiscussion']
     } else if (technology.isNew) {
       // 새로운 기술 - GitHub와 커뮤니티 중심
-      sourceOrder = ['communityVerified', 'communityDiscussion', 'official'];
+      sourceOrder = ['communityVerified', 'communityDiscussion', 'official']
     } else {
       // 일반적인 경우 - 균형잡힌 접근
-      sourceOrder = ['communityVerified', 'official', 'educational', 'communityDiscussion'];
+      sourceOrder = ['communityVerified', 'official', 'educational', 'communityDiscussion']
     }
 
     return {
       sources: this.selectSources(sourceOrder, problem),
       maxConcurrentSearches: 4,
       timeoutPerSource: 30000, // 30초
-      minimumResults: 3
-    };
+      minimumResults: 3,
+    }
   }
 }
 ```
@@ -177,10 +175,10 @@ class CommunitySourceValidator {
       this.validateTechnical(solution),
       this.validateCommunity(solution),
       this.validateFreshness(solution),
-      this.validateSecurity(solution)
-    ]);
+      this.validateSecurity(solution),
+    ])
 
-    return this.combineValidations(validations);
+    return this.combineValidations(validations)
   }
 
   private async validateTechnical(solution: CommunitySolution): Promise<TechnicalValidation> {
@@ -198,8 +196,8 @@ class CommunitySourceValidator {
       performanceImpact: this.analyzePerformance(solution.code),
 
       // 테스트 가능성
-      testable: this.checkTestability(solution.code)
-    };
+      testable: this.checkTestability(solution.code),
+    }
   }
 
   private async validateCommunity(solution: CommunitySolution): Promise<CommunityValidation> {
@@ -217,13 +215,13 @@ class CommunitySourceValidator {
       acceptanceRate: solution.metrics.acceptanceRate || 0,
 
       // 커뮤니티 검증 점수
-      communityScore: this.calculateCommunityScore(solution.metrics)
-    };
+      communityScore: this.calculateCommunityScore(solution.metrics),
+    }
   }
 
   private async validateFreshness(solution: CommunitySolution): Promise<FreshnessValidation> {
-    const age = Date.now() - solution.createdAt;
-    const ageInDays = age / (1000 * 60 * 60 * 24);
+    const age = Date.now() - solution.createdAt
+    const ageInDays = age / (1000 * 60 * 60 * 24)
 
     return {
       ageInDays,
@@ -233,38 +231,38 @@ class CommunitySourceValidator {
         solution.technologyVersion,
         this.currentTechnologyVersion
       ),
-      freshnessScore: Math.max(0, 1 - (ageInDays / 730)) // 2년에 걸쳐 점수 감소
-    };
+      freshnessScore: Math.max(0, 1 - ageInDays / 730), // 2년에 걸쳐 점수 감소
+    }
   }
 
   private async validateSecurity(solution: CommunitySolution): Promise<SecurityValidation> {
-    const securityIssues = await this.scanForSecurityIssues(solution.code);
+    const securityIssues = await this.scanForSecurityIssues(solution.code)
 
     return {
       hasSecurityIssues: securityIssues.length > 0,
       securityIssues,
       securityScore: this.calculateSecurityScore(securityIssues),
       usesSecurePractices: this.checkSecurePractices(solution.code),
-      exposesSecrets: this.checkForExposedSecrets(solution.code)
-    };
+      exposesSecrets: this.checkForExposedSecrets(solution.code),
+    }
   }
 
   private combineValidations(validations: ValidationResult[]): OverallValidation {
-    const [technical, community, freshness, security] = validations;
+    const [technical, community, freshness, security] = validations
 
     // 가중치 기반 종합 점수 계산
     const weights = {
       technical: 0.4,
       community: 0.25,
       freshness: 0.2,
-      security: 0.15
-    };
+      security: 0.15,
+    }
 
     const overallScore =
       technical.score * weights.technical +
       community.score * weights.community +
       freshness.score * weights.freshness +
-      security.score * weights.security;
+      security.score * weights.security
 
     return {
       overallScore,
@@ -273,8 +271,8 @@ class CommunitySourceValidator {
       freshness,
       security,
       recommendation: this.generateRecommendation(overallScore, validations),
-      confidence: this.calculateConfidence(validations)
-    };
+      confidence: this.calculateConfidence(validations),
+    }
   }
 }
 ```
@@ -289,64 +287,60 @@ class SolutionQualityFilter {
   private qualityThresholds = {
     minimum: 0.6,
     good: 0.75,
-    excellent: 0.9
-  };
+    excellent: 0.9,
+  }
 
   async filterSolutions(solutions: CommunitySolution[]): Promise<FilteredSolutions> {
     // 1단계: 기본 품질 필터
-    const basicFiltered = solutions.filter(solution =>
-      this.passesBasicQuality(solution)
-    );
+    const basicFiltered = solutions.filter(solution => this.passesBasicQuality(solution))
 
     // 2단계: 중복 제거
-    const deduplicated = this.removeDuplicates(basicFiltered);
+    const deduplicated = this.removeDuplicates(basicFiltered)
 
     // 3단계: 상세 품질 평가
     const qualityScored = await Promise.all(
       deduplicated.map(solution => this.scoreQuality(solution))
-    );
+    )
 
     // 4단계: 임계값 기반 필터링
     const filtered = qualityScored.filter(
       scored => scored.qualityScore >= this.qualityThresholds.minimum
-    );
+    )
 
     // 5단계: 다양성 보장
-    const diversified = this.ensureDiversity(filtered);
+    const diversified = this.ensureDiversity(filtered)
 
     return {
       excellent: diversified.filter(s => s.qualityScore >= this.qualityThresholds.excellent),
-      good: diversified.filter(s =>
-        s.qualityScore >= this.qualityThresholds.good &&
-        s.qualityScore < this.qualityThresholds.excellent
+      good: diversified.filter(
+        s =>
+          s.qualityScore >= this.qualityThresholds.good &&
+          s.qualityScore < this.qualityThresholds.excellent
       ),
-      acceptable: diversified.filter(s =>
-        s.qualityScore >= this.qualityThresholds.minimum &&
-        s.qualityScore < this.qualityThresholds.good
+      acceptable: diversified.filter(
+        s =>
+          s.qualityScore >= this.qualityThresholds.minimum &&
+          s.qualityScore < this.qualityThresholds.good
       ),
       totalProcessed: solutions.length,
       totalFiltered: diversified.length,
-      filteringStats: this.generateFilteringStats(solutions, diversified)
-    };
+      filteringStats: this.generateFilteringStats(solutions, diversified),
+    }
   }
 
   private passesBasicQuality(solution: CommunitySolution): boolean {
     return (
       // 코드가 포함되어 있어야 함
       solution.hasCode &&
-
       // 최소 설명이 있어야 함
       solution.description.length >= 50 &&
-
       // 스팸이 아니어야 함
       !this.isSpam(solution) &&
-
       // 관련성이 있어야 함
       this.isRelevant(solution) &&
-
       // 언어가 지원되어야 함
       this.isSupportedLanguage(solution.language)
-    );
+    )
   }
 
   private async scoreQuality(solution: CommunitySolution): Promise<ScoredSolution> {
@@ -361,34 +355,34 @@ class SolutionQualityFilter {
       completeness: this.scoreCompleteness(solution),
 
       // 설명 품질 (15%)
-      explanation: this.scoreExplanationQuality(solution)
-    };
+      explanation: this.scoreExplanationQuality(solution),
+    }
 
     const qualityScore =
       scores.technical * 0.4 +
       scores.community * 0.25 +
       scores.completeness * 0.2 +
-      scores.explanation * 0.15;
+      scores.explanation * 0.15
 
     return {
       ...solution,
       qualityScore,
       qualityBreakdown: scores,
-      qualityReason: this.generateQualityReason(scores)
-    };
+      qualityReason: this.generateQualityReason(scores),
+    }
   }
 
   private ensureDiversity(solutions: ScoredSolution[]): ScoredSolution[] {
     // 접근법별로 그룹화
-    const grouped = this.groupByApproach(solutions);
+    const grouped = this.groupByApproach(solutions)
 
     // 각 그룹에서 최고 품질 솔루션 선택
-    const diverseSolutions = Object.values(grouped).map(group =>
-      group.sort((a, b) => b.qualityScore - a.qualityScore)[0]
-    );
+    const diverseSolutions = Object.values(grouped).map(
+      group => group.sort((a, b) => b.qualityScore - a.qualityScore)[0]
+    )
 
     // 품질 순으로 정렬
-    return diverseSolutions.sort((a, b) => b.qualityScore - a.qualityScore);
+    return diverseSolutions.sort((a, b) => b.qualityScore - a.qualityScore)
   }
 }
 ```
@@ -403,10 +397,10 @@ class ContextualSolutionRecommender {
     solutions: FilteredSolutions
   ): Promise<RecommendationResult> {
     // 사용자 컨텍스트 분석
-    const userContext = await this.analyzeUserContext(problem);
+    const userContext = await this.analyzeUserContext(problem)
 
     // 솔루션별 적합성 점수 계산
-    const rankedSolutions = await this.rankSolutions(solutions, userContext);
+    const rankedSolutions = await this.rankSolutions(solutions, userContext)
 
     // 최적 추천 생성
     return {
@@ -414,8 +408,8 @@ class ContextualSolutionRecommender {
       alternatives: this.selectAlternatives(rankedSolutions),
       quickFixes: this.identifyQuickFixes(rankedSolutions),
       learningPath: this.generateLearningPath(rankedSolutions),
-      preventiveMeasures: this.suggestPreventiveMeasures(problem, rankedSolutions)
-    };
+      preventiveMeasures: this.suggestPreventiveMeasures(problem, rankedSolutions),
+    }
   }
 
   private async analyzeUserContext(problem: ProblemContext): Promise<UserContext> {
@@ -436,25 +430,21 @@ class ContextualSolutionRecommender {
       learningPreference: this.detectLearningPreference(problem),
 
       // 위험 허용도
-      riskTolerance: this.assessRiskTolerance(problem)
-    };
+      riskTolerance: this.assessRiskTolerance(problem),
+    }
   }
 
   private async rankSolutions(
     solutions: FilteredSolutions,
     context: UserContext
   ): Promise<RankedSolution[]> {
-    const allSolutions = [
-      ...solutions.excellent,
-      ...solutions.good,
-      ...solutions.acceptable
-    ];
+    const allSolutions = [...solutions.excellent, ...solutions.good, ...solutions.acceptable]
 
     const ranked = await Promise.all(
       allSolutions.map(solution => this.scoreSolutionFit(solution, context))
-    );
+    )
 
-    return ranked.sort((a, b) => b.contextScore - a.contextScore);
+    return ranked.sort((a, b) => b.contextScore - a.contextScore)
   }
 
   private async scoreSolutionFit(
@@ -475,22 +465,22 @@ class ContextualSolutionRecommender {
       complexityFit: this.scoreComplexityFit(solution, context.experienceLevel),
 
       // 위험도 적합성
-      riskFit: this.scoreRiskFit(solution, context.riskTolerance)
-    };
+      riskFit: this.scoreRiskFit(solution, context.riskTolerance),
+    }
 
     const contextScore =
       fitScores.techFit * 0.3 +
       fitScores.experienceFit * 0.25 +
       fitScores.timeFit * 0.2 +
       fitScores.complexityFit * 0.15 +
-      fitScores.riskFit * 0.1;
+      fitScores.riskFit * 0.1
 
     return {
       ...solution,
       contextScore,
       fitBreakdown: fitScores,
-      recommendation: this.generateRecommendationReason(fitScores)
-    };
+      recommendation: this.generateRecommendationReason(fitScores),
+    }
   }
 }
 ```
@@ -507,15 +497,13 @@ class CommunityFeedbackIntegrator {
     'github-reactions',
     'reddit-upvotes',
     'discord-reactions',
-    'dev-to-hearts'
-  ];
+    'dev-to-hearts',
+  ]
 
-  async integrateRealTimeFeedback(
-    solution: CommunitySolution
-  ): Promise<EnrichedSolution> {
-    const feedbackData = await this.gatherFeedbackData(solution);
-    const sentiment = await this.analyzeSentiment(feedbackData);
-    const trends = await this.analyzeTrends(feedbackData);
+  async integrateRealTimeFeedback(solution: CommunitySolution): Promise<EnrichedSolution> {
+    const feedbackData = await this.gatherFeedbackData(solution)
+    const sentiment = await this.analyzeSentiment(feedbackData)
+    const trends = await this.analyzeTrends(feedbackData)
 
     return {
       ...solution,
@@ -524,33 +512,33 @@ class CommunityFeedbackIntegrator {
         sentiment,
         trends,
         reliability: this.calculateReliability(feedbackData, sentiment),
-        freshness: this.calculateFeedbackFreshness(feedbackData)
+        freshness: this.calculateFeedbackFreshness(feedbackData),
       },
       enhancedMetadata: {
         communityConsensus: this.detectConsensus(feedbackData),
         controversyLevel: this.detectControversy(feedbackData),
         expertEndorsement: this.detectExpertEndorsement(feedbackData),
-        realWorldUsage: this.detectRealWorldUsage(feedbackData)
-      }
-    };
+        realWorldUsage: this.detectRealWorldUsage(feedbackData),
+      },
+    }
   }
 
   private async gatherFeedbackData(solution: CommunitySolution): Promise<FeedbackData> {
     const feedbackPromises = this.feedbackChannels.map(channel =>
       this.fetchChannelFeedback(channel, solution)
-    );
+    )
 
-    const channelFeedback = await Promise.allSettled(feedbackPromises);
+    const channelFeedback = await Promise.allSettled(feedbackPromises)
 
-    return this.consolidateFeedback(channelFeedback);
+    return this.consolidateFeedback(channelFeedback)
   }
 
   private async analyzeSentiment(feedbackData: FeedbackData): Promise<SentimentAnalysis> {
-    const comments = feedbackData.comments || [];
+    const comments = feedbackData.comments || []
 
     const sentimentScores = await Promise.all(
       comments.map(comment => this.analyzeSingleComment(comment))
-    );
+    )
 
     return {
       positive: sentimentScores.filter(s => s.sentiment === 'positive').length,
@@ -559,8 +547,8 @@ class CommunityFeedbackIntegrator {
       overallSentiment: this.calculateOverallSentiment(sentimentScores),
       confidenceLevel: this.calculateSentimentConfidence(sentimentScores),
       keyPositives: this.extractKeyPositives(sentimentScores),
-      keyNegatives: this.extractKeyNegatives(sentimentScores)
-    };
+      keyNegatives: this.extractKeyNegatives(sentimentScores),
+    }
   }
 
   private detectConsensus(feedbackData: FeedbackData): ConsensusAnalysis {
@@ -568,18 +556,18 @@ class CommunityFeedbackIntegrator {
       highUpvoteRatio: feedbackData.upvoteRatio > 0.8,
       lowControversy: feedbackData.controversyScore < 0.3,
       expertAgreement: feedbackData.expertEndorsements > 2,
-      consistentPositiveFeedback: feedbackData.positiveFeedbackRatio > 0.75
-    };
+      consistentPositiveFeedback: feedbackData.positiveFeedbackRatio > 0.75,
+    }
 
-    const consensusScore = Object.values(indicators).filter(Boolean).length / 4;
+    const consensusScore = Object.values(indicators).filter(Boolean).length / 4
 
     return {
       hasConsensus: consensusScore >= 0.75,
       consensusScore,
       indicators,
       confidence: this.calculateConsensusConfidence(indicators),
-      reasoning: this.generateConsensusReasoning(indicators)
-    };
+      reasoning: this.generateConsensusReasoning(indicators),
+    }
   }
 }
 ```
@@ -594,96 +582,96 @@ class CommunityContributionSystem {
     improvement: SolutionImprovement
   ): Promise<ContributionResult> {
     // 개선사항 검증
-    const validation = await this.validateImprovement(originalSolution, improvement);
+    const validation = await this.validateImprovement(originalSolution, improvement)
 
     if (!validation.isValid) {
       return {
         success: false,
         reason: validation.reason,
-        suggestions: validation.suggestions
-      };
+        suggestions: validation.suggestions,
+      }
     }
 
     // 커뮤니티에 기여
     const contribution = await this.submitContribution({
       originalSolution,
       improvement,
-      validation
-    });
+      validation,
+    })
 
     // 피드백 수집 시작
-    this.startFeedbackCollection(contribution);
+    this.startFeedbackCollection(contribution)
 
     return {
       success: true,
       contributionId: contribution.id,
       estimatedImpact: this.estimateImpact(improvement),
-      trackingUrl: contribution.trackingUrl
-    };
+      trackingUrl: contribution.trackingUrl,
+    }
   }
 
   async suggestImprovements(solution: CommunitySolution): Promise<ImprovementSuggestion[]> {
-    const suggestions: ImprovementSuggestion[] = [];
+    const suggestions: ImprovementSuggestion[] = []
 
     // 코드 개선 제안
-    const codeImprovements = await this.analyzeCodeImprovements(solution.code);
-    suggestions.push(...codeImprovements);
+    const codeImprovements = await this.analyzeCodeImprovements(solution.code)
+    suggestions.push(...codeImprovements)
 
     // 설명 개선 제안
-    const explanationImprovements = await this.analyzeExplanationImprovements(solution.description);
-    suggestions.push(...explanationImprovements);
+    const explanationImprovements = await this.analyzeExplanationImprovements(solution.description)
+    suggestions.push(...explanationImprovements)
 
     // 예제 추가 제안
-    const exampleSuggestions = await this.suggestAdditionalExamples(solution);
-    suggestions.push(...exampleSuggestions);
+    const exampleSuggestions = await this.suggestAdditionalExamples(solution)
+    suggestions.push(...exampleSuggestions)
 
     // 보안 개선 제안
-    const securityImprovements = await this.suggestSecurityImprovements(solution);
-    suggestions.push(...securityImprovements);
+    const securityImprovements = await this.suggestSecurityImprovements(solution)
+    suggestions.push(...securityImprovements)
 
-    return suggestions.sort((a, b) => b.priority - a.priority);
+    return suggestions.sort((a, b) => b.priority - a.priority)
   }
 
   private async analyzeCodeImprovements(code: string): Promise<CodeImprovement[]> {
-    const improvements: CodeImprovement[] = [];
+    const improvements: CodeImprovement[] = []
 
     // 성능 최적화 기회
-    const performanceIssues = await this.detectPerformanceIssues(code);
+    const performanceIssues = await this.detectPerformanceIssues(code)
     performanceIssues.forEach(issue => {
       improvements.push({
         type: 'performance',
         description: issue.description,
         suggestion: issue.fix,
         impact: 'medium',
-        difficulty: 'low'
-      });
-    });
+        difficulty: 'low',
+      })
+    })
 
     // 가독성 개선
-    const readabilityIssues = await this.detectReadabilityIssues(code);
+    const readabilityIssues = await this.detectReadabilityIssues(code)
     readabilityIssues.forEach(issue => {
       improvements.push({
         type: 'readability',
         description: issue.description,
         suggestion: issue.improvement,
         impact: 'low',
-        difficulty: 'low'
-      });
-    });
+        difficulty: 'low',
+      })
+    })
 
     // 보안 강화
-    const securityIssues = await this.detectSecurityIssues(code);
+    const securityIssues = await this.detectSecurityIssues(code)
     securityIssues.forEach(issue => {
       improvements.push({
         type: 'security',
         description: issue.description,
         suggestion: issue.fix,
         impact: 'high',
-        difficulty: 'medium'
-      });
-    });
+        difficulty: 'medium',
+      })
+    })
 
-    return improvements;
+    return improvements
   }
 }
 ```

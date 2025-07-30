@@ -2,9 +2,7 @@
   <div class="sensory-slider-view">
     <!-- Header -->
     <header class="screen-header">
-      <button class="back-btn" @click="$router.push('/sensory-expression')">
-        ←
-      </button>
+      <button class="back-btn" @click="$router.push('/sensory-expression')">←</button>
       <h1 class="screen-title">감각 평가</h1>
       <div class="progress-bar">
         <div class="progress-fill" :style="{ width: '86%' }"></div>
@@ -13,17 +11,11 @@
 
     <!-- Content -->
     <main class="content">
-      <p class="description">
-        커피의 각 특성을 1-5 스케일로 평가해주세요
-      </p>
+      <p class="description">커피의 각 특성을 1-5 스케일로 평가해주세요</p>
 
       <!-- Sensory Sliders -->
       <div class="sliders-container">
-        <div
-          v-for="attribute in sensoryAttributes"
-          :key="attribute.id"
-          class="slider-item"
-        >
+        <div v-for="attribute in sensoryAttributes" :key="attribute.id" class="slider-item">
           <div class="slider-header">
             <div class="attribute-info">
               <span class="attribute-icon">{{ attribute.icon }}</span>
@@ -31,7 +23,9 @@
             </div>
             <div class="value-display">
               <span class="value-number">{{ sliderValues[attribute.id] }}</span>
-              <span class="value-label">{{ getValueLabel(attribute.id, sliderValues[attribute.id]) }}</span>
+              <span class="value-label">{{
+                getValueLabel(attribute.id, sliderValues[attribute.id])
+              }}</span>
             </div>
           </div>
 
@@ -89,9 +83,7 @@
       <button type="button" class="btn-secondary" @click="$router.push('/sensory-expression')">
         이전
       </button>
-      <button type="button" class="btn-primary" @click="handleNext">
-        다음
-      </button>
+      <button type="button" class="btn-primary" @click="handleNext">다음</button>
     </div>
   </div>
 </template>
@@ -113,7 +105,7 @@ const sensoryAttributes = [
     minLabel: '약함',
     maxLabel: '강함',
     description: '신맛의 강도와 질',
-    labels: ['약함', '보통', '적당', '선명', '강함']
+    labels: ['약함', '보통', '적당', '선명', '강함'],
   },
   {
     id: 'sweetness',
@@ -122,7 +114,7 @@ const sensoryAttributes = [
     minLabel: '약함',
     maxLabel: '강함',
     description: '달콤함의 정도와 질',
-    labels: ['약함', '보통', '적당', '선명', '강함']
+    labels: ['약함', '보통', '적당', '선명', '강함'],
   },
   {
     id: 'bitterness',
@@ -131,7 +123,7 @@ const sensoryAttributes = [
     minLabel: '약함',
     maxLabel: '강함',
     description: '쓴맛의 강도와 특성',
-    labels: ['약함', '보통', '적당', '선명', '강함']
+    labels: ['약함', '보통', '적당', '선명', '강함'],
   },
   {
     id: 'body',
@@ -140,7 +132,7 @@ const sensoryAttributes = [
     minLabel: '가볍',
     maxLabel: '무겁',
     description: '입 안에서의 무게감',
-    labels: ['가볍', '약간 가볍', '보통', '약간 무겁', '무겁']
+    labels: ['가볍', '약간 가볍', '보통', '약간 무겁', '무겁'],
   },
   {
     id: 'aftertaste',
@@ -149,7 +141,7 @@ const sensoryAttributes = [
     minLabel: '짧음',
     maxLabel: '김',
     description: '마신 후 남는 맛',
-    labels: ['짧음', '약간 짧음', '보통', '약간 김', '김']
+    labels: ['짧음', '약간 짧음', '보통', '약간 김', '김'],
   },
   {
     id: 'balance',
@@ -158,8 +150,8 @@ const sensoryAttributes = [
     minLabel: '불균형',
     maxLabel: '완벽',
     description: '전체적인 맛의 조화',
-    labels: ['불균형', '약간 불균형', '보통', '좋음', '완벽']
-  }
+    labels: ['불균형', '약간 불균형', '보통', '좋음', '완벽'],
+  },
 ]
 
 // State
@@ -169,7 +161,7 @@ const sliderValues = ref({
   bitterness: 3,
   body: 3,
   aftertaste: 3,
-  balance: 3
+  balance: 3,
 })
 
 const quickNotes = ref('')
@@ -183,7 +175,7 @@ const overallScore = computed(() => {
 
 // Methods
 const getValueLabel = (attributeId, value) => {
-  const attribute = sensoryAttributes.find(attr => attr.id === attributeId)
+  const attribute = sensoryAttributes.find((attr) => attr.id === attributeId)
   return attribute ? attribute.labels[value - 1] : ''
 }
 
@@ -202,11 +194,11 @@ const handleNext = () => {
   const sensorySliderData = {
     ratings: { ...sliderValues.value },
     overall_score: parseFloat(overallScore.value),
-    quick_notes: quickNotes.value
+    quick_notes: quickNotes.value,
   }
-  
+
   tastingSessionStore.updateSensorySliderData(sensorySliderData)
-  
+
   // Navigate to personal comment
   router.push('/personal-comment')
 }
@@ -217,7 +209,7 @@ const handleNext = () => {
   max-width: 800px;
   margin: 0 auto;
   padding: 1rem;
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5F0E8 100%);
+  background: linear-gradient(135deg, #fff8f0 0%, #f5f0e8 100%);
   min-height: 100vh;
 }
 
@@ -236,7 +228,7 @@ const handleNext = () => {
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: #7C5842;
+  color: #7c5842;
   cursor: pointer;
   width: 40px;
   height: 40px;
@@ -254,14 +246,14 @@ const handleNext = () => {
 .screen-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .progress-bar {
   max-width: 300px;
   height: 4px;
-  background: #E8D5C4;
+  background: #e8d5c4;
   border-radius: 2px;
   margin: 1rem auto 0;
   overflow: hidden;
@@ -269,7 +261,7 @@ const handleNext = () => {
 
 .progress-fill {
   height: 100%;
-  background: #7C5842;
+  background: #7c5842;
   transition: width 0.3s ease;
 }
 
@@ -280,7 +272,7 @@ const handleNext = () => {
 
 .description {
   text-align: center;
-  color: #A0796A;
+  color: #a0796a;
   font-size: 1.1rem;
   margin-bottom: 2rem;
 }
@@ -321,7 +313,7 @@ const handleNext = () => {
 .attribute-name {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin: 0;
 }
 
@@ -334,12 +326,12 @@ const handleNext = () => {
 .value-number {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .value-label {
   font-size: 0.9rem;
-  color: #A0796A;
+  color: #a0796a;
 }
 
 /* Slider Body */
@@ -357,7 +349,7 @@ const handleNext = () => {
   height: 8px;
   -webkit-appearance: none;
   appearance: none;
-  background: #E8D5C4;
+  background: #e8d5c4;
   border-radius: 4px;
   outline: none;
   position: relative;
@@ -368,7 +360,7 @@ const handleNext = () => {
   appearance: none;
   width: 28px;
   height: 28px;
-  background: #7C5842;
+  background: #7c5842;
   border: 4px solid white;
   border-radius: 50%;
   cursor: pointer;
@@ -385,10 +377,10 @@ const handleNext = () => {
 .sensory-slider {
   background: linear-gradient(
     to right,
-    #7C5842 0%,
-    #7C5842 var(--value),
-    #E8D5C4 var(--value),
-    #E8D5C4 100%
+    #7c5842 0%,
+    #7c5842 var(--value),
+    #e8d5c4 var(--value),
+    #e8d5c4 100%
   );
 }
 
@@ -401,7 +393,7 @@ const handleNext = () => {
 
 .tick {
   font-size: 0.75rem;
-  color: #A0796A;
+  color: #a0796a;
   font-weight: 500;
 }
 
@@ -409,13 +401,13 @@ const handleNext = () => {
   display: flex;
   justify-content: space-between;
   font-size: 0.85rem;
-  color: #A0796A;
+  color: #a0796a;
   font-style: italic;
 }
 
 .attribute-description {
   font-size: 0.9rem;
-  color: #A0796A;
+  color: #a0796a;
   margin: 0;
   text-align: center;
 }
@@ -433,7 +425,7 @@ const handleNext = () => {
 .overall-title {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1.5rem;
 }
 
@@ -447,7 +439,7 @@ const handleNext = () => {
 .score-circle {
   width: 120px;
   height: 120px;
-  background: linear-gradient(135deg, #7C5842 0%, #A0796A 100%);
+  background: linear-gradient(135deg, #7c5842 0%, #a0796a 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -468,7 +460,7 @@ const handleNext = () => {
 
 .score-description {
   font-size: 1.1rem;
-  color: #7C5842;
+  color: #7c5842;
   font-weight: 500;
   margin: 0;
 }
@@ -485,14 +477,14 @@ const handleNext = () => {
 .notes-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1rem;
 }
 
 .notes-textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   font-size: 0.95rem;
   resize: vertical;
@@ -501,7 +493,7 @@ const handleNext = () => {
 
 .notes-textarea:focus {
   outline: none;
-  border-color: #7C5842;
+  border-color: #7c5842;
 }
 
 /* Action Buttons */
@@ -529,25 +521,25 @@ const handleNext = () => {
 }
 
 .btn-primary {
-  background: #7C5842;
+  background: #7c5842;
   color: white;
-  border: 2px solid #7C5842;
+  border: 2px solid #7c5842;
 }
 
 .btn-primary:hover {
-  background: #5D3F2E;
-  border-color: #5D3F2E;
+  background: #5d3f2e;
+  border-color: #5d3f2e;
   transform: translateY(-1px);
 }
 
 .btn-secondary {
   background: white;
-  color: #7C5842;
-  border: 2px solid #E8D5C4;
+  color: #7c5842;
+  border: 2px solid #e8d5c4;
 }
 
 .btn-secondary:hover {
-  border-color: #D4B896;
+  border-color: #d4b896;
   transform: translateY(-1px);
 }
 
@@ -558,11 +550,11 @@ const handleNext = () => {
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
+
   .value-display {
     align-self: flex-end;
   }
-  
+
   .action-buttons {
     flex-direction: column;
   }

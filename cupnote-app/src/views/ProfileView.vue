@@ -36,7 +36,7 @@
         <div class="profile-info">
           <h2 class="user-name">{{ userProfile?.display_name || '익명 사용자' }}</h2>
           <p class="user-email">{{ authStore.user?.email }}</p>
-          
+
           <!-- XP Progress -->
           <div class="xp-section">
             <div class="xp-bar">
@@ -89,9 +89,7 @@
             <div class="activity-score">{{ record.total_match_score }}점</div>
           </div>
         </div>
-        <RouterLink to="/records" class="view-all-link">
-          모든 기록 보기 →
-        </RouterLink>
+        <RouterLink to="/records" class="view-all-link"> 모든 기록 보기 → </RouterLink>
       </section>
 
       <!-- Profile Edit -->
@@ -140,14 +138,8 @@
         <h3 class="section-title danger-title">계정 관리</h3>
         <div class="danger-card">
           <h4 class="danger-card-title">비밀번호 변경</h4>
-          <p class="danger-card-description">
-            보안을 위해 정기적으로 비밀번호를 변경하세요
-          </p>
-          <button
-            type="button"
-            class="btn-secondary"
-            @click="showPasswordChange = true"
-          >
+          <p class="danger-card-description">보안을 위해 정기적으로 비밀번호를 변경하세요</p>
+          <button type="button" class="btn-secondary" @click="showPasswordChange = true">
             비밀번호 변경
           </button>
         </div>
@@ -164,7 +156,7 @@
     <div v-if="showPasswordChange" class="modal-overlay" @click="showPasswordChange = false">
       <div class="modal-content" @click.stop>
         <h3 class="modal-title">비밀번호 변경</h3>
-        
+
         <form @submit.prevent="handlePasswordChange">
           <div class="input-group">
             <label for="new-password" class="input-label">새 비밀번호</label>
@@ -194,7 +186,7 @@
               비밀번호가 일치하지 않습니다
             </div>
           </div>
-          
+
           <div class="modal-actions">
             <button
               type="button"
@@ -234,12 +226,12 @@ const showPasswordChange = ref(false)
 
 const editForm = ref({
   displayName: '',
-  username: ''
+  username: '',
 })
 
 const passwordForm = ref({
   newPassword: '',
-  confirmPassword: ''
+  confirmPassword: '',
 })
 
 // Computed
@@ -287,10 +279,7 @@ const passwordsMatch = computed(() => {
 })
 
 const isPasswordFormValid = computed(() => {
-  return (
-    passwordForm.value.newPassword.length >= 6 &&
-    passwordsMatch.value
-  )
+  return passwordForm.value.newPassword.length >= 6 && passwordsMatch.value
 })
 
 // Methods
@@ -307,9 +296,9 @@ const handleUpdateProfile = async () => {
   try {
     await authStore.updateUserProfile({
       display_name: editForm.value.displayName || null,
-      username: editForm.value.username || null
+      username: editForm.value.username || null,
     })
-    
+
     showSuccess.value = true
     setTimeout(() => {
       showSuccess.value = false
@@ -322,11 +311,11 @@ const handleUpdateProfile = async () => {
 const handlePasswordChange = async () => {
   try {
     await authStore.updatePassword(passwordForm.value.newPassword)
-    
+
     showPasswordChange.value = false
     passwordForm.value.newPassword = ''
     passwordForm.value.confirmPassword = ''
-    
+
     alert('비밀번호가 성공적으로 변경되었습니다.')
   } catch (error) {
     console.error('Password change failed:', error)
@@ -338,14 +327,14 @@ const formatDate = (dateString) => {
   const today = new Date()
   const diffTime = Math.abs(today - date)
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
-  
+
   if (diffDays === 0) return '오늘'
   if (diffDays === 1) return '어제'
   if (diffDays < 7) return `${diffDays}일 전`
-  
-  return date.toLocaleDateString('ko-KR', { 
-    month: 'long', 
-    day: 'numeric' 
+
+  return date.toLocaleDateString('ko-KR', {
+    month: 'long',
+    day: 'numeric',
   })
 }
 
@@ -371,7 +360,7 @@ onMounted(async () => {
   max-width: 800px;
   margin: 0 auto;
   padding: 1rem;
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5F0E8 100%);
+  background: linear-gradient(135deg, #fff8f0 0%, #f5f0e8 100%);
   min-height: 100vh;
 }
 
@@ -388,21 +377,21 @@ onMounted(async () => {
   border-radius: 12px;
   padding: 1rem 1.5rem;
   box-shadow: 0 2px 10px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .back-link {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #7C5842;
+  color: #7c5842;
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.2s ease;
 }
 
 .back-link:hover {
-  color: #5D3F2E;
+  color: #5d3f2e;
 }
 
 .back-icon {
@@ -412,14 +401,14 @@ onMounted(async () => {
 .profile-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin: 0;
 }
 
 .logout-btn {
   background: none;
-  border: 2px solid #E8D5C4;
-  color: #7C5842;
+  border: 2px solid #e8d5c4;
+  color: #7c5842;
   padding: 0.5rem 1rem;
   border-radius: 8px;
   font-size: 0.9rem;
@@ -429,8 +418,8 @@ onMounted(async () => {
 }
 
 .logout-btn:hover:not(:disabled) {
-  border-color: #D4B896;
-  background: #F8F4F0;
+  border-color: #d4b896;
+  background: #f8f4f0;
 }
 
 .logout-btn:disabled {
@@ -451,7 +440,7 @@ onMounted(async () => {
   border-radius: 16px;
   padding: 2rem;
   box-shadow: 0 4px 20px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
   display: flex;
   align-items: center;
   gap: 2rem;
@@ -465,7 +454,7 @@ onMounted(async () => {
 .avatar {
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, #7C5842, #A0796A);
+  background: linear-gradient(135deg, #7c5842, #a0796a);
   color: white;
   border-radius: 50%;
   display: flex;
@@ -483,8 +472,8 @@ onMounted(async () => {
   position: absolute;
   bottom: -5px;
   right: -5px;
-  background: #FFD700;
-  color: #7C5842;
+  background: #ffd700;
+  color: #7c5842;
   padding: 0.25rem 0.5rem;
   border-radius: 12px;
   font-size: 0.75rem;
@@ -499,12 +488,12 @@ onMounted(async () => {
 .user-name {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin: 0 0 0.25rem 0;
 }
 
 .user-email {
-  color: #A0796A;
+  color: #a0796a;
   margin: 0 0 1rem 0;
   font-size: 0.9rem;
 }
@@ -518,14 +507,14 @@ onMounted(async () => {
 .xp-bar {
   flex: 1;
   height: 8px;
-  background: #E8D5C4;
+  background: #e8d5c4;
   border-radius: 4px;
   overflow: hidden;
 }
 
 .xp-progress {
   height: 100%;
-  background: linear-gradient(90deg, #7C5842, #A0796A);
+  background: linear-gradient(90deg, #7c5842, #a0796a);
   border-radius: 4px;
   transition: width 0.3s ease;
 }
@@ -543,13 +532,13 @@ onMounted(async () => {
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .section-title {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin: 0 0 1.5rem 0;
 }
 
@@ -562,20 +551,20 @@ onMounted(async () => {
 .stat-card {
   text-align: center;
   padding: 1rem;
-  background: #F8F4F0;
+  background: #f8f4f0;
   border-radius: 12px;
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .stat-number {
   font-size: 2rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.25rem;
 }
 
 .stat-label {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.9rem;
 }
 
@@ -585,7 +574,7 @@ onMounted(async () => {
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .activity-list {
@@ -600,15 +589,15 @@ onMounted(async () => {
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: #F8F4F0;
+  background: #f8f4f0;
   border-radius: 12px;
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .activity-item:hover {
-  background: #F0E8DC;
+  background: #f0e8dc;
   transform: translateY(-1px);
 }
 
@@ -624,13 +613,13 @@ onMounted(async () => {
 .activity-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin: 0 0 0.25rem 0;
 }
 
 .activity-subtitle {
   font-size: 0.9rem;
-  color: #A0796A;
+  color: #a0796a;
   margin: 0 0 0.25rem 0;
 }
 
@@ -642,20 +631,20 @@ onMounted(async () => {
 .activity-score {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   flex-shrink: 0;
 }
 
 .view-all-link {
   display: inline-block;
-  color: #7C5842;
+  color: #7c5842;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s ease;
 }
 
 .view-all-link:hover {
-  color: #5D3F2E;
+  color: #5d3f2e;
 }
 
 /* Edit Section */
@@ -664,7 +653,7 @@ onMounted(async () => {
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .edit-form {
@@ -681,13 +670,13 @@ onMounted(async () => {
 
 .input-label {
   font-weight: 500;
-  color: #7C5842;
+  color: #7c5842;
   font-size: 0.9rem;
 }
 
 .input-field {
   padding: 0.75rem 1rem;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.2s ease;
@@ -695,12 +684,12 @@ onMounted(async () => {
 
 .input-field:focus {
   outline: none;
-  border-color: #7C5842;
+  border-color: #7c5842;
   box-shadow: 0 0 0 3px rgba(124, 88, 66, 0.1);
 }
 
 .input-field:disabled {
-  background: #F8F4F0;
+  background: #f8f4f0;
   cursor: not-allowed;
 }
 
@@ -711,27 +700,27 @@ onMounted(async () => {
 
 /* Danger Section */
 .danger-section {
-  background: #FEF2F2;
+  background: #fef2f2;
   border-radius: 16px;
   padding: 1.5rem;
-  border: 1px solid #FECACA;
+  border: 1px solid #fecaca;
 }
 
 .danger-title {
-  color: #DC2626;
+  color: #dc2626;
 }
 
 .danger-card {
   background: white;
   border-radius: 12px;
   padding: 1.5rem;
-  border: 1px solid #FECACA;
+  border: 1px solid #fecaca;
 }
 
 .danger-card-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #DC2626;
+  color: #dc2626;
   margin: 0 0 0.5rem 0;
 }
 
@@ -758,7 +747,7 @@ onMounted(async () => {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #7C5842, #A0796A);
+  background: linear-gradient(135deg, #7c5842, #a0796a);
   color: white;
   box-shadow: 0 4px 15px rgba(124, 88, 66, 0.3);
 }
@@ -776,13 +765,13 @@ onMounted(async () => {
 
 .btn-secondary {
   background: white;
-  color: #7C5842;
-  border: 2px solid #E8D5C4;
+  color: #7c5842;
+  border: 2px solid #e8d5c4;
 }
 
 .btn-secondary:hover:not(:disabled) {
-  border-color: #D4B896;
-  background: #F8F4F0;
+  border-color: #d4b896;
+  background: #f8f4f0;
 }
 
 .loading-spinner {
@@ -799,7 +788,7 @@ onMounted(async () => {
   position: fixed;
   top: 2rem;
   right: 2rem;
-  background: #10B981;
+  background: #10b981;
   color: white;
   padding: 1rem 1.5rem;
   border-radius: 8px;
@@ -843,7 +832,7 @@ onMounted(async () => {
 .modal-title {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -860,7 +849,7 @@ onMounted(async () => {
 }
 
 .error-text {
-  color: #DC2626;
+  color: #dc2626;
   font-size: 0.8rem;
   margin-top: 0.25rem;
 }
@@ -890,21 +879,21 @@ onMounted(async () => {
     text-align: center;
     gap: 1.5rem;
   }
-  
+
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .header-content {
     flex-direction: column;
     gap: 1rem;
     text-align: center;
   }
-  
+
   .modal-content {
     padding: 1.5rem;
   }
-  
+
   .success-toast {
     right: 1rem;
     top: 1rem;

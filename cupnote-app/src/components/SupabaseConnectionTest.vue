@@ -1,7 +1,7 @@
 <template>
   <div class="connection-test">
     <h3>🔌 Supabase 연결 테스트</h3>
-    
+
     <div class="status-card">
       <div class="status-item">
         <span class="label">연결 상태:</span>
@@ -9,12 +9,12 @@
           {{ connectionStatus.message }}
         </span>
       </div>
-      
+
       <div class="status-item">
         <span class="label">프로젝트 URL:</span>
         <span class="value">{{ supabaseUrl || '설정되지 않음' }}</span>
       </div>
-      
+
       <div class="status-item">
         <span class="label">인증 상태:</span>
         <span :class="['status', authStatus.type]">
@@ -27,7 +27,7 @@
       <button @click="testConnection" :disabled="testing" class="test-btn">
         {{ testing ? '테스트 중...' : '연결 테스트' }}
       </button>
-      
+
       <button @click="testDatabase" :disabled="testing" class="test-btn">
         {{ testing ? '테스트 중...' : 'DB 테스트' }}
       </button>
@@ -35,8 +35,11 @@
 
     <div v-if="testResults.length > 0" class="test-results">
       <h4>테스트 결과:</h4>
-      <div v-for="(result, index) in testResults" :key="index" 
-           :class="['result-item', result.success ? 'success' : 'error']">
+      <div
+        v-for="(result, index) in testResults"
+        :key="index"
+        :class="['result-item', result.success ? 'success' : 'error']"
+      >
         <span class="test-name">{{ result.test }}</span>
         <span class="result-message">{{ result.message }}</span>
       </div>
@@ -72,13 +75,13 @@ const authStatus = computed(() => {
 const testConnection = async () => {
   testing.value = true
   testResults.value = []
-  
+
   try {
     // 1. 환경변수 확인
     const envTest = {
       test: '환경변수 확인',
       success: !!(supabaseUrl && supabaseUrl !== 'your_supabase_project_url'),
-      message: supabaseUrl ? '✅ 설정됨' : '❌ VITE_SUPABASE_URL 미설정'
+      message: supabaseUrl ? '✅ 설정됨' : '❌ VITE_SUPABASE_URL 미설정',
     }
     testResults.value.push(envTest)
 
@@ -86,25 +89,31 @@ const testConnection = async () => {
     const clientTest = {
       test: 'Supabase 클라이언트',
       success: !!supabase,
-      message: supabase ? '✅ 초기화됨' : '❌ 초기화 실패'
+      message: supabase ? '✅ 초기화됨' : '❌ 초기화 실패',
     }
     testResults.value.push(clientTest)
 
     // 3. 인증 세션 확인
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession()
     const sessionTest = {
       test: '인증 세션',
       success: !sessionError,
-      message: sessionError ? `❌ ${sessionError.message}` : session ? '✅ 세션 활성' : '⚠️ 로그인 필요'
+      message: sessionError
+        ? `❌ ${sessionError.message}`
+        : session
+          ? '✅ 세션 활성'
+          : '⚠️ 로그인 필요',
     }
     testResults.value.push(sessionTest)
     authSession.value = session
-
   } catch (error) {
     testResults.value.push({
       test: '연결 테스트',
       success: false,
-      message: `❌ ${error.message}`
+      message: `❌ ${error.message}`,
     })
   } finally {
     testing.value = false
@@ -113,18 +122,18 @@ const testConnection = async () => {
 
 const testDatabase = async () => {
   testing.value = true
-  
+
   try {
     // 마스터 데이터 조회 테스트
     const { data: flavors, error: flavorError } = await supabase
       .from('flavor_categories')
       .select('*')
       .limit(5)
-    
+
     const flavorTest = {
       test: '향미 데이터 조회',
       success: !flavorError && flavors?.length > 0,
-      message: flavorError ? `❌ ${flavorError.message}` : `✅ ${flavors?.length || 0}개 조회됨`
+      message: flavorError ? `❌ ${flavorError.message}` : `✅ ${flavors?.length || 0}개 조회됨`,
     }
     testResults.value.push(flavorTest)
 
@@ -132,19 +141,18 @@ const testDatabase = async () => {
       .from('sensory_expressions')
       .select('*')
       .limit(5)
-    
+
     const sensoryTest = {
       test: '감각 표현 데이터 조회',
       success: !sensoryError && sensory?.length > 0,
-      message: sensoryError ? `❌ ${sensoryError.message}` : `✅ ${sensory?.length || 0}개 조회됨`
+      message: sensoryError ? `❌ ${sensoryError.message}` : `✅ ${sensory?.length || 0}개 조회됨`,
     }
     testResults.value.push(sensoryTest)
-
   } catch (error) {
     testResults.value.push({
       test: 'DB 연결 테스트',
       success: false,
-      message: `❌ ${error.message}`
+      message: `❌ ${error.message}`,
     })
   } finally {
     testing.value = false

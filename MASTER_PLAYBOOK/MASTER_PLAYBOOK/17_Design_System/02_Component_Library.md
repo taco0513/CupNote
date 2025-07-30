@@ -99,11 +99,11 @@ Components/
 ```tsx
 // Button.tsx
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'destructive';
-  size?: 'sm' | 'md' | 'lg';
-  loading?: boolean;
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
+  variant?: 'primary' | 'secondary' | 'ghost' | 'destructive'
+  size?: 'sm' | 'md' | 'lg'
+  loading?: boolean
+  leftIcon?: React.ReactNode
+  rightIcon?: React.ReactNode
 }
 
 const Button = ({
@@ -122,7 +122,7 @@ const Button = ({
     font-medium transition-all duration-200
     focus:outline-none focus:ring-2 focus:ring-offset-2
     disabled:opacity-50 disabled:cursor-not-allowed
-  `;
+  `
 
   const variantClasses = {
     primary: `
@@ -145,42 +145,47 @@ const Button = ({
       bg-[var(--color-error)] text-white
       hover:bg-[var(--color-error-dark)]
       focus:ring-[var(--color-error)]
-    `
-  };
+    `,
+  }
 
   const sizeClasses = {
     sm: 'px-3 py-1.5 text-sm rounded-md',
     md: 'px-4 py-2 text-base rounded-lg',
-    lg: 'px-6 py-3 text-lg rounded-lg'
-  };
+    lg: 'px-6 py-3 text-lg rounded-lg',
+  }
 
-  const combinedClasses = [
-    baseClasses,
-    variantClasses[variant],
-    sizeClasses[size],
-    className
-  ].join(' ').replace(/\s+/g, ' ').trim();
+  const combinedClasses = [baseClasses, variantClasses[variant], sizeClasses[size], className]
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim()
 
   return (
-    <button
-      className={combinedClasses}
-      disabled={disabled || loading}
-      {...props}
-    >
+    <button className={combinedClasses} disabled={disabled || loading} {...props}>
       {loading && (
         <svg className="animate-spin -ml-1 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          />
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          />
         </svg>
       )}
       {leftIcon && <span className="mr-2">{leftIcon}</span>}
       {children}
       {rightIcon && <span className="ml-2">{rightIcon}</span>}
     </button>
-  );
-};
+  )
+}
 
-export default Button;
+export default Button
 ```
 
 ### Input 컴포넌트
@@ -188,12 +193,12 @@ export default Button;
 ```tsx
 // Input.tsx
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
-  error?: string;
-  helper?: string;
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
-  variant?: 'default' | 'filled' | 'outlined';
+  label?: string
+  error?: string
+  helper?: string
+  leftIcon?: React.ReactNode
+  rightIcon?: React.ReactNode
+  variant?: 'default' | 'filled' | 'outlined'
 }
 
 const Input = ({
@@ -206,7 +211,7 @@ const Input = ({
   variant = 'default',
   ...props
 }: InputProps) => {
-  const inputId = props.id || `input-${Math.random().toString(36).substr(2, 9)}`;
+  const inputId = props.id || `input-${Math.random().toString(36).substr(2, 9)}`
 
   const baseClasses = `
     w-full px-3 py-2
@@ -214,7 +219,7 @@ const Input = ({
     transition-colors duration-200
     focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]
     disabled:opacity-50 disabled:cursor-not-allowed
-  `;
+  `
 
   const variantClasses = {
     default: `
@@ -231,13 +236,15 @@ const Input = ({
       border-2 border-[var(--border-primary)] rounded-lg
       bg-transparent
       focus:border-[var(--color-primary)]
-    `
-  };
+    `,
+  }
 
-  const errorClasses = error ? `
+  const errorClasses = error
+    ? `
     border-[var(--color-error)] focus:border-[var(--color-error)]
     focus:ring-[var(--color-error)]
-  ` : '';
+  `
+    : ''
 
   const inputClasses = [
     baseClasses,
@@ -245,16 +252,16 @@ const Input = ({
     errorClasses,
     leftIcon && 'pl-10',
     rightIcon && 'pr-10',
-    className
-  ].join(' ').replace(/\s+/g, ' ').trim();
+    className,
+  ]
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim()
 
   return (
     <div className="space-y-1">
       {label && (
-        <label
-          htmlFor={inputId}
-          className="block text-sm font-medium text-[var(--text-primary)]"
-        >
+        <label htmlFor={inputId} className="block text-sm font-medium text-[var(--text-primary)]">
           {label}
         </label>
       )}
@@ -266,11 +273,7 @@ const Input = ({
           </div>
         )}
 
-        <input
-          id={inputId}
-          className={inputClasses}
-          {...props}
-        />
+        <input id={inputId} className={inputClasses} {...props} />
 
         {rightIcon && (
           <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -280,15 +283,17 @@ const Input = ({
       </div>
 
       {(error || helper) && (
-        <p className={`text-sm ${error ? 'text-[var(--color-error)]' : 'text-[var(--text-secondary)]'}`}>
+        <p
+          className={`text-sm ${error ? 'text-[var(--color-error)]' : 'text-[var(--text-secondary)]'}`}
+        >
           {error || helper}
         </p>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Input;
+export default Input
 ```
 
 ### Text 컴포넌트
@@ -296,17 +301,25 @@ export default Input;
 ```tsx
 // Text.tsx
 interface TextProps {
-  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'div';
-  variant?: 'display-lg' | 'display-md' | 'display-sm' |
-           'heading-xl' | 'heading-lg' | 'heading-md' |
-           'body-lg' | 'body' | 'body-sm' |
-           'caption' | 'overline';
-  color?: 'primary' | 'secondary' | 'muted' | 'inverse' | 'error' | 'success' | 'warning';
-  weight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold';
-  align?: 'left' | 'center' | 'right' | 'justify';
-  truncate?: boolean;
-  children: React.ReactNode;
-  className?: string;
+  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'div'
+  variant?:
+    | 'display-lg'
+    | 'display-md'
+    | 'display-sm'
+    | 'heading-xl'
+    | 'heading-lg'
+    | 'heading-md'
+    | 'body-lg'
+    | 'body'
+    | 'body-sm'
+    | 'caption'
+    | 'overline'
+  color?: 'primary' | 'secondary' | 'muted' | 'inverse' | 'error' | 'success' | 'warning'
+  weight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold'
+  align?: 'left' | 'center' | 'right' | 'justify'
+  truncate?: boolean
+  children: React.ReactNode
+  className?: string
 }
 
 const Text = ({
@@ -328,11 +341,11 @@ const Text = ({
     'heading-lg': 'text-xl font-semibold leading-snug',
     'heading-md': 'text-lg font-medium leading-normal',
     'body-lg': 'text-lg font-normal leading-relaxed',
-    'body': 'text-base font-normal leading-normal',
+    body: 'text-base font-normal leading-normal',
     'body-sm': 'text-sm font-normal leading-normal',
-    'caption': 'text-sm font-medium leading-snug',
-    'overline': 'text-xs font-medium leading-normal uppercase tracking-wider'
-  };
+    caption: 'text-sm font-medium leading-snug',
+    overline: 'text-xs font-medium leading-normal uppercase tracking-wider',
+  }
 
   const colorClasses = {
     primary: 'text-[var(--text-primary)]',
@@ -341,23 +354,27 @@ const Text = ({
     inverse: 'text-[var(--text-inverse)]',
     error: 'text-[var(--color-error)]',
     success: 'text-[var(--color-success)]',
-    warning: 'text-[var(--color-warning)]'
-  };
+    warning: 'text-[var(--color-warning)]',
+  }
 
-  const weightClasses = weight ? {
-    light: 'font-light',
-    normal: 'font-normal',
-    medium: 'font-medium',
-    semibold: 'font-semibold',
-    bold: 'font-bold'
-  }[weight] : '';
+  const weightClasses = weight
+    ? {
+        light: 'font-light',
+        normal: 'font-normal',
+        medium: 'font-medium',
+        semibold: 'font-semibold',
+        bold: 'font-bold',
+      }[weight]
+    : ''
 
-  const alignClasses = align ? {
-    left: 'text-left',
-    center: 'text-center',
-    right: 'text-right',
-    justify: 'text-justify'
-  }[align] : '';
+  const alignClasses = align
+    ? {
+        left: 'text-left',
+        center: 'text-center',
+        right: 'text-right',
+        justify: 'text-justify',
+      }[align]
+    : ''
 
   const combinedClasses = [
     variantClasses[variant],
@@ -365,17 +382,19 @@ const Text = ({
     weightClasses,
     alignClasses,
     truncate && 'truncate',
-    className
-  ].filter(Boolean).join(' ');
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ')
 
   return (
     <Component className={combinedClasses} {...props}>
       {children}
     </Component>
-  );
-};
+  )
+}
 
-export default Text;
+export default Text
 ```
 
 ### Icon 컴포넌트
@@ -383,25 +402,20 @@ export default Text;
 ```tsx
 // Icon.tsx
 interface IconProps {
-  name: string;
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-  color?: 'current' | 'primary' | 'secondary' | 'muted' | 'error' | 'success' | 'warning';
-  className?: string;
+  name: string
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+  color?: 'current' | 'primary' | 'secondary' | 'muted' | 'error' | 'success' | 'warning'
+  className?: string
 }
 
-const Icon = ({
-  name,
-  size = 'md',
-  color = 'current',
-  className = ''
-}: IconProps) => {
+const Icon = ({ name, size = 'md', color = 'current', className = '' }: IconProps) => {
   const sizeClasses = {
     xs: 'w-3 h-3',
     sm: 'w-4 h-4',
     md: 'w-5 h-5',
     lg: 'w-6 h-6',
-    xl: 'w-8 h-8'
-  };
+    xl: 'w-8 h-8',
+  }
 
   const colorClasses = {
     current: 'text-current',
@@ -410,25 +424,22 @@ const Icon = ({
     muted: 'text-[var(--text-muted)]',
     error: 'text-[var(--color-error)]',
     success: 'text-[var(--color-success)]',
-    warning: 'text-[var(--color-warning)]'
-  };
+    warning: 'text-[var(--color-warning)]',
+  }
 
-  const combinedClasses = [
-    sizeClasses[size],
-    colorClasses[color],
-    className
-  ].join(' ');
+  const combinedClasses = [sizeClasses[size], colorClasses[color], className].join(' ')
 
   // 아이콘 매핑 (Heroicons 또는 다른 아이콘 라이브러리 사용)
   const iconPaths = {
-    'check': 'M5 13l4 4L19 7',
-    'x': 'M6 18L18 6M6 6l12 12',
+    check: 'M5 13l4 4L19 7',
+    x: 'M6 18L18 6M6 6l12 12',
     'arrow-right': 'M13 7l5 5m0 0l-5 5m5-5H6',
-    'user': 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
-    'mail': 'M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
-    'search': 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z',
-    'loading': 'M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
-  };
+    user: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
+    mail: 'M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
+    search: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z',
+    loading:
+      'M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z',
+  }
 
   return (
     <svg
@@ -438,16 +449,12 @@ const Icon = ({
       stroke="currentColor"
       viewBox="0 0 24 24"
     >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d={iconPaths[name] || iconPaths['x']}
-      />
+      <path strokeLinecap="round" strokeLinejoin="round" d={iconPaths[name] || iconPaths['x']} />
     </svg>
-  );
-};
+  )
+}
 
-export default Icon;
+export default Icon
 ```
 
 ## 조합 컴포넌트 (Composed)
@@ -457,100 +464,81 @@ export default Icon;
 ```tsx
 // Card.tsx
 interface CardProps {
-  children: React.ReactNode;
-  variant?: 'default' | 'outlined' | 'elevated';
-  padding?: 'none' | 'sm' | 'md' | 'lg';
-  className?: string;
+  children: React.ReactNode
+  variant?: 'default' | 'outlined' | 'elevated'
+  padding?: 'none' | 'sm' | 'md' | 'lg'
+  className?: string
 }
 
 interface CardHeaderProps {
-  children: React.ReactNode;
-  className?: string;
+  children: React.ReactNode
+  className?: string
 }
 
 interface CardBodyProps {
-  children: React.ReactNode;
-  className?: string;
+  children: React.ReactNode
+  className?: string
 }
 
 interface CardFooterProps {
-  children: React.ReactNode;
-  actions?: boolean;
-  className?: string;
+  children: React.ReactNode
+  actions?: boolean
+  className?: string
 }
 
-const Card = ({
-  children,
-  variant = 'default',
-  padding = 'md',
-  className = ''
-}: CardProps) => {
-  const baseClasses = 'rounded-[var(--radius-card)] transition-all duration-200';
+const Card = ({ children, variant = 'default', padding = 'md', className = '' }: CardProps) => {
+  const baseClasses = 'rounded-[var(--radius-card)] transition-all duration-200'
 
   const variantClasses = {
     default: 'bg-[var(--bg-primary)] border border-[var(--border-primary)]',
     outlined: 'bg-[var(--bg-primary)] border-2 border-[var(--border-primary)]',
-    elevated: 'bg-[var(--bg-primary)] shadow-[var(--shadow-md)]'
-  };
+    elevated: 'bg-[var(--bg-primary)] shadow-[var(--shadow-md)]',
+  }
 
   const paddingClasses = {
     none: '',
     sm: 'p-4',
     md: 'p-6',
-    lg: 'p-8'
-  };
+    lg: 'p-8',
+  }
 
   const combinedClasses = [
     baseClasses,
     variantClasses[variant],
     padding !== 'none' && paddingClasses[padding],
-    className
-  ].filter(Boolean).join(' ');
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ')
 
-  return (
-    <div className={combinedClasses}>
-      {children}
-    </div>
-  );
-};
+  return <div className={combinedClasses}>{children}</div>
+}
 
 const CardHeader = ({ children, className = '' }: CardHeaderProps) => {
   return (
     <div className={`border-b border-[var(--border-primary)] pb-4 mb-4 ${className}`}>
       {children}
     </div>
-  );
-};
+  )
+}
 
 const CardBody = ({ children, className = '' }: CardBodyProps) => {
-  return (
-    <div className={className}>
-      {children}
-    </div>
-  );
-};
+  return <div className={className}>{children}</div>
+}
 
-const CardFooter = ({
-  children,
-  actions = false,
-  className = ''
-}: CardFooterProps) => {
-  const baseClasses = 'border-t border-[var(--border-primary)] pt-4 mt-4';
-  const actionClasses = actions ? 'flex items-center justify-end gap-3' : '';
+const CardFooter = ({ children, actions = false, className = '' }: CardFooterProps) => {
+  const baseClasses = 'border-t border-[var(--border-primary)] pt-4 mt-4'
+  const actionClasses = actions ? 'flex items-center justify-end gap-3' : ''
 
-  return (
-    <div className={`${baseClasses} ${actionClasses} ${className}`}>
-      {children}
-    </div>
-  );
-};
+  return <div className={`${baseClasses} ${actionClasses} ${className}`}>{children}</div>
+}
 
 // 복합 컴포넌트로 내보내기
-Card.Header = CardHeader;
-Card.Body = CardBody;
-Card.Footer = CardFooter;
+Card.Header = CardHeader
+Card.Body = CardBody
+Card.Footer = CardFooter
 
-export default Card;
+export default Card
 ```
 
 ### Modal 컴포넌트
@@ -558,58 +546,48 @@ export default Card;
 ```tsx
 // Modal.tsx
 interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title?: string;
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
-  children: React.ReactNode;
-  className?: string;
+  isOpen: boolean
+  onClose: () => void
+  title?: string
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full'
+  children: React.ReactNode
+  className?: string
 }
 
-const Modal = ({
-  isOpen,
-  onClose,
-  title,
-  size = 'md',
-  children,
-  className = ''
-}: ModalProps) => {
+const Modal = ({ isOpen, onClose, title, size = 'md', children, className = '' }: ModalProps) => {
   const sizeClasses = {
     sm: 'max-w-md',
     md: 'max-w-lg',
     lg: 'max-w-2xl',
     xl: 'max-w-4xl',
-    full: 'max-w-7xl'
-  };
+    full: 'max-w-7xl',
+  }
 
   // 키보드 이벤트 처리
   React.useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        onClose();
+        onClose()
       }
-    };
+    }
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
+      document.addEventListener('keydown', handleEscape)
+      document.body.style.overflow = 'hidden'
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen, onClose]);
+      document.removeEventListener('keydown', handleEscape)
+      document.body.style.overflow = 'unset'
+    }
+  }, [isOpen, onClose])
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       {/* 배경 오버레이 */}
-      <div
-        className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
-        onClick={onClose}
-      />
+      <div className="fixed inset-0 bg-black bg-opacity-50 transition-opacity" onClick={onClose} />
 
       {/* 모달 컨테이너 */}
       <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
@@ -638,16 +616,14 @@ const Modal = ({
           )}
 
           {/* 컨텐츠 */}
-          <div>
-            {children}
-          </div>
+          <div>{children}</div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Modal;
+export default Modal
 ```
 
 ## 레이아웃 컴포넌트
@@ -657,42 +633,40 @@ export default Modal;
 ```tsx
 // Container.tsx
 interface ContainerProps {
-  children: React.ReactNode;
-  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';
-  padding?: boolean;
-  className?: string;
+  children: React.ReactNode
+  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full'
+  padding?: boolean
+  className?: string
 }
 
 const Container = ({
   children,
   maxWidth = 'lg',
   padding = true,
-  className = ''
+  className = '',
 }: ContainerProps) => {
   const maxWidthClasses = {
-    sm: 'max-w-screen-sm',     // 640px
-    md: 'max-w-screen-md',     // 768px
-    lg: 'max-w-screen-lg',     // 1024px
-    xl: 'max-w-screen-xl',     // 1280px
+    sm: 'max-w-screen-sm', // 640px
+    md: 'max-w-screen-md', // 768px
+    lg: 'max-w-screen-lg', // 1024px
+    xl: 'max-w-screen-xl', // 1280px
     '2xl': 'max-w-screen-2xl', // 1536px
-    full: 'max-w-none'
-  };
+    full: 'max-w-none',
+  }
 
   const combinedClasses = [
     'mx-auto',
     maxWidthClasses[maxWidth],
     padding && 'px-4 sm:px-6 lg:px-8',
-    className
-  ].filter(Boolean).join(' ');
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ')
 
-  return (
-    <div className={combinedClasses}>
-      {children}
-    </div>
-  );
-};
+  return <div className={combinedClasses}>{children}</div>
+}
 
-export default Container;
+export default Container
 ```
 
 ### Grid 컴포넌트
@@ -700,24 +674,18 @@ export default Container;
 ```tsx
 // Grid.tsx
 interface GridProps {
-  children: React.ReactNode;
-  cols?: 1 | 2 | 3 | 4 | 5 | 6 | 12;
-  gap?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  children: React.ReactNode
+  cols?: 1 | 2 | 3 | 4 | 5 | 6 | 12
+  gap?: 'none' | 'sm' | 'md' | 'lg' | 'xl'
   responsive?: {
-    sm?: 1 | 2 | 3 | 4 | 5 | 6 | 12;
-    md?: 1 | 2 | 3 | 4 | 5 | 6 | 12;
-    lg?: 1 | 2 | 3 | 4 | 5 | 6 | 12;
-  };
-  className?: string;
+    sm?: 1 | 2 | 3 | 4 | 5 | 6 | 12
+    md?: 1 | 2 | 3 | 4 | 5 | 6 | 12
+    lg?: 1 | 2 | 3 | 4 | 5 | 6 | 12
+  }
+  className?: string
 }
 
-const Grid = ({
-  children,
-  cols = 1,
-  gap = 'md',
-  responsive,
-  className = ''
-}: GridProps) => {
+const Grid = ({ children, cols = 1, gap = 'md', responsive, className = '' }: GridProps) => {
   const colsClasses = {
     1: 'grid-cols-1',
     2: 'grid-cols-2',
@@ -725,39 +693,37 @@ const Grid = ({
     4: 'grid-cols-4',
     5: 'grid-cols-5',
     6: 'grid-cols-6',
-    12: 'grid-cols-12'
-  };
+    12: 'grid-cols-12',
+  }
 
   const gapClasses = {
     none: 'gap-0',
     sm: 'gap-2',
     md: 'gap-4',
     lg: 'gap-6',
-    xl: 'gap-8'
-  };
+    xl: 'gap-8',
+  }
 
-  const responsiveClasses = responsive ? [
-    responsive.sm && `sm:grid-cols-${responsive.sm}`,
-    responsive.md && `md:grid-cols-${responsive.md}`,
-    responsive.lg && `lg:grid-cols-${responsive.lg}`
-  ].filter(Boolean) : [];
+  const responsiveClasses = responsive
+    ? [
+        responsive.sm && `sm:grid-cols-${responsive.sm}`,
+        responsive.md && `md:grid-cols-${responsive.md}`,
+        responsive.lg && `lg:grid-cols-${responsive.lg}`,
+      ].filter(Boolean)
+    : []
 
   const combinedClasses = [
     'grid',
     colsClasses[cols],
     gapClasses[gap],
     ...responsiveClasses,
-    className
-  ].join(' ');
+    className,
+  ].join(' ')
 
-  return (
-    <div className={combinedClasses}>
-      {children}
-    </div>
-  );
-};
+  return <div className={combinedClasses}>{children}</div>
+}
 
-export default Grid;
+export default Grid
 ```
 
 ### Stack 컴포넌트
@@ -765,13 +731,13 @@ export default Grid;
 ```tsx
 // Stack.tsx
 interface StackProps {
-  children: React.ReactNode;
-  direction?: 'row' | 'column';
-  gap?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-  align?: 'start' | 'center' | 'end' | 'stretch';
-  justify?: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly';
-  wrap?: boolean;
-  className?: string;
+  children: React.ReactNode
+  direction?: 'row' | 'column'
+  gap?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+  align?: 'start' | 'center' | 'end' | 'stretch'
+  justify?: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly'
+  wrap?: boolean
+  className?: string
 }
 
 const Stack = ({
@@ -781,12 +747,12 @@ const Stack = ({
   align,
   justify,
   wrap = false,
-  className = ''
+  className = '',
 }: StackProps) => {
   const directionClasses = {
     row: 'flex-row',
-    column: 'flex-col'
-  };
+    column: 'flex-col',
+  }
 
   const gapClasses = {
     none: 'gap-0',
@@ -794,24 +760,28 @@ const Stack = ({
     sm: 'gap-2',
     md: 'gap-4',
     lg: 'gap-6',
-    xl: 'gap-8'
-  };
+    xl: 'gap-8',
+  }
 
-  const alignClasses = align ? {
-    start: 'items-start',
-    center: 'items-center',
-    end: 'items-end',
-    stretch: 'items-stretch'
-  }[align] : '';
+  const alignClasses = align
+    ? {
+        start: 'items-start',
+        center: 'items-center',
+        end: 'items-end',
+        stretch: 'items-stretch',
+      }[align]
+    : ''
 
-  const justifyClasses = justify ? {
-    start: 'justify-start',
-    center: 'justify-center',
-    end: 'justify-end',
-    between: 'justify-between',
-    around: 'justify-around',
-    evenly: 'justify-evenly'
-  }[justify] : '';
+  const justifyClasses = justify
+    ? {
+        start: 'justify-start',
+        center: 'justify-center',
+        end: 'justify-end',
+        between: 'justify-between',
+        around: 'justify-around',
+        evenly: 'justify-evenly',
+      }[justify]
+    : ''
 
   const combinedClasses = [
     'flex',
@@ -820,17 +790,15 @@ const Stack = ({
     alignClasses,
     justifyClasses,
     wrap && 'flex-wrap',
-    className
-  ].filter(Boolean).join(' ');
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ')
 
-  return (
-    <div className={combinedClasses}>
-      {children}
-    </div>
-  );
-};
+  return <div className={combinedClasses}>{children}</div>
+}
 
-export default Stack;
+export default Stack
 ```
 
 ## 컴포넌트 문서화
@@ -917,39 +885,39 @@ export const AllSizes: Story = {
 ```typescript
 // types/components.ts
 export interface BaseComponentProps {
-  children?: React.ReactNode;
-  className?: string;
-  'data-testid'?: string;
+  children?: React.ReactNode
+  className?: string
+  'data-testid'?: string
 }
 
 export interface VariantProps {
-  variant?: string;
+  variant?: string
 }
 
 export interface SizeProps {
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg'
 }
 
 export interface StateProps {
-  disabled?: boolean;
-  loading?: boolean;
-  active?: boolean;
+  disabled?: boolean
+  loading?: boolean
+  active?: boolean
 }
 
 export interface ColorProps {
-  color?: 'primary' | 'secondary' | 'success' | 'warning' | 'error';
+  color?: 'primary' | 'secondary' | 'success' | 'warning' | 'error'
 }
 
 // 컴포넌트별 특화 타입들
-export type ButtonVariants = 'primary' | 'secondary' | 'ghost' | 'destructive';
-export type InputVariants = 'default' | 'filled' | 'outlined';
-export type CardVariants = 'default' | 'outlined' | 'elevated';
+export type ButtonVariants = 'primary' | 'secondary' | 'ghost' | 'destructive'
+export type InputVariants = 'default' | 'filled' | 'outlined'
+export type CardVariants = 'default' | 'outlined' | 'elevated'
 
 export interface ComponentStyleProps {
-  baseClasses: string;
-  variantClasses: Record<string, string>;
-  sizeClasses: Record<string, string>;
-  stateClasses: Record<string, string>;
+  baseClasses: string
+  variantClasses: Record<string, string>
+  sizeClasses: Record<string, string>
+  stateClasses: Record<string, string>
 }
 ```
 

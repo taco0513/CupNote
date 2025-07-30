@@ -14,23 +14,23 @@
 /* 1. 원본 토큰 (Primitive Tokens) - 기본 값들 */
 :root {
   /* 색상 팔레트 */
-  --blue-50: #EFF6FF;
-  --blue-100: #DBEAFE;
-  --blue-500: #3B82F6;
-  --blue-600: #2563EB;
-  --blue-900: #1E3A8A;
+  --blue-50: #eff6ff;
+  --blue-100: #dbeafe;
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
+  --blue-900: #1e3a8a;
 
   /* 회색 스케일 */
-  --gray-50: #F9FAFB;
-  --gray-100: #F3F4F6;
-  --gray-500: #6B7280;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-500: #6b7280;
   --gray-900: #111827;
 
   /* 간격 단위 */
   --space-1: 0.25rem; /* 4px */
-  --space-2: 0.5rem;  /* 8px */
-  --space-4: 1rem;    /* 16px */
-  --space-8: 2rem;    /* 32px */
+  --space-2: 0.5rem; /* 8px */
+  --space-4: 1rem; /* 16px */
+  --space-8: 2rem; /* 32px */
 }
 
 /* 2. 의미적 토큰 (Semantic Tokens) - 용도별 별명 */
@@ -41,9 +41,9 @@
   --color-primary-dark: var(--blue-900);
 
   /* 상태 색상 */
-  --color-success: #10B981;
-  --color-warning: #F59E0B;
-  --color-error: #EF4444;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
   --color-info: var(--blue-500);
 
   /* 텍스트 색상 */
@@ -52,7 +52,7 @@
   --text-inverse: var(--gray-50);
 
   /* 배경 색상 */
-  --bg-primary: #FFFFFF;
+  --bg-primary: #ffffff;
   --bg-secondary: var(--gray-50);
   --bg-tertiary: var(--gray-100);
 }
@@ -82,38 +82,38 @@
 // 토큰 네이밍 규칙
 interface TokenNamingConvention {
   // 구조: [category]-[property]-[variant]-[state]
-  pattern: string;
+  pattern: string
 
   examples: {
     // 색상 토큰
     color: [
-      "--color-primary",           // 기본 브랜드 색상
-      "--color-primary-light",     // 밝은 변형
-      "--color-primary-hover",     // 호버 상태
-      "--text-primary",            // 기본 텍스트 색상
-      "--bg-secondary"             // 보조 배경 색상
-    ],
+      '--color-primary', // 기본 브랜드 색상
+      '--color-primary-light', // 밝은 변형
+      '--color-primary-hover', // 호버 상태
+      '--text-primary', // 기본 텍스트 색상
+      '--bg-secondary', // 보조 배경 색상
+    ]
 
     // 간격 토큰
     spacing: [
-      "--space-xs",    // 매우 작은 간격
-      "--space-sm",    // 작은 간격
-      "--space-md",    // 중간 간격
-      "--space-lg",    // 큰 간격
-      "--space-xl"     // 매우 큰 간격
-    ],
+      '--space-xs', // 매우 작은 간격
+      '--space-sm', // 작은 간격
+      '--space-md', // 중간 간격
+      '--space-lg', // 큰 간격
+      '--space-xl', // 매우 큰 간격
+    ]
 
     // 타이포그래피 토큰
     typography: [
-      "--text-xs",     // 12px
-      "--text-sm",     // 14px
-      "--text-base",   // 16px
-      "--text-lg",     // 18px
-      "--text-xl",     // 20px
-      "--font-heading", // 제목용 폰트
-      "--font-body"    // 본문용 폰트
+      '--text-xs', // 12px
+      '--text-sm', // 14px
+      '--text-base', // 16px
+      '--text-lg', // 18px
+      '--text-xl', // 20px
+      '--font-heading', // 제목용 폰트
+      '--font-body', // 본문용 폰트
     ]
-  };
+  }
 }
 ```
 
@@ -125,29 +125,29 @@ interface TokenNamingConvention {
 /* 브랜드 색상 - 50부터 950까지 11단계 */
 :root {
   /* Primary 브랜드 색상 */
-  --primary-50: #EEF2FF;
-  --primary-100: #E0E7FF;
-  --primary-200: #C7D2FE;
-  --primary-300: #A5B4FC;
-  --primary-400: #818CF8;
-  --primary-500: #6366F1;  /* 기본 브랜드 색상 */
-  --primary-600: #4F46E5;
-  --primary-700: #4338CA;
-  --primary-800: #3730A3;
-  --primary-900: #312E81;
-  --primary-950: #1E1B4B;
+  --primary-50: #eef2ff;
+  --primary-100: #e0e7ff;
+  --primary-200: #c7d2fe;
+  --primary-300: #a5b4fc;
+  --primary-400: #818cf8;
+  --primary-500: #6366f1; /* 기본 브랜드 색상 */
+  --primary-600: #4f46e5;
+  --primary-700: #4338ca;
+  --primary-800: #3730a3;
+  --primary-900: #312e81;
+  --primary-950: #1e1b4b;
 
   /* Secondary 보조 색상 */
-  --secondary-50: #F8FAFC;
-  --secondary-100: #F1F5F9;
-  --secondary-200: #E2E8F0;
-  --secondary-300: #CBD5E1;
-  --secondary-400: #94A3B8;
-  --secondary-500: #64748B;  /* 기본 보조 색상 */
+  --secondary-50: #f8fafc;
+  --secondary-100: #f1f5f9;
+  --secondary-200: #e2e8f0;
+  --secondary-300: #cbd5e1;
+  --secondary-400: #94a3b8;
+  --secondary-500: #64748b; /* 기본 보조 색상 */
   --secondary-600: #475569;
   --secondary-700: #334155;
-  --secondary-800: #1E293B;
-  --secondary-900: #0F172A;
+  --secondary-800: #1e293b;
+  --secondary-900: #0f172a;
   --secondary-950: #020617;
 }
 ```
@@ -158,28 +158,28 @@ interface TokenNamingConvention {
 /* 상태별 색상 정의 */
 :root {
   /* 성공 상태 */
-  --color-success-50: #ECFDF5;
-  --color-success-500: #10B981;
+  --color-success-50: #ecfdf5;
+  --color-success-500: #10b981;
   --color-success-600: #059669;
-  --color-success-900: #064E3B;
+  --color-success-900: #064e3b;
 
   /* 경고 상태 */
-  --color-warning-50: #FFFBEB;
-  --color-warning-500: #F59E0B;
-  --color-warning-600: #D97706;
-  --color-warning-900: #78350F;
+  --color-warning-50: #fffbeb;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  --color-warning-900: #78350f;
 
   /* 오류 상태 */
-  --color-error-50: #FEF2F2;
-  --color-error-500: #EF4444;
-  --color-error-600: #DC2626;
-  --color-error-900: #7F1D1D;
+  --color-error-50: #fef2f2;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+  --color-error-900: #7f1d1d;
 
   /* 정보 상태 */
-  --color-info-50: #EFF6FF;
-  --color-info-500: #3B82F6;
-  --color-info-600: #2563EB;
-  --color-info-900: #1E3A8A;
+  --color-info-50: #eff6ff;
+  --color-info-500: #3b82f6;
+  --color-info-600: #2563eb;
+  --color-info-900: #1e3a8a;
 }
 
 /* 의미적 별명 적용 */
@@ -201,44 +201,44 @@ interface TokenNamingConvention {
 /* 라이트 모드 (기본) */
 :root {
   --text-primary: #111827;
-  --text-secondary: #6B7280;
-  --text-muted: #9CA3AF;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
 
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #F9FAFB;
-  --bg-tertiary: #F3F4F6;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --bg-tertiary: #f3f4f6;
 
-  --border-primary: #E5E7EB;
-  --border-secondary: #D1D5DB;
+  --border-primary: #e5e7eb;
+  --border-secondary: #d1d5db;
 }
 
 /* 다크 모드 */
-[data-theme="dark"] {
-  --text-primary: #F9FAFB;
-  --text-secondary: #D1D5DB;
-  --text-muted: #9CA3AF;
+[data-theme='dark'] {
+  --text-primary: #f9fafb;
+  --text-secondary: #d1d5db;
+  --text-muted: #9ca3af;
 
   --bg-primary: #111827;
-  --bg-secondary: #1F2937;
+  --bg-secondary: #1f2937;
   --bg-tertiary: #374151;
 
   --border-primary: #374151;
-  --border-secondary: #4B5563;
+  --border-secondary: #4b5563;
 }
 
 /* 자동 다크모드 감지 */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --text-primary: #F9FAFB;
-    --text-secondary: #D1D5DB;
-    --text-muted: #9CA3AF;
+  :root:not([data-theme='light']) {
+    --text-primary: #f9fafb;
+    --text-secondary: #d1d5db;
+    --text-muted: #9ca3af;
 
     --bg-primary: #111827;
-    --bg-secondary: #1F2937;
+    --bg-secondary: #1f2937;
     --bg-tertiary: #374151;
 
     --border-primary: #374151;
-    --border-secondary: #4B5563;
+    --border-secondary: #4b5563;
   }
 }
 ```
@@ -250,32 +250,32 @@ interface TokenNamingConvention {
 ```css
 /* 폰트 패밀리 */
 :root {
-  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-               "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
-               sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-               "Noto Color Emoji";
-  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas,
-               "Liberation Mono", Menlo, monospace;
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-serif: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
 
   /* 브랜드 폰트 (선택사항) */
-  --font-heading: "Inter", var(--font-sans);
+  --font-heading: 'Inter', var(--font-sans);
   --font-body: var(--font-sans);
 }
 
 /* 타입 스케일 - Modular Scale 사용 */
 :root {
   /* 폰트 크기 */
-  --text-xs: 0.75rem;     /* 12px */
-  --text-sm: 0.875rem;    /* 14px */
-  --text-base: 1rem;      /* 16px - 기준 크기 */
-  --text-lg: 1.125rem;    /* 18px */
-  --text-xl: 1.25rem;     /* 20px */
-  --text-2xl: 1.5rem;     /* 24px */
-  --text-3xl: 1.875rem;   /* 30px */
-  --text-4xl: 2.25rem;    /* 36px */
-  --text-5xl: 3rem;       /* 48px */
-  --text-6xl: 3.75rem;    /* 60px */
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-base: 1rem; /* 16px - 기준 크기 */
+  --text-lg: 1.125rem; /* 18px */
+  --text-xl: 1.25rem; /* 20px */
+  --text-2xl: 1.5rem; /* 24px */
+  --text-3xl: 1.875rem; /* 30px */
+  --text-4xl: 2.25rem; /* 36px */
+  --text-5xl: 3rem; /* 48px */
+  --text-6xl: 3.75rem; /* 60px */
 
   /* 라인 하이트 */
   --leading-none: 1;
@@ -396,58 +396,58 @@ interface TokenNamingConvention {
   /* 기본 간격 단위 */
   --space-0: 0;
   --space-px: 1px;
-  --space-0_5: 0.125rem;  /* 2px */
-  --space-1: 0.25rem;     /* 4px */
-  --space-1_5: 0.375rem;  /* 6px */
-  --space-2: 0.5rem;      /* 8px */
-  --space-2_5: 0.625rem;  /* 10px */
-  --space-3: 0.75rem;     /* 12px */
-  --space-3_5: 0.875rem;  /* 14px */
-  --space-4: 1rem;        /* 16px */
-  --space-5: 1.25rem;     /* 20px */
-  --space-6: 1.5rem;      /* 24px */
-  --space-7: 1.75rem;     /* 28px */
-  --space-8: 2rem;        /* 32px */
-  --space-9: 2.25rem;     /* 36px */
-  --space-10: 2.5rem;     /* 40px */
-  --space-11: 2.75rem;    /* 44px */
-  --space-12: 3rem;       /* 48px */
-  --space-14: 3.5rem;     /* 56px */
-  --space-16: 4rem;       /* 64px */
-  --space-20: 5rem;       /* 80px */
-  --space-24: 6rem;       /* 96px */
-  --space-28: 7rem;       /* 112px */
-  --space-32: 8rem;       /* 128px */
-  --space-36: 9rem;       /* 144px */
-  --space-40: 10rem;      /* 160px */
-  --space-44: 11rem;      /* 176px */
-  --space-48: 12rem;      /* 192px */
-  --space-52: 13rem;      /* 208px */
-  --space-56: 14rem;      /* 224px */
-  --space-60: 15rem;      /* 240px */
-  --space-64: 16rem;      /* 256px */
-  --space-72: 18rem;      /* 288px */
-  --space-80: 20rem;      /* 320px */
-  --space-96: 24rem;      /* 384px */
+  --space-0_5: 0.125rem; /* 2px */
+  --space-1: 0.25rem; /* 4px */
+  --space-1_5: 0.375rem; /* 6px */
+  --space-2: 0.5rem; /* 8px */
+  --space-2_5: 0.625rem; /* 10px */
+  --space-3: 0.75rem; /* 12px */
+  --space-3_5: 0.875rem; /* 14px */
+  --space-4: 1rem; /* 16px */
+  --space-5: 1.25rem; /* 20px */
+  --space-6: 1.5rem; /* 24px */
+  --space-7: 1.75rem; /* 28px */
+  --space-8: 2rem; /* 32px */
+  --space-9: 2.25rem; /* 36px */
+  --space-10: 2.5rem; /* 40px */
+  --space-11: 2.75rem; /* 44px */
+  --space-12: 3rem; /* 48px */
+  --space-14: 3.5rem; /* 56px */
+  --space-16: 4rem; /* 64px */
+  --space-20: 5rem; /* 80px */
+  --space-24: 6rem; /* 96px */
+  --space-28: 7rem; /* 112px */
+  --space-32: 8rem; /* 128px */
+  --space-36: 9rem; /* 144px */
+  --space-40: 10rem; /* 160px */
+  --space-44: 11rem; /* 176px */
+  --space-48: 12rem; /* 192px */
+  --space-52: 13rem; /* 208px */
+  --space-56: 14rem; /* 224px */
+  --space-60: 15rem; /* 240px */
+  --space-64: 16rem; /* 256px */
+  --space-72: 18rem; /* 288px */
+  --space-80: 20rem; /* 320px */
+  --space-96: 24rem; /* 384px */
 }
 
 /* 의미적 간격 별명 */
 :root {
   /* 컴포넌트 내부 간격 */
-  --space-xs: var(--space-1);    /* 4px */
-  --space-sm: var(--space-2);    /* 8px */
-  --space-md: var(--space-4);    /* 16px */
-  --space-lg: var(--space-6);    /* 24px */
-  --space-xl: var(--space-8);    /* 32px */
-  --space-2xl: var(--space-12);  /* 48px */
-  --space-3xl: var(--space-16);  /* 64px */
-  --space-4xl: var(--space-24);  /* 96px */
+  --space-xs: var(--space-1); /* 4px */
+  --space-sm: var(--space-2); /* 8px */
+  --space-md: var(--space-4); /* 16px */
+  --space-lg: var(--space-6); /* 24px */
+  --space-xl: var(--space-8); /* 32px */
+  --space-2xl: var(--space-12); /* 48px */
+  --space-3xl: var(--space-16); /* 64px */
+  --space-4xl: var(--space-24); /* 96px */
 
   /* 레이아웃 간격 */
-  --space-section: var(--space-16);    /* 섹션 간 간격 */
-  --space-component: var(--space-8);   /* 컴포넌트 간 간격 */
-  --space-element: var(--space-4);     /* 요소 간 간격 */
-  --space-inline: var(--space-2);      /* 인라인 요소 간격 */
+  --space-section: var(--space-16); /* 섹션 간 간격 */
+  --space-component: var(--space-8); /* 컴포넌트 간 간격 */
+  --space-element: var(--space-4); /* 요소 간 간격 */
+  --space-inline: var(--space-2); /* 인라인 요소 간격 */
 }
 ```
 
@@ -457,12 +457,12 @@ interface TokenNamingConvention {
 /* 반응형 간격 토큰 */
 :root {
   /* 적응형 간격 - clamp() 사용 */
-  --space-fluid-xs: clamp(0.25rem, 1vw, 0.5rem);      /* 4px - 8px */
-  --space-fluid-sm: clamp(0.5rem, 2vw, 1rem);         /* 8px - 16px */
-  --space-fluid-md: clamp(1rem, 4vw, 2rem);           /* 16px - 32px */
-  --space-fluid-lg: clamp(1.5rem, 6vw, 3rem);         /* 24px - 48px */
-  --space-fluid-xl: clamp(2rem, 8vw, 4rem);           /* 32px - 64px */
-  --space-fluid-2xl: clamp(3rem, 12vw, 6rem);         /* 48px - 96px */
+  --space-fluid-xs: clamp(0.25rem, 1vw, 0.5rem); /* 4px - 8px */
+  --space-fluid-sm: clamp(0.5rem, 2vw, 1rem); /* 8px - 16px */
+  --space-fluid-md: clamp(1rem, 4vw, 2rem); /* 16px - 32px */
+  --space-fluid-lg: clamp(1.5rem, 6vw, 3rem); /* 24px - 48px */
+  --space-fluid-xl: clamp(2rem, 8vw, 4rem); /* 32px - 64px */
+  --space-fluid-2xl: clamp(3rem, 12vw, 6rem); /* 48px - 96px */
 
   /* 컨테이너 간격 */
   --container-padding: clamp(1rem, 4vw, 2rem);
@@ -511,12 +511,12 @@ interface TokenNamingConvention {
 /* Elevation 레벨 */
 :root {
   /* Material Design 영감 elevation */
-  --elevation-0: none;                    /* Surface */
-  --elevation-1: var(--shadow-sm);        /* Card */
-  --elevation-2: var(--shadow-md);        /* Button */
-  --elevation-3: var(--shadow-lg);        /* Modal, Dropdown */
-  --elevation-4: var(--shadow-xl);        /* Navigation */
-  --elevation-5: var(--shadow-2xl);       /* Tooltip */
+  --elevation-0: none; /* Surface */
+  --elevation-1: var(--shadow-sm); /* Card */
+  --elevation-2: var(--shadow-md); /* Button */
+  --elevation-3: var(--shadow-lg); /* Modal, Dropdown */
+  --elevation-4: var(--shadow-xl); /* Navigation */
+  --elevation-5: var(--shadow-2xl); /* Tooltip */
 }
 ```
 
@@ -526,14 +526,14 @@ interface TokenNamingConvention {
 /* 보더 radius 토큰 */
 :root {
   --radius-none: 0;
-  --radius-sm: 0.125rem;      /* 2px */
-  --radius-md: 0.25rem;       /* 4px */
-  --radius-lg: 0.375rem;      /* 6px */
-  --radius-xl: 0.5rem;        /* 8px */
-  --radius-2xl: 0.75rem;      /* 12px */
-  --radius-3xl: 1rem;         /* 16px */
-  --radius-4xl: 1.5rem;       /* 24px */
-  --radius-full: 9999px;      /* 완전한 원형 */
+  --radius-sm: 0.125rem; /* 2px */
+  --radius-md: 0.25rem; /* 4px */
+  --radius-lg: 0.375rem; /* 6px */
+  --radius-xl: 0.5rem; /* 8px */
+  --radius-2xl: 0.75rem; /* 12px */
+  --radius-3xl: 1rem; /* 16px */
+  --radius-4xl: 1.5rem; /* 24px */
+  --radius-full: 9999px; /* 완전한 원형 */
 
   /* 의미적 radius */
   --radius-button: var(--radius-lg);
@@ -550,41 +550,41 @@ interface TokenNamingConvention {
 
 ```javascript
 // style-dictionary.config.js
-const StyleDictionary = require('style-dictionary');
+const StyleDictionary = require('style-dictionary')
 
 // 커스텀 변환 함수
 StyleDictionary.registerTransform({
   name: 'size/px',
   type: 'value',
-  matcher: function(token) {
-    return token.attributes.category === 'size';
+  matcher: function (token) {
+    return token.attributes.category === 'size'
   },
-  transformer: function(token) {
-    return parseFloat(token.original.value) + 'px';
-  }
-});
+  transformer: function (token) {
+    return parseFloat(token.original.value) + 'px'
+  },
+})
 
 // CSS 변수 포맷
 StyleDictionary.registerFormat({
   name: 'css/variables',
-  formatter: function(dictionary) {
+  formatter: function (dictionary) {
     return `:root {\n${dictionary.allTokens
       .map(token => `  --${token.name}: ${token.value};`)
-      .join('\n')}\n}`;
-  }
-});
+      .join('\n')}\n}`
+  },
+})
 
 // TypeScript 타입 생성
 StyleDictionary.registerFormat({
   name: 'typescript/tokens',
-  formatter: function(dictionary) {
+  formatter: function (dictionary) {
     const tokens = dictionary.allTokens
       .map(token => `  '${token.name}': '${token.value}'`)
-      .join(',\n');
+      .join(',\n')
 
-    return `export const tokens = {\n${tokens}\n} as const;\n\nexport type TokenName = keyof typeof tokens;`;
-  }
-});
+    return `export const tokens = {\n${tokens}\n} as const;\n\nexport type TokenName = keyof typeof tokens;`
+  },
+})
 
 module.exports = {
   source: ['tokens/**/*.json'],
@@ -592,21 +592,25 @@ module.exports = {
     css: {
       transformGroup: 'css',
       buildPath: 'dist/css/',
-      files: [{
-        destination: 'tokens.css',
-        format: 'css/variables'
-      }]
+      files: [
+        {
+          destination: 'tokens.css',
+          format: 'css/variables',
+        },
+      ],
     },
     typescript: {
       transformGroup: 'js',
       buildPath: 'dist/ts/',
-      files: [{
-        destination: 'tokens.ts',
-        format: 'typescript/tokens'
-      }]
-    }
-  }
-};
+      files: [
+        {
+          destination: 'tokens.ts',
+          format: 'typescript/tokens',
+        },
+      ],
+    },
+  },
+}
 ```
 
 ### JSON 토큰 정의

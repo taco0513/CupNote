@@ -3,14 +3,15 @@
 ## 현재 파일명 vs 문서 기준 파일명
 
 ### ✅ 이미 일치하는 파일
+
 - `RoasterNotesView.vue` → 유지
 - `SensoryExpressionView.vue` → 유지
 - `ResultView.vue` → 유지
 
 ### 🔄 변경 필요한 파일
+
 1. **CoffeeSetupView.vue** → `CoffeeInfoView.vue`
    - 모드 선택 부분 제거하고 커피 정보만 유지
-   
 2. **FlavorSelectionView.vue** → `UnifiedFlavorView.vue`
    - 문서명과 일치하도록 변경
 
@@ -18,6 +19,7 @@
    - 문서명과 일치하도록 변경
 
 ### 🆕 새로 생성할 파일
+
 1. **ModeSelectionView.vue** (NEW)
    - CoffeeSetupView에서 모드 선택 부분 분리
 
@@ -50,6 +52,7 @@ src/views/
 ## 라우팅 변경 계획
 
 ### 현재 라우팅
+
 - `/coffee-setup` → 모드 선택 + 커피 정보
 - `/flavor-selection` → 향미 선택
 - `/sensory-expression` → 감각 표현
@@ -58,6 +61,7 @@ src/views/
 - `/result` → 결과
 
 ### 변경 후 라우팅
+
 - `/mode-selection` → 모드 선택 (NEW)
 - `/coffee-info` → 커피 정보
 - `/home-cafe` → 홈카페 설정 (NEW)
@@ -72,10 +76,13 @@ src/views/
 ## 모드별 워크플로우
 
 ### Cafe Mode
+
 1. Mode Selection → 2. Coffee Info → 3. Unified Flavor → 4. Sensory Expression → 5. Personal Comment → 6. Roaster Notes → 7. Result
 
 ### HomeCafe Mode
+
 1. Mode Selection → 2. Coffee Info → 3. HomeCafe → 4. Unified Flavor → 5. Sensory Expression → 6. Personal Comment → 7. Roaster Notes → 8. Result
 
 ### Lab Mode
+
 1. Mode Selection → 2. Coffee Info → 3. HomeCafe → 4. Experimental Data → 5. Unified Flavor → 6. Sensory Expression → 7. Sensory Slider → 8. Personal Comment → 9. Roaster Notes → 10. Result

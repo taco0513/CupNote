@@ -1,22 +1,22 @@
-const { v4: uuidv4 } = require('uuid');
-const bcrypt = require('bcryptjs');
-const db = require('./index');
+const { v4: uuidv4 } = require('uuid')
+const bcrypt = require('bcryptjs')
+const db = require('./index')
 
 const seedDatabase = async () => {
   try {
-    console.log('🌱 Starting database seeding...');
+    console.log('🌱 Starting database seeding...')
 
     // Create test user
-    const salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash('password123', salt);
-    
-    const testUserId = uuidv4();
+    const salt = await bcrypt.genSalt(10)
+    const passwordHash = await bcrypt.hash('password123', salt)
+
+    const testUserId = uuidv4()
     await db.query(
       `INSERT INTO users (id, email, password_hash, username, preferred_mode)
        VALUES ($1, $2, $3, $4, $5)
        ON CONFLICT (email) DO NOTHING`,
       [testUserId, 'test@cupnote.com', passwordHash, 'TestUser', 'brew']
-    );
+    )
 
     // Create sample coffees
     const coffees = [
@@ -28,7 +28,7 @@ const seedDatabase = async () => {
         roast_date: new Date('2024-01-15'),
         variety: 'Heirloom',
         altitude: '1800-2200m',
-        tasting_notes: ['Blueberry', 'Lemon', 'Floral']
+        tasting_notes: ['Blueberry', 'Lemon', 'Floral'],
       },
       {
         name: 'Colombia Geisha',
@@ -38,7 +38,7 @@ const seedDatabase = async () => {
         roast_date: new Date('2024-01-20'),
         variety: 'Geisha',
         altitude: '1700-1900m',
-        tasting_notes: ['Jasmine', 'Bergamot', 'Honey']
+        tasting_notes: ['Jasmine', 'Bergamot', 'Honey'],
       },
       {
         name: 'Kenya AA',
@@ -48,20 +48,28 @@ const seedDatabase = async () => {
         roast_date: new Date('2024-01-18'),
         variety: 'SL28, SL34',
         altitude: '1600-1800m',
-        tasting_notes: ['Black Currant', 'Wine', 'Bright']
-      }
-    ];
+        tasting_notes: ['Black Currant', 'Wine', 'Bright'],
+      },
+    ]
 
-    const coffeeIds = [];
+    const coffeeIds = []
     for (const coffee of coffees) {
       const result = await db.query(
         `INSERT INTO coffees (name, roaster, origin, process, roast_date, variety, altitude, tasting_notes)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
          RETURNING id`,
-        [coffee.name, coffee.roaster, coffee.origin, coffee.process, coffee.roast_date, 
-         coffee.variety, coffee.altitude, coffee.tasting_notes]
-      );
-      coffeeIds.push(result.rows[0].id);
+        [
+          coffee.name,
+          coffee.roaster,
+          coffee.origin,
+          coffee.process,
+          coffee.roast_date,
+          coffee.variety,
+          coffee.altitude,
+          coffee.tasting_notes,
+        ]
+      )
+      coffeeIds.push(result.rows[0].id)
     }
 
     // Create sample tasting notes
@@ -79,7 +87,7 @@ const seedDatabase = async () => {
         timer_laps: [
           { lap_number: 1, label: '뜸들이기 (Blooming)', duration: 30000, total_time: 30000 },
           { lap_number: 2, label: '1차 추출', duration: 40000, total_time: 70000 },
-          { lap_number: 3, label: '2차 추출', duration: 50000, total_time: 120000 }
+          { lap_number: 3, label: '2차 추출', duration: 50000, total_time: 120000 },
         ],
         overall_score: 5,
         flavor_notes: ['Blueberry', 'Lemon', 'Bright'],
@@ -89,7 +97,7 @@ const seedDatabase = async () => {
         aftertaste: 4,
         balance: 5,
         mouthfeel: 8,
-        personal_notes: '크림처럼 부드러운 마우스필에 블루베리의 산미가 훌륭했다.'
+        personal_notes: '크림처럼 부드러운 마우스필에 블루베리의 산미가 훌륭했다.',
       },
       {
         coffee_id: coffeeIds[1],
@@ -105,9 +113,9 @@ const seedDatabase = async () => {
         aftertaste: 4,
         balance: 4,
         mouthfeel: 7,
-        personal_notes: '카페에서 마신 커피 중 최고. 자스민 향이 인상적.'
-      }
-    ];
+        personal_notes: '카페에서 마신 커피 중 최고. 자스민 향이 인상적.',
+      },
+    ]
 
     for (const note of tastingNotes) {
       await db.query(
@@ -121,14 +129,31 @@ const seedDatabase = async () => {
           $15, $16, $17, $18, $19, $20, $21, $22, $23
         )`,
         [
-          testUserId, note.coffee_id, note.mode, note.cafe_name, note.cafe_location,
-          note.menu_item, note.brew_method, note.water_temp, note.grind_size,
-          note.brew_time, note.coffee_weight, note.water_weight, note.brew_ratio,
-          JSON.stringify(note.timer_laps), note.overall_score, note.flavor_notes,
-          note.aroma, note.acidity, note.body, note.aftertaste, note.balance,
-          note.mouthfeel, note.personal_notes
+          testUserId,
+          note.coffee_id,
+          note.mode,
+          note.cafe_name,
+          note.cafe_location,
+          note.menu_item,
+          note.brew_method,
+          note.water_temp,
+          note.grind_size,
+          note.brew_time,
+          note.coffee_weight,
+          note.water_weight,
+          note.brew_ratio,
+          JSON.stringify(note.timer_laps),
+          note.overall_score,
+          note.flavor_notes,
+          note.aroma,
+          note.acidity,
+          note.body,
+          note.aftertaste,
+          note.balance,
+          note.mouthfeel,
+          note.personal_notes,
         ]
-      );
+      )
     }
 
     // Create sample achievements
@@ -140,7 +165,7 @@ const seedDatabase = async () => {
         category: 'tasting',
         requirement_type: 'count',
         requirement_value: 1,
-        points: 10
+        points: 10,
       },
       {
         name: 'Coffee Explorer',
@@ -149,7 +174,7 @@ const seedDatabase = async () => {
         category: 'exploration',
         requirement_type: 'count',
         requirement_value: 10,
-        points: 50
+        points: 50,
       },
       {
         name: 'Brew Master',
@@ -158,7 +183,7 @@ const seedDatabase = async () => {
         category: 'brewing',
         requirement_type: 'count',
         requirement_value: 5,
-        points: 30
+        points: 30,
       },
       {
         name: 'Consistency King',
@@ -167,28 +192,35 @@ const seedDatabase = async () => {
         category: 'tasting',
         requirement_type: 'streak',
         requirement_value: 7,
-        points: 40
-      }
-    ];
+        points: 40,
+      },
+    ]
 
     for (const achievement of achievements) {
       await db.query(
         `INSERT INTO achievements (name, description, icon, category, requirement_type, requirement_value, points)
          VALUES ($1, $2, $3, $4, $5, $6, $7)
          ON CONFLICT DO NOTHING`,
-        [achievement.name, achievement.description, achievement.icon, achievement.category,
-         achievement.requirement_type, achievement.requirement_value, achievement.points]
-      );
+        [
+          achievement.name,
+          achievement.description,
+          achievement.icon,
+          achievement.category,
+          achievement.requirement_type,
+          achievement.requirement_value,
+          achievement.points,
+        ]
+      )
     }
 
-    console.log('✅ Database seeding completed successfully');
-    console.log('🔑 Test user created: test@cupnote.com / password123');
-    process.exit(0);
+    console.log('✅ Database seeding completed successfully')
+    console.log('🔑 Test user created: test@cupnote.com / password123')
+    process.exit(0)
   } catch (error) {
-    console.error('❌ Seeding failed:', error);
-    process.exit(1);
+    console.error('❌ Seeding failed:', error)
+    process.exit(1)
   }
-};
+}
 
 // Run seeding
-seedDatabase();
+seedDatabase()

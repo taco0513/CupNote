@@ -7,6 +7,7 @@
 ## 📦 빠른 설치 방법
 
 ### 1️⃣ 프로젝트에 플레이북 복사
+
 ```bash
 # 새 프로젝트 폴더에서
 cp -r /path/to/AI_Workflow_Playbook/MASTER_PLAYBOOK ./
@@ -19,6 +20,7 @@ cp -r AI_Workflow_Playbook/MASTER_PLAYBOOK/{README.md,INDEX.md,00_Prompts,04_BMA
 ### 2️⃣ Claude/Cursor 학습 시키기
 
 **📋 초기 학습 프롬프트:**
+
 ```
 안녕 Claude! 이제 AI Workflow Playbook으로 체계적인 개발을 시작할 거야.
 
@@ -48,6 +50,7 @@ cp -r AI_Workflow_Playbook/MASTER_PLAYBOOK/{README.md,INDEX.md,00_Prompts,04_BMA
 ## 🎯 학습 완료 후 프로젝트 시작
 
 ### 3️⃣ 프로젝트 시작 프롬프트
+
 ```
 학습이 완료되었다면 이제 @MASTER_PLAYBOOK/00_Prompts/01_New_Project_Start.md 를 읽고 새 프로젝트를 시작해봅시다!
 
@@ -75,6 +78,7 @@ cp -r AI_Workflow_Playbook/MASTER_PLAYBOOK/{README.md,INDEX.md,00_Prompts,04_BMA
 ## 💡 추가 설치 옵션
 
 ### 🔧 최소 설치 (핵심만)
+
 ```bash
 # 핵심 파일만 복사
 mkdir -p docs/{playbook,decisions,errors,patterns}
@@ -84,19 +88,23 @@ cp MASTER_PLAYBOOK/04_BMAD_Method/01_Business_Definition.md docs/playbook/
 ```
 
 ### 📝 CLAUDE.md 설정 (프로젝트별 가이드)
+
 프로젝트 루트에 `CLAUDE.md` 파일 생성:
+
 ```markdown
 # CLAUDE.md
 
 이 프로젝트는 AI Workflow Playbook 방법론을 따릅니다:
 
 ## 개발 방식
+
 - **BMAD Method**: Business → Model → API → Design
 - **Living Documentation**: 실시간 컨텍스트 보존
 - **2분 룰**: 막히면 웹검색
 - **30분 프로토타입**: 빠른 아이디어 검증
 
 ## 주요 명령어
+
 - `/checkpoint` - 진행상황 체크포인트
 - `/build` - 프로젝트 빌드
 - `/analyze` - 코드 분석
@@ -136,12 +144,14 @@ BMAD 방법론으로 30분 프로토타입부터 시작해서 단계별로 개�
 ## 📊 성공 지표
 
 ### ✅ 설치 완료 체크리스트
+
 - [ ] MASTER_PLAYBOOK 폴더 복사 완료
 - [ ] Claude가 핵심 문서 학습 완료
 - [ ] 프로젝트 아이디어 구체화 완료
 - [ ] Living Documentation 시스템 이해
 
 ### 🎯 30분 후 달성 목표
+
 - [ ] 작동하는 프로토타입 완성
 - [ ] BMAD 방법론 첫 적용
 - [ ] `/checkpoint` 시스템 활용

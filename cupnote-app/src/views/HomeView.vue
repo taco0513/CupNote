@@ -8,43 +8,21 @@
           <span class="title-sub">커피 테이스팅 노트</span>
         </h1>
         <p class="hero-description">
-          당신의 커피 감각을 기록하고<br>
+          당신의 커피 감각을 기록하고<br />
           로스터의 의도와 비교해보세요
         </p>
         <div class="hero-actions">
-          <RouterLink 
-            v-if="isAuthenticated" 
-            to="/mode-selection" 
-            class="btn-primary"
-          >
+          <RouterLink v-if="isAuthenticated" to="/mode-selection" class="btn-primary">
             ☕ 커피 기록 시작하기
           </RouterLink>
-          <RouterLink 
-            v-else 
-            to="/auth" 
-            class="btn-primary"
-          >
-            🚀 무료로 시작하기
-          </RouterLink>
-          
-          <RouterLink 
-            v-if="isAuthenticated" 
-            to="/records" 
-            class="btn-secondary"
-          >
+          <RouterLink v-else to="/auth" class="btn-primary"> 🚀 무료로 시작하기 </RouterLink>
+
+          <RouterLink v-if="isAuthenticated" to="/records" class="btn-secondary">
             📚 나의 기록 보기
           </RouterLink>
-          <RouterLink 
-            v-else 
-            to="/auth?view=signup" 
-            class="btn-secondary"
-          >
-            📝 회원가입
-          </RouterLink>
-          
-          <button @click="showDemo" class="btn-demo">
-            ✨ 데모 체험하기
-          </button>
+          <RouterLink v-else to="/auth?view=signup" class="btn-secondary"> 📝 회원가입 </RouterLink>
+
+          <button @click="showDemo" class="btn-demo">✨ 데모 체험하기</button>
         </div>
       </div>
       <div class="hero-image">
@@ -60,7 +38,7 @@
           <div class="feature-icon">🎯</div>
           <h3 class="feature-title">정확한 감각 평가</h3>
           <p class="feature-description">
-            내가 느낀 향미가 로스터의 의도와<br>
+            내가 느낀 향미가 로스터의 의도와<br />
             얼마나 일치하는지 확인해보세요
           </p>
         </div>
@@ -68,7 +46,7 @@
           <div class="feature-icon">📈</div>
           <h3 class="feature-title">성장하는 커피 감각</h3>
           <p class="feature-description">
-            꾸준한 기록으로 점점 발전하는<br>
+            꾸준한 기록으로 점점 발전하는<br />
             나의 커피 감각을 확인하세요
           </p>
         </div>
@@ -76,7 +54,7 @@
           <div class="feature-icon">🏆</div>
           <h3 class="feature-title">재미있는 도전</h3>
           <p class="feature-description">
-            배지와 레벨 시스템으로<br>
+            배지와 레벨 시스템으로<br />
             더 즐거운 커피 라이프
           </p>
         </div>
@@ -126,11 +104,11 @@
       <div class="cta-content">
         <h2 class="cta-title">지금 시작해보세요!</h2>
         <p class="cta-description">
-          첫 번째 커피를 기록하고<br>
+          첫 번째 커피를 기록하고<br />
           당신의 커피 여정을 시작하세요
         </p>
-        <RouterLink 
-          :to="isAuthenticated ? '/mode-selection' : '/auth'" 
+        <RouterLink
+          :to="isAuthenticated ? '/mode-selection' : '/auth'"
           class="btn-primary btn-large"
         >
           {{ isAuthenticated ? '☕ 커피 기록하기' : '🚀 무료로 시작하기' }}
@@ -151,7 +129,6 @@ const notificationStore = useNotificationStore()
 const authStore = useAuthStore()
 const demoStore = useDemoStore()
 
-
 // Computed
 const isAuthenticated = computed(() => authStore.isAuthenticated)
 
@@ -160,9 +137,9 @@ const showDemo = () => {
   notificationStore.showSuccess(
     '카페모드 데모를 시작합니다! 실제 테이스팅 과정을 체험해보세요 ☕',
     '🎉 데모 시작',
-    { duration: 3000 }
+    { duration: 3000 },
   )
-  
+
   // 데모 스토어 초기화 및 라우팅
   demoStore.startDemo()
   setTimeout(() => {
@@ -174,7 +151,7 @@ const showDemo = () => {
 <style scoped>
 .home-view {
   min-height: 100vh;
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5F0E8 100%);
+  background: linear-gradient(135deg, #fff8f0 0%, #f5f0e8 100%);
 }
 
 /* Hero Section */
@@ -201,7 +178,7 @@ const showDemo = () => {
   display: block;
   font-size: 4rem;
   font-weight: 900;
-  color: #7C5842;
+  color: #7c5842;
   letter-spacing: -2px;
   margin-bottom: 0.5rem;
 }
@@ -210,7 +187,7 @@ const showDemo = () => {
   display: block;
   font-size: 1.5rem;
   font-weight: 400;
-  color: #A0796A;
+  color: #a0796a;
 }
 
 .hero-description {
@@ -248,7 +225,7 @@ const showDemo = () => {
   text-align: center;
   font-size: 2.5rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 3rem;
 }
 
@@ -264,9 +241,11 @@ const showDemo = () => {
   text-align: center;
   padding: 2rem;
   border-radius: 16px;
-  background: #FFF8F0;
-  border: 1px solid #F0E8DC;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: #fff8f0;
+  border: 1px solid #f0e8dc;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .feature-card:hover {
@@ -282,7 +261,7 @@ const showDemo = () => {
 .feature-title {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.75rem;
 }
 
@@ -294,7 +273,7 @@ const showDemo = () => {
 /* How It Works Section */
 .how-it-works-section {
   padding: 4rem 2rem;
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5F0E8 100%);
+  background: linear-gradient(135deg, #fff8f0 0%, #f5f0e8 100%);
 }
 
 .steps-container {
@@ -315,13 +294,13 @@ const showDemo = () => {
   padding: 1.5rem;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .step-number {
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, #7C5842, #A0796A);
+  background: linear-gradient(135deg, #7c5842, #a0796a);
   color: white;
   border-radius: 50%;
   display: flex;
@@ -339,7 +318,7 @@ const showDemo = () => {
 .step-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.25rem;
 }
 
@@ -350,13 +329,13 @@ const showDemo = () => {
 
 .step-arrow {
   font-size: 2rem;
-  color: #D4B896;
+  color: #d4b896;
   margin: 0 0.5rem;
 }
 
 /* CTA Section */
 .cta-section {
-  background: #7C5842;
+  background: #7c5842;
   padding: 4rem 2rem;
   text-align: center;
 }
@@ -394,7 +373,7 @@ const showDemo = () => {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #7C5842, #A0796A);
+  background: linear-gradient(135deg, #7c5842, #a0796a);
   color: white;
   box-shadow: 0 4px 15px rgba(124, 88, 66, 0.3);
 }
@@ -406,13 +385,13 @@ const showDemo = () => {
 
 .btn-secondary {
   background: white;
-  color: #7C5842;
-  border: 2px solid #E8D5C4;
+  color: #7c5842;
+  border: 2px solid #e8d5c4;
 }
 
 .btn-secondary:hover {
-  border-color: #D4B896;
-  background: #F8F4F0;
+  border-color: #d4b896;
+  background: #f8f4f0;
   transform: translateY(-2px);
 }
 
@@ -444,7 +423,8 @@ const showDemo = () => {
 
 /* Animations */
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -459,40 +439,40 @@ const showDemo = () => {
     text-align: center;
     padding: 2rem 1rem;
   }
-  
+
   .title-main {
     font-size: 3rem;
   }
-  
+
   .title-sub {
     font-size: 1.25rem;
   }
-  
+
   .hero-description {
     font-size: 1.1rem;
   }
-  
+
   .hero-actions {
     justify-content: center;
   }
-  
+
   .coffee-cup {
     font-size: 8rem;
     margin-top: 2rem;
   }
-  
+
   .steps-container {
     flex-direction: column;
   }
-  
+
   .step-arrow {
     transform: rotate(90deg);
   }
-  
+
   .section-title {
     font-size: 2rem;
   }
-  
+
   .cta-title {
     font-size: 2rem;
   }

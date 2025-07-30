@@ -12,31 +12,31 @@ AI가 이해하고 생성하기 쉬운 디자인 패턴을 정의합니다. Clau
 // AI가 이해하기 쉬운 컴포넌트 구조 패턴
 interface PredictableComponentStructure {
   // 1. 명확한 네이밍
-  componentName: string; // PascalCase로 명명
+  componentName: string // PascalCase로 명명
 
   // 2. 표준화된 Props
   props: {
-    variant?: string;      // 시각적 변형
-    size?: string;         // 크기 변형
-    state?: string;        // 상태 (disabled, loading, active)
-    children?: ReactNode;  // 컨텐츠
-    className?: string;    // 추가 스타일링
-  };
+    variant?: string // 시각적 변형
+    size?: string // 크기 변형
+    state?: string // 상태 (disabled, loading, active)
+    children?: ReactNode // 컨텐츠
+    className?: string // 추가 스타일링
+  }
 
   // 3. 일관된 CSS 클래스 구조
   cssPattern: {
-    base: string;          // 기본 클래스
-    variant: string;       // 변형별 클래스
-    size: string;          // 크기별 클래스
-    state: string;         // 상태별 클래스
-  };
+    base: string // 기본 클래스
+    variant: string // 변형별 클래스
+    size: string // 크기별 클래스
+    state: string // 상태별 클래스
+  }
 
   // 4. 표준화된 이벤트 핸들러
   events: {
-    onClick?: () => void;
-    onFocus?: () => void;
-    onBlur?: () => void;
-  };
+    onClick?: () => void
+    onFocus?: () => void
+    onBlur?: () => void
+  }
 }
 ```
 
@@ -52,7 +52,7 @@ class AIPatternMatcher {
         triggers: ['input', 'form', 'submit', 'validation'],
         components: ['Input', 'Button', 'FormGroup', 'ErrorMessage'],
         layout: 'vertical-stack',
-        spacing: 'form-spacing'
+        spacing: 'form-spacing',
       },
 
       // 카드 그리드 패턴
@@ -60,7 +60,7 @@ class AIPatternMatcher {
         triggers: ['grid', 'cards', 'list', 'gallery'],
         components: ['Card', 'Grid', 'Container'],
         layout: 'responsive-grid',
-        spacing: 'grid-gap'
+        spacing: 'grid-gap',
       },
 
       // 네비게이션 패턴
@@ -68,7 +68,7 @@ class AIPatternMatcher {
         triggers: ['nav', 'menu', 'header', 'sidebar'],
         components: ['NavItem', 'Logo', 'Menu', 'Toggle'],
         layout: 'horizontal-flex',
-        spacing: 'nav-spacing'
+        spacing: 'nav-spacing',
       },
 
       // 대시보드 패턴
@@ -76,21 +76,21 @@ class AIPatternMatcher {
         triggers: ['dashboard', 'metrics', 'stats', 'charts'],
         components: ['MetricCard', 'Chart', 'Table', 'Header'],
         layout: 'dashboard-grid',
-        spacing: 'dashboard-gap'
-      }
-    };
+        spacing: 'dashboard-gap',
+      },
+    }
 
-    return this.matchBestPattern(context, patterns);
+    return this.matchBestPattern(context, patterns)
   }
 
   private matchBestPattern(context: UIContext, patterns: PatternMap): DesignPattern {
     const scores = Object.entries(patterns).map(([name, pattern]) => ({
       name,
       pattern,
-      score: this.calculatePatternScore(context, pattern)
-    }));
+      score: this.calculatePatternScore(context, pattern),
+    }))
 
-    return scores.sort((a, b) => b.score - a.score)[0].pattern;
+    return scores.sort((a, b) => b.score - a.score)[0].pattern
   }
 }
 ```
@@ -124,7 +124,7 @@ const FormPatterns = {
       label: 'block text-sm font-medium text-gray-700',
       input: 'mt-1 block w-full rounded-md border-gray-300',
       error: 'mt-1 text-sm text-red-600',
-      actions: 'flex justify-end space-x-3 pt-6'
+      actions: 'flex justify-end space-x-3 pt-6',
     },
 
     aiPromptPattern: `
@@ -132,7 +132,7 @@ const FormPatterns = {
       Use consistent spacing and validation states
       Include submit and cancel buttons
       Apply form design tokens
-    `
+    `,
   },
 
   // 인라인 폼 패턴 (검색, 뉴스레터 등)
@@ -147,8 +147,8 @@ const FormPatterns = {
     cssClasses: {
       form: 'flex space-x-3',
       input: 'flex-1 min-w-0',
-      button: 'flex-shrink-0'
-    }
+      button: 'flex-shrink-0',
+    },
   },
 
   // 다단계 폼 패턴
@@ -169,10 +169,10 @@ const FormPatterns = {
     cssClasses: {
       stepIndicator: 'mb-8',
       formContent: 'min-h-[300px] space-y-6',
-      navigation: 'flex justify-between pt-6 border-t'
-    }
-  }
-};
+      navigation: 'flex justify-between pt-6 border-t',
+    },
+  },
+}
 ```
 
 ### 카드 레이아웃 패턴
@@ -209,7 +209,7 @@ const CardPatterns = {
       Each card should include: {cardElements}
       Use responsive breakpoints
       Apply consistent spacing and shadows
-    `
+    `,
   },
 
   // 대시보드 메트릭 카드
@@ -235,7 +235,7 @@ const CardPatterns = {
           <MetricTrend value={metric.change} />
         </CardBody>
       </Card>
-    `
+    `,
   },
 
   // 블로그/아티클 카드
@@ -264,9 +264,9 @@ const CardPatterns = {
           <Button variant="ghost" size="sm">Read More</Button>
         </CardFooter>
       </Card>
-    `
-  }
-};
+    `,
+  },
+}
 ```
 
 ### 네비게이션 패턴
@@ -297,7 +297,7 @@ const NavigationPatterns = {
       container: 'px-4 sm:px-6 lg:px-8',
       stack: 'h-16',
       navigation: 'hidden md:flex space-x-8',
-      navItem: 'text-gray-700 hover:text-gray-900 px-3 py-2'
+      navItem: 'text-gray-700 hover:text-gray-900 px-3 py-2',
     },
 
     mobilePattern: `
@@ -308,7 +308,7 @@ const NavigationPatterns = {
           <NavItem mobile href="/contact">Contact</NavItem>
         </Stack>
       </MobileMenu>
-    `
+    `,
   },
 
   // 사이드바 네비게이션
@@ -337,8 +337,8 @@ const NavigationPatterns = {
       content: 'flex-1 overflow-y-auto',
       section: 'py-4',
       navItem: 'flex items-center px-4 py-2 hover:bg-gray-800',
-      footer: 'p-4 border-t border-gray-800'
-    }
+      footer: 'p-4 border-t border-gray-800',
+    },
   },
 
   // 탭 네비게이션
@@ -362,10 +362,10 @@ const NavigationPatterns = {
       tabList: 'flex border-b border-gray-200',
       tab: 'px-4 py-2 font-medium text-sm border-b-2 border-transparent',
       tabActive: 'border-blue-500 text-blue-600',
-      tabContent: 'p-4'
-    }
-  }
-};
+      tabContent: 'p-4',
+    },
+  },
+}
 ```
 
 ### 대시보드 패턴
@@ -420,7 +420,7 @@ const DashboardPatterns = {
       - 1 data table for {tableData}
       - Responsive grid layout
       - Consistent card styling
-    `
+    `,
   },
 
   // 애널리틱스 대시보드
@@ -453,9 +453,9 @@ const DashboardPatterns = {
           </InsightsGrid>
         </DashboardMain>
       </DashboardLayout>
-    `
-  }
-};
+    `,
+  },
+}
 ```
 
 ## 상태 관리 패턴
@@ -493,7 +493,7 @@ const LoadingPatterns = {
           ))}
         </div>
       );
-    `
+    `,
   },
 
   // 인라인 로딩 (버튼, 폼 등)
@@ -511,7 +511,7 @@ const LoadingPatterns = {
           {children}
         </button>
       );
-    `
+    `,
   },
 
   // 페이지 레벨 로딩
@@ -535,9 +535,9 @@ const LoadingPatterns = {
           </div>
         </div>
       );
-    `
-  }
-};
+    `,
+  },
+}
 ```
 
 ### 에러 상태 패턴
@@ -563,7 +563,7 @@ const ErrorPatterns = {
           {children}
         </div>
       );
-    `
+    `,
   },
 
   // 페이지 레벨 에러
@@ -593,7 +593,7 @@ const ErrorPatterns = {
           </div>
         </div>
       );
-    `
+    `,
   },
 
   // 네트워크 에러
@@ -605,9 +605,9 @@ const ErrorPatterns = {
         action={<Button size="sm" onClick={handleRetry}>Retry</Button>}
         dismissible
       />
-    `
-  }
-};
+    `,
+  },
+}
 ```
 
 ### 빈 상태 패턴

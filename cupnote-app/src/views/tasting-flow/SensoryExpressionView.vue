@@ -2,21 +2,14 @@
   <div class="sensory-expression-view">
     <!-- Header -->
     <header class="sensory-header">
-      <h1 class="sensory-title">
-        👅 감각으로 표현해주세요
-      </h1>
-      <p class="sensory-subtitle">
-        입 안에서 느껴지는 감각을 선택해주세요 (선택사항)
-      </p>
+      <h1 class="sensory-title">👅 감각으로 표현해주세요</h1>
+      <p class="sensory-subtitle">입 안에서 느껴지는 감각을 선택해주세요 (선택사항)</p>
     </header>
 
     <!-- Progress Indicator -->
     <div class="progress-section">
       <div class="progress-bar">
-        <div 
-          class="progress-fill" 
-          :style="{ width: `${progressPercentage}%` }"
-        ></div>
+        <div class="progress-fill" :style="{ width: `${progressPercentage}%` }"></div>
       </div>
       <p class="progress-text">{{ completedCategories }}/{{ totalCategories }} 완료</p>
     </div>
@@ -24,11 +17,7 @@
     <!-- Sensory Categories -->
     <section class="categories-section">
       <div class="sensory-categories">
-        <div
-          v-for="category in sensoryCategories"
-          :key="category.id"
-          class="sensory-category"
-        >
+        <div v-for="category in sensoryCategories" :key="category.id" class="sensory-category">
           <div class="category-header">
             <div class="category-info">
               <span class="category-icon">{{ category.icon }}</span>
@@ -46,10 +35,10 @@
               :key="expression.id"
               :class="[
                 'expression-btn',
-                { 
+                {
                   selected: selectedExpressions[category.id]?.id === expression.id,
-                  'has-selection': selectedExpressions[category.id]
-                }
+                  'has-selection': selectedExpressions[category.id],
+                },
               ]"
               @click="selectExpression(category.id, expression)"
             >
@@ -60,10 +49,7 @@
 
           <!-- Clear Selection Button -->
           <div v-if="selectedExpressions[category.id]" class="clear-section">
-            <button
-              @click="clearSelection(category.id)"
-              class="clear-selection-btn"
-            >
+            <button @click="clearSelection(category.id)" class="clear-selection-btn">
               선택 해제
             </button>
           </div>
@@ -109,16 +95,8 @@
 
     <!-- Action Buttons -->
     <div class="action-buttons">
-      <button type="button" class="btn-secondary" @click="$router.go(-1)">
-        이전
-      </button>
-      <button
-        type="button"
-        class="btn-primary"
-        @click="handleNext"
-      >
-        다음 단계
-      </button>
+      <button type="button" class="btn-secondary" @click="$router.go(-1)">이전</button>
+      <button type="button" class="btn-primary" @click="handleNext">다음 단계</button>
     </div>
   </div>
 </template>
@@ -145,24 +123,24 @@ const sensoryCategories = ref([
       {
         id: 'bright',
         text: '밝고 상큼한',
-        description: '레몬이나 라임 같은 밝은 산미'
+        description: '레몬이나 라임 같은 밝은 산미',
       },
       {
         id: 'mild',
         text: '부드럽고 은은한',
-        description: '사과나 배 같은 온화한 산미'
+        description: '사과나 배 같은 온화한 산미',
       },
       {
         id: 'sharp',
         text: '톡 쏘는',
-        description: '시트러스 같은 강한 산미'
+        description: '시트러스 같은 강한 산미',
       },
       {
         id: 'wine-like',
         text: '와인 같은',
-        description: '발효된 과일 같은 복합적 산미'
-      }
-    ]
+        description: '발효된 과일 같은 복합적 산미',
+      },
+    ],
   },
   {
     id: 'sweetness',
@@ -173,24 +151,24 @@ const sensoryCategories = ref([
       {
         id: 'caramel',
         text: '캐러멜 같은',
-        description: '구운 설탕의 진한 단맛'
+        description: '구운 설탕의 진한 단맛',
       },
       {
         id: 'honey',
         text: '꿀 같은',
-        description: '부드럽고 자연스러운 단맛'
+        description: '부드럽고 자연스러운 단맛',
       },
       {
         id: 'chocolate',
         text: '초콜릿 같은',
-        description: '진하고 달콤한 카카오 단맛'
+        description: '진하고 달콤한 카카오 단맛',
       },
       {
         id: 'fruity-sweet',
         text: '과일 같은',
-        description: '신선한 과일의 상큼한 단맛'
-      }
-    ]
+        description: '신선한 과일의 상큼한 단맛',
+      },
+    ],
   },
   {
     id: 'body',
@@ -201,24 +179,24 @@ const sensoryCategories = ref([
       {
         id: 'light',
         text: '가볍고 깔끔한',
-        description: '물처럼 가벼운 질감'
+        description: '물처럼 가벼운 질감',
       },
       {
         id: 'medium',
         text: '적당히 묵직한',
-        description: '우유처럼 부드러운 질감'
+        description: '우유처럼 부드러운 질감',
       },
       {
         id: 'full',
         text: '진하고 무거운',
-        description: '크림처럼 진한 질감'
+        description: '크림처럼 진한 질감',
       },
       {
         id: 'silky',
         text: '부드럽고 실키한',
-        description: '실크처럼 부드러운 질감'
-      }
-    ]
+        description: '실크처럼 부드러운 질감',
+      },
+    ],
   },
   {
     id: 'aftertaste',
@@ -229,33 +207,31 @@ const sensoryCategories = ref([
       {
         id: 'clean',
         text: '깔끔하게 마무리',
-        description: '뒷맛이 깔끔하고 상쾌함'
+        description: '뒷맛이 깔끔하고 상쾌함',
       },
       {
         id: 'lingering',
         text: '오래 남는',
-        description: '좋은 맛이 오랫동안 지속됨'
+        description: '좋은 맛이 오랫동안 지속됨',
       },
       {
         id: 'sweet-finish',
         text: '달콤한 마무리',
-        description: '단맛으로 마무리되는 여운'
+        description: '단맛으로 마무리되는 여운',
       },
       {
         id: 'complex',
         text: '복합적인',
-        description: '여러 맛이 복합적으로 나타남'
-      }
-    ]
-  }
+        description: '여러 맛이 복합적으로 나타남',
+      },
+    ],
+  },
 ])
 
 // Computed
 const totalCategories = computed(() => sensoryCategories.value.length)
 const completedCategories = computed(() => Object.keys(selectedExpressions.value).length)
-const progressPercentage = computed(() => 
-  (completedCategories.value / totalCategories.value) * 100
-)
+const progressPercentage = computed(() => (completedCategories.value / totalCategories.value) * 100)
 
 // Methods
 const selectExpression = (categoryId, expression) => {
@@ -273,30 +249,30 @@ const clearSelection = (categoryId) => {
 }
 
 const getCategoryName = (categoryId) => {
-  const category = sensoryCategories.value.find(cat => cat.id === categoryId)
+  const category = sensoryCategories.value.find((cat) => cat.id === categoryId)
   return category ? category.name : categoryId
 }
 
 const handleNext = () => {
   // Convert selected expressions to array format for storage
   const sensoryArray = []
-  
+
   Object.entries(selectedExpressions.value).forEach(([categoryId, expression]) => {
     sensoryArray.push({
       id: expression.id,
       category: getCategoryName(categoryId),
-      text: expression.text
+      text: expression.text,
     })
   })
-  
+
   // Save to store
   tastingSessionStore.updateSensoryExpression(sensoryArray)
-  
+
   console.log('Sensory expressions saved:', sensoryArray)
-  
+
   // Get current mode from store
   const currentMode = tastingSessionStore.currentSession.mode || 'homecafe'
-  
+
   // Navigate based on mode
   if (currentMode === 'pro') {
     router.push('/sensory-slider')
@@ -311,7 +287,7 @@ const handleNext = () => {
   max-width: 800px;
   margin: 0 auto;
   padding: 1rem;
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5F0E8 100%);
+  background: linear-gradient(135deg, #fff8f0 0%, #f5f0e8 100%);
   min-height: 100vh;
 }
 
@@ -324,12 +300,12 @@ const handleNext = () => {
 .sensory-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .sensory-subtitle {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 1.1rem;
 }
 
@@ -340,7 +316,7 @@ const handleNext = () => {
 }
 
 .progress-bar {
-  background: #E8D5C4;
+  background: #e8d5c4;
   border-radius: 10px;
   height: 8px;
   overflow: hidden;
@@ -348,14 +324,14 @@ const handleNext = () => {
 }
 
 .progress-fill {
-  background: linear-gradient(90deg, #7C5842 0%, #A0796A 100%);
+  background: linear-gradient(90deg, #7c5842 0%, #a0796a 100%);
   height: 100%;
   border-radius: 10px;
   transition: width 0.3s ease;
 }
 
 .progress-text {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.9rem;
   margin: 0;
 }
@@ -376,7 +352,7 @@ const handleNext = () => {
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 /* Category Header */
@@ -386,7 +362,7 @@ const handleNext = () => {
   align-items: center;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #F8F4F0;
+  border-bottom: 2px solid #f8f4f0;
 }
 
 .category-info {
@@ -403,12 +379,12 @@ const handleNext = () => {
 .category-title {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin: 0;
 }
 
 .category-description {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.9rem;
   font-style: italic;
 }
@@ -419,7 +395,7 @@ const handleNext = () => {
 }
 
 .selected-indicator {
-  background: #7C5842;
+  background: #7c5842;
   color: white;
   border-radius: 50%;
   width: 24px;
@@ -441,7 +417,7 @@ const handleNext = () => {
 
 .expression-btn {
   background: white;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 12px;
   padding: 1rem;
   text-align: left;
@@ -455,14 +431,14 @@ const handleNext = () => {
 }
 
 .expression-btn:hover {
-  border-color: #D4B896;
+  border-color: #d4b896;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(124, 88, 66, 0.15);
 }
 
 .expression-btn.selected {
-  border-color: #7C5842;
-  background: linear-gradient(135deg, #7C5842 0%, #A0796A 100%);
+  border-color: #7c5842;
+  background: linear-gradient(135deg, #7c5842 0%, #a0796a 100%);
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(124, 88, 66, 0.3);
@@ -501,18 +477,18 @@ const handleNext = () => {
 
 .clear-selection-btn {
   background: none;
-  border: 1px solid #E8D5C4;
+  border: 1px solid #e8d5c4;
   border-radius: 6px;
   padding: 0.5rem 1rem;
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .clear-selection-btn:hover {
-  border-color: #D4B896;
-  background: #F8F4F0;
+  border-color: #d4b896;
+  background: #f8f4f0;
 }
 
 /* Summary Section */
@@ -525,13 +501,13 @@ const handleNext = () => {
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .summary-title {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1rem;
 }
 
@@ -546,14 +522,14 @@ const handleNext = () => {
   align-items: center;
   gap: 1rem;
   padding: 0.75rem;
-  background: #F8F4F0;
+  background: #f8f4f0;
   border-radius: 8px;
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .selected-category {
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   min-width: 60px;
 }
 
@@ -564,7 +540,7 @@ const handleNext = () => {
 
 .no-selections {
   text-align: center;
-  color: #A0796A;
+  color: #a0796a;
   font-style: italic;
   padding: 1.5rem;
 }
@@ -575,8 +551,8 @@ const handleNext = () => {
 }
 
 .help-card {
-  background: #FFF8F0;
-  border: 1px solid #F0E8DC;
+  background: #fff8f0;
+  border: 1px solid #f0e8dc;
   border-radius: 12px;
   padding: 1.5rem;
 }
@@ -584,7 +560,7 @@ const handleNext = () => {
 .help-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1rem;
 }
 
@@ -600,13 +576,13 @@ const handleNext = () => {
 }
 
 .help-note {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.9rem;
   font-style: italic;
   margin: 0;
   text-align: center;
   padding-top: 0.75rem;
-  border-top: 1px solid #F0E8DC;
+  border-top: 1px solid #f0e8dc;
 }
 
 /* Action Buttons */
@@ -616,7 +592,7 @@ const handleNext = () => {
   justify-content: space-between;
   margin-top: 2rem;
   padding-top: 2rem;
-  border-top: 1px solid #E8D5C4;
+  border-top: 1px solid #e8d5c4;
 }
 
 .btn-primary,
@@ -631,25 +607,25 @@ const handleNext = () => {
 }
 
 .btn-primary {
-  background: #7C5842;
+  background: #7c5842;
   color: white;
-  border: 2px solid #7C5842;
+  border: 2px solid #7c5842;
 }
 
 .btn-primary:hover {
-  background: #5D3F2E;
-  border-color: #5D3F2E;
+  background: #5d3f2e;
+  border-color: #5d3f2e;
   transform: translateY(-1px);
 }
 
 .btn-secondary {
   background: white;
-  color: #7C5842;
-  border: 2px solid #E8D5C4;
+  color: #7c5842;
+  border: 2px solid #e8d5c4;
 }
 
 .btn-secondary:hover {
-  border-color: #D4B896;
+  border-color: #d4b896;
   transform: translateY(-1px);
 }
 
@@ -658,38 +634,38 @@ const handleNext = () => {
   .sensory-expression-view {
     padding: 0.5rem;
   }
-  
+
   .sensory-title {
     font-size: 1.5rem;
   }
-  
+
   .sensory-category {
     padding: 1rem;
   }
-  
+
   .expressions-grid {
     grid-template-columns: 1fr;
     gap: 0.75rem;
   }
-  
+
   .expression-btn {
     padding: 0.875rem;
   }
-  
+
   .category-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
+
   .category-info {
     width: 100%;
   }
-  
+
   .category-status {
     align-self: flex-end;
   }
-  
+
   .action-buttons {
     flex-direction: column;
   }
@@ -701,17 +677,17 @@ const handleNext = () => {
     align-items: flex-start;
     gap: 0.25rem;
   }
-  
+
   .category-title {
     font-size: 1.1rem;
   }
-  
+
   .selected-expression-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
+
   .selected-category {
     min-width: auto;
     font-size: 0.9rem;

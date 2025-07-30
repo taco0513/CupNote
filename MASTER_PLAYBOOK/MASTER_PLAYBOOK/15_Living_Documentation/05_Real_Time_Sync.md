@@ -11,67 +11,62 @@
 ```typescript
 // 파일 변경 감시 및 동기화 시스템
 class FileWatcherSystem {
-  private watcher: chokidar.FSWatcher;
-  private documentSync: DocumentSyncService;
-  private contextUpdater: ContextUpdateService;
+  private watcher: chokidar.FSWatcher
+  private documentSync: DocumentSyncService
+  private contextUpdater: ContextUpdateService
 
   async initialize() {
     this.watcher = chokidar.watch(['src/**/*', 'docs/**/*'], {
-      ignored: [
-        '**/node_modules/**',
-        '**/.git/**',
-        '**/dist/**',
-        '**/*.log'
-      ],
+      ignored: ['**/node_modules/**', '**/.git/**', '**/dist/**', '**/*.log'],
       persistent: true,
       awaitWriteFinish: {
         stabilityThreshold: 500,
-        pollInterval: 100
-      }
-    });
+        pollInterval: 100,
+      },
+    })
 
-    this.setupEventHandlers();
+    this.setupEventHandlers()
   }
 
   private setupEventHandlers() {
     // 파일 추가
-    this.watcher.on('add', async (path) => {
-      console.log(`🆕 New file: ${path}`);
-      await this.handleNewFile(path);
-    });
+    this.watcher.on('add', async path => {
+      console.log(`🆕 New file: ${path}`)
+      await this.handleNewFile(path)
+    })
 
     // 파일 변경
-    this.watcher.on('change', async (path) => {
-      console.log(`🔄 Changed: ${path}`);
-      await this.handleFileChange(path);
-    });
+    this.watcher.on('change', async path => {
+      console.log(`🔄 Changed: ${path}`)
+      await this.handleFileChange(path)
+    })
 
     // 파일 삭제
-    this.watcher.on('unlink', async (path) => {
-      console.log(`🗑️  Deleted: ${path}`);
-      await this.handleFileDelete(path);
-    });
+    this.watcher.on('unlink', async path => {
+      console.log(`🗑️  Deleted: ${path}`)
+      await this.handleFileDelete(path)
+    })
 
     // 디렉토리 변경
-    this.watcher.on('addDir', async (path) => {
-      console.log(`📁 New directory: ${path}`);
-      await this.handleDirectoryChange(path);
-    });
+    this.watcher.on('addDir', async path => {
+      console.log(`📁 New directory: ${path}`)
+      await this.handleDirectoryChange(path)
+    })
   }
 
   private async handleFileChange(filePath: string) {
-    const fileType = this.getFileType(filePath);
+    const fileType = this.getFileType(filePath)
 
     switch (fileType) {
       case 'code':
-        await this.syncCodeChange(filePath);
-        break;
+        await this.syncCodeChange(filePath)
+        break
       case 'documentation':
-        await this.syncDocChange(filePath);
-        break;
+        await this.syncDocChange(filePath)
+        break
       case 'config':
-        await this.syncConfigChange(filePath);
-        break;
+        await this.syncConfigChange(filePath)
+        break
     }
   }
 }
@@ -84,31 +79,31 @@ class FileWatcherSystem {
 class CodeDocumentSync {
   async syncCodeChange(filePath: string) {
     // 1. 코드 분석
-    const analysis = await this.analyzeCode(filePath);
+    const analysis = await this.analyzeCode(filePath)
 
     // 2. 관련 문서 찾기
-    const relatedDocs = await this.findRelatedDocuments(filePath);
+    const relatedDocs = await this.findRelatedDocuments(filePath)
 
     // 3. 문서 업데이트 필요성 확인
-    const updateNeeded = await this.checkUpdateNeeded(analysis, relatedDocs);
+    const updateNeeded = await this.checkUpdateNeeded(analysis, relatedDocs)
 
     if (updateNeeded.length > 0) {
       // 4. 자동 업데이트 실행
       for (const doc of updateNeeded) {
-        await this.updateDocument(doc, analysis);
+        await this.updateDocument(doc, analysis)
       }
 
       // 5. AI 컨텍스트 업데이트
-      await this.updateAIContext(filePath, analysis);
+      await this.updateAIContext(filePath, analysis)
 
       // 6. 변경 알림
-      await this.notifyChanges(filePath, updateNeeded);
+      await this.notifyChanges(filePath, updateNeeded)
     }
   }
 
   private async analyzeCode(filePath: string): Promise<CodeAnalysis> {
-    const content = await fs.readFile(filePath, 'utf-8');
-    const ast = this.parseCode(content);
+    const content = await fs.readFile(filePath, 'utf-8')
+    const ast = this.parseCode(content)
 
     return {
       exports: this.extractExports(ast),
@@ -118,8 +113,8 @@ class CodeDocumentSync {
       complexity: this.calculateComplexity(ast),
       dependencies: this.analyzeDependencies(ast),
       patterns: this.identifyPatterns(ast),
-      lastModified: new Date()
-    };
+      lastModified: new Date(),
+    }
   }
 }
 ```
@@ -133,25 +128,25 @@ class CodeDocumentSync {
 class APIDocumentationSync {
   async syncAPIEndpoint(routeFile: string) {
     // 1. 라우트 파일 분석
-    const routes = await this.extractRoutes(routeFile);
+    const routes = await this.extractRoutes(routeFile)
 
     // 2. OpenAPI 스펙 업데이트
-    const openAPISpec = await this.updateOpenAPISpec(routes);
+    const openAPISpec = await this.updateOpenAPISpec(routes)
 
     // 3. Markdown 문서 업데이트
-    await this.updateMarkdownDocs(routes);
+    await this.updateMarkdownDocs(routes)
 
     // 4. Postman 커렉션 업데이트
-    await this.updatePostmanCollection(routes);
+    await this.updatePostmanCollection(routes)
 
     // 5. 예시 코드 업데이트
-    await this.updateExampleCode(routes);
+    await this.updateExampleCode(routes)
   }
 
   private async extractRoutes(filePath: string): Promise<Route[]> {
-    const content = await fs.readFile(filePath, 'utf-8');
-    const ast = parse(content);
-    const routes: Route[] = [];
+    const content = await fs.readFile(filePath, 'utf-8')
+    const ast = parse(content)
+    const routes: Route[] = []
 
     // Express 라우트 추출
     traverse(ast, {
@@ -163,73 +158,73 @@ class APIDocumentationSync {
             handler: this.extractHandler(path),
             middleware: this.extractMiddleware(path),
             validation: this.extractValidation(path),
-            description: this.extractDescription(path)
-          });
+            description: this.extractDescription(path),
+          })
         }
-      }
-    });
+      },
+    })
 
-    return routes;
+    return routes
   }
 }
 ```
 
 ### 타입 정의 동기화
 
-```typescript
+````typescript
 // TypeScript 타입 정의 문서 동기화
 class TypeDefinitionSync {
   async syncTypeDefinitions(typeFile: string) {
-    const program = ts.createProgram([typeFile], {});
-    const sourceFile = program.getSourceFile(typeFile);
-    const typeChecker = program.getTypeChecker();
+    const program = ts.createProgram([typeFile], {})
+    const sourceFile = program.getSourceFile(typeFile)
+    const typeChecker = program.getTypeChecker()
 
-    const types: TypeDefinition[] = [];
+    const types: TypeDefinition[] = []
 
     // 타입 정의 추출
-    ts.forEachChild(sourceFile!, (node) => {
+    ts.forEachChild(sourceFile!, node => {
       if (ts.isInterfaceDeclaration(node) || ts.isTypeAliasDeclaration(node)) {
-        const type = typeChecker.getTypeAtLocation(node);
-        const symbol = type.getSymbol();
+        const type = typeChecker.getTypeAtLocation(node)
+        const symbol = type.getSymbol()
 
         types.push({
           name: symbol?.getName() || '',
           kind: ts.isInterfaceDeclaration(node) ? 'interface' : 'type',
           properties: this.extractProperties(type, typeChecker),
           description: this.extractJSDoc(node),
-          examples: this.generateExamples(type)
-        });
+          examples: this.generateExamples(type),
+        })
       }
-    });
+    })
 
     // 문서 업데이트
-    await this.updateTypeDocumentation(types);
+    await this.updateTypeDocumentation(types)
   }
 
   private async updateTypeDocumentation(types: TypeDefinition[]) {
-    let markdown = '# Type Definitions\n\n';
+    let markdown = '# Type Definitions\n\n'
 
     for (const type of types) {
-      markdown += `## ${type.name}\n\n`;
-      markdown += `${type.description}\n\n`;
-      markdown += '```typescript\n';
-      markdown += this.generateTypeSignature(type);
-      markdown += '\n```\n\n';
+      markdown += `## ${type.name}\n\n`
+      markdown += `${type.description}\n\n`
+      markdown += '```typescript\n'
+      markdown += this.generateTypeSignature(type)
+      markdown += '\n```\n\n'
 
       if (type.examples.length > 0) {
-        markdown += '### Examples\n\n';
+        markdown += '### Examples\n\n'
         for (const example of type.examples) {
-          markdown += '```typescript\n';
-          markdown += example;
-          markdown += '\n```\n\n';
+          markdown += '```typescript\n'
+          markdown += example
+          markdown += '\n```\n\n'
         }
       }
     }
 
-    await fs.writeFile('docs/types.md', markdown);
+    await fs.writeFile('docs/types.md', markdown)
   }
 }
-```
+````
 
 ## 컨텍스트 자동 업데이트
 
@@ -238,29 +233,29 @@ class TypeDefinitionSync {
 ```typescript
 // AI를 위한 컨텍스트 자동 업데이트
 class AIContextMaintainer {
-  private contextCache = new Map<string, FileContext>();
+  private contextCache = new Map<string, FileContext>()
 
   async maintainFileContext(filePath: string) {
-    const context = await this.buildFileContext(filePath);
-    const previousContext = this.contextCache.get(filePath);
+    const context = await this.buildFileContext(filePath)
+    const previousContext = this.contextCache.get(filePath)
 
     if (this.hasSignificantChanges(context, previousContext)) {
       // 컨텍스트 파일 업데이트
-      await this.updateContextFile(filePath, context);
+      await this.updateContextFile(filePath, context)
 
       // 관련 컨텍스트 업데이트
-      await this.updateRelatedContexts(filePath, context);
+      await this.updateRelatedContexts(filePath, context)
 
       // 프로젝트 전체 컨텍스트 업데이트
-      await this.updateProjectContext(filePath, context);
+      await this.updateProjectContext(filePath, context)
     }
 
-    this.contextCache.set(filePath, context);
+    this.contextCache.set(filePath, context)
   }
 
   private async buildFileContext(filePath: string): Promise<FileContext> {
-    const content = await fs.readFile(filePath, 'utf-8');
-    const analysis = await this.analyzeFile(content, filePath);
+    const content = await fs.readFile(filePath, 'utf-8')
+    const analysis = await this.analyzeFile(content, filePath)
 
     return {
       path: filePath,
@@ -272,12 +267,12 @@ class AIContextMaintainer {
       recentChanges: await this.getRecentChanges(filePath),
       relatedFiles: await this.findRelatedFiles(filePath),
       gotchas: this.extractGotchas(content),
-      lastUpdated: new Date()
-    };
+      lastUpdated: new Date(),
+    }
   }
 
   private async updateContextFile(filePath: string, context: FileContext) {
-    const contextPath = `.claude/context/${path.basename(filePath)}.md`;
+    const contextPath = `.claude/context/${path.basename(filePath)}.md`
 
     const markdown = `# ${filePath}
 
@@ -308,10 +303,10 @@ ${context.gotchas.map(g => `- ⚠️ ${g}`).join('\n')}
 
 ## LAST UPDATED
 ${context.lastUpdated.toISOString()}
-`;
+`
 
-    await fs.ensureDir(path.dirname(contextPath));
-    await fs.writeFile(contextPath, markdown);
+    await fs.ensureDir(path.dirname(contextPath))
+    await fs.writeFile(contextPath, markdown)
   }
 }
 ```
@@ -328,60 +323,60 @@ class LinkValidationSystem {
       valid: 0,
       broken: 0,
       warnings: 0,
-      issues: [] as LinkIssue[]
-    };
+      issues: [] as LinkIssue[],
+    }
 
     // 1. 코드에서 참조하는 파일 확인
-    const codeReferences = await this.findCodeReferences();
+    const codeReferences = await this.findCodeReferences()
     for (const ref of codeReferences) {
-      if (!await this.fileExists(ref.target)) {
-        results.broken++;
+      if (!(await this.fileExists(ref.target))) {
+        results.broken++
         results.issues.push({
           type: 'broken_code_reference',
           source: ref.source,
           target: ref.target,
-          line: ref.line
-        });
+          line: ref.line,
+        })
       } else {
-        results.valid++;
+        results.valid++
       }
     }
 
     // 2. 문서에서 참조하는 코드 확인
-    const docReferences = await this.findDocumentationReferences();
+    const docReferences = await this.findDocumentationReferences()
     for (const ref of docReferences) {
-      if (!await this.fileExists(ref.target)) {
-        results.broken++;
+      if (!(await this.fileExists(ref.target))) {
+        results.broken++
         results.issues.push({
           type: 'broken_doc_reference',
           source: ref.source,
           target: ref.target,
-          line: ref.line
-        });
+          line: ref.line,
+        })
       } else {
-        results.valid++;
+        results.valid++
       }
     }
 
     // 3. 결과 리포트 생성
-    await this.generateValidationReport(results);
+    await this.generateValidationReport(results)
 
     // 4. 자동 수정 가능한 것들 수정
     if (results.broken > 0) {
-      await this.attemptAutoFix(results.issues);
+      await this.attemptAutoFix(results.issues)
     }
 
-    return results;
+    return results
   }
 
   private async attemptAutoFix(issues: LinkIssue[]) {
     for (const issue of issues) {
       // 비슷한 이름의 파일 찾기
-      const suggestion = await this.findSimilarFile(issue.target);
+      const suggestion = await this.findSimilarFile(issue.target)
 
       if (suggestion && suggestion.similarity > 0.8) {
-        console.log(`🔧 Auto-fixing: ${issue.target} → ${suggestion.file}`);
-        await this.updateReference(issue.source, issue.target, suggestion.file);
+        console.log(`🔧 Auto-fixing: ${issue.target} → ${suggestion.file}`)
+        await this.updateReference(issue.source, issue.target, suggestion.file)
       }
     }
   }
@@ -397,13 +392,13 @@ class LinkValidationSystem {
 class DocumentChangeNotifier {
   async notifyChanges(changes: Change[]) {
     // 1. 변경 사항 분류
-    const categorized = this.categorizeChanges(changes);
+    const categorized = this.categorizeChanges(changes)
 
     // 2. 영향도 분석
-    const impact = await this.analyzeImpact(categorized);
+    const impact = await this.analyzeImpact(categorized)
 
     // 3. 관련자 식별
-    const stakeholders = await this.identifyStakeholders(impact);
+    const stakeholders = await this.identifyStakeholders(impact)
 
     // 4. 알림 생성
     for (const [stakeholder, relevantChanges] of stakeholders) {
@@ -411,12 +406,12 @@ class DocumentChangeNotifier {
         changes: relevantChanges,
         impact: impact[stakeholder.id],
         summary: this.generateSummary(relevantChanges),
-        actions: this.suggestActions(relevantChanges)
-      });
+        actions: this.suggestActions(relevantChanges),
+      })
     }
 
     // 5. 변경 로그 기록
-    await this.logChanges(changes);
+    await this.logChanges(changes)
   }
 
   private generateSummary(changes: Change[]): string {
@@ -424,15 +419,15 @@ class DocumentChangeNotifier {
       added: changes.filter(c => c.type === 'add').length,
       modified: changes.filter(c => c.type === 'modify').length,
       deleted: changes.filter(c => c.type === 'delete').length,
-      highImpact: changes.filter(c => c.impact === 'high').length
-    };
+      highImpact: changes.filter(c => c.impact === 'high').length,
+    }
 
     return `📢 Documentation Update Summary:
 - 🆕 ${summary.added} new documents
 - 🔄 ${summary.modified} updated documents
 - 🗑️ ${summary.deleted} removed documents
 ${summary.highImpact > 0 ? `- ⚠️ ${summary.highImpact} high-impact changes` : ''}
-`;
+`
   }
 }
 ```

@@ -20,15 +20,15 @@ graph TD
     A[앱 시작] --> B{인증 상태}
     B -->|미인증| C[로그인/회원가입]
     B -->|인증됨| D[메인 대시보드]
-    
+
     C --> E[온보딩]
     E --> D
-    
+
     D --> F[테이스팅 시작]
     D --> G[기록 조회]
     D --> H[통계 확인]
     D --> I[성취 확인]
-    
+
     F --> J[모드 선택]
     J --> K[테이스팅 플로우]
     K --> L[결과 확인]
@@ -54,7 +54,7 @@ sequenceDiagram
     participant A as AuthView
     participant S as Supabase
     participant D as Dashboard
-    
+
     U->>A: 접속
     A->>U: 로그인/회원가입 폼 표시
     U->>A: 이메일/비밀번호 입력
@@ -81,6 +81,7 @@ sequenceDiagram
    - 사용자 프로필 초기화
 
 **상태 관리**:
+
 ```typescript
 // stores/auth.ts 사용
 const handleLogin = async (email: string, password: string) => {
@@ -94,6 +95,7 @@ const handleLogin = async (email: string, password: string) => {
 **라우트**: `/onboarding`
 
 **단계**:
+
 1. **환영 메시지**: CupNote 소개
 2. **경험 수준 설정**: 초보자/중급자/전문가
 3. **선호도 조사**: 선호하는 추출 방법, 향미 성향
@@ -101,25 +103,31 @@ const handleLogin = async (email: string, password: string) => {
 5. **첫 테이스팅 가이드**: 데모 모드 안내
 
 **실제 구현**:
+
 ```vue
 <!-- OnboardingView.vue -->
 <template>
   <div class="onboarding-container">
     <!-- 온보딩 단계 표시 -->
     <div class="onboarding-steps">
-      <div v-for="(step, index) in onboardingSteps" :key="index" 
-           :class="['step-card', { active: currentStep === index }]">
+      <div
+        v-for="(step, index) in onboardingSteps"
+        :key="index"
+        :class="['step-card', { active: currentStep === index }]"
+      >
         <div class="step-icon">{{ step.icon }}</div>
         <h3 class="step-title">{{ step.title }}</h3>
         <p class="step-description">{{ step.description }}</p>
       </div>
     </div>
-    
+
     <!-- 단계 인디케이터 -->
     <div class="step-indicators">
-      <div v-for="(_, index) in onboardingSteps" :key="index"
-           :class="['step-dot', { active: currentStep === index }]">
-      </div>
+      <div
+        v-for="(_, index) in onboardingSteps"
+        :key="index"
+        :class="['step-dot', { active: currentStep === index }]"
+      ></div>
     </div>
   </div>
 </template>
@@ -131,8 +139,8 @@ const onboardingSteps = [
   {
     icon: '👋',
     title: 'CupNote에 오신 걸 환영합니다!',
-    description: '커피의 향미와 감각을 기록하고 분석하는 개인 맞춤 커피 저널입니다.'
-  }
+    description: '커피의 향미와 감각을 기록하고 분석하는 개인 맞춤 커피 저널입니다.',
+  },
   // ... 더 많은 단계들
 ]
 
@@ -148,26 +156,27 @@ const startTasting = () => {
 
 **3가지 모드별 단계**:
 
-| 단계 | Cafe (7단계) | HomeCafe (8단계) | Pro (12단계) |
-|------|-------------|-----------------|-------------|
-| 1 | Mode Selection | Mode Selection | Mode Selection |
-| 2 | Coffee Info | Coffee Info | Coffee Info |
-| 3 | Flavor Selection | HomeCafe Settings | HomeCafe Settings |
-| 4 | Sensory Expression | Flavor Selection | Pro Brewing |
-| 5 | Personal Comment | Sensory Expression | QC Measurement |
-| 6 | Roaster Notes | Personal Comment | Pro QC Report |
-| 7 | Result | Roaster Notes | Flavor Selection |
-| 8 | - | Result | Sensory Expression |
-| 9 | - | - | Sensory Slider |
-| 10 | - | - | Personal Comment |
-| 11 | - | - | Roaster Notes |
-| 12 | - | - | Result |
+| 단계 | Cafe (7단계)       | HomeCafe (8단계)   | Pro (12단계)       |
+| ---- | ------------------ | ------------------ | ------------------ |
+| 1    | Mode Selection     | Mode Selection     | Mode Selection     |
+| 2    | Coffee Info        | Coffee Info        | Coffee Info        |
+| 3    | Flavor Selection   | HomeCafe Settings  | HomeCafe Settings  |
+| 4    | Sensory Expression | Flavor Selection   | Pro Brewing        |
+| 5    | Personal Comment   | Sensory Expression | QC Measurement     |
+| 6    | Roaster Notes      | Personal Comment   | Pro QC Report      |
+| 7    | Result             | Roaster Notes      | Flavor Selection   |
+| 8    | -                  | Result             | Sensory Expression |
+| 9    | -                  | -                  | Sensory Slider     |
+| 10   | -                  | -                  | Personal Comment   |
+| 11   | -                  | -                  | Roaster Notes      |
+| 12   | -                  | -                  | Result             |
 
 ### 1. 모드 선택 (ModeSelectionView)
 
 **라우트**: `/mode-selection`
 
 **기능**:
+
 - 3가지 테이스팅 모드 소개
 - 사용자 경험 수준 기반 추천
 - 각 모드별 예상 소요 시간 표시
@@ -178,7 +187,7 @@ const startTasting = () => {
 <template>
   <div class="mode-selection">
     <h1>테이스팅 모드를 선택해주세요</h1>
-    
+
     <div class="mode-cards">
       <ModeCard
         v-for="mode in modes"
@@ -188,7 +197,7 @@ const startTasting = () => {
         @select="selectMode"
       />
     </div>
-    
+
     <DemoModeButton @click="startDemo" />
   </div>
 </template>
@@ -206,10 +215,10 @@ const modes = [
     features: ['기본 향미 분석', '간단한 기록']
   },
   {
-    id: 'homecafe', 
+    id: 'homecafe',
     name: 'HomeCafe Mode',
     description: '집에서 내려 마시는 커피',
-    duration: '5-8분', 
+    duration: '5-8분',
     steps: 8,
     features: ['추출 설정 기록', '상세 향미 분석']
   },
@@ -237,12 +246,14 @@ const selectMode = (modeId: string) => {
 **라우트**: `/coffee-info`
 
 **공통 필드**:
+
 - 커피명 (필수)
 - 카페명/브랜드명 (필수)
 - 위치 (필수)
 - 추출 방법 (필수)
 
 **선택 필드** (Pro 모드):
+
 - 원산지, 품종, 고도
 - 가공 방식, 로스팅 레벨
 
@@ -250,7 +261,7 @@ const selectMode = (modeId: string) => {
 // 데이터 구조
 interface CoffeeInfo {
   coffee_name: string
-  cafe_name: string  
+  cafe_name: string
   location: string
   brewing_method: string
   // Pro 모드 추가 필드
@@ -268,6 +279,7 @@ interface CoffeeInfo {
 **조건**: HomeCafe, Pro 모드만
 
 **입력 정보**:
+
 - 드리퍼 종류
 - 레시피 (커피량, 물량, 비율, 수온, 시간)
 - 랩타임 기록
@@ -279,6 +291,7 @@ interface CoffeeInfo {
 **조건**: Pro 모드만
 
 **실험 데이터**:
+
 - 추출 방식 세부사항
 - 그라인드 사이즈
 - 블룸 시간, 총 시간
@@ -290,6 +303,7 @@ interface CoffeeInfo {
 **조건**: Pro 모드만
 
 **측정 항목**:
+
 - TDS (Total Dissolved Solids)
 - 추출율 (Extraction Yield)
 - 물 TDS, 물 pH
@@ -300,17 +314,17 @@ interface CoffeeInfo {
 <template>
   <div class="qc-measurement">
     <h2>QC 측정값을 입력해주세요</h2>
-    
+
     <div class="measurement-grid">
       <MeasurementInput
         v-model="measurements.tds"
         label="TDS (%)"
         :min="0.8"
-        :max="1.8" 
+        :max="1.8"
         :step="0.01"
         suffix="%"
       />
-      
+
       <MeasurementInput
         v-model="measurements.extraction_yield"
         label="추출율 (%)"
@@ -320,11 +334,8 @@ interface CoffeeInfo {
         suffix="%"
       />
     </div>
-    
-    <BrewingChart 
-      :tds="measurements.tds"
-      :yield="measurements.extraction_yield"
-    />
+
+    <BrewingChart :tds="measurements.tds" :yield="measurements.extraction_yield" />
   </div>
 </template>
 ```
@@ -335,6 +346,7 @@ interface CoffeeInfo {
 **조건**: Pro 모드만
 
 **리포트 내용**:
+
 - Golden Cup 범위 분석
 - 품질 등급 평가
 - 개선 제안사항
@@ -345,6 +357,7 @@ interface CoffeeInfo {
 **라우트**: `/flavor-selection`
 
 **SCA Flavor Wheel 기반**:
+
 - 카테고리별 향미 선택
 - 다중 선택 가능
 - 검색 및 필터링 기능
@@ -359,12 +372,9 @@ interface CoffeeInfo {
       :selected="selectedFlavors"
       @select="handleFlavorSelect"
     />
-    
-    <SelectedFlavors
-      :flavors="selectedFlavors"
-      @remove="removeFlavor"
-    />
-    
+
+    <SelectedFlavors :flavors="selectedFlavors" @remove="removeFlavor" />
+
     <CustomFlavorInput @add="addCustomFlavor" />
   </div>
 </template>
@@ -373,12 +383,12 @@ interface CoffeeInfo {
 const flavorCategories = [
   {
     name: '과일향',
-    subcategories: ['베리', '감귤', '열대과일']
+    subcategories: ['베리', '감귤', '열대과일'],
   },
   {
-    name: '꽃향', 
-    subcategories: ['장미', '재스민', '허브']
-  }
+    name: '꽃향',
+    subcategories: ['장미', '재스민', '허브'],
+  },
   // ... 더 많은 카테고리
 ]
 </script>
@@ -389,6 +399,7 @@ const flavorCategories = [
 **라우트**: `/sensory-expression`
 
 **표현 요소**:
+
 - 단맛, 산미, 쓴맛 강도
 - 바디감, 마우스필
 - 후미, 밸런스
@@ -400,6 +411,7 @@ const flavorCategories = [
 **조건**: Pro 모드만
 
 **정밀 평가**:
+
 - 0.5 단위 정밀 조정
 - SCA 평가 기준 적용
 - 실시간 점수 계산
@@ -410,6 +422,7 @@ const flavorCategories = [
 **라우트**: `/personal-comment`
 
 **자유 텍스트 입력**:
+
 - 개인적인 느낌
 - 추억이나 연상
 - 개선점이나 특이사항
@@ -420,6 +433,7 @@ const flavorCategories = [
 **라우트**: `/roaster-notes`
 
 **매칭 시스템**:
+
 - 로스터 제공 정보 입력
 - AI 기반 매칭 점수 계산
 - 차이점 분석
@@ -430,8 +444,9 @@ const flavorCategories = [
 **라우트**: `/result`
 
 **종합 결과**:
+
 - 매칭 점수
-- 향미 프로필 차트  
+- 향미 프로필 차트
 - 개선 제안
 - 성취 배지
 - 소셜 공유 옵션
@@ -441,21 +456,17 @@ const flavorCategories = [
 <template>
   <div class="result-view">
     <ScoreCard :score="matchScore" />
-    
+
     <FlavorProfile :flavors="selectedFlavors" />
-    
+
     <ImprovementSuggestions :suggestions="suggestions" />
-    
+
     <AchievementBadges :new-badges="newBadges" />
-    
+
     <ActionButtons>
       <BaseButton @click="saveAndExit">저장하고 나가기</BaseButton>
-      <BaseButton @click="startAnother" variant="outline">
-        다른 커피 테이스팅
-      </BaseButton>
-      <BaseButton @click="shareResult" variant="secondary">
-        결과 공유
-      </BaseButton>
+      <BaseButton @click="startAnother" variant="outline"> 다른 커피 테이스팅 </BaseButton>
+      <BaseButton @click="shareResult" variant="secondary"> 결과 공유 </BaseButton>
     </ActionButtons>
   </div>
 </template>
@@ -468,6 +479,7 @@ const flavorCategories = [
 **라우트**: `/`
 
 **주요 위젯**:
+
 - 오늘의 테이스팅 현황
 - 주간/월간 통계 요약
 - 최근 테이스팅 기록
@@ -479,27 +491,18 @@ const flavorCategories = [
 <template>
   <div class="dashboard">
     <WelcomeHeader :user="user" />
-    
+
     <QuickActions>
-      <ActionCard
-        title="새 테이스팅 시작"
-        icon="coffee"
-        color="primary"
-        @click="startTasting"
-      />
-      <ActionCard
-        title="기록 보기"
-        icon="list"
-        @click="viewRecords"
-      />
+      <ActionCard title="새 테이스팅 시작" icon="coffee" color="primary" @click="startTasting" />
+      <ActionCard title="기록 보기" icon="list" @click="viewRecords" />
     </QuickActions>
-    
+
     <StatsOverview :stats="userStats" />
-    
+
     <RecentTastings :records="recentRecords" />
-    
+
     <AchievementProgress :achievements="achievements" />
-    
+
     <PersonalizedTips :tips="dailyTips" />
   </div>
 </template>
@@ -510,6 +513,7 @@ const flavorCategories = [
 **라우트**: `/stats`
 
 **통계 섹션**:
+
 - 테이스팅 빈도 차트
 - 향미 선호도 분포
 - 점수 변화 추이
@@ -521,6 +525,7 @@ const flavorCategories = [
 **라우트**: `/achievements`
 
 **성취 시스템**:
+
 - 획득한 배지 목록
 - 진행 중인 도전과제
 - 다음 목표까지의 진행도
@@ -531,6 +536,7 @@ const flavorCategories = [
 **라우트**: `/records`
 
 **기능**:
+
 - 테이스팅 기록 목록
 - 검색 및 필터링
 - 정렬 옵션
@@ -543,30 +549,30 @@ const flavorCategories = [
   <div class="records-list">
     <!-- 검색 및 필터링 영역 -->
     <div class="filters-section">
-      <input 
-        v-model="searchQuery" 
-        type="text" 
+      <input
+        v-model="searchQuery"
+        type="text"
         placeholder="검색어를 입력하세요..."
         class="search-input"
       />
-      
+
       <select v-model="activeFilters.mode" class="filter-select">
         <option value="">모든 모드</option>
         <option value="cafe">Cafe</option>
         <option value="homecafe">HomeCafe</option>
         <option value="pro">Pro</option>
       </select>
-      
+
       <select v-model="activeFilters.origin" class="filter-select">
         <option value="">모든 원산지</option>
         <!-- 동적으로 생성되는 원산지 옵션들 -->
       </select>
     </div>
-    
+
     <!-- 기록 목록 표시 -->
     <div class="records-grid" v-if="!loading">
-      <div 
-        v-for="record in filteredRecords" 
+      <div
+        v-for="record in filteredRecords"
         :key="record.id"
         class="record-card"
         @click="viewRecord(record.id)"
@@ -579,14 +585,14 @@ const flavorCategories = [
         </div>
       </div>
     </div>
-    
+
     <!-- 로딩 상태 -->
     <LoadingSpinner v-else />
-    
+
     <!-- 페이지네이션 -->
     <div class="pagination" v-if="totalPages > 1">
-      <button 
-        v-for="page in totalPages" 
+      <button
+        v-for="page in totalPages"
         :key="page"
         :class="['page-btn', { active: currentPage === page }]"
         @click="currentPage = page"
@@ -605,6 +611,7 @@ const flavorCategories = [
 **라우트**: `/profile`
 
 **설정 항목**:
+
 - 개인 정보 수정
 - 경험 수준 업데이트
 - 알림 설정
@@ -617,6 +624,7 @@ const flavorCategories = [
 **권한**: 관리자만
 
 **관리 기능**:
+
 - 사용자 통계
 - 시스템 모니터링
 - 콘텐츠 관리
@@ -631,23 +639,23 @@ const flavorCategories = [
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
   const sessionStore = useTastingSessionStore()
-  
+
   // 인증 확인
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     return next('/auth')
   }
-  
+
   // 세션 상태 확인
   if (to.meta.requiresSession && !sessionStore.isSessionActive) {
     return next('/mode-selection')
   }
-  
+
   // 모드별 접근 제한
   const allowedModes = to.meta.allowedModes
   if (allowedModes && !allowedModes.includes(sessionStore.currentSession.mode)) {
     return next('/mode-selection')
   }
-  
+
   next()
 })
 ```
@@ -659,39 +667,56 @@ router.beforeEach(async (to, from, next) => {
 export function useFlowNavigation() {
   const router = useRouter()
   const sessionStore = useTastingSessionStore()
-  
+
   const FLOW_STEPS = {
     cafe: [
-      'coffee-info', 'flavor-selection', 'sensory-expression',
-      'personal-comment', 'roaster-notes', 'result'
+      'coffee-info',
+      'flavor-selection',
+      'sensory-expression',
+      'personal-comment',
+      'roaster-notes',
+      'result',
     ],
     homecafe: [
-      'coffee-info', 'home-cafe', 'flavor-selection', 
-      'sensory-expression', 'personal-comment', 'roaster-notes', 'result'
+      'coffee-info',
+      'home-cafe',
+      'flavor-selection',
+      'sensory-expression',
+      'personal-comment',
+      'roaster-notes',
+      'result',
     ],
     pro: [
-      'coffee-info', 'home-cafe', 'pro-brewing', 'qc-measurement',
-      'pro-qc-report', 'flavor-selection', 'sensory-expression',
-      'sensory-slider', 'personal-comment', 'roaster-notes', 'result'
-    ]
+      'coffee-info',
+      'home-cafe',
+      'pro-brewing',
+      'qc-measurement',
+      'pro-qc-report',
+      'flavor-selection',
+      'sensory-expression',
+      'sensory-slider',
+      'personal-comment',
+      'roaster-notes',
+      'result',
+    ],
   }
-  
+
   const navigateNext = (currentStep: string) => {
     const mode = sessionStore.currentSession.mode
     const steps = FLOW_STEPS[mode]
     const currentIndex = steps.indexOf(currentStep)
-    
+
     if (currentIndex < steps.length - 1) {
       const nextStep = steps[currentIndex + 1]
       router.push(`/${nextStep}`)
     }
   }
-  
+
   const navigatePrevious = (currentStep: string) => {
     const mode = sessionStore.currentSession.mode
     const steps = FLOW_STEPS[mode]
     const currentIndex = steps.indexOf(currentStep)
-    
+
     if (currentIndex > 0) {
       const prevStep = steps[currentIndex - 1]
       router.push(`/${prevStep}`)
@@ -699,20 +724,20 @@ export function useFlowNavigation() {
       router.push('/mode-selection')
     }
   }
-  
+
   const getProgressPercentage = (currentStep: string) => {
     const mode = sessionStore.currentSession.mode
     const steps = FLOW_STEPS[mode]
     const currentIndex = steps.indexOf(currentStep)
-    
+
     return ((currentIndex + 1) / steps.length) * 100
   }
-  
+
   return {
     navigateNext,
     navigatePrevious,
     getProgressPercentage,
-    FLOW_STEPS
+    FLOW_STEPS,
   }
 }
 ```
@@ -724,11 +749,11 @@ export function useFlowNavigation() {
 const handleSessionInterruption = () => {
   // 현재 상태 로컬 저장
   sessionStore.saveTemporarySession()
-  
+
   // 사용자에게 알림
   notificationStore.showWarning(
     '세션이 임시 저장되었습니다. 나중에 이어서 진행할 수 있습니다.',
-    '세션 저장됨'
+    '세션 저장됨',
   )
 }
 

@@ -106,13 +106,13 @@ const currentView = ref('login')
 const successMessage = ref({
   title: '',
   text: '',
-  showLogin: false
+  showLogin: false,
 })
 
 // Methods
 const handleLoginSuccess = (user) => {
   console.log('Login successful:', user)
-  
+
   // Redirect to original path or home
   const redirectPath = route.query.redirect || '/'
   router.push(redirectPath)
@@ -120,13 +120,13 @@ const handleLoginSuccess = (user) => {
 
 const handleSignupSuccess = (result) => {
   console.log('Signup successful:', result)
-  
+
   successMessage.value = {
     title: '회원가입 완료!',
     text: result.message || '이메일을 확인하여 계정을 활성화해주세요.',
-    showLogin: true
+    showLogin: true,
   }
-  
+
   currentView.value = 'success'
 }
 
@@ -134,9 +134,9 @@ const handleResetSent = (message) => {
   successMessage.value = {
     title: '비밀번호 재설정 이메일 발송',
     text: message || '이메일을 확인하여 비밀번호를 재설정해주세요.',
-    showLogin: true
+    showLogin: true,
   }
-  
+
   currentView.value = 'success'
 }
 
@@ -154,7 +154,7 @@ onMounted(() => {
 <style scoped>
 .auth-view {
   min-height: 100vh;
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5F0E8 100%);
+  background: linear-gradient(135deg, #fff8f0 0%, #f5f0e8 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -185,14 +185,14 @@ onMounted(() => {
 .brand-name {
   font-size: 3rem;
   font-weight: 800;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
   letter-spacing: -0.02em;
 }
 
 .brand-tagline {
   font-size: 1.1rem;
-  color: #A0796A;
+  color: #a0796a;
   font-weight: 500;
 }
 
@@ -223,18 +223,18 @@ onMounted(() => {
 .success-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1rem;
 }
 
 .success-text {
-  color: #A0796A;
+  color: #a0796a;
   line-height: 1.6;
   margin-bottom: 2rem;
 }
 
 .success-button {
-  background: #7C5842;
+  background: #7c5842;
   color: white;
   border: none;
   border-radius: 8px;
@@ -246,7 +246,7 @@ onMounted(() => {
 }
 
 .success-button:hover {
-  background: #5D3F2E;
+  background: #5d3f2e;
   transform: translateY(-1px);
 }
 
@@ -261,7 +261,7 @@ onMounted(() => {
 .features-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -278,7 +278,7 @@ onMounted(() => {
   gap: 1rem;
   padding: 1rem;
   border-radius: 12px;
-  background: #F8F4F0;
+  background: #f8f4f0;
   transition: transform 0.2s ease;
 }
 
@@ -305,12 +305,12 @@ onMounted(() => {
 .feature-name {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.25rem;
 }
 
 .feature-desc {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.9rem;
   line-height: 1.4;
 }
@@ -322,11 +322,11 @@ onMounted(() => {
     max-width: 500px;
     gap: 2rem;
   }
-  
+
   .features-preview {
     order: -1;
   }
-  
+
   .features-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -336,23 +336,23 @@ onMounted(() => {
   .auth-view {
     padding: 0.5rem;
   }
-  
+
   .auth-container {
     gap: 1.5rem;
   }
-  
+
   .brand-name {
     font-size: 2.5rem;
   }
-  
+
   .brand-tagline {
     font-size: 1rem;
   }
-  
+
   .features-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .features-preview {
     padding: 1.5rem;
   }
@@ -364,7 +364,7 @@ onMounted(() => {
     text-align: center;
     padding: 1.5rem 1rem;
   }
-  
+
   .feature-icon {
     width: 50px;
     height: 50px;

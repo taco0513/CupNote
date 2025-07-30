@@ -2,9 +2,7 @@
   <div class="pro-qc-report-view">
     <!-- Header -->
     <header class="screen-header">
-      <button class="back-btn" @click="$router.push('/result')">
-        ←
-      </button>
+      <button class="back-btn" @click="$router.push('/result')">←</button>
       <h1 class="screen-title">Pro QC 종합 리포트</h1>
       <div class="progress-bar">
         <div class="progress-fill" :style="{ width: '100%' }"></div>
@@ -26,10 +24,15 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Overall Quality Score -->
         <div class="overall-score">
-          <div class="score-circle" :style="{ background: `conic-gradient(${overallScoreColor} ${overallScorePercent}%, #e0e0e0 0%)` }">
+          <div
+            class="score-circle"
+            :style="{
+              background: `conic-gradient(${overallScoreColor} ${overallScorePercent}%, #e0e0e0 0%)`,
+            }"
+          >
             <div class="score-inner">
               <span class="score-value">{{ overallQualityScore }}</span>
               <span class="score-unit">/5.0</span>
@@ -49,7 +52,7 @@
       <!-- SCA Compliance Analysis -->
       <section class="compliance-section">
         <h2 class="section-title">SCA 표준 준수 분석</h2>
-        
+
         <div class="compliance-overview">
           <div class="compliance-score">
             <span class="compliance-value">{{ scaComplianceScore }}%</span>
@@ -61,7 +64,7 @@
         </div>
 
         <div class="compliance-breakdown">
-          <div class="compliance-item" :class="{ 'compliant': brewingCompliance.ratio }">
+          <div class="compliance-item" :class="{ compliant: brewingCompliance.ratio }">
             <div class="item-header">
               <span class="item-icon">⚖️</span>
               <span class="item-title">추출 비율</span>
@@ -69,8 +72,8 @@
             <div class="item-value">{{ brewRatioValue }}</div>
             <div class="item-status">{{ brewingCompliance.ratio ? '적합' : '부적합' }}</div>
           </div>
-          
-          <div class="compliance-item" :class="{ 'compliant': brewingCompliance.temperature }">
+
+          <div class="compliance-item" :class="{ compliant: brewingCompliance.temperature }">
             <div class="item-header">
               <span class="item-icon">🌡️</span>
               <span class="item-title">추출 온도</span>
@@ -78,8 +81,8 @@
             <div class="item-value">{{ waterTemperature }}°C</div>
             <div class="item-status">{{ brewingCompliance.temperature ? '적합' : '부적합' }}</div>
           </div>
-          
-          <div class="compliance-item" :class="{ 'compliant': brewingCompliance.water_quality }">
+
+          <div class="compliance-item" :class="{ compliant: brewingCompliance.water_quality }">
             <div class="item-header">
               <span class="item-icon">💧</span>
               <span class="item-title">물 품질</span>
@@ -93,7 +96,7 @@
       <!-- Extraction Analysis -->
       <section class="extraction-section">
         <h2 class="section-title">추출 분석</h2>
-        
+
         <div class="extraction-metrics">
           <div class="metric-card">
             <div class="metric-header">
@@ -145,7 +148,7 @@
       <!-- Quality Predictions -->
       <section class="prediction-section">
         <h2 class="section-title">품질 예측 분석</h2>
-        
+
         <div class="prediction-grid">
           <div class="prediction-card">
             <h3 class="prediction-title">추출 품질 예측</h3>
@@ -178,7 +181,7 @@
       <!-- Environmental Conditions -->
       <section class="environment-section">
         <h2 class="section-title">환경 조건</h2>
-        
+
         <div class="environment-grid">
           <div class="env-item">
             <span class="env-label">실내 온도</span>
@@ -202,7 +205,7 @@
       <!-- Equipment Information -->
       <section class="equipment-section">
         <h2 class="section-title">장비 정보</h2>
-        
+
         <div class="equipment-details">
           <div class="equipment-item">
             <span class="equipment-label">추출 방법</span>
@@ -239,14 +242,12 @@
 
     <!-- Action Buttons -->
     <div class="action-buttons">
-      <button type="button" class="btn-secondary" @click="$router.push('/result')">
-        돌아가기
-      </button>
+      <button type="button" class="btn-secondary" @click="$router.push('/result')">돌아가기</button>
       <button type="button" class="btn-export" @click="showExportMenu = !showExportMenu">
         <span class="export-icon">📤</span>
         리포트 내보내기
       </button>
-      
+
       <!-- Export Menu -->
       <div v-if="showExportMenu" class="export-menu">
         <button @click="exportAsJSON" class="export-option">
@@ -266,9 +267,7 @@
           전체 내보내기
         </button>
       </div>
-      <button type="button" class="btn-primary" @click="saveReport">
-        리포트 저장
-      </button>
+      <button type="button" class="btn-primary" @click="saveReport">리포트 저장</button>
     </div>
   </div>
 </template>
@@ -277,21 +276,21 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTastingSessionStore } from '../../stores/tastingSession'
-import { 
-  calculateScaComplianceScore, 
-  predictQualityScore, 
+import {
+  calculateScaComplianceScore,
+  predictQualityScore,
   evaluateExtractionYield,
   getComplianceGrade,
   generateRecommendations,
   validateBrewTime,
-  formatBrewTime
+  formatBrewTime,
 } from '../../utils/scaCalculations'
-import { 
-  exportReport as exportReportUtil, 
-  printPDFReport, 
-  downloadFile, 
+import {
+  exportReport as exportReportUtil,
+  printPDFReport,
+  downloadFile,
   generateFilename,
-  generateReportData 
+  generateReportData,
 } from '../../utils/reportGenerator'
 
 const router = useRouter()
@@ -377,7 +376,7 @@ const confidenceLevel = computed(() => {
   if (waterTemperature.value) dataPoints++
   if (brewRatio.value) dataPoints++
   if (totalBrewTime.value) dataPoints++
-  
+
   return Math.round((dataPoints / 5) * 100)
 })
 
@@ -429,19 +428,25 @@ const tdsStatusText = computed(() => {
 })
 
 const timeStatusClass = computed(() => {
-  const timeValidation = validateBrewTime(parseTimeToSeconds(totalBrewTime.value), extractionMethod.value)
+  const timeValidation = validateBrewTime(
+    parseTimeToSeconds(totalBrewTime.value),
+    extractionMethod.value,
+  )
   return timeValidation.valid ? 'optimal' : 'suboptimal'
 })
 
 const timeStatusText = computed(() => {
-  const timeValidation = validateBrewTime(parseTimeToSeconds(totalBrewTime.value), extractionMethod.value)
+  const timeValidation = validateBrewTime(
+    parseTimeToSeconds(totalBrewTime.value),
+    extractionMethod.value,
+  )
   return timeValidation.valid ? '적정' : '범위 벗어남'
 })
 
 // Quality factors and recommendations
 const qualityFactors = computed(() => {
   const factors = []
-  
+
   if (scaComplianceScore.value >= 80) {
     factors.push('SCA 기준 우수 준수')
   } else if (scaComplianceScore.value >= 60) {
@@ -449,7 +454,7 @@ const qualityFactors = computed(() => {
   } else {
     factors.push('SCA 기준 개선 필요')
   }
-  
+
   if (tdsEnabled.value && tdsValue.value) {
     const evaluation = evaluateExtractionYield(extractionYield.value)
     if (evaluation.status === 'optimal') {
@@ -458,7 +463,7 @@ const qualityFactors = computed(() => {
       factors.push(evaluation.description)
     }
   }
-  
+
   return factors
 })
 
@@ -468,9 +473,9 @@ const recommendations = computed(() => {
     waterAmount: coffeeAmount.value * brewRatio.value,
     waterTemp: waterTemperature.value,
     waterTds: waterTds.value,
-    waterPh: waterPh.value
+    waterPh: waterPh.value,
   }
-  
+
   const complianceResult = calculateScaComplianceScore(brewingData)
   return generateRecommendations(complianceResult.evaluations)
 })
@@ -483,7 +488,7 @@ const getCurrentDateTime = () => {
     month: 'long',
     day: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   })
 }
 
@@ -493,7 +498,7 @@ const getTimeRangeForMethod = () => {
     pourover: '2:30 - 6:00',
     immersion: '4:00 - 8:00',
     pressure: '0:25 - 0:35',
-    'cold-brew': '12:00:00 - 24:00:00'
+    'cold-brew': '12:00:00 - 24:00:00',
   }
   return ranges[method] || '2:30 - 6:00'
 }
@@ -511,7 +516,7 @@ const getFilterTypeName = (type) => {
   const names = {
     paper: '종이 필터',
     metal: '메탈 필터',
-    cloth: '천 필터'
+    cloth: '천 필터',
   }
   return names[type] || type
 }
@@ -520,7 +525,7 @@ const getTdsDeviceName = (device) => {
   const names = {
     'atago-pal3': 'ATAGO PAL-3',
     'hanna-hi96801': 'Hanna HI96801',
-    'milwaukee-ma871': 'Milwaukee MA871'
+    'milwaukee-ma871': 'Milwaukee MA871',
   }
   return names[device] || device
 }
@@ -556,14 +561,14 @@ const saveReport = async () => {
       scaCompliance: scaComplianceScore.value,
       extractionYield: extractionYield.value,
       recommendations: recommendations.value,
-      confidenceLevel: confidenceLevel.value
+      confidenceLevel: confidenceLevel.value,
     }
-    
+
     tastingSessionStore.updateProQcReport(reportData)
-    
+
     // Show success message (could implement toast notification)
     alert('QC 리포트가 저장되었습니다.')
-    
+
     // Navigate back to results
     router.push('/result')
   } catch (error) {
@@ -578,7 +583,7 @@ const saveReport = async () => {
   max-width: 900px;
   margin: 0 auto;
   padding: 1rem;
-  background: linear-gradient(135deg, #F3F8FF 0%, #E8F4FD 100%);
+  background: linear-gradient(135deg, #f3f8ff 0%, #e8f4fd 100%);
   min-height: 100vh;
 }
 
@@ -597,7 +602,7 @@ const saveReport = async () => {
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: #1976D2;
+  color: #1976d2;
   cursor: pointer;
   width: 40px;
   height: 40px;
@@ -615,14 +620,14 @@ const saveReport = async () => {
 .screen-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #1976D2;
+  color: #1976d2;
   margin-bottom: 0.5rem;
 }
 
 .progress-bar {
   max-width: 300px;
   height: 4px;
-  background: #BBDEFB;
+  background: #bbdefb;
   border-radius: 2px;
   margin: 1rem auto 0;
   overflow: hidden;
@@ -630,7 +635,7 @@ const saveReport = async () => {
 
 .progress-fill {
   height: 100%;
-  background: #1976D2;
+  background: #1976d2;
   transition: width 0.3s ease;
 }
 
@@ -646,7 +651,7 @@ const saveReport = async () => {
   padding: 2rem;
   margin-bottom: 2rem;
   box-shadow: 0 4px 20px rgba(25, 118, 210, 0.1);
-  border: 1px solid #E3F2FD;
+  border: 1px solid #e3f2fd;
 }
 
 .summary-header {
@@ -668,7 +673,7 @@ const saveReport = async () => {
 .summary-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #1976D2;
+  color: #1976d2;
   margin: 0 0 0.5rem 0;
 }
 
@@ -688,7 +693,7 @@ const saveReport = async () => {
   font-weight: 600;
   color: #333;
   padding: 0.25rem 0.75rem;
-  background: #E3F2FD;
+  background: #e3f2fd;
   border-radius: 12px;
   font-size: 0.9rem;
 }
@@ -696,7 +701,7 @@ const saveReport = async () => {
 .coffee-origin {
   color: #666;
   padding: 0.25rem 0.75rem;
-  background: #F5F5F5;
+  background: #f5f5f5;
   border-radius: 12px;
   font-size: 0.9rem;
 }
@@ -707,7 +712,7 @@ const saveReport = async () => {
   align-items: center;
   gap: 2rem;
   padding: 1.5rem;
-  background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
   border-radius: 16px;
 }
 
@@ -737,7 +742,7 @@ const saveReport = async () => {
 .score-value {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #1976D2;
+  color: #1976d2;
 }
 
 .score-unit {
@@ -753,7 +758,7 @@ const saveReport = async () => {
 .score-title {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #1976D2;
+  color: #1976d2;
   margin: 0 0 0.5rem 0;
 }
 
@@ -776,7 +781,7 @@ const saveReport = async () => {
 
 .confidence-value {
   font-weight: 600;
-  color: #1976D2;
+  color: #1976d2;
 }
 
 /* Section Styles */
@@ -791,15 +796,15 @@ const saveReport = async () => {
   padding: 1.5rem;
   margin-bottom: 1.5rem;
   box-shadow: 0 2px 10px rgba(25, 118, 210, 0.1);
-  border: 1px solid #E3F2FD;
+  border: 1px solid #e3f2fd;
 }
 
 .section-title {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #1976D2;
+  color: #1976d2;
   margin-bottom: 1.5rem;
-  border-bottom: 2px solid #E3F2FD;
+  border-bottom: 2px solid #e3f2fd;
   padding-bottom: 0.5rem;
 }
 
@@ -810,7 +815,7 @@ const saveReport = async () => {
   justify-content: space-between;
   margin-bottom: 1.5rem;
   padding: 1rem;
-  background: #F8FBFF;
+  background: #f8fbff;
   border-radius: 12px;
 }
 
@@ -823,7 +828,7 @@ const saveReport = async () => {
 .compliance-value {
   font-size: 2rem;
   font-weight: 700;
-  color: #1976D2;
+  color: #1976d2;
 }
 
 .compliance-label {
@@ -839,23 +844,23 @@ const saveReport = async () => {
 }
 
 .compliance-grade.grade-a {
-  background: #E8F5E9;
-  color: #2E7D32;
+  background: #e8f5e9;
+  color: #2e7d32;
 }
 
 .compliance-grade.grade-b {
-  background: #E3F2FD;
-  color: #1976D2;
+  background: #e3f2fd;
+  color: #1976d2;
 }
 
 .compliance-grade.grade-c {
-  background: #FFF3E0;
-  color: #F57C00;
+  background: #fff3e0;
+  color: #f57c00;
 }
 
 .compliance-grade.grade-d {
-  background: #FFEBEE;
-  color: #D32F2F;
+  background: #ffebee;
+  color: #d32f2f;
 }
 
 /* Compliance Breakdown */
@@ -867,15 +872,15 @@ const saveReport = async () => {
 
 .compliance-item {
   padding: 1rem;
-  background: #F8FBFF;
+  background: #f8fbff;
   border-radius: 12px;
-  border: 2px solid #FFCDD2;
+  border: 2px solid #ffcdd2;
   text-align: center;
 }
 
 .compliance-item.compliant {
-  border-color: #C8E6C9;
-  background: #F1F8E9;
+  border-color: #c8e6c9;
+  background: #f1f8e9;
 }
 
 .item-header {
@@ -899,18 +904,18 @@ const saveReport = async () => {
 .item-value {
   font-size: 1rem;
   font-weight: 600;
-  color: #1976D2;
+  color: #1976d2;
   margin-bottom: 0.25rem;
 }
 
 .item-status {
   font-size: 0.8rem;
   font-weight: 600;
-  color: #D32F2F;
+  color: #d32f2f;
 }
 
 .compliance-item.compliant .item-status {
-  color: #2E7D32;
+  color: #2e7d32;
 }
 
 /* Extraction Metrics */
@@ -922,9 +927,9 @@ const saveReport = async () => {
 
 .metric-card {
   padding: 1.5rem;
-  background: #F8FBFF;
+  background: #f8fbff;
   border-radius: 12px;
-  border: 1px solid #E3F2FD;
+  border: 1px solid #e3f2fd;
   text-align: center;
 }
 
@@ -943,14 +948,14 @@ const saveReport = async () => {
 .metric-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #1976D2;
+  color: #1976d2;
   margin: 0;
 }
 
 .metric-value {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #1976D2;
+  color: #1976d2;
   margin-bottom: 0.5rem;
 }
 
@@ -964,22 +969,22 @@ const saveReport = async () => {
 
 .metric-status.under,
 .metric-status.suboptimal {
-  background: #FFEBEE;
-  color: #D32F2F;
+  background: #ffebee;
+  color: #d32f2f;
 }
 
 .metric-status.optimal {
-  background: #E8F5E9;
-  color: #2E7D32;
+  background: #e8f5e9;
+  color: #2e7d32;
 }
 
 .metric-status.over {
-  background: #FFF3E0;
-  color: #F57C00;
+  background: #fff3e0;
+  color: #f57c00;
 }
 
 .metric-status.not-measured {
-  background: #F5F5F5;
+  background: #f5f5f5;
   color: #666;
 }
 
@@ -997,7 +1002,7 @@ const saveReport = async () => {
 .range-value {
   font-size: 0.85rem;
   font-weight: 500;
-  color: #1976D2;
+  color: #1976d2;
 }
 
 /* Prediction Grid */
@@ -1009,15 +1014,15 @@ const saveReport = async () => {
 
 .prediction-card {
   padding: 1.5rem;
-  background: #F8FBFF;
+  background: #f8fbff;
   border-radius: 12px;
-  border: 1px solid #E3F2FD;
+  border: 1px solid #e3f2fd;
 }
 
 .prediction-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #1976D2;
+  color: #1976d2;
   margin: 0 0 1rem 0;
   text-align: center;
 }
@@ -1025,7 +1030,7 @@ const saveReport = async () => {
 .prediction-score {
   font-size: 2rem;
   font-weight: 700;
-  color: #1976D2;
+  color: #1976d2;
   text-align: center;
   margin-bottom: 1rem;
 }
@@ -1051,7 +1056,7 @@ const saveReport = async () => {
   font-size: 0.85rem;
   color: #666;
   padding: 0.25rem 0;
-  border-left: 3px solid #E3F2FD;
+  border-left: 3px solid #e3f2fd;
   padding-left: 0.75rem;
   margin-bottom: 0.25rem;
 }
@@ -1066,7 +1071,7 @@ const saveReport = async () => {
   padding: 1rem;
   background: white;
   border-radius: 8px;
-  border: 1px solid #E3F2FD;
+  border: 1px solid #e3f2fd;
 }
 
 .rec-header {
@@ -1083,7 +1088,7 @@ const saveReport = async () => {
 .rec-category {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #1976D2;
+  color: #1976d2;
 }
 
 .rec-text {
@@ -1105,7 +1110,7 @@ const saveReport = async () => {
   flex-direction: column;
   gap: 0.5rem;
   padding: 1rem;
-  background: #F8FBFF;
+  background: #f8fbff;
   border-radius: 12px;
   text-align: center;
 }
@@ -1118,7 +1123,7 @@ const saveReport = async () => {
 .env-value {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #1976D2;
+  color: #1976d2;
 }
 
 /* Equipment Details */
@@ -1134,7 +1139,7 @@ const saveReport = async () => {
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem;
-  background: #F8FBFF;
+  background: #f8fbff;
   border-radius: 8px;
 }
 
@@ -1146,19 +1151,19 @@ const saveReport = async () => {
 .equipment-value {
   font-size: 0.9rem;
   font-weight: 500;
-  color: #1976D2;
+  color: #1976d2;
 }
 
 .equipment-notes {
   padding: 1rem;
-  background: #F8FBFF;
+  background: #f8fbff;
   border-radius: 12px;
 }
 
 .notes-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #1976D2;
+  color: #1976d2;
   margin: 0 0 0.5rem 0;
 }
 
@@ -1199,40 +1204,40 @@ const saveReport = async () => {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #1976D2, #1565C0);
+  background: linear-gradient(135deg, #1976d2, #1565c0);
   color: white;
-  border-color: #1976D2;
+  border-color: #1976d2;
   flex: 1;
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #1565C0, #0D47A1);
-  border-color: #1565C0;
+  background: linear-gradient(135deg, #1565c0, #0d47a1);
+  border-color: #1565c0;
   transform: translateY(-1px);
 }
 
 .btn-secondary {
   background: white;
-  color: #1976D2;
-  border-color: #E3F2FD;
+  color: #1976d2;
+  border-color: #e3f2fd;
   flex: 1;
 }
 
 .btn-secondary:hover {
-  border-color: #BBDEFB;
+  border-color: #bbdefb;
   transform: translateY(-1px);
 }
 
 .btn-export {
-  background: linear-gradient(135deg, #4CAF50, #388E3C);
+  background: linear-gradient(135deg, #4caf50, #388e3c);
   color: white;
-  border-color: #4CAF50;
+  border-color: #4caf50;
   flex: 1;
 }
 
 .btn-export:hover {
-  background: linear-gradient(135deg, #388E3C, #2E7D32);
-  border-color: #388E3C;
+  background: linear-gradient(135deg, #388e3c, #2e7d32);
+  border-color: #388e3c;
   transform: translateY(-1px);
 }
 
@@ -1248,7 +1253,7 @@ const saveReport = async () => {
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(25, 118, 210, 0.15);
-  border: 1px solid #E3F2FD;
+  border: 1px solid #e3f2fd;
   padding: 0.5rem;
   margin-bottom: 0.5rem;
   z-index: 1000;
@@ -1265,14 +1270,14 @@ const saveReport = async () => {
   border: none;
   border-radius: 8px;
   font-size: 0.95rem;
-  color: #1976D2;
+  color: #1976d2;
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: left;
 }
 
 .export-option:hover {
-  background: #E3F2FD;
+  background: #e3f2fd;
   transform: translateX(2px);
 }
 
@@ -1288,7 +1293,7 @@ const saveReport = async () => {
     text-align: center;
     gap: 1rem;
   }
-  
+
   .compliance-breakdown,
   .extraction-metrics,
   .prediction-grid,
@@ -1296,16 +1301,16 @@ const saveReport = async () => {
   .equipment-details {
     grid-template-columns: 1fr;
   }
-  
+
   .action-buttons {
     flex-direction: column;
   }
-  
+
   .compliance-overview {
     flex-direction: column;
     gap: 1rem;
   }
-  
+
   .export-menu {
     right: 1rem;
     left: 1rem;

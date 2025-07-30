@@ -11,18 +11,15 @@ Claude의 잠재력을 최대한 활용하기 위한 고급 프롬프팅 전략�
 ```typescript
 // 복잡한 문제 해결을 위한 단계별 접근
 interface ChainOfThoughtPrompt {
-  problem: ProblemDefinition;
-  steps: ThinkingStep[];
-  constraints: Constraint[];
-  expectedOutput: OutputSpecification;
+  problem: ProblemDefinition
+  steps: ThinkingStep[]
+  constraints: Constraint[]
+  expectedOutput: OutputSpecification
 }
 
 class AdvancedPromptingEngine {
   // 체인 오브 씽킹 프롬프트 생성
-  async createChainOfThoughtPrompt(
-    problem: ComplexProblem
-  ): Promise<StructuredPrompt> {
-
+  async createChainOfThoughtPrompt(problem: ComplexProblem): Promise<StructuredPrompt> {
     const prompt = `
     문제를 해결하기 위해 다음 단계를 따라주세요:
 
@@ -54,14 +51,14 @@ class AdvancedPromptingEngine {
     문제: ${problem.description}
     제약사항: ${problem.constraints.join(', ')}
     기대 결과: ${problem.expectedOutcome}
-    `;
+    `
 
     return {
       prompt,
       structure: 'chain-of-thought',
       estimatedTokens: this.estimateTokenUsage(prompt),
-      validationCriteria: await this.defineValidationCriteria(problem)
-    };
+      validationCriteria: await this.defineValidationCriteria(problem),
+    }
   }
 
   // 재귀적 추론 프롬프트
@@ -69,9 +66,8 @@ class AdvancedPromptingEngine {
     problem: ComplexProblem,
     depth: number = 3
   ): Promise<RecursivePrompt> {
-
-    const baseCase = await this.identifyBaseCase(problem);
-    const recursivePattern = await this.identifyRecursivePattern(problem);
+    const baseCase = await this.identifyBaseCase(problem)
+    const recursivePattern = await this.identifyRecursivePattern(problem)
 
     const prompt = `
     이 문제를 재귀적으로 접근해주세요:
@@ -92,15 +88,15 @@ class AdvancedPromptingEngine {
     - 현재 문제의 범위
     - 하위 문제로의 분해 방법
     - 결과 통합 전략
-    `;
+    `
 
     return {
       prompt,
       baseCase,
       recursivePattern,
       maxDepth: depth,
-      terminationCondition: this.defineTerminationCondition(problem)
-    };
+      terminationCondition: this.defineTerminationCondition(problem),
+    }
   }
 }
 ```
@@ -111,10 +107,7 @@ class AdvancedPromptingEngine {
 // 코드와 시각적 표현을 결합한 추론
 class MultiModalReasoningPrompts {
   // 다이어그램 기반 시스템 설계
-  async createDiagramBasedPrompt(
-    systemRequirements: SystemRequirements
-  ): Promise<DiagramPrompt> {
-
+  async createDiagramBasedPrompt(systemRequirements: SystemRequirements): Promise<DiagramPrompt> {
     const prompt = `
     다음 시스템을 설계하고 구현해주세요:
 
@@ -147,13 +140,13 @@ class MultiModalReasoningPrompts {
 
     비기능적 요구사항:
     ${systemRequirements.nonFunctional.map(req => `- ${req}`).join('\n')}
-    `;
+    `
 
     return {
       prompt,
       expectedDiagrams: ['architecture', 'sequence', 'class'],
-      codeStructure: await this.suggestCodeStructure(systemRequirements)
-    };
+      codeStructure: await this.suggestCodeStructure(systemRequirements),
+    }
   }
 
   // 코드 진화 시각화
@@ -161,9 +154,8 @@ class MultiModalReasoningPrompts {
     codeBase: CodeBase,
     evolutionGoals: EvolutionGoal[]
   ): Promise<EvolutionPrompt> {
-
-    const currentState = await this.analyzeCurrentCode(codeBase);
-    const targetState = await this.defineTargetState(evolutionGoals);
+    const currentState = await this.analyzeCurrentCode(codeBase)
+    const targetState = await this.defineTargetState(evolutionGoals)
 
     const prompt = `
     현재 코드를 목표 상태로 진화시켜주세요:
@@ -174,12 +166,16 @@ class MultiModalReasoningPrompts {
     \`\`\`
 
     진화 목표:
-    ${evolutionGoals.map((goal, i) => `
+    ${evolutionGoals
+      .map(
+        (goal, i) => `
     ${i + 1}. ${goal.description}
        - 현재: ${goal.currentMetric}
        - 목표: ${goal.targetMetric}
        - 전략: ${goal.suggestedApproach}
-    `).join('\n')}
+    `
+      )
+      .join('\n')}
 
     단계별 진화 경로:
     1. 리팩토링 준비
@@ -198,15 +194,15 @@ class MultiModalReasoningPrompts {
        - 문서화
 
     각 단계에서 before/after 비교와 개선 이유를 명확히 설명해주세요.
-    `;
+    `
 
     return {
       prompt,
       currentState,
       targetState,
       evolutionPath: await this.planEvolutionPath(currentState, targetState),
-      validationMetrics: this.defineValidationMetrics(evolutionGoals)
-    };
+      validationMetrics: this.defineValidationMetrics(evolutionGoals),
+    }
   }
 }
 ```
@@ -218,23 +214,19 @@ class MultiModalReasoningPrompts {
 ```typescript
 // 실시간 컨텍스트 증강 시스템
 class ContextAugmentationEngine {
-  private contextStore: ContextStore;
-  private relevanceCalculator: RelevanceCalculator;
+  private contextStore: ContextStore
+  private relevanceCalculator: RelevanceCalculator
 
   // 적응형 컨텍스트 프롬프트
   async createAdaptiveContextPrompt(
     task: DevelopmentTask,
     availableContext: AvailableContext
   ): Promise<AugmentedPrompt> {
-
     // 작업 관련성에 따른 컨텍스트 선택
-    const relevantContext = await this.selectRelevantContext(
-      task,
-      availableContext
-    );
+    const relevantContext = await this.selectRelevantContext(task, availableContext)
 
     // 우선순위별 컨텍스트 구성
-    const prioritizedContext = this.prioritizeContext(relevantContext);
+    const prioritizedContext = this.prioritizeContext(relevantContext)
 
     const prompt = `
     [핵심 컨텍스트]
@@ -244,35 +236,40 @@ class ContextAugmentationEngine {
     ${task.description}
 
     [관련 코드베이스 정보]
-    ${prioritizedContext.codebase.map(info => `
+    ${prioritizedContext.codebase
+      .map(
+        info => `
     파일: ${info.file}
     역할: ${info.purpose}
     주요 함수: ${info.keyFunctions.join(', ')}
-    `).join('\n')}
+    `
+      )
+      .join('\n')}
 
     [프로젝트 규칙]
     ${prioritizedContext.conventions.map(rule => `- ${rule}`).join('\n')}
 
     [참고할 패턴]
-    ${prioritizedContext.patterns.map(pattern => `
+    ${prioritizedContext.patterns
+      .map(
+        pattern => `
     패턴: ${pattern.name}
     용도: ${pattern.usage}
     예제: ${pattern.example}
-    `).join('\n')}
+    `
+      )
+      .join('\n')}
 
     위 컨텍스트를 고려하여 다음 작업을 수행해주세요:
     ${task.specificInstructions}
-    `;
+    `
 
     return {
       prompt,
       contextUsage: this.calculateContextUsage(prioritizedContext),
-      relevanceScore: await this.calculateRelevanceScore(
-        prioritizedContext,
-        task
-      ),
-      fallbackContext: this.prepareFallbackContext(availableContext)
-    };
+      relevanceScore: await this.calculateRelevanceScore(prioritizedContext, task),
+      fallbackContext: this.prepareFallbackContext(availableContext),
+    }
   }
 
   // 점진적 컨텍스트 확장
@@ -280,20 +277,19 @@ class ContextAugmentationEngine {
     initialTask: Task,
     contextLevels: ContextLevel[]
   ): Promise<ProgressivePrompt> {
-
-    const prompts: LeveledPrompt[] = [];
+    const prompts: LeveledPrompt[] = []
 
     for (const level of contextLevels) {
-      const levelPrompt = await this.createLevelPrompt(initialTask, level);
-      prompts.push(levelPrompt);
+      const levelPrompt = await this.createLevelPrompt(initialTask, level)
+      prompts.push(levelPrompt)
     }
 
     return {
       initialPrompt: prompts[0],
       expansionPrompts: prompts.slice(1),
       expansionTriggers: this.defineExpansionTriggers(contextLevels),
-      maxExpansionDepth: contextLevels.length
-    };
+      maxExpansionDepth: contextLevels.length,
+    }
   }
 }
 ```
@@ -308,7 +304,6 @@ class MetaPromptingStrategies {
     initialPrompt: string,
     qualityCriteria: QualityCriteria
   ): Promise<MetaPrompt> {
-
     const metaPrompt = `
     다음 프롬프트를 분석하고 개선해주세요:
 
@@ -332,15 +327,15 @@ class MetaPromptingStrategies {
     - 개선된 프롬프트가 원본 목적을 달성하는가?
     - 추가된 내용이 가치를 제공하는가?
     - 제거된 내용이 정말 불필요했는가?
-    `;
+    `
 
     return {
       metaPrompt,
       originalPrompt: initialPrompt,
       improvementCriteria: qualityCriteria,
       iterationLimit: 3,
-      convergenceThreshold: 0.9
-    };
+      convergenceThreshold: 0.9,
+    }
   }
 
   // 도메인 특화 프롬프트 템플릿 생성
@@ -348,7 +343,6 @@ class MetaPromptingStrategies {
     domain: DevelopmentDomain,
     taskTypes: TaskType[]
   ): Promise<PromptTemplate> {
-
     const templatePrompt = `
     ${domain} 도메인의 ${taskTypes.join(', ')} 작업을 위한
     프롬프트 템플릿을 생성해주세요.
@@ -380,17 +374,14 @@ class MetaPromptingStrategies {
       expectedOutput: "..."
     });
     \`\`\`
-    `;
+    `
 
     return {
       generationPrompt: templatePrompt,
       domain,
       supportedTaskTypes: taskTypes,
-      customizationPoints: await this.identifyCustomizationPoints(
-        domain,
-        taskTypes
-      )
-    };
+      customizationPoints: await this.identifyCustomizationPoints(domain, taskTypes),
+    }
   }
 }
 ```
@@ -407,7 +398,6 @@ class CreativeProblemSolvingPrompts {
     problem: Problem,
     constraints: Constraint[]
   ): Promise<BrainstormingPrompt> {
-
     const prompt = `
     다음 문제에 대해 창의적인 해결책을 브레인스토밍해주세요:
 
@@ -440,14 +430,14 @@ class CreativeProblemSolvingPrompts {
 
     제약사항: ${constraints.map(c => c.description).join(', ')}
     (단, 초기 아이디어 생성 시에는 제약을 느슨하게 해석)
-    `;
+    `
 
     return {
       prompt,
       expectedIdeas: 10,
       evaluationCriteria: this.defineEvaluationCriteria(),
-      refinementStrategy: 'convergent-selection'
-    };
+      refinementStrategy: 'convergent-selection',
+    }
   }
 
   // 아날로지 기반 문제 해결
@@ -455,8 +445,7 @@ class CreativeProblemSolvingPrompts {
     problem: Problem,
     sourceDomains: Domain[]
   ): Promise<AnalogyPrompt> {
-
-    const analogies = await this.findPotentialAnalogies(problem, sourceDomains);
+    const analogies = await this.findPotentialAnalogies(problem, sourceDomains)
 
     const prompt = `
     다른 도메인의 해결책을 현재 문제에 적용해보세요:
@@ -467,7 +456,9 @@ class CreativeProblemSolvingPrompts {
     핵심 도전: ${problem.coreChallenge}
 
     [참고 도메인과 아날로지]
-    ${analogies.map(analogy => `
+    ${analogies
+      .map(
+        analogy => `
     ${analogy.sourceDomain}에서의 유사 문제:
     - 문제: ${analogy.sourceProblem}
     - 해결책: ${analogy.sourceSolution}
@@ -477,7 +468,9 @@ class CreativeProblemSolvingPrompts {
     1. 핵심 원리를 현재 도메인으로 변환
     2. 필요한 조정사항 식별
     3. 구체적 구현 방안 제시
-    `).join('\n---\n')}
+    `
+      )
+      .join('\n---\n')}
 
     [창의적 적용]
     각 아날로지에 대해:
@@ -486,14 +479,14 @@ class CreativeProblemSolvingPrompts {
     3. 영감 적용: 원리만 차용하여 새로운 해결책
 
     가장 유망한 3가지 접근법을 상세히 개발해주세요.
-    `;
+    `
 
     return {
       prompt,
       analogies,
       transferStrategies: ['direct', 'adapted', 'inspired'],
-      evaluationFramework: this.createAnalogyEvaluationFramework()
-    };
+      evaluationFramework: this.createAnalogyEvaluationFramework(),
+    }
   }
 }
 ```
@@ -508,7 +501,6 @@ class ConstraintBasedCreativity {
     task: Task,
     extremeConstraints: ExtremeConstraint[]
   ): Promise<ConstraintPrompt> {
-
     const prompt = `
     다음의 극단적 제약 조건 하에서 창의적 해결책을 찾아주세요:
 
@@ -516,12 +508,16 @@ class ConstraintBasedCreativity {
     ${task.description}
 
     [극단적 제약]
-    ${extremeConstraints.map(constraint => `
+    ${extremeConstraints
+      .map(
+        constraint => `
     ${constraint.name}:
     - 일반적 수준: ${constraint.normalLevel}
     - 극단적 수준: ${constraint.extremeLevel}
     - 도전 요소: ${constraint.challenge}
-    `).join('\n')}
+    `
+      )
+      .join('\n')}
 
     [창의적 접근 전략]
     1. 제약을 장점으로 전환
@@ -545,31 +541,34 @@ class ConstraintBasedCreativity {
     - 모든 제약 충족 방법
     - 예상치 못한 이점
     - 구현 전략
-    `;
+    `
 
     return {
       prompt,
       constraints: extremeConstraints,
       creativityMetrics: this.defineCreativityMetrics(),
-      feasibilityThreshold: 0.6
-    };
+      feasibilityThreshold: 0.6,
+    }
   }
 
   // 역설적 요구사항 해결
   async createParadoxicalRequirementsPrompt(
     requirements: ParadoxicalRequirement[]
   ): Promise<ParadoxPrompt> {
-
     const prompt = `
     서로 모순되는 것처럼 보이는 요구사항들을 동시에 만족시켜주세요:
 
     [역설적 요구사항]
-    ${requirements.map(req => `
+    ${requirements
+      .map(
+        req => `
     ${req.name}:
     - 요구 A: ${req.requirementA}
     - 요구 B: ${req.requirementB}
     - 표면적 모순: ${req.apparentContradiction}
-    `).join('\n')}
+    `
+      )
+      .join('\n')}
 
     [해결 전략]
     1. 차원 분리
@@ -590,14 +589,14 @@ class ConstraintBasedCreativity {
        - 기술적 돌파구
 
     각 모순에 대한 해결책과 구현 코드를 제시해주세요.
-    `;
+    `
 
     return {
       prompt,
       paradoxes: requirements,
       resolutionStrategies: ['separation', 'integration', 'reinterpretation', 'innovation'],
-      validationCriteria: this.createParadoxResolutionCriteria()
-    };
+      validationCriteria: this.createParadoxResolutionCriteria(),
+    }
   }
 }
 ```
@@ -610,13 +609,9 @@ class ConstraintBasedCreativity {
 // 토큰 효율적인 프롬프트 설계
 class EfficientPromptingStrategies {
   // 압축 프롬프트 생성
-  async createCompressedPrompt(
-    task: Task,
-    tokenLimit: number
-  ): Promise<CompressedPrompt> {
-
-    const essentials = await this.extractEssentials(task);
-    const abbreviations = this.createAbbreviationMap(essentials);
+  async createCompressedPrompt(task: Task, tokenLimit: number): Promise<CompressedPrompt> {
+    const essentials = await this.extractEssentials(task)
+    const abbreviations = this.createAbbreviationMap(essentials)
 
     const prompt = `
     [간결 모드 활성화]
@@ -624,12 +619,12 @@ class EfficientPromptingStrategies {
     작업: ${this.compressDescription(task.description)}
 
     약어:
-    ${Object.entries(abbreviations).map(([full, abbr]) =>
-      `${abbr}=${full}`
-    ).join(', ')}
+    ${Object.entries(abbreviations)
+      .map(([full, abbr]) => `${abbr}=${full}`)
+      .join(', ')}
 
     요구사항:
-    ${essentials.requirements.map((req, i) => `R${i+1}: ${req}`).join('\n')}
+    ${essentials.requirements.map((req, i) => `R${i + 1}: ${req}`).join('\n')}
 
     출력 형식:
     - 코드: 주석 최소화, 핵심 로직만
@@ -637,15 +632,15 @@ class EfficientPromptingStrategies {
     - 구조: 계층적, 번호 매기기
 
     ${this.compressedContext(task.context, abbreviations)}
-    `;
+    `
 
     return {
       prompt,
       estimatedTokens: this.estimateTokens(prompt),
       compressionRatio: this.calculateCompressionRatio(task, prompt),
       abbreviations,
-      expansionGuide: this.createExpansionGuide(abbreviations)
-    };
+      expansionGuide: this.createExpansionGuide(abbreviations),
+    }
   }
 
   // 점진적 상세화 프롬프트
@@ -653,20 +648,19 @@ class EfficientPromptingStrategies {
     task: Task,
     detailLevels: DetailLevel[]
   ): Promise<ProgressivePrompt> {
-
     const prompts = detailLevels.map(level => ({
       level: level.name,
       prompt: this.createLevelSpecificPrompt(task, level),
       expectedTokens: level.targetTokens,
-      focusAreas: level.focusAreas
-    }));
+      focusAreas: level.focusAreas,
+    }))
 
     return {
       overviewPrompt: prompts[0],
       detailPrompts: prompts.slice(1),
       transitionTriggers: this.defineTransitionTriggers(detailLevels),
-      tokenBudget: detailLevels.reduce((sum, level) => sum + level.targetTokens, 0)
-    };
+      tokenBudget: detailLevels.reduce((sum, level) => sum + level.targetTokens, 0),
+    }
   }
 }
 ```
@@ -729,7 +723,7 @@ const PROMPT_PATTERNS = {
       - 성능: 효율성과 최적화
       - 보안: 취약점과 방어
       각 항목에 대해 구체적 예시와 개선안을 제시
-    `
+    `,
   },
 
   // 생성형 패턴
@@ -750,7 +744,7 @@ const PROMPT_PATTERNS = {
       Phase 3: 최적화 (성능)
       Phase 4: 일반화 (재사용)
       각 단계별 구체적 변경사항과 이유 설명
-    `
+    `,
   },
 
   // 학습형 패턴
@@ -771,9 +765,9 @@ const PROMPT_PATTERNS = {
       - 성능/복잡도 비교
       - 실제 코드 예시
       - 추천 선택 기준
-    `
-  }
-};
+    `,
+  },
+}
 ```
 
 ### 프롬프트 조합 전략
@@ -786,12 +780,11 @@ class PromptCompositionStrategy {
     topic: Topic,
     perspectives: Perspective[]
   ): Promise<CompositePrompt> {
-
     const sections = perspectives.map(perspective => ({
       viewpoint: perspective.name,
       prompt: this.createPerspectiveSection(topic, perspective),
-      weight: perspective.importance
-    }));
+      weight: perspective.importance,
+    }))
 
     const synthesisPrompt = `
     위의 모든 관점을 종합하여:
@@ -799,13 +792,13 @@ class PromptCompositionStrategy {
     2. 상충되는 부분과 해결
     3. 통합된 해결책
     4. 각 관점의 기여도
-    `;
+    `
 
     return {
       sections,
       synthesisPrompt,
-      integrationStrategy: 'weighted-consensus'
-    };
+      integrationStrategy: 'weighted-consensus',
+    }
   }
 
   // 반복적 개선 프롬프트
@@ -813,7 +806,6 @@ class PromptCompositionStrategy {
     initialSolution: Solution,
     refinementCriteria: Criteria[]
   ): Promise<RefinementPrompt> {
-
     const iterations = refinementCriteria.map((criterion, index) => ({
       iteration: index + 1,
       focus: criterion.name,
@@ -824,15 +816,15 @@ class PromptCompositionStrategy {
         - 구체적 변경사항
         - 개선 효과 측정
       `,
-      validationMetric: criterion.metric
-    }));
+      validationMetric: criterion.metric,
+    }))
 
     return {
       baselineSolution: initialSolution,
       iterations,
       convergenceCriteria: this.defineConvergence(refinementCriteria),
-      maxIterations: 5
-    };
+      maxIterations: 5,
+    }
   }
 }
 ```

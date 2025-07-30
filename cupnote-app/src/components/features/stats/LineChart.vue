@@ -15,7 +15,7 @@ import {
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
 } from 'chart.js'
 
 // Register Chart.js components
@@ -27,30 +27,30 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
 )
 
 const props = defineProps({
   chartId: {
     type: String,
-    required: true
+    required: true,
   },
   data: {
     type: Object,
-    required: true
+    required: true,
   },
   options: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
   },
   width: {
     type: Number,
-    default: 400
+    default: 400,
   },
   height: {
     type: Number,
-    default: 200
-  }
+    default: 200,
+  },
 })
 
 let chart = null
@@ -60,7 +60,7 @@ const defaultOptions = {
   maintainAspectRatio: false,
   plugins: {
     legend: {
-      display: false
+      display: false,
     },
     tooltip: {
       backgroundColor: 'rgba(124, 88, 66, 0.9)',
@@ -71,27 +71,27 @@ const defaultOptions = {
       cornerRadius: 8,
       displayColors: false,
       callbacks: {
-        title: function(context) {
+        title: function (context) {
           return context[0].label
         },
-        label: function(context) {
+        label: function (context) {
           return `점수: ${context.parsed.y}점`
-        }
-      }
-    }
+        },
+      },
+    },
   },
   scales: {
     x: {
       display: true,
       grid: {
-        display: false
+        display: false,
       },
       ticks: {
         color: '#A0796A',
         font: {
-          size: 12
-        }
-      }
+          size: 12,
+        },
+      },
     },
     y: {
       display: true,
@@ -99,18 +99,18 @@ const defaultOptions = {
       max: 100,
       grid: {
         color: 'rgba(160, 121, 106, 0.1)',
-        drawBorder: false
+        drawBorder: false,
       },
       ticks: {
         color: '#A0796A',
         font: {
-          size: 12
+          size: 12,
         },
-        callback: function(value) {
+        callback: function (value) {
           return value + '점'
-        }
-      }
-    }
+        },
+      },
+    },
   },
   elements: {
     line: {
@@ -118,7 +118,7 @@ const defaultOptions = {
       borderWidth: 3,
       borderColor: '#7C5842',
       backgroundColor: 'rgba(124, 88, 66, 0.1)',
-      fill: true
+      fill: true,
     },
     point: {
       radius: 6,
@@ -128,40 +128,40 @@ const defaultOptions = {
       borderWidth: 2,
       hoverBackgroundColor: '#5D3F2E',
       hoverBorderColor: '#fff',
-      hoverBorderWidth: 3
-    }
+      hoverBorderWidth: 3,
+    },
   },
   interaction: {
     intersect: false,
-    mode: 'index'
+    mode: 'index',
   },
   animation: {
     duration: 1000,
-    easing: 'easeOutQuart'
-  }
+    easing: 'easeOutQuart',
+  },
 }
 
 const initChart = async () => {
   await nextTick()
-  
+
   const canvas = document.getElementById(props.chartId)
   if (!canvas) return
-  
+
   const ctx = canvas.getContext('2d')
-  
+
   if (chart) {
     chart.destroy()
   }
-  
+
   const mergedOptions = {
     ...defaultOptions,
-    ...props.options
+    ...props.options,
   }
-  
+
   chart = new ChartJS(ctx, {
     type: 'line',
     data: props.data,
-    options: mergedOptions
+    options: mergedOptions,
   })
 }
 
@@ -173,14 +173,22 @@ const updateChart = () => {
 }
 
 // Watch for data changes
-watch(() => props.data, () => {
-  updateChart()
-}, { deep: true })
+watch(
+  () => props.data,
+  () => {
+    updateChart()
+  },
+  { deep: true },
+)
 
 // Watch for options changes
-watch(() => props.options, () => {
-  initChart()
-}, { deep: true })
+watch(
+  () => props.options,
+  () => {
+    initChart()
+  },
+  { deep: true },
+)
 
 onMounted(() => {
   initChart()

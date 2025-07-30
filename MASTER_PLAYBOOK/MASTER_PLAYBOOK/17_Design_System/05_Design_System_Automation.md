@@ -182,16 +182,16 @@ jobs:
 
 ```javascript
 // scripts/build-tokens.js - 자동화된 토큰 빌드 시스템
-const StyleDictionary = require('style-dictionary');
-const fs = require('fs-extra');
-const path = require('path');
-const chokidar = require('chokidar');
+const StyleDictionary = require('style-dictionary')
+const fs = require('fs-extra')
+const path = require('path')
+const chokidar = require('chokidar')
 
 class DesignTokenBuilder {
   constructor(config) {
-    this.config = config;
-    this.setupTransforms();
-    this.setupFormats();
+    this.config = config
+    this.setupTransforms()
+    this.setupFormats()
   }
 
   setupTransforms() {
@@ -199,79 +199,79 @@ class DesignTokenBuilder {
     StyleDictionary.registerTransform({
       name: 'color/css-var',
       type: 'value',
-      matcher: (token) => token.type === 'color',
-      transformer: (token) => `var(--${token.name})`
-    });
+      matcher: token => token.type === 'color',
+      transformer: token => `var(--${token.name})`,
+    })
 
     // 간격 변환
     StyleDictionary.registerTransform({
       name: 'size/px',
       type: 'value',
-      matcher: (token) => token.type === 'dimension',
-      transformer: (token) => {
+      matcher: token => token.type === 'dimension',
+      transformer: token => {
         if (typeof token.original.value === 'number') {
-          return `${token.original.value}px`;
+          return `${token.original.value}px`
         }
-        return token.original.value;
-      }
-    });
+        return token.original.value
+      },
+    })
 
     // iOS 색상 변환
     StyleDictionary.registerTransform({
       name: 'color/ios-swift',
       type: 'value',
-      matcher: (token) => token.type === 'color',
-      transformer: (token) => {
-        const hex = token.value.replace('#', '');
-        const r = parseInt(hex.substr(0, 2), 16) / 255;
-        const g = parseInt(hex.substr(2, 2), 16) / 255;
-        const b = parseInt(hex.substr(4, 2), 16) / 255;
-        return `Color(red: ${r.toFixed(3)}, green: ${g.toFixed(3)}, blue: ${b.toFixed(3)})`;
-      }
-    });
+      matcher: token => token.type === 'color',
+      transformer: token => {
+        const hex = token.value.replace('#', '')
+        const r = parseInt(hex.substr(0, 2), 16) / 255
+        const g = parseInt(hex.substr(2, 2), 16) / 255
+        const b = parseInt(hex.substr(4, 2), 16) / 255
+        return `Color(red: ${r.toFixed(3)}, green: ${g.toFixed(3)}, blue: ${b.toFixed(3)})`
+      },
+    })
   }
 
   setupFormats() {
     // CSS 사용자 정의 속성
     StyleDictionary.registerFormat({
       name: 'css/custom-properties',
-      formatter: function(dictionary, config) {
+      formatter: function (dictionary, config) {
         const tokens = dictionary.allTokens
           .map(token => `  --${token.name}: ${token.value};`)
-          .join('\n');
+          .join('\n')
 
-        return `:root {\n${tokens}\n}\n\n/* Dark theme overrides */\n[data-theme="dark"] {\n  /* Add dark theme tokens here */\n}`;
-      }
-    });
+        return `:root {\n${tokens}\n}\n\n/* Dark theme overrides */\n[data-theme="dark"] {\n  /* Add dark theme tokens here */\n}`
+      },
+    })
 
     // TypeScript 인터페이스
     StyleDictionary.registerFormat({
       name: 'typescript/interfaces',
-      formatter: function(dictionary, config) {
-        const tokenTypes = [...new Set(dictionary.allTokens.map(t => t.type))];
+      formatter: function (dictionary, config) {
+        const tokenTypes = [...new Set(dictionary.allTokens.map(t => t.type))]
 
-        const interfaces = tokenTypes.map(type => {
-          const tokens = dictionary.allTokens.filter(t => t.type === type);
-          const properties = tokens.map(t => `  ${t.name}: string;`).join('\n');
+        const interfaces = tokenTypes
+          .map(type => {
+            const tokens = dictionary.allTokens.filter(t => t.type === type)
+            const properties = tokens.map(t => `  ${t.name}: string;`).join('\n')
 
-          return `export interface ${type.charAt(0).toUpperCase() + type.slice(1)}Tokens {\n${properties}\n}`;
-        }).join('\n\n');
+            return `export interface ${type.charAt(0).toUpperCase() + type.slice(1)}Tokens {\n${properties}\n}`
+          })
+          .join('\n\n')
 
-        const allTokens = dictionary.allTokens
-          .map(t => `  ${t.name}: '${t.value}'`)
-          .join(',\n');
+        const allTokens = dictionary.allTokens.map(t => `  ${t.name}: '${t.value}'`).join(',\n')
 
-        return `${interfaces}\n\nexport const tokens = {\n${allTokens}\n} as const;\n\nexport type TokenName = keyof typeof tokens;`;
-      }
-    });
+        return `${interfaces}\n\nexport const tokens = {\n${allTokens}\n} as const;\n\nexport type TokenName = keyof typeof tokens;`
+      },
+    })
 
     // React 테마 provider
     StyleDictionary.registerFormat({
       name: 'react/theme-provider',
-      formatter: function(dictionary, config) {
+      formatter: function (dictionary, config) {
         const tokens = dictionary.allTokens
           .map(token => `  ${token.name}: '${token.value}'`)
-          .join(',\n');
+          .join(',\n')
 
         return `import React, { createContext, useContext } from 'react';
 
@@ -295,32 +295,32 @@ export const useTheme = () => {
     throw new Error('useTheme must be used within a ThemeProvider');
   }
   return context;
-};`;
-      }
-    });
+};`
+      },
+    })
   }
 
   async buildAllPlatforms() {
-    const platforms = ['web', 'ios', 'android', 'react-native'];
+    const platforms = ['web', 'ios', 'android', 'react-native']
 
     for (const platform of platforms) {
-      console.log(`Building tokens for ${platform}...`);
-      await this.buildPlatform(platform);
+      console.log(`Building tokens for ${platform}...`)
+      await this.buildPlatform(platform)
     }
 
-    console.log('✅ All platforms built successfully');
+    console.log('✅ All platforms built successfully')
   }
 
   async buildPlatform(platform) {
     const config = {
       source: ['design-tokens/**/*.json'],
       platforms: {
-        [platform]: this.getPlatformConfig(platform)
-      }
-    };
+        [platform]: this.getPlatformConfig(platform),
+      },
+    }
 
-    const styleDictionary = StyleDictionary.extend(config);
-    return styleDictionary.buildPlatform(platform);
+    const styleDictionary = StyleDictionary.extend(config)
+    return styleDictionary.buildPlatform(platform)
   }
 
   getPlatformConfig(platform) {
@@ -331,17 +331,17 @@ export const useTheme = () => {
         files: [
           {
             destination: 'tokens.css',
-            format: 'css/custom-properties'
+            format: 'css/custom-properties',
           },
           {
             destination: 'tokens.js',
-            format: 'javascript/module'
+            format: 'javascript/module',
           },
           {
             destination: 'tokens.d.ts',
-            format: 'typescript/interfaces'
-          }
-        ]
+            format: 'typescript/interfaces',
+          },
+        ],
       },
 
       react: {
@@ -350,9 +350,9 @@ export const useTheme = () => {
         files: [
           {
             destination: 'theme.ts',
-            format: 'react/theme-provider'
-          }
-        ]
+            format: 'react/theme-provider',
+          },
+        ],
       },
 
       ios: {
@@ -361,9 +361,9 @@ export const useTheme = () => {
         files: [
           {
             destination: 'DesignTokens.swift',
-            format: 'ios/swift/class'
-          }
-        ]
+            format: 'ios/swift/class',
+          },
+        ],
       },
 
       android: {
@@ -373,67 +373,67 @@ export const useTheme = () => {
           {
             destination: 'colors.xml',
             format: 'android/xml',
-            filter: token => token.type === 'color'
+            filter: token => token.type === 'color',
           },
           {
             destination: 'dimens.xml',
             format: 'android/xml',
-            filter: token => token.type === 'dimension'
-          }
-        ]
-      }
-    };
+            filter: token => token.type === 'dimension',
+          },
+        ],
+      },
+    }
 
-    return configs[platform];
+    return configs[platform]
   }
 
   // 파일 감시 및 자동 재빌드
   watch() {
-    console.log('👀 Watching for token changes...');
+    console.log('👀 Watching for token changes...')
 
     const watcher = chokidar.watch('design-tokens/**/*.json', {
       ignored: /node_modules/,
-      persistent: true
-    });
+      persistent: true,
+    })
 
-    watcher.on('change', async (path) => {
-      console.log(`📝 Token file changed: ${path}`);
+    watcher.on('change', async path => {
+      console.log(`📝 Token file changed: ${path}`)
       try {
-        await this.buildAllPlatforms();
-        console.log('🔄 Tokens rebuilt successfully');
+        await this.buildAllPlatforms()
+        console.log('🔄 Tokens rebuilt successfully')
       } catch (error) {
-        console.error('❌ Build failed:', error);
+        console.error('❌ Build failed:', error)
       }
-    });
+    })
   }
 }
 
 // CLI 인터페이스
 if (require.main === module) {
-  const builder = new DesignTokenBuilder();
-  const command = process.argv[2];
+  const builder = new DesignTokenBuilder()
+  const command = process.argv[2]
 
   switch (command) {
     case 'build':
-      builder.buildAllPlatforms();
-      break;
+      builder.buildAllPlatforms()
+      break
     case 'watch':
-      builder.watch();
-      break;
+      builder.watch()
+      break
     case 'build-platform':
-      const platform = process.argv[3];
+      const platform = process.argv[3]
       if (platform) {
-        builder.buildPlatform(platform);
+        builder.buildPlatform(platform)
       } else {
-        console.error('Please specify a platform: web, ios, android, react-native');
+        console.error('Please specify a platform: web, ios, android, react-native')
       }
-      break;
+      break
     default:
-      console.log('Usage: node build-tokens.js [build|watch|build-platform <platform>]');
+      console.log('Usage: node build-tokens.js [build|watch|build-platform <platform>]')
   }
 }
 
-module.exports = DesignTokenBuilder;
+module.exports = DesignTokenBuilder
 ```
 
 ## 컴포넌트 자동 생성
@@ -442,13 +442,13 @@ module.exports = DesignTokenBuilder;
 
 ```javascript
 // scripts/generate-component.js - AI 기반 컴포넌트 자동 생성
-const fs = require('fs-extra');
-const path = require('path');
-const handlebars = require('handlebars');
+const fs = require('fs-extra')
+const path = require('path')
+const handlebars = require('handlebars')
 
 class ComponentGenerator {
   constructor() {
-    this.setupTemplates();
+    this.setupTemplates()
   }
 
   setupTemplates() {
@@ -617,14 +617,14 @@ describe('{{componentName}}', () => {
     expect(element).toHaveClass('custom-class');
   });
 });
-        `
-      }
-    };
+        `,
+      },
+    }
 
     // Handlebars 헬퍼 등록
-    handlebars.registerHelper('pascalCase', function(str) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    });
+    handlebars.registerHelper('pascalCase', function (str) {
+      return str.charAt(0).toUpperCase() + str.slice(1)
+    })
   }
 
   async generateComponent(config) {
@@ -636,11 +636,11 @@ describe('{{componentName}}', () => {
       sizes = ['md'],
       element = 'div',
       baseClasses = `${name.toLowerCase()}`,
-      props = []
-    } = config;
+      props = [],
+    } = config
 
-    const componentDir = path.join('src/components', name);
-    await fs.ensureDir(componentDir);
+    const componentDir = path.join('src/components', name)
+    await fs.ensureDir(componentDir)
 
     const templateData = {
       componentName: name,
@@ -655,8 +655,8 @@ describe('{{componentName}}', () => {
       defaultSize: sizes[0],
       baseStyles: this.generateBaseStyles(config),
       variantStyles: this.generateVariantStyles(config),
-      sizeStyles: this.generateSizeStyles(config)
-    };
+      sizeStyles: this.generateSizeStyles(config),
+    }
 
     // 컴포넌트 파일들 생성
     const files = {
@@ -664,18 +664,18 @@ describe('{{componentName}}', () => {
       [`${name}.css`]: this.templates[type].styles,
       [`${name}.stories.tsx`]: this.templates[type].stories,
       [`${name}.test.tsx`]: this.templates[type].test,
-      'index.ts': `export { ${name} } from './${name}';`
-    };
+      'index.ts': `export { ${name} } from './${name}';`,
+    }
 
     for (const [filename, template] of Object.entries(files)) {
-      const content = handlebars.compile(template)(templateData);
-      await fs.writeFile(path.join(componentDir, filename), content);
+      const content = handlebars.compile(template)(templateData)
+      await fs.writeFile(path.join(componentDir, filename), content)
     }
 
     // 인덱스 파일 업데이트
-    await this.updateIndexFile(name);
+    await this.updateIndexFile(name)
 
-    console.log(`✅ Component '${name}' generated successfully`);
+    console.log(`✅ Component '${name}' generated successfully`)
   }
 
   generateBaseStyles(config) {
@@ -685,93 +685,95 @@ describe('{{componentName}}', () => {
       { property: 'justify-content', value: 'center' },
       { property: 'border', value: 'none' },
       { property: 'cursor', value: 'pointer' },
-      { property: 'transition', value: 'all 0.2s ease' }
-    ];
+      { property: 'transition', value: 'all 0.2s ease' },
+    ]
 
     if (config.baseStyles) {
-      baseStyles.push(...config.baseStyles);
+      baseStyles.push(...config.baseStyles)
     }
 
-    return baseStyles;
+    return baseStyles
   }
 
   generateVariantStyles(config) {
     const variantMap = {
       primary: [
         { property: 'background-color', value: 'var(--color-primary)' },
-        { property: 'color', value: 'var(--color-on-primary)' }
+        { property: 'color', value: 'var(--color-on-primary)' },
       ],
       secondary: [
         { property: 'background-color', value: 'var(--color-secondary)' },
-        { property: 'color', value: 'var(--color-on-secondary)' }
+        { property: 'color', value: 'var(--color-on-secondary)' },
       ],
       ghost: [
         { property: 'background-color', value: 'transparent' },
-        { property: 'color', value: 'var(--color-primary)' }
-      ]
-    };
+        { property: 'color', value: 'var(--color-primary)' },
+      ],
+    }
 
     return config.variants.map(variant => ({
       name: variant,
-      styles: variantMap[variant] || []
-    }));
+      styles: variantMap[variant] || [],
+    }))
   }
 
   generateSizeStyles(config) {
     const sizeMap = {
       sm: [
         { property: 'padding', value: 'var(--space-sm) var(--space-md)' },
-        { property: 'font-size', value: 'var(--text-sm)' }
+        { property: 'font-size', value: 'var(--text-sm)' },
       ],
       md: [
         { property: 'padding', value: 'var(--space-md) var(--space-lg)' },
-        { property: 'font-size', value: 'var(--text-base)' }
+        { property: 'font-size', value: 'var(--text-base)' },
       ],
       lg: [
         { property: 'padding', value: 'var(--space-lg) var(--space-xl)' },
-        { property: 'font-size', value: 'var(--text-lg)' }
-      ]
-    };
+        { property: 'font-size', value: 'var(--text-lg)' },
+      ],
+    }
 
     return config.sizes.map(size => ({
       name: size,
-      styles: sizeMap[size] || []
-    }));
+      styles: sizeMap[size] || [],
+    }))
   }
 
   async updateIndexFile(componentName) {
-    const indexPath = 'src/components/index.ts';
-    let content = '';
+    const indexPath = 'src/components/index.ts'
+    let content = ''
 
     try {
-      content = await fs.readFile(indexPath, 'utf8');
+      content = await fs.readFile(indexPath, 'utf8')
     } catch (error) {
       // 파일이 없으면 새로 생성
     }
 
-    const exportLine = `export { ${componentName} } from './${componentName}';`;
+    const exportLine = `export { ${componentName} } from './${componentName}';`
 
     if (!content.includes(exportLine)) {
-      content += `${exportLine}\n`;
-      await fs.writeFile(indexPath, content);
+      content += `${exportLine}\n`
+      await fs.writeFile(indexPath, content)
     }
   }
 }
 
 // CLI 인터페이스
 if (require.main === module) {
-  const generator = new ComponentGenerator();
-  const config = JSON.parse(process.argv[2] || '{}');
+  const generator = new ComponentGenerator()
+  const config = JSON.parse(process.argv[2] || '{}')
 
   if (!config.name) {
-    console.error('Please provide component name: node generate-component.js \'{"name": "Button"}\'');
-    process.exit(1);
+    console.error(
+      'Please provide component name: node generate-component.js \'{"name": "Button"}\''
+    )
+    process.exit(1)
   }
 
-  generator.generateComponent(config);
+  generator.generateComponent(config)
 }
 
-module.exports = ComponentGenerator;
+module.exports = ComponentGenerator
 ```
 
 ## 자동 문서화
@@ -780,121 +782,123 @@ module.exports = ComponentGenerator;
 
 ```javascript
 // scripts/generate-docs.js - 자동 문서 생성
-const fs = require('fs-extra');
-const path = require('path');
-const glob = require('glob');
+const fs = require('fs-extra')
+const path = require('path')
+const glob = require('glob')
 
 class DocumentationGenerator {
   constructor() {
-    this.outputDir = 'docs/components';
+    this.outputDir = 'docs/components'
   }
 
   async generateAllDocs() {
     // 컴포넌트 파일 찾기
-    const componentFiles = glob.sync('src/components/**/index.ts');
+    const componentFiles = glob.sync('src/components/**/index.ts')
 
     for (const file of componentFiles) {
-      const componentDir = path.dirname(file);
-      const componentName = path.basename(componentDir);
+      const componentDir = path.dirname(file)
+      const componentName = path.basename(componentDir)
 
-      await this.generateComponentDoc(componentName, componentDir);
+      await this.generateComponentDoc(componentName, componentDir)
     }
 
     // 인덱스 문서 생성
-    await this.generateIndexDoc(componentFiles);
+    await this.generateIndexDoc(componentFiles)
   }
 
   async generateComponentDoc(name, componentDir) {
-    const componentFile = path.join(componentDir, `${name}.tsx`);
-    const storyFile = path.join(componentDir, `${name}.stories.tsx`);
+    const componentFile = path.join(componentDir, `${name}.tsx`)
+    const storyFile = path.join(componentDir, `${name}.stories.tsx`)
 
-    if (!await fs.pathExists(componentFile)) {
-      return;
+    if (!(await fs.pathExists(componentFile))) {
+      return
     }
 
-    const componentSource = await fs.readFile(componentFile, 'utf8');
-    const propsInterface = this.extractPropsInterface(componentSource);
-    const examples = await this.extractExamples(storyFile);
+    const componentSource = await fs.readFile(componentFile, 'utf8')
+    const propsInterface = this.extractPropsInterface(componentSource)
+    const examples = await this.extractExamples(storyFile)
 
     const docContent = this.generateMarkdown({
       name,
       props: propsInterface,
       examples,
-      usage: this.generateUsageExamples(name, propsInterface)
-    });
+      usage: this.generateUsageExamples(name, propsInterface),
+    })
 
-    const docPath = path.join(this.outputDir, `${name}.md`);
-    await fs.ensureDir(path.dirname(docPath));
-    await fs.writeFile(docPath, docContent);
+    const docPath = path.join(this.outputDir, `${name}.md`)
+    await fs.ensureDir(path.dirname(docPath))
+    await fs.writeFile(docPath, docContent)
   }
 
   extractPropsInterface(source) {
-    const interfaceMatch = source.match(/export interface (\w+Props) \{([\s\S]*?)\}/);
-    if (!interfaceMatch) return [];
+    const interfaceMatch = source.match(/export interface (\w+Props) \{([\s\S]*?)\}/)
+    if (!interfaceMatch) return []
 
-    const interfaceBody = interfaceMatch[2];
-    const propMatches = interfaceBody.match(/(\w+)\??: ([^;]+);/g) || [];
+    const interfaceBody = interfaceMatch[2]
+    const propMatches = interfaceBody.match(/(\w+)\??: ([^;]+);/g) || []
 
     return propMatches.map(match => {
-      const [, name, type] = match.match(/(\w+)\??: ([^;]+);/) || [];
-      const optional = match.includes('?:');
+      const [, name, type] = match.match(/(\w+)\??: ([^;]+);/) || []
+      const optional = match.includes('?:')
 
       return {
         name,
         type: type.trim(),
         optional,
-        description: this.extractPropDescription(source, name)
-      };
-    });
+        description: this.extractPropDescription(source, name),
+      }
+    })
   }
 
   extractPropDescription(source, propName) {
     // JSDoc 코멘트에서 설명 추출
-    const commentMatch = source.match(new RegExp(`/\\*\\*[\\s\\S]*?\\* @param ${propName} ([^\\n]+)`));
-    return commentMatch ? commentMatch[1].trim() : '';
+    const commentMatch = source.match(
+      new RegExp(`/\\*\\*[\\s\\S]*?\\* @param ${propName} ([^\\n]+)`)
+    )
+    return commentMatch ? commentMatch[1].trim() : ''
   }
 
   async extractExamples(storyFile) {
-    if (!await fs.pathExists(storyFile)) {
-      return [];
+    if (!(await fs.pathExists(storyFile))) {
+      return []
     }
 
-    const storySource = await fs.readFile(storyFile, 'utf8');
-    const exportMatches = storySource.match(/export const (\w+): Story = \{([\s\S]*?)\};/g) || [];
+    const storySource = await fs.readFile(storyFile, 'utf8')
+    const exportMatches = storySource.match(/export const (\w+): Story = \{([\s\S]*?)\};/g) || []
 
     return exportMatches.map(match => {
-      const [, name] = match.match(/export const (\w+):/) || [];
-      const argsMatch = match.match(/args: \{([\s\S]*?)\}/);
+      const [, name] = match.match(/export const (\w+):/) || []
+      const argsMatch = match.match(/args: \{([\s\S]*?)\}/)
 
       return {
         name,
         args: argsMatch ? argsMatch[1] : '',
-        code: this.generateExampleCode(name, argsMatch)
-      };
-    });
+        code: this.generateExampleCode(name, argsMatch),
+      }
+    })
   }
 
   generateExampleCode(storyName, argsMatch) {
-    if (!argsMatch) return '';
+    if (!argsMatch) return ''
 
     const args = argsMatch[1]
       .split(',')
       .map(line => line.trim())
       .filter(line => line)
       .map(line => {
-        const [key, value] = line.split(':').map(s => s.trim());
-        return `${key}=${value}`;
+        const [key, value] = line.split(':').map(s => s.trim())
+        return `${key}=${value}`
       })
-      .join(' ');
+      .join(' ')
 
-    return `<ComponentName ${args}>Content</ComponentName>`;
+    return `<ComponentName ${args}>Content</ComponentName>`
   }
 
   generateUsageExamples(name, props) {
-    const requiredProps = props.filter(p => !p.optional);
-    const optionalProps = props.filter(p => p.optional);
+    const requiredProps = props.filter(p => !p.optional)
+    const optionalProps = props.filter(p => p.optional)
 
-    const examples = [];
+    const examples = []
 
     // 기본 사용법
     examples.push({
@@ -903,46 +907,47 @@ class DocumentationGenerator {
 
 <${name}>
   Default ${name}
-</${name}>`
-    });
+</${name}>`,
+    })
 
     // Props와 함께 사용
     if (props.length > 0) {
-      const propExamples = requiredProps.slice(0, 2)
+      const propExamples = requiredProps
+        .slice(0, 2)
         .concat(optionalProps.slice(0, 2))
         .map(p => {
-          const exampleValue = this.getExampleValue(p.type);
-          return `${p.name}=${exampleValue}`;
+          const exampleValue = this.getExampleValue(p.type)
+          return `${p.name}=${exampleValue}`
         })
-        .join(' ');
+        .join(' ')
 
       examples.push({
         title: 'With Props',
         code: `<${name} ${propExamples}>
   ${name} with props
-</${name}>`
-      });
+</${name}>`,
+      })
     }
 
-    return examples;
+    return examples
   }
 
   getExampleValue(type) {
     const typeMap = {
-      'string': '"example"',
-      'boolean': '{true}',
-      'number': '{42}',
+      string: '"example"',
+      boolean: '{true}',
+      number: '{42}',
       'React.ReactNode': '{<span>Content</span>}',
-      'function': '{() => console.log("clicked")}'
-    };
+      function: '{() => console.log("clicked")}',
+    }
 
     // Union type 처리 (예: 'primary' | 'secondary')
     if (type.includes('|')) {
-      const firstOption = type.split('|')[0].trim().replace(/'/g, '');
-      return `"${firstOption}"`;
+      const firstOption = type.split('|')[0].trim().replace(/'/g, '')
+      return `"${firstOption}"`
     }
 
-    return typeMap[type] || '{}';
+    return typeMap[type] || '{}'
   }
 
   generateMarkdown({ name, props, examples, usage }) {
@@ -960,31 +965,42 @@ npm install @design-system/components
 
 ## Usage
 
-${usage.map(example => `
+${usage
+  .map(
+    example => `
 ### ${example.title}
 
 \`\`\`jsx
 ${example.code}
 \`\`\`
-`).join('')}
+`
+  )
+  .join('')}
 
 ## Props
 
 | Name | Type | Default | Required | Description |
 |------|------|---------|----------|-------------|
-${props.map(prop =>
-  `| ${prop.name} | \`${prop.type}\` | - | ${prop.optional ? 'No' : 'Yes'} | ${prop.description} |`
-).join('\n')}
+${props
+  .map(
+    prop =>
+      `| ${prop.name} | \`${prop.type}\` | - | ${prop.optional ? 'No' : 'Yes'} | ${prop.description} |`
+  )
+  .join('\n')}
 
 ## Examples
 
-${examples.map(example => `
+${examples
+  .map(
+    example => `
 ### ${example.name}
 
 \`\`\`jsx
 ${example.code}
 \`\`\`
-`).join('')}
+`
+  )
+  .join('')}
 
 ## Accessibility
 
@@ -996,17 +1012,19 @@ ${example.code}
 
 - [Button](./Button.md)
 - [Input](./Input.md)
-`;
+`
 
-    return markdown;
+    return markdown
   }
 
   async generateIndexDoc(componentFiles) {
-    const components = componentFiles.map(file => {
-      const componentDir = path.dirname(file);
-      const componentName = path.basename(componentDir);
-      return componentName;
-    }).sort();
+    const components = componentFiles
+      .map(file => {
+        const componentDir = path.dirname(file)
+        const componentName = path.basename(componentDir)
+        return componentName
+      })
+      .sort()
 
     const indexContent = `# Component Library
 
@@ -1042,23 +1060,24 @@ Our components are built using design tokens for consistency:
 - [Typography](../tokens/typography.md)
 - [Spacing](../tokens/spacing.md)
 - [Shadows](../tokens/shadows.md)
-`;
+`
 
-    const indexPath = path.join(this.outputDir, 'README.md');
-    await fs.ensureDir(path.dirname(indexPath));
-    await fs.writeFile(indexPath, indexContent);
+    const indexPath = path.join(this.outputDir, 'README.md')
+    await fs.ensureDir(path.dirname(indexPath))
+    await fs.writeFile(indexPath, indexContent)
   }
 }
 
 // CLI 실행
 if (require.main === module) {
-  const generator = new DocumentationGenerator();
-  generator.generateAllDocs()
+  const generator = new DocumentationGenerator()
+  generator
+    .generateAllDocs()
     .then(() => console.log('✅ Documentation generated successfully'))
-    .catch(error => console.error('❌ Documentation generation failed:', error));
+    .catch(error => console.error('❌ Documentation generation failed:', error))
 }
 
-module.exports = DocumentationGenerator;
+module.exports = DocumentationGenerator
 ```
 
 ## SuperClaude 자동화 명령어

@@ -213,15 +213,15 @@ export class SocialMediaManager {
 export class InfluencerFinder {
   // 키워드 기반 인플루언서 발굴
   async findInfluencers(keywords: string[], minFollowers: number = 1000): Promise<Influencer[]> {
-    const platforms = ['twitter', 'instagram', 'youtube', 'tiktok'];
-    const allInfluencers: Influencer[] = [];
+    const platforms = ['twitter', 'instagram', 'youtube', 'tiktok']
+    const allInfluencers: Influencer[] = []
 
     for (const platform of platforms) {
-      const influencers = await this.searchInfluencersByPlatform(platform, keywords, minFollowers);
-      allInfluencers.push(...influencers);
+      const influencers = await this.searchInfluencersByPlatform(platform, keywords, minFollowers)
+      allInfluencers.push(...influencers)
     }
 
-    return this.rankInfluencers(allInfluencers);
+    return this.rankInfluencers(allInfluencers)
   }
 
   private async searchInfluencersByPlatform(
@@ -231,13 +231,13 @@ export class InfluencerFinder {
   ): Promise<Influencer[]> {
     switch (platform) {
       case 'twitter':
-        return await this.searchTwitterInfluencers(keywords, minFollowers);
+        return await this.searchTwitterInfluencers(keywords, minFollowers)
       case 'instagram':
-        return await this.searchInstagramInfluencers(keywords, minFollowers);
+        return await this.searchInstagramInfluencers(keywords, minFollowers)
       case 'youtube':
-        return await this.searchYouTubeInfluencers(keywords, minFollowers);
+        return await this.searchYouTubeInfluencers(keywords, minFollowers)
       default:
-        return [];
+        return []
     }
   }
 
@@ -246,20 +246,20 @@ export class InfluencerFinder {
     return influencers
       .map(influencer => ({
         ...influencer,
-        score: this.calculateInfluencerScore(influencer)
+        score: this.calculateInfluencerScore(influencer),
       }))
       .sort((a, b) => b.score - a.score)
-      .slice(0, 50); // 상위 50명만
+      .slice(0, 50) // 상위 50명만
   }
 
   private calculateInfluencerScore(influencer: Influencer): number {
-    const engagementRate = influencer.engagement / influencer.followers;
-    const reachScore = Math.log10(influencer.followers) * 10;
-    const engagementScore = engagementRate * 1000;
-    const freshnessScore = this.calculateFreshnessScore(influencer.lastPost);
-    const relevanceScore = this.calculateRelevanceScore(influencer.bio, influencer.recentPosts);
+    const engagementRate = influencer.engagement / influencer.followers
+    const reachScore = Math.log10(influencer.followers) * 10
+    const engagementScore = engagementRate * 1000
+    const freshnessScore = this.calculateFreshnessScore(influencer.lastPost)
+    const relevanceScore = this.calculateRelevanceScore(influencer.bio, influencer.recentPosts)
 
-    return reachScore + engagementScore + freshnessScore + relevanceScore;
+    return reachScore + engagementScore + freshnessScore + relevanceScore
   }
 
   // 자동 아웃리치 메시지 생성
@@ -279,13 +279,13 @@ export class InfluencerFinder {
       celebrity: `${influencer.name}님의 팀 관계자분께,
                   ${product.name}의 마케팅 담당자입니다.
                   브랜드 콜라보레이션 제안서를 보내드리고 싶습니다.
-                  검토 후 연락 주시면 감사하겠습니다.`
-    };
+                  검토 후 연락 주시면 감사하겠습니다.`,
+    }
 
     // 팔로워 수에 따른 템플릿 선택
-    if (influencer.followers < 10000) return templates.micro;
-    if (influencer.followers < 100000) return templates.macro;
-    return templates.celebrity;
+    if (influencer.followers < 10000) return templates.micro
+    if (influencer.followers < 100000) return templates.macro
+    return templates.celebrity
   }
 
   // 자동 아웃리치 실행
@@ -294,39 +294,39 @@ export class InfluencerFinder {
     product: ProductInfo,
     maxPerDay: number = 10
   ): Promise<OutreachResult[]> {
-    const results: OutreachResult[] = [];
-    let sentToday = 0;
+    const results: OutreachResult[] = []
+    let sentToday = 0
 
     for (const influencer of influencers) {
-      if (sentToday >= maxPerDay) break;
+      if (sentToday >= maxPerDay) break
 
       try {
-        const message = this.generateOutreachMessage(influencer, product);
-        const sent = await this.sendDirectMessage(influencer, message);
+        const message = this.generateOutreachMessage(influencer, product)
+        const sent = await this.sendDirectMessage(influencer, message)
 
         if (sent) {
-          sentToday++;
+          sentToday++
           results.push({
             influencer: influencer.username,
             platform: influencer.platform,
             status: 'sent',
-            sentAt: new Date()
-          });
+            sentAt: new Date(),
+          })
 
           // 스팸 방지를 위한 지연
-          await this.delay(5000 + Math.random() * 5000); // 5-10초 랜덤 지연
+          await this.delay(5000 + Math.random() * 5000) // 5-10초 랜덤 지연
         }
       } catch (error) {
         results.push({
           influencer: influencer.username,
           platform: influencer.platform,
           status: 'failed',
-          error: error.message
-        });
+          error: error.message,
+        })
       }
     }
 
-    return results;
+    return results
   }
 }
 ```
@@ -340,14 +340,14 @@ export class InfluencerFinder {
 export class SEOOptimizer {
   // 메타 태그 자동 생성
   generateMetaTags(content: {
-    title: string;
-    description: string;
-    keywords: string[];
-    url: string;
-    image?: string;
+    title: string
+    description: string
+    keywords: string[]
+    url: string
+    image?: string
   }): MetaTags {
-    const optimizedTitle = this.optimizeTitle(content.title);
-    const optimizedDescription = this.optimizeDescription(content.description);
+    const optimizedTitle = this.optimizeTitle(content.title)
+    const optimizedDescription = this.optimizeDescription(content.description)
 
     return {
       title: optimizedTitle,
@@ -359,58 +359,58 @@ export class SEOOptimizer {
         description: optimizedDescription,
         url: content.url,
         image: content.image || '/default-og-image.jpg',
-        type: 'article'
+        type: 'article',
       },
       twitter: {
         card: 'summary_large_image',
         title: optimizedTitle,
         description: optimizedDescription,
-        image: content.image || '/default-twitter-image.jpg'
+        image: content.image || '/default-twitter-image.jpg',
       },
-      jsonLd: this.generateJsonLd(content)
-    };
+      jsonLd: this.generateJsonLd(content),
+    }
   }
 
   // 제목 최적화 (60자 이내, 키워드 포함)
   private optimizeTitle(title: string): string {
-    const maxLength = 60;
+    const maxLength = 60
 
     if (title.length <= maxLength) {
-      return title;
+      return title
     }
 
     // 중요한 키워드를 앞쪽에 배치하고 길이 조정
-    const words = title.split(' ');
-    let optimizedTitle = '';
+    const words = title.split(' ')
+    let optimizedTitle = ''
 
     for (const word of words) {
       if ((optimizedTitle + word + ' ').length <= maxLength) {
-        optimizedTitle += word + ' ';
+        optimizedTitle += word + ' '
       } else {
-        break;
+        break
       }
     }
 
-    return optimizedTitle.trim() + (optimizedTitle.length < title.length ? '...' : '');
+    return optimizedTitle.trim() + (optimizedTitle.length < title.length ? '...' : '')
   }
 
   // 설명 최적화 (160자 이내, 액션 유도)
   private optimizeDescription(description: string): string {
-    const maxLength = 160;
+    const maxLength = 160
 
     if (description.length <= maxLength) {
-      return description;
+      return description
     }
 
     // 마지막 완전한 문장에서 자르기
-    const truncated = description.substring(0, maxLength);
-    const lastSentence = truncated.lastIndexOf('. ');
+    const truncated = description.substring(0, maxLength)
+    const lastSentence = truncated.lastIndexOf('. ')
 
     if (lastSentence > maxLength * 0.7) {
-      return truncated.substring(0, lastSentence + 1);
+      return truncated.substring(0, lastSentence + 1)
     }
 
-    return truncated.substring(0, truncated.lastIndexOf(' ')) + '...';
+    return truncated.substring(0, truncated.lastIndexOf(' ')) + '...'
   }
 
   // JSON-LD 구조화 데이터 생성
@@ -424,99 +424,103 @@ export class SEOOptimizer {
       datePublished: new Date().toISOString(),
       author: {
         '@type': 'Organization',
-        name: process.env.SITE_NAME || 'My Website'
+        name: process.env.SITE_NAME || 'My Website',
       },
       publisher: {
         '@type': 'Organization',
         name: process.env.SITE_NAME || 'My Website',
         logo: {
           '@type': 'ImageObject',
-          url: process.env.SITE_LOGO || '/logo.png'
-        }
-      }
-    };
+          url: process.env.SITE_LOGO || '/logo.png',
+        },
+      },
+    }
   }
 
   // 사이트맵 자동 생성
   async generateSitemap(pages: Page[]): Promise<string> {
-    const urls = pages.map(page => `
+    const urls = pages
+      .map(
+        page => `
       <url>
         <loc>${page.url}</loc>
         <lastmod>${page.lastModified.toISOString()}</lastmod>
         <changefreq>${page.changeFreq || 'weekly'}</changefreq>
         <priority>${page.priority || '0.5'}</priority>
       </url>
-    `).join('');
+    `
+      )
+      .join('')
 
     return `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
       ${urls}
-    </urlset>`;
+    </urlset>`
   }
 
   // robots.txt 생성
   generateRobotsTxt(config: {
-    allowedPaths: string[];
-    disallowedPaths: string[];
-    sitemapUrl: string;
+    allowedPaths: string[]
+    disallowedPaths: string[]
+    sitemapUrl: string
   }): string {
-    const allowed = config.allowedPaths.map(path => `Allow: ${path}`).join('\n');
-    const disallowed = config.disallowedPaths.map(path => `Disallow: ${path}`).join('\n');
+    const allowed = config.allowedPaths.map(path => `Allow: ${path}`).join('\n')
+    const disallowed = config.disallowedPaths.map(path => `Disallow: ${path}`).join('\n')
 
     return `User-agent: *
 ${allowed}
 ${disallowed}
 
-Sitemap: ${config.sitemapUrl}`;
+Sitemap: ${config.sitemapUrl}`
   }
 
   // 키워드 밀도 분석
   analyzeKeywordDensity(content: string, targetKeywords: string[]): KeywordAnalysis[] {
-    const words = content.toLowerCase().split(/\W+/);
-    const totalWords = words.length;
+    const words = content.toLowerCase().split(/\W+/)
+    const totalWords = words.length
 
     return targetKeywords.map(keyword => {
-      const keywordWords = keyword.toLowerCase().split(' ');
-      let count = 0;
+      const keywordWords = keyword.toLowerCase().split(' ')
+      let count = 0
 
       if (keywordWords.length === 1) {
-        count = words.filter(word => word === keywordWords[0]).length;
+        count = words.filter(word => word === keywordWords[0]).length
       } else {
         // 구문 키워드 검색
-        const phrases = this.extractPhrases(content.toLowerCase(), keywordWords.length);
-        count = phrases.filter(phrase => phrase === keyword.toLowerCase()).length;
+        const phrases = this.extractPhrases(content.toLowerCase(), keywordWords.length)
+        count = phrases.filter(phrase => phrase === keyword.toLowerCase()).length
       }
 
-      const density = (count / totalWords) * 100;
+      const density = (count / totalWords) * 100
 
       return {
         keyword,
         count,
         density: parseFloat(density.toFixed(2)),
-        recommendation: this.getKeywordRecommendation(density)
-      };
-    });
+        recommendation: this.getKeywordRecommendation(density),
+      }
+    })
   }
 
   private getKeywordRecommendation(density: number): string {
-    if (density < 0.5) return '키워드 사용량이 너무 적습니다. 더 자주 사용하세요.';
-    if (density > 3) return '키워드 과다 사용입니다. 자연스럽게 줄이세요.';
-    return '적절한 키워드 밀도입니다.';
+    if (density < 0.5) return '키워드 사용량이 너무 적습니다. 더 자주 사용하세요.'
+    if (density > 3) return '키워드 과다 사용입니다. 자연스럽게 줄이세요.'
+    return '적절한 키워드 밀도입니다.'
   }
 
   // 내부 링크 자동 추가
   addInternalLinks(content: string, linkMap: Map<string, string>): string {
-    let optimizedContent = content;
+    let optimizedContent = content
 
     linkMap.forEach((url, keyword) => {
-      const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
-      const replacement = `<a href="${url}" title="${keyword}">${keyword}</a>`;
+      const regex = new RegExp(`\\b${keyword}\\b`, 'gi')
+      const replacement = `<a href="${url}" title="${keyword}">${keyword}</a>`
 
       // 첫 번째 발견에만 링크 추가 (과도한 링크 방지)
-      optimizedContent = optimizedContent.replace(regex, replacement);
-    });
+      optimizedContent = optimizedContent.replace(regex, replacement)
+    })
 
-    return optimizedContent;
+    return optimizedContent
   }
 }
 ```
@@ -528,70 +532,73 @@ Sitemap: ${config.sitemapUrl}`;
 export class ContentSEOOptimizer {
   // 헤딩 구조 최적화
   optimizeHeadingStructure(content: string): string {
-    const headings = this.extractHeadings(content);
-    const optimizedHeadings = this.createOptimalHeadingHierarchy(headings);
+    const headings = this.extractHeadings(content)
+    const optimizedHeadings = this.createOptimalHeadingHierarchy(headings)
 
-    return this.replaceHeadings(content, optimizedHeadings);
+    return this.replaceHeadings(content, optimizedHeadings)
   }
 
   private extractHeadings(content: string): Heading[] {
-    const headingRegex = /<(h[1-6])>(.*?)<\/h[1-6]>/gi;
-    const headings: Heading[] = [];
-    let match;
+    const headingRegex = /<(h[1-6])>(.*?)<\/h[1-6]>/gi
+    const headings: Heading[] = []
+    let match
 
     while ((match = headingRegex.exec(content)) !== null) {
       headings.push({
         level: parseInt(match[1].charAt(1)),
         text: match[2],
-        original: match[0]
-      });
+        original: match[0],
+      })
     }
 
-    return headings;
+    return headings
   }
 
   // 이미지 ALT 텍스트 자동 생성
   async generateAltTexts(images: ImageInfo[]): Promise<Map<string, string>> {
-    const altTexts = new Map<string, string>();
+    const altTexts = new Map<string, string>()
 
     for (const image of images) {
-      let altText = '';
+      let altText = ''
 
       // 파일명에서 키워드 추출
-      const filename = image.src.split('/').pop()?.split('.')[0] || '';
-      const keywords = filename.replace(/[-_]/g, ' ').toLowerCase();
+      const filename = image.src.split('/').pop()?.split('.')[0] || ''
+      const keywords = filename.replace(/[-_]/g, ' ').toLowerCase()
 
       // 컨텍스트 기반 ALT 텍스트 생성
       if (image.context) {
-        altText = this.generateContextualAltText(keywords, image.context);
+        altText = this.generateContextualAltText(keywords, image.context)
       } else {
-        altText = this.generateGenericAltText(keywords);
+        altText = this.generateGenericAltText(keywords)
       }
 
       // ALT 텍스트 최적화 (125자 이내)
-      altText = this.optimizeAltText(altText);
-      altTexts.set(image.src, altText);
+      altText = this.optimizeAltText(altText)
+      altTexts.set(image.src, altText)
     }
 
-    return altTexts;
+    return altTexts
   }
 
   private generateContextualAltText(keywords: string, context: string): string {
     // 주변 텍스트를 분석하여 관련성 높은 ALT 텍스트 생성
-    const contextWords = context.toLowerCase().split(/\W+/);
-    const relevantWords = contextWords.filter(word =>
-      word.length > 3 && !this.isStopWord(word)
-    ).slice(0, 3);
+    const contextWords = context.toLowerCase().split(/\W+/)
+    const relevantWords = contextWords
+      .filter(word => word.length > 3 && !this.isStopWord(word))
+      .slice(0, 3)
 
-    return `${keywords} ${relevantWords.join(' ')}에 관한 이미지`;
+    return `${keywords} ${relevantWords.join(' ')}에 관한 이미지`
   }
 
   // 스키마 마크업 자동 생성
-  generateSchemaMarkup(type: 'Article' | 'Product' | 'Organization' | 'LocalBusiness', data: any): object {
+  generateSchemaMarkup(
+    type: 'Article' | 'Product' | 'Organization' | 'LocalBusiness',
+    data: any
+  ): object {
     const baseSchema = {
       '@context': 'https://schema.org',
-      '@type': type
-    };
+      '@type': type,
+    }
 
     switch (type) {
       case 'Article':
@@ -601,7 +608,7 @@ export class ContentSEOOptimizer {
           description: data.description,
           author: {
             '@type': 'Person',
-            name: data.author
+            name: data.author,
           },
           datePublished: data.publishDate,
           dateModified: data.modifiedDate,
@@ -609,9 +616,9 @@ export class ContentSEOOptimizer {
           publisher: {
             '@type': 'Organization',
             name: data.publisher,
-            logo: data.publisherLogo
-          }
-        };
+            logo: data.publisherLogo,
+          },
+        }
 
       case 'Product':
         return {
@@ -627,15 +634,15 @@ export class ContentSEOOptimizer {
             availability: data.availability,
             seller: {
               '@type': 'Organization',
-              name: data.seller
-            }
+              name: data.seller,
+            },
           },
           aggregateRating: data.rating && {
             '@type': 'AggregateRating',
             ratingValue: data.rating.value,
-            reviewCount: data.rating.count
-          }
-        };
+            reviewCount: data.rating.count,
+          },
+        }
 
       case 'Organization':
         return {
@@ -650,35 +657,35 @@ export class ContentSEOOptimizer {
             addressLocality: data.address.city,
             addressRegion: data.address.region,
             postalCode: data.address.postal,
-            addressCountry: data.address.country
+            addressCountry: data.address.country,
           },
           contactPoint: data.contact && {
             '@type': 'ContactPoint',
             telephone: data.contact.phone,
-            contactType: data.contact.type
-          }
-        };
+            contactType: data.contact.type,
+          },
+        }
 
       default:
-        return baseSchema;
+        return baseSchema
     }
   }
 
   // 페이지 속도 최적화 제안
   async analyzePageSpeed(url: string): Promise<SpeedOptimizationSuggestions> {
     // 실제로는 Google PageSpeed Insights API 사용
-    const mockResults = await this.getPageSpeedMetrics(url);
+    const mockResults = await this.getPageSpeedMetrics(url)
 
     return {
       currentScore: mockResults.score,
       suggestions: this.generateSpeedSuggestions(mockResults),
       criticalIssues: mockResults.issues.filter(issue => issue.impact === 'high'),
-      estimatedImprovement: this.calculatePotentialImprovement(mockResults)
-    };
+      estimatedImprovement: this.calculatePotentialImprovement(mockResults),
+    }
   }
 
   private generateSpeedSuggestions(metrics: PageSpeedMetrics): SpeedSuggestion[] {
-    const suggestions: SpeedSuggestion[] = [];
+    const suggestions: SpeedSuggestion[] = []
 
     if (metrics.largestContentfulPaint > 2500) {
       suggestions.push({
@@ -686,8 +693,8 @@ export class ContentSEOOptimizer {
         issue: 'Largest Contentful Paint가 너무 느립니다',
         solution: '이미지 최적화, Critical CSS 인라인화, 서버 응답 시간 개선',
         impact: 'high',
-        effort: 'medium'
-      });
+        effort: 'medium',
+      })
     }
 
     if (metrics.cumulativeLayoutShift > 0.1) {
@@ -696,11 +703,11 @@ export class ContentSEOOptimizer {
         issue: 'Cumulative Layout Shift가 높습니다',
         solution: '이미지 크기 사전 정의, 폰트 로딩 최적화, 광고 공간 확보',
         impact: 'medium',
-        effort: 'low'
-      });
+        effort: 'low',
+      })
     }
 
-    return suggestions;
+    return suggestions
   }
 }
 ```
@@ -712,7 +719,7 @@ export class ContentSEOOptimizer {
 ```typescript
 // lib/email-marketing.ts - 이메일 마케팅 자동화
 export class EmailMarketingAutomation {
-  private emailProvider: 'resend' | 'sendgrid' | 'mailgun';
+  private emailProvider: 'resend' | 'sendgrid' | 'mailgun'
 
   // 웰컴 시리즈 자동화
   async createWelcomeSeries(subscriber: Subscriber): Promise<void> {
@@ -721,27 +728,27 @@ export class EmailMarketingAutomation {
         delay: 0, // 즉시
         subject: '환영합니다! 시작하기 가이드',
         template: 'welcome-1',
-        personalData: { firstName: subscriber.firstName }
+        personalData: { firstName: subscriber.firstName },
       },
       {
         delay: 1, // 1일 후
         subject: '첫 번째 단계: 계정 설정 완료하기',
         template: 'welcome-2',
-        personalData: { setupUrl: `${process.env.BASE_URL}/setup?token=${subscriber.token}` }
+        personalData: { setupUrl: `${process.env.BASE_URL}/setup?token=${subscriber.token}` },
       },
       {
         delay: 3, // 3일 후
         subject: '성공 사례: 다른 사용자들은 이렇게 활용해요',
         template: 'welcome-3',
-        personalData: { caseStu: await this.getRelevantCaseStudy(subscriber.industry) }
+        personalData: { caseStu: await this.getRelevantCaseStudy(subscriber.industry) },
       },
       {
         delay: 7, // 1주일 후
         subject: '놓치고 있는 기능이 있나요?',
         template: 'welcome-4',
-        personalData: { unusedFeatures: await this.getUnusedFeatures(subscriber.id) }
-      }
-    ];
+        personalData: { unusedFeatures: await this.getUnusedFeatures(subscriber.id) },
+      },
+    ]
 
     // 각 이메일 스케줄링
     for (const email of welcomeSequence) {
@@ -750,8 +757,8 @@ export class EmailMarketingAutomation {
         subject: email.subject,
         template: email.template,
         data: email.personalData,
-        sendAt: new Date(Date.now() + email.delay * 24 * 60 * 60 * 1000)
-      });
+        sendAt: new Date(Date.now() + email.delay * 24 * 60 * 60 * 1000),
+      })
     }
   }
 
@@ -765,8 +772,8 @@ export class EmailMarketingAutomation {
         email: {
           subject: '장바구니에 남겨둔 상품이 있어요',
           template: 'abandoned-cart',
-          discountCode: 'COMEBACK10'
-        }
+          discountCode: 'COMEBACK10',
+        },
       },
       {
         event: 'feature_not_used',
@@ -774,8 +781,8 @@ export class EmailMarketingAutomation {
         condition: (data: any) => !data.hasUsedFeature,
         email: {
           subject: '이 기능을 놓치고 계신가요?',
-          template: 'feature-education'
-        }
+          template: 'feature-education',
+        },
       },
       {
         event: 'subscription_ending',
@@ -784,14 +791,14 @@ export class EmailMarketingAutomation {
         email: {
           subject: '구독이 곧 만료됩니다',
           template: 'renewal-reminder',
-          renewalDiscount: 'LOYAL20'
-        }
-      }
-    ];
+          renewalDiscount: 'LOYAL20',
+        },
+      },
+    ]
 
     // 트리거 등록
     for (const trigger of triggers) {
-      await this.registerTrigger(userId, trigger);
+      await this.registerTrigger(userId, trigger)
     }
   }
 
@@ -805,10 +812,10 @@ export class EmailMarketingAutomation {
       lastActivity: subscriber.lastActivity,
       preferences: subscriber.preferences,
       usageStats: await this.getUserUsageStats(subscriber.id),
-      recommendations: await this.getPersonalizedRecommendations(subscriber)
-    };
+      recommendations: await this.getPersonalizedRecommendations(subscriber),
+    }
 
-    return await this.renderTemplate(template, personalizationData);
+    return await this.renderTemplate(template, personalizationData)
   }
 
   // A/B 테스트 자동화
@@ -817,45 +824,48 @@ export class EmailMarketingAutomation {
       {
         name: 'A',
         subject: campaign.subjectA,
-        content: campaign.contentA
+        content: campaign.contentA,
       },
       {
         name: 'B',
         subject: campaign.subjectB,
-        content: campaign.contentB
-      }
-    ];
+        content: campaign.contentB,
+      },
+    ]
 
     // 50/50 분할로 발송
-    const subscribers = await this.getSubscribers(campaign.segmentId);
-    const midpoint = Math.floor(subscribers.length / 2);
+    const subscribers = await this.getSubscribers(campaign.segmentId)
+    const midpoint = Math.floor(subscribers.length / 2)
 
-    const groupA = subscribers.slice(0, midpoint);
-    const groupB = subscribers.slice(midpoint);
+    const groupA = subscribers.slice(0, midpoint)
+    const groupB = subscribers.slice(midpoint)
 
     // 동시 발송
     const [resultA, resultB] = await Promise.all([
       this.sendToGroup(groupA, variants[0]),
-      this.sendToGroup(groupB, variants[1])
-    ]);
+      this.sendToGroup(groupB, variants[1]),
+    ])
 
     // 24시간 후 결과 분석
-    setTimeout(async () => {
-      const analysis = await this.analyzeABTestResults(campaign.id);
-      await this.selectWinnerAndSendToRest(analysis);
-    }, 24 * 60 * 60 * 1000);
+    setTimeout(
+      async () => {
+        const analysis = await this.analyzeABTestResults(campaign.id)
+        await this.selectWinnerAndSendToRest(analysis)
+      },
+      24 * 60 * 60 * 1000
+    )
 
     return {
       testId: campaign.id,
       variantA: resultA,
       variantB: resultB,
-      analysisScheduled: true
-    };
+      analysisScheduled: true,
+    }
   }
 
   // 이메일 성과 분석
   async analyzeEmailPerformance(campaignId: string): Promise<EmailAnalytics> {
-    const metrics = await this.getCampaignMetrics(campaignId);
+    const metrics = await this.getCampaignMetrics(campaignId)
 
     return {
       sent: metrics.sent,
@@ -877,29 +887,29 @@ export class EmailMarketingAutomation {
       clicksByDay: await this.getClicksByDay(campaignId),
 
       // 개선 제안
-      recommendations: this.generateImprovementSuggestions(metrics)
-    };
+      recommendations: this.generateImprovementSuggestions(metrics),
+    }
   }
 
   private generateImprovementSuggestions(metrics: EmailMetrics): string[] {
-    const suggestions: string[] = [];
+    const suggestions: string[] = []
 
-    const openRate = (metrics.opened / metrics.delivered) * 100;
-    const clickRate = (metrics.clicked / metrics.delivered) * 100;
+    const openRate = (metrics.opened / metrics.delivered) * 100
+    const clickRate = (metrics.clicked / metrics.delivered) * 100
 
     if (openRate < 20) {
-      suggestions.push('제목 개선 필요: A/B 테스트로 더 매력적인 제목 찾기');
+      suggestions.push('제목 개선 필요: A/B 테스트로 더 매력적인 제목 찾기')
     }
 
     if (clickRate < 2) {
-      suggestions.push('콘텐츠 개선 필요: CTA 버튼 최적화 및 개인화 강화');
+      suggestions.push('콘텐츠 개선 필요: CTA 버튼 최적화 및 개인화 강화')
     }
 
     if (metrics.unsubscribed / metrics.delivered > 0.005) {
-      suggestions.push('구독 취소율 높음: 콘텐츠 관련성 및 빈도 재검토');
+      suggestions.push('구독 취소율 높음: 콘텐츠 관련성 및 빈도 재검토')
     }
 
-    return suggestions;
+    return suggestions
   }
 }
 ```
@@ -941,6 +951,7 @@ export class EmailMarketingAutomation {
 ## 마케팅 성공 체크리스트
 
 ### 첫 24시간 목표
+
 - [ ] **소셜미디어**: 주요 플랫폼에 첫 포스트 발행
 - [ ] **SEO**: 기본 메타태그 및 사이트맵 설정
 - [ ] **이메일**: 뉴스레터 가입 양식 설치
@@ -948,6 +959,7 @@ export class EmailMarketingAutomation {
 - [ ] **컨텐츠**: 론칭 블로그 포스트 작성
 
 ### 첫 주 목표
+
 - [ ] **트래픽**: 일일 방문자 100명 달성
 - [ ] **소셜**: 팔로워 50명 확보
 - [ ] **이메일**: 구독자 20명 확보
@@ -955,6 +967,7 @@ export class EmailMarketingAutomation {
 - [ ] **인플루언서**: 첫 협업 파트너 확보
 
 ### 첫 달 목표
+
 - [ ] **트래픽**: 월간 방문자 10,000명
 - [ ] **전환**: 첫 고객 10명 확보
 - [ ] **소셜**: 팔로워 500명, 참여율 5%+
@@ -962,6 +975,7 @@ export class EmailMarketingAutomation {
 - [ ] **SEO**: 5개 키워드 첫 페이지 랭킹
 
 ### 성장 단계 목표
+
 - [ ] **브랜드 인지도**: 업계 내 인지도 확보
 - [ ] **바이럴**: 첫 바이럴 콘텐츠 생성
 - [ ] **미디어**: 언론 보도 또는 인터뷰
@@ -969,6 +983,7 @@ export class EmailMarketingAutomation {
 - [ ] **파트너십**: 전략적 파트너십 체결
 
 ### 핵심 KPI
+
 - **CAC (Customer Acquisition Cost)**: < 30,000원
 - **LTV (Lifetime Value)**: > 300,000원
 - **LTV/CAC 비율**: > 3:1

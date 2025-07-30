@@ -5,6 +5,7 @@
 **Claude가 혼자 삽질하지 말고 스마트하게 외부 리소스를 활용**하는 자동화된 문제 해결 시스템입니다.
 
 ### 핵심 철학
+
 - 🚫 **2분 룰**: 2분 이상 막히면 자동으로 웹 검색
 - 🎯 **토큰 효율성**: 혼자 삽질(5000토큰) vs 웹검색(200토큰)
 - 🔍 **최신 솔루션 우선**: 2024년 기준 검증된 해결책
@@ -15,15 +16,17 @@
 ## 🚨 5단계 Problem Solving 파이프라인
 
 ### 📊 효율성 비교
-| 방법 | 시간 | 토큰 | 성공률 | 사용 시점 |
-|------|------|-------|--------|-----------|
-| **내부 지식** | 30초 | 100 | 90% | 기본 패턴 |
-| **구조적 분석** | 1분 | 300 | 70% | 복잡한 에러 |
-| **웹 검색** ⭐ | 2분 | 200 | 95% | 막힐 때 |
-| **커뮤니티 솔루션** | 5분 | 500 | 98% | 심화 문제 |
-| **전문가 패턴** | 10분 | 800 | 99% | 근본 해결 |
+
+| 방법                | 시간 | 토큰 | 성공률 | 사용 시점   |
+| ------------------- | ---- | ---- | ------ | ----------- |
+| **내부 지식**       | 30초 | 100  | 90%    | 기본 패턴   |
+| **구조적 분석**     | 1분  | 300  | 70%    | 복잡한 에러 |
+| **웹 검색** ⭐      | 2분  | 200  | 95%    | 막힐 때     |
+| **커뮤니티 솔루션** | 5분  | 500  | 98%    | 심화 문제   |
+| **전문가 패턴**     | 10분 | 800  | 99%    | 근본 해결   |
 
 ### Level 1: 내부 지식 활용 (30초)
+
 ```bash
 # 기존 컨텍스트와 플레이북에서 답 찾기
 - 15_Living_Documentation에서 유사 사례 검색
@@ -32,6 +35,7 @@
 ```
 
 ### Level 2: 구조적 분석 (1분)
+
 ```bash
 # 체계적 디버깅
 - 에러 메시지 패턴 분석
@@ -41,6 +45,7 @@
 ```
 
 ### Level 3: 웹 검색 자동 트리거 ⭐ (2분)
+
 ```bash
 # 자동 조건 (하나라도 해당하면 즉시 검색)
 - ⏰ 2분 이상 해결 안 될 때
@@ -54,6 +59,7 @@
 ```
 
 ### Level 4: 커뮤니티 솔루션 (5분)
+
 ```bash
 # 심화 검색 전략
 - Stack Overflow (검증된 솔루션)
@@ -63,6 +69,7 @@
 ```
 
 ### Level 5: 전문가 패턴 (10분)
+
 ```bash
 # 마지막 단계
 - 도메인 전문가 페르소나 활성화
@@ -78,6 +85,7 @@
 ### 📋 상황별 자동 검색 패턴
 
 #### 컴파일/빌드 에러
+
 ```yaml
 트리거:
 - "compilation failed", "build error", "syntax error"
@@ -92,6 +100,7 @@
 ```
 
 #### 의존성/패키지 문제
+
 ```yaml
 트리거:
 - "module not found", "package not installed"
@@ -106,6 +115,7 @@
 ```
 
 #### 성능 문제
+
 ```yaml
 트리거:
 - 2분 이상 같은 최적화 시도
@@ -120,6 +130,7 @@
 ```
 
 #### 배포/DevOps 에러
+
 ```yaml
 트리거:
 - "deploy failed", "CI/CD error", "docker error"
@@ -136,6 +147,7 @@
 ### 🎯 검색 쿼리 최적화 전략
 
 #### 효과적인 검색 패턴
+
 ```bash
 # ✅ 좋은 검색 쿼리
 "Next.js 14 TypeError useRouter undefined fix 2024"
@@ -149,16 +161,17 @@
 ```
 
 #### 검색 키워드 우선순위
+
 ```yaml
 필수 키워드:
-- 정확한 기술명 + 버전 ("React 18", "Node 20")
-- 구체적인 에러 메시지 ("TypeError", "ECONNREFUSED")
-- 연도 ("2024", "latest")
+  - 정확한 기술명 + 버전 ("React 18", "Node 20")
+  - 구체적인 에러 메시지 ("TypeError", "ECONNREFUSED")
+  - 연도 ("2024", "latest")
 
 추가 키워드:
-- 플랫폼/OS ("macOS", "Windows", "Linux")
-- 환경 ("development", "production", "Docker")
-- 해결책 타입 ("fix", "solution", "workaround")
+  - 플랫폼/OS ("macOS", "Windows", "Linux")
+  - 환경 ("development", "production", "Docker")
+  - 해결책 타입 ("fix", "solution", "workaround")
 ```
 
 ---
@@ -166,20 +179,21 @@
 ## 🤖 Smart Assistant 통합
 
 ### 자동 트리거 시스템
+
 ```javascript
 // 12_Smart_Assistant 업그레이드
 const AutoSearchTrigger = {
   // 검색 필요성 자동 감지
-  detectSearchNeed: (context) => {
+  detectSearchNeed: context => {
     const indicators = [
       context.timeSpent > 120, // 2분 이상
       context.sameApproachCount >= 3, // 같은 방법 3번
       context.errorPatterns.includes('unknown'),
       context.tokenUsage > 1000,
-      context.isNewTechnology
-    ];
+      context.isNewTechnology,
+    ]
 
-    return indicators.filter(Boolean).length >= 1;
+    return indicators.filter(Boolean).length >= 1
   },
 
   // 최적화된 검색 쿼리 생성
@@ -188,15 +202,16 @@ const AutoSearchTrigger = {
       tech.name + (tech.version ? ` ${tech.version}` : ''),
       error.message || error.type,
       context.os && `${context.os}`,
-      'solution fix 2024'
-    ].filter(Boolean);
+      'solution fix 2024',
+    ].filter(Boolean)
 
-    return parts.join(' ');
-  }
-};
+    return parts.join(' ')
+  },
+}
 ```
 
 ### 상황별 자동 추천 업데이트
+
 ```yaml
 # 12_Smart_Assistant/README.md에 추가
 
@@ -227,6 +242,7 @@ const AutoSearchTrigger = {
 ### 📋 즉시 사용 가능한 명령어 템플릿
 
 #### 에러 해결 템플릿
+
 ```bash
 # 패턴 1: 구체적인 에러 메시지
 /search "[기술명] [정확한 에러 메시지] fix 2024"
@@ -242,6 +258,7 @@ const AutoSearchTrigger = {
 ```
 
 #### 단계별 실행 가이드
+
 ```bash
 # 1단계: 즉시 검색 (2분 경과 시)
 You: "Next.js에서 이상한 에러가 계속 나는데..."
@@ -261,23 +278,24 @@ Claude: 가장 적합한 해결책을 적용하겠습니다...
 ### 🎯 효율성 측정
 
 #### Before vs After
+
 ```yaml
 기존 방식 (Claude 혼자 삽질):
-- 시간: 30분
-- 토큰: 5000개
-- 성공률: 60%
-- 사용자 스트레스: 높음
+  - 시간: 30분
+  - 토큰: 5000개
+  - 성공률: 60%
+  - 사용자 스트레스: 높음
 
 새로운 방식 (스마트 검색):
-- 시간: 3분
-- 토큰: 300개
-- 성공률: 95%
-- 사용자 스트레스: 낮음
+  - 시간: 3분
+  - 토큰: 300개
+  - 성공률: 95%
+  - 사용자 스트레스: 낮음
 
 효율성 개선:
-- ⚡ 시간 90% 단축
-- 💰 토큰 94% 절약
-- 🎯 성공률 35% 향상
+  - ⚡ 시간 90% 단축
+  - 💰 토큰 94% 절약
+  - 🎯 성공률 35% 향상
 ```
 
 ---
@@ -285,6 +303,7 @@ Claude: 가장 적합한 해결책을 적용하겠습니다...
 ## 🔗 다른 섹션과의 연계
 
 ### 📚 15_Living_Documentation 통합
+
 ```bash
 # 해결된 문제들 자동 축적
 해결책 발견 → 15_Living_Documentation에 자동 추가
@@ -296,6 +315,7 @@ Claude: 가장 적합한 해결책을 적용하겠습니다...
 ```
 
 ### 🤖 12_Smart_Assistant 강화
+
 ```bash
 # 문제 해결 패턴 학습
 성공적인 검색 쿼리 → 자동 추천 시스템에 반영
@@ -303,6 +323,7 @@ Claude: 가장 적합한 해결책을 적용하겠습니다...
 ```
 
 ### 🎯 02_AI_Experts 활용
+
 ```bash
 # 전문가별 검색 전략
 Frontend Expert → React/Vue 특화 검색
@@ -315,6 +336,7 @@ DevOps Expert → 배포/인프라 특화 검색
 ## 💡 고급 기능
 
 ### 🔮 예측적 문제 방지
+
 ```bash
 # "이런 문제가 생길 수 있습니다" 사전 경고
 프로젝트 패턴 분석 → 잠재적 문제 예측
@@ -322,6 +344,7 @@ DevOps Expert → 배포/인프라 특화 검색
 ```
 
 ### 🌐 커뮤니티 솔루션 통합
+
 ```bash
 # 실시간 솔루션 업데이트
 GitHub Issues → 최신 해결책 자동 수집
@@ -330,6 +353,7 @@ Discord/Reddit → 커뮤니티 논의 반영
 ```
 
 ### 📊 성능 추적
+
 ```bash
 # 문제 해결 효율성 측정
 검색 성공률 → 쿼리 패턴 최적화
@@ -342,12 +366,14 @@ Discord/Reddit → 커뮤니티 논의 반영
 ## 🚀 시작하기
 
 ### 즉시 적용 방법
+
 1. **2분 룰 활성화**: 2분 이상 막히면 자동 웹 검색
 2. **검색 쿼리 패턴 학습**: 효과적인 키워드 조합 습득
 3. **성공 사례 축적**: 해결된 문제들 문서화
 4. **자동화 시스템 구축**: Smart Assistant 트리거 설정
 
 ### 성공 지표
+
 - 🎯 문제 해결 시간 90% 단축
 - 💰 토큰 사용량 80% 절약
 - 📈 해결 성공률 95% 달성

@@ -4,12 +4,12 @@
       {{ label }}
       <span v-if="required" class="base-input-required">*</span>
     </label>
-    
+
     <div class="base-input-container">
       <span v-if="$slots.prefix" class="base-input-prefix">
         <slot name="prefix" />
       </span>
-      
+
       <input
         :id="inputId"
         v-model="inputValue"
@@ -23,12 +23,12 @@
         @focus="handleFocus"
         @blur="handleBlur"
       />
-      
+
       <span v-if="$slots.suffix" class="base-input-suffix">
         <slot name="suffix" />
       </span>
     </div>
-    
+
     <p v-if="error" class="base-input-error">
       {{ error }}
     </p>
@@ -44,11 +44,11 @@ import { computed, ref } from 'vue'
 const props = defineProps({
   modelValue: {
     type: [String, Number],
-    default: ''
+    default: '',
   },
   type: {
     type: String,
-    default: 'text'
+    default: 'text',
   },
   label: String,
   placeholder: String,
@@ -60,12 +60,12 @@ const props = defineProps({
   size: {
     type: String,
     default: 'medium',
-    validator: (value) => ['small', 'medium', 'large'].includes(value)
+    validator: (value) => ['small', 'medium', 'large'].includes(value),
   },
   fullWidth: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 const emit = defineEmits(['update:modelValue', 'input', 'focus', 'blur'])
@@ -79,7 +79,7 @@ const isFocused = ref(false)
 // Computed
 const inputValue = computed({
   get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value)
+  set: (value) => emit('update:modelValue', value),
 })
 
 const inputClasses = computed(() => [
@@ -89,8 +89,8 @@ const inputClasses = computed(() => [
     'base-input--error': props.error,
     'base-input--disabled': props.disabled,
     'base-input--focused': isFocused.value,
-    'base-input--full-width': props.fullWidth
-  }
+    'base-input--full-width': props.fullWidth,
+  },
 ])
 
 // Methods

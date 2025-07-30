@@ -28,7 +28,7 @@
             <div class="stat-change positive">+{{ stats.userGrowth }}%</div>
           </div>
         </div>
-        
+
         <div class="stat-card success">
           <div class="stat-icon">☕</div>
           <div class="stat-content">
@@ -37,7 +37,7 @@
             <div class="stat-change positive">+{{ stats.tastingGrowth }}%</div>
           </div>
         </div>
-        
+
         <div class="stat-card warning">
           <div class="stat-icon">🎯</div>
           <div class="stat-content">
@@ -46,7 +46,7 @@
             <div class="stat-change positive">+{{ stats.scoreImprovement }}%</div>
           </div>
         </div>
-        
+
         <div class="stat-card info">
           <div class="stat-icon">⭐</div>
           <div class="stat-content">
@@ -83,7 +83,10 @@
               <div class="score-bar">
                 <div class="score-label">90-100점</div>
                 <div class="score-progress">
-                  <div class="score-fill excellent" :style="`width: ${scoreDistribution.excellent}%`"></div>
+                  <div
+                    class="score-fill excellent"
+                    :style="`width: ${scoreDistribution.excellent}%`"
+                  ></div>
                 </div>
                 <div class="score-value">{{ scoreDistribution.excellent }}%</div>
               </div>
@@ -127,8 +130,12 @@
             <div v-for="tasting in recentTastings" :key="tasting.id" class="activity-item">
               <div class="activity-avatar">{{ tasting.userInitial }}</div>
               <div class="activity-content">
-                <div class="activity-main">{{ tasting.coffee_info?.coffee_name || 'Unknown Coffee' }}</div>
-                <div class="activity-sub">{{ tasting.coffee_info?.cafe_name || 'Unknown Cafe' }} · {{ tasting.timeAgo }}</div>
+                <div class="activity-main">
+                  {{ tasting.coffee_info?.coffee_name || 'Unknown Coffee' }}
+                </div>
+                <div class="activity-sub">
+                  {{ tasting.coffee_info?.cafe_name || 'Unknown Cafe' }} · {{ tasting.timeAgo }}
+                </div>
               </div>
               <div class="activity-score" :class="getScoreClass(tasting.matchScore)">
                 {{ tasting.matchScore }}점
@@ -198,14 +205,14 @@ const stats = ref({
   avgMatchScore: 78,
   scoreImprovement: 5.2,
   activeUsers: 234,
-  engagement: 15.7
+  engagement: 15.7,
 })
 
 const scoreDistribution = ref({
   excellent: 25,
   good: 45,
   fair: 22,
-  poor: 8
+  poor: 8,
 })
 
 const recentTastings = ref([
@@ -215,7 +222,7 @@ const recentTastings = ref([
     coffeeName: '에스프레소 블렌드',
     cafeName: '카페 베네',
     timeAgo: '5분 전',
-    matchScore: 85
+    matchScore: 85,
   },
   {
     id: 2,
@@ -223,7 +230,7 @@ const recentTastings = ref([
     coffeeName: '케냐 AA',
     cafeName: '로스터리 카페',
     timeAgo: '12분 전',
-    matchScore: 92
+    matchScore: 92,
   },
   {
     id: 3,
@@ -231,7 +238,7 @@ const recentTastings = ref([
     coffeeName: '콜롬비아 수프리모',
     cafeName: '원두가게',
     timeAgo: '18분 전',
-    matchScore: 76
+    matchScore: 76,
   },
   {
     id: 4,
@@ -239,8 +246,8 @@ const recentTastings = ref([
     coffeeName: '브라질 산토스',
     cafeName: '모닝 카페',
     timeAgo: '25분 전',
-    matchScore: 68
-  }
+    matchScore: 68,
+  },
 ])
 
 const popularCoffees = ref([
@@ -250,7 +257,7 @@ const popularCoffees = ref([
     name: '에티오피아 예가체프',
     cafe: '스페셜티 로스터',
     tastings: 156,
-    avgScore: 4.8
+    avgScore: 4.8,
   },
   {
     id: 2,
@@ -258,7 +265,7 @@ const popularCoffees = ref([
     name: '콜롬비아 수프리모',
     cafe: '프리미엄 빈',
     tastings: 134,
-    avgScore: 4.6
+    avgScore: 4.6,
   },
   {
     id: 3,
@@ -266,7 +273,7 @@ const popularCoffees = ref([
     name: '케냐 AA',
     cafe: '로스터리 카페',
     tastings: 128,
-    avgScore: 4.7
+    avgScore: 4.7,
   },
   {
     id: 4,
@@ -274,8 +281,8 @@ const popularCoffees = ref([
     name: '과테말라 안티구아',
     cafe: '원두공장',
     tastings: 95,
-    avgScore: 4.5
-  }
+    avgScore: 4.5,
+  },
 ])
 
 // 시간 업데이트
@@ -289,7 +296,7 @@ const updateTime = () => {
     day: '2-digit',
     hour: '2-digit',
     minute: '2-digit',
-    second: '2-digit'
+    second: '2-digit',
   })
 }
 
@@ -761,31 +768,31 @@ onUnmounted(() => {
   .admin-dashboard {
     padding: 1rem;
   }
-  
+
   .header-content {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
-  
+
   .stats-grid,
   .charts-grid,
   .activity-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .actions-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .dashboard-title {
     font-size: 1.5rem;
   }
-  
+
   .stat-card {
     padding: 1.5rem;
   }
-  
+
   .chart-card,
   .activity-card {
     padding: 1.5rem;

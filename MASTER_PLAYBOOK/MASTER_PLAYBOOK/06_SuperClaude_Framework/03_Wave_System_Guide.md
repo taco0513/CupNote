@@ -7,6 +7,7 @@ Wave System은 복잡한 작업을 여러 단계(wave)로 나누어 체계적으
 ## 핵심 개념
 
 ### 자동 활성화 조건
+
 ```yaml
 activation_formula: |
   complexity ≥ 0.7 AND
@@ -15,6 +16,7 @@ activation_formula: |
 ```
 
 ### Wave의 구조
+
 ```
 Wave 1: 분석 → Wave 2: 계획 → Wave 3: 구현 → Wave 4: 검증 → Wave 5: 최적화
 ```
@@ -22,7 +24,9 @@ Wave 1: 분석 → Wave 2: 계획 → Wave 3: 구현 → Wave 4: 검증 → Wave
 ## Wave 전략
 
 ### 1. Progressive (점진적 개선)
+
 **특징**: 반복적 개선을 통한 점진적 향상
+
 ```bash
 /improve --wave-mode force --wave-strategy progressive
 
@@ -33,6 +37,7 @@ Wave 1: 분석 → Wave 2: 계획 → Wave 3: 구현 → Wave 4: 검증 → Wave
 ```
 
 **Wave 구성**:
+
 1. 현재 상태 평가
 2. 개선 기회 식별
 3. 우선순위별 구현
@@ -40,7 +45,9 @@ Wave 1: 분석 → Wave 2: 계획 → Wave 3: 구현 → Wave 4: 검증 → Wave
 5. 추가 개선
 
 ### 2. Systematic (체계적 분석)
+
 **특징**: 철저한 분석과 방법론적 접근
+
 ```bash
 /analyze --wave-mode force --wave-strategy systematic
 
@@ -51,6 +58,7 @@ Wave 1: 분석 → Wave 2: 계획 → Wave 3: 구현 → Wave 4: 검증 → Wave
 ```
 
 **Wave 구성**:
+
 1. 전체 시스템 스캔
 2. 문제 영역 매핑
 3. 근본 원인 분석
@@ -58,7 +66,9 @@ Wave 1: 분석 → Wave 2: 계획 → Wave 3: 구현 → Wave 4: 검증 → Wave
 5. 통합 테스트
 
 ### 3. Adaptive (적응형 구성)
+
 **특징**: 상황에 따라 동적으로 조정
+
 ```bash
 /implement --wave-mode force --wave-strategy adaptive
 
@@ -69,6 +79,7 @@ Wave 1: 분석 → Wave 2: 계획 → Wave 3: 구현 → Wave 4: 검증 → Wave
 ```
 
 **Wave 구성**:
+
 1. 초기 평가
 2. 전략 결정
 3. 유연한 실행
@@ -76,7 +87,9 @@ Wave 1: 분석 → Wave 2: 계획 → Wave 3: 구현 → Wave 4: 검증 → Wave
 5. 전략 재조정
 
 ### 4. Enterprise (대규모 오케스트레이션)
+
 **특징**: 대규모 시스템을 위한 포괄적 접근
+
 ```bash
 /build --wave-mode force --wave-strategy enterprise
 
@@ -87,6 +100,7 @@ Wave 1: 분석 → Wave 2: 계획 → Wave 3: 구현 → Wave 4: 검증 → Wave
 ```
 
 **Wave 구성**:
+
 1. 인프라 평가
 2. 의존성 분석
 3. 단계별 마이그레이션
@@ -96,6 +110,7 @@ Wave 1: 분석 → Wave 2: 계획 → Wave 3: 구현 → Wave 4: 검증 → Wave
 ## Wave 실행 패턴
 
 ### 기본 실행 플로우
+
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
 │   Wave 1    │ ──▶ │   Wave 2    │ ──▶ │   Wave 3    │
@@ -106,6 +121,7 @@ Wave 1: 분석 → Wave 2: 계획 → Wave 3: 구현 → Wave 4: 검증 → Wave
 ```
 
 ### 병렬 Wave 실행
+
 ```
          ┌─────────────┐
          │ 조정자 Wave │
@@ -122,6 +138,7 @@ Wave 1: 분석 → Wave 2: 계획 → Wave 3: 구현 → Wave 4: 검증 → Wave
 ## Wave 위임 전략
 
 ### 파일 단위 위임
+
 ```bash
 /improve --wave-mode force --wave-delegation files
 
@@ -130,6 +147,7 @@ Wave 1: 분석 → Wave 2: 계획 → Wave 3: 구현 → Wave 4: 검증 → Wave
 ```
 
 ### 폴더 단위 위임
+
 ```bash
 /analyze --wave-mode force --wave-delegation folders
 
@@ -138,6 +156,7 @@ Wave 1: 분석 → Wave 2: 계획 → Wave 3: 구현 → Wave 4: 검증 → Wave
 ```
 
 ### 작업 단위 위임
+
 ```bash
 /build --wave-mode force --wave-delegation tasks
 
@@ -148,6 +167,7 @@ Wave 1: 분석 → Wave 2: 계획 → Wave 3: 구현 → Wave 4: 검증 → Wave
 ## Wave 검증 및 체크포인트
 
 ### 검증 모드
+
 ```bash
 # 각 Wave 후 검증
 /improve --wave-mode force --wave-validation
@@ -157,6 +177,7 @@ Wave 1: 분석 → Wave 2: 계획 → Wave 3: 구현 → Wave 4: 검증 → Wave
 ```
 
 ### 검증 기준
+
 1. **구문 검사**: 코드 유효성
 2. **테스트 통과**: 기존 테스트 실행
 3. **성능 지표**: 개선 측정
@@ -166,6 +187,7 @@ Wave 1: 분석 → Wave 2: 계획 → Wave 3: 구현 → Wave 4: 검증 → Wave
 ## 실제 사용 예시
 
 ### 예시 1: 대규모 리팩토링
+
 ```bash
 /improve "전체 코드베이스 리팩토링" \
   --wave-mode force \
@@ -181,6 +203,7 @@ Wave 1: 분석 → Wave 2: 계획 → Wave 3: 구현 → Wave 4: 검증 → Wave
 ```
 
 ### 예시 2: 성능 최적화
+
 ```bash
 /improve --focus performance \
   --wave-mode force \
@@ -195,6 +218,7 @@ Wave 1: 분석 → Wave 2: 계획 → Wave 3: 구현 → Wave 4: 검증 → Wave
 ```
 
 ### 예시 3: 보안 감사
+
 ```bash
 /analyze --focus security \
   --wave-mode force \
@@ -211,16 +235,18 @@ Wave 1: 분석 → Wave 2: 계획 → Wave 3: 구현 → Wave 4: 검증 → Wave
 ## Wave 모니터링
 
 ### 진행 상황 추적
+
 ```yaml
 wave_progress:
   current_wave: 3
   total_waves: 5
   completion: 60%
-  status: "구현 진행 중"
-  next_milestone: "통합 테스트"
+  status: '구현 진행 중'
+  next_milestone: '통합 테스트'
 ```
 
 ### 성과 지표
+
 - **품질 개선**: 코드 복잡도 감소율
 - **성능 향상**: 응답 시간 개선율
 - **보안 강화**: 취약점 해결율
@@ -229,6 +255,7 @@ wave_progress:
 ## 모범 사례
 
 ### Do's
+
 1. ✅ 복잡한 작업에 Wave 사용
 2. ✅ 적절한 전략 선택
 3. ✅ 검증 단계 포함
@@ -236,6 +263,7 @@ wave_progress:
 5. ✅ 체크포인트 설정
 
 ### Don'ts
+
 1. ❌ 단순 작업에 Wave 강제
 2. ❌ 너무 많은 Wave 설정 (최대 7개 권장)
 3. ❌ 검증 없이 진행
@@ -245,12 +273,14 @@ wave_progress:
 ## 문제 해결
 
 ### Wave 실패 시
+
 1. 체크포인트로 롤백
 2. 실패 원인 분석
 3. 전략 재조정
 4. 단계별 재실행
 
 ### 성능 이슈
+
 1. Wave 수 조정
 2. 병렬 처리 최적화
 3. 위임 전략 변경

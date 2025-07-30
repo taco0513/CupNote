@@ -5,6 +5,7 @@
 데이터 모델을 기반으로 **클라이언트와 서버 간의 통신 인터페이스**를 설계합니다. 좋은 API는 직관적이고, 일관성 있으며, 확장 가능합니다.
 
 ### API 설계 원칙
+
 1. **일관성**: 예측 가능한 패턴
 2. **단순성**: 복잡함보다 간단함
 3. **유연성**: 다양한 클라이언트 지원
@@ -13,6 +14,7 @@
 ## 🏗️ RESTful API 설계
 
 ### REST 원칙
+
 ```
 1. Resource 중심 설계
    /users (not /getUsers)
@@ -33,6 +35,7 @@
 ```
 
 ### URL 설계 패턴
+
 ```
 # 리소스 컬렉션
 GET    /api/products          # 목록 조회
@@ -56,6 +59,7 @@ POST   /api/orders/:id/cancel       # 주문 취소
 ## 📋 API 스펙 정의
 
 ### OpenAPI 3.0 명세
+
 ```yaml
 openapi: 3.0.0
 info:
@@ -98,6 +102,7 @@ paths:
 ### Request/Response 설계
 
 #### Request 구조
+
 ```javascript
 // 상품 생성 요청
 POST /api/products
@@ -120,6 +125,7 @@ Body:
 ```
 
 #### Response 구조
+
 ```javascript
 // 성공 응답
 {
@@ -158,6 +164,7 @@ Body:
 ## 🔐 인증/인가 시스템
 
 ### JWT 기반 인증
+
 ```javascript
 // 로그인
 POST /api/auth/login
@@ -189,6 +196,7 @@ POST /api/auth/refresh
 ```
 
 ### 권한 체계
+
 ```javascript
 // 역할 기반 접근 제어 (RBAC)
 const permissions = {
@@ -222,6 +230,7 @@ const permissions = {
 ## 📊 API 버전 관리
 
 ### 버전 관리 전략
+
 ```
 1. URL 버전
    /api/v1/products
@@ -235,6 +244,7 @@ const permissions = {
 ```
 
 ### 하위 호환성 유지
+
 ```javascript
 // v1 응답 (기존)
 {
@@ -261,6 +271,7 @@ const permissions = {
 ## 🚀 성능 최적화
 
 ### 페이지네이션
+
 ```javascript
 // Offset 기반
 GET /api/products?page=2&limit=20
@@ -288,6 +299,7 @@ GET /api/products?cursor=eyJpZCI6MTAwfQ&limit=20
 ```
 
 ### 필드 선택
+
 ```javascript
 // 필요한 필드만 요청
 GET /api/products?fields=id,name,price
@@ -303,6 +315,7 @@ GET /api/products?fields=id,name,price
 ```
 
 ### 캐싱 전략
+
 ```javascript
 // ETag 활용
 Response Headers:
@@ -318,6 +331,7 @@ Request Headers:
 ## 📝 API 문서화
 
 ### Swagger/OpenAPI 통합
+
 ```javascript
 /**
  * @swagger
@@ -344,30 +358,37 @@ Request Headers:
 ```
 
 ### API 문서 구성
-```markdown
+
+````markdown
 # Product API
 
 ## 상품 목록 조회
+
 상품 목록을 페이지네이션과 함께 조회합니다.
 
 ### Request
+
 `GET /api/products`
 
 ### Parameters
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| page | integer | No | 페이지 번호 (기본: 1) |
-| limit | integer | No | 페이지당 항목 수 (기본: 20) |
-| category | string | No | 카테고리 필터 |
+
+| Name     | Type    | Required | Description                 |
+| -------- | ------- | -------- | --------------------------- |
+| page     | integer | No       | 페이지 번호 (기본: 1)       |
+| limit    | integer | No       | 페이지당 항목 수 (기본: 20) |
+| category | string  | No       | 카테고리 필터               |
 
 ### Response
+
 ```json
 {
   "success": true,
   "data": [...]
 }
 ```
-```
+````
+
+````
 
 ## 🔧 실전 구현
 
@@ -432,11 +453,12 @@ router.post('/', authorize('products:create'), async (req, res) => {
     }
   }
 });
-```
+````
 
 ## 🎯 Day 8-11 실행 계획
 
 ### Day 8: API 설계
+
 ```
 오전:
 - 엔드포인트 목록 작성
@@ -450,6 +472,7 @@ router.post('/', authorize('products:create'), async (req, res) => {
 ```
 
 ### Day 9: 인증/인가
+
 ```
 오전:
 - 인증 방식 선택 (JWT)
@@ -463,6 +486,7 @@ router.post('/', authorize('products:create'), async (req, res) => {
 ```
 
 ### Day 10: 구현
+
 ```
 오전:
 - 기본 라우터 구성
@@ -476,6 +500,7 @@ router.post('/', authorize('products:create'), async (req, res) => {
 ```
 
 ### Day 11: 문서화/테스트
+
 ```
 오전:
 - OpenAPI 스펙 작성
@@ -491,6 +516,7 @@ router.post('/', authorize('products:create'), async (req, res) => {
 ## ✅ 체크리스트
 
 ### API 설계 완료 기준
+
 - [ ] 모든 비즈니스 기능 커버
 - [ ] RESTful 원칙 준수
 - [ ] 일관된 응답 구조
@@ -502,12 +528,14 @@ router.post('/', authorize('products:create'), async (req, res) => {
 ## 💡 Best Practices
 
 ### Do's ✅
+
 1. **버전 관리**: 처음부터 버전 고려
 2. **일관성**: 네이밍, 구조 통일
 3. **문서화**: 코드와 함께 작성
 4. **보안**: HTTPS, 인증, 권한
 
 ### Don'ts ❌
+
 1. **동사 URL**: /getUsers (X)
 2. **민감정보 노출**: 비밀번호, 토큰
 3. **과도한 중첩**: /a/b/c/d/e

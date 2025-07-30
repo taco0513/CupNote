@@ -19,19 +19,19 @@ export default mergeConfig(
           '**/*.config.*',
           '**/mockData/*',
           '**/*.spec.ts',
-          '**/*.test.ts'
+          '**/*.test.ts',
         ],
         thresholds: {
           global: {
             statements: 70,
             branches: 70,
             functions: 70,
-            lines: 70
-          }
-        }
+            lines: 70,
+          },
+        },
       },
       globals: true,
-      setupFiles: ['./src/test/setup.ts']
-    }
-  })
+      setupFiles: ['./src/test/setup.ts'],
+    },
+  }),
 )

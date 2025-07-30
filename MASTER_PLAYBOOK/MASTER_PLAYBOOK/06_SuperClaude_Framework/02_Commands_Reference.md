@@ -3,6 +3,7 @@
 ## 개발 명령어
 
 ### /build
+
 **용도**: 프로젝트 빌더 (프레임워크 자동 감지)
 
 ```bash
@@ -20,11 +21,13 @@
 ```
 
 **자동 활성화**:
+
 - 페르소나: Frontend, Backend, Architect
 - MCP: Magic (UI), Context7 (패턴)
 - 패키지 매니저: Bun 우선 (30x 빠름)
 
 ### /implement
+
 **용도**: 기능 및 코드 구현
 
 ```bash
@@ -41,6 +44,7 @@
 ```
 
 **구현 타입**:
+
 - `component`: UI 컴포넌트
 - `api`: API 엔드포인트
 - `service`: 백엔드 서비스
@@ -49,6 +53,7 @@
 - `database`: DB 스키마
 
 ### /analyze
+
 **용도**: 다차원 코드 및 시스템 분석
 
 ```bash
@@ -70,11 +75,13 @@
 ```
 
 **분석 레벨**:
+
 - `--think`: 모듈 수준 분석
 - `--think-hard`: 시스템 전체 분석
 - `--ultrathink`: 아키텍처 재설계 수준
 
 ### /improve
+
 **용도**: 증거 기반 코드 개선
 
 ```bash
@@ -95,6 +102,7 @@
 ```
 
 **개선 전략**:
+
 - `performance`: 성능 최적화
 - `security`: 보안 강화
 - `quality`: 코드 품질
@@ -103,6 +111,7 @@
 ## 분석 명령어
 
 ### /troubleshoot
+
 **용도**: 문제 조사 및 해결
 
 ```bash
@@ -117,6 +126,7 @@
 ```
 
 ### /explain
+
 **용도**: 교육적 설명
 
 ```bash
@@ -131,6 +141,7 @@
 ```
 
 ### /estimate
+
 **용도**: 증거 기반 추정
 
 ```bash
@@ -147,6 +158,7 @@
 ## 품질 명령어
 
 ### /test
+
 **용도**: 테스트 워크플로우
 
 ```bash
@@ -164,6 +176,7 @@
 ```
 
 ### /cleanup
+
 **용도**: 프로젝트 정리 및 기술 부채 감소
 
 ```bash
@@ -178,6 +191,7 @@
 ```
 
 ### /document
+
 **용도**: 문서 생성
 
 ```bash
@@ -197,6 +211,7 @@
 ## 워크플로우 명령어
 
 ### /git
+
 **용도**: Git 워크플로우 지원
 
 ```bash
@@ -211,6 +226,7 @@
 ```
 
 ### /task
+
 **용도**: 장기 프로젝트 관리
 
 ```bash
@@ -225,6 +241,7 @@
 ```
 
 ### /spawn
+
 **용도**: 작업 오케스트레이션
 
 ```bash
@@ -241,16 +258,19 @@
 ## 플래그 참조
 
 ### 사고 플래그
+
 - `--think`: 멀티파일 분석 (~4K 토큰)
 - `--think-hard`: 심층 아키텍처 분석 (~10K 토큰)
 - `--ultrathink`: 중요 시스템 재설계 (~32K 토큰)
 
 ### 압축 플래그
+
 - `--uc`: 30-50% 토큰 감소
 - `--answer-only`: 작업 생성 없이 직접 응답
 - `--verbose`: 최대 상세 설명
 
 ### MCP 서버 플래그
+
 - `--c7`: Context7 활성화 (기본 활성)
 - `--seq`: Sequential 활성화
 - `--magic`: Magic UI 활성화
@@ -259,11 +279,13 @@
 - `--no-mcp`: MCP 비활성화
 
 ### Wave 플래그
+
 - `--wave-mode [auto|force|off]`: Wave 제어
 - `--wave-strategy [progressive|systematic|adaptive|enterprise]`: 전략 선택
 - `--wave-delegation [files|folders|tasks]`: 위임 방식
 
 ### 기타 플래그
+
 - `--safe-mode`: 최대 검증, 보수적 실행
 - `--validate`: 사전 검증 및 리스크 평가
 - `--loop`: 반복 개선 모드
@@ -274,17 +296,20 @@
 ## 자동 활성화 규칙
 
 ### 복잡도 기반
+
 - 복잡도 ≥0.7 → Wave 모드 고려
 - 파일 >20개 → 병렬 처리 고려
 - 작업 유형 >2개 → 멀티 도메인 처리
 
 ### 도메인 기반
+
 - UI 작업 → Frontend 페르소나 + Magic
 - API 작업 → Backend 페르소나 + Context7
 - 보안 작업 → Security 페르소나 + Sequential
 - 성능 작업 → Performance 페르소나 + Playwright
 
 ### 상황 기반
+
 - 리소스 사용 >75% → --uc 자동 활성화
 - 프로덕션 환경 → --safe-mode 제안
 - 대규모 리팩토링 → Wave 모드 제안

@@ -9,12 +9,14 @@
 ### 🔧 backend-architect - 백엔드 설계사
 
 #### 전문 분야
+
 - RESTful API 설계
 - 데이터베이스 구조 설계
 - 서버 아키텍처 구축
 - 마이크로서비스 설계
 
 #### 자동 호출 상황
+
 ```
 "로그인 시스템 만들어줘"
 "데이터 저장 기능 필요해"
@@ -23,6 +25,7 @@
 ```
 
 #### 실제 사용 예시
+
 ```
 You: 사용자 정보를 저장하고 조회하는 API 만들어줘
 
@@ -42,12 +45,14 @@ Backend Architect: 네, 사용자 정보 관리를 위한 RESTful API를 설계�
 ### 🎨 frontend-developer - 프론트엔드 개발자
 
 #### 전문 분야
+
 - React/Next.js 개발
 - UI/UX 구현
 - 반응형 디자인
 - 애니메이션 효과
 
 #### 자동 호출 상황
+
 ```
 "버튼 만들어줘"
 "페이지 디자인해줘"
@@ -56,6 +61,7 @@ Backend Architect: 네, 사용자 정보 관리를 위한 RESTful API를 설계�
 ```
 
 #### 실제 사용 예시
+
 ```
 You: 로그인 페이지 예쁘게 만들어줘
 
@@ -73,12 +79,14 @@ Frontend Developer: 모던하고 깔끔한 로그인 페이지를 만들어드�
 ### 📱 mobile-developer - 모바일 앱 개발자
 
 #### 전문 분야
+
 - React Native 개발
 - Flutter 개발
 - iOS/Android 네이티브 기능
 - 앱스토어 배포
 
 #### 자동 호출 상황
+
 ```
 "모바일 앱으로 만들어줘"
 "푸시 알림 기능"
@@ -87,6 +95,7 @@ Frontend Developer: 모던하고 깔끔한 로그인 페이지를 만들어드�
 ```
 
 #### 실제 사용 예시
+
 ```
 You: 사진 찍어서 공유하는 앱 만들어줘
 
@@ -104,12 +113,14 @@ Mobile Developer: 카메라 기능이 있는 사진 공유 앱을 만들어드�
 ### 🎮 game-developer - 게임 개발자
 
 #### 전문 분야
+
 - 웹 게임 개발
 - Unity/Phaser 활용
 - 게임 로직 설계
 - 멀티플레이어 구현
 
 #### 자동 호출 상황
+
 ```
 "간단한 게임 만들어줘"
 "퍼즐 게임"
@@ -122,12 +133,14 @@ Mobile Developer: 카메라 기능이 있는 사진 공유 앱을 만들어드�
 ### 🎯 ui-ux-designer - UI/UX 디자이너
 
 #### 전문 분야
+
 - 사용자 경험 설계
 - 인터페이스 디자인
 - 프로토타입 제작
 - 디자인 시스템 구축
 
 #### 자동 호출 상황
+
 ```
 "사용하기 쉽게 만들어줘"
 "디자인 개선해줘"
@@ -140,12 +153,14 @@ Mobile Developer: 카메라 기능이 있는 사진 공유 앱을 만들어드�
 ### 🔌 api-designer - API 설계자
 
 #### 전문 분야
+
 - RESTful API 설계
 - GraphQL 스키마
 - API 문서화
 - 버전 관리
 
 #### 자동 호출 상황
+
 ```
 "API 구조 설계해줘"
 "GraphQL로 만들어줘"
@@ -158,12 +173,14 @@ Mobile Developer: 카메라 기능이 있는 사진 공유 앱을 만들어드�
 ### 💾 database-architect - 데이터베이스 설계자
 
 #### 전문 분야
+
 - 데이터베이스 설계
 - 쿼리 최적화
 - 인덱싱 전략
 - 데이터 마이그레이션
 
 #### 자동 호출 상황
+
 ```
 "데이터베이스 구조 잡아줘"
 "쿼리가 느려"
@@ -176,12 +193,14 @@ Mobile Developer: 카메라 기능이 있는 사진 공유 앱을 만들어드�
 ### 🌐 fullstack-engineer - 풀스택 엔지니어
 
 #### 전문 분야
+
 - 전체 시스템 구현
 - 프론트엔드 + 백엔드
 - 데이터베이스 연동
 - 배포까지 총괄
 
 #### 자동 호출 상황
+
 ```
 "전체 시스템 만들어줘"
 "처음부터 끝까지"
@@ -194,12 +213,14 @@ Mobile Developer: 카메라 기능이 있는 사진 공유 앱을 만들어드�
 ### ⛓️ blockchain-developer - 블록체인 개발자
 
 #### 전문 분야
+
 - 스마트 컨트랙트
 - Web3 통합
 - NFT/DeFi 개발
 - 암호화폐 결제
 
 #### 자동 호출 상황
+
 ```
 "NFT 마켓플레이스"
 "암호화폐 결제"
@@ -212,12 +233,14 @@ Mobile Developer: 카메라 기능이 있는 사진 공유 앱을 만들어드�
 ### 🛍️ ecommerce-specialist - 이커머스 전문가
 
 #### 전문 분야
+
 - 온라인 쇼핑몰 구축
 - 결제 시스템 통합
 - 재고 관리
 - 주문 처리 시스템
 
 #### 자동 호출 상황
+
 ```
 "쇼핑몰 만들어줘"
 "장바구니 기능"
@@ -230,12 +253,14 @@ Mobile Developer: 카메라 기능이 있는 사진 공유 앱을 만들어드�
 ### 🔧 devtools-creator - 개발 도구 제작자
 
 #### 전문 분야
+
 - VS Code 확장 프로그램
 - Chrome 확장 프로그램
 - CLI 도구 개발
 - 자동화 스크립트
 
 #### 자동 호출 상황
+
 ```
 "브라우저 확장 프로그램"
 "개발 도구 만들기"
@@ -248,12 +273,14 @@ Mobile Developer: 카메라 기능이 있는 사진 공유 앱을 만들어드�
 ### 🏢 saas-architect - SaaS 설계자
 
 #### 전문 분야
+
 - 멀티테넌트 아키텍처
 - 구독 결제 시스템
 - 사용량 기반 과금
 - 관리자 대시보드
 
 #### 자동 호출 상황
+
 ```
 "SaaS 서비스 만들기"
 "구독 모델"
@@ -264,12 +291,14 @@ Mobile Developer: 카메라 기능이 있는 사진 공유 앱을 만들어드�
 ## 💡 효과적인 활용법
 
 ### 1. 자연스러운 요청
+
 ```
 ❌ "backend-architect를 불러서 API를 RESTful하게..."
 ✅ "사용자 정보 저장하는 기능 만들어줘"
 ```
 
 ### 2. 단계별 접근
+
 ```
 1단계: "로그인 화면 만들어줘" (frontend-developer)
 2단계: "로그인 처리하는 서버 만들어줘" (backend-architect)
@@ -277,6 +306,7 @@ Mobile Developer: 카메라 기능이 있는 사진 공유 앱을 만들어드�
 ```
 
 ### 3. 협업 활용
+
 ```
 You: "쇼핑몰 만들어줘"
 → 자동으로 협업:
@@ -289,18 +319,23 @@ You: "쇼핑몰 만들어줘"
 ## 🎯 프로젝트별 추천 조합
 
 ### 🌐 웹사이트
+
 - frontend-developer + backend-architect + database-architect
 
 ### 📱 모바일 앱
+
 - mobile-developer + api-designer + ui-ux-designer
 
 ### 🛒 온라인 쇼핑몰
+
 - ecommerce-specialist + frontend-developer + payment-specialist
 
 ### 🎮 게임
+
 - game-developer + ui-ux-designer + backend-architect
 
 ### 💼 SaaS 서비스
+
 - saas-architect + fullstack-engineer + database-architect
 
 ## ❓ FAQ

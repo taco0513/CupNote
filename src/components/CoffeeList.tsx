@@ -1,0 +1,294 @@
+'use client'
+
+import { useEffect, useState, useMemo } from 'react'
+import { CoffeeRecord } from '@/types/coffee'
+import { LocalStorage } from '@/lib/storage'
+import SearchBar from './SearchBar'
+import FilterPanel, { FilterOptions } from './FilterPanel'
+
+export default function CoffeeList() {
+  const [records, setRecords] = useState<CoffeeRecord[]>([])
+  const [loading, setLoading] = useState(true)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [filters, setFilters] = useState<FilterOptions>({})
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
+
+  useEffect(() => {
+    loadRecords()
+  }, [])
+
+  const loadRecords = () => {
+    try {
+      setLoading(true)
+      // 첫 방문시 샘플 데이터 초기화
+      LocalStorage.initializeSampleData()
+      // 로컬 스토리지에서 기록 로드
+      const data = LocalStorage.getRecords()
+      setRecords(data)
+    } catch (error) {
+      console.error('기록 로드 오류:', error)
+      setRecords([])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // 외부에서 새 기록 추가시 목록 새로고침
+  useEffect(() => {
+    const handleStorageChange = () => {
+      loadRecords()
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    // 같은 탭에서 변경사항 감지를 위한 커스텀 이벤트
+    window.addEventListener('cupnote-record-added', handleStorageChange)
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      window.removeEventListener('cupnote-record-added', handleStorageChange)
+    }
+  }, [])
+
+  // 검색 및 필터링된 결과
+  const filteredRecords = useMemo(() => {
+    let filtered = [...records]
+
+    // 검색 필터링
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase()
+      filtered = filtered.filter(
+        record =>
+          record.coffeeName.toLowerCase().includes(query) ||
+          record.roastery?.toLowerCase().includes(query) ||
+          record.origin?.toLowerCase().includes(query) ||
+          record.taste.toLowerCase().includes(query) ||
+          record.memo?.toLowerCase().includes(query) ||
+          record.tags?.some(tag => tag.toLowerCase().includes(query))
+      )
+    }
+
+    // 모드 필터링
+    if (filters.mode) {
+      filtered = filtered.filter(record => record.mode === filters.mode)
+    }
+
+    // 테이스팅 모드 필터링
+    if (filters.tasteMode) {
+      filtered = filtered.filter(record => record.tasteMode === filters.tasteMode)
+    }
+
+    // 평점 필터링
+    if (filters.rating) {
+      filtered = filtered.filter(record => (record.rating || 0) >= filters.rating!)
+    }
+
+    // 날짜 범위 필터링
+    if (filters.dateRange && filters.dateRange !== 'all') {
+      const now = new Date()
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+
+      filtered = filtered.filter(record => {
+        const recordDate = new Date(record.createdAt)
+
+        switch (filters.dateRange) {
+          case 'today':
+            return recordDate >= today
+          case 'week':
+            const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000)
+            return recordDate >= weekAgo
+          case 'month':
+            const monthAgo = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate())
+            return recordDate >= monthAgo
+          default:
+            return true
+        }
+      })
+    }
+
+    // 정렬
+    const sortBy = filters.sortBy || 'date'
+    const sortOrder = filters.sortOrder || 'desc'
+
+    filtered.sort((a, b) => {
+      let comparison = 0
+
+      switch (sortBy) {
+        case 'name':
+          comparison = a.coffeeName.localeCompare(b.coffeeName)
+          break
+        case 'rating':
+          comparison = (a.rating || 0) - (b.rating || 0)
+          break
+        case 'date':
+        default:
+          comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          break
+      }
+
+      return sortOrder === 'asc' ? comparison : -comparison
+    })
+
+    return filtered
+  }, [records, searchQuery, filters])
+
+  if (loading) {
+    return (
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {[1, 2, 3].map(i => (
+          <div key={i} className="bg-white rounded-xl shadow-sm p-6 animate-pulse">
+            <div className="h-4 bg-gray-200 rounded mb-2"></div>
+            <div className="h-3 bg-gray-200 rounded mb-4 w-2/3"></div>
+            <div className="space-y-2">
+              <div className="h-3 bg-gray-200 rounded"></div>
+              <div className="h-3 bg-gray-200 rounded w-3/4"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  if (records.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <div className="text-6xl mb-4">☕</div>
+        <p className="text-gray-600 text-lg mb-2">아직 기록된 커피가 없어요</p>
+        <p className="text-gray-500">첫 커피를 기록해보세요!</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* 검색 및 필터 섹션 */}
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+        <div className="flex-1">
+          <SearchBar onSearch={setSearchQuery} />
+        </div>
+        <FilterPanel
+          filters={filters}
+          onFiltersChange={setFilters}
+          isOpen={isFilterOpen}
+          onToggle={() => setIsFilterOpen(!isFilterOpen)}
+        />
+      </div>
+
+      {/* 결과 개수 표시 */}
+      <div className="flex items-center justify-between">
+        <p className="text-gray-600">
+          총 {filteredRecords.length}개의 기록
+          {searchQuery && ` (검색: "${searchQuery}")`}
+        </p>
+        {(searchQuery || Object.keys(filters).length > 0) && (
+          <button
+            onClick={() => {
+              setSearchQuery('')
+              setFilters({})
+              setIsFilterOpen(false)
+            }}
+            className="text-coffee-600 hover:text-coffee-700 text-sm font-medium"
+          >
+            모든 필터 초기화
+          </button>
+        )}
+      </div>
+
+      {/* 커피 카드 목록 */}
+      {filteredRecords.length === 0 ? (
+        <div className="text-center py-12">
+          <div className="text-6xl mb-4">🔍</div>
+          <p className="text-gray-600 text-lg mb-2">검색 결과가 없습니다</p>
+          <p className="text-gray-500">다른 검색어나 필터를 시도해보세요</p>
+        </div>
+      ) : (
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {filteredRecords.map(record => (
+            <CoffeeCard key={record.id} record={record} />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function CoffeeCard({ record }: { record: CoffeeRecord }) {
+  const getModeDisplay = (mode?: string, tasteMode?: string) => {
+    if (mode === 'cafe') return { icon: '🏪', text: 'Cafe', color: 'bg-blue-100 text-blue-800' }
+    if (mode === 'homecafe')
+      return { icon: '🏠', text: 'HomeCafe', color: 'bg-green-100 text-green-800' }
+    if (mode === 'lab') return { icon: '🔬', text: 'Lab', color: 'bg-purple-100 text-purple-800' }
+
+    // 기본 모드 (tasteMode 기반)
+    if (tasteMode === 'simple')
+      return { icon: '🌱', text: '편하게', color: 'bg-green-100 text-green-800' }
+    return { icon: '🎯', text: '전문가', color: 'bg-blue-100 text-blue-800' }
+  }
+
+  const modeDisplay = getModeDisplay(record.mode, record.tasteMode)
+
+  return (
+    <a
+      href={`/coffee/${record.id}`}
+      className="block bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-6 cursor-pointer"
+    >
+      <div className="mb-4">
+        <div className="flex items-start justify-between mb-2">
+          <h3 className="text-lg font-semibold text-coffee-800 flex-1 mr-2">{record.coffeeName}</h3>
+          <span
+            className={`px-2 py-1 rounded-full text-xs font-medium ${modeDisplay.color} whitespace-nowrap`}
+          >
+            {modeDisplay.icon} {modeDisplay.text}
+          </span>
+        </div>
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-gray-600">
+            {record.roastery} · {record.date}
+          </p>
+          {record.rating && (
+            <div className="flex text-sm">
+              {'⭐'.repeat(record.rating)}
+              {'☆'.repeat(5 - record.rating)}
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        <div>
+          <p className="text-sm font-medium text-gray-700 mb-1">
+            {record.tasteMode === 'simple' ? '내가 느낀 맛' : '테이스팅 노트'}
+          </p>
+          <p className="text-gray-600 line-clamp-2">{record.taste}</p>
+        </div>
+
+        {record.origin && (
+          <div>
+            <p className="text-sm font-medium text-gray-700 mb-1">원산지</p>
+            <p className="text-gray-600 text-sm">{record.origin}</p>
+          </div>
+        )}
+
+        {record.tags && record.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {record.tags.slice(0, 3).map((tag, index) => (
+              <span key={index} className="px-2 py-1 bg-gray-100 text-gray-600 rounded-md text-xs">
+                #{tag}
+              </span>
+            ))}
+            {record.tags.length > 3 && (
+              <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-md text-xs">
+                +{record.tags.length - 3}
+              </span>
+            )}
+          </div>
+        )}
+
+        {record.memo && (
+          <div className="pt-3 border-t border-gray-100">
+            <p className="text-sm text-gray-500 italic line-clamp-1">{record.memo}</p>
+          </div>
+        )}
+      </div>
+    </a>
+  )
+}

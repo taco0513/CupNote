@@ -11,7 +11,11 @@
     "db:migrate": "node src/db/migrate.js",
     "db:seed": "node src/db/seed.js"
   },
-  "keywords": ["coffee", "tasting", "api"],
+  "keywords": [
+    "coffee",
+    "tasting",
+    "api"
+  ],
   "author": "CupNote Team",
   "license": "MIT",
   "dependencies": {

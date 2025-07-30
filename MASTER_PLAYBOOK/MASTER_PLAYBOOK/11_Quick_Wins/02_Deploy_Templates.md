@@ -13,65 +13,67 @@
 export const vercelTemplates = {
   // Next.js 풀스택 SaaS
   saas: {
-    deployUrl: "https://vercel.com/new/clone?repository-url=https://github.com/your-org/saas-template",
+    deployUrl:
+      'https://vercel.com/new/clone?repository-url=https://github.com/your-org/saas-template',
     features: [
-      "Next.js 14 + App Router",
-      "Supabase 인증 및 데이터베이스",
-      "Stripe 결제 시스템",
-      "이메일 자동화",
-      "관리자 대시보드",
-      "SEO 최적화"
+      'Next.js 14 + App Router',
+      'Supabase 인증 및 데이터베이스',
+      'Stripe 결제 시스템',
+      '이메일 자동화',
+      '관리자 대시보드',
+      'SEO 최적화',
     ],
     envVariables: {
-      NEXT_PUBLIC_SUPABASE_URL: "Your Supabase project URL",
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: "Your Supabase anon key",
-      SUPABASE_SERVICE_ROLE_KEY: "Your Supabase service role key",
-      NEXTAUTH_SECRET: "Random secret key",
-      NEXTAUTH_URL: "Your domain",
-      STRIPE_SECRET_KEY: "Your Stripe secret key",
-      STRIPE_WEBHOOK_SECRET: "Your Stripe webhook secret"
+      NEXT_PUBLIC_SUPABASE_URL: 'Your Supabase project URL',
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: 'Your Supabase anon key',
+      SUPABASE_SERVICE_ROLE_KEY: 'Your Supabase service role key',
+      NEXTAUTH_SECRET: 'Random secret key',
+      NEXTAUTH_URL: 'Your domain',
+      STRIPE_SECRET_KEY: 'Your Stripe secret key',
+      STRIPE_WEBHOOK_SECRET: 'Your Stripe webhook secret',
     },
     postDeploy: [
-      "Supabase 테이블 생성",
-      "Stripe 제품 및 가격 설정",
-      "도메인 연결",
-      "SSL 인증서 자동 설정"
-    ]
+      'Supabase 테이블 생성',
+      'Stripe 제품 및 가격 설정',
+      '도메인 연결',
+      'SSL 인증서 자동 설정',
+    ],
   },
 
   // E-commerce 스토어
   ecommerce: {
-    deployUrl: "https://vercel.com/new/clone?repository-url=https://github.com/vercel/commerce",
+    deployUrl: 'https://vercel.com/new/clone?repository-url=https://github.com/vercel/commerce',
     features: [
-      "Shopify/BigCommerce 연동",
-      "상품 검색 및 필터링",
-      "장바구니 및 결제",
-      "사용자 계정 관리",
-      "주문 추적",
-      "모바일 최적화"
+      'Shopify/BigCommerce 연동',
+      '상품 검색 및 필터링',
+      '장바구니 및 결제',
+      '사용자 계정 관리',
+      '주문 추적',
+      '모바일 최적화',
     ],
-    setupTime: "5분",
+    setupTime: '5분',
     customization: {
-      theme: "30초로 브랜드 색상 변경",
-      products: "CMS에서 즉시 상품 추가",
-      payment: "Stripe 연동 2분"
-    }
+      theme: '30초로 브랜드 색상 변경',
+      products: 'CMS에서 즉시 상품 추가',
+      payment: 'Stripe 연동 2분',
+    },
   },
 
   // 블로그/CMS
   blog: {
-    deployUrl: "https://vercel.com/new/clone?repository-url=https://github.com/vercel/next.js/tree/canary/examples/blog",
+    deployUrl:
+      'https://vercel.com/new/clone?repository-url=https://github.com/vercel/next.js/tree/canary/examples/blog',
     features: [
-      "Markdown 기반 블로그",
-      "SEO 최적화",
-      "RSS 피드 자동 생성",
-      "댓글 시스템",
-      "검색 기능",
-      "다크 모드"
+      'Markdown 기반 블로그',
+      'SEO 최적화',
+      'RSS 피드 자동 생성',
+      '댓글 시스템',
+      '검색 기능',
+      '다크 모드',
     ],
-    contentManagement: "Notion, Contentful, 또는 로컬 Markdown"
-  }
-};
+    contentManagement: 'Notion, Contentful, 또는 로컬 Markdown',
+  },
+}
 ```
 
 ### Railway 원클릭 API 서버
@@ -81,58 +83,58 @@ export const vercelTemplates = {
 export const railwayTemplates = {
   // Express.js API 서버
   expressApi: {
-    deployUrl: "https://railway.app/template/express-api",
-    stack: ["Express.js", "TypeScript", "PostgreSQL", "Redis"],
+    deployUrl: 'https://railway.app/template/express-api',
+    stack: ['Express.js', 'TypeScript', 'PostgreSQL', 'Redis'],
     features: [
-      "RESTful API 엔드포인트",
-      "JWT 인증",
-      "PostgreSQL 데이터베이스",
-      "Redis 캐싱",
-      "API 문서 자동 생성",
-      "로깅 및 모니터링"
+      'RESTful API 엔드포인트',
+      'JWT 인증',
+      'PostgreSQL 데이터베이스',
+      'Redis 캐싱',
+      'API 문서 자동 생성',
+      '로깅 및 모니터링',
     ],
-    deployTime: "3분",
+    deployTime: '3분',
     autoSetup: {
-      database: "PostgreSQL 인스턴스 자동 생성",
-      environment: "환경 변수 자동 설정",
-      ssl: "HTTPS 자동 활성화",
-      monitoring: "헬스 체크 자동 설정"
-    }
+      database: 'PostgreSQL 인스턴스 자동 생성',
+      environment: '환경 변수 자동 설정',
+      ssl: 'HTTPS 자동 활성화',
+      monitoring: '헬스 체크 자동 설정',
+    },
   },
 
   // FastAPI Python 서버
   fastapi: {
-    deployUrl: "https://railway.app/template/fastapi",
-    stack: ["FastAPI", "Python 3.11", "PostgreSQL", "Redis"],
+    deployUrl: 'https://railway.app/template/fastapi',
+    stack: ['FastAPI', 'Python 3.11', 'PostgreSQL', 'Redis'],
     features: [
-      "자동 API 문서 (Swagger)",
-      "Pydantic 데이터 검증",
-      "SQLAlchemy ORM",
-      "Celery 백그라운드 작업",
-      "JWT 인증",
-      "CORS 설정"
+      '자동 API 문서 (Swagger)',
+      'Pydantic 데이터 검증',
+      'SQLAlchemy ORM',
+      'Celery 백그라운드 작업',
+      'JWT 인증',
+      'CORS 설정',
     ],
     specialFeatures: {
-      aiIntegration: "OpenAI API 연동 준비",
-      dataProcessing: "Pandas, NumPy 사전 설치",
-      machineLearning: "scikit-learn 포함"
-    }
+      aiIntegration: 'OpenAI API 연동 준비',
+      dataProcessing: 'Pandas, NumPy 사전 설치',
+      machineLearning: 'scikit-learn 포함',
+    },
   },
 
   // GraphQL API
   graphql: {
-    deployUrl: "https://railway.app/template/graphql-api",
-    stack: ["Apollo Server", "GraphQL", "Prisma", "PostgreSQL"],
+    deployUrl: 'https://railway.app/template/graphql-api',
+    stack: ['Apollo Server', 'GraphQL', 'Prisma', 'PostgreSQL'],
     features: [
-      "GraphQL Playground",
-      "실시간 구독",
-      "데이터베이스 관계 자동 해결",
-      "타입 안전성",
-      "쿼리 최적화",
-      "인증 및 권한 관리"
-    ]
-  }
-};
+      'GraphQL Playground',
+      '실시간 구독',
+      '데이터베이스 관계 자동 해결',
+      '타입 안전성',
+      '쿼리 최적화',
+      '인증 및 권한 관리',
+    ],
+  },
+}
 ```
 
 ### Netlify JAMstack 템플릿
@@ -142,42 +144,43 @@ export const railwayTemplates = {
 export const netlifyTemplates = {
   // Gatsby 정적 사이트
   gatsby: {
-    deployUrl: "https://app.netlify.com/start/deploy?repository=https://github.com/gatsbyjs/gatsby-starter-default",
-    buildTime: "2분",
+    deployUrl:
+      'https://app.netlify.com/start/deploy?repository=https://github.com/gatsbyjs/gatsby-starter-default',
+    buildTime: '2분',
     features: [
-      "정적 사이트 생성",
-      "GraphQL 데이터 레이어",
-      "이미지 최적화",
-      "PWA 지원",
-      "Lighthouse 점수 95+",
-      "CDN 자동 배포"
+      '정적 사이트 생성',
+      'GraphQL 데이터 레이어',
+      '이미지 최적화',
+      'PWA 지원',
+      'Lighthouse 점수 95+',
+      'CDN 자동 배포',
     ],
     cmsIntegration: {
-      contentful: "1분 연동",
-      sanity: "2분 연동",
-      strapi: "3분 연동"
-    }
+      contentful: '1분 연동',
+      sanity: '2분 연동',
+      strapi: '3분 연동',
+    },
   },
 
   // Hugo 정적 사이트
   hugo: {
-    deployUrl: "https://app.netlify.com/start/deploy?repository=https://github.com/gohugoio/hugo",
-    buildTime: "30초",
+    deployUrl: 'https://app.netlify.com/start/deploy?repository=https://github.com/gohugoio/hugo',
+    buildTime: '30초',
     features: [
-      "매우 빠른 빌드 속도",
-      "다국어 지원",
-      "테마 시스템",
-      "이미지 처리",
-      "검색 엔진 최적화",
-      "RSS/Sitemap 자동 생성"
+      '매우 빠른 빌드 속도',
+      '다국어 지원',
+      '테마 시스템',
+      '이미지 처리',
+      '검색 엔진 최적화',
+      'RSS/Sitemap 자동 생성',
     ],
     performance: {
-      buildSpeed: "1000+ 페이지 < 1분",
-      loadSpeed: "99/100 Lighthouse 점수",
-      bandwidth: "최소 대역폭 사용"
-    }
-  }
-};
+      buildSpeed: '1000+ 페이지 < 1분',
+      loadSpeed: '99/100 Lighthouse 점수',
+      bandwidth: '최소 대역폭 사용',
+    },
+  },
+}
 ```
 
 ## 도커 기반 원클릭 배포
@@ -193,7 +196,7 @@ services:
   frontend:
     image: your-org/frontend:latest
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_API_URL=https://api.yourdomain.com
@@ -201,15 +204,15 @@ services:
       - backend
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`yourdomain.com`)"
-      - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.frontend.rule=Host(`yourdomain.com`)'
+      - 'traefik.http.routers.frontend.tls.certresolver=letsencrypt'
 
   # Express.js 백엔드
   backend:
     image: your-org/backend:latest
     ports:
-      - "8000:8000"
+      - '8000:8000'
     environment:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://user:pass@postgres:5432/app
@@ -220,9 +223,9 @@ services:
       - redis
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.backend.rule=Host(`api.yourdomain.com`)"
-      - "traefik.http.routers.backend.tls.certresolver=letsencrypt"
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.backend.rule=Host(`api.yourdomain.com`)'
+      - 'traefik.http.routers.backend.tls.certresolver=letsencrypt'
 
   # PostgreSQL 데이터베이스
   postgres:
@@ -248,8 +251,8 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - ./ssl:/etc/nginx/ssl
@@ -262,17 +265,17 @@ services:
   traefik:
     image: traefik:v2.10
     command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
-      - "--certificatesresolvers.letsencrypt.acme.email=admin@yourdomain.com"
-      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+      - '--api.insecure=true'
+      - '--providers.docker=true'
+      - '--entrypoints.web.address=:80'
+      - '--entrypoints.websecure.address=:443'
+      - '--certificatesresolvers.letsencrypt.acme.tlschallenge=true'
+      - '--certificatesresolvers.letsencrypt.acme.email=admin@yourdomain.com'
+      - '--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json'
     ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"  # Traefik 대시보드
+      - '80:80'
+      - '443:443'
+      - '8080:8080' # Traefik 대시보드
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - letsencrypt:/letsencrypt
@@ -388,7 +391,7 @@ services:
   prometheus:
     image: prom/prometheus:latest
     ports:
-      - "9090:9090"
+      - '9090:9090'
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
@@ -403,7 +406,7 @@ services:
   grafana:
     image: grafana/grafana:latest
     ports:
-      - "3001:3000"
+      - '3001:3000'
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin123
     volumes:
@@ -416,7 +419,7 @@ services:
   loki:
     image: grafana/loki:latest
     ports:
-      - "3100:3100"
+      - '3100:3100'
     volumes:
       - ./loki.yml:/etc/loki/local-config.yaml
       - loki_data:/loki
@@ -523,6 +526,7 @@ echo "✅ Backup completed: /backups/$(date +%Y-%m-%d).tar.gz"
 ## 배포 성공 체크리스트
 
 ### 즉시 확인 사항 (5분 내)
+
 - [ ] **앱 접근**: 메인 도메인에서 정상 로딩
 - [ ] **API 응답**: 주요 엔드포인트 정상 동작
 - [ ] **데이터베이스**: 연결 및 쿼리 정상
@@ -530,6 +534,7 @@ echo "✅ Backup completed: /backups/$(date +%Y-%m-%d).tar.gz"
 - [ ] **모니터링**: 기본 메트릭 수집 중
 
 ### 24시간 내 확인 사항
+
 - [ ] **성능**: 평균 응답시간 < 200ms
 - [ ] **가용성**: 99.9% 업타임 유지
 - [ ] **보안**: 보안 헤더 및 HTTPS 강제
@@ -537,6 +542,7 @@ echo "✅ Backup completed: /backups/$(date +%Y-%m-%d).tar.gz"
 - [ ] **로그**: 에러 로그 모니터링 정상
 
 ### 일주일 내 최적화
+
 - [ ] **CDN**: 정적 자산 CDN 연결
 - [ ] **캐싱**: Redis 캐시 효과 확인
 - [ ] **알림**: 중요 알림 채널 테스트

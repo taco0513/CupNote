@@ -1,49 +1,49 @@
 {
   // Living Documentation Snippets for CupNote
-  
+
   "Why Comment": {
     "prefix": "why",
     "body": [
       "// WHY: ${1:비즈니스 이유나 기술적 결정 이유}",
       "// TRIED: ${2:시도했던 다른 방법들}",
-      "// CONTEXT: ${3:관련 문서나 결정사항 참조}"
+      "// CONTEXT: ${3:관련 문서나 결정사항 참조}",
     ],
-    "description": "Add context comment for complex logic"
+    "description": "Add context comment for complex logic",
   },
-  
+
   "File Purpose": {
     "prefix": "purpose",
     "body": [
       "// PURPOSE: ${1:이 파일의 목적}",
       "// ARCHITECTURE: ${2:어느 레이어에 속하는지}",
       "// RELATED: ${3:관련된 파일들}",
-      "// GOTCHAS: ${4:주의사항}"
+      "// GOTCHAS: ${4:주의사항}",
     ],
-    "description": "Document file purpose and relationships"
+    "description": "Document file purpose and relationships",
   },
-  
+
   "Error Log": {
     "prefix": "errlog",
     "body": [
       "// ERROR: ${1:에러 설명}",
       "// FILE: ${TM_FILENAME}:${TM_LINE_NUMBER}",
       "// CONTEXT: ${2:무엇을 하려고 했는지}",
-      "// TODO: log_error \"$1\" \"${TM_FILENAME}\""
+      "// TODO: log_error \"$1\" \"${TM_FILENAME}\"",
     ],
-    "description": "Quick error logging reminder"
+    "description": "Quick error logging reminder",
   },
-  
+
   "Pattern Documentation": {
     "prefix": "pattern",
     "body": [
       "// PATTERN: ${1:패턴 이름}",
       "// USE_CASE: ${2:언제 사용하는지}",
       "// BENEFITS: ${3:장점}",
-      "// EXAMPLE: ${4:사용 예시}"
+      "// EXAMPLE: ${4:사용 예시}",
     ],
-    "description": "Document a reusable pattern"
+    "description": "Document a reusable pattern",
   },
-  
+
   "Decision Record": {
     "prefix": "decision",
     "body": [
@@ -51,22 +51,22 @@
       "// DATE: ${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}",
       "// REASONING: ${2:이유}",
       "// ALTERNATIVES: ${3:다른 옵션들}",
-      "// DOCS: docs/decisions/"
+      "// DOCS: docs/decisions/",
     ],
-    "description": "Reference a decision record"
+    "description": "Reference a decision record",
   },
-  
+
   "TODO with Context": {
     "prefix": "todo",
     "body": [
       "// TODO: ${1:할 일}",
       "// CONTEXT: ${2:왜 필요한지}",
       "// PRIORITY: ${3|HIGH,MEDIUM,LOW|}",
-      "// RELATED: ${4:관련 이슈나 파일}"
+      "// RELATED: ${4:관련 이슈나 파일}",
     ],
-    "description": "Contextual TODO comment"
+    "description": "Contextual TODO comment",
   },
-  
+
   "Korean Sensory Expression": {
     "prefix": "sensory",
     "body": [
@@ -76,8 +76,8 @@
       "  category: '${3|aroma,taste,texture,aftertaste|}',",
       "  intensity: ${4:1-5},",
       "  relatedExperience: \"${5:관련 경험}\"",
-      "}"
+      "}",
     ],
-    "description": "Korean sensory expression mapping"
-  }
+    "description": "Korean sensory expression mapping",
+  },
 }

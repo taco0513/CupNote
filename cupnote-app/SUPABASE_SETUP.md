@@ -24,9 +24,11 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 Supabase Dashboard → SQL Editor에서 다음 순서로 실행:
 
 ### 3.1 기본 스키마 생성
+
 `database/schema.sql` 파일 내용을 복사하여 실행
 
 ### 3.2 마스터 데이터 삽입
+
 `database/seed-data.sql` 파일 내용을 복사하여 실행
 
 ## 4. 연결 테스트
@@ -53,14 +55,17 @@ Google OAuth를 사용하려면:
 ## 트러블슈팅
 
 ### 연결 실패 시
+
 - 환경 변수가 올바른지 확인
 - Supabase 프로젝트가 활성 상태인지 확인
 - 네트워크 연결 상태 확인
 
 ### RLS 정책 오류 시
+
 - SQL Editor에서 RLS 정책이 올바르게 생성되었는지 확인
 - 테이블별 권한 설정 확인
 
 ### 인증 오류 시
+
 - 인증 제공자 설정 확인
 - Redirect URL 설정 확인

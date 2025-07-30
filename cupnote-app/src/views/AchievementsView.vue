@@ -23,10 +23,12 @@
               <div class="level-icon-large">{{ userLevel.icon }}</div>
               <div class="level-details">
                 <h2 class="level-title-large">{{ userLevel.title }}</h2>
-                <div class="level-points-large">{{ totalPoints }}포인트 • Lv.{{ userLevel.level }}</div>
+                <div class="level-points-large">
+                  {{ totalPoints }}포인트 • Lv.{{ userLevel.level }}
+                </div>
               </div>
             </div>
-            
+
             <div v-if="nextLevelProgress && userLevel.level < 10" class="next-level-preview">
               <div class="next-level-info">
                 <span class="next-level-text">다음 레벨</span>
@@ -36,7 +38,7 @@
                 </div>
               </div>
               <div class="level-progress-bar">
-                <div 
+                <div
                   class="level-progress-fill"
                   :style="{ width: `${nextLevelProgress.progress}%` }"
                 ></div>
@@ -45,7 +47,7 @@
                 </div>
               </div>
             </div>
-            
+
             <div v-else-if="userLevel.level >= 10" class="max-level">
               <div class="max-level-icon">👑</div>
               <div class="max-level-text">최고 레벨 달성!</div>
@@ -82,7 +84,9 @@ const userLevel = computed(() => userStatsStore.userLevel)
 const totalPoints = computed(() => userStatsStore.totalPoints)
 const nextLevelProgress = computed(() => userStatsStore.nextLevelProgress)
 const earnedCount = computed(() => userStatsStore.earnedAchievements?.length || 0)
-const totalCount = computed(() => userStatsStore.achievements?.filter(a => !a.is_hidden)?.length || 0)
+const totalCount = computed(
+  () => userStatsStore.achievements?.filter((a) => !a.is_hidden)?.length || 0,
+)
 
 // Level progression data
 const levelProgression = [
@@ -95,17 +99,17 @@ const levelProgression = [
   { level: 7, title: 'Skilled Brewer', icon: '⭐' },
   { level: 8, title: 'Advanced Cupper', icon: '🎯' },
   { level: 9, title: 'Expert Taster', icon: '👑' },
-  { level: 10, title: 'Coffee Master', icon: '🏆' }
+  { level: 10, title: 'Coffee Master', icon: '🏆' },
 ]
 
 // Methods
 const getNextLevelIcon = (level) => {
-  const levelData = levelProgression.find(l => l.level === level)
+  const levelData = levelProgression.find((l) => l.level === level)
   return levelData?.icon || '🆕'
 }
 
 const getNextLevelTitle = (level) => {
-  const levelData = levelProgression.find(l => l.level === level)
+  const levelData = levelProgression.find((l) => l.level === level)
   return levelData?.title || 'Coffee Newcomer'
 }
 
@@ -126,7 +130,7 @@ onMounted(async () => {
   max-width: 1400px;
   margin: 0 auto;
   padding: 1rem;
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5F0E8 100%);
+  background: linear-gradient(135deg, #fff8f0 0%, #f5f0e8 100%);
   min-height: 100vh;
 }
 
@@ -143,21 +147,21 @@ onMounted(async () => {
   border-radius: 12px;
   padding: 1rem 1.5rem;
   box-shadow: 0 2px 10px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .back-link {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #7C5842;
+  color: #7c5842;
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.2s ease;
 }
 
 .back-link:hover {
-  color: #5D3F2E;
+  color: #5d3f2e;
 }
 
 .back-icon {
@@ -167,13 +171,13 @@ onMounted(async () => {
 .achievements-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin: 0;
 }
 
 .header-stats {
   font-size: 0.9rem;
-  color: #A0796A;
+  color: #a0796a;
   font-weight: 500;
 }
 
@@ -190,7 +194,7 @@ onMounted(async () => {
 }
 
 .level-progress-card {
-  background: linear-gradient(135deg, #7C5842 0%, #A0796A 100%);
+  background: linear-gradient(135deg, #7c5842 0%, #a0796a 100%);
   border-radius: 20px;
   padding: 2.5rem;
   color: white;
@@ -206,7 +210,7 @@ onMounted(async () => {
   right: -50%;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
   transform: rotate(45deg);
 }
 
@@ -293,7 +297,7 @@ onMounted(async () => {
 
 .level-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #FFF, #F0E8DC);
+  background: linear-gradient(90deg, #fff, #f0e8dc);
   border-radius: 10px;
   transition: width 0.5s ease;
 }
@@ -305,8 +309,8 @@ onMounted(async () => {
   transform: translate(-50%, -50%);
   font-size: 0.8rem;
   font-weight: 600;
-  color: #7C5842;
-  text-shadow: 0 0 4px rgba(255,255,255,0.8);
+  color: #7c5842;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
 }
 
 .max-level {
@@ -347,15 +351,15 @@ onMounted(async () => {
 .loading-spinner {
   width: 60px;
   height: 60px;
-  border: 4px solid #E8D5C4;
-  border-top-color: #7C5842;
+  border: 4px solid #e8d5c4;
+  border-top-color: #7c5842;
   border-radius: 50%;
   margin-bottom: 1rem;
   animation: spin 1s linear infinite;
 }
 
 .loading-text {
-  color: #7C5842;
+  color: #7c5842;
   font-weight: 500;
 }
 
@@ -372,29 +376,29 @@ onMounted(async () => {
     gap: 1rem;
     text-align: center;
   }
-  
+
   .current-level {
     flex-direction: column;
     text-align: center;
     gap: 1rem;
   }
-  
+
   .level-icon-large {
     width: 80px;
     height: 80px;
     font-size: 3rem;
   }
-  
+
   .level-title-large {
     font-size: 1.5rem;
   }
-  
+
   .next-level-info {
     flex-direction: column;
     gap: 0.5rem;
     text-align: center;
   }
-  
+
   .progress-text {
     font-size: 0.7rem;
   }

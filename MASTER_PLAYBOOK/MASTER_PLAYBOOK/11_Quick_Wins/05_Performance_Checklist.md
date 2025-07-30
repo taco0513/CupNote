@@ -133,7 +133,7 @@ const nextConfig = {
   webpack: (config, { dev, isServer }) => {
     // 프로덕션에서 번들 크기 분석
     if (!dev && !isServer) {
-      const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+      const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
       config.plugins.push(
         new BundleAnalyzerPlugin({
@@ -141,7 +141,7 @@ const nextConfig = {
           reportFilename: './analyze/client.html',
           openAnalyzer: false,
         })
-      );
+      )
     }
 
     // 중복 제거
@@ -159,9 +159,9 @@ const nextConfig = {
           chunks: 'all',
         },
       },
-    };
+    }
 
-    return config;
+    return config
   },
 
   // 헤더 최적화
@@ -200,11 +200,11 @@ const nextConfig = {
           },
         ],
       },
-    ];
+    ]
   },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig
 ```
 
 ### 레이지 로딩 및 코드 스플리팅
@@ -313,24 +313,24 @@ function IntersectionObserver({ children }: { children: React.ReactNode }) {
 
 ```typescript
 // lib/database-optimization.ts - 데이터베이스 최적화
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client'
 
 class OptimizedDatabase {
-  private prisma: PrismaClient;
-  private queryCache = new Map();
+  private prisma: PrismaClient
+  private queryCache = new Map()
 
   constructor() {
     this.prisma = new PrismaClient({
       log: ['query', 'info', 'warn', 'error'],
-    });
+    })
   }
 
   // 연결 최적화 (선택적 로딩)
   async getUser(id: string, includeProfile: boolean = false) {
-    const cacheKey = `user:${id}:${includeProfile}`;
+    const cacheKey = `user:${id}:${includeProfile}`
 
     if (this.queryCache.has(cacheKey)) {
-      return this.queryCache.get(cacheKey);
+      return this.queryCache.get(cacheKey)
     }
 
     const user = await this.prisma.user.findUnique({
@@ -345,18 +345,18 @@ class OptimizedDatabase {
             select: {
               bio: true,
               avatar: true,
-              preferences: true
-            }
-          }
-        })
-      }
-    });
+              preferences: true,
+            },
+          },
+        }),
+      },
+    })
 
     // 5분 캐싱
-    this.queryCache.set(cacheKey, user);
-    setTimeout(() => this.queryCache.delete(cacheKey), 5 * 60 * 1000);
+    this.queryCache.set(cacheKey, user)
+    setTimeout(() => this.queryCache.delete(cacheKey), 5 * 60 * 1000)
 
-    return user;
+    return user
   }
 
   // 배치 쿼리로 N+1 문제 해결
@@ -371,24 +371,20 @@ class OptimizedDatabase {
             title: true,
             createdAt: true,
             _count: {
-              select: { comments: true }
-            }
+              select: { comments: true },
+            },
           },
           orderBy: { createdAt: 'desc' },
-          take: 5 // 최신 5개만
-        }
-      }
-    });
+          take: 5, // 최신 5개만
+        },
+      },
+    })
 
-    return users;
+    return users
   }
 
   // 페이지네이션 최적화
-  async getPaginatedPosts(
-    page: number = 1,
-    limit: number = 10,
-    cursor?: string
-  ) {
+  async getPaginatedPosts(page: number = 1, limit: number = 10, cursor?: string) {
     // 커서 기반 페이지네이션 (무한 스크롤용)
     if (cursor) {
       return await this.prisma.post.findMany({
@@ -402,13 +398,13 @@ class OptimizedDatabase {
           excerpt: true,
           createdAt: true,
           author: {
-            select: { name: true, avatar: true }
+            select: { name: true, avatar: true },
           },
           _count: {
-            select: { comments: true, likes: true }
-          }
-        }
-      });
+            select: { comments: true, likes: true },
+          },
+        },
+      })
     }
 
     // 오프셋 기반 페이지네이션 (페이지 번호용)
@@ -422,12 +418,12 @@ class OptimizedDatabase {
         excerpt: true,
         createdAt: true,
         author: {
-          select: { name: true, avatar: true }
-        }
-      }
-    });
+          select: { name: true, avatar: true },
+        },
+      },
+    })
 
-    const total = await this.prisma.post.count();
+    const total = await this.prisma.post.count()
 
     return {
       posts,
@@ -437,9 +433,9 @@ class OptimizedDatabase {
         total,
         pages: Math.ceil(total / limit),
         hasNext: page * limit < total,
-        hasPrev: page > 1
-      }
-    };
+        hasPrev: page > 1,
+      },
+    }
   }
 
   // 집계 쿼리 최적화
@@ -450,7 +446,7 @@ class OptimizedDatabase {
         this.prisma.post.count({ where: { userId } }),
         this.prisma.comment.count({ where: { userId } }),
         this.prisma.like.count({ where: { userId } }),
-        this.prisma.follower.count({ where: { followingId: userId } })
+        this.prisma.follower.count({ where: { followingId: userId } }),
       ]),
 
       // 최근 활동
@@ -462,22 +458,22 @@ class OptimizedDatabase {
           id: true,
           title: true,
           createdAt: true,
-          _count: { select: { comments: true, likes: true } }
-        }
-      })
-    ]);
+          _count: { select: { comments: true, likes: true } },
+        },
+      }),
+    ])
 
-    const [postsCount, commentsCount, likesCount, followersCount] = userStats;
+    const [postsCount, commentsCount, likesCount, followersCount] = userStats
 
     return {
       counts: {
         posts: postsCount,
         comments: commentsCount,
         likes: likesCount,
-        followers: followersCount
+        followers: followersCount,
       },
-      recentActivity
-    };
+      recentActivity,
+    }
   }
 
   // 검색 최적화 (풀텍스트 검색)
@@ -490,7 +486,7 @@ class OptimizedDatabase {
       WHERE search_vector @@ plainto_tsquery(${query})
       ORDER BY rank DESC, created_at DESC
       LIMIT ${limit}
-    `;
+    `
   }
 }
 ```
@@ -499,73 +495,73 @@ class OptimizedDatabase {
 
 ```typescript
 // lib/caching.ts - 멀티레벨 캐싱 시스템
-import Redis from 'ioredis';
+import Redis from 'ioredis'
 
 class CacheManager {
-  private redis: Redis;
-  private memoryCache = new Map();
-  private readonly DEFAULT_TTL = 3600; // 1시간
+  private redis: Redis
+  private memoryCache = new Map()
+  private readonly DEFAULT_TTL = 3600 // 1시간
 
   constructor() {
-    this.redis = new Redis(process.env.REDIS_URL!);
+    this.redis = new Redis(process.env.REDIS_URL!)
   }
 
   // L1: 메모리 캐시 (가장 빠름, 제한적)
   private getFromMemory(key: string) {
-    const item = this.memoryCache.get(key);
+    const item = this.memoryCache.get(key)
     if (item && item.expiry > Date.now()) {
-      return item.value;
+      return item.value
     }
-    this.memoryCache.delete(key);
-    return null;
+    this.memoryCache.delete(key)
+    return null
   }
 
   private setToMemory(key: string, value: any, ttl: number = 300) {
     // 메모리 캐시는 5분으로 제한
     this.memoryCache.set(key, {
       value,
-      expiry: Date.now() + ttl * 1000
-    });
+      expiry: Date.now() + ttl * 1000,
+    })
 
     // 메모리 사용량 제한 (1000개 항목)
     if (this.memoryCache.size > 1000) {
-      this.clearOldestMemoryCache();
+      this.clearOldestMemoryCache()
     }
   }
 
   // L2: Redis 캐시 (빠름, 확장 가능)
   async getFromRedis(key: string) {
-    const value = await this.redis.get(key);
-    return value ? JSON.parse(value) : null;
+    const value = await this.redis.get(key)
+    return value ? JSON.parse(value) : null
   }
 
   async setToRedis(key: string, value: any, ttl: number = this.DEFAULT_TTL) {
-    await this.redis.setex(key, ttl, JSON.stringify(value));
+    await this.redis.setex(key, ttl, JSON.stringify(value))
   }
 
   // 통합 캐시 인터페이스
   async get(key: string) {
     // L1 캐시 확인
-    let value = this.getFromMemory(key);
+    let value = this.getFromMemory(key)
     if (value !== null) {
-      return value;
+      return value
     }
 
     // L2 캐시 확인
-    value = await this.getFromRedis(key);
+    value = await this.getFromRedis(key)
     if (value !== null) {
       // L1 캐시에도 저장
-      this.setToMemory(key, value);
-      return value;
+      this.setToMemory(key, value)
+      return value
     }
 
-    return null;
+    return null
   }
 
   async set(key: string, value: any, ttl: number = this.DEFAULT_TTL) {
     // 두 레벨 모두에 저장
-    this.setToMemory(key, value, Math.min(ttl, 300));
-    await this.setToRedis(key, value, ttl);
+    this.setToMemory(key, value, Math.min(ttl, 300))
+    await this.setToRedis(key, value, ttl)
   }
 
   // 캐시 무효화
@@ -573,54 +569,54 @@ class CacheManager {
     // 메모리 캐시 무효화
     for (const key of this.memoryCache.keys()) {
       if (key.includes(pattern)) {
-        this.memoryCache.delete(key);
+        this.memoryCache.delete(key)
       }
     }
 
     // Redis 캐시 무효화
-    const keys = await this.redis.keys(`*${pattern}*`);
+    const keys = await this.redis.keys(`*${pattern}*`)
     if (keys.length > 0) {
-      await this.redis.del(...keys);
+      await this.redis.del(...keys)
     }
   }
 
   // 스마트 캐싱 (자동 TTL 조정)
   async smartSet(key: string, value: any, accessFrequency: number = 1) {
     // 접근 빈도에 따라 TTL 조정
-    let ttl = this.DEFAULT_TTL;
+    let ttl = this.DEFAULT_TTL
 
-    if (accessFrequency > 100) ttl *= 2; // 자주 접근하는 데이터는 더 오래
-    if (accessFrequency < 10) ttl /= 2;  // 가끔 접근하는 데이터는 짧게
+    if (accessFrequency > 100) ttl *= 2 // 자주 접근하는 데이터는 더 오래
+    if (accessFrequency < 10) ttl /= 2 // 가끔 접근하는 데이터는 짧게
 
-    await this.set(key, value, ttl);
+    await this.set(key, value, ttl)
   }
 
   private clearOldestMemoryCache() {
     // 가장 오래된 100개 항목 제거
     const entries = Array.from(this.memoryCache.entries())
-      .sort(([,a], [,b]) => a.expiry - b.expiry)
-      .slice(0, 100);
+      .sort(([, a], [, b]) => a.expiry - b.expiry)
+      .slice(0, 100)
 
-    entries.forEach(([key]) => this.memoryCache.delete(key));
+    entries.forEach(([key]) => this.memoryCache.delete(key))
   }
 }
 
 // 사용 예시
-export const cache = new CacheManager();
+export const cache = new CacheManager()
 
 export async function getCachedData<T>(
   key: string,
   fetcher: () => Promise<T>,
   ttl?: number
 ): Promise<T> {
-  let data = await cache.get(key);
+  let data = await cache.get(key)
 
   if (data === null) {
-    data = await fetcher();
-    await cache.set(key, data, ttl);
+    data = await fetcher()
+    await cache.set(key, data, ttl)
   }
 
-  return data;
+  return data
 }
 ```
 
@@ -631,87 +627,87 @@ export async function getCachedData<T>(
 ```typescript
 // lib/performance-monitor.ts - 성능 모니터링 시스템
 export class PerformanceMonitor {
-  private metrics: Map<string, number[]> = new Map();
-  private observers: PerformanceObserver[] = [];
+  private metrics: Map<string, number[]> = new Map()
+  private observers: PerformanceObserver[] = []
 
   constructor() {
-    this.initializeObservers();
+    this.initializeObservers()
   }
 
   private initializeObservers() {
     // Core Web Vitals 측정
     if (typeof window !== 'undefined' && 'PerformanceObserver' in window) {
       // Largest Contentful Paint (LCP)
-      const lcpObserver = new PerformanceObserver((list) => {
+      const lcpObserver = new PerformanceObserver(list => {
         for (const entry of list.getEntries()) {
-          this.recordMetric('lcp', entry.startTime);
+          this.recordMetric('lcp', entry.startTime)
         }
-      });
-      lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
-      this.observers.push(lcpObserver);
+      })
+      lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] })
+      this.observers.push(lcpObserver)
 
       // First Input Delay (FID)
-      const fidObserver = new PerformanceObserver((list) => {
+      const fidObserver = new PerformanceObserver(list => {
         for (const entry of list.getEntries()) {
-          this.recordMetric('fid', entry.processingStart - entry.startTime);
+          this.recordMetric('fid', entry.processingStart - entry.startTime)
         }
-      });
-      fidObserver.observe({ entryTypes: ['first-input'] });
-      this.observers.push(fidObserver);
+      })
+      fidObserver.observe({ entryTypes: ['first-input'] })
+      this.observers.push(fidObserver)
 
       // Cumulative Layout Shift (CLS)
-      let clsValue = 0;
-      const clsObserver = new PerformanceObserver((list) => {
+      let clsValue = 0
+      const clsObserver = new PerformanceObserver(list => {
         for (const entry of list.getEntries()) {
           if (!entry.hadRecentInput) {
-            clsValue += entry.value;
+            clsValue += entry.value
           }
         }
-        this.recordMetric('cls', clsValue);
-      });
-      clsObserver.observe({ entryTypes: ['layout-shift'] });
-      this.observers.push(clsObserver);
+        this.recordMetric('cls', clsValue)
+      })
+      clsObserver.observe({ entryTypes: ['layout-shift'] })
+      this.observers.push(clsObserver)
     }
   }
 
   // 메트릭 기록
   recordMetric(name: string, value: number) {
     if (!this.metrics.has(name)) {
-      this.metrics.set(name, []);
+      this.metrics.set(name, [])
     }
 
-    const values = this.metrics.get(name)!;
-    values.push(value);
+    const values = this.metrics.get(name)!
+    values.push(value)
 
     // 최근 100개 값만 유지
     if (values.length > 100) {
-      values.shift();
+      values.shift()
     }
 
     // 임계값 초과 시 알림
-    this.checkThresholds(name, value);
+    this.checkThresholds(name, value)
   }
 
   // 성능 임계값 검사
   private checkThresholds(metric: string, value: number) {
     const thresholds = {
       lcp: 2500, // 2.5초
-      fid: 100,  // 100ms
-      cls: 0.1,  // 0.1
-      api_response: 1000 // 1초
-    };
+      fid: 100, // 100ms
+      cls: 0.1, // 0.1
+      api_response: 1000, // 1초
+    }
 
     if (thresholds[metric] && value > thresholds[metric]) {
-      this.sendAlert(metric, value, thresholds[metric]);
+      this.sendAlert(metric, value, thresholds[metric])
     }
   }
 
   // 통계 계산
   getStats(metric: string): PerformanceStats | null {
-    const values = this.metrics.get(metric);
-    if (!values || values.length === 0) return null;
+    const values = this.metrics.get(metric)
+    if (!values || values.length === 0) return null
 
-    const sorted = [...values].sort((a, b) => a - b);
+    const sorted = [...values].sort((a, b) => a - b)
     return {
       mean: values.reduce((sum, val) => sum + val, 0) / values.length,
       median: sorted[Math.floor(sorted.length / 2)],
@@ -720,27 +716,24 @@ export class PerformanceMonitor {
       p99: sorted[Math.floor(sorted.length * 0.99)],
       min: sorted[0],
       max: sorted[sorted.length - 1],
-      count: values.length
-    };
+      count: values.length,
+    }
   }
 
   // API 응답 시간 측정
-  async measureApiCall<T>(
-    name: string,
-    apiCall: () => Promise<T>
-  ): Promise<T> {
-    const startTime = performance.now();
+  async measureApiCall<T>(name: string, apiCall: () => Promise<T>): Promise<T> {
+    const startTime = performance.now()
 
     try {
-      const result = await apiCall();
-      const duration = performance.now() - startTime;
+      const result = await apiCall()
+      const duration = performance.now() - startTime
 
-      this.recordMetric(`api_${name}`, duration);
-      return result;
+      this.recordMetric(`api_${name}`, duration)
+      return result
     } catch (error) {
-      const duration = performance.now() - startTime;
-      this.recordMetric(`api_${name}_error`, duration);
-      throw error;
+      const duration = performance.now() - startTime
+      this.recordMetric(`api_${name}_error`, duration)
+      throw error
     }
   }
 
@@ -748,7 +741,9 @@ export class PerformanceMonitor {
   measurePageLoad() {
     if (typeof window !== 'undefined') {
       window.addEventListener('load', () => {
-        const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+        const navigation = performance.getEntriesByType(
+          'navigation'
+        )[0] as PerformanceNavigationTiming
 
         const metrics = {
           dns_lookup: navigation.domainLookupEnd - navigation.domainLookupStart,
@@ -756,13 +751,13 @@ export class PerformanceMonitor {
           server_response: navigation.responseEnd - navigation.requestStart,
           dom_parse: navigation.domContentLoadedEventEnd - navigation.responseEnd,
           resource_load: navigation.loadEventEnd - navigation.domContentLoadedEventEnd,
-          total_load: navigation.loadEventEnd - navigation.navigationStart
-        };
+          total_load: navigation.loadEventEnd - navigation.navigationStart,
+        }
 
         Object.entries(metrics).forEach(([name, value]) => {
-          this.recordMetric(`page_${name}`, value);
-        });
-      });
+          this.recordMetric(`page_${name}`, value)
+        })
+      })
     }
   }
 
@@ -773,7 +768,7 @@ export class PerformanceMonitor {
       coreWebVitals: {
         lcp: this.getStats('lcp'),
         fid: this.getStats('fid'),
-        cls: this.getStats('cls')
+        cls: this.getStats('cls'),
       },
       pageLoad: {
         dnsLookup: this.getStats('page_dns_lookup'),
@@ -781,40 +776,40 @@ export class PerformanceMonitor {
         serverResponse: this.getStats('page_server_response'),
         domParse: this.getStats('page_dom_parse'),
         resourceLoad: this.getStats('page_resource_load'),
-        totalLoad: this.getStats('page_total_load')
+        totalLoad: this.getStats('page_total_load'),
       },
       apiPerformance: this.getApiMetrics(),
-      recommendations: this.generateRecommendations()
-    };
+      recommendations: this.generateRecommendations(),
+    }
 
-    return report;
+    return report
   }
 
   // 성능 개선 권장사항
   private generateRecommendations(): string[] {
-    const recommendations: string[] = [];
+    const recommendations: string[] = []
 
-    const lcpStats = this.getStats('lcp');
+    const lcpStats = this.getStats('lcp')
     if (lcpStats && lcpStats.p75 > 2500) {
-      recommendations.push('LCP 개선 필요: 이미지 최적화, 크리티컬 리소스 우선로딩');
+      recommendations.push('LCP 개선 필요: 이미지 최적화, 크리티컬 리소스 우선로딩')
     }
 
-    const fidStats = this.getStats('fid');
+    const fidStats = this.getStats('fid')
     if (fidStats && fidStats.p75 > 100) {
-      recommendations.push('FID 개선 필요: JavaScript 번들 크기 줄이기, 코드 스플리팅');
+      recommendations.push('FID 개선 필요: JavaScript 번들 크기 줄이기, 코드 스플리팅')
     }
 
-    const clsStats = this.getStats('cls');
+    const clsStats = this.getStats('cls')
     if (clsStats && clsStats.p75 > 0.1) {
-      recommendations.push('CLS 개선 필요: 이미지 크기 고정, 폰트 로딩 최적화');
+      recommendations.push('CLS 개선 필요: 이미지 크기 고정, 폰트 로딩 최적화')
     }
 
-    return recommendations;
+    return recommendations
   }
 
   private async sendAlert(metric: string, value: number, threshold: number) {
     // 실제 구현에서는 Slack, 이메일 등으로 알림 발송
-    console.warn(`⚠️ Performance Alert: ${metric} = ${value} (threshold: ${threshold})`);
+    console.warn(`⚠️ Performance Alert: ${metric} = ${value} (threshold: ${threshold})`)
 
     // 웹훅 알림 (옵션)
     try {
@@ -826,28 +821,28 @@ export class PerformanceMonitor {
           value,
           threshold,
           timestamp: new Date(),
-          url: window.location.href
-        })
-      });
+          url: window.location.href,
+        }),
+      })
     } catch (error) {
-      console.error('Failed to send performance alert:', error);
+      console.error('Failed to send performance alert:', error)
     }
   }
 
   // 정리
   cleanup() {
-    this.observers.forEach(observer => observer.disconnect());
-    this.observers = [];
-    this.metrics.clear();
+    this.observers.forEach(observer => observer.disconnect())
+    this.observers = []
+    this.metrics.clear()
   }
 }
 
 // 전역 성능 모니터 인스턴스
-export const performanceMonitor = new PerformanceMonitor();
+export const performanceMonitor = new PerformanceMonitor()
 
 // 자동 페이지 로드 측정 시작
 if (typeof window !== 'undefined') {
-  performanceMonitor.measurePageLoad();
+  performanceMonitor.measurePageLoad()
 }
 ```
 
@@ -888,6 +883,7 @@ if (typeof window !== 'undefined') {
 ## 성능 최적화 체크리스트
 
 ### 즉시 적용 가능 (30분 내)
+
 - [ ] **이미지 최적화**: WebP 형식, 적절한 크기 설정
 - [ ] **압축 활성화**: Gzip/Brotli 압축 설정
 - [ ] **불필요한 코드 제거**: 사용하지 않는 CSS/JS 정리
@@ -895,6 +891,7 @@ if (typeof window !== 'undefined') {
 - [ ] **폰트 최적화**: 웹폰트 preload, display: swap
 
 ### 단기 최적화 (1주일 내)
+
 - [ ] **코드 스플리팅**: 라우트별, 컴포넌트별 분할
 - [ ] **레이지 로딩**: 이미지, 컴포넌트 지연 로딩
 - [ ] **CDN 연결**: 정적 자산 CDN 배포
@@ -902,6 +899,7 @@ if (typeof window !== 'undefined') {
 - [ ] **Redis 캐싱**: API 응답 캐시 구현
 
 ### 중장기 최적화 (1개월 내)
+
 - [ ] **성능 모니터링**: 실시간 모니터링 시스템 구축
 - [ ] **서버 최적화**: 로드 밸런싱, 오토 스케일링
 - [ ] **PWA 구현**: 서비스 워커, 오프라인 기능
@@ -909,6 +907,7 @@ if (typeof window !== 'undefined') {
 - [ ] **성능 예산**: 성능 메트릭 기반 CI/CD
 
 ### 성능 목표
+
 - **Lighthouse 점수**: 90+ (모든 항목)
 - **LCP**: < 2.5초
 - **FID**: < 100ms

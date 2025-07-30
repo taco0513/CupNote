@@ -24,47 +24,42 @@ Match Score = (향미 일치도 × 40%) + (감각 표현 일치도 × 40%) + (�
 ### 1. 향미 일치도 (Flavor Match) - 40%
 
 #### 계산 로직
+
 ```typescript
-const calculateFlavorMatch = (
-  userFlavors: FlavorNote[],
-  roasterNotes: string
-): number => {
+const calculateFlavorMatch = (userFlavors: FlavorNote[], roasterNotes: string): number => {
   // 1. 로스터 노트에서 향미 키워드 추출
-  const roasterKeywords = extractFlavorKeywords(roasterNotes);
-  
+  const roasterKeywords = extractFlavorKeywords(roasterNotes)
+
   // 2. 직접 일치 검사
   const directMatches = userFlavors.filter(flavor =>
     roasterKeywords.includes(flavor.name.toLowerCase())
-  );
-  
+  )
+
   // 3. 카테고리 일치 검사
-  const categoryMatches = userFlavors.filter(flavor =>
-    !directMatches.includes(flavor) &&
-    roasterKeywords.some(keyword => 
-      isSameCategory(flavor.name, keyword)
-    )
-  );
-  
+  const categoryMatches = userFlavors.filter(
+    flavor =>
+      !directMatches.includes(flavor) &&
+      roasterKeywords.some(keyword => isSameCategory(flavor.name, keyword))
+  )
+
   // 4. 연관 일치 검사
-  const relatedMatches = userFlavors.filter(flavor =>
-    !directMatches.includes(flavor) &&
-    !categoryMatches.includes(flavor) &&
-    roasterKeywords.some(keyword =>
-      isRelated(flavor.name, keyword)
-    )
-  );
-  
+  const relatedMatches = userFlavors.filter(
+    flavor =>
+      !directMatches.includes(flavor) &&
+      !categoryMatches.includes(flavor) &&
+      roasterKeywords.some(keyword => isRelated(flavor.name, keyword))
+  )
+
   // 5. 가중치 적용 계산
-  const score = 
-    (directMatches.length * 100) +
-    (categoryMatches.length * 70) +
-    (relatedMatches.length * 50);
-    
-  return Math.min(100, score / userFlavors.length);
-};
+  const score =
+    directMatches.length * 100 + categoryMatches.length * 70 + relatedMatches.length * 50
+
+  return Math.min(100, score / userFlavors.length)
+}
 ```
 
 #### 매칭 예시
+
 - **직접 일치 (100점)**: "딸기" ↔ "strawberry"
 - **카테고리 일치 (70점)**: "베리류" ↔ "strawberry"
 - **연관 일치 (50점)**: "과일향" ↔ "strawberry"
@@ -72,100 +67,92 @@ const calculateFlavorMatch = (
 ### 2. 감각 표현 일치도 (Sensory Match) - 40%
 
 #### 계산 로직
+
 ```typescript
 const calculateSensoryMatch = (
   userExpressions: SensoryExpressions,
   roasterNotes: string
 ): number => {
   const categories = [
-    'acidity',    // 산미
-    'sweetness',  // 단맛
+    'acidity', // 산미
+    'sweetness', // 단맛
     'bitterness', // 쓴맛
-    'body',       // 바디
-    'aroma',      // 향
-    'finish'      // 여운
-  ];
-  
-  let totalScore = 0;
-  let validCategories = 0;
-  
+    'body', // 바디
+    'aroma', // 향
+    'finish', // 여운
+  ]
+
+  let totalScore = 0
+  let validCategories = 0
+
   categories.forEach(category => {
-    const userTerms = userExpressions[category];
+    const userTerms = userExpressions[category]
     if (userTerms && userTerms.length > 0) {
-      validCategories++;
-      
+      validCategories++
+
       // 한영 매핑 테이블 활용
-      const mappedTerms = mapKoreanToEnglish(userTerms);
-      const roasterTerms = extractSensoryTerms(roasterNotes, category);
-      
+      const mappedTerms = mapKoreanToEnglish(userTerms)
+      const roasterTerms = extractSensoryTerms(roasterNotes, category)
+
       // 카테고리별 매칭 점수 계산
-      const categoryScore = calculateCategoryMatch(
-        mappedTerms, 
-        roasterTerms
-      );
-      
-      totalScore += categoryScore;
+      const categoryScore = calculateCategoryMatch(mappedTerms, roasterTerms)
+
+      totalScore += categoryScore
     }
-  });
-  
-  return validCategories > 0 ? totalScore / validCategories : 0;
-};
+  })
+
+  return validCategories > 0 ? totalScore / validCategories : 0
+}
 ```
 
 #### 한국어-영어 매핑 예시
+
 ```javascript
 const sensoryMapping = {
   acidity: {
-    "상큼한": ["bright", "crisp", "lively"],
-    "부드러운": ["mild", "soft", "gentle"],
-    "날카로운": ["sharp", "pointed", "tart"],
-    "과일같은": ["fruity", "juicy"],
-    "와인같은": ["wine-like", "winey"]
+    상큼한: ['bright', 'crisp', 'lively'],
+    부드러운: ['mild', 'soft', 'gentle'],
+    날카로운: ['sharp', 'pointed', 'tart'],
+    과일같은: ['fruity', 'juicy'],
+    와인같은: ['wine-like', 'winey'],
   },
   body: {
-    "가벼운": ["light", "delicate", "tea-like"],
-    "중간": ["medium", "balanced"],
-    "무거운": ["heavy", "full", "bold"],
-    "크리미한": ["creamy", "smooth", "velvety"],
-    "실키한": ["silky", "soft"]
-  }
+    가벼운: ['light', 'delicate', 'tea-like'],
+    중간: ['medium', 'balanced'],
+    무거운: ['heavy', 'full', 'bold'],
+    크리미한: ['creamy', 'smooth', 'velvety'],
+    실키한: ['silky', 'soft'],
+  },
   // ... 기타 카테고리
-};
+}
 ```
 
 ### 3. 전체 인상 일치도 (Overall Impression) - 20%
 
 #### 계산 로직
+
 ```typescript
-const calculateOverallMatch = (
-  userComment: string,
-  roasterNotes: string
-): number => {
+const calculateOverallMatch = (userComment: string, roasterNotes: string): number => {
   // 1. 감정 분석
-  const userSentiment = analyzeSentiment(userComment);
-  const roasterSentiment = analyzeSentiment(roasterNotes);
-  
+  const userSentiment = analyzeSentiment(userComment)
+  const roasterSentiment = analyzeSentiment(roasterNotes)
+
   // 2. 키 포인트 추출
-  const userKeyPoints = extractKeyPoints(userComment);
-  const roasterKeyPoints = extractKeyPoints(roasterNotes);
-  
+  const userKeyPoints = extractKeyPoints(userComment)
+  const roasterKeyPoints = extractKeyPoints(roasterNotes)
+
   // 3. 감정 일치도 (50%)
-  const sentimentMatch = calculateSentimentAlignment(
-    userSentiment,
-    roasterSentiment
-  );
-  
+  const sentimentMatch = calculateSentimentAlignment(userSentiment, roasterSentiment)
+
   // 4. 핵심 포인트 일치도 (50%)
-  const keyPointMatch = calculateKeyPointOverlap(
-    userKeyPoints,
-    roasterKeyPoints
-  );
-  
-  return (sentimentMatch * 0.5) + (keyPointMatch * 0.5);
-};
+  const keyPointMatch = calculateKeyPointOverlap(userKeyPoints, roasterKeyPoints)
+
+  return sentimentMatch * 0.5 + keyPointMatch * 0.5
+}
 ```
 
 #### 감정 분석 요소
+
 - **긍정/부정/중립**: 전반적 평가 톤
 - **강도**: 표현의 강약 정도
 - **복잡도**: 단순/복잡한 표현 사용
@@ -174,43 +161,43 @@ const calculateOverallMatch = (
 
 ### 점수대별 평가
 
-| 점수 범위 | 평가 | 설명 |
-|----------|------|------|
-| 90-100% | 전문가 수준 | 큐핑 전문가와 유사한 정확도 |
-| 80-89% | 매우 우수 | 뛰어난 감각 능력 보유 |
-| 70-79% | 우수 | 좋은 수준의 감각 능력 |
-| 60-69% | 보통 | 평균적인 감각 능력 |
-| 50-59% | 발전 필요 | 더 많은 경험과 학습 필요 |
-| 50% 미만 | 초보자 | 기초부터 차근차근 학습 권장 |
+| 점수 범위 | 평가        | 설명                        |
+| --------- | ----------- | --------------------------- |
+| 90-100%   | 전문가 수준 | 큐핑 전문가와 유사한 정확도 |
+| 80-89%    | 매우 우수   | 뛰어난 감각 능력 보유       |
+| 70-79%    | 우수        | 좋은 수준의 감각 능력       |
+| 60-69%    | 보통        | 평균적인 감각 능력          |
+| 50-59%    | 발전 필요   | 더 많은 경험과 학습 필요    |
+| 50% 미만  | 초보자      | 기초부터 차근차근 학습 권장 |
 
 ### 카테고리별 피드백
 
 ```typescript
 interface MatchScoreFeedback {
-  overall_score: number;
-  
-  strengths: string[];        // 잘한 부분
-  improvements: string[];     // 개선 필요 부분
-  
+  overall_score: number
+
+  strengths: string[] // 잘한 부분
+  improvements: string[] // 개선 필요 부분
+
   category_feedback: {
     flavor: {
-      score: number;
-      matched: string[];      // 일치한 향미
-      missed: string[];       // 놓친 향미
-      unique: string[];       // 독특하게 발견한 향미
-    };
+      score: number
+      matched: string[] // 일치한 향미
+      missed: string[] // 놓친 향미
+      unique: string[] // 독특하게 발견한 향미
+    }
     sensory: {
-      score: number;
-      accurate: string[];     // 정확한 표현
-      different: string[];    // 다른 표현
-      suggestion: string[];   // 추천 표현
-    };
+      score: number
+      accurate: string[] // 정확한 표현
+      different: string[] // 다른 표현
+      suggestion: string[] // 추천 표현
+    }
     overall: {
-      score: number;
-      alignment: string;      // 전반적 일치도
-      tips: string[];        // 향상 팁
-    };
-  };
+      score: number
+      alignment: string // 전반적 일치도
+      tips: string[] // 향상 팁
+    }
+  }
 }
 ```
 
@@ -224,14 +211,15 @@ interface MatchScoreFeedback {
    - 단순 퍼센트 계산
 
 2. **하드코딩된 데이터**
+
    ```javascript
    // 초기 버전: 고정된 매핑 테이블
    const basicFlavorMap = {
-     "딸기": ["strawberry", "berry"],
-     "초콜릿": ["chocolate", "cocoa"],
-     "꽃": ["floral", "flower"],
+     딸기: ['strawberry', 'berry'],
+     초콜릿: ['chocolate', 'cocoa'],
+     꽃: ['floral', 'flower'],
      // ... 주요 30개 향미
-   };
+   }
    ```
 
 3. **기본 피드백**
@@ -281,33 +269,22 @@ interface MatchScoreFeedback {
 // 1. 키워드 추출
 function extractFlavorKeywords(text: string): string[] {
   // 정규식과 키워드 사전을 활용한 추출
-  const keywords = [];
-  const patterns = [
-    /\b(strawberry|berry|chocolate|floral)\b/gi,
-    /[가-힣]+(?=향|맛|느낌)/g
-  ];
+  const keywords = []
+  const patterns = [/\b(strawberry|berry|chocolate|floral)\b/gi, /[가-힣]+(?=향|맛|느낌)/g]
   // ... 추출 로직
-  return keywords;
+  return keywords
 }
 
 // 2. 한영 변환
-function mapKoreanToEnglish(
-  koreanTerms: string[]
-): string[] {
-  return koreanTerms.flatMap(term => 
-    sensoryMapping[term] || [term]
-  );
+function mapKoreanToEnglish(koreanTerms: string[]): string[] {
+  return koreanTerms.flatMap(term => sensoryMapping[term] || [term])
 }
 
 // 3. 유사도 계산
-function calculateSimilarity(
-  term1: string,
-  term2: string
-): number {
+function calculateSimilarity(term1: string, term2: string): number {
   // 레벤슈타인 거리 또는 코사인 유사도
   // 초기엔 단순 매칭, 추후 고도화
-  return term1.toLowerCase() === term2.toLowerCase() ? 
-    100 : 0;
+  return term1.toLowerCase() === term2.toLowerCase() ? 100 : 0
 }
 ```
 
@@ -317,32 +294,32 @@ function calculateSimilarity(
 interface MatchScoreData {
   // 입력
   user_input: {
-    flavors: string[];
-    sensory: Record<string, string[]>;
-    comment: string;
-  };
-  
+    flavors: string[]
+    sensory: Record<string, string[]>
+    comment: string
+  }
+
   roaster_notes: {
-    text: string;
-    language: 'ko' | 'en' | 'mixed';
-    source: string;
-  };
-  
+    text: string
+    language: 'ko' | 'en' | 'mixed'
+    source: string
+  }
+
   // 결과
   result: {
-    timestamp: Date;
-    overall_score: number;
+    timestamp: Date
+    overall_score: number
     category_scores: {
-      flavor: number;
-      sensory: number;
-      overall: number;
-    };
+      flavor: number
+      sensory: number
+      overall: number
+    }
     details: {
-      matched_keywords: string[];
-      missed_keywords: string[];
-      unique_discoveries: string[];
-    };
-  };
+      matched_keywords: string[]
+      missed_keywords: string[]
+      unique_discoveries: string[]
+    }
+  }
 }
 ```
 
@@ -351,18 +328,18 @@ interface MatchScoreData {
 ### 캐싱 전략
 
 ```typescript
-const keywordCache = new Map();
-const mappingCache = new Map();
+const keywordCache = new Map()
+const mappingCache = new Map()
 
 function getCachedExtraction(text: string) {
-  const hash = createHash(text);
+  const hash = createHash(text)
   if (keywordCache.has(hash)) {
-    return keywordCache.get(hash);
+    return keywordCache.get(hash)
   }
-  
-  const keywords = extractFlavorKeywords(text);
-  keywordCache.set(hash, keywords);
-  return keywords;
+
+  const keywords = extractFlavorKeywords(text)
+  keywordCache.set(hash, keywords)
+  return keywords
 }
 ```
 
@@ -392,13 +369,13 @@ const getScoreVisual = (score: number) => {
 
 ```javascript
 const motivationalMessages = {
-  90: "와우! 전문 큐퍼 수준이에요! 🎯",
-  80: "훌륭해요! 감각이 정말 뛰어나시네요! ✨",
-  70: "좋아요! 계속 이렇게 발전하세요! 📈",
-  60: "괜찮아요! 조금만 더 연습하면 돼요! 💪",
-  50: "시작이 반이에요! 꾸준히 해봐요! 🌱",
-  0: "모든 전문가도 처음엔 초보였어요! 🚀"
-};
+  90: '와우! 전문 큐퍼 수준이에요! 🎯',
+  80: '훌륭해요! 감각이 정말 뛰어나시네요! ✨',
+  70: '좋아요! 계속 이렇게 발전하세요! 📈',
+  60: '괜찮아요! 조금만 더 연습하면 돼요! 💪',
+  50: '시작이 반이에요! 꾸준히 해봐요! 🌱',
+  0: '모든 전문가도 처음엔 초보였어요! 🚀',
+}
 ```
 
 ## 🔬 검증 및 테스트
@@ -408,41 +385,44 @@ const motivationalMessages = {
 ```typescript
 describe('Match Score Algorithm', () => {
   test('직접 일치 테스트', () => {
-    const userFlavors = ['딸기', '초콜릿'];
-    const roasterNotes = 'Strawberry and chocolate notes';
-    const score = calculateFlavorMatch(userFlavors, roasterNotes);
-    expect(score).toBeGreaterThan(90);
-  });
-  
+    const userFlavors = ['딸기', '초콜릿']
+    const roasterNotes = 'Strawberry and chocolate notes'
+    const score = calculateFlavorMatch(userFlavors, roasterNotes)
+    expect(score).toBeGreaterThan(90)
+  })
+
   test('카테고리 일치 테스트', () => {
-    const userFlavors = ['베리류'];
-    const roasterNotes = 'Blueberry and raspberry';
-    const score = calculateFlavorMatch(userFlavors, roasterNotes);
-    expect(score).toBeGreaterThan(60);
-  });
-  
+    const userFlavors = ['베리류']
+    const roasterNotes = 'Blueberry and raspberry'
+    const score = calculateFlavorMatch(userFlavors, roasterNotes)
+    expect(score).toBeGreaterThan(60)
+  })
+
   test('한국어 감각 표현 매칭', () => {
-    const userSensory = { acidity: ['상큼한'] };
-    const roasterNotes = 'Bright and crisp acidity';
-    const score = calculateSensoryMatch(userSensory, roasterNotes);
-    expect(score).toBeGreaterThan(80);
-  });
-});
+    const userSensory = { acidity: ['상큼한'] }
+    const roasterNotes = 'Bright and crisp acidity'
+    const score = calculateSensoryMatch(userSensory, roasterNotes)
+    expect(score).toBeGreaterThan(80)
+  })
+})
 ```
 
 ## 📈 미래 개선 방향
 
 ### 단기 (3-6개월)
+
 1. 사용자 피드백 기반 매핑 테이블 개선
 2. 더 정교한 카테고리 분류
 3. 개인화된 학습 곡선 추적
 
 ### 중기 (6-12개월)
+
 1. NLP 모델 통합
 2. 이미지 인식 (라떼 아트 등)
 3. 음성 입력 지원
 
 ### 장기 (1년+)
+
 1. AI 기반 완전 자동화
 2. 전문가 네트워크 연동
 3. 국제화 (다국어 지원)
@@ -455,7 +435,8 @@ Match Score 알고리즘은 CupNote의 핵심 차별화 요소로, 사용자의 
 
 **문서 버전**: 1.0  
 **작성일**: 2025-01-28  
-**관련 문서**: 
+**관련 문서**:
+
 - ROASTER_NOTES_SCREEN.md
 - RESULT_SCREEN.md
 - master-playbook-application-report.md

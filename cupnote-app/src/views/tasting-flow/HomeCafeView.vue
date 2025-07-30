@@ -2,9 +2,7 @@
   <div class="home-cafe-view">
     <!-- Header -->
     <header class="screen-header">
-      <button class="back-btn" @click="$router.push('/coffee-info')">
-        ←
-      </button>
+      <button class="back-btn" @click="$router.push('/coffee-info')">←</button>
       <h1 class="screen-title">홈카페 설정</h1>
       <div class="progress-bar">
         <div class="progress-fill" :style="{ width: '43%' }"></div>
@@ -32,13 +30,13 @@
       <!-- Recipe Settings -->
       <section class="recipe-section">
         <h2 class="section-title">레시피 설정</h2>
-        
+
         <!-- Coffee Amount -->
         <div class="recipe-field">
           <h3 class="field-label">원두량</h3>
           <div class="dial-control">
-            <button 
-              class="dial-btn minus" 
+            <button
+              class="dial-btn minus"
               @click="adjustCoffeeAmount(-1)"
               :disabled="coffeeAmount <= 10"
             >
@@ -48,8 +46,8 @@
               <span class="amount">{{ coffeeAmount }}</span>
               <span class="unit">g</span>
             </div>
-            <button 
-              class="dial-btn plus" 
+            <button
+              class="dial-btn plus"
               @click="adjustCoffeeAmount(1)"
               :disabled="coffeeAmount >= 50"
             >
@@ -81,13 +79,7 @@
         <div class="recipe-field">
           <h3 class="field-label">물 온도</h3>
           <div class="temp-input">
-            <input
-              v-model.number="waterTemp"
-              type="number"
-              min="80"
-              max="100"
-              class="temp-field"
-            />
+            <input v-model.number="waterTemp" type="number" min="80" max="100" class="temp-field" />
             <span class="temp-unit">°C</span>
           </div>
         </div>
@@ -100,34 +92,16 @@
               <span class="timer-time">{{ formatTime(elapsedTime) }}</span>
             </div>
             <div class="timer-controls">
-              <button 
-                v-if="!isTimerRunning" 
-                class="timer-btn start"
-                @click="startTimer"
-              >
+              <button v-if="!isTimerRunning" class="timer-btn start" @click="startTimer">
                 시작
               </button>
-              <button 
-                v-else 
-                class="timer-btn stop"
-                @click="stopTimer"
-              >
-                정지
-              </button>
-              <button 
-                v-if="elapsedTime > 0" 
-                class="timer-btn reset"
-                @click="resetTimer"
-              >
+              <button v-else class="timer-btn stop" @click="stopTimer">정지</button>
+              <button v-if="elapsedTime > 0" class="timer-btn reset" @click="resetTimer">
                 리셋
               </button>
             </div>
             <div v-if="lapTimes.length > 0" class="lap-times">
-              <div 
-                v-for="(lap, index) in lapTimes" 
-                :key="index"
-                class="lap-time"
-              >
+              <div v-for="(lap, index) in lapTimes" :key="index" class="lap-time">
                 <span class="lap-label">Lap {{ index + 1 }}:</span>
                 <span class="lap-value">{{ formatTime(lap) }}</span>
               </div>
@@ -150,18 +124,11 @@
       <!-- Personal Recipe -->
       <section class="personal-recipe">
         <div class="recipe-actions">
-          <button 
-            class="save-recipe-btn"
-            @click="saveRecipe"
-          >
+          <button class="save-recipe-btn" @click="saveRecipe">
             <span class="save-icon">💾</span>
             나의 커피로 저장
           </button>
-          <button 
-            v-if="savedRecipe"
-            class="load-recipe-btn"
-            @click="loadRecipe"
-          >
+          <button v-if="savedRecipe" class="load-recipe-btn" @click="loadRecipe">
             <span class="load-icon">📂</span>
             나의 커피 불러오기
           </button>
@@ -174,9 +141,7 @@
       <button type="button" class="btn-secondary" @click="$router.push('/coffee-info')">
         이전
       </button>
-      <button type="button" class="btn-primary" @click="handleNext">
-        다음
-      </button>
+      <button type="button" class="btn-primary" @click="handleNext">다음</button>
     </div>
   </div>
 </template>
@@ -200,7 +165,7 @@ const drippers = [
   { value: 'orea', name: 'Orea', icon: '🔵' },
   { value: 'flower', name: 'Flower', icon: '🌺' },
   { value: 'blue-bottle', name: 'Blue Bottle', icon: '💙' },
-  { value: 'timemore', name: 'Timemore', icon: '💎' }
+  { value: 'timemore', name: 'Timemore', icon: '💎' },
 ]
 
 // Ratio presets
@@ -211,7 +176,7 @@ const ratioPresets = [
   { value: 16.5, label: '1:16.5' },
   { value: 17, label: '1:17' },
   { value: 17.5, label: '1:17.5' },
-  { value: 18, label: '1:18' }
+  { value: 18, label: '1:18' },
 ]
 
 // State
@@ -250,7 +215,7 @@ const formatTime = (seconds) => {
 const startTimer = () => {
   isTimerRunning.value = true
   const startTime = Date.now() - elapsedTime.value * 1000
-  
+
   timerInterval = setInterval(() => {
     elapsedTime.value = Math.floor((Date.now() - startTime) / 1000)
   }, 100)
@@ -284,13 +249,13 @@ const saveRecipe = () => {
     coffee_amount: coffeeAmount.value,
     water_amount: waterAmount.value,
     ratio: ratio.value,
-    saved_at: new Date().toISOString()
+    saved_at: new Date().toISOString(),
   }
-  
+
   // Save to localStorage (in real app, use AsyncStorage)
   localStorage.setItem('homecafe_my_coffee_recipe', JSON.stringify(recipe))
   savedRecipe.value = recipe
-  
+
   alert('레시피가 저장되었습니다!')
 }
 
@@ -312,23 +277,24 @@ const handleNext = () => {
       ratio: ratio.value,
       water_temp: waterTemp.value,
       brew_time: elapsedTime.value,
-      lap_times: lapTimes.value
+      lap_times: lapTimes.value,
     },
-    quick_note: quickNote.value
+    quick_note: quickNote.value,
   }
-  
+
   // Update brewing method
-  const dripperName = drippers.find(d => d.value === selectedDripper.value)?.name || selectedDripper.value
+  const dripperName =
+    drippers.find((d) => d.value === selectedDripper.value)?.name || selectedDripper.value
   const brewingMethod = `${dripperName} - ${coffeeAmount.value}g, 1:${ratio.value}, ${waterTemp.value}°C`
-  
+
   // Update coffee info with brewing method
   tastingSessionStore.updateCoffeeSetup({
-    brewing_method: brewingMethod
+    brewing_method: brewingMethod,
   })
-  
+
   // Update HomeCafe specific data
   tastingSessionStore.updateHomeCafeData(homeCafeData)
-  
+
   // Navigate based on mode
   if (currentMode.value === 'pro') {
     router.push('/pro-brewing')
@@ -358,7 +324,7 @@ onUnmounted(() => {
   max-width: 600px;
   margin: 0 auto;
   padding: 1rem;
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5F0E8 100%);
+  background: linear-gradient(135deg, #fff8f0 0%, #f5f0e8 100%);
   min-height: 100vh;
 }
 
@@ -377,7 +343,7 @@ onUnmounted(() => {
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: #7C5842;
+  color: #7c5842;
   cursor: pointer;
   width: 40px;
   height: 40px;
@@ -395,14 +361,14 @@ onUnmounted(() => {
 .screen-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .progress-bar {
   max-width: 300px;
   height: 4px;
-  background: #E8D5C4;
+  background: #e8d5c4;
   border-radius: 2px;
   margin: 1rem auto 0;
   overflow: hidden;
@@ -410,7 +376,7 @@ onUnmounted(() => {
 
 .progress-fill {
   height: 100%;
-  background: #7C5842;
+  background: #7c5842;
   transition: width 0.3s ease;
 }
 
@@ -422,9 +388,9 @@ onUnmounted(() => {
 .section-title {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1rem;
-  border-bottom: 2px solid #E8D5C4;
+  border-bottom: 2px solid #e8d5c4;
   padding-bottom: 0.5rem;
 }
 
@@ -445,7 +411,7 @@ onUnmounted(() => {
 
 .dripper-btn {
   background: white;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   padding: 1rem 0.5rem;
   text-align: center;
@@ -458,13 +424,13 @@ onUnmounted(() => {
 }
 
 .dripper-btn:hover {
-  border-color: #D4B896;
+  border-color: #d4b896;
   transform: translateY(-1px);
 }
 
 .dripper-btn.active {
-  border-color: #7C5842;
-  background: #7C5842;
+  border-color: #7c5842;
+  background: #7c5842;
   color: white;
 }
 
@@ -497,7 +463,7 @@ onUnmounted(() => {
 .field-label {
   font-size: 1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.75rem;
 }
 
@@ -511,7 +477,7 @@ onUnmounted(() => {
 }
 
 .dial-btn {
-  background: #7C5842;
+  background: #7c5842;
   color: white;
   border: none;
   border-radius: 50%;
@@ -527,12 +493,12 @@ onUnmounted(() => {
 }
 
 .dial-btn:hover:not(:disabled) {
-  background: #5D3F2E;
+  background: #5d3f2e;
   transform: scale(1.1);
 }
 
 .dial-btn:disabled {
-  background: #CCC;
+  background: #ccc;
   cursor: not-allowed;
 }
 
@@ -545,30 +511,30 @@ onUnmounted(() => {
 .amount {
   font-size: 2rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .unit {
   font-size: 1.2rem;
-  color: #A0796A;
+  color: #a0796a;
 }
 
 .water-calculation {
   text-align: center;
   padding: 0.5rem;
-  background: #F8F4F0;
+  background: #f8f4f0;
   border-radius: 8px;
 }
 
 .water-label {
-  color: #A0796A;
+  color: #a0796a;
   margin-right: 0.5rem;
 }
 
 .water-amount {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 /* Ratio Buttons */
@@ -580,7 +546,7 @@ onUnmounted(() => {
 
 .ratio-btn {
   background: white;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   padding: 0.5rem;
   cursor: pointer;
@@ -589,12 +555,12 @@ onUnmounted(() => {
 }
 
 .ratio-btn:hover {
-  border-color: #D4B896;
+  border-color: #d4b896;
 }
 
 .ratio-btn.active {
-  border-color: #7C5842;
-  background: #7C5842;
+  border-color: #7c5842;
+  background: #7c5842;
   color: white;
 }
 
@@ -608,7 +574,7 @@ onUnmounted(() => {
 .temp-field {
   width: 80px;
   padding: 0.5rem;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   font-size: 1rem;
   text-align: center;
@@ -616,17 +582,17 @@ onUnmounted(() => {
 
 .temp-field:focus {
   outline: none;
-  border-color: #7C5842;
+  border-color: #7c5842;
 }
 
 .temp-unit {
   font-size: 1rem;
-  color: #A0796A;
+  color: #a0796a;
 }
 
 /* Timer */
 .timer-container {
-  background: #F8F4F0;
+  background: #f8f4f0;
   border-radius: 8px;
   padding: 1rem;
 }
@@ -639,7 +605,7 @@ onUnmounted(() => {
 .timer-time {
   font-size: 2rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   font-family: monospace;
 }
 
@@ -659,12 +625,12 @@ onUnmounted(() => {
 }
 
 .timer-btn.start {
-  background: #4CAF50;
+  background: #4caf50;
   color: white;
 }
 
 .timer-btn.stop {
-  background: #F44336;
+  background: #f44336;
   color: white;
 }
 
@@ -680,7 +646,7 @@ onUnmounted(() => {
 
 .lap-times {
   margin-top: 1rem;
-  border-top: 1px solid #E8D5C4;
+  border-top: 1px solid #e8d5c4;
   padding-top: 1rem;
 }
 
@@ -692,12 +658,12 @@ onUnmounted(() => {
 }
 
 .lap-label {
-  color: #A0796A;
+  color: #a0796a;
 }
 
 .lap-value {
   font-weight: 500;
-  color: #7C5842;
+  color: #7c5842;
   font-family: monospace;
 }
 
@@ -705,14 +671,14 @@ onUnmounted(() => {
 .note-field {
   width: 100%;
   padding: 0.75rem;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   font-size: 1rem;
 }
 
 .note-field:focus {
   outline: none;
-  border-color: #7C5842;
+  border-color: #7c5842;
 }
 
 /* Personal Recipe */
@@ -735,10 +701,10 @@ onUnmounted(() => {
   flex: 1;
   min-width: 150px;
   padding: 0.75rem 1rem;
-  border: 2px solid #7C5842;
+  border: 2px solid #7c5842;
   border-radius: 8px;
   background: white;
-  color: #7C5842;
+  color: #7c5842;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -750,7 +716,7 @@ onUnmounted(() => {
 
 .save-recipe-btn:hover,
 .load-recipe-btn:hover {
-  background: #7C5842;
+  background: #7c5842;
   color: white;
   transform: translateY(-1px);
 }
@@ -780,25 +746,25 @@ onUnmounted(() => {
 }
 
 .btn-primary {
-  background: #7C5842;
+  background: #7c5842;
   color: white;
-  border: 2px solid #7C5842;
+  border: 2px solid #7c5842;
 }
 
 .btn-primary:hover {
-  background: #5D3F2E;
-  border-color: #5D3F2E;
+  background: #5d3f2e;
+  border-color: #5d3f2e;
   transform: translateY(-1px);
 }
 
 .btn-secondary {
   background: white;
-  color: #7C5842;
-  border: 2px solid #E8D5C4;
+  color: #7c5842;
+  border: 2px solid #e8d5c4;
 }
 
 .btn-secondary:hover {
-  border-color: #D4B896;
+  border-color: #d4b896;
   transform: translateY(-1px);
 }
 
@@ -807,15 +773,15 @@ onUnmounted(() => {
   .dripper-grid {
     grid-template-columns: repeat(3, 1fr);
   }
-  
+
   .ratio-buttons {
     grid-template-columns: repeat(4, 1fr);
   }
-  
+
   .recipe-actions {
     flex-direction: column;
   }
-  
+
   .save-recipe-btn,
   .load-recipe-btn {
     width: 100%;

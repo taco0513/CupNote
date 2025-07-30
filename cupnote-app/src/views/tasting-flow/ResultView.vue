@@ -39,16 +39,12 @@
     <!-- Your Selections Summary -->
     <section class="selections-summary">
       <h3 class="summary-title">선택하신 표현들</h3>
-      
+
       <!-- Flavors -->
       <div v-if="selectedFlavors.length > 0" class="selection-group">
         <h4 class="group-title">🌸 향미</h4>
         <div class="selection-tags">
-          <span
-            v-for="flavor in selectedFlavors"
-            :key="flavor.id"
-            class="selection-tag flavor-tag"
-          >
+          <span v-for="flavor in selectedFlavors" :key="flavor.id" class="selection-tag flavor-tag">
             {{ flavor.text }}
           </span>
         </div>
@@ -89,10 +85,7 @@
             <span class="item-score">{{ flavorMatchScore }}%</span>
           </div>
           <div class="item-bar">
-            <div 
-              class="item-progress" 
-              :style="{ width: flavorMatchScore + '%' }"
-            ></div>
+            <div class="item-progress" :style="{ width: flavorMatchScore + '%' }"></div>
           </div>
         </div>
 
@@ -103,10 +96,7 @@
             <span class="item-score">{{ sensoryMatchScore }}%</span>
           </div>
           <div class="item-bar">
-            <div 
-              class="item-progress" 
-              :style="{ width: sensoryMatchScore + '%' }"
-            ></div>
+            <div class="item-progress" :style="{ width: sensoryMatchScore + '%' }"></div>
           </div>
         </div>
 
@@ -114,7 +104,9 @@
           <div class="item-header">
             <span class="item-icon">📋</span>
             <span class="item-name">로스터 노트</span>
-            <span class="item-score">{{ roasterNoteBonus > 0 ? '+' + roasterNoteBonus : roasterNoteBonus }}%</span>
+            <span class="item-score"
+              >{{ roasterNoteBonus > 0 ? '+' + roasterNoteBonus : roasterNoteBonus }}%</span
+            >
           </div>
           <div class="item-description">
             {{ roasterNoteBonus > 0 ? 'Level 2 보너스 적용' : '기본 Level 1 점수' }}
@@ -152,9 +144,7 @@
 
     <!-- Action Buttons -->
     <div class="action-buttons">
-      <button type="button" class="btn-secondary" @click="shareResult">
-        📤 공유하기
-      </button>
+      <button type="button" class="btn-secondary" @click="shareResult">📤 공유하기</button>
       <button type="button" class="btn-primary" @click="startNewTasting">
         ☕ 새로운 커피 기록하기
       </button>
@@ -198,13 +188,13 @@ const currentSession = computed(() => tastingSessionStore.currentSession)
 const mockCoffeeInfo = computed(() => ({
   name: currentSession.value.coffeeInfo?.coffee_name || '커피 이름 없음',
   cafe: currentSession.value.coffeeInfo?.cafe_name || '카페 이름 없음',
-  method: currentSession.value.coffeeInfo?.brewing_method || '브루잉 방법 없음'
+  method: currentSession.value.coffeeInfo?.brewing_method || '브루잉 방법 없음',
 }))
 
 const selectedFlavors = computed(() => currentSession.value.selectedFlavors || [])
 const selectedSensory = computed(() => currentSession.value.sensoryExpressions || [])
 const personalNotes = computed(() => currentSession.value.personalComment || '')
-const roasterNoteBonus = computed(() => currentSession.value.roasterNotesLevel === 2 ? 10 : 0)
+const roasterNoteBonus = computed(() => (currentSession.value.roasterNotesLevel === 2 ? 10 : 0))
 
 // Score calculation (get from store)
 const scores = computed(() => tastingSessionStore.calculateMatchScores())
@@ -215,7 +205,7 @@ const matchScore = computed(() => scores.value.totalMatchScore)
 // Community data
 const communityData = ref({
   totalUsers: 47,
-  averageScore: 73
+  averageScore: 73,
 })
 
 // Computed properties
@@ -256,11 +246,13 @@ const communityComparisonMessage = computed(() => {
 const shareResult = () => {
   // TODO: Implement share functionality
   if (navigator.share) {
-    navigator.share({
-      title: 'CupNote 테이스팅 결과',
-      text: `${mockCoffeeInfo.value.name} 테이스팅 결과: ${matchScore.value}점! ${scoreMessage.value}`,
-      url: window.location.href
-    }).catch(err => console.log('Error sharing:', err))
+    navigator
+      .share({
+        title: 'CupNote 테이스팅 결과',
+        text: `${mockCoffeeInfo.value.name} 테이스팅 결과: ${matchScore.value}점! ${scoreMessage.value}`,
+        url: window.location.href,
+      })
+      .catch((err) => console.log('Error sharing:', err))
   } else {
     // Fallback for browsers that don't support Web Share API
     const text = `${mockCoffeeInfo.value.name} 테이스팅 결과: ${matchScore.value}점! ${scoreMessage.value}`
@@ -289,45 +281,56 @@ const showAchievementPopup = (message) => {
 // Initialize
 onMounted(async () => {
   // Check if we have complete session data
-  if (!tastingSessionStore.currentSession.coffeeInfo || !tastingSessionStore.currentSession.selectedFlavors) {
+  if (
+    !tastingSessionStore.currentSession.coffeeInfo ||
+    !tastingSessionStore.currentSession.selectedFlavors
+  ) {
     console.error('Incomplete session data, redirecting to home')
     router.push('/')
     return
   }
-  
+
   // TODO: For now, we'll use mock user ID. In real app, get from auth
   const mockUserId = 'mock-user-id-123'
-  
+
   try {
     // Save the coffee record with error handling
-    await withErrorHandling(async () => {
-      const savedRecord = await tastingSessionStore.saveCurrentSession(mockUserId)
-      console.log('Coffee record saved:', savedRecord)
-    }, {
-      operation: 'saveResult',
-      component: 'ResultView'
-    })
-    
+    await withErrorHandling(
+      async () => {
+        const savedRecord = await tastingSessionStore.saveCurrentSession(mockUserId)
+        console.log('Coffee record saved:', savedRecord)
+      },
+      {
+        operation: 'saveResult',
+        component: 'ResultView',
+      },
+    )
+
     // Get coffee statistics with separate error handling
-    await withErrorHandling(async () => {
-      isLoadingStats.value = true
-      const stats = await tastingSessionStore.getCoffeeStatistics(currentSession.value.coffeeInfo?.coffee_name)
-      if (stats) {
-        communityData.value.totalUsers = stats.total_records
-        communityData.value.averageScore = Math.round(stats.average_score)
-      }
-    }, {
-      operation: 'loadStats',
-      component: 'ResultView',
-      showNotification: false // Don't show notification for stats failures
-    })
+    await withErrorHandling(
+      async () => {
+        isLoadingStats.value = true
+        const stats = await tastingSessionStore.getCoffeeStatistics(
+          currentSession.value.coffeeInfo?.coffee_name,
+        )
+        if (stats) {
+          communityData.value.totalUsers = stats.total_records
+          communityData.value.averageScore = Math.round(stats.average_score)
+        }
+      },
+      {
+        operation: 'loadStats',
+        component: 'ResultView',
+        showNotification: false, // Don't show notification for stats failures
+      },
+    )
   } catch (error) {
     // Error already handled by withErrorHandling
     console.error('Failed to save coffee record:', error)
   } finally {
     isLoadingStats.value = false
   }
-  
+
   // Show achievement popup for first-time or high score
   setTimeout(() => {
     if (matchScore.value >= 85) {
@@ -344,7 +347,7 @@ onMounted(async () => {
   max-width: 800px;
   margin: 0 auto;
   padding: 1rem;
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5F0E8 100%);
+  background: linear-gradient(135deg, #fff8f0 0%, #f5f0e8 100%);
   min-height: 100vh;
 }
 
@@ -357,13 +360,13 @@ onMounted(async () => {
 .result-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
   animation: slideDown 0.6s ease-out;
 }
 
 .result-subtitle {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 1.1rem;
   line-height: 1.4;
   animation: fadeIn 0.8s ease-out 0.2s both;
@@ -375,7 +378,7 @@ onMounted(async () => {
   border-radius: 20px;
   padding: 1.5rem;
   box-shadow: 0 8px 24px rgba(124, 88, 66, 0.15);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
   margin-bottom: 2rem;
   animation: slideUp 0.6s ease-out 0.4s both;
 }
@@ -387,12 +390,12 @@ onMounted(async () => {
 .coffee-name {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .cafe-name {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 1rem;
   margin-bottom: 1rem;
 }
@@ -401,12 +404,12 @@ onMounted(async () => {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: #F8F4F0;
+  background: #f8f4f0;
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 0.9rem;
-  color: #7C5842;
-  border: 1px solid #E8D5C4;
+  color: #7c5842;
+  border: 1px solid #e8d5c4;
 }
 
 .method-icon {
@@ -436,10 +439,7 @@ onMounted(async () => {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: conic-gradient(
-    var(--score-color) var(--progress),
-    #E8D5C4 var(--progress)
-  );
+  background: conic-gradient(var(--score-color) var(--progress), #e8d5c4 var(--progress));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -464,7 +464,7 @@ onMounted(async () => {
 .score-number {
   font-size: 3rem;
   font-weight: 900;
-  color: #7C5842;
+  color: #7c5842;
   line-height: 1;
   margin-bottom: 0.25rem;
 }
@@ -472,29 +472,29 @@ onMounted(async () => {
 .score-label {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #A0796A;
+  color: #a0796a;
   letter-spacing: 2px;
 }
 
 /* Score classes */
 .score-excellent {
-  --score-color: linear-gradient(45deg, #FFD700, #FFA500);
+  --score-color: linear-gradient(45deg, #ffd700, #ffa500);
 }
 
 .score-great {
-  --score-color: linear-gradient(45deg, #10B981, #059669);
+  --score-color: linear-gradient(45deg, #10b981, #059669);
 }
 
 .score-good {
-  --score-color: linear-gradient(45deg, #3B82F6, #1D4ED8);
+  --score-color: linear-gradient(45deg, #3b82f6, #1d4ed8);
 }
 
 .score-okay {
-  --score-color: linear-gradient(45deg, #F59E0B, #D97706);
+  --score-color: linear-gradient(45deg, #f59e0b, #d97706);
 }
 
 .score-needs-improvement {
-  --score-color: linear-gradient(45deg, #EF4444, #DC2626);
+  --score-color: linear-gradient(45deg, #ef4444, #dc2626);
 }
 
 .score-message {
@@ -505,12 +505,12 @@ onMounted(async () => {
 .message-text {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .message-desc {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 1rem;
 }
 
@@ -520,7 +520,7 @@ onMounted(async () => {
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
   margin-bottom: 2rem;
   animation: slideUp 0.6s ease-out 1.4s both;
 }
@@ -528,7 +528,7 @@ onMounted(async () => {
 .summary-title {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -544,7 +544,7 @@ onMounted(async () => {
 .group-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.75rem;
 }
 
@@ -555,36 +555,36 @@ onMounted(async () => {
 }
 
 .selection-tag {
-  background: #F8F4F0;
-  border: 1px solid #E8D5C4;
+  background: #f8f4f0;
+  border: 1px solid #e8d5c4;
   border-radius: 20px;
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
-  color: #7C5842;
+  color: #7c5842;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
 .flavor-tag {
-  background: linear-gradient(135deg, #FFF8F0, #F8F4F0);
+  background: linear-gradient(135deg, #fff8f0, #f8f4f0);
 }
 
 .sensory-tag {
-  background: linear-gradient(135deg, #F0F8FF, #E8F4FD);
+  background: linear-gradient(135deg, #f0f8ff, #e8f4fd);
 }
 
 .sensory-category {
   font-size: 0.8rem;
-  color: #A0796A;
+  color: #a0796a;
   font-weight: 500;
 }
 
 .personal-notes {
-  background: #F8F4F0;
+  background: #f8f4f0;
   border-radius: 12px;
   padding: 1rem;
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .notes-text {
@@ -600,7 +600,7 @@ onMounted(async () => {
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
   margin-bottom: 2rem;
   animation: slideUp 0.6s ease-out 1.6s both;
 }
@@ -608,7 +608,7 @@ onMounted(async () => {
 .breakdown-title {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -640,18 +640,18 @@ onMounted(async () => {
 .item-name {
   flex: 1;
   font-weight: 500;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .item-score {
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   font-size: 1.1rem;
 }
 
 .item-bar {
   height: 8px;
-  background: #F0E8DC;
+  background: #f0e8dc;
   border-radius: 4px;
   overflow: hidden;
   margin-left: 40px;
@@ -659,7 +659,7 @@ onMounted(async () => {
 
 .item-progress {
   height: 100%;
-  background: linear-gradient(90deg, #7C5842, #A0796A);
+  background: linear-gradient(90deg, #7c5842, #a0796a);
   border-radius: 4px;
   transition: width 0.8s ease-out;
 }
@@ -667,14 +667,14 @@ onMounted(async () => {
 .item-description {
   margin-left: 40px;
   font-size: 0.85rem;
-  color: #A0796A;
+  color: #a0796a;
   font-style: italic;
 }
 
 /* Community Section */
 .community-section {
-  background: linear-gradient(135deg, #FFF8F0, #F8F4F0);
-  border: 1px solid #F0E8DC;
+  background: linear-gradient(135deg, #fff8f0, #f8f4f0);
+  border: 1px solid #f0e8dc;
   border-radius: 16px;
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -684,7 +684,7 @@ onMounted(async () => {
 .community-title {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1rem;
   text-align: center;
 }
@@ -709,12 +709,12 @@ onMounted(async () => {
   display: block;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .stat-label {
   font-size: 0.9rem;
-  color: #A0796A;
+  color: #a0796a;
 }
 
 .community-comparison {
@@ -722,7 +722,7 @@ onMounted(async () => {
   padding: 1rem;
   background: white;
   border-radius: 12px;
-  border: 1px solid #E8D5C4;
+  border: 1px solid #e8d5c4;
 }
 
 .comparison-text {
@@ -761,7 +761,7 @@ onMounted(async () => {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #7C5842, #A0796A);
+  background: linear-gradient(135deg, #7c5842, #a0796a);
   color: white;
   box-shadow: 0 4px 15px rgba(124, 88, 66, 0.3);
 }
@@ -773,13 +773,13 @@ onMounted(async () => {
 
 .btn-secondary {
   background: white;
-  color: #7C5842;
-  border: 2px solid #E8D5C4;
+  color: #7c5842;
+  border: 2px solid #e8d5c4;
 }
 
 .btn-secondary:hover {
-  border-color: #D4B896;
-  background: #F8F4F0;
+  border-color: #d4b896;
+  background: #f8f4f0;
   transform: translateY(-1px);
 }
 
@@ -816,7 +816,7 @@ onMounted(async () => {
 .achievement-title {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
@@ -826,7 +826,7 @@ onMounted(async () => {
 }
 
 .achievement-reward {
-  background: linear-gradient(135deg, #FFD700, #FFA500);
+  background: linear-gradient(135deg, #ffd700, #ffa500);
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 20px;
@@ -902,24 +902,24 @@ onMounted(async () => {
   .result-view {
     padding: 0.5rem;
   }
-  
+
   .result-title {
     font-size: 2rem;
   }
-  
+
   .score-circle {
     width: 160px;
     height: 160px;
   }
-  
+
   .score-number {
     font-size: 2.5rem;
   }
-  
+
   .community-stats {
     gap: 1rem;
   }
-  
+
   .action-buttons {
     flex-direction: column;
   }
@@ -932,12 +932,12 @@ onMounted(async () => {
   .community-section {
     padding: 1rem;
   }
-  
+
   .selection-tags {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .selection-tag {
     text-align: center;
     justify-content: center;

@@ -233,14 +233,14 @@ repos:
 
 ```typescript
 // scripts/auto-review.ts
-import { Octokit } from '@octokit/rest';
-import { analyzeCode } from './code-analyzer';
+import { Octokit } from '@octokit/rest'
+import { analyzeCode } from './code-analyzer'
 
 class AutoCodeReviewer {
-  private octokit: Octokit;
+  private octokit: Octokit
 
   constructor(token: string) {
-    this.octokit = new Octokit({ auth: token });
+    this.octokit = new Octokit({ auth: token })
   }
 
   async reviewPR(owner: string, repo: string, prNumber: number) {
@@ -248,18 +248,18 @@ class AutoCodeReviewer {
     const { data: files } = await this.octokit.pulls.listFiles({
       owner,
       repo,
-      pull_number: prNumber
-    });
+      pull_number: prNumber,
+    })
 
-    const comments: ReviewComment[] = [];
+    const comments: ReviewComment[] = []
 
     for (const file of files) {
       // 코드 분석
-      const analysis = await analyzeCode(file);
+      const analysis = await analyzeCode(file)
 
       // 자동 리뷰 코멘트 생성
       if (analysis.issues.length > 0) {
-        comments.push(...this.generateComments(file, analysis));
+        comments.push(...this.generateComments(file, analysis))
       }
     }
 
@@ -271,26 +271,23 @@ class AutoCodeReviewer {
         pull_number: prNumber,
         body: '🤖 자동 코드 리뷰 결과입니다.',
         event: 'COMMENT',
-        comments
-      });
+        comments,
+      })
     }
   }
 
-  private generateComments(
-    file: File,
-    analysis: CodeAnalysis
-  ): ReviewComment[] {
+  private generateComments(file: File, analysis: CodeAnalysis): ReviewComment[] {
     return analysis.issues.map(issue => ({
       path: file.filename,
       line: issue.line,
-      body: `💡 **${issue.type}**: ${issue.message}\n\n제안: ${issue.suggestion}`
-    }));
+      body: `💡 **${issue.type}**: ${issue.message}\n\n제안: ${issue.suggestion}`,
+    }))
   }
 }
 
 // 코드 분석 함수
 export async function analyzeCode(file: File): Promise<CodeAnalysis> {
-  const issues: Issue[] = [];
+  const issues: Issue[] = []
 
   // 복잡도 검사
   if (file.complexity > 10) {
@@ -298,22 +295,24 @@ export async function analyzeCode(file: File): Promise<CodeAnalysis> {
       type: 'complexity',
       line: file.complexityLocation,
       message: '함수가 너무 복잡합니다',
-      suggestion: '더 작은 함수로 분리해보세요'
-    });
+      suggestion: '더 작은 함수로 분리해보세요',
+    })
   }
 
   // 중복 코드 검사
-  const duplicates = findDuplicates(file.content);
+  const duplicates = findDuplicates(file.content)
   if (duplicates.length > 0) {
-    issues.push(...duplicates.map(dup => ({
-      type: 'duplication',
-      line: dup.line,
-      message: '중복된 코드가 발견되었습니다',
-      suggestion: '공통 함수로 추출하세요'
-    })));
+    issues.push(
+      ...duplicates.map(dup => ({
+        type: 'duplication',
+        line: dup.line,
+        message: '중복된 코드가 발견되었습니다',
+        suggestion: '공통 함수로 추출하세요',
+      }))
+    )
   }
 
-  return { issues };
+  return { issues }
 }
 ```
 
@@ -338,8 +337,8 @@ services:
       - /app/node_modules
       - /app/.next
     ports:
-      - "3000:3000"
-      - "9229:9229" # 디버그 포트
+      - '3000:3000'
+      - '9229:9229' # 디버그 포트
     environment:
       - NODE_ENV=development
       - WATCHPACK_POLLING=true
@@ -352,7 +351,7 @@ services:
   db:
     image: postgres:15-alpine
     ports:
-      - "5432:5432"
+      - '5432:5432'
     environment:
       POSTGRES_USER: developer
       POSTGRES_PASSWORD: localpass
@@ -365,7 +364,7 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - '6379:6379'
     command: redis-server --appendonly yes
     volumes:
       - redis_data:/data
@@ -374,7 +373,7 @@ services:
   test-db:
     image: postgres:15-alpine
     ports:
-      - "5433:5432"
+      - '5433:5432'
     environment:
       POSTGRES_USER: tester
       POSTGRES_PASSWORD: testpass
@@ -506,44 +505,44 @@ main
 
 ```typescript
 // e2e/auth.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test'
 
 test.describe('인증 플로우', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:3000');
-  });
+    await page.goto('http://localhost:3000')
+  })
 
   test('회원가입 프로세스', async ({ page }) => {
     // 회원가입 버튼 클릭
-    await page.click('text=회원가입');
+    await page.click('text=회원가입')
 
     // 폼 작성
-    await page.fill('input[name="email"]', 'test@example.com');
-    await page.fill('input[name="password"]', 'Password123!');
-    await page.fill('input[name="confirmPassword"]', 'Password123!');
+    await page.fill('input[name="email"]', 'test@example.com')
+    await page.fill('input[name="password"]', 'Password123!')
+    await page.fill('input[name="confirmPassword"]', 'Password123!')
 
     // 제출
-    await page.click('button[type="submit"]');
+    await page.click('button[type="submit"]')
 
     // 성공 확인
-    await expect(page.locator('text=회원가입이 완료되었습니다')).toBeVisible();
-  });
+    await expect(page.locator('text=회원가입이 완료되었습니다')).toBeVisible()
+  })
 
   test('로그인 프로세스', async ({ page }) => {
     // 로그인 페이지로 이동
-    await page.click('text=로그인');
+    await page.click('text=로그인')
 
     // 폼 작성
-    await page.fill('input[name="email"]', 'existing@example.com');
-    await page.fill('input[name="password"]', 'Password123!');
+    await page.fill('input[name="email"]', 'existing@example.com')
+    await page.fill('input[name="password"]', 'Password123!')
 
     // 제출
-    await page.click('button[type="submit"]');
+    await page.click('button[type="submit"]')
 
     // 대시보드로 리다이렉트 확인
-    await expect(page).toHaveURL('/dashboard');
-  });
-});
+    await expect(page).toHaveURL('/dashboard')
+  })
+})
 ```
 
 ## 배포 자동화
@@ -579,46 +578,45 @@ test.describe('인증 플로우', () => {
 
 ```typescript
 // scripts/deploy-staging.ts
-import { exec } from 'child_process';
-import { promisify } from 'util';
+import { exec } from 'child_process'
+import { promisify } from 'util'
 
-const execAsync = promisify(exec);
+const execAsync = promisify(exec)
 
 class StagingDeployer {
   async deploy(branch: string) {
     try {
-      console.log('🚀 스테이징 배포를 시작합니다...');
+      console.log('🚀 스테이징 배포를 시작합니다...')
 
       // 1. 테스트 실행
-      console.log('🧪 테스트 실행 중...');
-      await execAsync('npm run test:ci');
+      console.log('🧪 테스트 실행 중...')
+      await execAsync('npm run test:ci')
 
       // 2. 빌드
-      console.log('🏭 빌드 중...');
-      await execAsync('npm run build');
+      console.log('🏭 빌드 중...')
+      await execAsync('npm run build')
 
       // 3. Docker 이미지 빌드
-      console.log('🐳 Docker 이미지 빌드 중...');
-      const tag = `staging-${Date.now()}`;
-      await execAsync(`docker build -t myapp:${tag} .`);
+      console.log('🐳 Docker 이미지 빌드 중...')
+      const tag = `staging-${Date.now()}`
+      await execAsync(`docker build -t myapp:${tag} .`)
 
       // 4. 이미지 푸시
-      console.log('📤 이미지 푸시 중...');
-      await execAsync(`docker push registry.company.com/myapp:${tag}`);
+      console.log('📤 이미지 푸시 중...')
+      await execAsync(`docker push registry.company.com/myapp:${tag}`)
 
       // 5. 스테이징 서버 업데이트
-      console.log('🔄 스테이징 서버 업데이트 중...');
-      await this.updateStagingServer(tag);
+      console.log('🔄 스테이징 서버 업데이트 중...')
+      await this.updateStagingServer(tag)
 
       // 6. 헬스 체크
-      console.log('🏥 헬스 체크 중...');
-      await this.checkHealth('https://staging.myapp.com/health');
+      console.log('🏥 헬스 체크 중...')
+      await this.checkHealth('https://staging.myapp.com/health')
 
-      console.log('✅ 스테이징 배포 완료!');
-
+      console.log('✅ 스테이징 배포 완료!')
     } catch (error) {
-      console.error('❌ 배포 실패:', error);
-      throw error;
+      console.error('❌ 배포 실패:', error)
+      throw error
     }
   }
 
@@ -628,13 +626,13 @@ class StagingDeployer {
       kubectl set image deployment/myapp \
         myapp=registry.company.com/myapp:${tag} \
         --namespace=staging
-    `);
+    `)
   }
 
   private async checkHealth(url: string) {
-    const response = await fetch(url);
+    const response = await fetch(url)
     if (!response.ok) {
-      throw new Error(`Health check failed: ${response.status}`);
+      throw new Error(`Health check failed: ${response.status}`)
     }
   }
 }
@@ -646,7 +644,7 @@ class StagingDeployer {
 
 ```typescript
 // lib/error-tracking.ts
-import * as Sentry from '@sentry/nextjs';
+import * as Sentry from '@sentry/nextjs'
 
 class ErrorTracker {
   static initialize() {
@@ -658,45 +656,42 @@ class ErrorTracker {
       beforeSend(event, hint) {
         // 민감한 정보 필터링
         if (event.request?.cookies) {
-          delete event.request.cookies;
+          delete event.request.cookies
         }
 
         // 개발 환경에서는 콘솔로만 출력
         if (process.env.NODE_ENV === 'development') {
-          console.error('Sentry Event:', event);
-          return null;
+          console.error('Sentry Event:', event)
+          return null
         }
 
-        return event;
+        return event
       },
 
       integrations: [
         new Sentry.BrowserTracing(),
         new Sentry.Replay({
           maskAllText: true,
-          blockAllMedia: true
-        })
-      ]
-    });
+          blockAllMedia: true,
+        }),
+      ],
+    })
   }
 
   static captureError(error: Error, context?: any) {
     Sentry.captureException(error, {
       contexts: {
-        custom: context
-      }
-    });
+        custom: context,
+      },
+    })
   }
 }
 
 // 자동 에러 보고
 if (typeof window !== 'undefined') {
-  window.addEventListener('unhandledrejection', (event) => {
-    ErrorTracker.captureError(
-      new Error(event.reason),
-      { type: 'unhandledRejection' }
-    );
-  });
+  window.addEventListener('unhandledrejection', event => {
+    ErrorTracker.captureError(new Error(event.reason), { type: 'unhandledRejection' })
+  })
 }
 ```
 
@@ -705,56 +700,53 @@ if (typeof window !== 'undefined') {
 ```typescript
 // lib/performance-monitoring.ts
 class PerformanceMonitor {
-  private metrics: Map<string, number[]> = new Map();
+  private metrics: Map<string, number[]> = new Map()
 
   // API 응답 시간 추적
-  async trackAPICall<T>(
-    name: string,
-    fn: () => Promise<T>
-  ): Promise<T> {
-    const start = performance.now();
+  async trackAPICall<T>(name: string, fn: () => Promise<T>): Promise<T> {
+    const start = performance.now()
 
     try {
-      const result = await fn();
-      const duration = performance.now() - start;
+      const result = await fn()
+      const duration = performance.now() - start
 
-      this.recordMetric(name, duration);
+      this.recordMetric(name, duration)
 
       // 임계값 초과 시 경고
       if (duration > 1000) {
-        console.warn(`Slow API call: ${name} took ${duration}ms`);
+        console.warn(`Slow API call: ${name} took ${duration}ms`)
       }
 
-      return result;
+      return result
     } catch (error) {
-      const duration = performance.now() - start;
-      this.recordMetric(`${name}_error`, duration);
-      throw error;
+      const duration = performance.now() - start
+      this.recordMetric(`${name}_error`, duration)
+      throw error
     }
   }
 
   private recordMetric(name: string, value: number) {
     if (!this.metrics.has(name)) {
-      this.metrics.set(name, []);
+      this.metrics.set(name, [])
     }
 
-    const values = this.metrics.get(name)!;
-    values.push(value);
+    const values = this.metrics.get(name)!
+    values.push(value)
 
     // 최근 100개만 유지
     if (values.length > 100) {
-      values.shift();
+      values.shift()
     }
   }
 
   getMetrics(name: string) {
-    const values = this.metrics.get(name) || [];
+    const values = this.metrics.get(name) || []
 
     if (values.length === 0) {
-      return null;
+      return null
     }
 
-    const sorted = [...values].sort((a, b) => a - b);
+    const sorted = [...values].sort((a, b) => a - b)
 
     return {
       avg: values.reduce((a, b) => a + b, 0) / values.length,
@@ -762,8 +754,8 @@ class PerformanceMonitor {
       max: sorted[sorted.length - 1],
       p50: sorted[Math.floor(sorted.length * 0.5)],
       p95: sorted[Math.floor(sorted.length * 0.95)],
-      p99: sorted[Math.floor(sorted.length * 0.99)]
-    };
+      p99: sorted[Math.floor(sorted.length * 0.99)],
+    }
   }
 }
 ```

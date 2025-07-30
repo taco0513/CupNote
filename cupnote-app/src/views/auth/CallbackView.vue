@@ -6,15 +6,13 @@
         <h2 class="loading-title">로그인 처리 중...</h2>
         <p class="loading-description">잠시만 기다려주세요</p>
       </div>
-      
+
       <!-- Error State -->
       <div v-if="error" class="error-content">
         <div class="error-icon">⚠️</div>
         <h3 class="error-title">로그인에 실패했습니다</h3>
         <p class="error-description">{{ error }}</p>
-        <RouterLink to="/auth/login" class="btn-primary">
-          다시 시도하기
-        </RouterLink>
+        <RouterLink to="/auth/login" class="btn-primary"> 다시 시도하기 </RouterLink>
       </div>
     </div>
   </div>
@@ -36,7 +34,7 @@ onMounted(async () => {
     if (!authStore.initialized) {
       await authStore.initializeAuth()
     }
-    
+
     // Wait for auth state to settle
     setTimeout(() => {
       if (authStore.isAuthenticated) {
@@ -57,7 +55,7 @@ onMounted(async () => {
 <style scoped>
 .callback-view {
   min-height: 100vh;
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5F0E8 100%);
+  background: linear-gradient(135deg, #fff8f0 0%, #f5f0e8 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,14 +73,14 @@ onMounted(async () => {
   border-radius: 20px;
   padding: 3rem 2rem;
   box-shadow: 0 8px 32px rgba(124, 88, 66, 0.15);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .loading-spinner {
   width: 60px;
   height: 60px;
-  border: 4px solid #E8D5C4;
-  border-top-color: #7C5842;
+  border: 4px solid #e8d5c4;
+  border-top-color: #7c5842;
   border-radius: 50%;
   margin: 0 auto 2rem;
   animation: spin 1s linear infinite;
@@ -91,12 +89,12 @@ onMounted(async () => {
 .loading-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .loading-description {
-  color: #A0796A;
+  color: #a0796a;
   margin: 0;
 }
 
@@ -105,7 +103,7 @@ onMounted(async () => {
   border-radius: 20px;
   padding: 3rem 2rem;
   box-shadow: 0 8px 32px rgba(124, 88, 66, 0.15);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .error-icon {
@@ -116,7 +114,7 @@ onMounted(async () => {
 .error-title {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
@@ -129,7 +127,7 @@ onMounted(async () => {
 .btn-primary {
   display: inline-block;
   padding: 0.75rem 2rem;
-  background: linear-gradient(135deg, #7C5842, #A0796A);
+  background: linear-gradient(135deg, #7c5842, #a0796a);
   color: white;
   text-decoration: none;
   border-radius: 8px;

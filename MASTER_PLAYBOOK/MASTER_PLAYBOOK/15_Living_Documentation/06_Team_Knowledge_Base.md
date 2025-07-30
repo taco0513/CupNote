@@ -11,24 +11,24 @@
 ```typescript
 // 팀 지식 자동 수집기
 class TeamKnowledgeCollector {
-  private knowledgeBase: KnowledgeRepository;
-  private analyzer: InsightAnalyzer;
+  private knowledgeBase: KnowledgeRepository
+  private analyzer: InsightAnalyzer
 
   async collectKnowledge() {
     // 1. 코드 리뷰에서 인사이트 추출
-    const codeReviews = await this.extractFromCodeReviews();
+    const codeReviews = await this.extractFromCodeReviews()
 
     // 2. 커밋 메시지에서 패턴 분석
-    const commitPatterns = await this.analyzeCommitMessages();
+    const commitPatterns = await this.analyzeCommitMessages()
 
     // 3. 이슈/PR 토론에서 결정사항 수집
-    const decisions = await this.extractFromDiscussions();
+    const decisions = await this.extractFromDiscussions()
 
     // 4. 에러 해결 과정 기록
-    const solutions = await this.collectErrorSolutions();
+    const solutions = await this.collectErrorSolutions()
 
     // 5. 팀 미팅 노트 분석
-    const meetingInsights = await this.processMeetingNotes();
+    const meetingInsights = await this.processMeetingNotes()
 
     // 6. 지식 통합 및 저장
     await this.integrateKnowledge({
@@ -36,21 +36,22 @@ class TeamKnowledgeCollector {
       commitPatterns,
       decisions,
       solutions,
-      meetingInsights
-    });
+      meetingInsights,
+    })
   }
 
   private async extractFromCodeReviews(): Promise<ReviewInsight[]> {
-    const reviews = await this.getRecentCodeReviews();
-    const insights: ReviewInsight[] = [];
+    const reviews = await this.getRecentCodeReviews()
+    const insights: ReviewInsight[] = []
 
     for (const review of reviews) {
       // 중요한 코멘트 추출
-      const importantComments = review.comments.filter(comment =>
-        comment.reactions.length > 2 || // 반응이 많은 코멘트
-        comment.resolved && comment.changes_requested || // 변경 요청 후 해결
-        comment.body.match(/IMPORTANT|TODO|FIXME|NOTE/i) // 키워드 포함
-      );
+      const importantComments = review.comments.filter(
+        comment =>
+          comment.reactions.length > 2 || // 반응이 많은 코멘트
+          (comment.resolved && comment.changes_requested) || // 변경 요청 후 해결
+          comment.body.match(/IMPORTANT|TODO|FIXME|NOTE/i) // 키워드 포함
+      )
 
       for (const comment of importantComments) {
         insights.push({
@@ -61,15 +62,15 @@ class TeamKnowledgeCollector {
           context: {
             file: comment.path,
             line: comment.line,
-            pr_title: review.title
+            pr_title: review.title,
           },
           tags: this.extractTags(comment.body),
-          learning: this.extractLearning(comment)
-        });
+          learning: this.extractLearning(comment),
+        })
       }
     }
 
-    return insights;
+    return insights
   }
 }
 ```
@@ -79,20 +80,18 @@ class TeamKnowledgeCollector {
 ```typescript
 // 팀 학습 패턴 분석기
 class TeamLearningAnalyzer {
-  async analyzeTeamPatterns(
-    timeRange: { start: Date; end: Date }
-  ): Promise<TeamPatterns> {
+  async analyzeTeamPatterns(timeRange: { start: Date; end: Date }): Promise<TeamPatterns> {
     // 1. 코드 작성 패턴
-    const codingPatterns = await this.analyzeCodingPatterns(timeRange);
+    const codingPatterns = await this.analyzeCodingPatterns(timeRange)
 
     // 2. 문제 해결 패턴
-    const problemSolvingPatterns = await this.analyzeProblemSolving(timeRange);
+    const problemSolvingPatterns = await this.analyzeProblemSolving(timeRange)
 
     // 3. 커뮤니케이션 패턴
-    const communicationPatterns = await this.analyzeCommunication(timeRange);
+    const communicationPatterns = await this.analyzeCommunication(timeRange)
 
     // 4. 협업 패턴
-    const collaborationPatterns = await this.analyzeCollaboration(timeRange);
+    const collaborationPatterns = await this.analyzeCollaboration(timeRange)
 
     return {
       coding: codingPatterns,
@@ -103,33 +102,31 @@ class TeamLearningAnalyzer {
         codingPatterns,
         problemSolvingPatterns,
         communicationPatterns,
-        collaborationPatterns
+        collaborationPatterns,
       }),
-      recommendations: this.generateRecommendations()
-    };
+      recommendations: this.generateRecommendations(),
+    }
   }
 
-  private async analyzeCodingPatterns(
-    timeRange: TimeRange
-  ): Promise<CodingPattern[]> {
-    const patterns: CodingPattern[] = [];
+  private async analyzeCodingPatterns(timeRange: TimeRange): Promise<CodingPattern[]> {
+    const patterns: CodingPattern[] = []
 
     // 자주 사용되는 코드 패턴 분석
-    const codeAnalysis = await this.analyzeCodebase(timeRange);
+    const codeAnalysis = await this.analyzeCodebase(timeRange)
 
     // 팀원별 선호 패턴
     for (const member of this.teamMembers) {
-      const memberPatterns = await this.analyzeMemberPatterns(member, codeAnalysis);
+      const memberPatterns = await this.analyzeMemberPatterns(member, codeAnalysis)
       patterns.push({
         member: member.name,
         preferredPatterns: memberPatterns.preferred,
         avoidedPatterns: memberPatterns.avoided,
         strengthAreas: memberPatterns.strengths,
-        improvementAreas: memberPatterns.improvements
-      });
+        improvementAreas: memberPatterns.improvements,
+      })
     }
 
-    return patterns;
+    return patterns
   }
 }
 ```
@@ -141,10 +138,7 @@ class TeamLearningAnalyzer {
 ```typescript
 // 팀 지식 게시판 시스템
 class KnowledgeSharingBoard {
-  async createKnowledgePost(
-    author: TeamMember,
-    knowledge: Knowledge
-  ): Promise<KnowledgePost> {
+  async createKnowledgePost(author: TeamMember, knowledge: Knowledge): Promise<KnowledgePost> {
     const post: KnowledgePost = {
       id: uuid(),
       author: author.id,
@@ -158,53 +152,44 @@ class KnowledgeSharingBoard {
         views: 0,
         likes: 0,
         bookmarks: 0,
-        applications: 0
+        applications: 0,
       },
       relatedPosts: await this.findRelatedPosts(knowledge),
-      aiSummary: await this.generateAISummary(knowledge)
-    };
+      aiSummary: await this.generateAISummary(knowledge),
+    }
 
     // 저장 및 인덱싱
-    await this.savePost(post);
-    await this.indexForSearch(post);
+    await this.savePost(post)
+    await this.indexForSearch(post)
 
     // 관련 팀원에게 알림
-    await this.notifyRelevantMembers(post);
+    await this.notifyRelevantMembers(post)
 
-    return post;
+    return post
   }
 
-  async searchKnowledge(
-    query: string,
-    filters?: SearchFilters
-  ): Promise<SearchResults> {
+  async searchKnowledge(query: string, filters?: SearchFilters): Promise<SearchResults> {
     // 1. 키워드 검색
-    const keywordResults = await this.searchByKeywords(query);
+    const keywordResults = await this.searchByKeywords(query)
 
     // 2. 시맨틱 검색
-    const semanticResults = await this.semanticSearch(query);
+    const semanticResults = await this.semanticSearch(query)
 
     // 3. 컨텍스트 기반 검색
-    const contextResults = await this.searchByContext(query, this.getCurrentContext());
+    const contextResults = await this.searchByContext(query, this.getCurrentContext())
 
     // 4. 결과 통합 및 랭킹
-    const combinedResults = this.combineAndRank([
-      keywordResults,
-      semanticResults,
-      contextResults
-    ]);
+    const combinedResults = this.combineAndRank([keywordResults, semanticResults, contextResults])
 
     // 5. 필터 적용
-    const filteredResults = filters
-      ? this.applyFilters(combinedResults, filters)
-      : combinedResults;
+    const filteredResults = filters ? this.applyFilters(combinedResults, filters) : combinedResults
 
     return {
       results: filteredResults,
       totalCount: filteredResults.length,
       facets: this.generateFacets(filteredResults),
-      suggestions: this.generateSearchSuggestions(query, filteredResults)
-    };
+      suggestions: this.generateSearchSuggestions(query, filteredResults),
+    }
   }
 }
 ```
@@ -214,58 +199,56 @@ class KnowledgeSharingBoard {
 ```typescript
 // 자동 태깅 및 분류 시스템
 class KnowledgeTaggingSystem {
-  private tagOntology: TagOntology;
-  private mlClassifier: MLClassifier;
+  private tagOntology: TagOntology
+  private mlClassifier: MLClassifier
 
   async autoTagKnowledge(knowledge: Knowledge): Promise<Tag[]> {
-    const tags: Tag[] = [];
+    const tags: Tag[] = []
 
     // 1. 컨텐츠 분석
-    const contentAnalysis = await this.analyzeContent(knowledge.content);
+    const contentAnalysis = await this.analyzeContent(knowledge.content)
 
     // 2. 기술 스택 태그
-    tags.push(...this.extractTechStackTags(contentAnalysis));
+    tags.push(...this.extractTechStackTags(contentAnalysis))
 
     // 3. 문제 유형 태그
-    tags.push(...this.extractProblemTypeTags(contentAnalysis));
+    tags.push(...this.extractProblemTypeTags(contentAnalysis))
 
     // 4. 난이도 태그
-    tags.push(this.assessDifficultyTag(contentAnalysis));
+    tags.push(this.assessDifficultyTag(contentAnalysis))
 
     // 5. 팀 특화 태그
-    tags.push(...this.extractTeamSpecificTags(knowledge));
+    tags.push(...this.extractTeamSpecificTags(knowledge))
 
     // 6. ML 기반 추천 태그
-    const mlTags = await this.mlClassifier.suggestTags(knowledge);
-    tags.push(...mlTags.filter(tag => tag.confidence > 0.7));
+    const mlTags = await this.mlClassifier.suggestTags(knowledge)
+    tags.push(...mlTags.filter(tag => tag.confidence > 0.7))
 
-    return this.deduplicateAndRank(tags);
+    return this.deduplicateAndRank(tags)
   }
 
   private extractTechStackTags(analysis: ContentAnalysis): Tag[] {
-    const techTags: Tag[] = [];
+    const techTags: Tag[] = []
     const techKeywords = {
-      'react': ['react', 'jsx', 'hooks', 'component'],
-      'nodejs': ['node', 'express', 'npm', 'package.json'],
-      'typescript': ['typescript', 'ts', 'interface', 'type'],
-      'docker': ['docker', 'container', 'dockerfile'],
-      'kubernetes': ['k8s', 'kubernetes', 'pod', 'deployment'],
-      'aws': ['aws', 'ec2', 's3', 'lambda']
-    };
+      react: ['react', 'jsx', 'hooks', 'component'],
+      nodejs: ['node', 'express', 'npm', 'package.json'],
+      typescript: ['typescript', 'ts', 'interface', 'type'],
+      docker: ['docker', 'container', 'dockerfile'],
+      kubernetes: ['k8s', 'kubernetes', 'pod', 'deployment'],
+      aws: ['aws', 'ec2', 's3', 'lambda'],
+    }
 
     for (const [tech, keywords] of Object.entries(techKeywords)) {
-      if (keywords.some(keyword =>
-        analysis.tokens.includes(keyword.toLowerCase())
-      )) {
+      if (keywords.some(keyword => analysis.tokens.includes(keyword.toLowerCase()))) {
         techTags.push({
           name: tech,
           type: 'technology',
-          confidence: 0.9
-        });
+          confidence: 0.9,
+        })
       }
     }
 
-    return techTags;
+    return techTags
   }
 }
 ```
@@ -278,11 +261,11 @@ class KnowledgeTaggingSystem {
 // 지식 관계 시각화
 class KnowledgeGraphVisualizer {
   async generateKnowledgeGraph(): Promise<KnowledgeGraph> {
-    const nodes: GraphNode[] = [];
-    const edges: GraphEdge[] = [];
+    const nodes: GraphNode[] = []
+    const edges: GraphEdge[] = []
 
     // 1. 지식 노드 생성
-    const knowledgePosts = await this.getAllKnowledgePosts();
+    const knowledgePosts = await this.getAllKnowledgePosts()
     for (const post of knowledgePosts) {
       nodes.push({
         id: post.id,
@@ -293,13 +276,13 @@ class KnowledgeGraphVisualizer {
         metadata: {
           author: post.author,
           date: post.createdAt,
-          views: post.metadata.views
-        }
-      });
+          views: post.metadata.views,
+        },
+      })
     }
 
     // 2. 사람 노드 생성
-    const teamMembers = await this.getTeamMembers();
+    const teamMembers = await this.getTeamMembers()
     for (const member of teamMembers) {
       nodes.push({
         id: member.id,
@@ -309,9 +292,9 @@ class KnowledgeGraphVisualizer {
         color: '#4CAF50',
         metadata: {
           role: member.role,
-          expertise: member.expertise
-        }
-      });
+          expertise: member.expertise,
+        },
+      })
     }
 
     // 3. 관계 엣지 생성
@@ -321,8 +304,8 @@ class KnowledgeGraphVisualizer {
         source: post.author,
         target: post.id,
         type: 'authored',
-        weight: 1
-      });
+        weight: 1,
+      })
     }
 
     // 지식 간 관계
@@ -332,8 +315,8 @@ class KnowledgeGraphVisualizer {
           source: post.id,
           target: relatedId,
           type: 'related',
-          weight: this.calculateRelatedness(post.id, relatedId)
-        });
+          weight: this.calculateRelatedness(post.id, relatedId),
+        })
       }
     }
 
@@ -341,8 +324,8 @@ class KnowledgeGraphVisualizer {
       nodes,
       edges,
       layout: this.calculateOptimalLayout(nodes, edges),
-      clusters: this.identifyClusters(nodes, edges)
-    };
+      clusters: this.identifyClusters(nodes, edges),
+    }
   }
 }
 ```
@@ -353,7 +336,7 @@ class KnowledgeGraphVisualizer {
 // 팀 학습 대시보드
 class TeamLearningDashboard {
   async generateDashboard(): Promise<DashboardData> {
-    const timeRange = { start: dayjs().subtract(30, 'day').toDate(), end: new Date() };
+    const timeRange = { start: dayjs().subtract(30, 'day').toDate(), end: new Date() }
 
     return {
       // 핵심 지표
@@ -361,14 +344,14 @@ class TeamLearningDashboard {
         totalKnowledgePosts: await this.countKnowledgePosts(timeRange),
         activeContributors: await this.countActiveContributors(timeRange),
         knowledgeApplications: await this.countApplications(timeRange),
-        averageTimeToSolution: await this.calculateAvgSolutionTime(timeRange)
+        averageTimeToSolution: await this.calculateAvgSolutionTime(timeRange),
       },
 
       // 트렌드 차트
       trends: {
         knowledgeGrowth: await this.calculateKnowledgeGrowthTrend(),
         topicEvolution: await this.analyzeTopicEvolution(),
-        expertiseMap: await this.mapTeamExpertise()
+        expertiseMap: await this.mapTeamExpertise(),
       },
 
       // 핵심 인사이트
@@ -376,16 +359,16 @@ class TeamLearningDashboard {
         mostValuableKnowledge: await this.identifyMostValuable(),
         knowledgeGaps: await this.identifyKnowledgeGaps(),
         collaborationPatterns: await this.analyzeCollaborationPatterns(),
-        learningVelocity: await this.calculateLearningVelocity()
+        learningVelocity: await this.calculateLearningVelocity(),
       },
 
       // 추천 사항
       recommendations: {
         topicsToExplore: await this.recommendTopics(),
         expertsToConsult: await this.recommendExperts(),
-        knowledgeToShare: await this.identifyShareableKnowledge()
-      }
-    };
+        knowledgeToShare: await this.identifyShareableKnowledge(),
+      },
+    }
   }
 }
 ```
@@ -404,7 +387,7 @@ class AIKnowledgeFormatter {
         problem: this.extractProblem(knowledge),
         solution: this.extractSolution(knowledge),
         context: this.extractContext(knowledge),
-        outcome: this.extractOutcome(knowledge)
+        outcome: this.extractOutcome(knowledge),
       },
 
       // 구조화된 데이터
@@ -412,14 +395,14 @@ class AIKnowledgeFormatter {
         prerequisites: this.extractPrerequisites(knowledge),
         steps: this.extractSteps(knowledge),
         codeExamples: this.extractCodeExamples(knowledge),
-        pitfalls: this.extractPitfalls(knowledge)
+        pitfalls: this.extractPitfalls(knowledge),
       },
 
       // 관계 정보
       relationships: {
         relatedKnowledge: knowledge.relatedPosts,
         requiredSkills: this.identifyRequiredSkills(knowledge),
-        applicableScenarios: this.identifyScenarios(knowledge)
+        applicableScenarios: this.identifyScenarios(knowledge),
       },
 
       // 메타데이터
@@ -427,16 +410,16 @@ class AIKnowledgeFormatter {
         confidence: this.assessConfidence(knowledge),
         complexity: this.assessComplexity(knowledge),
         timeToImplement: this.estimateImplementationTime(knowledge),
-        successRate: this.calculateSuccessRate(knowledge)
+        successRate: this.calculateSuccessRate(knowledge),
       },
 
       // 팀 컨텍스트
       teamContext: {
         previousApplications: this.getPreviousApplications(knowledge),
         teamFeedback: this.getTeamFeedback(knowledge),
-        improvements: this.getImprovements(knowledge)
-      }
-    };
+        improvements: this.getImprovements(knowledge),
+      },
+    }
   }
 }
 ```

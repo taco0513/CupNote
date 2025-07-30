@@ -64,8 +64,8 @@
         <span v-if="errors.password" class="field-error">{{ errors.password }}</span>
         <div class="password-strength">
           <div class="strength-bar">
-            <div 
-              class="strength-fill" 
+            <div
+              class="strength-fill"
               :class="passwordStrength.class"
               :style="{ width: passwordStrength.width }"
             ></div>
@@ -110,8 +110,8 @@
       <div class="form-field">
         <label class="field-label">선호하는 사용 모드</label>
         <div class="mode-options">
-          <label 
-            v-for="mode in modeOptions" 
+          <label
+            v-for="mode in modeOptions"
             :key="mode.value"
             class="mode-option"
             :class="{ disabled: !isModeAvailable(mode.value) }"
@@ -143,8 +143,8 @@
             :disabled="isLoading"
           />
           <span class="checkbox-text">
-            <a href="#" class="link">이용약관</a> 및 
-            <a href="#" class="link">개인정보처리방침</a>에 동의합니다
+            <a href="#" class="link">이용약관</a> 및 <a href="#" class="link">개인정보처리방침</a>에
+            동의합니다
           </span>
         </label>
         <span v-if="errors.terms" class="field-error">{{ errors.terms }}</span>
@@ -159,9 +159,7 @@
             class="checkbox-input"
             :disabled="isLoading"
           />
-          <span class="checkbox-text">
-            마케팅 정보 수신에 동의합니다 (선택)
-          </span>
+          <span class="checkbox-text"> 마케팅 정보 수신에 동의합니다 (선택) </span>
         </label>
       </div>
 
@@ -171,11 +169,7 @@
       </div>
 
       <!-- Submit Button -->
-      <button
-        type="submit"
-        class="submit-button"
-        :disabled="isLoading || !isFormValid"
-      >
+      <button type="submit" class="submit-button" :disabled="isLoading || !isFormValid">
         <span v-if="isLoading" class="loading-spinner">⏳</span>
         {{ isLoading ? '가입 중...' : '회원가입' }}
       </button>
@@ -230,37 +224,39 @@ const modeOptions = [
     name: 'Cafe Mode',
     icon: '☕',
     description: '간단한 테이스팅',
-    minExperience: 'beginner'
+    minExperience: 'beginner',
   },
   {
     value: 'homecafe',
     name: 'Home Cafe',
     icon: '🏠',
     description: '홈카페 레시피',
-    minExperience: 'intermediate'
+    minExperience: 'intermediate',
   },
   {
     value: 'pro',
     name: 'Pro Mode',
     icon: '🎯',
     description: 'SCA 표준 전문 평가',
-    minExperience: 'advanced'
-  }
+    minExperience: 'advanced',
+  },
 ]
 
 // Computed
 const isFormValid = computed(() => {
-  return fullName.value.length > 0 &&
-         email.value.length > 0 &&
-         password.value.length >= 6 &&
-         confirmPassword.value === password.value &&
-         agreeToTerms.value &&
-         isValidEmail(email.value)
+  return (
+    fullName.value.length > 0 &&
+    email.value.length > 0 &&
+    password.value.length >= 6 &&
+    confirmPassword.value === password.value &&
+    agreeToTerms.value &&
+    isValidEmail(email.value)
+  )
 })
 
 const passwordStrength = computed(() => {
   const score = calculatePasswordStrength(password.value)
-  
+
   if (score === 0) return { width: '0%', class: '', text: '' }
   if (score <= 2) return { width: '25%', class: 'weak', text: '약함' }
   if (score <= 3) return { width: '50%', class: 'fair', text: '보통' }
@@ -288,63 +284,63 @@ const calculatePasswordStrength = (password) => {
 const isModeAvailable = (mode) => {
   const experienceOrder = ['beginner', 'intermediate', 'advanced', 'expert']
   const currentLevel = experienceOrder.indexOf(coffeeExperience.value)
-  const modeOption = modeOptions.find(m => m.value === mode)
+  const modeOption = modeOptions.find((m) => m.value === mode)
   const requiredLevel = experienceOrder.indexOf(modeOption.minExperience)
-  
+
   return currentLevel >= requiredLevel
 }
 
 const validateForm = () => {
   errors.value = {}
-  
+
   if (!fullName.value.trim()) {
     errors.value.fullName = '이름을 입력해주세요'
   }
-  
+
   if (!email.value) {
     errors.value.email = '이메일을 입력해주세요'
   } else if (!isValidEmail(email.value)) {
     errors.value.email = '유효한 이메일 주소를 입력해주세요'
   }
-  
+
   if (!password.value) {
     errors.value.password = '비밀번호를 입력해주세요'
   } else if (password.value.length < 6) {
     errors.value.password = '비밀번호는 최소 6자 이상이어야 합니다'
   }
-  
+
   if (!confirmPassword.value) {
     errors.value.confirmPassword = '비밀번호 확인을 입력해주세요'
   } else if (password.value !== confirmPassword.value) {
     errors.value.confirmPassword = '비밀번호가 일치하지 않습니다'
   }
-  
+
   if (!agreeToTerms.value) {
     errors.value.terms = '이용약관에 동의해주세요'
   }
-  
+
   return Object.keys(errors.value).length === 0
 }
 
 const handleSignup = async () => {
   if (!validateForm()) return
-  
+
   errors.value = {}
-  
+
   try {
     const userData = {
       fullName: fullName.value.trim(),
       coffeeExperience: coffeeExperience.value,
       preferredMode: preferredMode.value,
-      marketingAgreement: agreeToMarketing.value
+      marketingAgreement: agreeToMarketing.value,
     }
-    
+
     const result = await authStore.signUp(email.value, password.value, userData)
-    
+
     if (result.success) {
       emit('signup-success', {
         user: result.user,
-        message: result.message
+        message: result.message,
       })
     } else {
       errors.value.general = result.error || '회원가입에 실패했습니다'
@@ -384,12 +380,12 @@ watch(coffeeExperience, (newExperience) => {
 .form-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .form-subtitle {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.9rem;
   line-height: 1.4;
 }
@@ -403,30 +399,34 @@ watch(coffeeExperience, (newExperience) => {
   display: block;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
-.field-input, .field-select {
+.field-input,
+.field-select {
   width: 100%;
   padding: 0.75rem;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.2s ease;
 }
 
-.field-input:focus, .field-select:focus {
+.field-input:focus,
+.field-select:focus {
   outline: none;
-  border-color: #7C5842;
+  border-color: #7c5842;
 }
 
-.field-input.error, .field-select.error {
-  border-color: #F44336;
+.field-input.error,
+.field-select.error {
+  border-color: #f44336;
 }
 
-.field-input:disabled, .field-select:disabled {
-  background-color: #F5F5F5;
+.field-input:disabled,
+.field-select:disabled {
+  background-color: #f5f5f5;
   cursor: not-allowed;
 }
 
@@ -454,7 +454,7 @@ watch(coffeeExperience, (newExperience) => {
 
 .strength-bar {
   height: 4px;
-  background: #E8D5C4;
+  background: #e8d5c4;
   border-radius: 2px;
   overflow: hidden;
   margin-bottom: 0.25rem;
@@ -465,14 +465,22 @@ watch(coffeeExperience, (newExperience) => {
   transition: width 0.3s ease;
 }
 
-.strength-fill.weak { background: #F44336; }
-.strength-fill.fair { background: #FF9800; }
-.strength-fill.good { background: #2196F3; }
-.strength-fill.strong { background: #4CAF50; }
+.strength-fill.weak {
+  background: #f44336;
+}
+.strength-fill.fair {
+  background: #ff9800;
+}
+.strength-fill.good {
+  background: #2196f3;
+}
+.strength-fill.strong {
+  background: #4caf50;
+}
 
 .strength-text {
   font-size: 0.8rem;
-  color: #A0796A;
+  color: #a0796a;
 }
 
 /* Mode Options */
@@ -500,18 +508,18 @@ watch(coffeeExperience, (newExperience) => {
   align-items: center;
   gap: 0.75rem;
   padding: 1rem;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   transition: all 0.2s ease;
 }
 
 .mode-option:not(.disabled) .mode-card:hover {
-  border-color: #D4B896;
+  border-color: #d4b896;
 }
 
 .mode-input:checked + .mode-card {
-  border-color: #7C5842;
-  background: #F8F4F0;
+  border-color: #7c5842;
+  background: #f8f4f0;
 }
 
 .mode-icon {
@@ -520,13 +528,13 @@ watch(coffeeExperience, (newExperience) => {
 
 .mode-name {
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   min-width: 80px;
 }
 
 .mode-desc {
   font-size: 0.9rem;
-  color: #A0796A;
+  color: #a0796a;
   flex: 1;
 }
 
@@ -543,34 +551,34 @@ watch(coffeeExperience, (newExperience) => {
 }
 
 .checkbox-text {
-  color: #7C5842;
+  color: #7c5842;
   font-size: 0.9rem;
   line-height: 1.4;
 }
 
 .link {
-  color: #1976D2;
+  color: #1976d2;
   text-decoration: underline;
 }
 
 .link:hover {
-  color: #1565C0;
+  color: #1565c0;
 }
 
 /* Error Messages */
 .field-error {
   display: block;
-  color: #F44336;
+  color: #f44336;
   font-size: 0.8rem;
   margin-top: 0.25rem;
 }
 
 .error-message {
-  background: #FFEBEE;
-  border: 1px solid #FFCDD2;
+  background: #ffebee;
+  border: 1px solid #ffcdd2;
   border-radius: 8px;
   padding: 0.75rem;
-  color: #C62828;
+  color: #c62828;
   font-size: 0.9rem;
   margin-bottom: 1rem;
   text-align: center;
@@ -580,7 +588,7 @@ watch(coffeeExperience, (newExperience) => {
 .submit-button {
   width: 100%;
   padding: 0.75rem;
-  background: #7C5842;
+  background: #7c5842;
   color: white;
   border: none;
   border-radius: 8px;
@@ -595,12 +603,12 @@ watch(coffeeExperience, (newExperience) => {
 }
 
 .submit-button:hover:not(:disabled) {
-  background: #5D3F2E;
+  background: #5d3f2e;
   transform: translateY(-1px);
 }
 
 .submit-button:disabled {
-  background: #CCC;
+  background: #ccc;
   cursor: not-allowed;
   transform: none;
 }
@@ -610,38 +618,42 @@ watch(coffeeExperience, (newExperience) => {
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Footer */
 .form-footer {
   text-align: center;
   padding-top: 1rem;
-  border-top: 1px solid #E8D5C4;
+  border-top: 1px solid #e8d5c4;
 }
 
 .footer-text {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.9rem;
 }
 
 .link-button {
   background: none;
   border: none;
-  color: #7C5842;
+  color: #7c5842;
   text-decoration: underline;
   cursor: pointer;
   font-size: 0.9rem;
 }
 
 .link-button.primary {
-  color: #1976D2;
+  color: #1976d2;
   font-weight: 600;
 }
 
 .link-button:hover:not(:disabled) {
-  color: #5D3F2E;
+  color: #5d3f2e;
 }
 
 .link-button:disabled {
@@ -655,13 +667,13 @@ watch(coffeeExperience, (newExperience) => {
     padding: 1.5rem;
     margin: 1rem;
   }
-  
+
   .mode-card {
     flex-direction: column;
     text-align: center;
     gap: 0.5rem;
   }
-  
+
   .mode-name {
     min-width: auto;
   }

@@ -27,7 +27,7 @@ export const useNotificationStore = defineStore('notification', () => {
       id,
       duration: 5000, // 기본 5초
       dismissible: true,
-      ...notification
+      ...notification,
     }
 
     notifications.value.push(newNotification)
@@ -44,7 +44,7 @@ export const useNotificationStore = defineStore('notification', () => {
 
   // 알림 제거
   const removeNotification = (id: string) => {
-    const index = notifications.value.findIndex(n => n.id === id)
+    const index = notifications.value.findIndex((n) => n.id === id)
     if (index > -1) {
       notifications.value.splice(index, 1)
     }
@@ -57,7 +57,7 @@ export const useNotificationStore = defineStore('notification', () => {
 
   // 특정 타입의 알림만 제거
   const clearNotificationsByType = (type: Notification['type']) => {
-    notifications.value = notifications.value.filter(n => n.type !== type)
+    notifications.value = notifications.value.filter((n) => n.type !== type)
   }
 
   // 편의 메서드들
@@ -66,7 +66,7 @@ export const useNotificationStore = defineStore('notification', () => {
       type: 'success',
       title,
       message,
-      ...options
+      ...options,
     })
   }
 
@@ -76,7 +76,7 @@ export const useNotificationStore = defineStore('notification', () => {
       title,
       message,
       duration: 8000, // 에러는 조금 더 오래 표시
-      ...options
+      ...options,
     })
   }
 
@@ -86,7 +86,7 @@ export const useNotificationStore = defineStore('notification', () => {
       title,
       message,
       duration: 6000,
-      ...options
+      ...options,
     })
   }
 
@@ -95,17 +95,21 @@ export const useNotificationStore = defineStore('notification', () => {
       type: 'info',
       title,
       message,
-      ...options
+      ...options,
     })
   }
 
   // CupNote 특화 알림들
-  const showCoffeeNotification = (message: string, title?: string, options?: Partial<Notification>) => {
+  const showCoffeeNotification = (
+    message: string,
+    title?: string,
+    options?: Partial<Notification>,
+  ) => {
     return addNotification({
       type: 'coffee',
       title,
       message,
-      ...options
+      ...options,
     })
   }
 
@@ -115,7 +119,7 @@ export const useNotificationStore = defineStore('notification', () => {
       title: title || '🏆 새로운 성취!',
       message,
       duration: 8000, // 성취는 조금 더 오래 표시
-      ...options
+      ...options,
     })
   }
 
@@ -125,51 +129,42 @@ export const useNotificationStore = defineStore('notification', () => {
       title: title || '💡 커피 팁',
       message,
       duration: 7000,
-      ...options
+      ...options,
     })
   }
 
   // 테이스팅 관련 특화 알림들
   const showTastingStart = (coffeeName: string) => {
-    return showCoffeeNotification(
-      `${coffeeName} 테이스팅을 시작합니다!`,
-      '☕ 테이스팅 시작',
-      { duration: 3000 }
-    )
+    return showCoffeeNotification(`${coffeeName} 테이스팅을 시작합니다!`, '☕ 테이스팅 시작', {
+      duration: 3000,
+    })
   }
 
   const showTastingComplete = (coffeeName: string, matchScore: number) => {
-    const title = matchScore >= 80 ? '🎯 훌륭한 감각!' : matchScore >= 60 ? '👍 좋은 시작!' : '📈 성장 중!'
-    return showSuccess(
-      `${coffeeName} 테이스팅 완료! 매치 점수: ${matchScore}점`,
-      title,
-      { duration: 6000 }
-    )
+    const title =
+      matchScore >= 80 ? '🎯 훌륭한 감각!' : matchScore >= 60 ? '👍 좋은 시작!' : '📈 성장 중!'
+    return showSuccess(`${coffeeName} 테이스팅 완료! 매치 점수: ${matchScore}점`, title, {
+      duration: 6000,
+    })
   }
 
   const showScoreImprovement = (previousScore: number, currentScore: number) => {
     const improvement = currentScore - previousScore
-    return showAchievement(
-      `이전보다 ${improvement}점 향상되었습니다!`,
-      '📈 감각 향상',
-      { duration: 6000 }
-    )
+    return showAchievement(`이전보다 ${improvement}점 향상되었습니다!`, '📈 감각 향상', {
+      duration: 6000,
+    })
   }
 
   const showNewBadge = (badgeName: string) => {
-    return showAchievement(
-      `새로운 배지를 획득했습니다: ${badgeName}`,
-      '🏆 새 배지 획득!',
-      { duration: 8000 }
-    )
+    return showAchievement(`새로운 배지를 획득했습니다: ${badgeName}`, '🏆 새 배지 획득!', {
+      duration: 8000,
+    })
   }
 
   const showDailyStreak = (streakDays: number) => {
-    return showAchievement(
-      `${streakDays}일 연속 테이스팅 기록!`,
-      '🔥 연속 기록',
-      { duration: 5000 }
-    )
+    return showAchievement(`${streakDays}일 연속 테이스팅 기록!`, '🔥 연속 기록', {
+      duration: 5000,
+    })
   }
 
   // ID 생성 유틸리티
@@ -194,7 +189,7 @@ export const useNotificationStore = defineStore('notification', () => {
     showTastingComplete,
     showScoreImprovement,
     showNewBadge,
-    showDailyStreak
+    showDailyStreak,
   }
 })
 
@@ -236,5 +231,5 @@ export const notify = {
   tip: (message: string, title?: string, options?: Partial<Notification>) => {
     const store = useNotificationStore()
     return store.showTip(message, title, options)
-  }
+  },
 }

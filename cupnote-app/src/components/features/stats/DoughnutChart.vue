@@ -6,12 +6,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue'
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend
-} from 'chart.js'
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend)
@@ -19,24 +14,24 @@ ChartJS.register(ArcElement, Tooltip, Legend)
 const props = defineProps({
   chartId: {
     type: String,
-    required: true
+    required: true,
   },
   data: {
     type: Object,
-    required: true
+    required: true,
   },
   options: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
   },
   width: {
     type: Number,
-    default: 300
+    default: 300,
   },
   height: {
     type: Number,
-    default: 300
-  }
+    default: 300,
+  },
 })
 
 let chart = null
@@ -53,7 +48,7 @@ const coffeeColors = [
   '#F5DEB3', // Wheat
   '#FAEBD7', // Antique white
   '#8B4513', // Saddle brown
-  '#A0522D'  // Sienna
+  '#A0522D', // Sienna
 ]
 
 const defaultOptions = {
@@ -66,12 +61,12 @@ const defaultOptions = {
         color: '#7C5842',
         font: {
           size: 12,
-          weight: '500'
+          weight: '500',
         },
         padding: 15,
         usePointStyle: true,
-        pointStyle: 'circle'
-      }
+        pointStyle: 'circle',
+      },
     },
     tooltip: {
       backgroundColor: 'rgba(124, 88, 66, 0.9)',
@@ -83,67 +78,69 @@ const defaultOptions = {
       displayColors: true,
       callbacks: {
         title: () => null,
-        label: function(context) {
+        label: function (context) {
           const label = context.label || ''
           const value = context.parsed || 0
           const total = context.dataset.data.reduce((a, b) => a + b, 0)
           const percentage = Math.round((value / total) * 100)
           return `${label}: ${value}회 (${percentage}%)`
-        }
-      }
-    }
+        },
+      },
+    },
   },
   cutout: '50%',
   animation: {
     animateRotate: true,
     animateScale: true,
     duration: 1000,
-    easing: 'easeOutQuart'
+    easing: 'easeOutQuart',
   },
   elements: {
     arc: {
       borderWidth: 2,
       borderColor: '#fff',
       hoverBorderWidth: 3,
-      hoverBorderColor: '#fff'
-    }
-  }
+      hoverBorderColor: '#fff',
+    },
+  },
 }
 
 const processData = (data) => {
   return {
     ...data,
-    datasets: data.datasets.map(dataset => ({
+    datasets: data.datasets.map((dataset) => ({
       ...dataset,
       backgroundColor: dataset.backgroundColor || coffeeColors,
-      hoverBackgroundColor: dataset.hoverBackgroundColor || coffeeColors.map(color => 
-        color + 'CC' // Add transparency on hover
-      )
-    }))
+      hoverBackgroundColor:
+        dataset.hoverBackgroundColor ||
+        coffeeColors.map(
+          (color) => color + 'CC', // Add transparency on hover
+        ),
+    })),
   }
 }
 
 const initChart = async () => {
   await nextTick()
-  
+
   const canvas = document.getElementById(props.chartId)
   if (!canvas) return
-  
+
   const ctx = canvas.getContext('2d')
-  
+
   if (chart) {
     chart.destroy()
   }
-  
+
   const mergedOptions = {
     ...defaultOptions,
-    ...props.options
+    ...props.options,
   }
-  
+
   chart = new ChartJS(ctx, {
     type: 'doughnut',
     data: processData(props.data),
-    options: mergedOptions
+    options: mergedOptions,
   })
 }
 
@@ -155,14 +152,22 @@ const updateChart = () => {
 }
 
 // Watch for data changes
-watch(() => props.data, () => {
-  updateChart()
-}, { deep: true })
+watch(
+  () => props.data,
+  () => {
+    updateChart()
+  },
+  { deep: true },
+)
 
 // Watch for options changes
-watch(() => props.options, () => {
-  initChart()
-}, { deep: true })
+watch(
+  () => props.options,
+  () => {
+    initChart()
+  },
+  { deep: true },
+)
 
 onMounted(() => {
   initChart()

@@ -9,7 +9,7 @@
           <div class="summary-label">획득한 배지</div>
         </div>
       </div>
-      
+
       <div class="summary-card">
         <div class="summary-icon">⭐</div>
         <div class="summary-content">
@@ -17,7 +17,7 @@
           <div class="summary-label">총 포인트</div>
         </div>
       </div>
-      
+
       <div class="summary-card">
         <div class="summary-icon">🔥</div>
         <div class="summary-content">
@@ -25,7 +25,7 @@
           <div class="summary-label">진행 중</div>
         </div>
       </div>
-      
+
       <div class="summary-card">
         <div class="summary-icon">{{ userLevel.icon }}</div>
         <div class="summary-content">
@@ -37,8 +37,8 @@
 
     <!-- Filter Tabs -->
     <div class="filter-tabs">
-      <button 
-        v-for="filter in filters" 
+      <button
+        v-for="filter in filters"
         :key="filter.key"
         @click="activeFilter = filter.key"
         :class="{ active: activeFilter === filter.key }"
@@ -50,14 +50,14 @@
 
     <!-- Achievements Grid -->
     <div class="achievements-grid" v-if="filteredAchievements.length > 0">
-      <AchievementCard 
+      <AchievementCard
         v-for="achievement in filteredAchievements"
         :key="achievement.id"
         :achievement="achievement"
         :userProgress="getUserProgress(achievement.id)"
       />
     </div>
-    
+
     <!-- Empty State -->
     <div v-else class="empty-state">
       <div class="empty-icon">🎯</div>
@@ -83,7 +83,9 @@ const userAchievements = computed(() => userStatsStore.userAchievements || [])
 const earnedAchievements = computed(() => userStatsStore.earnedAchievements || [])
 const inProgressAchievements = computed(() => userStatsStore.inProgressAchievements || [])
 const availableAchievements = computed(() => userStatsStore.availableAchievements || [])
-const userLevel = computed(() => userStatsStore.userLevel || { level: 1, title: 'Coffee Newcomer', icon: '🆕' })
+const userLevel = computed(
+  () => userStatsStore.userLevel || { level: 1, title: 'Coffee Newcomer', icon: '🆕' },
+)
 const totalPoints = computed(() => userStatsStore.totalPoints || 0)
 
 const earnedCount = computed(() => earnedAchievements.value.length)
@@ -93,29 +95,29 @@ const filters = [
   { key: 'all', label: '전체' },
   { key: 'earned', label: '획득 완료' },
   { key: 'in_progress', label: '진행 중' },
-  { key: 'available', label: '도전 가능' }
+  { key: 'available', label: '도전 가능' },
 ]
 
 const filteredAchievements = computed(() => {
   switch (activeFilter.value) {
     case 'earned':
-      return achievements.value.filter(a => 
-        earnedAchievements.value.some(ea => ea.achievement_id === a.id)
+      return achievements.value.filter((a) =>
+        earnedAchievements.value.some((ea) => ea.achievement_id === a.id),
       )
     case 'in_progress':
-      return achievements.value.filter(a => 
-        inProgressAchievements.value.some(ia => ia.achievement_id === a.id)
+      return achievements.value.filter((a) =>
+        inProgressAchievements.value.some((ia) => ia.achievement_id === a.id),
       )
     case 'available':
       return availableAchievements.value
     default:
-      return achievements.value.filter(a => !a.is_hidden)
+      return achievements.value.filter((a) => !a.is_hidden)
   }
 })
 
 // Methods
 const getUserProgress = (achievementId) => {
-  return userAchievements.value.find(ua => ua.achievement_id === achievementId)
+  return userAchievements.value.find((ua) => ua.achievement_id === achievementId)
 }
 
 const getFilterCount = (filterKey) => {
@@ -127,7 +129,7 @@ const getFilterCount = (filterKey) => {
     case 'available':
       return availableAchievements.value.length
     default:
-      return achievements.value.filter(a => !a.is_hidden).length
+      return achievements.value.filter((a) => !a.is_hidden).length
   }
 }
 
@@ -177,7 +179,7 @@ const getEmptyStateDescription = () => {
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 15px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -190,7 +192,7 @@ const getEmptyStateDescription = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #F8F4F0, #F0E8DC);
+  background: linear-gradient(135deg, #f8f4f0, #f0e8dc);
   border-radius: 50%;
 }
 
@@ -201,13 +203,13 @@ const getEmptyStateDescription = () => {
 .summary-number {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.25rem;
 }
 
 .summary-label {
   font-size: 0.9rem;
-  color: #A0796A;
+  color: #a0796a;
   font-weight: 500;
 }
 
@@ -219,7 +221,7 @@ const getEmptyStateDescription = () => {
   padding: 0.5rem;
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .filter-tab {
@@ -227,7 +229,7 @@ const getEmptyStateDescription = () => {
   padding: 0.75rem 1rem;
   border: none;
   background: transparent;
-  color: #7C5842;
+  color: #7c5842;
   font-weight: 500;
   border-radius: 8px;
   cursor: pointer;
@@ -236,11 +238,11 @@ const getEmptyStateDescription = () => {
 }
 
 .filter-tab:hover {
-  background: #F8F4F0;
+  background: #f8f4f0;
 }
 
 .filter-tab.active {
-  background: linear-gradient(135deg, #7C5842, #A0796A);
+  background: linear-gradient(135deg, #7c5842, #a0796a);
   color: white;
   box-shadow: 0 2px 8px rgba(124, 88, 66, 0.3);
 }
@@ -259,7 +261,7 @@ const getEmptyStateDescription = () => {
   background: white;
   border-radius: 16px;
   box-shadow: 0 4px 15px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .empty-icon {
@@ -271,7 +273,7 @@ const getEmptyStateDescription = () => {
 .empty-title {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
@@ -287,30 +289,30 @@ const getEmptyStateDescription = () => {
   .achievements-summary {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .summary-card {
     padding: 1rem;
   }
-  
+
   .summary-icon {
     width: 50px;
     height: 50px;
     font-size: 2rem;
   }
-  
+
   .summary-number {
     font-size: 1.5rem;
   }
-  
+
   .filter-tabs {
     flex-wrap: wrap;
   }
-  
+
   .filter-tab {
     font-size: 0.8rem;
     padding: 0.5rem 0.75rem;
   }
-  
+
   .achievements-grid {
     grid-template-columns: 1fr;
   }

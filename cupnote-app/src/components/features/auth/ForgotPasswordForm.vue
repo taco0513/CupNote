@@ -34,11 +34,7 @@
       </div>
 
       <!-- Submit Button -->
-      <button
-        type="submit"
-        class="submit-button"
-        :disabled="isLoading || !isFormValid"
-      >
+      <button type="submit" class="submit-button" :disabled="isLoading || !isFormValid">
         <span v-if="isLoading" class="loading-spinner">⏳</span>
         {{ isLoading ? '전송 중...' : '재설정 링크 전송' }}
       </button>
@@ -56,14 +52,12 @@
             <li>몇 분 후에 다시 시도해보세요</li>
           </ul>
         </div>
-        
+
         <div class="help-item">
           <h4 class="help-item-title">계속 문제가 있나요?</h4>
           <p class="help-text">
-            고객지원팀에 문의하세요: 
-            <a href="mailto:support@cupnote.app" class="help-link">
-              support@cupnote.app
-            </a>
+            고객지원팀에 문의하세요:
+            <a href="mailto:support@cupnote.app" class="help-link"> support@cupnote.app </a>
           </p>
         </div>
       </div>
@@ -101,24 +95,24 @@ const isValidEmail = (email) => {
 
 const validateForm = () => {
   errors.value = {}
-  
+
   if (!email.value) {
     errors.value.email = '이메일을 입력해주세요'
   } else if (!isValidEmail(email.value)) {
     errors.value.email = '유효한 이메일 주소를 입력해주세요'
   }
-  
+
   return Object.keys(errors.value).length === 0
 }
 
 const handleResetPassword = async () => {
   if (!validateForm()) return
-  
+
   errors.value = {}
-  
+
   try {
     const result = await authStore.resetPassword(email.value)
-    
+
     if (result.success) {
       emit('reset-sent', result.message)
     } else {
@@ -152,7 +146,7 @@ const handleResetPassword = async () => {
   align-items: center;
   background: none;
   border: none;
-  color: #7C5842;
+  color: #7c5842;
   font-size: 0.9rem;
   cursor: pointer;
   margin-bottom: 1rem;
@@ -173,12 +167,12 @@ const handleResetPassword = async () => {
 .form-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .form-subtitle {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.9rem;
   line-height: 1.5;
 }
@@ -196,14 +190,14 @@ const handleResetPassword = async () => {
   display: block;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .field-input {
   width: 100%;
   padding: 0.75rem;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.2s ease;
@@ -211,32 +205,32 @@ const handleResetPassword = async () => {
 
 .field-input:focus {
   outline: none;
-  border-color: #7C5842;
+  border-color: #7c5842;
 }
 
 .field-input.error {
-  border-color: #F44336;
+  border-color: #f44336;
 }
 
 .field-input:disabled {
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   cursor: not-allowed;
 }
 
 /* Error Messages */
 .field-error {
   display: block;
-  color: #F44336;
+  color: #f44336;
   font-size: 0.8rem;
   margin-top: 0.25rem;
 }
 
 .error-message {
-  background: #FFEBEE;
-  border: 1px solid #FFCDD2;
+  background: #ffebee;
+  border: 1px solid #ffcdd2;
   border-radius: 8px;
   padding: 0.75rem;
-  color: #C62828;
+  color: #c62828;
   font-size: 0.9rem;
   margin-bottom: 1rem;
   text-align: center;
@@ -246,7 +240,7 @@ const handleResetPassword = async () => {
 .submit-button {
   width: 100%;
   padding: 0.75rem;
-  background: #7C5842;
+  background: #7c5842;
   color: white;
   border: none;
   border-radius: 8px;
@@ -261,12 +255,12 @@ const handleResetPassword = async () => {
 }
 
 .submit-button:hover:not(:disabled) {
-  background: #5D3F2E;
+  background: #5d3f2e;
   transform: translateY(-1px);
 }
 
 .submit-button:disabled {
-  background: #CCC;
+  background: #ccc;
   cursor: not-allowed;
   transform: none;
 }
@@ -276,20 +270,24 @@ const handleResetPassword = async () => {
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Help Section */
 .help-section {
   padding-top: 1.5rem;
-  border-top: 1px solid #E8D5C4;
+  border-top: 1px solid #e8d5c4;
 }
 
 .help-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1rem;
   text-align: center;
 }
@@ -301,7 +299,7 @@ const handleResetPassword = async () => {
 }
 
 .help-item {
-  background: #F8F4F0;
+  background: #f8f4f0;
   padding: 1rem;
   border-radius: 8px;
 }
@@ -309,14 +307,14 @@ const handleResetPassword = async () => {
 .help-item-title {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .help-list {
   margin: 0;
   padding-left: 1.2rem;
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.85rem;
   line-height: 1.5;
 }
@@ -326,19 +324,19 @@ const handleResetPassword = async () => {
 }
 
 .help-text {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.85rem;
   line-height: 1.5;
   margin: 0;
 }
 
 .help-link {
-  color: #1976D2;
+  color: #1976d2;
   text-decoration: underline;
 }
 
 .help-link:hover {
-  color: #1565C0;
+  color: #1565c0;
 }
 
 /* Responsive */
@@ -347,11 +345,11 @@ const handleResetPassword = async () => {
     padding: 1.5rem;
     margin: 1rem;
   }
-  
+
   .help-content {
     gap: 1rem;
   }
-  
+
   .help-item {
     padding: 0.75rem;
   }

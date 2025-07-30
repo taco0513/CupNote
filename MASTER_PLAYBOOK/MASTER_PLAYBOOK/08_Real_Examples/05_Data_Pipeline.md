@@ -5,68 +5,71 @@
 확장 가능한 실시간 데이터 파이프라인을 SuperClaude와 AI 워크플로우를 활용하여 구축하는 완전한 가이드입니다.
 
 ### 프로젝트: 전자상거래 데이터 파이프라인
+
 ```yaml
 data_pipeline:
-  name: "E-commerce Analytics Pipeline"
-  domain: "전자상거래 데이터 분석"
-  scale: "일일 10TB+ 데이터 처리"
+  name: 'E-commerce Analytics Pipeline'
+  domain: '전자상거래 데이터 분석'
+  scale: '일일 10TB+ 데이터 처리'
 
 data_sources:
-  - "웹사이트 이벤트 (클릭스트림)"
-  - "모바일 앱 이벤트"
-  - "거래 데이터 (주문, 결제)"
-  - "고객 서비스 로그"
-  - "재고 관리 시스템"
-  - "외부 API (광고, 날씨)"
+  - '웹사이트 이벤트 (클릭스트림)'
+  - '모바일 앱 이벤트'
+  - '거래 데이터 (주문, 결제)'
+  - '고객 서비스 로그'
+  - '재고 관리 시스템'
+  - '외부 API (광고, 날씨)'
 
 processing_requirements:
-  - "실시간 스트림 처리 (< 1초 지연)"
-  - "배치 처리 (일일 ETL)"
-  - "데이터 품질 검증"
-  - "스키마 진화 지원"
-  - "장애 복구 및 재처리"
-  - "비용 최적화"
+  - '실시간 스트림 처리 (< 1초 지연)'
+  - '배치 처리 (일일 ETL)'
+  - '데이터 품질 검증'
+  - '스키마 진화 지원'
+  - '장애 복구 및 재처리'
+  - '비용 최적화'
 
 output_destinations:
-  - "실시간 대시보드"
-  - "ML 모델 피처 스토어"
-  - "비즈니스 인텔리전스 도구"
-  - "A/B 테스트 플랫폼"
-  - "개인화 추천 시스템"
+  - '실시간 대시보드'
+  - 'ML 모델 피처 스토어'
+  - '비즈니스 인텔리전스 도구'
+  - 'A/B 테스트 플랫폼'
+  - '개인화 추천 시스템'
 ```
 
 ### 기술 스택
+
 ```yaml
 technology_stack:
   streaming:
-    ingestion: "Apache Kafka"
-    processing: "Apache Flink / Kafka Streams"
-    storage: "Apache Cassandra / ClickHouse"
+    ingestion: 'Apache Kafka'
+    processing: 'Apache Flink / Kafka Streams'
+    storage: 'Apache Cassandra / ClickHouse'
 
   batch:
-    orchestration: "Apache Airflow"
-    processing: "Apache Spark"
-    storage: "AWS S3 / HDFS"
+    orchestration: 'Apache Airflow'
+    processing: 'Apache Spark'
+    storage: 'AWS S3 / HDFS'
 
   infrastructure:
-    cloud: "AWS / GCP"
-    containers: "Docker + Kubernetes"
-    monitoring: "Prometheus + Grafana"
+    cloud: 'AWS / GCP'
+    containers: 'Docker + Kubernetes'
+    monitoring: 'Prometheus + Grafana'
 
   languages:
-    python: "Apache Beam, Pandas, PySpark"
-    java: "Kafka Streams, Flink"
-    sql: "dbt, BigQuery"
+    python: 'Apache Beam, Pandas, PySpark'
+    java: 'Kafka Streams, Flink'
+    sql: 'dbt, BigQuery'
 
   ml_ops:
-    feature_store: "Feast"
-    model_serving: "MLflow + Seldon"
-    monitoring: "Evidently AI"
+    feature_store: 'Feast'
+    model_serving: 'MLflow + Seldon'
+    monitoring: 'Evidently AI'
 ```
 
 ## Phase 1: 파이프라인 아키텍처 설계
 
 ### SuperClaude를 활용한 설계
+
 ```bash
 # 1. 데이터 파이프라인 아키텍처 설계
 /design "전자상거래 데이터 파이프라인" --stream-batch --lambda-architecture
@@ -82,28 +85,30 @@ technology_stack:
 ```
 
 ### Lambda 아키텍처 구조
+
 ```yaml
 lambda_architecture:
   speed_layer:
-    purpose: "실시간 처리 (Hot Path)"
-    latency: "< 1초"
-    technologies: ["Kafka", "Flink", "Redis"]
-    data_types: ["스트림 이벤트", "실시간 메트릭"]
+    purpose: '실시간 처리 (Hot Path)'
+    latency: '< 1초'
+    technologies: ['Kafka', 'Flink', 'Redis']
+    data_types: ['스트림 이벤트', '실시간 메트릭']
 
   batch_layer:
-    purpose: "정확성 보장 (Cold Path)"
-    latency: "시간/일 단위"
-    technologies: ["Airflow", "Spark", "S3"]
-    data_types: ["전체 데이터셋", "복잡한 분석"]
+    purpose: '정확성 보장 (Cold Path)'
+    latency: '시간/일 단위'
+    technologies: ['Airflow', 'Spark', 'S3']
+    data_types: ['전체 데이터셋', '복잡한 분석']
 
   serving_layer:
-    purpose: "통합 뷰 제공"
-    latency: "< 100ms"
-    technologies: ["Cassandra", "Redis", "BigQuery"]
-    data_types: ["집계 결과", "피처"]
+    purpose: '통합 뷰 제공'
+    latency: '< 100ms'
+    technologies: ['Cassandra', 'Redis', 'BigQuery']
+    data_types: ['집계 결과', '피처']
 ```
 
 ### 데이터 플로우 다이어그램
+
 ```
 Data Sources
     ↓
@@ -129,6 +134,7 @@ Data Sources
 ```
 
 ### 데이터 스키마 설계
+
 ```json
 // events.avsc - 이벤트 스키마
 {
@@ -195,6 +201,7 @@ Data Sources
 ## Phase 2: 실시간 스트림 처리 구현
 
 ### SuperClaude를 활용한 Kafka 설정
+
 ```bash
 # 1. Kafka 클러스터 설정
 /implement "Kafka 클러스터" --topics --partitions --replication
@@ -210,28 +217,30 @@ Data Sources
 ```
 
 ### Kafka 토픽 구성
+
 ```yaml
 kafka_topics:
   user-events:
     partitions: 24
     replication_factor: 3
-    retention_ms: 604800000  # 7 days
-    cleanup_policy: "delete"
+    retention_ms: 604800000 # 7 days
+    cleanup_policy: 'delete'
 
   transactions:
     partitions: 12
     replication_factor: 3
-    retention_ms: 2592000000  # 30 days
-    cleanup_policy: "compact"
+    retention_ms: 2592000000 # 30 days
+    cleanup_policy: 'compact'
 
   user-profiles:
     partitions: 6
     replication_factor: 3
-    retention_ms: -1  # infinite
-    cleanup_policy: "compact"
+    retention_ms: -1 # infinite
+    cleanup_policy: 'compact'
 ```
 
 ### Flink 스트림 처리 구현
+
 ```java
 // StreamProcessingJob.java
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -424,6 +433,7 @@ public class AnomalyDetectionFunction extends KeyedProcessFunction<String, UserE
 ```
 
 ### 실시간 메트릭 대시보드
+
 ```python
 # real_time_dashboard.py
 import streamlit as st
@@ -608,6 +618,7 @@ if __name__ == "__main__":
 ## Phase 3: 배치 처리 워크플로우 구현
 
 ### Airflow DAG 구현
+
 ```python
 # dags/ecommerce_etl_dag.py
 from datetime import datetime, timedelta
@@ -777,6 +788,7 @@ load_to_warehouse >> generate_quality_report >> send_completion_notification
 ```
 
 ### Spark 데이터 처리 작업
+
 ```python
 # jobs/process_daily_events.py
 from pyspark.sql import SparkSession
@@ -975,6 +987,7 @@ if __name__ == "__main__":
 ## Phase 4: ML 파이프라인 통합
 
 ### Feature Store 구현
+
 ```python
 # feature_store/user_features.py
 import pandas as pd
@@ -1097,22 +1110,24 @@ class RealTimeFeatureCalculator:
 ## 프로젝트 성과 및 배운 점
 
 ### 개발 성과
+
 ```yaml
 infrastructure_metrics:
-  data_volume: "일일 15TB 처리"
-  latency: "스트림 처리 < 500ms"
-  throughput: "100,000 events/second"
-  availability: "99.9% uptime"
-  cost_optimization: "40% 비용 절감"
+  data_volume: '일일 15TB 처리'
+  latency: '스트림 처리 < 500ms'
+  throughput: '100,000 events/second'
+  availability: '99.9% uptime'
+  cost_optimization: '40% 비용 절감'
 
 business_impact:
-  real_time_insights: "실시간 대시보드 구축"
-  ml_features: "200+ 피처 자동 생성"
-  data_quality: "95% 데이터 품질 보장"
-  analytics_speed: "쿼리 응답 시간 80% 개선"
+  real_time_insights: '실시간 대시보드 구축'
+  ml_features: '200+ 피처 자동 생성'
+  data_quality: '95% 데이터 품질 보장'
+  analytics_speed: '쿼리 응답 시간 80% 개선'
 ```
 
 ### AI 워크플로우 활용 효과
+
 1. **아키텍처 설계**: Lambda 아키텍처 설계 및 최적화 자동화
 2. **스트림 처리**: Flink 작업 코드 생성 및 상태 관리 구현
 3. **배치 처리**: Airflow DAG 및 Spark 작업 자동 생성

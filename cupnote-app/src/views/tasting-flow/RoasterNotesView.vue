@@ -2,11 +2,9 @@
   <div class="roaster-notes-view">
     <!-- Header -->
     <header class="roaster-header">
-      <h1 class="roaster-title">
-        📋 로스터 노트가 있나요?
-      </h1>
+      <h1 class="roaster-title">📋 로스터 노트가 있나요?</h1>
       <p class="roaster-subtitle">
-        카페 메뉴판이나 원두 패키지에 적힌 향미 정보를 입력해주세요<br>
+        카페 메뉴판이나 원두 패키지에 적힌 향미 정보를 입력해주세요<br />
         <strong>없다면 건너뛰어도 괜찮아요!</strong>
       </p>
     </header>
@@ -47,7 +45,7 @@
             <span class="method-label">직접 입력</span>
             <span class="method-desc">메뉴판이나 패키지 보고 입력</span>
           </button>
-          
+
           <button
             :class="['method-btn', { active: inputMethod === 'photo' }]"
             @click="setInputMethod('photo')"
@@ -57,7 +55,7 @@
             <span class="method-label">사진 촬영</span>
             <span class="method-desc">곧 추가될 예정</span>
           </button>
-          
+
           <button
             :class="['method-btn', { active: inputMethod === 'skip' }]"
             @click="setInputMethod('skip')"
@@ -73,9 +71,7 @@
     <!-- Text Input -->
     <section v-if="inputMethod === 'text'" class="text-input-section">
       <div class="input-container">
-        <label for="roaster-notes" class="input-label">
-          로스터 노트 입력
-        </label>
+        <label for="roaster-notes" class="input-label"> 로스터 노트 입력 </label>
         <textarea
           id="roaster-notes"
           v-model="roasterNotes"
@@ -84,9 +80,7 @@
           maxlength="300"
           rows="4"
         ></textarea>
-        <div class="character-count">
-          {{ roasterNotes.length }}/300
-        </div>
+        <div class="character-count">{{ roasterNotes.length }}/300</div>
       </div>
 
       <!-- Quick Suggestions -->
@@ -125,7 +119,10 @@
             로스터 노트가 없어도 괜찮아요! 대신 다음과 같은 정보를 받을 수 있습니다:
           </p>
           <ul class="skip-benefits">
-            <li>✨ <strong>Level 1 매치 스코어</strong>: 선택한 향미와 감각만으로도 의미있는 점수를 제공</li>
+            <li>
+              ✨ <strong>Level 1 매치 스코어</strong>: 선택한 향미와 감각만으로도 의미있는 점수를
+              제공
+            </li>
             <li>🎯 <strong>개인 취향 분석</strong>: 회원님의 취향 패턴을 더 정확히 파악</li>
             <li>📈 <strong>성장 추적</strong>: 감각 발달 과정을 체계적으로 기록</li>
           </ul>
@@ -157,9 +154,7 @@
             </div>
           </div>
         </div>
-        <p class="impact-note">
-          두 방법 모두 충분히 의미있는 정보를 제공합니다!
-        </p>
+        <p class="impact-note">두 방법 모두 충분히 의미있는 정보를 제공합니다!</p>
       </div>
     </section>
 
@@ -170,9 +165,7 @@
         <div class="help-content">
           <div class="help-item">
             <span class="help-icon">🏪</span>
-            <div class="help-text">
-              <strong>카페에서</strong>: 메뉴판이나 칠판의 커피 설명 확인
-            </div>
+            <div class="help-text"><strong>카페에서</strong>: 메뉴판이나 칠판의 커피 설명 확인</div>
           </div>
           <div class="help-item">
             <span class="help-icon">📦</span>
@@ -182,9 +175,7 @@
           </div>
           <div class="help-item">
             <span class="help-icon">💻</span>
-            <div class="help-text">
-              <strong>온라인</strong>: 로스터리 웹사이트나 SNS 확인
-            </div>
+            <div class="help-text"><strong>온라인</strong>: 로스터리 웹사이트나 SNS 확인</div>
           </div>
           <div class="help-item">
             <span class="help-icon">👥</span>
@@ -198,9 +189,7 @@
 
     <!-- Action Buttons -->
     <div class="action-buttons">
-      <button type="button" class="btn-secondary" @click="$router.go(-1)">
-        이전
-      </button>
+      <button type="button" class="btn-secondary" @click="$router.go(-1)">이전</button>
       <button
         type="button"
         class="btn-primary"
@@ -237,7 +226,7 @@ const quickSuggestions = ref([
   { id: 7, text: '부드러운 바디' },
   { id: 8, text: '달콤한 여운' },
   { id: 9, text: '밝은 산미' },
-  { id: 10, text: '진한 풍미' }
+  { id: 10, text: '진한 풍미' },
 ])
 
 // Methods
@@ -258,9 +247,9 @@ const addSuggestion = (text) => {
       roasterNotes.value += ' '
     }
   }
-  
+
   roasterNotes.value += text
-  
+
   // Focus textarea
   const textarea = document.getElementById('roaster-notes')
   if (textarea) {
@@ -272,12 +261,12 @@ const addSuggestion = (text) => {
 const handleNext = () => {
   const notes = inputMethod.value === 'skip' ? null : roasterNotes.value.trim()
   const level = inputMethod.value === 'skip' ? 1 : 2
-  
+
   // Save to store
   tastingSessionStore.updateRoasterNotes(notes, level)
-  
+
   console.log('Roaster notes saved:', { notes, level })
-  
+
   // Navigate to result view
   router.push('/tasting-result')
 }
@@ -288,7 +277,7 @@ const handleNext = () => {
   max-width: 800px;
   margin: 0 auto;
   padding: 1rem;
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5F0E8 100%);
+  background: linear-gradient(135deg, #fff8f0 0%, #f5f0e8 100%);
   min-height: 100vh;
 }
 
@@ -301,12 +290,12 @@ const handleNext = () => {
 .roaster-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .roaster-subtitle {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 1.1rem;
   line-height: 1.5;
 }
@@ -321,7 +310,7 @@ const handleNext = () => {
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .info-header {
@@ -338,7 +327,7 @@ const handleNext = () => {
 .info-title {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin: 0;
 }
 
@@ -351,7 +340,7 @@ const handleNext = () => {
 .examples-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
@@ -376,13 +365,13 @@ const handleNext = () => {
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .section-title {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -395,7 +384,7 @@ const handleNext = () => {
 
 .method-btn {
   background: white;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 12px;
   padding: 1.5rem;
   cursor: pointer;
@@ -408,14 +397,14 @@ const handleNext = () => {
 }
 
 .method-btn:hover:not(:disabled) {
-  border-color: #D4B896;
+  border-color: #d4b896;
   transform: translateY(-3px);
   box-shadow: 0 6px 20px rgba(124, 88, 66, 0.15);
 }
 
 .method-btn.active {
-  border-color: #7C5842;
-  background: linear-gradient(135deg, #7C5842 0%, #A0796A 100%);
+  border-color: #7c5842;
+  background: linear-gradient(135deg, #7c5842 0%, #a0796a 100%);
   color: white;
   transform: translateY(-3px);
   box-shadow: 0 8px 25px rgba(124, 88, 66, 0.3);
@@ -447,7 +436,7 @@ const handleNext = () => {
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
   margin-bottom: 2rem;
 }
 
@@ -459,7 +448,7 @@ const handleNext = () => {
 .input-label {
   display: block;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.75rem;
   font-size: 1rem;
 }
@@ -467,7 +456,7 @@ const handleNext = () => {
 .notes-textarea {
   width: 100%;
   padding: 1rem;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 12px;
   font-size: 1rem;
   font-family: inherit;
@@ -478,7 +467,7 @@ const handleNext = () => {
 
 .notes-textarea:focus {
   outline: none;
-  border-color: #7C5842;
+  border-color: #7c5842;
   box-shadow: 0 0 0 3px rgba(124, 88, 66, 0.1);
 }
 
@@ -487,7 +476,7 @@ const handleNext = () => {
   bottom: 0.5rem;
   right: 1rem;
   font-size: 0.8rem;
-  color: #A0796A;
+  color: #a0796a;
   background: rgba(255, 255, 255, 0.9);
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
@@ -501,7 +490,7 @@ const handleNext = () => {
 .suggestions-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.75rem;
 }
 
@@ -512,40 +501,40 @@ const handleNext = () => {
 }
 
 .suggestion-btn {
-  background: #F8F4F0;
-  border: 1px solid #E8D5C4;
+  background: #f8f4f0;
+  border: 1px solid #e8d5c4;
   border-radius: 20px;
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .suggestion-btn:hover {
-  border-color: #D4B896;
-  background: #F0E8DC;
+  border-color: #d4b896;
+  background: #f0e8dc;
   transform: translateY(-1px);
 }
 
 /* Preview */
 .preview-container {
-  border-top: 1px solid #F0E8DC;
+  border-top: 1px solid #f0e8dc;
   padding-top: 1rem;
 }
 
 .preview-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.75rem;
 }
 
 .notes-preview {
-  background: #F8F4F0;
+  background: #f8f4f0;
   border-radius: 8px;
   padding: 1rem;
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .preview-text {
@@ -560,7 +549,7 @@ const handleNext = () => {
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
   margin-bottom: 2rem;
 }
 
@@ -583,7 +572,7 @@ const handleNext = () => {
 .skip-title {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin: 0;
 }
 
@@ -607,15 +596,15 @@ const handleNext = () => {
 }
 
 .skip-note {
-  background: #FFF8F0;
+  background: #fff8f0;
   border-radius: 8px;
   padding: 1rem;
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .skip-note p {
   margin: 0;
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.9rem;
   font-style: italic;
 }
@@ -626,8 +615,8 @@ const handleNext = () => {
 }
 
 .impact-card {
-  background: #F8F4F0;
-  border: 1px solid #F0E8DC;
+  background: #f8f4f0;
+  border: 1px solid #f0e8dc;
   border-radius: 16px;
   padding: 1.5rem;
 }
@@ -635,7 +624,7 @@ const handleNext = () => {
 .impact-title {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1rem;
   text-align: center;
 }
@@ -662,19 +651,19 @@ const handleNext = () => {
 }
 
 .impact-label.with-notes {
-  background: #7C5842;
+  background: #7c5842;
   color: white;
 }
 
 .impact-label.without-notes {
-  background: #A0796A;
+  background: #a0796a;
   color: white;
 }
 
 .impact-score {
   display: block;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.25rem;
 }
 
@@ -687,13 +676,13 @@ const handleNext = () => {
 .impact-divider {
   width: 2px;
   height: 40px;
-  background: #E8D5C4;
+  background: #e8d5c4;
   flex-shrink: 0;
 }
 
 .impact-note {
   text-align: center;
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.9rem;
   font-style: italic;
   margin: 0;
@@ -705,8 +694,8 @@ const handleNext = () => {
 }
 
 .help-card {
-  background: #FFF8F0;
-  border: 1px solid #F0E8DC;
+  background: #fff8f0;
+  border: 1px solid #f0e8dc;
   border-radius: 12px;
   padding: 1.5rem;
 }
@@ -714,7 +703,7 @@ const handleNext = () => {
 .help-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1rem;
   text-align: center;
 }
@@ -732,7 +721,7 @@ const handleNext = () => {
   padding: 0.75rem;
   background: white;
   border-radius: 8px;
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .help-icon {
@@ -754,7 +743,7 @@ const handleNext = () => {
   justify-content: space-between;
   margin-top: 2rem;
   padding-top: 2rem;
-  border-top: 1px solid #E8D5C4;
+  border-top: 1px solid #e8d5c4;
 }
 
 .btn-primary,
@@ -769,32 +758,32 @@ const handleNext = () => {
 }
 
 .btn-primary {
-  background: #7C5842;
+  background: #7c5842;
   color: white;
-  border: 2px solid #7C5842;
+  border: 2px solid #7c5842;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #5D3F2E;
-  border-color: #5D3F2E;
+  background: #5d3f2e;
+  border-color: #5d3f2e;
   transform: translateY(-1px);
 }
 
 .btn-primary:disabled {
-  background: #CCC;
-  border-color: #CCC;
+  background: #ccc;
+  border-color: #ccc;
   cursor: not-allowed;
   transform: none;
 }
 
 .btn-secondary {
   background: white;
-  color: #7C5842;
-  border: 2px solid #E8D5C4;
+  color: #7c5842;
+  border: 2px solid #e8d5c4;
 }
 
 .btn-secondary:hover {
-  border-color: #D4B896;
+  border-color: #d4b896;
   transform: translateY(-1px);
 }
 
@@ -803,29 +792,29 @@ const handleNext = () => {
   .roaster-notes-view {
     padding: 0.5rem;
   }
-  
+
   .roaster-title {
     font-size: 1.5rem;
   }
-  
+
   .method-buttons {
     grid-template-columns: 1fr;
   }
-  
+
   .impact-comparison {
     flex-direction: column;
     gap: 1rem;
   }
-  
+
   .impact-divider {
     width: 40px;
     height: 2px;
   }
-  
+
   .help-content {
     gap: 0.75rem;
   }
-  
+
   .action-buttons {
     flex-direction: column;
   }
@@ -835,15 +824,15 @@ const handleNext = () => {
   .roaster-subtitle {
     font-size: 1rem;
   }
-  
+
   .method-btn {
     padding: 1rem;
   }
-  
+
   .method-icon {
     font-size: 1.5rem;
   }
-  
+
   .help-item {
     flex-direction: column;
     align-items: center;

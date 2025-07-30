@@ -24,7 +24,9 @@
                   <p class="template-description">{{ template.description }}</p>
                   <div class="template-meta">
                     <span class="template-period">{{ getPeriodLabel(template.period) }}</span>
-                    <span class="template-target">목표: {{ template.target_value }}{{ template.unit }}</span>
+                    <span class="template-target"
+                      >목표: {{ template.target_value }}{{ template.unit }}</span
+                    >
                   </div>
                 </div>
               </button>
@@ -36,9 +38,7 @@
               <div class="divider"></div>
             </div>
 
-            <button @click="customMode = true" class="btn-custom">
-              ✨ 나만의 목표 만들기
-            </button>
+            <button @click="customMode = true" class="btn-custom">✨ 나만의 목표 만들기</button>
           </div>
 
           <!-- Goal Form -->
@@ -70,7 +70,7 @@
                 required
                 placeholder="예: 매일 커피 기록하기"
                 class="form-input"
-              >
+              />
             </div>
 
             <div class="form-group">
@@ -87,12 +87,7 @@
             <div class="form-row">
               <div class="form-group">
                 <label for="type">목표 유형</label>
-                <select
-                  id="type"
-                  v-model="formData.type"
-                  required
-                  class="form-select"
-                >
+                <select id="type" v-model="formData.type" required class="form-select">
                   <option value="tastings">테이스팅 횟수</option>
                   <option value="streak">연속 기록</option>
                   <option value="score">평균 점수</option>
@@ -130,13 +125,13 @@
                     min="1"
                     required
                     class="form-input"
-                  >
+                  />
                   <input
                     v-model="formData.unit"
                     type="text"
                     placeholder="단위"
                     class="form-input unit-input"
-                  >
+                  />
                 </div>
               </div>
             </div>
@@ -151,7 +146,7 @@
                   required
                   class="form-input"
                   :min="today"
-                >
+                />
               </div>
 
               <div class="form-group">
@@ -163,24 +158,22 @@
                   required
                   class="form-input"
                   :min="formData.start_date || today"
-                >
+                />
               </div>
             </div>
 
             <div class="form-actions">
-              <button 
-                v-if="!isEdit && customMode" 
-                type="button" 
+              <button
+                v-if="!isEdit && customMode"
+                type="button"
                 @click="customMode = false"
                 class="btn-secondary"
               >
                 뒤로
               </button>
-              <button type="button" @click="close" class="btn-secondary">
-                취소
-              </button>
+              <button type="button" @click="close" class="btn-secondary">취소</button>
               <button type="submit" class="btn-primary" :disabled="loading">
-                {{ loading ? '저장 중...' : (isEdit ? '수정하기' : '목표 만들기') }}
+                {{ loading ? '저장 중...' : isEdit ? '수정하기' : '목표 만들기' }}
               </button>
             </div>
           </form>
@@ -198,12 +191,12 @@ import { useNotificationStore } from '../../stores/notification'
 const props = defineProps({
   modelValue: {
     type: Boolean,
-    default: false
+    default: false,
   },
   editGoal: {
     type: Object,
-    default: null
-  }
+    default: null,
+  },
 })
 
 const emit = defineEmits(['update:modelValue', 'saved'])
@@ -223,7 +216,7 @@ const formData = ref({
   target_value: 7,
   unit: '회',
   start_date: '',
-  end_date: ''
+  end_date: '',
 })
 
 const availableIcons = ['☕', '🎯', '📊', '🔥', '🌍', '🏆', '⏰', '📈', '⭐', '🚀']
@@ -242,7 +235,7 @@ const getPeriodLabel = (period) => {
     daily: '일일',
     weekly: '주간',
     monthly: '월간',
-    custom: '커스텀'
+    custom: '커스텀',
   }
   return labels[period] || period
 }
@@ -253,7 +246,7 @@ const selectTemplate = (template) => {
     ...formData.value,
     ...template,
     start_date: '',
-    end_date: ''
+    end_date: '',
   }
   customMode.value = true
 }
@@ -274,7 +267,7 @@ const resetForm = () => {
     target_value: 7,
     unit: '회',
     start_date: '',
-    end_date: ''
+    end_date: '',
   }
 }
 
@@ -289,46 +282,44 @@ const saveGoal = async () => {
     if (result.success) {
       notificationStore.showSuccess(
         isEdit.value ? '목표가 수정되었습니다' : '새 목표가 생성되었습니다',
-        isEdit.value ? '목표 수정 완료' : '목표 생성 완료'
+        isEdit.value ? '목표 수정 완료' : '목표 생성 완료',
       )
       emit('saved', result.data)
       close()
     } else {
-      notificationStore.showError(
-        result.error || '오류가 발생했습니다',
-        '목표 저장 실패'
-      )
+      notificationStore.showError(result.error || '오류가 발생했습니다', '목표 저장 실패')
     }
   } catch (err) {
     console.error('Error saving goal:', err)
-    notificationStore.showError(
-      '목표 저장 중 오류가 발생했습니다',
-      '오류'
-    )
+    notificationStore.showError('목표 저장 중 오류가 발생했습니다', '오류')
   } finally {
     loading.value = false
   }
 }
 
 // Watch for edit mode
-watch(() => props.editGoal, (newGoal) => {
-  if (newGoal) {
-    formData.value = {
-      icon: newGoal.icon || '🎯',
-      title: newGoal.title,
-      description: newGoal.description || '',
-      type: newGoal.type,
-      period: newGoal.period,
-      target_value: newGoal.target_value,
-      unit: newGoal.unit,
-      start_date: newGoal.start_date?.split('T')[0] || '',
-      end_date: newGoal.end_date?.split('T')[0] || ''
+watch(
+  () => props.editGoal,
+  (newGoal) => {
+    if (newGoal) {
+      formData.value = {
+        icon: newGoal.icon || '🎯',
+        title: newGoal.title,
+        description: newGoal.description || '',
+        type: newGoal.type,
+        period: newGoal.period,
+        target_value: newGoal.target_value,
+        unit: newGoal.unit,
+        start_date: newGoal.start_date?.split('T')[0] || '',
+        end_date: newGoal.end_date?.split('T')[0] || '',
+      }
+      customMode.value = true
+    } else {
+      resetForm()
     }
-    customMode.value = true
-  } else {
-    resetForm()
-  }
-}, { immediate: true })
+  },
+  { immediate: true },
+)
 </script>
 
 <style scoped>
@@ -355,7 +346,9 @@ watch(() => props.editGoal, (newGoal) => {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 .modal-header {
@@ -363,14 +356,14 @@ watch(() => props.editGoal, (newGoal) => {
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem;
-  border-bottom: 1px solid #F0E8DC;
+  border-bottom: 1px solid #f0e8dc;
 }
 
 .modal-title {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .modal-close {
@@ -378,15 +371,15 @@ watch(() => props.editGoal, (newGoal) => {
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #A0796A;
+  color: #a0796a;
   padding: 0.5rem;
   border-radius: 8px;
   transition: all 0.2s ease;
 }
 
 .modal-close:hover {
-  background: #F8F4F0;
-  color: #7C5842;
+  background: #f8f4f0;
+  color: #7c5842;
 }
 
 .modal-body {
@@ -406,7 +399,7 @@ watch(() => props.editGoal, (newGoal) => {
   margin: 0 0 1rem 0;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .templates-grid {
@@ -416,8 +409,8 @@ watch(() => props.editGoal, (newGoal) => {
 }
 
 .template-card {
-  background: #FFF8F0;
-  border: 1px solid #F0E8DC;
+  background: #fff8f0;
+  border: 1px solid #f0e8dc;
   border-radius: 12px;
   padding: 1rem;
   cursor: pointer;
@@ -432,7 +425,7 @@ watch(() => props.editGoal, (newGoal) => {
 .template-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(124, 88, 66, 0.15);
-  border-color: #D4B896;
+  border-color: #d4b896;
 }
 
 .template-icon {
@@ -448,7 +441,7 @@ watch(() => props.editGoal, (newGoal) => {
   margin: 0 0 0.25rem 0;
   font-size: 1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .template-description {
@@ -462,7 +455,7 @@ watch(() => props.editGoal, (newGoal) => {
   display: flex;
   gap: 1rem;
   font-size: 0.75rem;
-  color: #A0796A;
+  color: #a0796a;
 }
 
 .divider-container {
@@ -475,16 +468,16 @@ watch(() => props.editGoal, (newGoal) => {
 .divider {
   flex: 1;
   height: 1px;
-  background: #E8D5C4;
+  background: #e8d5c4;
 }
 
 .divider-text {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.9rem;
 }
 
 .btn-custom {
-  background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
   color: white;
   border: none;
   padding: 1rem 2rem;
@@ -523,13 +516,13 @@ watch(() => props.editGoal, (newGoal) => {
 .form-group label {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .form-input,
 .form-select {
   padding: 0.75rem 1rem;
-  border: 1px solid #E8D5C4;
+  border: 1px solid #e8d5c4;
   border-radius: 8px;
   font-size: 1rem;
   transition: all 0.2s ease;
@@ -539,7 +532,7 @@ watch(() => props.editGoal, (newGoal) => {
 .form-input:focus,
 .form-select:focus {
   outline: none;
-  border-color: #D4B896;
+  border-color: #d4b896;
   box-shadow: 0 0 0 3px rgba(212, 184, 150, 0.1);
 }
 
@@ -552,7 +545,7 @@ watch(() => props.editGoal, (newGoal) => {
 .icon-option {
   width: 50px;
   height: 50px;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   background: white;
   font-size: 1.5rem;
@@ -561,13 +554,13 @@ watch(() => props.editGoal, (newGoal) => {
 }
 
 .icon-option:hover {
-  border-color: #D4B896;
+  border-color: #d4b896;
   transform: scale(1.05);
 }
 
 .icon-option.selected {
-  border-color: #7C5842;
-  background: #FFF8F0;
+  border-color: #7c5842;
+  background: #fff8f0;
 }
 
 .input-with-unit {
@@ -585,7 +578,7 @@ watch(() => props.editGoal, (newGoal) => {
   justify-content: flex-end;
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid #F0E8DC;
+  border-top: 1px solid #f0e8dc;
 }
 
 .btn-primary,
@@ -600,7 +593,7 @@ watch(() => props.editGoal, (newGoal) => {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #7C5842, #A0796A);
+  background: linear-gradient(135deg, #7c5842, #a0796a);
   color: white;
 }
 
@@ -616,13 +609,13 @@ watch(() => props.editGoal, (newGoal) => {
 
 .btn-secondary {
   background: white;
-  color: #7C5842;
-  border: 1px solid #E8D5C4;
+  color: #7c5842;
+  border: 1px solid #e8d5c4;
 }
 
 .btn-secondary:hover {
-  background: #F8F4F0;
-  border-color: #D4B896;
+  background: #f8f4f0;
+  border-color: #d4b896;
 }
 
 /* Modal Transition */
@@ -647,7 +640,7 @@ watch(() => props.editGoal, (newGoal) => {
     margin: 1rem;
     max-height: calc(100vh - 2rem);
   }
-  
+
   .templates-grid {
     grid-template-columns: 1fr;
   }

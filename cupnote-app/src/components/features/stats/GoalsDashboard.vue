@@ -6,9 +6,7 @@
         <h2 class="dashboard-title">나의 목표</h2>
         <p class="dashboard-subtitle">목표를 설정하고 달성률을 확인하세요</p>
       </div>
-      <button @click="showGoalModal = true" class="btn-create-goal">
-        ➕ 새 목표 만들기
-      </button>
+      <button @click="showGoalModal = true" class="btn-create-goal">➕ 새 목표 만들기</button>
     </div>
 
     <!-- Progress Overview -->
@@ -20,7 +18,7 @@
           <p class="overview-label">전체 진행률</p>
         </div>
       </div>
-      
+
       <div class="overview-card">
         <div class="overview-icon">🎯</div>
         <div class="overview-content">
@@ -28,7 +26,7 @@
           <p class="overview-label">진행 중인 목표</p>
         </div>
       </div>
-      
+
       <div class="overview-card">
         <div class="overview-icon">✅</div>
         <div class="overview-content">
@@ -36,7 +34,7 @@
           <p class="overview-label">완료된 목표</p>
         </div>
       </div>
-      
+
       <div class="overview-card">
         <div class="overview-icon">🏆</div>
         <div class="overview-content">
@@ -72,9 +70,7 @@
       <p class="empty-message">
         {{ emptyMessage }}
       </p>
-      <button @click="showGoalModal = true" class="btn-primary">
-        첫 목표 만들기
-      </button>
+      <button @click="showGoalModal = true" class="btn-primary">첫 목표 만들기</button>
     </div>
 
     <div v-else class="goals-grid">
@@ -89,11 +85,7 @@
     </div>
 
     <!-- Goal Modal -->
-    <GoalModal
-      v-model="showGoalModal"
-      :edit-goal="editingGoal"
-      @saved="onGoalSaved"
-    />
+    <GoalModal v-model="showGoalModal" :edit-goal="editingGoal" @saved="onGoalSaved" />
   </div>
 </template>
 
@@ -116,15 +108,15 @@ const activeTab = ref('all')
 const loading = ref(true)
 
 // Computed
-const { 
-  activeGoals, 
-  completedGoals, 
+const {
+  activeGoals,
+  completedGoals,
   inProgressGoals,
   todaysGoals,
   weeklyGoals,
   monthlyGoals,
   overallProgress,
-  achievementRate
+  achievementRate,
 } = goalsStore
 
 const tabs = computed(() => [
@@ -133,7 +125,7 @@ const tabs = computed(() => [
   { key: 'today', label: '오늘', count: todaysGoals.value.length },
   { key: 'weekly', label: '주간', count: weeklyGoals.value.length },
   { key: 'monthly', label: '월간', count: monthlyGoals.value.length },
-  { key: 'completed', label: '완료', count: completedGoals.value.length }
+  { key: 'completed', label: '완료', count: completedGoals.value.length },
 ])
 
 const displayedGoals = computed(() => {
@@ -185,7 +177,7 @@ const editGoal = (goal) => {
 
 const deleteGoal = async (goalId) => {
   if (!confirm('이 목표를 삭제하시겠습니까?')) return
-  
+
   const result = await goalsStore.deleteGoal(goalId)
   if (result.success) {
     notificationStore.showSuccess('목표가 삭제되었습니다')
@@ -231,17 +223,17 @@ onMounted(async () => {
   margin: 0 0 0.5rem 0;
   font-size: 2rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .dashboard-subtitle {
   margin: 0;
-  color: #A0796A;
+  color: #a0796a;
   font-size: 1.1rem;
 }
 
 .btn-create-goal {
-  background: linear-gradient(135deg, #7C5842, #A0796A);
+  background: linear-gradient(135deg, #7c5842, #a0796a);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -273,7 +265,7 @@ onMounted(async () => {
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -292,13 +284,13 @@ onMounted(async () => {
   margin: 0;
   font-size: 1.75rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .overview-label {
   margin: 0;
   font-size: 0.9rem;
-  color: #A0796A;
+  color: #a0796a;
 }
 
 /* Tabs */
@@ -306,7 +298,7 @@ onMounted(async () => {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 2rem;
-  border-bottom: 2px solid #F0E8DC;
+  border-bottom: 2px solid #f0e8dc;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -317,7 +309,7 @@ onMounted(async () => {
   padding: 0.75rem 1rem;
   font-size: 1rem;
   font-weight: 500;
-  color: #A0796A;
+  color: #a0796a;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
@@ -329,17 +321,17 @@ onMounted(async () => {
 }
 
 .tab-button:hover {
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .tab-button.active {
-  color: #7C5842;
+  color: #7c5842;
   font-weight: 600;
-  border-bottom-color: #7C5842;
+  border-bottom-color: #7c5842;
 }
 
 .tab-count {
-  background: #F0E8DC;
+  background: #f0e8dc;
   padding: 0.125rem 0.5rem;
   border-radius: 12px;
   font-size: 0.85rem;
@@ -347,7 +339,7 @@ onMounted(async () => {
 }
 
 .tab-button.active .tab-count {
-  background: #7C5842;
+  background: #7c5842;
   color: white;
 }
 
@@ -362,21 +354,23 @@ onMounted(async () => {
 .loading-container {
   text-align: center;
   padding: 4rem 2rem;
-  color: #A0796A;
+  color: #a0796a;
 }
 
 .loading-spinner {
   width: 50px;
   height: 50px;
-  border: 4px solid #F0E8DC;
-  border-top-color: #7C5842;
+  border: 4px solid #f0e8dc;
+  border-top-color: #7c5842;
   border-radius: 50%;
   margin: 0 auto 1rem;
   animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Empty State */
@@ -394,17 +388,17 @@ onMounted(async () => {
   margin: 0 0 0.5rem 0;
   font-size: 1.5rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .empty-message {
   margin: 0 0 2rem 0;
-  color: #A0796A;
+  color: #a0796a;
   font-size: 1.1rem;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #7C5842, #A0796A);
+  background: linear-gradient(135deg, #7c5842, #a0796a);
   color: white;
   border: none;
   padding: 0.75rem 2rem;
@@ -426,26 +420,26 @@ onMounted(async () => {
   .goals-dashboard {
     padding: 1rem;
   }
-  
+
   .dashboard-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
-  
+
   .dashboard-title {
     font-size: 1.5rem;
   }
-  
+
   .btn-create-goal {
     width: 100%;
     justify-content: center;
   }
-  
+
   .progress-overview {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .goals-grid {
     grid-template-columns: 1fr;
   }
@@ -455,15 +449,15 @@ onMounted(async () => {
   .overview-card {
     padding: 1rem;
   }
-  
+
   .overview-icon {
     font-size: 2rem;
   }
-  
+
   .overview-value {
     font-size: 1.25rem;
   }
-  
+
   .overview-label {
     font-size: 0.8rem;
   }

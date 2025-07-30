@@ -5,11 +5,13 @@
 **아이디어에서 베타 테스터가 사용할 수 있는 실제 서비스까지** - 프로토타입도 프로덕션 품질로 만드는 완전한 가이드입니다.
 
 ### 3단계 프로젝트 성숙도
+
 - ⚡ **30분 프로토타입**: 빠른 아이디어 검증용
 - 🏗️ **1-3일 베타 서비스**: 실제 사용자 테스트 가능
 - 🏢 **1-2주 프로덕션**: 확장 가능한 상용 서비스
 
 ### 핵심 철학
+
 - 🎯 **처음부터 제대로**: 나중에 갈아엎지 않을 기반
 - 👥 **실제 사용자 고려**: 베타 테스터가 실제 사용 가능
 - 🔧 **점진적 발전**: 프로토타입 → 베타 → 프로덕션
@@ -26,12 +28,14 @@
 **핵심 철학**: HTML로 먼저 디자인하면 모바일 앱 개발이 3배 빠릅니다!
 
 #### 왜 HTML 우선인가?
+
 - ⚡ **즉시 테스트**: 실제 모바일에서 바로 확인 가능
 - 🎨 **빠른 시각화**: 5분만에 전체 화면 흐름 완성
 - 🔄 **쉬운 수정**: CSS 변경으로 즉시 디자인 업데이트
 - 📐 **정확한 설계**: 네이티브 변환 전 UX 완전 검증
 
 ### Phase 1A: 웹앱 아이디어 정리 (5분)
+
 ```bash
 # Claude와 함께 아이디어 구체화
 claude
@@ -49,6 +53,7 @@ Deployment: Vercel
 ```
 
 ### Phase 1B: 모바일앱 아이디어 정리 (5분)
+
 ```bash
 # 모바일 앱 전용 아이디어 구체화
 claude
@@ -65,6 +70,7 @@ AI 추천 단계별 접근:
 ```
 
 ### Phase 2A: 웹앱 프로젝트 생성 (10분)
+
 ```bash
 # 1. Next.js 프로젝트 생성
 npx create-next-app@latest my-todo-app \
@@ -115,6 +121,7 @@ You: "@17_Design_System/README.md
 ```
 
 #### 🚀 기본 프로토타입 (빠른 시작용)
+
 ```bash
 # 기존 방식 (바로 시작하고 싶다면)
 # 1. 간단한 HTML 모바일 프로토타입 구조 생성
@@ -139,57 +146,59 @@ You: "다음 구조로 모바일 소셜 앱 HTML 프로토타입을 만들어줘
 **💡 혁신적 접근**: 17_Design_System의 플랫폼별 토큰을 활용하면 나중에 네이티브 앱 변환 시 개발 시간이 70% 단축됩니다!
 
 **design-tokens.css** - 크로스 플랫폼 호환 토큰 시스템:
+
 ```css
 /* design-tokens.css - 17_Design_System 기반 토큰 */
 :root {
   /* Brand Colors */
-  --color-primary: #4F46E5;
-  --color-secondary: #10B981;
-  --color-accent: #F59E0B;
+  --color-primary: #4f46e5;
+  --color-secondary: #10b981;
+  --color-accent: #f59e0b;
 
   /* UI Colors */
-  --color-background: #FFFFFF;
-  --color-surface: #F9FAFB;
-  --color-border: #E5E7EB;
+  --color-background: #ffffff;
+  --color-surface: #f9fafb;
+  --color-border: #e5e7eb;
 
   /* Text Colors */
   --text-primary: #111827;
-  --text-secondary: #6B7280;
-  --text-muted: #9CA3AF;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
 
   /* Spacing (8px grid) */
   --space-1: 0.25rem; /* 4px */
-  --space-2: 0.5rem;  /* 8px */
+  --space-2: 0.5rem; /* 8px */
   --space-3: 0.75rem; /* 12px */
-  --space-4: 1rem;    /* 16px */
+  --space-4: 1rem; /* 16px */
   --space-5: 1.25rem; /* 20px */
-  --space-6: 1.5rem;  /* 24px */
-  --space-8: 2rem;    /* 32px */
+  --space-6: 1.5rem; /* 24px */
+  --space-8: 2rem; /* 32px */
 
   /* Typography */
-  --text-sm: 0.875rem;  /* 14px */
-  --text-base: 1rem;    /* 16px */
-  --text-lg: 1.125rem;  /* 18px */
-  --text-xl: 1.25rem;   /* 20px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-base: 1rem; /* 16px */
+  --text-lg: 1.125rem; /* 18px */
+  --text-xl: 1.25rem; /* 20px */
 
   /* Border & Effects */
   --radius-sm: 0.25rem; /* 4px */
   --radius-md: 0.375rem; /* 6px */
-  --radius-lg: 0.5rem;   /* 8px */
+  --radius-lg: 0.5rem; /* 8px */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }
 
 /* Dark mode support */
-[data-theme="dark"] {
+[data-theme='dark'] {
   --color-background: #111827;
-  --color-surface: #1F2937;
-  --text-primary: #F9FAFB;
-  --text-secondary: #D1D5DB;
+  --color-surface: #1f2937;
+  --text-primary: #f9fafb;
+  --text-secondary: #d1d5db;
 }
 ```
 
 **components.css** - 재사용 가능한 컴포넌트:
+
 ```css
 /* components.css - 토큰 기반 컴포넌트 */
 .mobile-container {
@@ -342,15 +351,16 @@ You: "다음 구조로 모바일 소셜 앱 HTML 프로토타입을 만들어줘
 
 #### 📊 HTML → 네이티브 앱 전환 전략
 
-| 단계 | Web | iOS | Android | 소요 시간 | 추천 도구 |
-|------|-----|-----|---------|----------|-----------|
-| **Level 1** | HTML + CSS | WebView 래퍼 | WebView 래퍼 | 30분 | PWA 기술 |
-| **Level 2** | React PWA | React Native | React Native | 1-2일 | Expo |
-| **Level 3** | Next.js | SwiftUI | Jetpack Compose | 1-2주 | 네이티브 |
+| 단계        | Web        | iOS          | Android         | 소요 시간 | 추천 도구 |
+| ----------- | ---------- | ------------ | --------------- | --------- | --------- |
+| **Level 1** | HTML + CSS | WebView 래퍼 | WebView 래퍼    | 30분      | PWA 기술  |
+| **Level 2** | React PWA  | React Native | React Native    | 1-2일     | Expo      |
+| **Level 3** | Next.js    | SwiftUI      | Jetpack Compose | 1-2주     | 네이티브  |
 
 #### 🎯 플랫폼별 최적화 Claude 명령어
 
 **iOS 네이티브 변환:**
+
 ```bash
 # SwiftUI로 변환
 /convert @mobile-prototype --platform ios --swiftui --design-tokens @17_Design_System
@@ -360,6 +370,7 @@ You: "다음 구조로 모바일 소셜 앱 HTML 프로토타입을 만들어줘
 ```
 
 **Android 네이티브 변환:**
+
 ```bash
 # Jetpack Compose로 변환
 /convert @mobile-prototype --platform android --compose --material3 --design-tokens @17_Design_System
@@ -369,6 +380,7 @@ You: "다음 구조로 모바일 소셜 앱 HTML 프로토타입을 만들어줘
 ```
 
 **크로스 플랫폼 진화:**
+
 ```bash
 # React Native 변환 (둘 다 지원)
 /convert @mobile-prototype --platform react-native --expo --design-tokens @17_Design_System
@@ -380,13 +392,15 @@ You: "다음 구조로 모바일 소셜 앱 HTML 프로토타입을 만들어줘
 #### 🔄 토큰 기반 자동 변환 프로세스
 
 **1단계: 토큰 매핑**
+
 ```css
 /* HTML/CSS */
---color-primary: #4F46E5;
+--color-primary: #4f46e5;
 --space-4: 1rem;
 ```
 
 **2단계: iOS 변환**
+
 ```swift
 // SwiftUI DesignTokens
 static let colorPrimary = Color(red: 79/255, green: 70/255, blue: 229/255)
@@ -394,6 +408,7 @@ static let spacing4: CGFloat = 16
 ```
 
 **3단계: Android 변환**
+
 ```xml
 <!-- colors.xml -->
 <color name="color_primary">#4F46E5</color>
@@ -402,247 +417,252 @@ static let spacing4: CGFloat = 16
 ```
 
 #### ⚡ 5분만에 완성되는 모바일 프로토타입 (기본 버전)
+
 ```html
 <!-- index.html - Claude가 생성 -->
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mobile App Prototype</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <div class="mobile-container">
-        <!-- 상단 헤더 -->
-        <header class="top-bar">
-            <button class="icon-btn">←</button>
-            <h1 class="title">Social</h1>
-            <button class="icon-btn">⋮</button>
-        </header>
+      <!-- 상단 헤더 -->
+      <header class="top-bar">
+        <button class="icon-btn">←</button>
+        <h1 class="title">Social</h1>
+        <button class="icon-btn">⋮</button>
+      </header>
 
-        <!-- 메인 콘텐츠 -->
-        <main class="content" id="main-content">
-            <div class="feed">
-                <div class="post">
-                    <div class="post-header">
-                        <img src="https://via.placeholder.com/40" class="avatar">
-                        <span class="username">사용자명</span>
-                    </div>
-                    <img src="https://via.placeholder.com/300x200" class="post-image">
-                    <div class="post-actions">
-                        <button class="action-btn">♥</button>
-                        <button class="action-btn">💬</button>
-                        <button class="action-btn">↗</button>
-                    </div>
-                </div>
+      <!-- 메인 콘텐츠 -->
+      <main class="content" id="main-content">
+        <div class="feed">
+          <div class="post">
+            <div class="post-header">
+              <img src="https://via.placeholder.com/40" class="avatar" />
+              <span class="username">사용자명</span>
             </div>
-        </main>
+            <img src="https://via.placeholder.com/300x200" class="post-image" />
+            <div class="post-actions">
+              <button class="action-btn">♥</button>
+              <button class="action-btn">💬</button>
+              <button class="action-btn">↗</button>
+            </div>
+          </div>
+        </div>
+      </main>
 
-        <!-- 하단 탭 -->
-        <nav class="bottom-tabs">
-            <button class="tab active" onclick="switchTab('home')">🏠</button>
-            <button class="tab" onclick="switchTab('search')">🔍</button>
-            <button class="tab" onclick="switchTab('profile')">👤</button>
-        </nav>
+      <!-- 하단 탭 -->
+      <nav class="bottom-tabs">
+        <button class="tab active" onclick="switchTab('home')">🏠</button>
+        <button class="tab" onclick="switchTab('search')">🔍</button>
+        <button class="tab" onclick="switchTab('profile')">👤</button>
+      </nav>
     </div>
 
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
 ```
 
 ```css
 /* style.css - 네이티브 느낌의 모바일 스타일 */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: #f5f5f5;
-    overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f5f5f5;
+  overflow: hidden;
 }
 
 .mobile-container {
-    width: 375px;  /* iPhone 표준 너비 */
-    height: 812px; /* iPhone X 높이 */
-    margin: 20px auto;
-    background: white;
-    border-radius: 25px;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
+  width: 375px; /* iPhone 표준 너비 */
+  height: 812px; /* iPhone X 높이 */
+  margin: 20px auto;
+  background: white;
+  border-radius: 25px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
 }
 
 /* 상단 헤더 */
 .top-bar {
-    height: 60px;
-    background: white;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    border-bottom: 1px solid #eee;
+  height: 60px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 1px solid #eee;
 }
 
 .icon-btn {
-    background: none;
-    border: none;
-    font-size: 20px;
-    padding: 8px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background 0.2s;
+  background: none;
+  border: none;
+  font-size: 20px;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
 .icon-btn:hover {
-    background: #f0f0f0;
+  background: #f0f0f0;
 }
 
 .title {
-    font-size: 18px;
-    font-weight: 600;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 /* 메인 콘텐츠 */
 .content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 10px;
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
 }
 
 .post {
-    background: white;
-    border-radius: 12px;
-    margin-bottom: 15px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .post-header {
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  gap: 10px;
 }
 
 .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
 .username {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 .post-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
 }
 
 .post-actions {
-    display: flex;
-    gap: 15px;
-    padding: 15px;
+  display: flex;
+  gap: 15px;
+  padding: 15px;
 }
 
 .action-btn {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 50%;
-    transition: transform 0.2s;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: transform 0.2s;
 }
 
 .action-btn:active {
-    transform: scale(1.2);
+  transform: scale(1.2);
 }
 
 /* 하단 탭 */
 .bottom-tabs {
-    height: 70px;
-    background: white;
-    display: flex;
-    border-top: 1px solid #eee;
+  height: 70px;
+  background: white;
+  display: flex;
+  border-top: 1px solid #eee;
 }
 
 .tab {
-    flex: 1;
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
+  flex: 1;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
 }
 
 .tab.active {
-    background: #007AFF;
-    color: white;
+  background: #007aff;
+  color: white;
 }
 
 .tab:not(.active):hover {
-    background: #f0f0f0;
+  background: #f0f0f0;
 }
 
 /* 터치 친화적 크기 */
-.tab, .icon-btn, .action-btn {
-    min-height: 44px;
-    min-width: 44px;
+.tab,
+.icon-btn,
+.action-btn {
+  min-height: 44px;
+  min-width: 44px;
 }
 
 /* 모바일 제스처 시뮬레이션 */
 .content {
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 }
 
 /* 모바일 디바이스에서 실제 전체 화면 */
 @media (max-width: 480px) {
-    .mobile-container {
-        width: 100vw;
-        height: 100vh;
-        margin: 0;
-        border-radius: 0;
-    }
+  .mobile-container {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+  }
 }
 ```
 
 ```javascript
 // script.js - 기본 인터랙션
 function switchTab(tabName) {
-    // 탭 활성화 상태 변경
-    document.querySelectorAll('.tab').forEach(tab => {
-        tab.classList.remove('active');
-    });
-    event.target.classList.add('active');
+  // 탭 활성화 상태 변경
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.classList.remove('active')
+  })
+  event.target.classList.add('active')
 
-    // 콘텐츠 변경 (시뮬레이션)
-    const content = document.getElementById('main-content');
+  // 콘텐츠 변경 (시뮬레이션)
+  const content = document.getElementById('main-content')
 
-    switch(tabName) {
-        case 'home':
-            content.innerHTML = generateHomeFeed();
-            break;
-        case 'search':
-            content.innerHTML = '<div class="search-page"><h2>검색</h2><input type="text" placeholder="검색어 입력..."></div>';
-            break;
-        case 'profile':
-            content.innerHTML = '<div class="profile-page"><h2>프로필</h2><p>사용자 프로필 페이지</p></div>';
-            break;
-    }
+  switch (tabName) {
+    case 'home':
+      content.innerHTML = generateHomeFeed()
+      break
+    case 'search':
+      content.innerHTML =
+        '<div class="search-page"><h2>검색</h2><input type="text" placeholder="검색어 입력..."></div>'
+      break
+    case 'profile':
+      content.innerHTML =
+        '<div class="profile-page"><h2>프로필</h2><p>사용자 프로필 페이지</p></div>'
+      break
+  }
 }
 
 function generateHomeFeed() {
-    return `
+  return `
         <div class="feed">
             <div class="post">
                 <div class="post-header">
@@ -669,32 +689,33 @@ function generateHomeFeed() {
                 </div>
             </div>
         </div>
-    `;
+    `
 }
 
 // 터치 제스처 시뮬레이션
-let startY = 0;
-document.addEventListener('touchstart', function(e) {
-    startY = e.touches[0].clientY;
-});
+let startY = 0
+document.addEventListener('touchstart', function (e) {
+  startY = e.touches[0].clientY
+})
 
-document.addEventListener('touchmove', function(e) {
-    // 스크롤 제스처 처리
-    const currentY = e.touches[0].clientY;
-    const diff = startY - currentY;
+document.addEventListener('touchmove', function (e) {
+  // 스크롤 제스처 처리
+  const currentY = e.touches[0].clientY
+  const diff = startY - currentY
 
-    if (Math.abs(diff) > 10) {
-        // 스크롤 방향에 따른 처리
-        if (diff > 0) {
-            // 위로 스크롤
-        } else {
-            // 아래로 스크롤
-        }
+  if (Math.abs(diff) > 10) {
+    // 스크롤 방향에 따른 처리
+    if (diff > 0) {
+      // 위로 스크롤
+    } else {
+      // 아래로 스크롤
     }
-});
+  }
+})
 ```
 
 ### Phase 3: AI 기반 빠른 설정 (10분)
+
 ```bash
 # Claude Code로 전체 설정 자동화
 claude
@@ -715,6 +736,7 @@ You: "방금 생성한 Next.js 프로젝트에 다음을 설정해줘:
 ```
 
 ### Phase 4: 데이터베이스 & 배포 (5분)
+
 ```bash
 # 1. Supabase 프로젝트 생성 (30초)
 # https://supabase.com/dashboard
@@ -732,6 +754,7 @@ npx vercel --prod
 ```
 
 #### ⚡ 모바일 HTML 프로토타입 테스트 (5분)
+
 ```bash
 # 1. 브라우저에서 테스트
 open index.html  # 또는 브라우저에서 파일 열기
@@ -750,6 +773,7 @@ claude "iOS/Android 네이티브 느낌으로 스타일 개선해줘"
 HTML 프로토타입이 완벽하다면, 이제 진짜 모바일 앱으로 만들어보세요!
 
 #### React Native 변환 (15분)
+
 ```bash
 # 1. React Native 프로젝트 생성
 npx create-expo-app SocialApp --template blank-typescript
@@ -764,6 +788,7 @@ claude "위의 HTML/CSS 구조를 React Native로 변환해줘:
 ```
 
 #### React Native 컴포넌트 예시
+
 ```typescript
 // App.tsx - Claude가 생성
 import React, { useState } from 'react';
@@ -933,6 +958,7 @@ const styles = StyleSheet.create({
 ```
 
 #### Flutter 변환 (선택사항)
+
 ```bash
 # Flutter 프로젝트 생성
 flutter create social_app
@@ -949,6 +975,7 @@ claude "위의 HTML 구조를 Flutter로 변환해줘:
 ### 🎨 디자인 시스템과의 연결성
 
 #### ✅ 얻은 것들 (디자인 시스템 Level 1 완성!)
+
 - **일관된 토큰 시스템**: 색상, 간격, 타이포그래피 표준화
 - **재사용 가능한 컴포넌트**: 버튼, 카드, 탭 등 기본 UI 블록
 - **확장 가능한 구조**: Level 2, 3으로 자연스럽게 진화 가능
@@ -959,6 +986,7 @@ claude "위의 HTML 구조를 Flutter로 변환해줘:
 ### 📱 모바일 HTML 우선 개발의 장점 요약
 
 #### ✅ 얻은 것들
+
 - **5분만에** 전체 앱 플로우 확인
 - **실제 모바일**에서 터치 테스트 완료
 - **UX 검증** 완료 (네이티브 변환 전)
@@ -966,6 +994,7 @@ claude "위의 HTML 구조를 Flutter로 변환해줘:
 - **개발 방향성** 확정
 
 #### 🚀 다음 단계
+
 - **Level 2 베타**에서 실제 기능 구현
 - **React Native/Flutter** 네이티브 변환
 - **백엔드 API** 연동
@@ -980,6 +1009,7 @@ claude "위의 HTML 구조를 Flutter로 변환해줘:
 ### 🎨 디자인 시스템 Level 2로 진화
 
 **Level 1 → Level 2 변화점:**
+
 - ✅ **브랜드 적용**: 기본 토큰 → 브랜드 컬러 시스템
 - ✅ **반응형 강화**: 다양한 디바이스 지원
 - ✅ **다크모드 지원**: 사용자 선호도 대응
@@ -987,6 +1017,7 @@ claude "위의 HTML 구조를 Flutter로 변환해줘:
 - ✅ **컴포넌트 확장**: 15개 재사용 컴포넌트 구축
 
 **Claude 명령어 예시:**
+
 ```bash
 /upgrade-design-system @design-tokens.css
   --level 2
@@ -995,6 +1026,7 @@ claude "위의 HTML 구조를 Flutter로 변환해줘:
 ```
 
 ### 왜 베타 서비스가 중요한가?
+
 - 📊 **실제 사용자 피드백**: 진짜 문제점 발견
 - 🔧 **실용성 검증**: 아이디어의 실제 가치 확인
 - 💡 **개선 방향**: 어떤 기능이 정말 필요한지 파악
@@ -1004,6 +1036,7 @@ claude "위의 HTML 구조를 Flutter로 변환해줘:
 ### Day 1: 기반 강화 (프로토타입 → 베타)
 
 #### 1.1: 환경 설정 업그레이드
+
 ```bash
 # 프로덕션급 환경 변수 설정
 cat > .env.example << 'EOF'
@@ -1033,6 +1066,7 @@ npm install @sentry/nextjs @vercel/analytics
 ```
 
 #### 1.2: 에러 처리 및 모니터링
+
 ```bash
 # Sentry 에러 추적 설정
 claude setup-error-tracking @. --provider sentry --include "api,components,pages"
@@ -1048,6 +1082,7 @@ You: "베타 테스터용 에러 처리를 강화해줘:
 ```
 
 #### 1.3: 사용자 피드백 시스템
+
 ```bash
 # 피드백 수집 컴포넌트 추가
 claude create-feedback-system @. --include "bug-report,feature-request,satisfaction-survey"
@@ -1062,6 +1097,7 @@ You: "베타 테스터 피드백 수집 시스템을 만들어줘:
 ### Day 2: 품질 및 사용성 개선
 
 #### 2.1: 사용자 경험 최적화
+
 ```bash
 # UX 개선
 claude improve-ux @components --focus "onboarding,navigation,feedback,mobile"
@@ -1075,6 +1111,7 @@ You: "베타 테스터가 헷갈리지 않도록 UX를 개선해줘:
 ```
 
 #### 2.2: 성능 최적화
+
 ```bash
 # 기본 성능 최적화
 claude optimize-performance @. --focus "loading,bundling,images,api"
@@ -1090,6 +1127,7 @@ You: "베타 테스터가 답답함을 느끼지 않도록 성능을 최적화�
 ```
 
 #### 2.3: 접근성 및 호환성
+
 ```bash
 # 접근성 개선
 claude improve-accessibility @components --wcag-level AA
@@ -1107,6 +1145,7 @@ You: "다양한 사용자가 접근할 수 있도록 개선해줘:
 ### Day 3: 베타 런칭 준비
 
 #### 3.1: 베타 사용자 관리 시스템
+
 ```bash
 # 베타 사용자 초대 시스템
 claude create-beta-system @. --features "invite-codes,user-roles,feedback-tracking"
@@ -1120,6 +1159,7 @@ You: "베타 테스터 관리 시스템을 만들어줘:
 ```
 
 #### 3.2: 사용자 지원 체계
+
 ```bash
 # 도움말 및 가이드
 claude create-user-guide @. --include "getting-started,faq,troubleshooting"
@@ -1136,6 +1176,7 @@ You: "베타 테스터가 막히지 않도록 지원 체계를 구축해줘:
 ```
 
 #### 3.3: 베타 런칭
+
 ```bash
 # 베타 런칭 체크리스트 생성
 claude create-beta-checklist @. --comprehensive
@@ -1159,6 +1200,7 @@ You: "베타 런칭 전 체크리스트를 만들어줘:
 ### 🎨 디자인 시스템 Level 3 완성
 
 **Level 2 → Level 3 변화점:**
+
 - 🔧 **자동화 파이프라인**: Style Dictionary, 토큰 자동 배포
 - 📚 **Storybook 문서화**: 30+ 컴포넌트 체계적 관리
 - 🧪 **Visual Regression 테스트**: 디자인 일관성 자동 검증
@@ -1166,6 +1208,7 @@ You: "베타 런칭 전 체크리스트를 만들어줘:
 - 🔄 **CI/CD 통합**: 디자인 변경사항 자동 배포
 
 **Claude 명령어 예시:**
+
 ```bash
 /production-design-system @design-tokens.css
   --level 3
@@ -1175,6 +1218,7 @@ You: "베타 런칭 전 체크리스트를 만들어줘:
 ```
 
 ### 베타 → 프로덕션 전환 시점
+
 - ✅ 베타 테스터 만족도 80% 이상
 - ✅ 주요 버그 해결 완료
 - ✅ 핵심 기능 안정화
@@ -1185,6 +1229,7 @@ You: "베타 런칭 전 체크리스트를 만들어줘:
 ### Week 1: 시스템 강화
 
 #### 시스템 아키텍처 업그레이드
+
 ```bash
 # 확장 가능한 아키텍처 설계
 claude redesign-architecture @. --focus "scalability,maintainability,security"
@@ -1198,6 +1243,7 @@ You: "베타에서 얻은 인사이트를 바탕으로 프로덕션 아키텍처
 ```
 
 #### 데이터베이스 최적화
+
 ```bash
 # 베타 데이터 분석 후 DB 최적화
 claude optimize-database @prisma --based-on-usage-data
@@ -1211,6 +1257,7 @@ You: "베타 사용 패턴을 분석해서 데이터베이스를 최적화해줘
 ```
 
 #### 보안 강화
+
 ```bash
 # 프로덕션급 보안 설정
 claude security-audit @. --level production
@@ -1226,6 +1273,7 @@ You: "프로덕션 런칭을 위한 보안을 강화해줘:
 ### Week 2: 운영 체계 구축
 
 #### 모니터링 및 알럿
+
 ```bash
 # 포괄적 모니터링 시스템
 claude setup-monitoring @. --level production
@@ -1239,6 +1287,7 @@ You: "프로덕션 서비스 모니터링 체계를 구축해줘:
 ```
 
 #### 배포 및 운영 자동화
+
 ```bash
 # CI/CD 파이프라인 구축
 claude setup-cicd @. --include "testing,security,deployment,rollback"
@@ -1252,6 +1301,7 @@ You: "안전하고 효율적인 배포 시스템을 구축해줘:
 ```
 
 #### 고객 지원 및 운영
+
 ```bash
 # 고객 지원 시스템
 claude setup-customer-support @. --include "ticketing,knowledge-base,analytics"
@@ -1269,6 +1319,7 @@ You: "프로덕션 고객 지원 체계를 구축해줘:
 ## 📊 각 단계별 성공 지표
 
 ### Level 1: 30분 프로토타입
+
 ```yaml
 성공 지표:
 - 작동하는 앱 완성: ✅
@@ -1290,6 +1341,7 @@ You: "프로덕션 고객 지원 체계를 구축해줘:
 ```
 
 ### Level 2: 1-3일 베타 서비스
+
 ```yaml
 성공 지표:
 - 베타 사용자 확보: 10-50명
@@ -1313,6 +1365,7 @@ You: "프로덕션 고객 지원 체계를 구축해줘:
 ```
 
 ### Level 3: 1-2주 프로덕션 서비스
+
 ```yaml
 성공 지표:
 - 시스템 가용성: > 99.9%
@@ -1341,6 +1394,7 @@ You: "프로덕션 고객 지원 체계를 구축해줘:
 ## 🔧 실전 활용 시나리오
 
 ### 시나리오 1: 개인 개발자
+
 ```bash
 # Week 1: 프로토타입 (개인 검증)
 # Week 2: 베타 (친구, 지인 10명 테스트)
@@ -1350,6 +1404,7 @@ You: "프로덕션 고객 지원 체계를 구축해줘:
 ```
 
 ### 시나리오 2: 스타트업 팀
+
 ```bash
 # Day 1: 프로토타입 (팀 내부 검증)
 # Week 1: 베타 (타겟 고객 50명 테스트)
@@ -1359,6 +1414,7 @@ You: "프로덕션 고객 지원 체계를 구축해줘:
 ```
 
 ### 시나리오 3: 기업 내부 프로젝트
+
 ```bash
 # Day 1: 프로토타입 (스테이크홀더 데모)
 # Week 1: 베타 (부서 내 파일럿)
@@ -1372,6 +1428,7 @@ You: "프로덕션 고객 지원 체계를 구축해줘:
 ## 🎯 프로젝트 유형별 빠른 시작
 
 ### 1. SaaS 앱 템플릿
+
 ```bash
 # SaaS 스타터킷 복제
 npx create-next-app my-saas \
@@ -1384,6 +1441,7 @@ claude customize-saas @. \
 ```
 
 ### 2. 전자상거래 앱
+
 ```bash
 # Commerce 템플릿 사용
 npx create-next-app my-shop \
@@ -1396,6 +1454,7 @@ claude setup-ecommerce @. \
 ```
 
 ### 3. 블로그/CMS
+
 ```bash
 # 블로그 템플릿
 npx create-next-app my-blog \
@@ -1408,6 +1467,7 @@ claude integrate-cms @. \
 ```
 
 ### 4. AI 앱
+
 ```bash
 # AI 앱 템플릿
 npx create-next-app my-ai-app \
@@ -1420,6 +1480,7 @@ claude setup-ai-features @. \
 ```
 
 ### 5. 모바일 앱 (React Native)
+
 ```bash
 # Expo 프로젝트 생성
 npx create-expo-app MyApp --template blank-typescript
@@ -1435,6 +1496,7 @@ claude setup-mobile @. \
 ## 🛠️ 기술 스택 조합 가이드
 
 ### 🥇 추천 스택 (안정성 우선)
+
 ```yaml
 Frontend: Next.js + TypeScript + Tailwind CSS
 Backend: Next.js API Routes + Prisma
@@ -1449,6 +1511,7 @@ Monitoring: Vercel Analytics
 ```
 
 ### 🚀 성능 중심 스택
+
 ```yaml
 Frontend: Next.js + TypeScript + Tailwind CSS
 Backend: Fastify + Prisma + TypeScript
@@ -1463,6 +1526,7 @@ Monitoring: Grafana + Prometheus
 ```
 
 ### ⚡ 최신 기술 스택
+
 ```yaml
 Frontend: Next.js 14 + Server Components + TypeScript
 Backend: tRPC + Prisma + TypeScript
@@ -1477,6 +1541,7 @@ State: Zustand + React Query
 ```
 
 ### 🔋 풀스택 TypeScript
+
 ```yaml
 Frontend: Next.js + TypeScript
 Backend: Nest.js + TypeScript + Prisma
@@ -1495,6 +1560,7 @@ Testing: Jest + Supertest + Playwright
 ## 🤖 AI 기반 자동 설정
 
 ### 스마트 프로젝트 생성기
+
 ```bash
 # Claude에게 모든 것을 맡기기
 claude create-project \
@@ -1514,6 +1580,7 @@ claude create-project \
 ```
 
 ### 커스텀 템플릿 생성
+
 ```bash
 # 자주 사용하는 패턴을 템플릿으로 저장
 claude save-template \
@@ -1532,6 +1599,7 @@ claude use-template my-saas-starter \
 ## 📋 프로젝트 셋업 체크리스트
 
 ### ✅ 개발 환경 체크리스트
+
 ```bash
 기본 설정:
 □ Node.js 18+ 설치 확인
@@ -1549,6 +1617,7 @@ claude use-template my-saas-starter \
 ```
 
 ### 🔧 기술 스택 체크리스트
+
 ```bash
 Frontend:
 □ 프레임워크 설치 (Next.js/React)
@@ -1573,6 +1642,7 @@ Backend:
 ```
 
 ### 🚀 빠른 검증 체크리스트
+
 ```bash
 기능 검증:
 □ 사용자 가입/로그인 테스트
@@ -1596,6 +1666,7 @@ Backend:
 ### 자주 발생하는 셋업 문제
 
 #### 1. 패키지 설치 실패
+
 ```bash
 문제: npm install 오류
 해결:
@@ -1610,6 +1681,7 @@ You: "npm install 시 이런 에러가 나는데..."
 ```
 
 #### 2. 데이터베이스 연결 오류
+
 ```bash
 문제: Database connection failed
 해결:
@@ -1623,6 +1695,7 @@ You: "npm install 시 이런 에러가 나는데..."
 ```
 
 #### 3. 빌드 에러
+
 ```bash
 문제: Next.js build failed
 해결:
@@ -1636,6 +1709,7 @@ AI 디버깅:
 ```
 
 #### 4. 배포 실패
+
 ```bash
 문제: Vercel deployment failed
 해결:
@@ -1653,6 +1727,7 @@ AI 디버깅:
 ## 🎯 프로젝트 유형별 빠른 가이드
 
 ### 스타트업 MVP (2주 목표)
+
 ```bash
 1주차:
 □ 핵심 기능 3개 정의
@@ -1674,6 +1749,7 @@ AI 디버깅:
 ```
 
 ### 사이드 프로젝트 (주말)
+
 ```bash
 토요일:
 □ 아이디어 구체화 (1시간)
@@ -1691,6 +1767,7 @@ AI 디버깅:
 ```
 
 ### 학습 프로젝트 (1개월)
+
 ```bash
 1주차: 기초 설정 및 계획
 2주차: 핵심 기능 구현
@@ -1708,6 +1785,7 @@ AI 디버깅:
 ## 💡 프로 팁
 
 ### 시간 절약 꿀팁
+
 ```bash
 # 1. 템플릿 미리 준비
 git clone https://github.com/your-org/project-template
@@ -1730,6 +1808,7 @@ EOF
 ```
 
 ### AI 활용 극대화
+
 ```bash
 # 한 번에 모든 설정 요청
 You: "Next.js + TypeScript + Prisma + NextAuth + Tailwind로
@@ -1747,6 +1826,7 @@ You: "사용자는 할일을 추가/수정/삭제할 수 있고,
 ## 🚀 다음 단계
 
 프로젝트 셋업 완료 후:
+
 1. **[17_Design_System](../17_Design_System/README.md)** - 디자인 시스템 완전 마스터 🎨
 2. **[05_17Day_Journey](../05_17Day_Journey/README.md)** - 체계적 개발 진행
 3. **[12_Smart_Assistant](../12_Smart_Assistant/README.md)** - 자동화 워크플로우 활용

@@ -29,9 +29,9 @@ export const useAuthStore = defineStore('auth', () => {
         password,
         options: {
           data: {
-            display_name: displayName || null
-          }
-        }
+            display_name: displayName || null,
+          },
+        },
       })
 
       if (signUpError) throw signUpError
@@ -57,7 +57,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       const { data, error: signInError } = await supabase.auth.signInWithPassword({
         email,
-        password
+        password,
       })
 
       if (signInError) throw signInError
@@ -99,8 +99,8 @@ export const useAuthStore = defineStore('auth', () => {
       const { data, error: googleError } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`
-        }
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
       })
 
       if (googleError) throw googleError
@@ -120,7 +120,7 @@ export const useAuthStore = defineStore('auth', () => {
       error.value = null
 
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/reset-password`
+        redirectTo: `${window.location.origin}/auth/reset-password`,
       })
 
       if (resetError) throw resetError
@@ -138,7 +138,7 @@ export const useAuthStore = defineStore('auth', () => {
       error.value = null
 
       const { error: updateError } = await supabase.auth.updateUser({
-        password: newPassword
+        password: newPassword,
       })
 
       if (updateError) throw updateError
@@ -152,15 +152,13 @@ export const useAuthStore = defineStore('auth', () => {
 
   const createUserProfile = async (authUser: User, displayName?: string) => {
     try {
-      const { error: profileError } = await supabase
-        .from('users')
-        .insert({
-          auth_id: authUser.id,
-          display_name: displayName || authUser.user_metadata?.display_name || null,
-          username: null, // Can be set later
-          level: 1,
-          xp: 0
-        })
+      const { error: profileError } = await supabase.from('users').insert({
+        auth_id: authUser.id,
+        display_name: displayName || authUser.user_metadata?.display_name || null,
+        username: null, // Can be set later
+        level: 1,
+        xp: 0,
+      })
 
       if (profileError) throw profileError
     } catch (err) {
@@ -189,7 +187,7 @@ export const useAuthStore = defineStore('auth', () => {
             .select('*')
             .eq('auth_id', user.value.id)
             .single()
-          
+
           if (newError) throw newError
           userProfile.value = newData
         } else {
@@ -204,7 +202,9 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const updateUserProfile = async (updates: Partial<Pick<UserProfile, 'display_name' | 'username'>>) => {
+  const updateUserProfile = async (
+    updates: Partial<Pick<UserProfile, 'display_name' | 'username'>>,
+  ) => {
     if (!user.value || !userProfile.value) return
 
     try {
@@ -238,9 +238,9 @@ export const useAuthStore = defineStore('auth', () => {
 
       const { data, error: xpError } = await supabase
         .from('users')
-        .update({ 
+        .update({
           xp: newXP,
-          level: newLevel
+          level: newLevel,
         })
         .eq('id', userProfile.value.id)
         .select()
@@ -260,8 +260,10 @@ export const useAuthStore = defineStore('auth', () => {
   const initialize = async () => {
     try {
       // Get initial session
-      const { data: { session: initialSession } } = await supabase.auth.getSession()
-      
+      const {
+        data: { session: initialSession },
+      } = await supabase.auth.getSession()
+
       if (initialSession) {
         session.value = initialSession
         user.value = initialSession.user
@@ -271,7 +273,7 @@ export const useAuthStore = defineStore('auth', () => {
       // Listen for auth changes
       supabase.auth.onAuthStateChange(async (event, newSession) => {
         console.log('Auth state changed:', event, newSession?.user?.email)
-        
+
         session.value = newSession
         user.value = newSession?.user || null
 
@@ -313,6 +315,6 @@ export const useAuthStore = defineStore('auth', () => {
     updateUserProfile,
     addXP,
     initialize,
-    clearError
+    clearError,
   }
 })

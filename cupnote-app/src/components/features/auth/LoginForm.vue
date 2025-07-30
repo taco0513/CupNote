@@ -75,11 +75,7 @@
       </div>
 
       <!-- Submit Button -->
-      <button
-        type="submit"
-        class="submit-button"
-        :disabled="isLoading || !isFormValid"
-      >
+      <button type="submit" class="submit-button" :disabled="isLoading || !isFormValid">
         <span v-if="isLoading" class="loading-spinner">⏳</span>
         {{ isLoading ? '로그인 중...' : '로그인' }}
       </button>
@@ -103,12 +99,7 @@
     <!-- Demo Account -->
     <div class="demo-section">
       <p class="demo-text">체험해보고 싶으시다면:</p>
-      <button
-        type="button"
-        class="demo-button"
-        @click="loginAsDemo"
-        :disabled="isLoading"
-      >
+      <button type="button" class="demo-button" @click="loginAsDemo" :disabled="isLoading">
         데모 계정으로 로그인
       </button>
     </div>
@@ -137,9 +128,7 @@ const isLoading = computed(() => authStore.isLoading)
 
 // Computed
 const isFormValid = computed(() => {
-  return email.value.length > 0 && 
-         password.value.length >= 6 &&
-         isValidEmail(email.value)
+  return email.value.length > 0 && password.value.length >= 6 && isValidEmail(email.value)
 })
 
 // Methods
@@ -150,30 +139,30 @@ const isValidEmail = (email) => {
 
 const validateForm = () => {
   errors.value = {}
-  
+
   if (!email.value) {
     errors.value.email = '이메일을 입력해주세요'
   } else if (!isValidEmail(email.value)) {
     errors.value.email = '유효한 이메일 주소를 입력해주세요'
   }
-  
+
   if (!password.value) {
     errors.value.password = '비밀번호를 입력해주세요'
   } else if (password.value.length < 6) {
     errors.value.password = '비밀번호는 최소 6자 이상이어야 합니다'
   }
-  
+
   return Object.keys(errors.value).length === 0
 }
 
 const handleLogin = async () => {
   if (!validateForm()) return
-  
+
   errors.value = {}
-  
+
   try {
     const result = await authStore.signIn(email.value, password.value)
-    
+
     if (result.success) {
       emit('login-success', result.user)
     } else {
@@ -211,12 +200,12 @@ const loginAsDemo = async () => {
 .form-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .form-subtitle {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.9rem;
   line-height: 1.4;
 }
@@ -234,14 +223,14 @@ const loginAsDemo = async () => {
   display: block;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .field-input {
   width: 100%;
   padding: 0.75rem;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.2s ease;
@@ -249,15 +238,15 @@ const loginAsDemo = async () => {
 
 .field-input:focus {
   outline: none;
-  border-color: #7C5842;
+  border-color: #7c5842;
 }
 
 .field-input.error {
-  border-color: #F44336;
+  border-color: #f44336;
 }
 
 .field-input:disabled {
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   cursor: not-allowed;
 }
 
@@ -303,24 +292,24 @@ const loginAsDemo = async () => {
 }
 
 .checkbox-text {
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .link-button {
   background: none;
   border: none;
-  color: #7C5842;
+  color: #7c5842;
   text-decoration: underline;
   cursor: pointer;
   font-size: 0.9rem;
 }
 
 .link-button:hover:not(:disabled) {
-  color: #5D3F2E;
+  color: #5d3f2e;
 }
 
 .link-button.primary {
-  color: #1976D2;
+  color: #1976d2;
   font-weight: 600;
 }
 
@@ -332,17 +321,17 @@ const loginAsDemo = async () => {
 /* Error Messages */
 .field-error {
   display: block;
-  color: #F44336;
+  color: #f44336;
   font-size: 0.8rem;
   margin-top: 0.25rem;
 }
 
 .error-message {
-  background: #FFEBEE;
-  border: 1px solid #FFCDD2;
+  background: #ffebee;
+  border: 1px solid #ffcdd2;
   border-radius: 8px;
   padding: 0.75rem;
-  color: #C62828;
+  color: #c62828;
   font-size: 0.9rem;
   margin-bottom: 1rem;
   text-align: center;
@@ -352,7 +341,7 @@ const loginAsDemo = async () => {
 .submit-button {
   width: 100%;
   padding: 0.75rem;
-  background: #7C5842;
+  background: #7c5842;
   color: white;
   border: none;
   border-radius: 8px;
@@ -367,12 +356,12 @@ const loginAsDemo = async () => {
 }
 
 .submit-button:hover:not(:disabled) {
-  background: #5D3F2E;
+  background: #5d3f2e;
   transform: translateY(-1px);
 }
 
 .submit-button:disabled {
-  background: #CCC;
+  background: #ccc;
   cursor: not-allowed;
   transform: none;
 }
@@ -382,19 +371,23 @@ const loginAsDemo = async () => {
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Footer */
 .form-footer {
   text-align: center;
   padding-top: 1rem;
-  border-top: 1px solid #E8D5C4;
+  border-top: 1px solid #e8d5c4;
 }
 
 .footer-text {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.9rem;
 }
 
@@ -403,19 +396,19 @@ const loginAsDemo = async () => {
   text-align: center;
   margin-top: 1.5rem;
   padding-top: 1rem;
-  border-top: 1px solid #E8D5C4;
+  border-top: 1px solid #e8d5c4;
 }
 
 .demo-text {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.8rem;
   margin-bottom: 0.5rem;
 }
 
 .demo-button {
-  background: #E3F2FD;
-  color: #1976D2;
-  border: 1px solid #BBDEFB;
+  background: #e3f2fd;
+  color: #1976d2;
+  border: 1px solid #bbdefb;
   border-radius: 6px;
   padding: 0.5rem 1rem;
   font-size: 0.8rem;
@@ -424,7 +417,7 @@ const loginAsDemo = async () => {
 }
 
 .demo-button:hover:not(:disabled) {
-  background: #BBDEFB;
+  background: #bbdefb;
 }
 
 .demo-button:disabled {
@@ -438,7 +431,7 @@ const loginAsDemo = async () => {
     padding: 1.5rem;
     margin: 1rem;
   }
-  
+
   .form-options {
     flex-direction: column;
     gap: 0.5rem;

@@ -30,6 +30,7 @@
 ```
 
 **필수 학습 자료**:
+
 ```
 @/MASTER_PLAYBOOK/20_Smart_Problem_Solving/README.md - 전체 정독 필수!
 ```
@@ -37,31 +38,43 @@
 ### 🧠 5단계 Problem Solving 파이프라인
 
 **Stage 1: 즉시 진단 (30초)**
+
 ```typescript
 // 문제 상황 즉시 분류
 interface EmergencyDiagnosis {
-  severity: 'critical' | 'high' | 'medium' | 'low';
-  impact: 'production' | 'development' | 'local';
-  category: 'build' | 'runtime' | 'network' | 'data' | 'auth' | 'performance';
-  timeConstraint: 'immediate' | 'urgent' | 'normal';
+  severity: 'critical' | 'high' | 'medium' | 'low'
+  impact: 'production' | 'development' | 'local'
+  category: 'build' | 'runtime' | 'network' | 'data' | 'auth' | 'performance'
+  timeConstraint: 'immediate' | 'urgent' | 'normal'
 }
 
 const diagnoseProblem = (error: string, context: string): EmergencyDiagnosis => {
   // 키워드 기반 자동 분류
   if (error.includes('EADDRINUSE') || error.includes('port')) {
-    return { severity: 'medium', impact: 'development', category: 'network', timeConstraint: 'urgent' };
+    return {
+      severity: 'medium',
+      impact: 'development',
+      category: 'network',
+      timeConstraint: 'urgent',
+    }
   }
   if (error.includes('Cannot find module') || error.includes('MODULE_NOT_FOUND')) {
-    return { severity: 'high', impact: 'development', category: 'build', timeConstraint: 'urgent' };
+    return { severity: 'high', impact: 'development', category: 'build', timeConstraint: 'urgent' }
   }
   if (error.includes('500') || error.includes('database')) {
-    return { severity: 'critical', impact: 'production', category: 'runtime', timeConstraint: 'immediate' };
+    return {
+      severity: 'critical',
+      impact: 'production',
+      category: 'runtime',
+      timeConstraint: 'immediate',
+    }
   }
   // ... 더 많은 패턴들
-};
+}
 ```
 
 **Stage 2: 구조적 분석 (1분)**
+
 ```bash
 # 즉시 실행할 진단 명령어들
 echo "=== 시스템 상태 체크 ==="
@@ -79,6 +92,7 @@ env | grep -E "(NODE|PORT|DATABASE)"  # 주요 환경 변수
 ```
 
 **Stage 3: 웹 검색 (2분) - 자동 트리거!**
+
 ```
 검색 쿼리 템플릿:
 1. "[기술스택] [정확한 에러메시지] fix 2024"
@@ -87,6 +101,7 @@ env | grep -E "(NODE|PORT|DATABASE)"  # 주요 환경 변수
 ```
 
 **Stage 4: 커뮤니티 솔루션 (5분)**
+
 ```
 우선순위별 검색 소스:
 1. Stack Overflow (실용적 해결책)
@@ -97,14 +112,15 @@ env | grep -E "(NODE|PORT|DATABASE)"  # 주요 환경 변수
 ```
 
 **Stage 5: 전문가 패턴 (10분)**
+
 ```typescript
 // 근본 원인 분석 체크리스트
 interface RootCauseAnalysis {
-  timeline: string[];  // 문제 발생 직전 변경사항
-  environment: string; // 개발/스테이징/프로덕션 환경 차이
-  dependencies: string[]; // 최근 설치/업데이트된 패키지
-  configuration: object; // 설정 파일 변경사항
-  infrastructure: string; // 서버, 네트워크, 인프라 이슈
+  timeline: string[] // 문제 발생 직전 변경사항
+  environment: string // 개발/스테이징/프로덕션 환경 차이
+  dependencies: string[] // 최근 설치/업데이트된 패키지
+  configuration: object // 설정 파일 변경사항
+  infrastructure: string // 서버, 네트워크, 인프라 이슈
 }
 
 const analyzeRootCause = (problem: EmergencyDiagnosis): RootCauseAnalysis => {
@@ -113,9 +129,9 @@ const analyzeRootCause = (problem: EmergencyDiagnosis): RootCauseAnalysis => {
     environment: compareEnvironments(),
     dependencies: checkDependencyConflicts(),
     configuration: auditConfigChanges(),
-    infrastructure: monitorSystemHealth()
-  };
-};
+    infrastructure: monitorSystemHealth(),
+  }
+}
 ```
 
 ---
@@ -149,6 +165,7 @@ npm run build  # 최종 빌드
 ```
 
 **웹 검색 쿼리**:
+
 ```
 "[빌드도구] build failed [구체적 에러메시지] fix 2024"
 "webpack module not found [모듈명] solution"
@@ -182,6 +199,7 @@ telnet database-host 3306  # MySQL
 ```
 
 **웹 검색 쿼리**:
+
 ```
 "[서버환경] server not responding troubleshoot 2024"
 "502 bad gateway nginx [원인] fix"
@@ -211,6 +229,7 @@ pm2 restart app  # 애플리케이션 재시작
 ```
 
 **웹 검색 쿼리**:
+
 ```
 "[DB종류] connection refused fix 2024"
 "connection pool exhausted [ORM] solution"
@@ -240,6 +259,7 @@ redis-cli FLUSHALL  # 세션 초기화 (주의!)
 ```
 
 **웹 검색 쿼리**:
+
 ```
 "JWT token expired handling [프레임워크] 2024"
 "401 unauthorized [인증라이브러리] fix"
@@ -366,69 +386,69 @@ app.use((req, res, next) => {
 class EarlyWarningSystem {
   private thresholds = {
     memory: 80, // 메모리 사용률 80% 이상
-    cpu: 70,    // CPU 사용률 70% 이상
+    cpu: 70, // CPU 사용률 70% 이상
     diskSpace: 90, // 디스크 사용률 90% 이상
     responseTime: 2000, // 응답 시간 2초 이상
-    errorRate: 5 // 에러율 5% 이상
-  };
+    errorRate: 5, // 에러율 5% 이상
+  }
 
   monitorSystem(): void {
     setInterval(() => {
-      this.checkMemoryUsage();
-      this.checkCPUUsage();
-      this.checkDiskSpace();
-      this.checkResponseTime();
-      this.checkErrorRate();
-    }, 60000); // 1분마다 체크
+      this.checkMemoryUsage()
+      this.checkCPUUsage()
+      this.checkDiskSpace()
+      this.checkResponseTime()
+      this.checkErrorRate()
+    }, 60000) // 1분마다 체크
   }
 
   private checkMemoryUsage(): void {
-    const usage = process.memoryUsage();
-    const usagePercent = (usage.heapUsed / usage.heapTotal) * 100;
+    const usage = process.memoryUsage()
+    const usagePercent = (usage.heapUsed / usage.heapTotal) * 100
 
     if (usagePercent > this.thresholds.memory) {
       this.sendAlert('HIGH_MEMORY_USAGE', {
         current: usagePercent,
         threshold: this.thresholds.memory,
-        recommendation: 'Check for memory leaks, restart if necessary'
-      });
+        recommendation: 'Check for memory leaks, restart if necessary',
+      })
     }
   }
 
   private sendAlert(type: string, data: any): void {
-    console.warn(`🚨 EARLY WARNING [${type}]:`, data);
+    console.warn(`🚨 EARLY WARNING [${type}]:`, data)
 
     // Slack, Discord, 이메일 등으로 알림 전송
     // 구현은 각 플랫폼별 API 문서 참조
 
     // 자동 복구 로직 실행 (옵션)
-    this.attemptAutoRecovery(type, data);
+    this.attemptAutoRecovery(type, data)
   }
 
   private attemptAutoRecovery(type: string, data: any): void {
     switch (type) {
       case 'HIGH_MEMORY_USAGE':
         // 가비지 컬렉션 강제 실행
-        if (global.gc) global.gc();
-        break;
+        if (global.gc) global.gc()
+        break
       case 'HIGH_DISK_USAGE':
         // 오래된 로그 파일 정리
-        this.cleanupOldLogs();
-        break;
+        this.cleanupOldLogs()
+        break
       // 다른 자동 복구 로직들...
     }
   }
 
   private cleanupOldLogs(): void {
     // 7일 이상 된 로그 파일 삭제
-    const exec = require('child_process').exec;
+    const exec = require('child_process').exec
     exec('find /var/log -name "*.log" -mtime +7 -delete', (error, stdout, stderr) => {
       if (error) {
-        console.error('Log cleanup failed:', error);
+        console.error('Log cleanup failed:', error)
       } else {
-        console.log('Old logs cleaned up successfully');
+        console.log('Old logs cleaned up successfully')
       }
-    });
+    })
   }
 }
 ```
@@ -504,12 +524,14 @@ echo "🏁 Emergency Recovery Complete"
 ### ⚡ 즉시 실행 (첫 2분)
 
 **Step 1: 상황 파악**
+
 - [ ] 에러 메시지 정확한 텍스트 복사
 - [ ] 문제 발생 시점 및 변경사항 확인
 - [ ] 영향 범위 파악 (로컬/개발/프로덕션)
 - [ ] 사용자 영향도 평가
 
 **Step 2: 즉시 대응**
+
 - [ ] 2분 룰 적용 - 웹 검색 시작
 - [ ] 로그 파일 확인 및 관련 정보 수집
 - [ ] 시스템 리소스 상태 체크
@@ -518,12 +540,14 @@ echo "🏁 Emergency Recovery Complete"
 ### 🔧 체계적 해결 (5-10분)
 
 **Step 3: 구조적 분석**
+
 - [ ] 5단계 파이프라인 적용
 - [ ] Stack Overflow, GitHub Issues 검색
 - [ ] 공식 문서 및 커뮤니티 검색
 - [ ] 유사 사례 및 해결책 수집
 
 **Step 4: 솔루션 적용**
+
 - [ ] 백업 또는 롤백 계획 수립
 - [ ] 테스트 환경에서 솔루션 검증
 - [ ] 프로덕션 적용 및 모니터링
@@ -532,6 +556,7 @@ echo "🏁 Emergency Recovery Complete"
 ### 📝 사후 관리
 
 **Step 5: 개선 및 예방**
+
 - [ ] 근본 원인 분석 및 기록
 - [ ] 재발 방지 대책 수립
 - [ ] 모니터링 및 알림 시스템 개선
@@ -547,6 +572,7 @@ echo "🏁 Emergency Recovery Complete"
 
 ```markdown
 ## 🚨 긴급 상황 정보
+
 - **문제 유형**: [빌드실패/서버다운/DB연결오류/성능문제/기타]
 - **에러 메시지**: [정확한 에러 메시지 전문]
 - **발생 시점**: [언제부터 문제가 시작되었는지]
@@ -557,6 +583,7 @@ echo "🏁 Emergency Recovery Complete"
 ```
 
 **💡 긴급 대응 준비물**
+
 - [ ] 에러 로그 파일 또는 스크린샷
 - [ ] 최근 Git 커밋 히스토리
 - [ ] 시스템 환경 정보 (OS, Node 버전 등)

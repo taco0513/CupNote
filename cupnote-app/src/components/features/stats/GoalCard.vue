@@ -6,8 +6,8 @@
         <h4 class="goal-title">{{ goal.title }}</h4>
         <p class="goal-period">{{ periodLabel }}</p>
       </div>
-      <button 
-        @click="$emit('toggle-active')" 
+      <button
+        @click="$emit('toggle-active')"
         class="goal-toggle"
         :class="{ active: goal.is_active }"
         :title="goal.is_active ? '목표 비활성화' : '목표 활성화'"
@@ -27,8 +27,8 @@
         <span class="progress-target">/ {{ goal.target_value }}{{ goal.unit }}</span>
       </div>
       <div class="progress-bar">
-        <div 
-          class="progress-fill" 
+        <div
+          class="progress-fill"
           :style="{ width: `${goal.progress}%` }"
           :class="progressClass"
         ></div>
@@ -41,20 +41,8 @@
         <span class="date-label">{{ remainingTime }}</span>
       </div>
       <div class="goal-actions">
-        <button 
-          @click="$emit('edit')" 
-          class="btn-icon"
-          title="목표 수정"
-        >
-          ✏️
-        </button>
-        <button 
-          @click="$emit('delete')" 
-          class="btn-icon btn-danger"
-          title="목표 삭제"
-        >
-          🗑️
-        </button>
+        <button @click="$emit('edit')" class="btn-icon" title="목표 수정">✏️</button>
+        <button @click="$emit('delete')" class="btn-icon btn-danger" title="목표 삭제">🗑️</button>
       </div>
     </div>
   </div>
@@ -66,8 +54,8 @@ import { computed } from 'vue'
 const props = defineProps({
   goal: {
     type: Object,
-    required: true
-  }
+    required: true,
+  },
 })
 
 const emit = defineEmits(['toggle-active', 'edit', 'delete'])
@@ -78,7 +66,7 @@ const periodLabel = computed(() => {
     daily: '일일 목표',
     weekly: '주간 목표',
     monthly: '월간 목표',
-    custom: '커스텀 목표'
+    custom: '커스텀 목표',
   }
   return periodMap[props.goal.period] || props.goal.period
 })
@@ -95,16 +83,16 @@ const progressClass = computed(() => {
 const remainingTime = computed(() => {
   if (!props.goal.is_active) return '비활성'
   if (props.goal.progress >= 100) return '완료됨! 🎉'
-  
+
   const now = new Date()
   const end = new Date(props.goal.end_date)
   const diff = end - now
-  
+
   if (diff < 0) return '기간 만료'
-  
+
   const days = Math.floor(diff / (1000 * 60 * 60 * 24))
   const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-  
+
   if (days > 0) return `${days}일 남음`
   if (hours > 0) return `${hours}시간 남음`
   return '곧 마감'
@@ -117,7 +105,7 @@ const remainingTime = computed(() => {
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
   transition: all 0.3s ease;
 }
 
@@ -127,8 +115,8 @@ const remainingTime = computed(() => {
 }
 
 .goal-card.goal-completed {
-  background: linear-gradient(135deg, #F0FDF4, #DCFCE7);
-  border-color: #86EFAC;
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  border-color: #86efac;
 }
 
 .goal-header {
@@ -151,13 +139,13 @@ const remainingTime = computed(() => {
   margin: 0;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .goal-period {
   margin: 0;
   font-size: 0.85rem;
-  color: #A0796A;
+  color: #a0796a;
 }
 
 .goal-toggle {
@@ -171,7 +159,7 @@ const remainingTime = computed(() => {
 }
 
 .goal-toggle:hover {
-  background: #F8F4F0;
+  background: #f8f4f0;
 }
 
 .goal-toggle.active {
@@ -202,18 +190,18 @@ const remainingTime = computed(() => {
 
 .progress-current {
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   font-size: 1.1rem;
 }
 
 .progress-target {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.9rem;
 }
 
 .progress-bar {
   height: 10px;
-  background: #F0E8DC;
+  background: #f0e8dc;
   border-radius: 5px;
   overflow: hidden;
   margin-bottom: 0.5rem;
@@ -221,35 +209,37 @@ const remainingTime = computed(() => {
 
 .progress-fill {
   height: 100%;
-  transition: width 0.5s ease, background-color 0.3s ease;
+  transition:
+    width 0.5s ease,
+    background-color 0.3s ease;
   border-radius: 5px;
 }
 
 .progress-start {
-  background: #E8D5C4;
+  background: #e8d5c4;
 }
 
 .progress-low {
-  background: #F59E0B;
+  background: #f59e0b;
 }
 
 .progress-medium {
-  background: #EAB308;
+  background: #eab308;
 }
 
 .progress-high {
-  background: #84CC16;
+  background: #84cc16;
 }
 
 .progress-complete {
-  background: #10B981;
+  background: #10b981;
 }
 
 .progress-percentage {
   text-align: right;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .goal-footer {
@@ -258,7 +248,7 @@ const remainingTime = computed(() => {
   align-items: center;
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid #F0E8DC;
+  border-top: 1px solid #f0e8dc;
 }
 
 .goal-dates {
@@ -266,7 +256,7 @@ const remainingTime = computed(() => {
 }
 
 .date-label {
-  color: #A0796A;
+  color: #a0796a;
   font-weight: 500;
 }
 
@@ -286,12 +276,12 @@ const remainingTime = computed(() => {
 }
 
 .btn-icon:hover {
-  background: #F8F4F0;
+  background: #f8f4f0;
   transform: scale(1.1);
 }
 
 .btn-icon.btn-danger:hover {
-  background: #FEE2E2;
+  background: #fee2e2;
 }
 
 /* Responsive */
@@ -299,19 +289,19 @@ const remainingTime = computed(() => {
   .goal-card {
     padding: 1rem;
   }
-  
+
   .goal-header {
     gap: 0.75rem;
   }
-  
+
   .goal-icon {
     font-size: 2rem;
   }
-  
+
   .goal-title {
     font-size: 1rem;
   }
-  
+
   .goal-description {
     font-size: 0.85rem;
   }

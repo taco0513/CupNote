@@ -16,12 +16,12 @@ const props = defineProps({
   size: {
     type: String,
     default: 'medium',
-    validator: (value) => ['small', 'medium', 'large'].includes(value)
+    validator: (value) => ['small', 'medium', 'large'].includes(value),
   },
   message: {
     type: String,
-    default: ''
-  }
+    default: '',
+  },
 })
 
 const sizeClass = computed(() => `spinner-${props.size}`)

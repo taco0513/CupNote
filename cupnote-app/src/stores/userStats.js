@@ -1,6 +1,6 @@
 /**
  * User Statistics Store
- * 
+ *
  * Manages user statistics, achievements, and progress tracking
  * with real-time updates and intelligent insights.
  */
@@ -21,20 +21,20 @@ export const useUserStatsStore = defineStore('userStats', () => {
 
   // Computed
   const isLoading = computed(() => loading.value)
-  
+
   const totalTastings = computed(() => stats.value?.total_tastings || 0)
   const totalProSessions = computed(() => stats.value?.total_pro_sessions || 0)
   const averageScaScore = computed(() => stats.value?.average_sca_score || 0)
   const currentStreak = computed(() => stats.value?.streak_days || 0)
   const longestStreak = computed(() => stats.value?.longest_streak || 0)
-  
+
   const favoriteOrigin = computed(() => stats.value?.favorite_origin || 'N/A')
   const favoriteRoaster = computed(() => stats.value?.favorite_roaster || 'N/A')
   const favoriteProcess = computed(() => stats.value?.favorite_process || 'N/A')
-  
+
   const preferredRatio = computed(() => stats.value?.preferred_ratio || 16.0)
   const preferredTemperature = computed(() => stats.value?.preferred_temperature || 93)
-  
+
   const totalBrewingTime = computed(() => {
     const seconds = stats.value?.total_brewing_time || 0
     const hours = Math.floor(seconds / 3600)
@@ -44,21 +44,21 @@ export const useUserStatsStore = defineStore('userStats', () => {
 
   // Achievement Progress
   const earnedAchievements = computed(() => {
-    return userAchievements.value.filter(ua => ua.progress >= 100)
+    return userAchievements.value.filter((ua) => ua.progress >= 100)
   })
 
   const inProgressAchievements = computed(() => {
-    return userAchievements.value.filter(ua => ua.progress > 0 && ua.progress < 100)
+    return userAchievements.value.filter((ua) => ua.progress > 0 && ua.progress < 100)
   })
 
   const availableAchievements = computed(() => {
-    const earnedIds = new Set(userAchievements.value.map(ua => ua.achievement_id))
-    return achievements.value.filter(a => !earnedIds.has(a.id) && !a.is_hidden)
+    const earnedIds = new Set(userAchievements.value.map((ua) => ua.achievement_id))
+    return achievements.value.filter((a) => !earnedIds.has(a.id) && !a.is_hidden)
   })
 
   const totalPoints = computed(() => {
     return earnedAchievements.value.reduce((sum, ua) => {
-      const achievement = achievements.value.find(a => a.id === ua.achievement_id)
+      const achievement = achievements.value.find((a) => a.id === ua.achievement_id)
       return sum + (achievement?.points || 0)
     }, 0)
   })
@@ -81,20 +81,22 @@ export const useUserStatsStore = defineStore('userStats', () => {
     const currentPoints = totalPoints.value
     const thresholds = [0, 25, 50, 100, 150, 250, 400, 600, 800, 1000]
     const currentLevel = userLevel.value.level
-    
+
     if (currentLevel >= 10) {
       return { current: currentPoints, next: 1000, progress: 100 }
     }
-    
+
     const nextThreshold = thresholds[currentLevel]
     const prevThreshold = thresholds[currentLevel - 1]
-    const progress = Math.round(((currentPoints - prevThreshold) / (nextThreshold - prevThreshold)) * 100)
-    
+    const progress = Math.round(
+      ((currentPoints - prevThreshold) / (nextThreshold - prevThreshold)) * 100,
+    )
+
     return {
       current: currentPoints,
       next: nextThreshold,
       needed: nextThreshold - currentPoints,
-      progress: progress
+      progress: progress,
     }
   })
 
@@ -103,7 +105,7 @@ export const useUserStatsStore = defineStore('userStats', () => {
     const now = new Date()
     const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()))
     startOfWeek.setHours(0, 0, 0, 0)
-    
+
     return [
       {
         id: 'weekly_tastings',
@@ -112,7 +114,7 @@ export const useUserStatsStore = defineStore('userStats', () => {
         current: 3, // This would be calculated from recent records
         target: 7,
         unit: '회',
-        period: 'week'
+        period: 'week',
       },
       {
         id: 'weekly_streak',
@@ -121,8 +123,8 @@ export const useUserStatsStore = defineStore('userStats', () => {
         current: currentStreak.value,
         target: 7,
         unit: '일',
-        period: 'week'
-      }
+        period: 'week',
+      },
     ]
   })
 
@@ -135,7 +137,7 @@ export const useUserStatsStore = defineStore('userStats', () => {
         current: Math.min(totalTastings.value, 20), // This would be calculated from current month
         target: 20,
         unit: '회',
-        period: 'month'
+        period: 'month',
       },
       {
         id: 'monthly_score',
@@ -144,7 +146,7 @@ export const useUserStatsStore = defineStore('userStats', () => {
         current: Math.round(averageScaScore.value),
         target: 85,
         unit: '점',
-        period: 'month'
+        period: 'month',
       },
       {
         id: 'monthly_origins',
@@ -153,8 +155,8 @@ export const useUserStatsStore = defineStore('userStats', () => {
         current: 3, // This would be calculated from unique origins this month
         target: 5,
         unit: '개',
-        period: 'month'
-      }
+        period: 'month',
+      },
     ]
   })
 
@@ -183,9 +185,8 @@ export const useUserStatsStore = defineStore('userStats', () => {
         average_sca_score: 0,
         streak_days: 0,
         longest_streak: 0,
-        total_brewing_time: 0
+        total_brewing_time: 0,
       }
-
     } catch (err) {
       console.error('Error fetching user stats:', err)
       error.value = err.message
@@ -204,7 +205,6 @@ export const useUserStatsStore = defineStore('userStats', () => {
 
       if (achievementsError) throw achievementsError
       achievements.value = data || []
-
     } catch (err) {
       console.error('Error fetching achievements:', err)
       error.value = err.message
@@ -217,15 +217,16 @@ export const useUserStatsStore = defineStore('userStats', () => {
     try {
       const { data, error: userAchievementsError } = await supabase
         .from('user_achievements')
-        .select(`
+        .select(
+          `
           *,
           achievement:achievements(*)
-        `)
+        `,
+        )
         .eq('user_id', userId)
 
       if (userAchievementsError) throw userAchievementsError
       userAchievements.value = data || []
-
     } catch (err) {
       console.error('Error fetching user achievements:', err)
       error.value = err.message
@@ -247,7 +248,6 @@ export const useUserStatsStore = defineStore('userStats', () => {
       }
 
       preferences.value = preferencesError ? await createDefaultPreferences(userId) : data
-
     } catch (err) {
       console.error('Error fetching user preferences:', err)
       error.value = err.message
@@ -268,7 +268,7 @@ export const useUserStatsStore = defineStore('userStats', () => {
       default_temperature: 93,
       measurement_units: 'metric',
       privacy_level: 'private',
-      show_tips: true
+      show_tips: true,
     }
 
     try {
@@ -296,7 +296,7 @@ export const useUserStatsStore = defineStore('userStats', () => {
         .from('user_preferences')
         .update({
           ...updates,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq('user_id', preferences.value.user_id)
         .select()
@@ -306,7 +306,6 @@ export const useUserStatsStore = defineStore('userStats', () => {
 
       preferences.value = data
       return { success: true }
-
     } catch (err) {
       console.error('Error updating preferences:', err)
       error.value = err.message
@@ -320,40 +319,38 @@ export const useUserStatsStore = defineStore('userStats', () => {
     try {
       // This would contain logic to check if user has earned new achievements
       // based on their latest activity (triggerData)
-      
+
       const newAchievements = []
-      
+
       // Example: Check for first brew achievement
       if (triggerData.type === 'new_tasting' && totalTastings.value === 1) {
-        const firstBrewAchievement = achievements.value.find(a => a.code === 'first_brew')
+        const firstBrewAchievement = achievements.value.find((a) => a.code === 'first_brew')
         if (firstBrewAchievement) {
           newAchievements.push({
             user_id: userId,
             achievement_id: firstBrewAchievement.id,
             progress: 100,
-            earned_at: new Date().toISOString()
+            earned_at: new Date().toISOString(),
           })
         }
       }
 
       // Example: Check for Pro Mode achievements
       if (triggerData.type === 'pro_session' && totalProSessions.value === 1) {
-        const proBeginnerAchievement = achievements.value.find(a => a.code === 'pro_beginner')
+        const proBeginnerAchievement = achievements.value.find((a) => a.code === 'pro_beginner')
         if (proBeginnerAchievement) {
           newAchievements.push({
             user_id: userId,
             achievement_id: proBeginnerAchievement.id,
             progress: 100,
-            earned_at: new Date().toISOString()
+            earned_at: new Date().toISOString(),
           })
         }
       }
 
       // Insert new achievements
       if (newAchievements.length > 0) {
-        const { error } = await supabase
-          .from('user_achievements')
-          .insert(newAchievements)
+        const { error } = await supabase.from('user_achievements').insert(newAchievements)
 
         if (!error) {
           // Refresh user achievements
@@ -382,7 +379,7 @@ export const useUserStatsStore = defineStore('userStats', () => {
           icon: '🔥',
           title: '일주일 연속 기록!',
           message: '꾸준한 커피 여정을 이어가고 있습니다.',
-          color: '#F59E0B'
+          color: '#F59E0B',
         })
       } else if (currentStreak.value >= 3) {
         insights.push({
@@ -390,7 +387,7 @@ export const useUserStatsStore = defineStore('userStats', () => {
           icon: '📈',
           title: '좋은 페이스!',
           message: `${7 - currentStreak.value}일만 더 기록하면 일주일 달성!`,
-          color: '#10B981'
+          color: '#10B981',
         })
       }
     }
@@ -404,7 +401,7 @@ export const useUserStatsStore = defineStore('userStats', () => {
           icon: '🎯',
           title: 'Pro Mode 애호가',
           message: `전체 테이스팅의 ${Math.round(proRatio)}%가 Pro Mode입니다.`,
-          color: '#8B5CF6'
+          color: '#8B5CF6',
         })
       }
     }
@@ -417,7 +414,7 @@ export const useUserStatsStore = defineStore('userStats', () => {
           icon: '⭐',
           title: 'SCA 마스터 수준',
           message: `평균 SCA 점수 ${averageScaScore.value}점으로 전문가 수준입니다.`,
-          color: '#DC2626'
+          color: '#DC2626',
         })
       } else if (averageScaScore.value >= 80) {
         insights.push({
@@ -425,7 +422,7 @@ export const useUserStatsStore = defineStore('userStats', () => {
           icon: '📊',
           title: '높은 품질 유지',
           message: `평균 SCA 점수가 ${averageScaScore.value}점으로 일관되게 좋습니다.`,
-          color: '#059669'
+          color: '#059669',
         })
       }
     }
@@ -437,7 +434,7 @@ export const useUserStatsStore = defineStore('userStats', () => {
         icon: '⏰',
         title: '커피에 투자한 시간',
         message: `총 ${totalBrewingTime.value.hours}시간 ${totalBrewingTime.value.minutes}분을 커피 추출에 사용했습니다.`,
-        color: '#6366F1'
+        color: '#6366F1',
       })
     }
 
@@ -447,14 +444,13 @@ export const useUserStatsStore = defineStore('userStats', () => {
   const initializeUserStats = async (userId) => {
     try {
       loading.value = true
-      
+
       await Promise.all([
         fetchUserStats(userId),
         fetchAchievements(),
         fetchUserAchievements(userId),
-        fetchUserPreferences(userId)
+        fetchUserPreferences(userId),
       ])
-
     } catch (err) {
       console.error('Error initializing user stats:', err)
       error.value = err.message
@@ -502,6 +498,6 @@ export const useUserStatsStore = defineStore('userStats', () => {
     fetchUserPreferences,
     updatePreferences,
     checkAndUpdateAchievements,
-    initializeUserStats
+    initializeUserStats,
   }
 })

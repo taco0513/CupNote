@@ -2,12 +2,8 @@
   <div class="mode-selection-view">
     <!-- Header -->
     <header class="mode-header">
-      <h1 class="mode-title">
-        ☕ CupNote
-      </h1>
-      <p class="mode-subtitle">
-        오늘의 커피를 기록해보세요
-      </p>
+      <h1 class="mode-title">☕ CupNote</h1>
+      <p class="mode-subtitle">오늘의 커피를 기록해보세요</p>
     </header>
 
     <!-- Mode Cards -->
@@ -27,9 +23,7 @@
 
     <!-- Action Buttons -->
     <div class="action-buttons">
-      <button type="button" class="btn-secondary" @click="$router.push('/')">
-        취소
-      </button>
+      <button type="button" class="btn-secondary" @click="$router.push('/')">취소</button>
     </div>
   </div>
 </template>
@@ -49,34 +43,34 @@ const modes = [
     label: 'Cafe Mode',
     icon: '☕',
     description: '카페에서 마시는 커피',
-    time: '3-5분'
+    time: '3-5분',
   },
   {
     value: 'homecafe',
     label: 'HomeCafe Mode',
     icon: '🏠',
     description: '집에서 내려 마시는 커피',
-    time: '5-8분'
+    time: '5-8분',
   },
   {
     value: 'pro',
     label: 'Pro Mode',
     icon: '🎯',
     description: 'SCA 표준 전문 품질 평가',
-    time: '8-12분'
-  }
+    time: '8-12분',
+  },
 ]
 
 // Methods
 const selectMode = (mode) => {
   // Start new session with selected mode
   tastingSessionStore.startNewSession(mode)
-  
+
   console.log('Selected mode:', mode)
-  
+
   // Check if we're in demo mode
   const isDemo = route.path.startsWith('/demo')
-  
+
   // Navigate to coffee info - use demo path if in demo mode
   if (isDemo) {
     router.push('/demo/coffee-info')
@@ -107,7 +101,7 @@ const selectMode = (mode) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: 
+  background-image:
     radial-gradient(circle at 20% 50%, rgba(124, 88, 66, 0.03) 0%, transparent 50%),
     radial-gradient(circle at 80% 20%, rgba(124, 88, 66, 0.02) 0%, transparent 50%),
     radial-gradient(circle at 40% 80%, rgba(124, 88, 66, 0.03) 0%, transparent 50%);
@@ -270,31 +264,31 @@ const selectMode = (mode) => {
   .mode-selection-view {
     padding: var(--space-6) var(--space-4);
   }
-  
+
   .mode-header {
     margin-bottom: var(--space-8);
   }
-  
+
   .mode-title {
     font-size: var(--text-4xl);
   }
-  
+
   .mode-subtitle {
     font-size: var(--text-lg);
   }
-  
+
   .mode-cards {
     gap: var(--space-4);
   }
-  
+
   .mode-card {
     padding: var(--space-6);
   }
-  
+
   .mode-icon {
     font-size: var(--text-4xl);
   }
-  
+
   .mode-name {
     font-size: var(--text-xl);
   }
@@ -306,8 +300,15 @@ const selectMode = (mode) => {
     animation: fadeIn 0.6s ease-out forwards;
     opacity: 0;
   }
-  
-  .mode-card:nth-child(1) { animation-delay: 0.1s; }
-  .mode-card:nth-child(2) { animation-delay: 0.2s; }
-  .mode-card:nth-child(3) { animation-delay: 0.3s; }
-}</style>
+
+  .mode-card:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .mode-card:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .mode-card:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+}
+</style>

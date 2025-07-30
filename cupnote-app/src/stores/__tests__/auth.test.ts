@@ -14,14 +14,14 @@ vi.mock('../../lib/supabase', () => ({
       resetPasswordForEmail: vi.fn(),
       updateUser: vi.fn(),
       getSession: vi.fn(),
-      onAuthStateChange: vi.fn()
+      onAuthStateChange: vi.fn(),
     },
     from: vi.fn(() => ({
       insert: vi.fn(),
       select: vi.fn(),
-      update: vi.fn()
-    }))
-  }
+      update: vi.fn(),
+    })),
+  },
 }))
 
 // Mock user data
@@ -29,11 +29,11 @@ const mockUser: User = {
   id: 'test-user-id',
   email: 'test@example.com',
   user_metadata: {
-    display_name: 'Test User'
+    display_name: 'Test User',
   },
   app_metadata: {},
   aud: 'authenticated',
-  created_at: '2023-01-01T00:00:00Z'
+  created_at: '2023-01-01T00:00:00Z',
 }
 
 const mockSession: Session = {
@@ -41,7 +41,7 @@ const mockSession: Session = {
   refresh_token: 'mock-refresh-token',
   expires_in: 3600,
   token_type: 'bearer',
-  user: mockUser
+  user: mockUser,
 }
 
 const mockUserProfile = {
@@ -52,7 +52,7 @@ const mockUserProfile = {
   level: 1,
   xp: 0,
   created_at: '2023-01-01T00:00:00Z',
-  updated_at: '2023-01-01T00:00:00Z'
+  updated_at: '2023-01-01T00:00:00Z',
 }
 
 describe('Auth Store', () => {
@@ -62,42 +62,42 @@ describe('Auth Store', () => {
   beforeEach(async () => {
     setActivePinia(createPinia())
     store = useAuthStore()
-    
+
     // Get the mocked supabase instance
     const { supabase } = await import('../../lib/supabase')
     mockSupabase = vi.mocked(supabase)
-    
+
     // Reset all mocks
     vi.clearAllMocks()
-    
+
     // Setup default mock implementations
     mockSupabase.auth.getSession.mockResolvedValue({
-      data: { session: null }
+      data: { session: null },
     })
-    
+
     // Setup database query chain mocks
     const mockSelect = vi.fn().mockReturnValue({
       eq: vi.fn().mockReturnValue({
-        single: vi.fn().mockResolvedValue({ data: mockUserProfile, error: null })
-      })
+        single: vi.fn().mockResolvedValue({ data: mockUserProfile, error: null }),
+      }),
     })
-    
+
     const mockInsert = vi.fn().mockReturnValue({
-      select: vi.fn().mockResolvedValue({ data: mockUserProfile, error: null })
+      select: vi.fn().mockResolvedValue({ data: mockUserProfile, error: null }),
     })
-    
+
     const mockUpdate = vi.fn().mockReturnValue({
       eq: vi.fn().mockReturnValue({
         select: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue({ data: mockUserProfile, error: null })
-        })
-      })
+          single: vi.fn().mockResolvedValue({ data: mockUserProfile, error: null }),
+        }),
+      }),
     })
 
     mockSupabase.from.mockReturnValue({
       insert: mockInsert,
       select: mockSelect,
-      update: mockUpdate
+      update: mockUpdate,
     })
   })
 
@@ -116,20 +116,20 @@ describe('Auth Store', () => {
   describe('Computed Properties', () => {
     it('should compute isAuthenticated correctly', () => {
       expect(store.isAuthenticated).toBe(false)
-      
+
       store.user = mockUser
       expect(store.isAuthenticated).toBe(true)
-      
+
       store.user = null
       expect(store.isAuthenticated).toBe(false)
     })
 
     it('should compute userId correctly', () => {
       expect(store.userId).toBeNull()
-      
+
       store.user = mockUser
       expect(store.userId).toBe('test-user-id')
-      
+
       store.user = null
       expect(store.userId).toBeNull()
     })
@@ -139,7 +139,7 @@ describe('Auth Store', () => {
     it('should sign up successfully', async () => {
       mockSupabase.auth.signUp.mockResolvedValue({
         data: { user: mockUser, session: mockSession },
-        error: null
+        error: null,
       })
 
       const result = await store.signUp('test@example.com', 'password123', 'Test User')
@@ -149,9 +149,9 @@ describe('Auth Store', () => {
         password: 'password123',
         options: {
           data: {
-            display_name: 'Test User'
-          }
-        }
+            display_name: 'Test User',
+          },
+        },
       })
 
       expect(result.user).toEqual(mockUser)
@@ -163,11 +163,13 @@ describe('Auth Store', () => {
       const error = new Error('Email already exists')
       mockSupabase.auth.signUp.mockResolvedValue({
         data: { user: null, session: null },
-        error
+        error,
       })
 
-      await expect(store.signUp('test@example.com', 'password123')).rejects.toThrow('Email already exists')
-      
+      await expect(store.signUp('test@example.com', 'password123')).rejects.toThrow(
+        'Email already exists',
+      )
+
       expect(store.error).toBe('Email already exists')
       expect(store.isLoading).toBe(false)
     })
@@ -175,14 +177,14 @@ describe('Auth Store', () => {
     it('should sign in successfully', async () => {
       mockSupabase.auth.signInWithPassword.mockResolvedValue({
         data: { user: mockUser, session: mockSession },
-        error: null
+        error: null,
       })
 
       const result = await store.signIn('test@example.com', 'password123')
 
       expect(mockSupabase.auth.signInWithPassword).toHaveBeenCalledWith({
         email: 'test@example.com',
-        password: 'password123'
+        password: 'password123',
       })
 
       expect(result.user).toEqual(mockUser)
@@ -194,11 +196,13 @@ describe('Auth Store', () => {
       const error = new Error('Invalid credentials')
       mockSupabase.auth.signInWithPassword.mockResolvedValue({
         data: { user: null, session: null },
-        error
+        error,
       })
 
-      await expect(store.signIn('test@example.com', 'wrongpassword')).rejects.toThrow('Invalid credentials')
-      
+      await expect(store.signIn('test@example.com', 'wrongpassword')).rejects.toThrow(
+        'Invalid credentials',
+      )
+
       expect(store.error).toBe('Invalid credentials')
       expect(store.isLoading).toBe(false)
     })
@@ -224,13 +228,13 @@ describe('Auth Store', () => {
     it('should sign in with Google successfully', async () => {
       mockSupabase.auth.signInWithOAuth.mockResolvedValue({
         data: { url: 'https://google.oauth.url' },
-        error: null
+        error: null,
       })
 
       // Mock window.location.origin
       Object.defineProperty(window, 'location', {
         value: { origin: 'http://localhost:3000' },
-        writable: true
+        writable: true,
       })
 
       const result = await store.signInWithGoogle()
@@ -238,8 +242,8 @@ describe('Auth Store', () => {
       expect(mockSupabase.auth.signInWithOAuth).toHaveBeenCalledWith({
         provider: 'google',
         options: {
-          redirectTo: 'http://localhost:3000/auth/callback'
-        }
+          redirectTo: 'http://localhost:3000/auth/callback',
+        },
       })
 
       expect(result.url).toBe('https://google.oauth.url')
@@ -255,13 +259,13 @@ describe('Auth Store', () => {
       // Mock window.location.origin
       Object.defineProperty(window, 'location', {
         value: { origin: 'http://localhost:3000' },
-        writable: true
+        writable: true,
       })
 
       await store.resetPassword('test@example.com')
 
       expect(mockSupabase.auth.resetPasswordForEmail).toHaveBeenCalledWith('test@example.com', {
-        redirectTo: 'http://localhost:3000/auth/reset-password'
+        redirectTo: 'http://localhost:3000/auth/reset-password',
       })
 
       expect(store.isLoading).toBe(false)
@@ -274,7 +278,7 @@ describe('Auth Store', () => {
       await store.updatePassword('newpassword123')
 
       expect(mockSupabase.auth.updateUser).toHaveBeenCalledWith({
-        password: 'newpassword123'
+        password: 'newpassword123',
       })
 
       expect(store.isLoading).toBe(false)
@@ -286,7 +290,7 @@ describe('Auth Store', () => {
       mockSupabase.auth.resetPasswordForEmail.mockResolvedValue({ error })
 
       await expect(store.resetPassword('test@example.com')).rejects.toThrow('Reset failed')
-      
+
       expect(store.error).toBe('Reset failed')
       expect(store.isLoading).toBe(false)
     })
@@ -332,24 +336,24 @@ describe('Auth Store', () => {
       const mockUpdate = vi.fn().mockReturnValue({
         eq: vi.fn().mockReturnValue({
           select: vi.fn().mockReturnValue({
-            single: vi.fn().mockResolvedValue({ data: updatedProfile, error: null })
-          })
-        })
+            single: vi.fn().mockResolvedValue({ data: updatedProfile, error: null }),
+          }),
+        }),
       })
 
       mockSupabase.from.mockReturnValue({
         insert: vi.fn(),
         select: vi.fn(),
-        update: mockUpdate
+        update: mockUpdate,
       })
 
       const result = await store.addXP(50)
 
       expect(result).toEqual({
         xpGained: 50,
-        levelUp: false
+        levelUp: false,
       })
-      
+
       expect(store.userProfile?.xp).toBe(50)
       expect(store.userProfile?.level).toBe(1)
     })
@@ -364,15 +368,15 @@ describe('Auth Store', () => {
       const mockUpdate = vi.fn().mockReturnValue({
         eq: vi.fn().mockReturnValue({
           select: vi.fn().mockReturnValue({
-            single: vi.fn().mockResolvedValue({ data: updatedProfile, error: null })
-          })
-        })
+            single: vi.fn().mockResolvedValue({ data: updatedProfile, error: null }),
+          }),
+        }),
       })
 
       mockSupabase.from.mockReturnValue({
         insert: vi.fn(),
         select: vi.fn(),
-        update: mockUpdate
+        update: mockUpdate,
       })
 
       const result = await store.addXP(50)
@@ -382,9 +386,9 @@ describe('Auth Store', () => {
       // So levelUp will always be false. This test documents the current behavior.
       expect(result).toEqual({
         xpGained: 50,
-        levelUp: false // Bug: compares 2 > 2 (both are the updated level)
+        levelUp: false, // Bug: compares 2 > 2 (both are the updated level)
       })
-      
+
       expect(store.userProfile?.level).toBe(2)
     })
   })
@@ -392,7 +396,7 @@ describe('Auth Store', () => {
   describe('Initialization', () => {
     it('should initialize with existing session', async () => {
       mockSupabase.auth.getSession.mockResolvedValue({
-        data: { session: mockSession }
+        data: { session: mockSession },
       })
 
       await store.initialize()
@@ -415,9 +419,9 @@ describe('Auth Store', () => {
   describe('Error Handling', () => {
     it('should clear error', () => {
       store.error = 'Some error'
-      
+
       store.clearError()
-      
+
       expect(store.error).toBeNull()
     })
 
@@ -425,7 +429,7 @@ describe('Auth Store', () => {
       mockSupabase.auth.signInWithPassword.mockRejectedValue('String error')
 
       await expect(store.signIn('test@example.com', 'password')).rejects.toBe('String error')
-      
+
       expect(store.error).toBe('Failed to sign in')
     })
   })
@@ -433,12 +437,14 @@ describe('Auth Store', () => {
   describe('Loading States', () => {
     it('should manage loading state during sign up', async () => {
       let resolveSignUp: (value: any) => void
-      mockSupabase.auth.signUp.mockReturnValue(new Promise(resolve => {
-        resolveSignUp = resolve
-      }))
+      mockSupabase.auth.signUp.mockReturnValue(
+        new Promise((resolve) => {
+          resolveSignUp = resolve
+        }),
+      )
 
       const signUpPromise = store.signUp('test@example.com', 'password123')
-      
+
       expect(store.isLoading).toBe(true)
 
       resolveSignUp({ data: { user: mockUser }, error: null })
@@ -455,21 +461,23 @@ describe('Auth Store', () => {
       const mockUpdate = vi.fn().mockReturnValue({
         eq: vi.fn().mockReturnValue({
           select: vi.fn().mockReturnValue({
-            single: vi.fn().mockReturnValue(new Promise(resolve => {
-              resolveUpdate = resolve
-            }))
-          })
-        })
+            single: vi.fn().mockReturnValue(
+              new Promise((resolve) => {
+                resolveUpdate = resolve
+              }),
+            ),
+          }),
+        }),
       })
 
       mockSupabase.from.mockReturnValue({
         insert: vi.fn(),
         select: vi.fn(),
-        update: mockUpdate
+        update: mockUpdate,
       })
 
       const updatePromise = store.updateUserProfile({ display_name: 'New Name' })
-      
+
       expect(store.isLoading).toBe(true)
 
       resolveUpdate({ data: mockUserProfile, error: null })

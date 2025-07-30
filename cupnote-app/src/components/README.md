@@ -28,3 +28,4 @@ components/
 - **Feature Components**: `[Feature][ComponentName].vue`
 - **Layout Components**: `The[ComponentName].vue`
 - **Single Instance**: `The[ComponentName].vue`
+```

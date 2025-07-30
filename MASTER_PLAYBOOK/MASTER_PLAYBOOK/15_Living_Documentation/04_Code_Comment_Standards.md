@@ -70,17 +70,17 @@ class UserService implements IUserService {
 // CONTEXT: 보안팀 요구사항 - 모든 인증 시도는 추적되어야 함
 // RELATED: auth-logger.service.ts, security-audit.md
 if (user.isDisabled) {
-  await this.authLogger.logFailedAttempt(email, 'USER_DISABLED');
-  throw new UnauthorizedException('Account is disabled');
+  await this.authLogger.logFailedAttempt(email, 'USER_DISABLED')
+  throw new UnauthorizedException('Account is disabled')
 }
 
 // WHY: 3번 연속 실패시 계정 잠금 (브루트포스 방지)
 // TRIED: IP 기반 차단 → 공유 네트워크 문제로 폐기
 // CONTEXT: 5분 후 자동 해제, 관리자는 즉시 해제 가능
 if (failedAttempts >= 3) {
-  await this.lockAccount(user.id, LOCK_DURATION);
+  await this.lockAccount(user.id, LOCK_DURATION)
   // GOTCHA: 잠금 상태도 별도로 로깅해야 함
-  await this.securityLogger.logAccountLocked(user.id);
+  await this.securityLogger.logAccountLocked(user.id)
 }
 ```
 
@@ -94,7 +94,7 @@ if (failedAttempts >= 3) {
 //   - 세션 기반: 확장성 문제
 //   - 30분 유지: 보안 위험
 // REVIEW_DATE: 2024-07-15
-const ACCESS_TOKEN_EXPIRY = '15m';
+const ACCESS_TOKEN_EXPIRY = '15m'
 
 // ARCHITECTURE: 이벤트 기반 알림 시스템
 // PATTERN: Pub/Sub를 통한 느슨한 결합
@@ -107,8 +107,8 @@ const ACCESS_TOKEN_EXPIRY = '15m';
 this.eventBus.publish('user.registered', {
   userId: user.id,
   email: user.email,
-  timestamp: new Date()
-});
+  timestamp: new Date(),
+})
 ```
 
 ## 코드 컨텍스트 주석
@@ -168,8 +168,8 @@ async calculatePermissions(userId: string): Promise<Permission[]> {
 
 ```typescript
 try {
-  const result = await this.externalAPI.call(data);
-  return result;
+  const result = await this.externalAPI.call(data)
+  return result
 } catch (error) {
   // ERROR_HANDLING: 외부 API 에러 처리 전략
   // CATEGORIES:
@@ -180,21 +180,19 @@ try {
   if (error.response?.status >= 400 && error.response?.status < 500) {
     // CLIENT_ERROR: 입력 데이터 문제
     // ACTION: 사용자에게 구체적 에러 메시지 제공
-    throw new ValidationError(
-      `External API error: ${error.response.data.message}`
-    );
+    throw new ValidationError(`External API error: ${error.response.data.message}`)
   } else if (error.response?.status >= 500) {
     // SERVER_ERROR: 외부 서비스 문제
     // ACTION: 3회까지 지수 백오프로 재시도
     // FALLBACK: 캐시된 데이터 사용
-    return this.retryWithFallback(data, error);
+    return this.retryWithFallback(data, error)
   } else {
     // NETWORK_ERROR: 연결 실패
     // ACTION: 큐에 저장 후 나중에 처리
     // MONITORING: 알림 발송
-    await this.queueForLater(data);
-    await this.alertOps('External API unreachable', error);
-    throw new ServiceUnavailableError('Service temporarily unavailable');
+    await this.queueForLater(data)
+    await this.alertOps('External API unreachable', error)
+    throw new ServiceUnavailableError('Service temporarily unavailable')
   }
 }
 ```
@@ -210,8 +208,8 @@ try {
 async function* streamLargeDataset(query: Query) {
   // OPTIMIZATION: 커서 기반 페이지네이션
   // WHY: Offset 방식은 대량 데이터에서 O(n) 성능 저하
-  let cursor = null;
-  const batchSize = 1000; // TUNED: 메모리/속도 최적 균형점
+  let cursor = null
+  const batchSize = 1000 // TUNED: 메모리/속도 최적 균형점
 
   while (true) {
     // QUERY_OPTIMIZATION: 인덱스 활용
@@ -219,17 +217,17 @@ async function* streamLargeDataset(query: Query) {
     const batch = await db.query({
       ...query,
       cursor,
-      limit: batchSize
-    });
+      limit: batchSize,
+    })
 
-    if (batch.length === 0) break;
+    if (batch.length === 0) break
 
     // MEMORY_OPTIMIZATION: 즉시 처리 후 해제
     for (const item of batch) {
-      yield processItem(item);
+      yield processItem(item)
     }
 
-    cursor = batch[batch.length - 1].id;
+    cursor = batch[batch.length - 1].id
   }
 }
 
@@ -240,8 +238,8 @@ async function* streamLargeDataset(query: Query) {
 // INVALIDATION: 이벤트 기반 즉시 무효화
 const cachedData = await this.multiLevelCache.get(key, async () => {
   // EXPENSIVE_OPERATION: 평균 500ms
-  return await this.calculateComplexData(params);
-});
+  return await this.calculateComplexData(params)
+})
 ```
 
 ## AI 친화적 주석 패턴

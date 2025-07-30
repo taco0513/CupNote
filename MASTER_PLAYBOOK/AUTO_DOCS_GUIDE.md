@@ -5,12 +5,14 @@
 ## 🎯 문제 해결
 
 **기존 문제점**:
+
 - ❌ 새 파일을 만들거나 수정할 때마다 일일이 문서 확인
 - ❌ 누락된 문서들을 수동으로 찾아야 함
 - ❌ SuperClaude /checkpoint와 문서 동기화 번거로움
 - ❌ 프로젝트 변경 사항 추적의 어려움
 
 **Auto-Docs 해결책**:
+
 - ✅ **실시간 파일 변경 감지**: 모든 파일 변경사항을 자동 추적
 - ✅ **자동 문서 생성**: README, CHANGELOG, PROGRESS 자동 생성/업데이트
 - ✅ **SuperClaude 완벽 연동**: /checkpoint 명령어와 실시간 동기화
@@ -34,22 +36,26 @@
 ## 💡 핵심 기능
 
 ### 1. 실시간 파일 모니터링
+
 - **감지 대상**: `.js`, `.ts`, `.jsx`, `.tsx`, `.md`, `.json`, `.yml` 등
 - **실시간 추적**: 추가/수정/삭제/이름변경 모든 변경사항
 - **지능형 필터링**: `node_modules`, `.git` 등 불필요한 파일 자동 제외
 
 ### 2. 자동 문서 생성
+
 - **README.md**: 프로젝트 구조, 기술스택, 사용법 자동 생성
 - **CHANGELOG.md**: 모든 파일 변경사항을 시간순으로 기록
 - **PROGRESS.md**: 프로젝트 진행상황, 할일, 이슈 관리
 - **API 문서**: 코드 분석을 통한 API 문서 자동 생성 (개발 중)
 
 ### 3. SuperClaude 완벽 연동
+
 - **/checkpoint 자동 연동**: 체크포인트 생성 시 문서 자동 업데이트
 - **Git 상태 동기화**: 커밋되지 않은 변경사항 자동 추적
 - **MCP 서버 협력**: Context7, Sequential 등과 연동된 스마트 문서화
 
 ### 4. 누락 문서 탐지
+
 - **필수 문서 확인**: README, package.json 등 기본 문서 검사
 - **폴더별 문서**: 각 디렉토리의 README 존재 여부 확인
 - **자동 생성 제안**: 누락된 문서의 자동 생성 방법 제공
@@ -92,30 +98,30 @@ auto-docs generate --missing
 
 ```yaml
 watch:
-  paths: ['**/*.js', '**/*.ts', '**/*.md']  # 모니터링할 파일 패턴
-  ignore: ['node_modules/**', '.git/**']    # 제외할 패턴
-  debounceMs: 1000                          # 변경 감지 지연시간
+  paths: ['**/*.js', '**/*.ts', '**/*.md'] # 모니터링할 파일 패턴
+  ignore: ['node_modules/**', '.git/**'] # 제외할 패턴
+  debounceMs: 1000 # 변경 감지 지연시간
 
 docs:
-  autoGenerate: true                        # 자동 생성 활성화
-  language: 'ko'                           # 문서 언어 (ko/en)
+  autoGenerate: true # 자동 생성 활성화
+  language: 'ko' # 문서 언어 (ko/en)
   templates:
-    readme: true                           # README 자동 생성
-    changelog: true                        # CHANGELOG 자동 생성
-    progress: true                         # PROGRESS 자동 생성
+    readme: true # README 자동 생성
+    changelog: true # CHANGELOG 자동 생성
+    progress: true # PROGRESS 자동 생성
 
 git:
-  autoCommit: false                        # Git 자동 커밋 (선택사항)
-  commitPrefix: '📝 docs:'                 # 커밋 메시지 접두사
+  autoCommit: false # Git 자동 커밋 (선택사항)
+  commitPrefix: '📝 docs:' # 커밋 메시지 접두사
 
 notifications:
-  enabled: true                            # 알림 활성화
-  missingDocs: true                        # 누락 문서 알림
-  changes: true                            # 변경사항 알림
+  enabled: true # 알림 활성화
+  missingDocs: true # 누락 문서 알림
+  changes: true # 변경사항 알림
 
 superClaude:
-  enabled: true                            # SuperClaude 연동
-  checkpointIntegration: true              # /checkpoint 연동
+  enabled: true # SuperClaude 연동
+  checkpointIntegration: true # /checkpoint 연동
 ```
 
 ## 📊 실제 사용 예시
@@ -172,6 +178,7 @@ touch src/components/UserProfile.jsx
 ## 🔄 워크플로우 최적화
 
 ### 개발 시작 시
+
 ```bash
 # 1. Auto-Docs 모니터링 시작
 nohup auto-docs watch &
@@ -182,6 +189,7 @@ nohup auto-docs watch &
 ```
 
 ### 프로젝트 리뷰 시
+
 ```bash
 # 현재 상태 확인
 auto-docs status
@@ -199,16 +207,19 @@ auto-docs generate --missing
 ## 🎛️ 고급 기능
 
 ### 1. 스마트 변수 시스템
+
 - **package.json 분석**: 프로젝트명, 설명, 기술스택 자동 추출
 - **Git 분석**: 커밋 히스토리, 브랜치 정보 활용
 - **코드 분석**: 함수, 클래스, API 엔드포인트 자동 감지
 
 ### 2. 다국어 템플릿
+
 - **한국어**: 자연스러운 한국어 문서 생성
 - **영어**: 국제 표준 문서 형식
 - **사용자 정의**: 템플릿 커스터마이징 가능
 
 ### 3. 외부 도구 연동
+
 - **Git**: 커밋 메시지, 브랜치 정보 활용
 - **npm/yarn**: 패키지 정보, 스크립트 분석
 - **TypeScript**: 타입 정보 기반 API 문서
@@ -219,6 +230,7 @@ auto-docs generate --missing
 ### 자주 묻는 질문
 
 **Q: 파일 변경이 감지되지 않아요**
+
 ```bash
 # 1. 권한 확인
 ls -la .auto-docs.yml
@@ -232,6 +244,7 @@ auto-docs watch
 ```
 
 **Q: 문서가 생성되지 않아요**
+
 ```bash
 # 1. 상태 확인
 auto-docs status
@@ -244,6 +257,7 @@ cat auto-docs/logs/auto-docs.log
 ```
 
 **Q: SuperClaude 연동이 안 돼요**
+
 ```bash
 # 1. checkpoints 폴더 확인
 ls -la checkpoints/
@@ -278,7 +292,7 @@ getMyCustomTemplate() {
 // index.js의 handleFileChange 확장
 if (filePath.endsWith('.py')) {
   // Python 파일 특별 처리
-  await this.generatePythonDocs(filePath);
+  await this.generatePythonDocs(filePath)
 }
 ```
 

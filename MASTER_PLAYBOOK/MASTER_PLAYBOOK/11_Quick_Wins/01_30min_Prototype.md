@@ -11,19 +11,19 @@
 ```typescript
 // 30분 최적 시간 배분
 interface TimeAllocation {
-  setup: 5, // 환경 설정 및 템플릿 선택
-  core: 15, // 핵심 기능 구현
-  ui: 7,    // 기본 UI/UX 적용
+  setup: 5 // 환경 설정 및 템플릿 선택
+  core: 15 // 핵심 기능 구현
+  ui: 7 // 기본 UI/UX 적용
   deploy: 3 // 배포 및 공유
 }
 
 // 성공률 최대화 규칙
 const prototypingRules = {
-  rule1: "완벽함보다 작동성 우선",
-  rule2: "기존 템플릿과 라이브러리 최대 활용",
-  rule3: "핵심 기능 1개에만 집중",
-  rule4: "UI는 최소한으로, 기능은 확실하게"
-};
+  rule1: '완벽함보다 작동성 우선',
+  rule2: '기존 템플릿과 라이브러리 최대 활용',
+  rule3: '핵심 기능 1개에만 집중',
+  rule4: 'UI는 최소한으로, 기능은 확실하게',
+}
 ```
 
 ### 빠른 프로토타입 스택
@@ -31,31 +31,31 @@ const prototypingRules = {
 ```typescript
 // 웹 애플리케이션 스택 (추천)
 const webStack = {
-  framework: "Next.js 14",
-  ui: "Tailwind CSS + shadcn/ui",
-  backend: "Next.js API Routes",
-  database: "Supabase (즉시 설정)",
-  auth: "NextAuth.js",
-  deployment: "Vercel (1분 배포)"
-};
+  framework: 'Next.js 14',
+  ui: 'Tailwind CSS + shadcn/ui',
+  backend: 'Next.js API Routes',
+  database: 'Supabase (즉시 설정)',
+  auth: 'NextAuth.js',
+  deployment: 'Vercel (1분 배포)',
+}
 
 // 모바일 앱 스택
 const mobileStack = {
-  framework: "Expo + React Native",
-  ui: "NativeWind + Expo Components",
-  backend: "Expo Router API",
-  database: "Expo SQLite",
-  deployment: "Expo Development Build"
-};
+  framework: 'Expo + React Native',
+  ui: 'NativeWind + Expo Components',
+  backend: 'Expo Router API',
+  database: 'Expo SQLite',
+  deployment: 'Expo Development Build',
+}
 
 // API 서버 스택
 const apiStack = {
-  framework: "Express.js + TypeScript",
-  database: "Railway PostgreSQL",
-  auth: "JWT + bcrypt",
-  documentation: "Swagger 자동 생성",
-  deployment: "Railway (1분 배포)"
-};
+  framework: 'Express.js + TypeScript',
+  database: 'Railway PostgreSQL',
+  auth: 'JWT + bcrypt',
+  documentation: 'Swagger 자동 생성',
+  deployment: 'Railway (1분 배포)',
+}
 ```
 
 ## 프로토타입 템플릿
@@ -652,6 +652,7 @@ export default function FeedbackButton() {
 ## 성공 체크리스트
 
 ### 30분 완료 기준
+
 - [ ] **기능**: 핵심 기능 1개가 완전히 작동
 - [ ] **UI**: 기본적인 사용자 인터페이스 완성
 - [ ] **반응형**: 모바일에서도 사용 가능
@@ -659,6 +660,7 @@ export default function FeedbackButton() {
 - [ ] **피드백**: 사용자 의견 수집 방법 준비
 
 ### 즉시 개선 방향
+
 1. **사용자 테스트**: 최소 3명에게 사용해보라고 요청
 2. **피드백 분석**: 30분 내 주요 문제점 파악
 3. **우선순위**: 가장 많이 언급된 문제부터 해결

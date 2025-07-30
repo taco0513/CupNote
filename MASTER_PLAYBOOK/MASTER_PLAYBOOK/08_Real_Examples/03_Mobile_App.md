@@ -5,57 +5,60 @@
 React Native와 Expo를 활용하여 크로스플랫폼 모바일 앱을 SuperClaude AI 워크플로우로 구축하는 완전한 가이드입니다.
 
 ### 앱 컨셉: 피트니스 트래커
+
 ```yaml
 app_concept:
-  name: "FitTrack Pro"
-  category: "건강 및 피트니스"
-  target_users: "운동 애호가, 건강 관리자"
+  name: 'FitTrack Pro'
+  category: '건강 및 피트니스'
+  target_users: '운동 애호가, 건강 관리자'
 
 core_features:
-  - "운동 기록 및 추적"
-  - "개인화된 운동 계획"
-  - "진행 상황 시각화"
-  - "소셜 기능 (친구와 경쟁)"
-  - "웨어러블 디바이스 연동"
-  - "오프라인 모드 지원"
+  - '운동 기록 및 추적'
+  - '개인화된 운동 계획'
+  - '진행 상황 시각화'
+  - '소셜 기능 (친구와 경쟁)'
+  - '웨어러블 디바이스 연동'
+  - '오프라인 모드 지원'
 
 technical_requirements:
-  platforms: ["iOS", "Android"]
+  platforms: ['iOS', 'Android']
   offline_support: true
   push_notifications: true
-  device_sensors: ["GPS", "가속도계", "자이로스코프"]
-  integrations: ["Apple Health", "Google Fit", "Strava"]
+  device_sensors: ['GPS', '가속도계', '자이로스코프']
+  integrations: ['Apple Health', 'Google Fit', 'Strava']
 ```
 
 ### 기술 스택
+
 ```yaml
 technology_stack:
-  framework: "React Native + Expo"
-  language: "TypeScript"
-  navigation: "React Navigation 6"
-  state_management: "Redux Toolkit + RTK Query"
-  ui_library: "React Native Elements + NativeBase"
-  animations: "React Native Reanimated 3"
+  framework: 'React Native + Expo'
+  language: 'TypeScript'
+  navigation: 'React Navigation 6'
+  state_management: 'Redux Toolkit + RTK Query'
+  ui_library: 'React Native Elements + NativeBase'
+  animations: 'React Native Reanimated 3'
 
 backend:
-  runtime: "Node.js + TypeScript"
-  framework: "Express.js"
-  database: "MongoDB + Redis"
-  auth: "Firebase Auth"
-  storage: "Firebase Storage"
-  push: "Firebase Cloud Messaging"
+  runtime: 'Node.js + TypeScript'
+  framework: 'Express.js'
+  database: 'MongoDB + Redis'
+  auth: 'Firebase Auth'
+  storage: 'Firebase Storage'
+  push: 'Firebase Cloud Messaging'
 
 development_tools:
-  testing: "Jest + Detox"
-  code_quality: "ESLint + Prettier"
-  ci_cd: "GitHub Actions + EAS Build"
-  analytics: "Firebase Analytics"
-  crash_reporting: "Sentry"
+  testing: 'Jest + Detox'
+  code_quality: 'ESLint + Prettier'
+  ci_cd: 'GitHub Actions + EAS Build'
+  analytics: 'Firebase Analytics'
+  crash_reporting: 'Sentry'
 ```
 
 ## Phase 1: 프로젝트 설정 및 아키텍처
 
 ### SuperClaude를 활용한 초기 설정
+
 ```bash
 # 1. React Native 프로젝트 설정
 /build "fittrack-mobile" --framework react-native --expo --typescript
@@ -71,6 +74,7 @@ development_tools:
 ```
 
 ### 프로젝트 구조
+
 ```
 fittrack-mobile/
 ├── src/
@@ -89,98 +93,100 @@ fittrack-mobile/
 ```
 
 ### 데이터 모델 설계
+
 ```typescript
 // types/models.ts
 export interface User {
-  id: string;
-  email: string;
-  username: string;
+  id: string
+  email: string
+  username: string
   profile: {
-    firstName: string;
-    lastName: string;
-    avatar?: string;
-    birthDate: Date;
-    height: number; // cm
-    weight: number; // kg
-    fitnessLevel: 'beginner' | 'intermediate' | 'advanced';
-    goals: string[];
-  };
+    firstName: string
+    lastName: string
+    avatar?: string
+    birthDate: Date
+    height: number // cm
+    weight: number // kg
+    fitnessLevel: 'beginner' | 'intermediate' | 'advanced'
+    goals: string[]
+  }
   preferences: {
-    units: 'metric' | 'imperial';
+    units: 'metric' | 'imperial'
     notifications: {
-      workoutReminders: boolean;
-      achievements: boolean;
-      social: boolean;
-    };
-  };
-  createdAt: Date;
-  updatedAt: Date;
+      workoutReminders: boolean
+      achievements: boolean
+      social: boolean
+    }
+  }
+  createdAt: Date
+  updatedAt: Date
 }
 
 export interface Exercise {
-  id: string;
-  name: string;
-  category: 'strength' | 'cardio' | 'flexibility' | 'sports';
-  muscleGroups: string[];
-  equipment: string[];
-  difficulty: 'easy' | 'medium' | 'hard';
-  instructions: string[];
-  images: string[];
-  videoUrl?: string;
+  id: string
+  name: string
+  category: 'strength' | 'cardio' | 'flexibility' | 'sports'
+  muscleGroups: string[]
+  equipment: string[]
+  difficulty: 'easy' | 'medium' | 'hard'
+  instructions: string[]
+  images: string[]
+  videoUrl?: string
 }
 
 export interface Workout {
-  id: string;
-  userId: string;
-  name: string;
-  exercises: WorkoutExercise[];
-  duration: number; // minutes
-  caloriesBurned?: number;
-  date: Date;
-  notes?: string;
-  isTemplate: boolean;
-  createdAt: Date;
+  id: string
+  userId: string
+  name: string
+  exercises: WorkoutExercise[]
+  duration: number // minutes
+  caloriesBurned?: number
+  date: Date
+  notes?: string
+  isTemplate: boolean
+  createdAt: Date
 }
 
 export interface WorkoutExercise {
-  exerciseId: string;
-  exercise: Exercise;
-  sets: ExerciseSet[];
-  restTime: number; // seconds
-  notes?: string;
+  exerciseId: string
+  exercise: Exercise
+  sets: ExerciseSet[]
+  restTime: number // seconds
+  notes?: string
 }
 
 export interface ExerciseSet {
-  id: string;
-  reps?: number;
-  weight?: number; // kg
-  duration?: number; // seconds for time-based exercises
-  distance?: number; // meters for cardio
-  completed: boolean;
+  id: string
+  reps?: number
+  weight?: number // kg
+  duration?: number // seconds for time-based exercises
+  distance?: number // meters for cardio
+  completed: boolean
 }
 
 export interface Progress {
-  id: string;
-  userId: string;
-  date: Date;
+  id: string
+  userId: string
+  date: Date
   metrics: {
-    weight?: number;
-    bodyFat?: number;
-    muscleMass?: number;
+    weight?: number
+    bodyFat?: number
+    muscleMass?: number
     measurements?: {
-      chest?: number;
-      waist?: number;
-      arms?: number;
-      thighs?: number;
-    };
-  };
-  photos?: string[];
+      chest?: number
+      waist?: number
+      arms?: number
+      thighs?: number
+    }
+  }
+  photos?: string[]
 }
 ```
 
 ## Phase 2: 핵심 기능 구현
 
 ### SuperClaude를 활용한 컴포넌트 개발
+
 ```bash
 # 1. 인증 플로우 구현
 /implement "Firebase 인증 플로우" --react-native --biometric --social-login
@@ -196,103 +202,104 @@ export interface Progress {
 ```
 
 ### 인증 시스템 구현
+
 ```typescript
 // services/auth.service.ts
-import auth from '@react-native-firebase/auth';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import auth from '@react-native-firebase/auth'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import { LoginManager, AccessToken } from 'react-native-fbsdk-next'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 class AuthService {
   constructor() {
-    this.configureGoogleSignIn();
+    this.configureGoogleSignIn()
   }
 
   private configureGoogleSignIn() {
     GoogleSignin.configure({
       webClientId: process.env.GOOGLE_WEB_CLIENT_ID,
-    });
+    })
   }
 
   async signInWithEmail(email: string, password: string) {
     try {
-      const userCredential = await auth().signInWithEmailAndPassword(email, password);
-      await this.saveUserSession(userCredential.user);
-      return userCredential.user;
+      const userCredential = await auth().signInWithEmailAndPassword(email, password)
+      await this.saveUserSession(userCredential.user)
+      return userCredential.user
     } catch (error) {
-      throw this.handleAuthError(error);
+      throw this.handleAuthError(error)
     }
   }
 
   async signUpWithEmail(email: string, password: string, userData: any) {
     try {
-      const userCredential = await auth().createUserWithEmailAndPassword(email, password);
+      const userCredential = await auth().createUserWithEmailAndPassword(email, password)
 
       // 사용자 프로필 업데이트
       await userCredential.user.updateProfile({
         displayName: `${userData.firstName} ${userData.lastName}`,
-      });
+      })
 
       // Firestore에 추가 사용자 정보 저장
-      await this.createUserProfile(userCredential.user.uid, userData);
+      await this.createUserProfile(userCredential.user.uid, userData)
 
-      return userCredential.user;
+      return userCredential.user
     } catch (error) {
-      throw this.handleAuthError(error);
+      throw this.handleAuthError(error)
     }
   }
 
   async signInWithGoogle() {
     try {
-      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-      const { idToken } = await GoogleSignin.signIn();
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true })
+      const { idToken } = await GoogleSignin.signIn()
 
-      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-      const userCredential = await auth().signInWithCredential(googleCredential);
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken)
+      const userCredential = await auth().signInWithCredential(googleCredential)
 
-      await this.saveUserSession(userCredential.user);
-      return userCredential.user;
+      await this.saveUserSession(userCredential.user)
+      return userCredential.user
     } catch (error) {
-      throw this.handleAuthError(error);
+      throw this.handleAuthError(error)
     }
   }
 
   async signInWithFacebook() {
     try {
-      const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+      const result = await LoginManager.logInWithPermissions(['public_profile', 'email'])
 
       if (result.isCancelled) {
-        throw new Error('사용자가 로그인을 취소했습니다');
+        throw new Error('사용자가 로그인을 취소했습니다')
       }
 
-      const data = await AccessToken.getCurrentAccessToken();
+      const data = await AccessToken.getCurrentAccessToken()
       if (!data) {
-        throw new Error('Facebook 액세스 토큰을 가져올 수 없습니다');
+        throw new Error('Facebook 액세스 토큰을 가져올 수 없습니다')
       }
 
-      const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
-      const userCredential = await auth().signInWithCredential(facebookCredential);
+      const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken)
+      const userCredential = await auth().signInWithCredential(facebookCredential)
 
-      await this.saveUserSession(userCredential.user);
-      return userCredential.user;
+      await this.saveUserSession(userCredential.user)
+      return userCredential.user
     } catch (error) {
-      throw this.handleAuthError(error);
+      throw this.handleAuthError(error)
     }
   }
 
   async signOut() {
     try {
-      await auth().signOut();
-      await AsyncStorage.removeItem('userSession');
+      await auth().signOut()
+      await AsyncStorage.removeItem('userSession')
 
       // 소셜 로그인 세션도 정리
       if (await GoogleSignin.isSignedIn()) {
-        await GoogleSignin.signOut();
+        await GoogleSignin.signOut()
       }
 
-      LoginManager.logOut();
+      LoginManager.logOut()
     } catch (error) {
-      console.error('Sign out error:', error);
+      console.error('Sign out error:', error)
     }
   }
 
@@ -303,9 +310,9 @@ class AuthService {
       displayName: user.displayName,
       photoURL: user.photoURL,
       lastLoginAt: new Date().toISOString(),
-    };
+    }
 
-    await AsyncStorage.setItem('userSession', JSON.stringify(session));
+    await AsyncStorage.setItem('userSession', JSON.stringify(session))
   }
 
   private handleAuthError(error: any) {
@@ -315,16 +322,17 @@ class AuthService {
       'auth/email-already-in-use': '이미 사용 중인 이메일입니다',
       'auth/weak-password': '비밀번호는 6자 이상이어야 합니다',
       'auth/invalid-email': '유효하지 않은 이메일 형식입니다',
-    };
+    }
 
-    return new Error(errorMessages[error.code] || '인증 오류가 발생했습니다');
+    return new Error(errorMessages[error.code] || '인증 오류가 발생했습니다')
   }
 }
 
-export const authService = new AuthService();
+export const authService = new AuthService()
 ```
 
 ### 운동 기록 화면 구현
+
 ```typescript
 // screens/WorkoutScreen.tsx
 import React, { useState, useEffect } from 'react';
@@ -593,6 +601,7 @@ const styles = StyleSheet.create({
 ```
 
 ### 진행 상황 차트 구현
+
 ```typescript
 // components/ProgressChart.tsx
 import React from 'react';
@@ -810,63 +819,64 @@ const styles = StyleSheet.create({
 ## Phase 3: 오프라인 지원 및 동기화
 
 ### 오프라인 데이터 관리
+
 ```typescript
 // services/offline.service.ts
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import NetInfo from '@react-native-netinfo/netinfo';
-import { syncActions } from '../store/slices/syncSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import NetInfo from '@react-native-netinfo/netinfo'
+import { syncActions } from '../store/slices/syncSlice'
 
 class OfflineService {
-  private isOnline = true;
-  private syncQueue: any[] = [];
+  private isOnline = true
+  private syncQueue: any[] = []
 
   constructor() {
-    this.initializeNetworkListener();
-    this.loadSyncQueue();
+    this.initializeNetworkListener()
+    this.loadSyncQueue()
   }
 
   private initializeNetworkListener() {
     NetInfo.addEventListener(state => {
-      const wasOffline = !this.isOnline;
-      this.isOnline = state.isConnected ?? false;
+      const wasOffline = !this.isOnline
+      this.isOnline = state.isConnected ?? false
 
       if (wasOffline && this.isOnline) {
         // 온라인 복구 시 동기화 실행
-        this.processSyncQueue();
+        this.processSyncQueue()
       }
-    });
+    })
   }
 
   async saveOfflineData(key: string, data: any) {
     try {
-      const timestamp = new Date().toISOString();
+      const timestamp = new Date().toISOString()
       const offlineData = {
         data,
         timestamp,
         synced: false,
-      };
+      }
 
-      await AsyncStorage.setItem(`offline_${key}`, JSON.stringify(offlineData));
+      await AsyncStorage.setItem(`offline_${key}`, JSON.stringify(offlineData))
 
       // 동기화 큐에 추가
       if (!this.isOnline) {
-        this.addToSyncQueue('save', key, data);
+        this.addToSyncQueue('save', key, data)
       }
     } catch (error) {
-      console.error('Error saving offline data:', error);
+      console.error('Error saving offline data:', error)
     }
   }
 
   async getOfflineData(key: string) {
     try {
-      const offlineData = await AsyncStorage.getItem(`offline_${key}`);
+      const offlineData = await AsyncStorage.getItem(`offline_${key}`)
       if (offlineData) {
-        return JSON.parse(offlineData);
+        return JSON.parse(offlineData)
       }
-      return null;
+      return null
     } catch (error) {
-      console.error('Error getting offline data:', error);
-      return null;
+      console.error('Error getting offline data:', error)
+      return null
     }
   }
 
@@ -878,69 +888,69 @@ class OfflineService {
       data,
       timestamp: new Date().toISOString(),
       retryCount: 0,
-    };
+    }
 
-    this.syncQueue.push(syncItem);
-    await this.saveSyncQueue();
+    this.syncQueue.push(syncItem)
+    await this.saveSyncQueue()
   }
 
   private async loadSyncQueue() {
     try {
-      const queueData = await AsyncStorage.getItem('sync_queue');
+      const queueData = await AsyncStorage.getItem('sync_queue')
       if (queueData) {
-        this.syncQueue = JSON.parse(queueData);
+        this.syncQueue = JSON.parse(queueData)
       }
     } catch (error) {
-      console.error('Error loading sync queue:', error);
+      console.error('Error loading sync queue:', error)
     }
   }
 
   private async saveSyncQueue() {
     try {
-      await AsyncStorage.setItem('sync_queue', JSON.stringify(this.syncQueue));
+      await AsyncStorage.setItem('sync_queue', JSON.stringify(this.syncQueue))
     } catch (error) {
-      console.error('Error saving sync queue:', error);
+      console.error('Error saving sync queue:', error)
     }
   }
 
   async processSyncQueue() {
     if (!this.isOnline || this.syncQueue.length === 0) {
-      return;
+      return
     }
 
-    const failedItems: any[] = [];
+    const failedItems: any[] = []
 
     for (const item of this.syncQueue) {
       try {
-        await this.syncItem(item);
-        console.log(`Synced item: ${item.key}`);
+        await this.syncItem(item)
+        console.log(`Synced item: ${item.key}`)
       } catch (error) {
-        console.error(`Failed to sync item: ${item.key}`, error);
-        item.retryCount++;
+        console.error(`Failed to sync item: ${item.key}`, error)
+        item.retryCount++
 
         // 3회 재시도 후 실패 처리
         if (item.retryCount < 3) {
-          failedItems.push(item);
+          failedItems.push(item)
         } else {
-          console.error(`Permanently failed to sync: ${item.key}`);
+          console.error(`Permanently failed to sync: ${item.key}`)
         }
       }
     }
 
-    this.syncQueue = failedItems;
-    await this.saveSyncQueue();
+    this.syncQueue = failedItems
+    await this.saveSyncQueue()
   }
 
   private async syncItem(item: any) {
     switch (item.action) {
       case 'save':
-        await this.uploadData(item.key, item.data);
-        break;
+        await this.uploadData(item.key, item.data)
+        break
       case 'delete':
-        await this.deleteData(item.key);
-        break;
+        await this.deleteData(item.key)
+        break
       default:
-        throw new Error(`Unknown sync action: ${item.action}`);
+        throw new Error(`Unknown sync action: ${item.action}`)
     }
   }
 
@@ -950,68 +960,68 @@ class OfflineService {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${await this.getAuthToken()}`,
+        Authorization: `Bearer ${await this.getAuthToken()}`,
       },
       body: JSON.stringify(data),
-    });
+    })
 
     if (!response.ok) {
-      throw new Error(`Sync failed: ${response.statusText}`);
+      throw new Error(`Sync failed: ${response.statusText}`)
     }
 
     // 동기화 완료 후 로컬 데이터 업데이트
-    await this.markAsSynced(key);
+    await this.markAsSynced(key)
   }
 
   private async deleteData(key: string) {
     const response = await fetch(`${API_BASE_URL}/sync/${key}`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${await this.getAuthToken()}`,
+        Authorization: `Bearer ${await this.getAuthToken()}`,
       },
-    });
+    })
 
     if (!response.ok) {
-      throw new Error(`Delete sync failed: ${response.statusText}`);
+      throw new Error(`Delete sync failed: ${response.statusText}`)
     }
 
-    await AsyncStorage.removeItem(`offline_${key}`);
+    await AsyncStorage.removeItem(`offline_${key}`)
   }
 
   private async markAsSynced(key: string) {
-    const offlineData = await this.getOfflineData(key);
+    const offlineData = await this.getOfflineData(key)
     if (offlineData) {
-      offlineData.synced = true;
-      await AsyncStorage.setItem(`offline_${key}`, JSON.stringify(offlineData));
+      offlineData.synced = true
+      await AsyncStorage.setItem(`offline_${key}`, JSON.stringify(offlineData))
     }
   }
 
   private async getAuthToken() {
-    const userSession = await AsyncStorage.getItem('userSession');
+    const userSession = await AsyncStorage.getItem('userSession')
     if (userSession) {
-      const session = JSON.parse(userSession);
-      return session.accessToken;
+      const session = JSON.parse(userSession)
+      return session.accessToken
     }
-    throw new Error('No auth token available');
+    throw new Error('No auth token available')
   }
 
   getSyncStatus() {
     return {
       isOnline: this.isOnline,
       pendingSyncItems: this.syncQueue.length,
-      lastSyncAttempt: this.syncQueue.length > 0
-        ? this.syncQueue[this.syncQueue.length - 1].timestamp
-        : null,
-    };
+      lastSyncAttempt:
+        this.syncQueue.length > 0 ? this.syncQueue[this.syncQueue.length - 1].timestamp : null,
+    }
   }
 }
 
-export const offlineService = new OfflineService();
+export const offlineService = new OfflineService()
 ```
 
 ## Phase 4: 배포 및 앱 스토어 출시
 
 ### EAS Build 설정
+
 ```javascript
 // eas.json
 {
@@ -1055,11 +1065,12 @@ export const offlineService = new OfflineService();
 ```
 
 ### 앱 스토어 메타데이터
+
 ```yaml
 app_store_listing:
   ios:
-    app_name: "FitTrack Pro"
-    subtitle: "개인 맞춤 피트니스 트래커"
+    app_name: 'FitTrack Pro'
+    subtitle: '개인 맞춤 피트니스 트래커'
     description: |
       FitTrack Pro는 당신의 피트니스 여정을 완벽하게 추적하고 관리하는 올인원 솔루션입니다.
 
@@ -1071,13 +1082,13 @@ app_store_listing:
       • Apple Health 및 웨어러블 기기 연동
       • 오프라인 모드 지원
 
-    keywords: "피트니스,운동,헬스,트래커,다이어트,건강"
-    category: "건강 및 피트니스"
-    content_rating: "4+"
+    keywords: '피트니스,운동,헬스,트래커,다이어트,건강'
+    category: '건강 및 피트니스'
+    content_rating: '4+'
 
   android:
-    app_name: "FitTrack Pro"
-    short_description: "개인 맞춤 피트니스 트래커로 건강한 라이프스타일을 시작하세요"
+    app_name: 'FitTrack Pro'
+    short_description: '개인 맞춤 피트니스 트래커로 건강한 라이프스타일을 시작하세요'
     full_description: |
       🏋️‍♂️ FitTrack Pro - 당신만의 피트니스 코치
 
@@ -1092,11 +1103,12 @@ app_store_listing:
       ⌚ 웨어러블 기기 완벽 연동
       📱 오프라인에서도 모든 기능 사용 가능
 
-    category: "HEALTH_AND_FITNESS"
-    content_rating: "Everyone"
+    category: 'HEALTH_AND_FITNESS'
+    content_rating: 'Everyone'
 ```
 
 ### SuperClaude를 활용한 배포 자동화
+
 ```bash
 # 1. 앱 스토어 자산 생성
 /generate app-store-assets --screenshots --descriptions --keywords
@@ -1114,23 +1126,25 @@ app_store_listing:
 ## 프로젝트 성과 및 학습 포인트
 
 ### 개발 성과
+
 ```yaml
 development_metrics:
-  development_time: "16주 → 12주 (25% 단축)"
-  code_quality: "85% 테스트 커버리지"
-  performance: "60fps 부드러운 애니메이션"
-  app_size: "iOS: 45MB, Android: 38MB"
-  crash_rate: "< 0.1%"
+  development_time: '16주 → 12주 (25% 단축)'
+  code_quality: '85% 테스트 커버리지'
+  performance: '60fps 부드러운 애니메이션'
+  app_size: 'iOS: 45MB, Android: 38MB'
+  crash_rate: '< 0.1%'
 
 app_store_performance:
-  ios_approval: "첫 제출에 승인"
-  android_approval: "자동 승인"
-  user_rating: "4.6/5.0 (iOS), 4.4/5.0 (Android)"
-  download_growth: "월 25% 증가"
-  retention_rate: "D7: 65%, D30: 35%"
+  ios_approval: '첫 제출에 승인'
+  android_approval: '자동 승인'
+  user_rating: '4.6/5.0 (iOS), 4.4/5.0 (Android)'
+  download_growth: '월 25% 증가'
+  retention_rate: 'D7: 65%, D30: 35%'
 ```
 
 ### AI 워크플로우 활용 효과
+
 1. **크로스플랫폼 개발**: React Native 설정 및 최적화 자동화
 2. **UI/UX 구현**: 컴포넌트 디자인 시스템 빠른 구축
 3. **오프라인 기능**: 복잡한 동기화 로직 구현 지원

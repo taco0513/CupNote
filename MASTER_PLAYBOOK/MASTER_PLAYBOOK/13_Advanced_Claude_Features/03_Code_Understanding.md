@@ -11,43 +11,42 @@ Claude의 고급 코드 분석 능력을 활용하여 복잡한 코드베이스�
 ```typescript
 // 코드베이스 분석 엔진
 interface CodebaseAnalysis {
-  structure: ProjectStructure;
-  dependencies: DependencyGraph;
-  patterns: ArchitecturePattern[];
-  metrics: CodeMetrics;
-  insights: AnalysisInsight[];
+  structure: ProjectStructure
+  dependencies: DependencyGraph
+  patterns: ArchitecturePattern[]
+  metrics: CodeMetrics
+  insights: AnalysisInsight[]
 }
 
 class CodebaseAnalyzer {
-  private astParser: ASTParser;
-  private patternDetector: PatternDetector;
-  private metricsCalculator: MetricsCalculator;
+  private astParser: ASTParser
+  private patternDetector: PatternDetector
+  private metricsCalculator: MetricsCalculator
 
   // 종합적 코드베이스 분석
   async analyzeCodebase(
     projectPath: string,
     analysisDepth: AnalysisDepth
   ): Promise<ComprehensiveAnalysis> {
-
     // 1. 프로젝트 구조 분석
-    const structure = await this.analyzeProjectStructure(projectPath);
+    const structure = await this.analyzeProjectStructure(projectPath)
 
     // 2. 의존성 그래프 생성
-    const dependencies = await this.buildDependencyGraph(structure);
+    const dependencies = await this.buildDependencyGraph(structure)
 
     // 3. 아키텍처 패턴 감지
-    const patterns = await this.detectArchitecturePatterns(structure, dependencies);
+    const patterns = await this.detectArchitecturePatterns(structure, dependencies)
 
     // 4. 코드 품질 메트릭 계산
-    const metrics = await this.calculateCodeMetrics(structure);
+    const metrics = await this.calculateCodeMetrics(structure)
 
     // 5. 심층 인사이트 도출
     const insights = await this.deriveInsights({
       structure,
       dependencies,
       patterns,
-      metrics
-    });
+      metrics,
+    })
 
     return {
       overview: {
@@ -55,53 +54,50 @@ class CodebaseAnalyzer {
         totalLines: metrics.totalLines,
         languages: structure.languages,
         frameworks: await this.detectFrameworks(structure),
-        architecture: patterns[0]?.name || 'Mixed'
+        architecture: patterns[0]?.name || 'Mixed',
       },
 
       structure: {
         tree: structure.tree,
         modules: structure.modules,
         layers: await this.identifyLayers(structure),
-        boundaries: await this.identifyBoundaries(structure)
+        boundaries: await this.identifyBoundaries(structure),
       },
 
       dependencies: {
         graph: dependencies,
         circular: await this.findCircularDependencies(dependencies),
         external: await this.analyzeExternalDependencies(structure),
-        health: await this.assessDependencyHealth(dependencies)
+        health: await this.assessDependencyHealth(dependencies),
       },
 
       patterns: {
         architectural: patterns,
         design: await this.detectDesignPatterns(structure),
         antiPatterns: await this.detectAntiPatterns(structure),
-        recommendations: await this.generatePatternRecommendations(patterns)
+        recommendations: await this.generatePatternRecommendations(patterns),
       },
 
       quality: {
         metrics,
         hotspots: await this.identifyHotspots(metrics),
         technicalDebt: await this.estimateTechnicalDebt(metrics),
-        improvements: await this.suggestImprovements(metrics)
+        improvements: await this.suggestImprovements(metrics),
       },
 
       insights: {
         strengths: insights.filter(i => i.type === 'strength'),
         weaknesses: insights.filter(i => i.type === 'weakness'),
         opportunities: insights.filter(i => i.type === 'opportunity'),
-        risks: insights.filter(i => i.type === 'risk')
-      }
-    };
+        risks: insights.filter(i => i.type === 'risk'),
+      },
+    }
   }
 
   // 의존성 그래프 분석
-  private async buildDependencyGraph(
-    structure: ProjectStructure
-  ): Promise<DependencyGraph> {
-
-    const nodes: DependencyNode[] = [];
-    const edges: DependencyEdge[] = [];
+  private async buildDependencyGraph(structure: ProjectStructure): Promise<DependencyGraph> {
+    const nodes: DependencyNode[] = []
+    const edges: DependencyEdge[] = []
 
     for (const file of structure.files) {
       // 파일을 노드로 추가
@@ -109,19 +105,19 @@ class CodebaseAnalyzer {
         id: file.path,
         type: this.getFileType(file),
         module: this.getModule(file, structure),
-        complexity: await this.calculateFileComplexity(file)
-      };
-      nodes.push(node);
+        complexity: await this.calculateFileComplexity(file),
+      }
+      nodes.push(node)
 
       // 의존성을 엣지로 추가
-      const dependencies = await this.extractDependencies(file);
+      const dependencies = await this.extractDependencies(file)
       for (const dep of dependencies) {
         edges.push({
           from: file.path,
           to: dep.path,
           type: dep.type,
-          strength: this.calculateDependencyStrength(dep)
-        });
+          strength: this.calculateDependencyStrength(dep),
+        })
       }
     }
 
@@ -131,9 +127,9 @@ class CodebaseAnalyzer {
       metrics: {
         coupling: this.calculateCoupling(edges),
         cohesion: this.calculateCohesion(nodes, edges),
-        stability: this.calculateStability(nodes, edges)
-      }
-    };
+        stability: this.calculateStability(nodes, edges),
+      },
+    }
   }
 }
 ```
@@ -238,72 +234,64 @@ class CodeFlowAnalyzer {
 ```typescript
 // 레거시 코드 분석 및 현대화
 class LegacyCodeInterpreter {
-  private patternLibrary: LegacyPatternLibrary;
-  private modernizationStrategies: ModernizationStrategy[];
+  private patternLibrary: LegacyPatternLibrary
+  private modernizationStrategies: ModernizationStrategy[]
 
   // 레거시 패턴 식별
-  async analyzeLegacyCode(
-    codebase: LegacyCodebase
-  ): Promise<LegacyAnalysis> {
-
+  async analyzeLegacyCode(codebase: LegacyCodebase): Promise<LegacyAnalysis> {
     // 코딩 스타일 및 시대 추정
-    const era = await this.estimateCodeEra(codebase);
+    const era = await this.estimateCodeEra(codebase)
 
     // 레거시 패턴 감지
-    const legacyPatterns = await this.detectLegacyPatterns(codebase, era);
+    const legacyPatterns = await this.detectLegacyPatterns(codebase, era)
 
     // 기술 부채 평가
-    const technicalDebt = await this.assessTechnicalDebt(codebase, legacyPatterns);
+    const technicalDebt = await this.assessTechnicalDebt(codebase, legacyPatterns)
 
     // 위험 요소 식별
-    const risks = await this.identifyRisks(codebase, legacyPatterns);
+    const risks = await this.identifyRisks(codebase, legacyPatterns)
 
     // 현대화 기회 분석
     const modernizationOpportunities = await this.analyzeModernizationOpportunities(
       codebase,
       legacyPatterns
-    );
+    )
 
     return {
       era: {
         estimatedPeriod: era.period,
         characteristics: era.characteristics,
         technologies: era.technologies,
-        confidence: era.confidence
+        confidence: era.confidence,
       },
 
       patterns: {
         structural: legacyPatterns.structural,
         behavioral: legacyPatterns.behavioral,
         idioms: legacyPatterns.idioms,
-        antiPatterns: legacyPatterns.antiPatterns
+        antiPatterns: legacyPatterns.antiPatterns,
       },
 
       technicalDebt: {
         score: technicalDebt.score,
         categories: technicalDebt.categories,
         hotspots: technicalDebt.hotspots,
-        estimatedEffort: technicalDebt.estimatedEffort
+        estimatedEffort: technicalDebt.estimatedEffort,
       },
 
       risks: {
         security: risks.security,
         maintenance: risks.maintenance,
         performance: risks.performance,
-        scalability: risks.scalability
+        scalability: risks.scalability,
       },
 
       modernization: {
         opportunities: modernizationOpportunities,
-        strategy: await this.createModernizationStrategy(
-          codebase,
-          modernizationOpportunities
-        ),
-        roadmap: await this.createModernizationRoadmap(
-          modernizationOpportunities
-        )
-      }
-    };
+        strategy: await this.createModernizationStrategy(codebase, modernizationOpportunities),
+        roadmap: await this.createModernizationRoadmap(modernizationOpportunities),
+      },
+    }
   }
 
   // 레거시 패턴을 현대적 패턴으로 변환
@@ -311,30 +299,17 @@ class LegacyCodeInterpreter {
     legacyCode: LegacyCode,
     targetFramework: ModernFramework
   ): Promise<ModernizedCode> {
-
     // 패턴 매핑 생성
-    const patternMappings = await this.createPatternMappings(
-      legacyCode.patterns,
-      targetFramework
-    );
+    const patternMappings = await this.createPatternMappings(legacyCode.patterns, targetFramework)
 
     // 코드 변환 계획
-    const transformationPlan = await this.planTransformation(
-      legacyCode,
-      patternMappings
-    );
+    const transformationPlan = await this.planTransformation(legacyCode, patternMappings)
 
     // 단계별 변환
-    const transformedCode = await this.executeTransformation(
-      legacyCode,
-      transformationPlan
-    );
+    const transformedCode = await this.executeTransformation(legacyCode, transformationPlan)
 
     // 검증 및 최적화
-    const validatedCode = await this.validateTransformation(
-      legacyCode,
-      transformedCode
-    );
+    const validatedCode = await this.validateTransformation(legacyCode, transformedCode)
 
     return {
       original: legacyCode,
@@ -344,10 +319,10 @@ class LegacyCodeInterpreter {
         readability: this.calculateReadabilityImprovement(legacyCode, validatedCode),
         maintainability: this.calculateMaintainabilityImprovement(legacyCode, validatedCode),
         performance: await this.estimatePerformanceImprovement(legacyCode, validatedCode),
-        security: await this.assessSecurityImprovement(legacyCode, validatedCode)
+        security: await this.assessSecurityImprovement(legacyCode, validatedCode),
       },
-      migrations: await this.generateMigrationGuide(legacyCode, validatedCode)
-    };
+      migrations: await this.generateMigrationGuide(legacyCode, validatedCode),
+    }
   }
 }
 ```
@@ -362,18 +337,17 @@ class BusinessLogicExtractor {
     codebase: Codebase,
     domainContext: DomainContext
   ): Promise<BusinessLogicModel> {
-
     // 도메인 엔티티 식별
-    const entities = await this.identifyDomainEntities(codebase, domainContext);
+    const entities = await this.identifyDomainEntities(codebase, domainContext)
 
     // 비즈니스 규칙 추출
-    const rules = await this.extractBusinessRules(codebase, entities);
+    const rules = await this.extractBusinessRules(codebase, entities)
 
     // 워크플로우 분석
-    const workflows = await this.analyzeBusinessWorkflows(codebase, entities);
+    const workflows = await this.analyzeBusinessWorkflows(codebase, entities)
 
     // 제약 조건 식별
-    const constraints = await this.identifyBusinessConstraints(codebase, entities);
+    const constraints = await this.identifyBusinessConstraints(codebase, entities)
 
     return {
       domainModel: {
@@ -382,10 +356,10 @@ class BusinessLogicExtractor {
           properties: entity.properties,
           behaviors: entity.behaviors,
           relationships: entity.relationships,
-          invariants: entity.invariants
+          invariants: entity.invariants,
         })),
         valueObjects: await this.identifyValueObjects(entities),
-        aggregates: await this.identifyAggregates(entities)
+        aggregates: await this.identifyAggregates(entities),
       },
 
       businessRules: rules.map(rule => ({
@@ -395,7 +369,7 @@ class BusinessLogicExtractor {
         implementation: rule.implementation,
         conditions: rule.conditions,
         actions: rule.actions,
-        exceptions: rule.exceptions
+        exceptions: rule.exceptions,
       })),
 
       workflows: workflows.map(workflow => ({
@@ -404,23 +378,23 @@ class BusinessLogicExtractor {
         actors: workflow.actors,
         triggers: workflow.triggers,
         outcomes: workflow.outcomes,
-        alternativePaths: workflow.alternativePaths
+        alternativePaths: workflow.alternativePaths,
       })),
 
       constraints: constraints.map(constraint => ({
         type: constraint.type,
         description: constraint.description,
         validation: constraint.validation,
-        errorHandling: constraint.errorHandling
+        errorHandling: constraint.errorHandling,
       })),
 
       documentation: await this.generateBusinessDocumentation({
         entities,
         rules,
         workflows,
-        constraints
-      })
-    };
+        constraints,
+      }),
+    }
   }
 
   // 암시적 비즈니스 로직 발견
@@ -428,26 +402,25 @@ class BusinessLogicExtractor {
     codebase: Codebase,
     executionTraces: ExecutionTrace[]
   ): Promise<ImplicitLogic[]> {
-
-    const implicitLogic: ImplicitLogic[] = [];
+    const implicitLogic: ImplicitLogic[] = []
 
     // 패턴 분석을 통한 암시적 규칙 발견
-    const patterns = await this.analyzeExecutionPatterns(executionTraces);
+    const patterns = await this.analyzeExecutionPatterns(executionTraces)
 
     for (const pattern of patterns) {
       if (pattern.frequency > 0.8 && !this.isExplicitlyDocumented(pattern, codebase)) {
-        const logic = await this.inferBusinessLogic(pattern, codebase);
+        const logic = await this.inferBusinessLogic(pattern, codebase)
         implicitLogic.push({
           pattern,
           inferredLogic: logic,
           confidence: pattern.frequency,
           evidence: pattern.occurrences,
-          recommendation: await this.generateExplicitImplementation(logic)
-        });
+          recommendation: await this.generateExplicitImplementation(logic),
+        })
       }
     }
 
-    return implicitLogic;
+    return implicitLogic
   }
 }
 ```
@@ -459,35 +432,32 @@ class BusinessLogicExtractor {
 ```typescript
 // 아키텍처 패턴 인식 엔진
 class ArchitecturePatternRecognizer {
-  private patternCatalog: PatternCatalog;
-  private patternMatchers: PatternMatcher[];
+  private patternCatalog: PatternCatalog
+  private patternMatchers: PatternMatcher[]
 
   // 종합적 패턴 분석
-  async recognizePatterns(
-    codebase: Codebase
-  ): Promise<ArchitectureAnalysis> {
-
+  async recognizePatterns(codebase: Codebase): Promise<ArchitectureAnalysis> {
     // 구조적 패턴 감지
-    const structuralPatterns = await this.detectStructuralPatterns(codebase);
+    const structuralPatterns = await this.detectStructuralPatterns(codebase)
 
     // 행동 패턴 감지
-    const behavioralPatterns = await this.detectBehavioralPatterns(codebase);
+    const behavioralPatterns = await this.detectBehavioralPatterns(codebase)
 
     // 아키텍처 스타일 식별
     const architectureStyle = await this.identifyArchitectureStyle(
       structuralPatterns,
       behavioralPatterns
-    );
+    )
 
     // 마이크로 패턴 분석
-    const microPatterns = await this.analyzeMicroPatterns(codebase);
+    const microPatterns = await this.analyzeMicroPatterns(codebase)
 
     return {
       architectureStyle: {
         primary: architectureStyle.primary,
         secondary: architectureStyle.secondary,
         confidence: architectureStyle.confidence,
-        characteristics: architectureStyle.characteristics
+        characteristics: architectureStyle.characteristics,
       },
 
       patterns: {
@@ -496,17 +466,17 @@ class ArchitecturePatternRecognizer {
           type: pattern.type,
           instances: pattern.instances,
           coverage: pattern.coverage,
-          quality: this.assessPatternQuality(pattern)
+          quality: this.assessPatternQuality(pattern),
         })),
 
         behavioral: behavioralPatterns.map(pattern => ({
           name: pattern.name,
           type: pattern.type,
           implementations: pattern.implementations,
-          consistency: this.assessPatternConsistency(pattern)
+          consistency: this.assessPatternConsistency(pattern),
         })),
 
-        micro: microPatterns
+        micro: microPatterns,
       },
 
       layering: await this.analyzeLayering(codebase),
@@ -517,23 +487,20 @@ class ArchitecturePatternRecognizer {
         architectureStyle,
         structuralPatterns,
         behavioralPatterns
-      )
-    };
+      ),
+    }
   }
 
   // 레이어 아키텍처 분석
-  private async analyzeLayering(
-    codebase: Codebase
-  ): Promise<LayerAnalysis> {
-
+  private async analyzeLayering(codebase: Codebase): Promise<LayerAnalysis> {
     // 레이어 경계 식별
-    const layers = await this.identifyLayers(codebase);
+    const layers = await this.identifyLayers(codebase)
 
     // 레이어 간 의존성 분석
-    const layerDependencies = await this.analyzeLayerDependencies(layers);
+    const layerDependencies = await this.analyzeLayerDependencies(layers)
 
     // 레이어 위반 검출
-    const violations = await this.detectLayerViolations(layers, layerDependencies);
+    const violations = await this.detectLayerViolations(layers, layerDependencies)
 
     return {
       layers: layers.map(layer => ({
@@ -541,23 +508,23 @@ class ArchitecturePatternRecognizer {
         responsibility: layer.responsibility,
         components: layer.components,
         interfaces: layer.interfaces,
-        dependencies: layer.dependencies
+        dependencies: layer.dependencies,
       })),
 
       dependencies: {
         allowed: layerDependencies.allowed,
         actual: layerDependencies.actual,
-        violations: violations
+        violations: violations,
       },
 
       quality: {
         separation: this.calculateLayerSeparation(layers),
         cohesion: this.calculateLayerCohesion(layers),
-        stability: this.calculateLayerStability(layers)
+        stability: this.calculateLayerStability(layers),
       },
 
-      recommendations: this.generateLayeringRecommendations(layers, violations)
-    };
+      recommendations: this.generateLayeringRecommendations(layers, violations),
+    }
   }
 }
 ```
@@ -572,24 +539,20 @@ class DomainDrivenDesignAnalyzer {
     codebase: Codebase,
     domainKnowledge: DomainKnowledge
   ): Promise<DDDAnalysis> {
-
     // Bounded Context 식별
-    const boundedContexts = await this.identifyBoundedContexts(
-      codebase,
-      domainKnowledge
-    );
+    const boundedContexts = await this.identifyBoundedContexts(codebase, domainKnowledge)
 
     // Aggregate 분석
-    const aggregates = await this.analyzeAggregates(codebase, boundedContexts);
+    const aggregates = await this.analyzeAggregates(codebase, boundedContexts)
 
     // Domain Events 추출
-    const domainEvents = await this.extractDomainEvents(codebase);
+    const domainEvents = await this.extractDomainEvents(codebase)
 
     // Repository 패턴 분석
-    const repositories = await this.analyzeRepositories(codebase);
+    const repositories = await this.analyzeRepositories(codebase)
 
     // Domain Service 식별
-    const domainServices = await this.identifyDomainServices(codebase);
+    const domainServices = await this.identifyDomainServices(codebase)
 
     return {
       boundedContexts: boundedContexts.map(context => ({
@@ -597,7 +560,7 @@ class DomainDrivenDesignAnalyzer {
         boundary: context.boundary,
         language: context.ubiquitousLanguage,
         models: context.models,
-        integrationPoints: context.integrationPoints
+        integrationPoints: context.integrationPoints,
       })),
 
       aggregates: aggregates.map(aggregate => ({
@@ -605,7 +568,7 @@ class DomainDrivenDesignAnalyzer {
         entities: aggregate.entities,
         valueObjects: aggregate.valueObjects,
         invariants: aggregate.invariants,
-        boundaries: aggregate.boundaries
+        boundaries: aggregate.boundaries,
       })),
 
       domainEvents: domainEvents.map(event => ({
@@ -613,53 +576,44 @@ class DomainDrivenDesignAnalyzer {
         trigger: event.trigger,
         data: event.data,
         handlers: event.handlers,
-        sideEffects: event.sideEffects
+        sideEffects: event.sideEffects,
       })),
 
       repositories: {
         interfaces: repositories.interfaces,
         implementations: repositories.implementations,
         patterns: repositories.patterns,
-        consistency: this.assessRepositoryConsistency(repositories)
+        consistency: this.assessRepositoryConsistency(repositories),
       },
 
       domainServices: domainServices.map(service => ({
         name: service.name,
         responsibility: service.responsibility,
         operations: service.operations,
-        dependencies: service.dependencies
+        dependencies: service.dependencies,
       })),
 
       quality: {
-        modelAlignment: await this.assessModelAlignment(
-          boundedContexts,
-          domainKnowledge
-        ),
+        modelAlignment: await this.assessModelAlignment(boundedContexts, domainKnowledge),
         boundaryClarity: this.assessBoundaryClarity(boundedContexts),
-        languageConsistency: this.assessLanguageConsistency(
-          boundedContexts,
-          codebase
-        )
-      }
-    };
+        languageConsistency: this.assessLanguageConsistency(boundedContexts, codebase),
+      },
+    }
   }
 
   // Context Mapping 분석
-  async analyzeContextMapping(
-    boundedContexts: BoundedContext[]
-  ): Promise<ContextMap> {
-
-    const relationships: ContextRelationship[] = [];
+  async analyzeContextMapping(boundedContexts: BoundedContext[]): Promise<ContextMap> {
+    const relationships: ContextRelationship[] = []
 
     for (let i = 0; i < boundedContexts.length; i++) {
       for (let j = i + 1; j < boundedContexts.length; j++) {
         const relationship = await this.analyzeContextRelationship(
           boundedContexts[i],
           boundedContexts[j]
-        );
+        )
 
         if (relationship) {
-          relationships.push(relationship);
+          relationships.push(relationship)
         }
       }
     }
@@ -672,11 +626,11 @@ class DomainDrivenDesignAnalyzer {
         type: rel.type, // Shared Kernel, Customer/Supplier, Conformist, etc.
         integrationPattern: rel.integrationPattern,
         dataFlow: rel.dataFlow,
-        issues: rel.issues
+        issues: rel.issues,
       })),
       integrationComplexity: this.calculateIntegrationComplexity(relationships),
-      recommendations: await this.generateIntegrationRecommendations(relationships)
-    };
+      recommendations: await this.generateIntegrationRecommendations(relationships),
+    }
   }
 }
 ```
@@ -688,37 +642,33 @@ class DomainDrivenDesignAnalyzer {
 ```typescript
 // 코드 의도 분석기
 class CodeIntentAnalyzer {
-  private semanticAnalyzer: SemanticAnalyzer;
-  private contextualizer: CodeContextualizer;
+  private semanticAnalyzer: SemanticAnalyzer
+  private contextualizer: CodeContextualizer
 
   // 함수 의도 추론
   async inferFunctionIntent(
     functionDef: FunctionDefinition,
     context: CodeContext
   ): Promise<FunctionIntent> {
-
     // 함수명 분석
-    const nameAnalysis = await this.analyzeFunctionName(functionDef.name);
+    const nameAnalysis = await this.analyzeFunctionName(functionDef.name)
 
     // 매개변수 분석
-    const parameterAnalysis = await this.analyzeParameters(functionDef.parameters);
+    const parameterAnalysis = await this.analyzeParameters(functionDef.parameters)
 
     // 구현 분석
-    const implementationAnalysis = await this.analyzeImplementation(
-      functionDef.body,
-      context
-    );
+    const implementationAnalysis = await this.analyzeImplementation(functionDef.body, context)
 
     // 사용 패턴 분석
-    const usageAnalysis = await this.analyzeUsagePatterns(functionDef, context);
+    const usageAnalysis = await this.analyzeUsagePatterns(functionDef, context)
 
     // 의도 종합
     const intent = await this.synthesizeIntent({
       nameAnalysis,
       parameterAnalysis,
       implementationAnalysis,
-      usageAnalysis
-    });
+      usageAnalysis,
+    })
 
     return {
       primaryPurpose: intent.primary,
@@ -729,8 +679,8 @@ class CodeIntentAnalyzer {
       invariants: intent.invariants,
       businessMeaning: await this.extractBusinessMeaning(intent, context),
       technicalRole: await this.identifyTechnicalRole(intent),
-      qualityAttributes: await this.identifyQualityAttributes(intent)
-    };
+      qualityAttributes: await this.identifyQualityAttributes(intent),
+    }
   }
 
   // 클래스 책임 분석
@@ -738,49 +688,48 @@ class CodeIntentAnalyzer {
     classDef: ClassDefinition,
     codebase: Codebase
   ): Promise<ClassResponsibilities> {
-
     // 단일 책임 원칙 분석
-    const responsibilities = await this.identifyResponsibilities(classDef);
+    const responsibilities = await this.identifyResponsibilities(classDef)
 
     // 협력 관계 분석
-    const collaborations = await this.analyzeCollaborations(classDef, codebase);
+    const collaborations = await this.analyzeCollaborations(classDef, codebase)
 
     // 계약 분석
-    const contracts = await this.analyzeContracts(classDef);
+    const contracts = await this.analyzeContracts(classDef)
 
     return {
       primary: {
         responsibility: responsibilities.primary,
         justification: responsibilities.primaryJustification,
-        cohesion: this.calculateCohesion(classDef, responsibilities.primary)
+        cohesion: this.calculateCohesion(classDef, responsibilities.primary),
       },
 
       secondary: responsibilities.secondary.map(resp => ({
         responsibility: resp,
         justification: resp.justification,
-        refactoringPotential: this.assessRefactoringPotential(classDef, resp)
+        refactoringPotential: this.assessRefactoringPotential(classDef, resp),
       })),
 
       collaborations: collaborations.map(collab => ({
         collaborator: collab.className,
         relationship: collab.type,
         purpose: collab.purpose,
-        coupling: this.calculateCoupling(classDef, collab)
+        coupling: this.calculateCoupling(classDef, collab),
       })),
 
       contracts: {
         provided: contracts.provided,
         required: contracts.required,
-        invariants: contracts.invariants
+        invariants: contracts.invariants,
       },
 
       designQuality: {
         srp: this.assessSingleResponsibility(responsibilities),
         cohesion: this.assessOverallCohesion(classDef, responsibilities),
         coupling: this.assessOverallCoupling(classDef, collaborations),
-        abstraction: this.assessAbstractionLevel(classDef)
-      }
-    };
+        abstraction: this.assessAbstractionLevel(classDef),
+      },
+    }
   }
 }
 ```
@@ -830,35 +779,30 @@ class RefactoringAnalyzer {
     codebase: Codebase,
     refactoringGoals: RefactoringGoal[]
   ): Promise<RefactoringPlan> {
-
     // 현재 상태 분석
-    const currentState = await this.analyzeCurrentState(codebase);
+    const currentState = await this.analyzeCurrentState(codebase)
 
     // 위험 요소 식별
-    const risks = await this.identifyRefactoringRisks(currentState);
+    const risks = await this.identifyRefactoringRisks(currentState)
 
     // 우선순위 결정
-    const priorities = await this.prioritizeRefactoring(
-      refactoringGoals,
-      currentState,
-      risks
-    );
+    const priorities = await this.prioritizeRefactoring(refactoringGoals, currentState, risks)
 
     // 단계별 계획 수립
-    const phases = await this.planRefactoringPhases(priorities, risks);
+    const phases = await this.planRefactoringPhases(priorities, risks)
 
     return {
       currentState: {
         summary: currentState.summary,
         metrics: currentState.metrics,
-        issues: currentState.issues
+        issues: currentState.issues,
       },
 
       risks: risks.map(risk => ({
         area: risk.area,
         severity: risk.severity,
         impact: risk.impact,
-        mitigation: risk.mitigation
+        mitigation: risk.mitigation,
       })),
 
       plan: {
@@ -868,25 +812,22 @@ class RefactoringAnalyzer {
           tasks: phase.tasks,
           duration: phase.estimatedDuration,
           dependencies: phase.dependencies,
-          validation: phase.validationCriteria
+          validation: phase.validationCriteria,
         })),
 
         timeline: this.createTimeline(phases),
 
         resources: this.estimateResources(phases),
 
-        rollback: this.createRollbackStrategy(phases)
+        rollback: this.createRollbackStrategy(phases),
       },
 
       expectedOutcome: {
-        improvements: await this.predictImprovements(
-          currentState,
-          refactoringGoals
-        ),
+        improvements: await this.predictImprovements(currentState, refactoringGoals),
         metrics: await this.predictMetricChanges(currentState, phases),
-        roi: this.calculateROI(phases, currentState)
-      }
-    };
+        roi: this.calculateROI(phases, currentState),
+      },
+    }
   }
 }
 ```

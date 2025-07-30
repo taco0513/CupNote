@@ -1,5 +1,5 @@
 const errorHandler = (err, req, res, next) => {
-  console.error('Error:', err);
+  console.error('Error:', err)
 
   // Joi validation errors
   if (err.name === 'ValidationError') {
@@ -8,9 +8,9 @@ const errorHandler = (err, req, res, next) => {
       error: {
         code: 'VALIDATION_ERROR',
         message: 'Invalid input data',
-        details: err.details || err.message
-      }
-    });
+        details: err.details || err.message,
+      },
+    })
   }
 
   // JWT errors
@@ -19,9 +19,9 @@ const errorHandler = (err, req, res, next) => {
       success: false,
       error: {
         code: 'UNAUTHORIZED',
-        message: 'Invalid token'
-      }
-    });
+        message: 'Invalid token',
+      },
+    })
   }
 
   if (err.name === 'TokenExpiredError') {
@@ -29,30 +29,32 @@ const errorHandler = (err, req, res, next) => {
       success: false,
       error: {
         code: 'UNAUTHORIZED',
-        message: 'Token expired'
-      }
-    });
+        message: 'Token expired',
+      },
+    })
   }
 
   // Database errors
-  if (err.code === '23505') { // PostgreSQL unique violation
+  if (err.code === '23505') {
+    // PostgreSQL unique violation
     return res.status(409).json({
       success: false,
       error: {
         code: 'CONFLICT',
-        message: 'Resource already exists'
-      }
-    });
+        message: 'Resource already exists',
+      },
+    })
   }
 
-  if (err.code === '23503') { // PostgreSQL foreign key violation
+  if (err.code === '23503') {
+    // PostgreSQL foreign key violation
     return res.status(400).json({
       success: false,
       error: {
         code: 'VALIDATION_ERROR',
-        message: 'Invalid reference'
-      }
-    });
+        message: 'Invalid reference',
+      },
+    })
   }
 
   // Custom application errors
@@ -61,9 +63,9 @@ const errorHandler = (err, req, res, next) => {
       success: false,
       error: {
         code: err.code || 'ERROR',
-        message: err.message
-      }
-    });
+        message: err.message,
+      },
+    })
   }
 
   // Default error
@@ -72,13 +74,13 @@ const errorHandler = (err, req, res, next) => {
     error: {
       code: 'INTERNAL_ERROR',
       message: 'An unexpected error occurred',
-      ...(process.env.NODE_ENV === 'development' && { details: err.message })
+      ...(process.env.NODE_ENV === 'development' && { details: err.message }),
     },
     meta: {
       request_id: req.id || 'unknown',
-      timestamp: new Date().toISOString()
-    }
-  });
-};
+      timestamp: new Date().toISOString(),
+    },
+  })
+}
 
-module.exports = errorHandler;
+module.exports = errorHandler

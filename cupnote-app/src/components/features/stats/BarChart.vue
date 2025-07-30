@@ -13,40 +13,33 @@ import {
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 } from 'chart.js'
 
 // Register Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-)
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const props = defineProps({
   chartId: {
     type: String,
-    required: true
+    required: true,
   },
   data: {
     type: Object,
-    required: true
+    required: true,
   },
   options: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
   },
   width: {
     type: Number,
-    default: 400
+    default: 400,
   },
   height: {
     type: Number,
-    default: 200
-  }
+    default: 200,
+  },
 })
 
 let chart = null
@@ -56,7 +49,7 @@ const defaultOptions = {
   maintainAspectRatio: false,
   plugins: {
     legend: {
-      display: false
+      display: false,
     },
     tooltip: {
       backgroundColor: 'rgba(124, 88, 66, 0.9)',
@@ -67,46 +60,46 @@ const defaultOptions = {
       cornerRadius: 8,
       displayColors: false,
       callbacks: {
-        title: function(context) {
+        title: function (context) {
           return context[0].label
         },
-        label: function(context) {
+        label: function (context) {
           return `${context.parsed.y}회`
-        }
-      }
-    }
+        },
+      },
+    },
   },
   scales: {
     x: {
       display: true,
       grid: {
-        display: false
+        display: false,
       },
       ticks: {
         color: '#A0796A',
         font: {
-          size: 12
-        }
-      }
+          size: 12,
+        },
+      },
     },
     y: {
       display: true,
       beginAtZero: true,
       grid: {
         color: 'rgba(160, 121, 106, 0.1)',
-        drawBorder: false
+        drawBorder: false,
       },
       ticks: {
         color: '#A0796A',
         font: {
-          size: 12
+          size: 12,
         },
         stepSize: 1,
-        callback: function(value) {
+        callback: function (value) {
           return value + '회'
-        }
-      }
-    }
+        },
+      },
+    },
   },
   elements: {
     bar: {
@@ -114,53 +107,53 @@ const defaultOptions = {
         topLeft: 4,
         topRight: 4,
         bottomLeft: 0,
-        bottomRight: 0
+        bottomRight: 0,
       },
-      borderSkipped: false
-    }
+      borderSkipped: false,
+    },
   },
   animation: {
     duration: 1000,
-    easing: 'easeOutQuart'
-  }
+    easing: 'easeOutQuart',
+  },
 }
 
 const processData = (data) => {
   return {
     ...data,
-    datasets: data.datasets.map(dataset => ({
+    datasets: data.datasets.map((dataset) => ({
       ...dataset,
       backgroundColor: dataset.backgroundColor || 'rgba(124, 88, 66, 0.8)',
       borderColor: dataset.borderColor || '#7C5842',
       borderWidth: dataset.borderWidth || 1,
       hoverBackgroundColor: dataset.hoverBackgroundColor || 'rgba(124, 88, 66, 1)',
       hoverBorderColor: dataset.hoverBorderColor || '#5D3F2E',
-      hoverBorderWidth: dataset.hoverBorderWidth || 2
-    }))
+      hoverBorderWidth: dataset.hoverBorderWidth || 2,
+    })),
   }
 }
 
 const initChart = async () => {
   await nextTick()
-  
+
   const canvas = document.getElementById(props.chartId)
   if (!canvas) return
-  
+
   const ctx = canvas.getContext('2d')
-  
+
   if (chart) {
     chart.destroy()
   }
-  
+
   const mergedOptions = {
     ...defaultOptions,
-    ...props.options
+    ...props.options,
   }
-  
+
   chart = new ChartJS(ctx, {
     type: 'bar',
     data: processData(props.data),
-    options: mergedOptions
+    options: mergedOptions,
   })
 }
 
@@ -172,14 +165,22 @@ const updateChart = () => {
 }
 
 // Watch for data changes
-watch(() => props.data, () => {
-  updateChart()
-}, { deep: true })
+watch(
+  () => props.data,
+  () => {
+    updateChart()
+  },
+  { deep: true },
+)
 
 // Watch for options changes
-watch(() => props.options, () => {
-  initChart()
-}, { deep: true })
+watch(
+  () => props.options,
+  () => {
+    initChart()
+  },
+  { deep: true },
+)
 
 onMounted(() => {
   initChart()

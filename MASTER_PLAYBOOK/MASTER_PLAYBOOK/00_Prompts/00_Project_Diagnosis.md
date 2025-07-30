@@ -87,15 +87,15 @@
 
 ### 진단 결과 → 추천 프롬프트 매핑
 
-| 진단 결과 | 추천 프롬프트 | 이유 |
-|-----------|--------------|------|
-| 🌱 새싹 프로젝트 | 01_New_Project_Start.md | 기초부터 제대로 설정 |
-| 🏗️ 건설 중 | 03_Project_Optimization.md | 진행 중인 개발 최적화 |
-| 🎢 롤러코스터 | 02_Project_Review_Foundation.md | 기초 재정비 필요 |
-| 🏚️ 레거시 | 08_Rescue_Messy_Project.md | 전면적인 구조 작업 |
-| ⚡ 최적화 필요 | 03_Project_Optimization.md | 성능/구조 개선 |
-| 🆘 긴급 상황 | 06_Emergency_Debugging.md | 즉시 문제 해결 |
-| 🎯 프로덕션 준비 | 07_Architecture_Design.md | 최종 검토와 개선 |
+| 진단 결과        | 추천 프롬프트                   | 이유                  |
+| ---------------- | ------------------------------- | --------------------- |
+| 🌱 새싹 프로젝트 | 01_New_Project_Start.md         | 기초부터 제대로 설정  |
+| 🏗️ 건설 중       | 03_Project_Optimization.md      | 진행 중인 개발 최적화 |
+| 🎢 롤러코스터    | 02_Project_Review_Foundation.md | 기초 재정비 필요      |
+| 🏚️ 레거시        | 08_Rescue_Messy_Project.md      | 전면적인 구조 작업    |
+| ⚡ 최적화 필요   | 03_Project_Optimization.md      | 성능/구조 개선        |
+| 🆘 긴급 상황     | 06_Emergency_Debugging.md       | 즉시 문제 해결        |
+| 🎯 프로덕션 준비 | 07_Architecture_Design.md       | 최종 검토와 개선      |
 
 ### 복합 상황 대응
 
@@ -110,16 +110,19 @@
 ## 💡 사용 팁
 
 ### 1. 진단 전 준비사항
+
 - 프로젝트 루트 디렉토리에서 실행
 - Git 저장소라면 최신 상태로 pull
 - node_modules 등은 미리 설치
 
 ### 2. 진단 후 행동 요령
+
 - 진단 결과를 팀과 공유
 - 추천된 프롬프트로 즉시 학습 시작
 - 개선사항은 우선순위에 따라 처리
 
 ### 3. 정기 건강검진
+
 - 2주마다 재진단 권장
 - 큰 기능 추가 후 필수 진단
 - 팀원 변경 시 진단 및 공유

@@ -2,15 +2,9 @@
   <div class="coffee-info-view">
     <!-- Header -->
     <header class="setup-header">
-      <button class="back-btn" @click="$router.push('/mode-selection')">
-        ←
-      </button>
-      <h1 class="setup-title">
-        ☕ 커피 정보 입력
-      </h1>
-      <p class="setup-subtitle">
-        {{ modeLabels[currentMode] }} 모드
-      </p>
+      <button class="back-btn" @click="$router.push('/mode-selection')">←</button>
+      <h1 class="setup-title">☕ 커피 정보 입력</h1>
+      <p class="setup-subtitle">{{ modeLabels[currentMode] }} 모드</p>
       <div class="progress-bar">
         <div class="progress-fill" :style="{ width: '25%' }"></div>
       </div>
@@ -21,7 +15,7 @@
       <!-- Basic Info (All Modes) -->
       <section class="form-section">
         <h3 class="section-title">기본 정보</h3>
-        
+
         <div class="input-group">
           <label for="cafeName" class="input-label required">카페 이름</label>
           <input
@@ -50,21 +44,11 @@
           <label class="input-label required">온도</label>
           <div class="radio-group">
             <label class="radio-item">
-              <input
-                v-model="formData.temperature"
-                type="radio"
-                value="hot"
-                class="radio-input"
-              />
+              <input v-model="formData.temperature" type="radio" value="hot" class="radio-input" />
               <span class="radio-label">🔥 HOT</span>
             </label>
             <label class="radio-item">
-              <input
-                v-model="formData.temperature"
-                type="radio"
-                value="iced"
-                class="radio-input"
-              />
+              <input v-model="formData.temperature" type="radio" value="iced" class="radio-input" />
               <span class="radio-label">❄️ ICED</span>
             </label>
           </div>
@@ -80,7 +64,7 @@
             <span>선택 정보 {{ showOptionalFields ? '접기' : '펼치기' }}</span>
             <span class="expand-icon">{{ showOptionalFields ? '▲' : '▼' }}</span>
           </button>
-          
+
           <div v-show="showOptionalFields" class="optional-fields">
             <div class="input-group">
               <label for="origin" class="input-label">원산지</label>
@@ -117,11 +101,7 @@
 
             <div class="input-group">
               <label for="process" class="input-label">가공방식</label>
-              <select
-                id="process"
-                v-model="formData.process"
-                class="select-field"
-              >
+              <select id="process" v-model="formData.process" class="select-field">
                 <option value="">선택하세요</option>
                 <option value="washed">워시드</option>
                 <option value="natural">내추럴</option>
@@ -132,11 +112,7 @@
 
             <div class="input-group">
               <label for="roastLevel" class="input-label">로스팅 레벨</label>
-              <select
-                id="roastLevel"
-                v-model="formData.roastLevel"
-                class="select-field"
-              >
+              <select id="roastLevel" v-model="formData.roastLevel" class="select-field">
                 <option value="">선택하세요</option>
                 <option value="light">라이트</option>
                 <option value="medium">미디엄</option>
@@ -150,7 +126,7 @@
       <!-- Brew Settings (HomeCafe + Lab Modes) -->
       <section v-if="showBrewSettings" class="form-section">
         <h3 class="section-title">브루잉 설정</h3>
-        
+
         <div class="input-group">
           <label class="input-label">드리퍼</label>
           <div class="dripper-grid">
@@ -216,15 +192,11 @@
       <!-- Pro Data (Pro Mode Only) -->
       <section v-if="currentMode === 'pro'" class="form-section">
         <h3 class="section-title">Pro 데이터</h3>
-        
+
         <div class="lab-controls">
           <div class="input-group">
             <label for="grindSize" class="input-label">분쇄도</label>
-            <select
-              id="grindSize"
-              v-model="formData.grindSize"
-              class="select-field"
-            >
+            <select id="grindSize" v-model="formData.grindSize" class="select-field">
               <option value="">선택하세요</option>
               <option value="coarse">Coarse</option>
               <option value="medium">Medium</option>
@@ -289,9 +261,7 @@
         <button type="button" class="btn-secondary" @click="$router.push('/mode-selection')">
           취소
         </button>
-        <button type="submit" class="btn-primary" :disabled="!isFormValid">
-          다음 단계
-        </button>
+        <button type="submit" class="btn-primary" :disabled="!isFormValid">다음 단계</button>
       </div>
     </form>
   </div>
@@ -311,7 +281,7 @@ const { navigateNext, validateSession } = useFlowNavigation()
 const modeLabels = {
   cafe: '카페',
   homecafe: '홈카페',
-  lab: '랩'
+  lab: '랩',
 }
 
 // State
@@ -329,17 +299,17 @@ const formData = ref({
   altitude: '',
   process: '',
   roastLevel: '',
-  
+
   // Brew Settings
   dripper: 'v60',
   coffeeAmount: 20,
   ratio: 16,
-  
+
   // Lab Data
   grindSize: '',
   waterTemp: 93,
   tds: null,
-  extractionYield: null
+  extractionYield: null,
 })
 
 // Options
@@ -348,22 +318,22 @@ const drippers = [
   { value: 'kalita', name: 'Kalita', icon: '🔺' },
   { value: 'chemex', name: 'Chemex', icon: '⌛' },
   { value: 'aeropress', name: 'Aeropress', icon: '🔥' },
-  { value: 'french-press', name: 'French Press', icon: '☕' }
+  { value: 'french-press', name: 'French Press', icon: '☕' },
 ]
 
 const ratios = [
   { value: 15, label: '1:15' },
   { value: 16, label: '1:16' },
-  { value: 17, label: '1:17' }
+  { value: 17, label: '1:17' },
 ]
 
 // Computed Properties
-const showBrewSettings = computed(() => 
-  currentMode.value === 'homecafe' || currentMode.value === 'pro'
+const showBrewSettings = computed(
+  () => currentMode.value === 'homecafe' || currentMode.value === 'pro',
 )
 
-const calculatedWater = computed(() => 
-  Math.round(formData.value.coffeeAmount * formData.value.ratio)
+const calculatedWater = computed(() =>
+  Math.round(formData.value.coffeeAmount * formData.value.ratio),
 )
 
 const isFormValid = computed(() => {
@@ -388,24 +358,25 @@ const adjustTemp = (delta) => {
 
 const handleSubmit = () => {
   if (!isFormValid.value) return
-  
+
   // Create location string based on mode
-  const location = currentMode.value === 'cafe' 
-    ? formData.value.cafeName 
-    : currentMode.value === 'homecafe' 
-      ? '홈카페' 
-      : 'Pro'
-  
+  const location =
+    currentMode.value === 'cafe'
+      ? formData.value.cafeName
+      : currentMode.value === 'homecafe'
+        ? '홈카페'
+        : 'Pro'
+
   // Create brewing method string
   let brewingMethod = `${currentMode.value === 'cafe' ? '카페' : formData.value.dripper || '기타'}`
-  
+
   if (currentMode.value !== 'cafe') {
     brewingMethod += ` - ${formData.value.coffeeAmount}g, 1:${formData.value.ratio}`
     if (currentMode.value === 'pro' && formData.value.waterTemp) {
       brewingMethod += `, ${formData.value.waterTemp}°C`
     }
   }
-  
+
   // Save to store with altitude
   tastingSessionStore.updateCoffeeSetup({
     coffee_name: formData.value.coffeeName,
@@ -416,11 +387,11 @@ const handleSubmit = () => {
     variety: formData.value.variety,
     altitude: formData.value.altitude,
     process: formData.value.process,
-    roastLevel: formData.value.roastLevel
+    roastLevel: formData.value.roastLevel,
   })
-  
+
   console.log('Coffee setup saved:', tastingSessionStore.currentSession)
-  
+
   // Navigate to next step using the flow navigation
   navigateNext('coffee-info', ['coffeeInfo'])
 }
@@ -436,7 +407,7 @@ onMounted(() => {
   max-width: 600px;
   margin: 0 auto;
   padding: 1rem;
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5F0E8 100%);
+  background: linear-gradient(135deg, #fff8f0 0%, #f5f0e8 100%);
   min-height: 100vh;
 }
 
@@ -454,7 +425,7 @@ onMounted(() => {
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: #7C5842;
+  color: #7c5842;
   cursor: pointer;
   width: 40px;
   height: 40px;
@@ -472,7 +443,7 @@ onMounted(() => {
 .progress-bar {
   max-width: 300px;
   height: 4px;
-  background: #E8D5C4;
+  background: #e8d5c4;
   border-radius: 2px;
   margin: 1rem auto 0;
   overflow: hidden;
@@ -480,28 +451,28 @@ onMounted(() => {
 
 .progress-fill {
   height: 100%;
-  background: #7C5842;
+  background: #7c5842;
   transition: width 0.3s ease;
 }
 
 .setup-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .setup-subtitle {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 1.1rem;
 }
 
 .section-title {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1rem;
-  border-bottom: 2px solid #E8D5C4;
+  border-bottom: 2px solid #e8d5c4;
   padding-bottom: 0.5rem;
 }
 
@@ -518,7 +489,7 @@ onMounted(() => {
 
 .mode-btn {
   background: white;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 12px;
   padding: 1rem;
   text-align: center;
@@ -530,14 +501,14 @@ onMounted(() => {
 }
 
 .mode-btn:hover {
-  border-color: #D4B896;
+  border-color: #d4b896;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(124, 88, 66, 0.2);
 }
 
 .mode-btn.active {
-  border-color: #7C5842;
-  background: #7C5842;
+  border-color: #7c5842;
+  background: #7c5842;
   color: white;
 }
 
@@ -575,20 +546,20 @@ onMounted(() => {
 .input-label {
   display: block;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .input-label.required::after {
   content: ' *';
-  color: #E74C3C;
+  color: #e74c3c;
 }
 
 .input-field,
 .select-field {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.2s ease;
@@ -597,7 +568,7 @@ onMounted(() => {
 .input-field:focus,
 .select-field:focus {
   outline: none;
-  border-color: #7C5842;
+  border-color: #7c5842;
   box-shadow: 0 0 0 3px rgba(124, 88, 66, 0.1);
 }
 
@@ -606,7 +577,7 @@ onMounted(() => {
   right: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.9rem;
 }
 
@@ -636,8 +607,8 @@ onMounted(() => {
 }
 
 .expand-btn {
-  background: #F8F4F0;
-  border: 1px solid #E8D5C4;
+  background: #f8f4f0;
+  border: 1px solid #e8d5c4;
   border-radius: 8px;
   padding: 0.75rem 1rem;
   width: 100%;
@@ -646,18 +617,18 @@ onMounted(() => {
   align-items: center;
   cursor: pointer;
   font-weight: 500;
-  color: #7C5842;
+  color: #7c5842;
   transition: background-color 0.2s ease;
 }
 
 .expand-btn:hover {
-  background: #F0E8DC;
+  background: #f0e8dc;
 }
 
 .optional-fields {
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid #E8D5C4;
+  border-top: 1px solid #e8d5c4;
 }
 
 /* Dripper Grid */
@@ -669,7 +640,7 @@ onMounted(() => {
 
 .dripper-btn {
   background: white;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   padding: 1rem 0.5rem;
   text-align: center;
@@ -681,12 +652,12 @@ onMounted(() => {
 }
 
 .dripper-btn:hover {
-  border-color: #D4B896;
+  border-color: #d4b896;
 }
 
 .dripper-btn.active {
-  border-color: #7C5842;
-  background: #7C5842;
+  border-color: #7c5842;
+  background: #7c5842;
   color: white;
 }
 
@@ -715,7 +686,7 @@ onMounted(() => {
 
 .amount-btn,
 .temp-btn {
-  background: #7C5842;
+  background: #7c5842;
   color: white;
   border: none;
   border-radius: 50%;
@@ -732,12 +703,12 @@ onMounted(() => {
 
 .amount-btn:hover:not(:disabled),
 .temp-btn:hover:not(:disabled) {
-  background: #5D3F2E;
+  background: #5d3f2e;
 }
 
 .amount-btn:disabled,
 .temp-btn:disabled {
-  background: #CCC;
+  background: #ccc;
   cursor: not-allowed;
 }
 
@@ -745,7 +716,7 @@ onMounted(() => {
 .temp-display {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   min-width: 60px;
   text-align: center;
 }
@@ -758,7 +729,7 @@ onMounted(() => {
 
 .ratio-btn {
   background: white;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   padding: 0.5rem 1rem;
   cursor: pointer;
@@ -767,32 +738,32 @@ onMounted(() => {
 }
 
 .ratio-btn:hover {
-  border-color: #D4B896;
+  border-color: #d4b896;
 }
 
 .ratio-btn.active {
-  border-color: #7C5842;
-  background: #7C5842;
+  border-color: #7c5842;
+  background: #7c5842;
   color: white;
 }
 
 .calculated-info {
   text-align: center;
   padding: 1rem;
-  background: #F8F4F0;
+  background: #f8f4f0;
   border-radius: 8px;
-  border: 1px solid #E8D5C4;
+  border: 1px solid #e8d5c4;
 }
 
 .calc-label {
-  color: #A0796A;
+  color: #a0796a;
   margin-right: 0.5rem;
 }
 
 .calc-value {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 /* Lab Controls */
@@ -809,7 +780,7 @@ onMounted(() => {
   justify-content: space-between;
   margin-top: 2rem;
   padding-top: 2rem;
-  border-top: 1px solid #E8D5C4;
+  border-top: 1px solid #e8d5c4;
 }
 
 .btn-primary,
@@ -824,32 +795,32 @@ onMounted(() => {
 }
 
 .btn-primary {
-  background: #7C5842;
+  background: #7c5842;
   color: white;
-  border: 2px solid #7C5842;
+  border: 2px solid #7c5842;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #5D3F2E;
-  border-color: #5D3F2E;
+  background: #5d3f2e;
+  border-color: #5d3f2e;
   transform: translateY(-1px);
 }
 
 .btn-primary:disabled {
-  background: #CCC;
-  border-color: #CCC;
+  background: #ccc;
+  border-color: #ccc;
   cursor: not-allowed;
   transform: none;
 }
 
 .btn-secondary {
   background: white;
-  color: #7C5842;
-  border: 2px solid #E8D5C4;
+  color: #7c5842;
+  border: 2px solid #e8d5c4;
 }
 
 .btn-secondary:hover {
-  border-color: #D4B896;
+  border-color: #d4b896;
   transform: translateY(-1px);
 }
 
@@ -858,23 +829,23 @@ onMounted(() => {
   .coffee-info-view {
     padding: 0.5rem;
   }
-  
+
   .coffee-form {
     padding: 1.5rem;
   }
-  
+
   .setup-title {
     font-size: 1.5rem;
   }
-  
+
   .mode-buttons {
     grid-template-columns: 1fr;
   }
-  
+
   .dripper-grid {
     grid-template-columns: repeat(3, 1fr);
   }
-  
+
   .action-buttons {
     flex-direction: column;
   }

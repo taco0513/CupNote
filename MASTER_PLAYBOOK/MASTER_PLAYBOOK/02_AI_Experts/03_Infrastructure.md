@@ -9,12 +9,14 @@
 ### 🔧 devops-engineer - DevOps 엔지니어
 
 #### 전문 분야
+
 - CI/CD 파이프라인 구축
 - 자동화 시스템 구현
 - 인프라 코드화 (IaC)
 - 모니터링 설정
 
 #### 자동 호출 상황
+
 ```
 "자동 배포 설정"
 "CI/CD 구축"
@@ -23,6 +25,7 @@
 ```
 
 #### 실제 사용 예시
+
 ```
 You: 코드 푸시하면 자동으로 배포되게 해줘
 
@@ -43,12 +46,14 @@ DevOps Engineer: GitHub Actions로 자동 배포 파이프라인을 구축하겠
 ### ☁️ cloud-architect - 클라우드 설계자
 
 #### 전문 분야
+
 - AWS/GCP/Azure 아키텍처
 - 서버리스 설계
 - 비용 최적화
 - 확장성 설계
 
 #### 자동 호출 상황
+
 ```
 "AWS에 배포"
 "서버 구축"
@@ -57,6 +62,7 @@ DevOps Engineer: GitHub Actions로 자동 배포 파이프라인을 구축하겠
 ```
 
 #### 실제 사용 예시
+
 ```
 You: 사용자가 늘어나도 괜찮은 서버 구조 만들어줘
 
@@ -77,12 +83,14 @@ Cloud Architect: 자동 확장 가능한 클라우드 아키텍처를 설계하�
 ### 🚀 deployment-specialist - 배포 전문가
 
 #### 전문 분야
+
 - 무중단 배포
 - 롤백 전략
 - 배포 자동화
 - 다양한 플랫폼 배포
 
 #### 자동 호출 상황
+
 ```
 "사이트 배포해줘"
 "온라인에 올려줘"
@@ -91,6 +99,7 @@ Cloud Architect: 자동 확장 가능한 클라우드 아키텍처를 설계하�
 ```
 
 #### 실제 사용 예시
+
 ```
 You: 만든 웹사이트를 인터넷에 올려줘
 
@@ -114,12 +123,14 @@ Deployment Specialist: Vercel을 통해 배포하겠습니다.
 ### 🐳 docker-expert - Docker 전문가
 
 #### 전문 분야
+
 - 컨테이너화
 - Docker Compose
 - 이미지 최적화
 - 컨테이너 오케스트레이션
 
 #### 자동 호출 상황
+
 ```
 "Docker로 패키징"
 "컨테이너화"
@@ -128,6 +139,7 @@ Deployment Specialist: Vercel을 통해 배포하겠습니다.
 ```
 
 #### 실제 사용 예시
+
 ```
 You: 개발 환경을 팀원들과 똑같이 맞추고 싶어
 
@@ -149,12 +161,14 @@ docker-compose up -d
 ### ⚙️ kubernetes-admin - 쿠버네티스 관리자
 
 #### 전문 분야
+
 - K8s 클러스터 관리
 - 컨테이너 오케스트레이션
 - 스케일링 정책
 - 서비스 메시
 
 #### 자동 호출 상황
+
 ```
 "대규모 서비스 운영"
 "마이크로서비스 관리"
@@ -167,12 +181,14 @@ docker-compose up -d
 ### 📊 monitoring-engineer - 모니터링 엔지니어
 
 #### 전문 분야
+
 - 실시간 모니터링
 - 로그 수집/분석
 - 알림 시스템
 - 대시보드 구축
 
 #### 자동 호출 상황
+
 ```
 "서버 상태 확인"
 "에러 추적"
@@ -181,6 +197,7 @@ docker-compose up -d
 ```
 
 #### 실제 사용 예시
+
 ```
 You: 서버에 문제 생기면 바로 알고 싶어
 
@@ -199,12 +216,14 @@ Monitoring Engineer: 종합 모니터링 시스템을 구축하겠습니다.
 ### 💾 backup-specialist - 백업 전문가
 
 #### 전문 분야
+
 - 자동 백업 시스템
 - 재해 복구 계획
 - 데이터 복원
 - 백업 정책 수립
 
 #### 자동 호출 상황
+
 ```
 "데이터 백업"
 "백업 자동화"
@@ -217,12 +236,14 @@ Monitoring Engineer: 종합 모니터링 시스템을 구축하겠습니다.
 ### 🌐 cdn-optimizer - CDN 최적화 전문가
 
 #### 전문 분야
+
 - CDN 설정 및 최적화
 - 글로벌 콘텐츠 배포
 - 캐싱 전략
 - 엣지 컴퓨팅
 
 #### 자동 호출 상황
+
 ```
 "전 세계에서 빠르게"
 "이미지 로딩 최적화"
@@ -233,6 +254,7 @@ Monitoring Engineer: 종합 모니터링 시스템을 구축하겠습니다.
 ## 💡 효과적인 활용법
 
 ### 1. 배포 프로세스
+
 ```
 개발 완료 → deployment-specialist
 모니터링 설정 → monitoring-engineer
@@ -241,6 +263,7 @@ CDN 적용 → cdn-optimizer
 ```
 
 ### 2. 확장 가능한 시스템
+
 ```
 1. cloud-architect: 클라우드 설계
 2. docker-expert: 컨테이너화
@@ -249,6 +272,7 @@ CDN 적용 → cdn-optimizer
 ```
 
 ### 3. 안정적인 운영
+
 ```
 - 24/7 모니터링
 - 자동 백업
@@ -259,16 +283,19 @@ CDN 적용 → cdn-optimizer
 ## 🎯 프로젝트 규모별 추천
 
 ### 🌱 소규모 (개인 프로젝트)
+
 - deployment-specialist (Vercel/Netlify 배포)
 - monitoring-engineer (기본 모니터링)
 
 ### 🌿 중규모 (스타트업)
+
 - cloud-architect (AWS/GCP 구성)
 - docker-expert (컨테이너화)
 - devops-engineer (CI/CD)
 - monitoring-engineer (APM 도구)
 
 ### 🌳 대규모 (엔터프라이즈)
+
 - 모든 인프라 전문가 총동원
 - kubernetes-admin (대규모 오케스트레이션)
 - backup-specialist (재해 복구)
@@ -277,12 +304,14 @@ CDN 적용 → cdn-optimizer
 ## 📊 자동화되는 작업들
 
 ### DevOps 자동화
+
 - ✅ 코드 푸시 → 자동 테스트
 - ✅ 테스트 통과 → 자동 빌드
 - ✅ 빌드 성공 → 자동 배포
 - ✅ 배포 완료 → 알림 발송
 
 ### 운영 자동화
+
 - ✅ 트래픽 증가 → 서버 자동 확장
 - ✅ 에러 발생 → 자동 알림
 - ✅ 매일 자정 → 자동 백업

@@ -11,12 +11,14 @@ Claude Code CLI가 일관되고 확장 가능한 UI를 자동 생성할 수 있�
 ### 🚀 속도와 일관성의 완벽한 조합
 
 **기존 방식의 문제점:**
+
 ```
 디자인 결정 → 코딩 → 수정 → 재코딩 → 또 수정 → ...
 ⏰ 시간: 3-5시간, 🎯 일관성: 60%
 ```
 
 **디자인 시스템 + AI 방식:**
+
 ```
 토큰 정의 → AI 자동 생성 → 완성
 ⏰ 시간: 10-15분, 🎯 일관성: 95%
@@ -41,41 +43,41 @@ Claude Code CLI가 일관되고 확장 가능한 UI를 자동 생성할 수 있�
 /* AI 프로토타입 토큰 세트 */
 :root {
   /* 🎨 Color Scale - 프로토타입에 최적화 */
-  --color-primary: #4F46E5;
-  --color-success: #10B981;
-  --color-warning: #F59E0B;
-  --color-error: #EF4444;
+  --color-primary: #4f46e5;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
 
   /* 📝 Text Colors */
   --text-primary: #111827;
-  --text-secondary: #6B7280;
-  --text-muted: #9CA3AF;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
 
   /* 🏢 Background */
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #F9FAFB;
-  --bg-muted: #F3F4F6;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --bg-muted: #f3f4f6;
 
   /* 📏 Spacing Scale (8px grid) */
   --space-1: 0.25rem; /* 4px */
-  --space-2: 0.5rem;  /* 8px */
+  --space-2: 0.5rem; /* 8px */
   --space-3: 0.75rem; /* 12px */
-  --space-4: 1rem;    /* 16px */
-  --space-6: 1.5rem;  /* 24px */
-  --space-8: 2rem;    /* 32px */
+  --space-4: 1rem; /* 16px */
+  --space-6: 1.5rem; /* 24px */
+  --space-8: 2rem; /* 32px */
 
   /* 🔤 Typography */
-  --text-xs: 0.75rem;   /* 12px */
-  --text-sm: 0.875rem;  /* 14px */
-  --text-base: 1rem;    /* 16px */
-  --text-lg: 1.125rem;  /* 18px */
-  --text-xl: 1.25rem;   /* 20px */
-  --text-2xl: 1.5rem;   /* 24px */
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-base: 1rem; /* 16px */
+  --text-lg: 1.125rem; /* 18px */
+  --text-xl: 1.25rem; /* 20px */
+  --text-2xl: 1.5rem; /* 24px */
   --text-3xl: 1.875rem; /* 30px */
 
   /* 🎯 Border & Shadow */
   --border-radius: 0.375rem; /* 6px */
-  --border-color: #E5E7EB;
+  --border-color: #e5e7eb;
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }
@@ -88,8 +90,8 @@ Claude Code CLI가 일관되고 확장 가능한 UI를 자동 생성할 수 있�
 ```jsx
 // 🔘 Button Component - Claude Code 최적화
 const Button = ({
-  variant = 'primary',    // primary | secondary | ghost
-  size = 'md',           // sm | md | lg
+  variant = 'primary', // primary | secondary | ghost
+  size = 'md', // sm | md | lg
   children,
   className = '',
   ...props
@@ -97,14 +99,14 @@ const Button = ({
   const variants = {
     primary: 'bg-[var(--color-primary)] text-white',
     secondary: 'bg-transparent border border-[var(--color-primary)] text-[var(--color-primary)]',
-    ghost: 'bg-transparent text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]'
-  };
+    ghost: 'bg-transparent text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]',
+  }
 
   const sizes = {
     sm: 'px-[var(--space-3)] py-[var(--space-1)] text-[var(--text-sm)]',
     md: 'px-[var(--space-4)] py-[var(--space-2)] text-[var(--text-base)]',
-    lg: 'px-[var(--space-6)] py-[var(--space-3)] text-[var(--text-lg)]'
-  };
+    lg: 'px-[var(--space-6)] py-[var(--space-3)] text-[var(--text-lg)]',
+  }
 
   return (
     <button
@@ -120,8 +122,8 @@ const Button = ({
     >
       {children}
     </button>
-  );
-};
+  )
+}
 ```
 
 ---
@@ -130,11 +132,11 @@ const Button = ({
 
 ### 📊 3단계 디자인 시스템 성숙도
 
-| 단계 | 범위 | 토큰 수 | 컴포넌트 수 | 시간 | Claude 활용도 |
-|------|------|---------|-------------|------|---------------|
-| **Level 1: 프로토타입** | 기본 UI | 20개 | 5개 | 30분 | 90% 자동 |
-| **Level 2: 베타** | 브랜드 적용 | 50개 | 15개 | 1-2일 | 70% 자동 |
-| **Level 3: 프로덕션** | 완전한 시스템 | 100+개 | 30+개 | 1-2주 | 50% 자동 |
+| 단계                    | 범위          | 토큰 수 | 컴포넌트 수 | 시간  | Claude 활용도 |
+| ----------------------- | ------------- | ------- | ----------- | ----- | ------------- |
+| **Level 1: 프로토타입** | 기본 UI       | 20개    | 5개         | 30분  | 90% 자동      |
+| **Level 2: 베타**       | 브랜드 적용   | 50개    | 15개        | 1-2일 | 70% 자동      |
+| **Level 3: 프로덕션**   | 완전한 시스템 | 100+개  | 30+개       | 1-2주 | 50% 자동      |
 
 ### 🎯 Level 1: 30분 프로토타입 시스템
 
@@ -148,6 +150,7 @@ const Button = ({
 ```
 
 **자동 생성 컴포넌트:**
+
 - ✅ Button (Primary, Secondary, Ghost)
 - ✅ Card (기본 레이아웃)
 - ✅ Input (Label, Error 상태)
@@ -159,6 +162,7 @@ const Button = ({
 **목표**: 실제 사용자 테스트 가능한 브랜드 적용 UI
 
 **확장 영역:**
+
 - 🎨 브랜드 컬러 시스템 (Primary, Secondary, Accent)
 - 📱 반응형 디자인 토큰
 - 🎭 다크모드 지원
@@ -168,11 +172,11 @@ const Button = ({
 /* 베타 단계 확장 토큰 */
 :root {
   /* 브랜드 컬러 스케일 */
-  --color-primary-50: #EEF2FF;
-  --color-primary-100: #E0E7FF;
-  --color-primary-500: #4F46E5;
-  --color-primary-600: #4338CA;
-  --color-primary-700: #3730A3;
+  --color-primary-50: #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-500: #4f46e5;
+  --color-primary-600: #4338ca;
+  --color-primary-700: #3730a3;
 
   /* 반응형 간격 */
   --space-mobile: clamp(1rem, 4vw, 2rem);
@@ -180,10 +184,10 @@ const Button = ({
 }
 
 /* 다크모드 지원 */
-[data-theme="dark"] {
-  --text-primary: #F9FAFB;
+[data-theme='dark'] {
+  --text-primary: #f9fafb;
   --bg-primary: #111827;
-  --bg-secondary: #1F2937;
+  --bg-secondary: #1f2937;
 }
 ```
 
@@ -192,6 +196,7 @@ const Button = ({
 **목표**: 상용 서비스급 완전한 디자인 시스템
 
 **프로덕션 기능:**
+
 - 🔧 자동화된 토큰 관리 (Style Dictionary)
 - 📚 Storybook 문서화
 - 🧪 Visual Regression 테스트
@@ -205,11 +210,12 @@ const Button = ({
 ### Web 플랫폼 전문 구현
 
 #### 반응형 브레이크포인트 시스템
+
 ```css
 /* 플랫폼 최적화 브레이크포인트 */
 :root {
-  --bp-xs: 480px;  /* 모바일 세로 */
-  --bp-sm: 768px;  /* 태블릿 세로 */
+  --bp-xs: 480px; /* 모바일 세로 */
+  --bp-sm: 768px; /* 태블릿 세로 */
   --bp-md: 1024px; /* 태블릿 가로 */
   --bp-lg: 1440px; /* 데스크탑 */
   --bp-xl: 1920px; /* 대형 모니터 */
@@ -223,11 +229,14 @@ const Button = ({
 }
 
 @media (min-width: var(--bp-sm)) {
-  .container { padding: 0 var(--space-6); }
+  .container {
+    padding: 0 var(--space-6);
+  }
 }
 ```
 
 #### 접근성 우선 인터랙션
+
 ```css
 /* 포커스 스타일 */
 .btn:focus-visible {
@@ -246,13 +255,16 @@ const Button = ({
 
 /* 터치 vs 마우스 감지 */
 @media (hover: hover) {
-  .btn:hover { transform: translateY(-1px); }
+  .btn:hover {
+    transform: translateY(-1px);
+  }
 }
 ```
 
 ### 📱 iOS 네이티브 디자인 시스템
 
 #### SwiftUI 디자인 토큰
+
 ```swift
 // DesignTokens.swift
 struct DesignTokens {
@@ -286,6 +298,7 @@ struct DesignTokens {
 ```
 
 #### Safe Area 대응
+
 ```swift
 // SafeAreaAwareView.swift
 struct SafeAreaAwareView: View {
@@ -314,6 +327,7 @@ struct SafeAreaAwareView: View {
 ### 🤖 Android Material 3 시스템
 
 #### Jetpack Compose 토큰 시스템
+
 ```kotlin
 // DesignTokens.kt
 object DesignTokens {
@@ -355,6 +369,7 @@ object DesignTokens {
 ```
 
 #### 제스처 및 피드백 시스템
+
 ```kotlin
 // InteractiveButton.kt
 @Composable
@@ -392,39 +407,40 @@ fun InteractiveButton(
 ### 🔄 토큰 생성 파이프라인
 
 #### 자동화된 변환 시스템
+
 ```javascript
 // build-tokens.js
-const StyleDictionary = require('style-dictionary');
+const StyleDictionary = require('style-dictionary')
 
 // Web용 CSS 변수 생성
 StyleDictionary.registerFormat({
   name: 'css/variables',
-  formatter: function(dictionary) {
+  formatter: function (dictionary) {
     return `:root {\n${dictionary.allTokens
       .map(token => `  --${token.name}: ${token.value};`)
-      .join('\n')}\n}`;
-  }
-});
+      .join('\n')}\n}`
+  },
+})
 
 // iOS용 Swift 상수 생성
 StyleDictionary.registerFormat({
   name: 'ios/swift',
-  formatter: function(dictionary) {
+  formatter: function (dictionary) {
     return `struct DesignTokens {\n${dictionary.allTokens
       .map(token => `    static let ${token.name} = "${token.value}"`)
-      .join('\n')}\n}`;
-  }
-});
+      .join('\n')}\n}`
+  },
+})
 
 // Android용 XML 리소스 생성
 StyleDictionary.registerFormat({
   name: 'android/xml',
-  formatter: function(dictionary) {
+  formatter: function (dictionary) {
     return `<?xml version="1.0" encoding="UTF-8"?>\n<resources>\n${dictionary.allTokens
       .map(token => `    <color name="${token.name}">${token.value}</color>`)
-      .join('\n')}\n</resources>`;
-  }
-});
+      .join('\n')}\n</resources>`
+  },
+})
 
 // 플랫폼별 빌드 실행
 StyleDictionary.extend({
@@ -433,34 +449,41 @@ StyleDictionary.extend({
     web: {
       transformGroup: 'web',
       buildPath: 'dist/web/',
-      files: [{
-        destination: 'tokens.css',
-        format: 'css/variables'
-      }]
+      files: [
+        {
+          destination: 'tokens.css',
+          format: 'css/variables',
+        },
+      ],
     },
     ios: {
       transformGroup: 'ios',
       buildPath: 'dist/ios/',
-      files: [{
-        destination: 'DesignTokens.swift',
-        format: 'ios/swift'
-      }]
+      files: [
+        {
+          destination: 'DesignTokens.swift',
+          format: 'ios/swift',
+        },
+      ],
     },
     android: {
       transformGroup: 'android',
       buildPath: 'dist/android/',
-      files: [{
-        destination: 'colors.xml',
-        format: 'android/xml'
-      }]
-    }
-  }
-}).buildAllPlatforms();
+      files: [
+        {
+          destination: 'colors.xml',
+          format: 'android/xml',
+        },
+      ],
+    },
+  },
+}).buildAllPlatforms()
 ```
 
 ### 🎯 플랫폼별 Claude Code 최적화
 
 #### 웹 개발 최적화 명령어
+
 ```bash
 # 반응형 컴포넌트 생성
 /create component --platform web --responsive --breakpoints "mobile,tablet,desktop" --design-tokens
@@ -473,6 +496,7 @@ StyleDictionary.extend({
 ```
 
 #### iOS 개발 최적화 명령어
+
 ```bash
 # SwiftUI 컴포넌트 생성
 /create component --platform ios --swiftui --safe-area --dynamic-type
@@ -485,6 +509,7 @@ StyleDictionary.extend({
 ```
 
 #### Android 개발 최적화 명령어
+
 ```bash
 # Jetpack Compose 컴포넌트 생성
 /create component --platform android --compose --material3 --gesture-support
@@ -499,6 +524,7 @@ StyleDictionary.extend({
 ### 📋 플랫폼별 체크리스트
 
 #### 웹 플랫폼 체크리스트
+
 - [ ] 브레이크포인트 및 컨테이너 적용
 - [ ] 키보드 포커스 스타일 구현
 - [ ] `prefers-reduced-motion` 지원
@@ -506,6 +532,7 @@ StyleDictionary.extend({
 - [ ] 크로스 브라우저 호환성 검증
 
 #### iOS 플랫폼 체크리스트
+
 - [ ] Safe Area Insets 처리
 - [ ] Dynamic Type 대응
 - [ ] Dark Mode 지원
@@ -513,6 +540,7 @@ StyleDictionary.extend({
 - [ ] Haptic Feedback 구현
 
 #### Android 플랫폼 체크리스트
+
 - [ ] WindowInsets 처리
 - [ ] Material You 색상 맵핑
 - [ ] 48dp 탭 타깃 보장
@@ -529,20 +557,24 @@ StyleDictionary.extend({
 
 ```markdown
 # ✅ 좋은 예시
+
 @design-tokens.css
 Create a responsive navigation component using our design tokens:
+
 - Use --color-primary for active states
 - Apply --space-4 for padding
 - Include mobile hamburger menu
 - Follow accessibility guidelines
 
 # ❌ 피해야 할 예시
+
 Make a nice navigation bar that looks good
 ```
 
 ### 🔧 자동화 워크플로우
 
 **1. 토큰 업데이트 자동화:**
+
 ```bash
 # package.json scripts
 {
@@ -553,6 +585,7 @@ Make a nice navigation bar that looks good
 ```
 
 **2. 컴포넌트 생성 자동화:**
+
 ```bash
 # Claude 명령어 템플릿
 /create [component-name]
@@ -565,19 +598,23 @@ Make a nice navigation bar that looks good
 ### 📚 Context 파일 최적화
 
 **design-system-context.md 구조:**
+
 ```markdown
 # Design System Context for Claude
 
 ## Current Tokens
+
 @design-tokens.css
 
 ## Component Standards
+
 - All components use CSS custom properties
 - Follow BEM naming convention
 - Include responsive breakpoints
 - Ensure WCAG 2.1 AA compliance
 
 ## Code Patterns
+
 [컴포넌트 템플릿들...]
 ```
 
@@ -606,7 +643,7 @@ Make a nice navigation bar that looks good
     <Text color="secondary">Product description...</Text>
   </Card.Body>
   <Card.Footer>
-    <Button variant="primary">Add to Cart</Button>
+    <button variant="primary">Add to Cart</button>
   </Card.Footer>
 </Card>
 ```
@@ -621,16 +658,16 @@ if (userInput.includes('form')) {
   recommend([
     '/create form component with validation states',
     '/implement error handling with design tokens',
-    '/add loading states with consistent styling'
-  ]);
+    '/add loading states with consistent styling',
+  ])
 }
 
 if (userInput.includes('dashboard')) {
   recommend([
     '/create card grid layout using spacing tokens',
     '/implement responsive navigation with mobile menu',
-    '/add data visualization with color scale'
-  ]);
+    '/add data visualization with color scale',
+  ])
 }
 ```
 
@@ -640,11 +677,14 @@ if (userInput.includes('dashboard')) {
 
 ```markdown
 <!-- 자동 생성되는 토큰 문서 -->
+
 ## Color Tokens Used
+
 - `--color-primary`: #4F46E5 (사용처: 14개 컴포넌트)
 - `--color-success`: #10B981 (사용처: 7개 컴포넌트)
 
 ## Latest Component Updates
+
 - Button: 토큰 기반 hover 상태 추가 (2024-01-15)
 - Card: 반응형 패딩 적용 (2024-01-14)
 ```
@@ -656,6 +696,7 @@ if (userInput.includes('dashboard')) {
 ### 📋 디자인 시스템 체크리스트
 
 **✅ Level 1 (프로토타입) 준비:**
+
 - [ ] 기본 컬러 토큰 정의 (5개)
 - [ ] 타이포그래피 스케일 설정 (6개)
 - [ ] 간격 토큰 정의 (8개)
@@ -663,6 +704,7 @@ if (userInput.includes('dashboard')) {
 - [ ] Claude 컨텍스트 파일 설정
 
 **✅ Level 2 (베타) 업그레이드:**
+
 - [ ] 브랜드 컬러 확장 (20개)
 - [ ] 반응형 토큰 추가
 - [ ] 다크모드 지원
@@ -670,6 +712,7 @@ if (userInput.includes('dashboard')) {
 - [ ] Storybook 설정
 
 **✅ Level 3 (프로덕션) 완성:**
+
 - [ ] 자동화 파이프라인 구축
 - [ ] Visual Regression 테스트
 - [ ] NPM 패키지 배포
@@ -679,6 +722,7 @@ if (userInput.includes('dashboard')) {
 ### 🚀 즉시 사용 가능한 템플릿
 
 **1. 토큰 정의 템플릿:**
+
 ```css
 /* 복사해서 바로 사용하세요 */
 :root {
@@ -687,17 +731,19 @@ if (userInput.includes('dashboard')) {
   --brand-secondary: #[YOUR-HEX];
 
   /* Semantic Colors */
-  --color-success: #10B981;
-  --color-warning: #F59E0B;
-  --color-error: #EF4444;
-  --color-info: #3B82F6;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
 }
 ```
 
 **2. Claude 프롬프트 템플릿:**
+
 ```markdown
 @design-tokens.css
 Create a [COMPONENT-TYPE] component that:
+
 - Uses semantic color tokens for state indication
 - Applies consistent spacing with our spacing scale
 - Includes hover and focus states
@@ -707,12 +753,12 @@ Create a [COMPONENT-TYPE] component that:
 
 ### 🎯 성공 측정 지표
 
-| 지표 | Level 1 목표 | Level 2 목표 | Level 3 목표 |
-|------|-------------|-------------|-------------|
-| **개발 속도** | 5배 향상 | 10배 향상 | 15배 향상 |
-| **일관성 점수** | 80% | 90% | 95% |
-| **재사용률** | 60% | 80% | 90% |
-| **Claude 정확도** | 85% | 95% | 98% |
+| 지표              | Level 1 목표 | Level 2 목표 | Level 3 목표 |
+| ----------------- | ------------ | ------------ | ------------ |
+| **개발 속도**     | 5배 향상     | 10배 향상    | 15배 향상    |
+| **일관성 점수**   | 80%          | 90%          | 95%          |
+| **재사용률**      | 60%          | 80%          | 90%          |
+| **Claude 정확도** | 85%          | 95%          | 98%          |
 
 ---
 
@@ -721,11 +767,13 @@ Create a [COMPONENT-TYPE] component that:
 ### 💼 시나리오 1: E-commerce 프로토타입
 
 **30분 목표:**
+
 1. 제품 카드 컴포넌트
 2. 장바구니 버튼
 3. 간단한 체크아웃 폼
 
 **Claude 명령어 시퀀스:**
+
 ```bash
 /load @design-tokens.css
 /create product-card component with image, title, price, add-to-cart button
@@ -736,11 +784,13 @@ Create a [COMPONENT-TYPE] component that:
 ### 🏥 시나리오 2: 대시보드 베타 서비스
 
 **1-2일 목표:**
+
 1. 반응형 네비게이션
 2. 데이터 시각화 카드
 3. 사용자 설정 폼
 
 **진화 과정:**
+
 ```
 Day 1: HTML 프로토타입 with 토큰
 Day 2: React 컴포넌트로 리팩토링
@@ -752,11 +802,13 @@ Day 3: 베타 사용자 피드백 반영
 ## 🚀 다음 단계
 
 ### 🎯 즉시 시작하기
+
 1. **[14_Project_Kickstart](../14_Project_Kickstart/README.md)**에서 HTML 프로토타입 생성
 2. 이 가이드의 토큰을 적용해서 디자인 시스템 기반으로 업그레이드
 3. **[12_Smart_Assistant](../12_Smart_Assistant/README.md)**로 자동 추천 활용
 
 ### 🌟 고급 활용
+
 1. **[06_SuperClaude_Framework](../06_SuperClaude_Framework/README.md)**와 연계한 자동화
 2. **[15_Living_Documentation](../15_Living_Documentation/README.md)**으로 실시간 문서화
 3. **[09_Testing_QA](../09_Testing_QA/README.md)**로 디자인 시스템 품질 검증

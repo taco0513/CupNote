@@ -5,6 +5,7 @@
 **개발하면서 자연스럽게 쌓이는 문서화 시스템** - AI가 헤매지 않도록 컨텍스트를 실시간으로 보존합니다.
 
 ### 핵심 철학
+
 - 🔄 **개발과 동시**: 별도 시간 투자 없이 개발하면서 자동 기록
 - 🤖 **AI 친화적**: Claude가 바로 이해할 수 있는 형태로 저장
 - ⚡ **5초 원칙**: 지금 당장 5초만 투자해서 나중에 몇 시간 절약
@@ -15,6 +16,7 @@
 ## 🚨 왜 AI가 헤매는가?
 
 ### 일반적인 문제들
+
 ```yaml
 상황: "이 에러 왜 나는지 모르겠어"
 AI: "로그나 이전 시도를 보여주세요"
@@ -30,6 +32,7 @@ AI: "기존 패턴이나 아키텍처를 보여주세요"
 ```
 
 ### AI가 필요한 컨텍스트
+
 - 🤔 **의도**: 왜 이렇게 구현했는지
 - 🔍 **시도**: 무엇을 시도해봤는지 (실패 포함)
 - 🔗 **관계**: 어떤 파일들이 연결되어 있는지
@@ -41,6 +44,7 @@ AI: "기존 패턴이나 아키텍처를 보여주세요"
 ## 🏗️ 살아있는 문서화 아키텍처
 
 ### 프로젝트 구조
+
 ```
 your-project/
 ├── docs/
@@ -63,11 +67,12 @@ your-project/
 ### 1. 즉시 기록 패턴
 
 #### 코드 작성할 때 (5초)
+
 ```typescript
 // WHY: 사용자 인증 실패시 3번까지 재시도 (보안팀 요구사항)
 // TRIED: bcrypt.compare 직접 사용했으나 타이밍 어택 취약점
 // CONTEXT: /docs/decisions/auth-retry-policy.md 참조
-const MAX_AUTH_RETRIES = 3;
+const MAX_AUTH_RETRIES = 3
 
 function authenticateUser(credentials) {
   // PATTERN: 모든 auth 함수는 이 패턴 따름 (/docs/patterns/auth.md)
@@ -76,6 +81,7 @@ function authenticateUser(credentials) {
 ```
 
 #### 에러 만났을 때 (5초)
+
 ```bash
 # 에러 발생 즉시 기록
 echo "$(date): TypeError in user.service.ts line 45" >> docs/errors/$(date +%Y-%m).md
@@ -85,6 +91,7 @@ echo "RELATED: user.model.ts, validation.ts" >> docs/errors/$(date +%Y-%m).md
 ```
 
 #### 해결했을 때 (5초)
+
 ```bash
 # 해결 방법 즉시 기록
 echo "SOLVED: interface User에 optional field 추가" >> docs/errors/$(date +%Y-%m).md
@@ -95,6 +102,7 @@ echo "LESSON: 타입 정의할 때 optional 필드 먼저 고려하기" >> docs/
 ### 2. 자동 수집 시스템
 
 #### Git Hook으로 자동 기록
+
 ```bash
 # .git/hooks/post-commit
 #!/bin/sh
@@ -112,19 +120,20 @@ EOF
 ```
 
 #### 에러 자동 수집
+
 ```javascript
 // 프로덕션 에러 자동 기록
-process.on('uncaughtException', (error) => {
+process.on('uncaughtException', error => {
   const errorLog = {
     timestamp: new Date().toISOString(),
     error: error.message,
     stack: error.stack,
     context: getCurrentContext(), // 현재 작업 컨텍스트
-    relatedFiles: getRelatedFiles(error) // 관련 파일들
-  };
+    relatedFiles: getRelatedFiles(error), // 관련 파일들
+  }
 
-  fs.appendFileSync('docs/errors/production.jsonl', JSON.stringify(errorLog) + '\n');
-});
+  fs.appendFileSync('docs/errors/production.jsonl', JSON.stringify(errorLog) + '\n')
+})
 ```
 
 ---
@@ -134,6 +143,7 @@ process.on('uncaughtException', (error) => {
 ### 코드 변경 시 관련 문서 추적
 
 #### 자동 관련 파일 찾기
+
 ```bash
 # 파일 변경할 때 관련 문서도 함께 업데이트
 update_with_docs() {
@@ -155,6 +165,7 @@ update_with_docs() {
 ```
 
 #### 문서 일관성 체크
+
 ```bash
 # 문서와 코드 동기화 확인
 check_docs_sync() {
@@ -185,97 +196,116 @@ check_docs_sync() {
 ### Claude가 좋아하는 형식
 
 #### 1. 컨텍스트 문서 템플릿
+
 ```markdown
 # 파일명: src/user.service.ts
 
 ## PURPOSE
+
 사용자 관리 핵심 로직 - 생성, 인증, 권한 처리
 
 ## ARCHITECTURE
+
 - LAYER: Service Layer (비즈니스 로직)
 - DEPENDS_ON: user.model.ts, auth.util.ts, validation.ts
 - USED_BY: user.controller.ts, auth.middleware.ts
 
 ## KEY_DECISIONS
+
 - 패스워드 해싱: bcrypt (보안팀 요구사항)
 - 세션 관리: JWT + Redis (확장성 고려)
 - 에러 처리: custom UserError 클래스 사용
 
 ## PATTERNS
+
 - Repository Pattern for database access
 - Strategy Pattern for authentication methods
 - Observer Pattern for user events
 
 ## GOTCHAS
+
 - ⚠️ 사용자 삭제시 관련 데이터 cascade 삭제 주의
 - ⚠️ 비밀번호 변경시 모든 세션 무효화 필요
 - ⚠️ 이메일 변경시 재인증 필요
 
 ## RELATED_FILES
+
 - user.model.ts: 데이터 모델
 - auth.util.ts: 인증 유틸리티
 - user.controller.ts: API 엔드포인트
 - validation.ts: 유효성 검사
 
 ## RECENT_CHANGES
+
 - 2024-01-15: 2FA 지원 추가 (security update)
 - 2024-01-10: 사용자 역할 시스템 개선 (feature update)
 
 ## TESTING
+
 - Unit tests: user.service.test.ts
 - Integration tests: user.integration.test.ts
 - Key scenarios: 회원가입, 로그인, 비밀번호 변경
 ```
 
 #### 2. 에러 해결 과정 템플릿
-```markdown
+
+````markdown
 # Error: TypeError in user creation flow
 
 ## WHEN
+
 2024-01-15 14:30 - 사용자 회원가입 시도 중
 
 ## SYMPTOMS
+
 - TypeError: Cannot read property 'email' of undefined
 - Line: user.service.ts:45
 - Frequency: 사용자 입력 누락시마다
 
 ## INVESTIGATION
+
 1. ✅ TRIED: console.log로 user 객체 확인 → undefined 확인
 2. ✅ TRIED: validation 미들웨어 확인 → 정상 작동
 3. ✅ TRIED: 프론트엔드 payload 확인 → email 필드 누락 발견
 4. ❌ TRIED: 백엔드에서 기본값 설정 → 비즈니스 로직 위반
 
 ## SOLUTION
+
 ```typescript
 // BEFORE
 function createUser(userData) {
-  const email = userData.email.toLowerCase(); // ❌ email이 없으면 에러
+  const email = userData.email.toLowerCase() // ❌ email이 없으면 에러
 }
 
 // AFTER
 function createUser(userData) {
   if (!userData?.email) {
-    throw new ValidationError('Email is required');
+    throw new ValidationError('Email is required')
   }
-  const email = userData.email.toLowerCase(); // ✅ 안전
+  const email = userData.email.toLowerCase() // ✅ 안전
 }
 ```
+````
 
 ## LESSON_LEARNED
+
 - 사용자 입력은 항상 검증 후 사용
 - Optional chaining 적극 활용
 - 에러 메시지를 명확하게 작성
 
 ## RELATED_FILES
+
 - user.service.ts: 에러 발생 위치
 - validation.middleware.ts: 검증 로직
 - user.controller.ts: API 엔드포인트
 
 ## PREVENTION
+
 - TypeScript strict 모드 활성화
 - 입력 검증 미들웨어 강화
 - 단위 테스트에 edge case 추가
-```
+
+````
 
 #### 3. 결정 사항 기록 템플릿
 ```markdown
@@ -322,22 +352,26 @@ class AuthService {
     return {accessToken, refreshToken};
   }
 }
-```
+````
 
 ## CONSEQUENCES
+
 - ✅ 확장성 확보
 - ✅ 모바일 앱 지원 가능
 - ❌ 시스템 복잡도 증가
 - ❌ Redis 의존성 추가
 
 ## RELATED_FILES
+
 - auth.service.ts: 토큰 생성/검증
 - auth.middleware.ts: 토큰 검사
 - redis.config.ts: Redis 설정
 
 ## REVIEW_DATE
+
 2024-07-10 (6개월 후 재검토)
-```
+
+````
 
 ---
 
@@ -357,9 +391,10 @@ class AuthService {
     "error-log": "echo \"$(date): $1\" >> docs/errors/$(date +%Y-%m).md"
   }
 }
-```
+````
 
 #### 개발 플로우 통합
+
 ```bash
 # 새 기능 시작할 때
 start_feature() {
@@ -396,6 +431,7 @@ EOF
 ```
 
 #### 에러 발생시 즉시 기록
+
 ```bash
 # 에러 만났을 때 바로 실행
 log_error() {
@@ -421,6 +457,7 @@ EOF
 ### 해결 후 즉시 업데이트
 
 #### 문제 해결 완료 체크
+
 ```bash
 # 해결했을 때 바로 실행
 solved_error() {
@@ -448,6 +485,7 @@ solved_error() {
 ### Claude에게 프로젝트 컨텍스트 제공
 
 #### 프로젝트 시작시 설정
+
 ```bash
 # Claude 전용 컨텍스트 생성
 setup_claude_context() {
@@ -476,11 +514,13 @@ setup_claude_context() {
 
 ## File Organization
 ```
+
 src/
-├── components/     # UI 컴포넌트
-├── services/      # 비즈니스 로직
-├── utils/         # 유틸리티 함수
-└── types/         # TypeScript 타입 정의
+├── components/ # UI 컴포넌트
+├── services/ # 비즈니스 로직
+├── utils/ # 유틸리티 함수
+└── types/ # TypeScript 타입 정의
+
 ```
 
 ## Current Status
@@ -492,6 +532,7 @@ EOF
 ```
 
 #### 세션 시작할 때마다 컨텍스트 로드
+
 ```bash
 # Claude 세션 시작
 claude_start() {
@@ -516,6 +557,7 @@ claude_start() {
 ### 컨텍스트 기반 질문하기
 
 #### 구체적 컨텍스트 제공
+
 ```bash
 # 좋은 질문 예시
 claude "이 에러를 해결해줘 @docs/errors/2024-01.md @src/user.service.ts @.claude/current-focus.md"
@@ -525,6 +567,7 @@ claude "에러가 나는데 어떻게 해결하지?"
 ```
 
 #### 관련 파일 자동 포함
+
 ```bash
 # 스마트 질문 헬퍼
 ask_claude() {
@@ -558,6 +601,7 @@ ask_claude() {
 ### 문서화 완성도 체크
 
 #### 자동 품질 검사
+
 ```bash
 # 문서화 품질 점수
 check_documentation_quality() {
@@ -624,6 +668,7 @@ check_documentation_quality() {
 ```
 
 #### 문서 동기화 검사
+
 ```bash
 # 코드와 문서 동기화 상태 확인
 check_sync_status() {
@@ -666,6 +711,7 @@ check_sync_status() {
 ## 🚀 즉시 적용 가이드
 
 ### 1단계: 기본 설정 (5분)
+
 ```bash
 # 프로젝트 루트에서 실행
 mkdir -p docs/{decisions,errors,patterns,context,trace}
@@ -687,6 +733,7 @@ chmod +x .git/hooks/post-commit
 ```
 
 ### 2단계: 코딩할 때 적용 (매일)
+
 ```typescript
 // 새 파일 만들 때 항상 상단에 추가
 // PURPOSE: 이 파일이 하는 일
@@ -703,6 +750,7 @@ function complexLogic() {
 ```
 
 ### 3단계: 에러 만날 때 적용 (즉시)
+
 ```bash
 # 에러 발생시 바로 실행 (5초)
 echo "$(date): [에러 설명] in [파일명]:[라인]" >> docs/errors/$(date +%Y-%m).md
@@ -712,6 +760,7 @@ echo "SOLUTION: " >> docs/errors/$(date +%Y-%m).md
 ```
 
 ### 4단계: Claude와 작업할 때
+
 ```bash
 # 항상 컨텍스트와 함께 질문
 claude "질문 내용 @.claude/project-context.md @현재파일 @관련파일"
@@ -727,6 +776,7 @@ echo "LEARNED: [배운 내용]" >> .claude/learned-patterns.md
 ### VS Code 통합
 
 #### 자동 문서화 확장 설정
+
 ```json
 // .vscode/tasks.json
 {
@@ -748,25 +798,18 @@ echo "LEARNED: [배운 내용]" >> .claude/learned-patterns.md
 ```
 
 #### 코드 스니펫
+
 ```json
 // .vscode/snippets.json
 {
   "context-comment": {
     "prefix": "why",
-    "body": [
-      "// WHY: $1",
-      "// TRIED: $2",
-      "// CONTEXT: $3"
-    ],
+    "body": ["// WHY: $1", "// TRIED: $2", "// CONTEXT: $3"],
     "description": "Add context comment"
   },
   "error-log": {
     "prefix": "errlog",
-    "body": [
-      "// ERROR: $1",
-      "// FILE: ${TM_FILENAME}:${TM_LINE_NUMBER}",
-      "// CONTEXT: $2"
-    ],
+    "body": ["// ERROR: $1", "// FILE: ${TM_FILENAME}:${TM_LINE_NUMBER}", "// CONTEXT: $2"],
     "description": "Quick error logging"
   }
 }
@@ -775,6 +818,7 @@ echo "LEARNED: [배운 내용]" >> .claude/learned-patterns.md
 ### 자동 리포트 생성
 
 #### 주간 문서화 리포트
+
 ```bash
 # 매주 실행되는 문서화 상태 리포트
 generate_weekly_report() {
@@ -810,16 +854,19 @@ EOF
 ### 문서화 시스템이 성공했다는 신호들
 
 #### AI 협업 효율성
+
 - ✅ Claude가 첫 번째 답변에서 정확한 해결책 제시
 - ✅ 컨텍스트 재설명 없이도 복잡한 작업 수행 가능
 - ✅ 관련 파일들을 자동으로 정확히 식별
 
 #### 개발 생산성
+
 - ✅ 과거 에러 해결 방법을 5초 안에 찾기 가능
 - ✅ 새 팀원이 프로젝트 이해하는데 1시간 이내
 - ✅ 코드 리뷰시 컨텍스트 설명 시간 50% 단축
 
 #### 코드 품질
+
 - ✅ 같은 실수 반복율 90% 감소
 - ✅ 버그 발생시 관련 코드 즉시 식별 가능
 - ✅ 리팩토링시 영향 범위 정확히 파악

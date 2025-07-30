@@ -15,32 +15,31 @@ class PrototypeArchitectureGenerator {
     projectType: ProjectType,
     requirements: QuickRequirements
   ): Promise<PrototypeArchitecture> {
-
     // 최소 구조 생성
     const minimalStructure = {
       frontend: {
         type: 'single-page',
         framework: this.selectQuickFramework(projectType),
         routing: 'simple',
-        state: 'local-only'
+        state: 'local-only',
       },
       backend: {
         type: 'monolithic',
         framework: 'express',
         database: 'sqlite',
-        authentication: 'basic'
+        authentication: 'basic',
       },
       deployment: {
         platform: 'vercel',
-        environment: 'development'
-      }
-    };
+        environment: 'development',
+      },
+    }
 
     return {
       structure: minimalStructure,
       setupTime: '30 minutes',
-      scalabilityPath: await this.defineScalabilityPath(minimalStructure)
-    };
+      scalabilityPath: await this.defineScalabilityPath(minimalStructure),
+    }
   }
 }
 ```
@@ -50,10 +49,10 @@ class PrototypeArchitectureGenerator {
 ```typescript
 // MVP 아키텍처 설계
 interface MVPArchitecture {
-  layers: ArchitecturalLayer[];
-  patterns: DesignPattern[];
-  infrastructure: InfrastructureConfig;
-  scalability: ScalabilityStrategy;
+  layers: ArchitecturalLayer[]
+  patterns: DesignPattern[]
+  infrastructure: InfrastructureConfig
+  scalability: ScalabilityStrategy
 }
 
 class MVPArchitectureDesigner {
@@ -61,65 +60,52 @@ class MVPArchitectureDesigner {
     prototype: PrototypeArchitecture,
     businessRequirements: BusinessRequirements
   ): Promise<MVPArchitecture> {
-
     // 계층 구조 정의
     const layers = [
       {
         name: 'Presentation Layer',
-        components: [
-          'UI Components',
-          'View Models',
-          'Route Handlers'
-        ],
-        technologies: ['React', 'Next.js', 'TailwindCSS']
+        components: ['UI Components', 'View Models', 'Route Handlers'],
+        technologies: ['React', 'Next.js', 'TailwindCSS'],
       },
       {
         name: 'Business Logic Layer',
-        components: [
-          'Services',
-          'Use Cases',
-          'Domain Models'
-        ],
-        patterns: ['Repository', 'Factory', 'Strategy']
+        components: ['Services', 'Use Cases', 'Domain Models'],
+        patterns: ['Repository', 'Factory', 'Strategy'],
       },
       {
         name: 'Data Access Layer',
-        components: [
-          'Repositories',
-          'Data Mappers',
-          'Query Builders'
-        ],
-        technologies: ['Prisma', 'PostgreSQL']
-      }
-    ];
+        components: ['Repositories', 'Data Mappers', 'Query Builders'],
+        technologies: ['Prisma', 'PostgreSQL'],
+      },
+    ]
 
     // 핵심 패턴 선택
-    const patterns = await this.selectCorePatterns(businessRequirements);
+    const patterns = await this.selectCorePatterns(businessRequirements)
 
     // 인프라 구성
     const infrastructure = {
       hosting: {
         frontend: 'Vercel',
         backend: 'Railway',
-        database: 'Supabase'
+        database: 'Supabase',
       },
       monitoring: {
         analytics: 'Vercel Analytics',
         errors: 'Sentry',
-        logs: 'Console'
+        logs: 'Console',
       },
       ci_cd: {
         pipeline: 'GitHub Actions',
-        environments: ['development', 'staging']
-      }
-    };
+        environments: ['development', 'staging'],
+      },
+    }
 
     return {
       layers,
       patterns,
       infrastructure,
-      scalability: await this.planScalability(layers, infrastructure)
-    };
+      scalability: await this.planScalability(layers, infrastructure),
+    }
   }
 }
 ```
@@ -133,31 +119,30 @@ class ProductionArchitecture {
     mvpArchitecture: MVPArchitecture,
     productionRequirements: ProductionRequirements
   ): Promise<ProductionReadyArchitecture> {
-
     // 마이크로서비스 고려
     const serviceArchitecture = await this.evaluateMicroservices(
       mvpArchitecture,
       productionRequirements
-    );
+    )
 
     // 보안 강화
     const securityArchitecture = {
       authentication: {
         provider: 'Auth0',
         mfa: true,
-        sessionManagement: 'JWT with refresh tokens'
+        sessionManagement: 'JWT with refresh tokens',
       },
       authorization: {
         model: 'RBAC',
         policies: 'Policy-based',
-        implementation: 'CASL'
+        implementation: 'CASL',
       },
       encryption: {
         atRest: 'AES-256',
         inTransit: 'TLS 1.3',
-        keyManagement: 'AWS KMS'
-      }
-    };
+        keyManagement: 'AWS KMS',
+      },
+    }
 
     // 확장성 설계
     const scalabilityDesign = {
@@ -166,28 +151,28 @@ class ProductionArchitecture {
         autoScaling: {
           metrics: ['CPU', 'Memory', 'Request Rate'],
           min: 2,
-          max: 10
-        }
+          max: 10,
+        },
       },
       caching: {
         cdn: 'CloudFlare',
         applicationCache: 'Redis',
-        databaseCache: 'Query result caching'
+        databaseCache: 'Query result caching',
       },
       database: {
         replication: 'Master-Slave',
         sharding: 'By tenant',
-        backups: 'Daily automated'
-      }
-    };
+        backups: 'Daily automated',
+      },
+    }
 
     return {
       services: serviceArchitecture,
       security: securityArchitecture,
       scalability: scalabilityDesign,
       reliability: await this.designReliability(productionRequirements),
-      observability: await this.setupObservability(productionRequirements)
-    };
+      observability: await this.setupObservability(productionRequirements),
+    }
   }
 }
 ```
@@ -199,9 +184,7 @@ class ProductionArchitecture {
 ```typescript
 // ADR 관리 시스템
 class ArchitectureDecisionRecorder {
-  async recordDecision(
-    decision: ArchitecturalDecision
-  ): Promise<ADR> {
+  async recordDecision(decision: ArchitecturalDecision): Promise<ADR> {
     const adr = {
       id: this.generateId(),
       date: new Date(),
@@ -213,27 +196,27 @@ class ArchitectureDecisionRecorder {
       consequences: {
         positive: decision.positiveConsequences,
         negative: decision.negativeConsequences,
-        neutral: decision.neutralConsequences
+        neutral: decision.neutralConsequences,
       },
 
       alternatives: decision.alternatives.map(alt => ({
         option: alt.option,
         pros: alt.pros,
         cons: alt.cons,
-        reason_rejected: alt.rejectionReason
+        reason_rejected: alt.rejectionReason,
       })),
 
       implementation: {
         steps: decision.implementationSteps,
         timeline: decision.timeline,
-        team: decision.responsibleTeam
-      }
-    };
+        team: decision.responsibleTeam,
+      },
+    }
 
-    await this.saveADR(adr);
-    await this.notifyStakeholders(adr);
+    await this.saveADR(adr)
+    await this.notifyStakeholders(adr)
 
-    return adr;
+    return adr
   }
 }
 ```
@@ -262,17 +245,10 @@ const frontendFrameworkDecision: ADR = {
       'SSR/SSG 기본 지원',
       'API Routes로 백엔드 통합 용이',
       '뛰어난 개발자 경험',
-      'Vercel 배포 최적화'
+      'Vercel 배포 최적화',
     ],
-    negative: [
-      '학습 곡선 존재',
-      'App Router 복잡성',
-      '번들 크기 관리 필요'
-    ],
-    neutral: [
-      'React 생태계 종속',
-      'TypeScript 필수'
-    ]
+    negative: ['학습 곡선 존재', 'App Router 복잡성', '번들 크기 관리 필요'],
+    neutral: ['React 생태계 종속', 'TypeScript 필수'],
   },
 
   alternatives: [
@@ -280,16 +256,16 @@ const frontendFrameworkDecision: ADR = {
       option: 'Vite + React',
       pros: ['더 빠른 빌드', '더 가벼움'],
       cons: ['SSR 직접 구현', 'SEO 추가 작업'],
-      reason_rejected: 'SSR 구현 복잡도'
+      reason_rejected: 'SSR 구현 복잡도',
     },
     {
       option: 'Remix',
       pros: ['더 나은 라우팅', '폼 처리 우수'],
       cons: ['작은 커뮤니티', '레퍼런스 부족'],
-      reason_rejected: '팀 경험 부족'
-    }
-  ]
-};
+      reason_rejected: '팀 경험 부족',
+    },
+  ],
+}
 ```
 
 ## 기술 스택 선택 가이드
@@ -303,26 +279,25 @@ class TechStackRecommender {
     projectType: string,
     constraints: ProjectConstraints
   ): Promise<RecommendedStack> {
-
     const stacks = {
       'saas-b2b': {
         frontend: {
           framework: 'Next.js',
           ui: 'Tailwind + Radix UI',
           state: 'Zustand + React Query',
-          testing: 'Jest + React Testing Library'
+          testing: 'Jest + React Testing Library',
         },
         backend: {
           framework: 'NestJS',
           database: 'PostgreSQL',
           orm: 'Prisma',
-          cache: 'Redis'
+          cache: 'Redis',
         },
         infrastructure: {
           hosting: 'AWS/Vercel',
           ci_cd: 'GitHub Actions',
-          monitoring: 'DataDog'
-        }
+          monitoring: 'DataDog',
+        },
       },
 
       'mobile-first': {
@@ -330,14 +305,14 @@ class TechStackRecommender {
           framework: 'React Native/Flutter',
           web: 'Next.js PWA',
           state: 'Redux Toolkit',
-          navigation: 'React Navigation'
+          navigation: 'React Navigation',
         },
         backend: {
           framework: 'Fastify',
           database: 'MongoDB',
           realtime: 'Socket.io',
-          storage: 'S3'
-        }
+          storage: 'S3',
+        },
       },
 
       'ai-powered': {
@@ -345,21 +320,18 @@ class TechStackRecommender {
           framework: 'Next.js',
           ui: 'Vercel AI SDK UI',
           streaming: 'Server-Sent Events',
-          visualization: 'D3.js'
+          visualization: 'D3.js',
         },
         backend: {
           framework: 'FastAPI',
           ml: 'LangChain/LlamaIndex',
           vectorDB: 'Pinecone',
-          queue: 'Celery + Redis'
-        }
-      }
-    };
+          queue: 'Celery + Redis',
+        },
+      },
+    }
 
-    return this.customizeForConstraints(
-      stacks[projectType],
-      constraints
-    );
+    return this.customizeForConstraints(stacks[projectType], constraints)
   }
 }
 ```
@@ -377,18 +349,18 @@ class ModularArchitecture {
       auth: {
         path: 'src/modules/auth',
         exports: ['AuthService', 'AuthGuard', 'useAuth'],
-        dependencies: ['@core/database', '@core/crypto']
+        dependencies: ['@core/database', '@core/crypto'],
       },
       user: {
         path: 'src/modules/user',
         exports: ['UserService', 'UserRepository', 'UserDTO'],
-        dependencies: ['@core/auth', '@core/database']
+        dependencies: ['@core/auth', '@core/database'],
       },
       database: {
         path: 'src/modules/database',
         exports: ['DatabaseService', 'Repository', 'Transaction'],
-        dependencies: ['prisma']
-      }
+        dependencies: ['prisma'],
+      },
     },
 
     // 기능 모듈
@@ -396,44 +368,44 @@ class ModularArchitecture {
       billing: {
         path: 'src/modules/billing',
         exports: ['BillingService', 'SubscriptionManager'],
-        dependencies: ['@core/user', 'stripe']
+        dependencies: ['@core/user', 'stripe'],
       },
       notifications: {
         path: 'src/modules/notifications',
         exports: ['NotificationService', 'EmailProvider'],
-        dependencies: ['@core/user', 'resend']
+        dependencies: ['@core/user', 'resend'],
       },
       analytics: {
         path: 'src/modules/analytics',
         exports: ['AnalyticsService', 'EventTracker'],
-        dependencies: ['@core/user', 'posthog']
-      }
+        dependencies: ['@core/user', 'posthog'],
+      },
     },
 
     // 공유 모듈
     shared: {
       utils: {
         path: 'src/shared/utils',
-        exports: ['formatters', 'validators', 'helpers']
+        exports: ['formatters', 'validators', 'helpers'],
       },
       constants: {
         path: 'src/shared/constants',
-        exports: ['API_ROUTES', 'ERROR_CODES', 'PERMISSIONS']
+        exports: ['API_ROUTES', 'ERROR_CODES', 'PERMISSIONS'],
       },
       types: {
         path: 'src/shared/types',
-        exports: ['User', 'ApiResponse', 'ErrorType']
-      }
-    }
-  };
+        exports: ['User', 'ApiResponse', 'ErrorType'],
+      },
+    },
+  }
 
   // 모듈 간 통신
   async setupModuleCommunication() {
     return {
       eventBus: new EventEmitter(),
       messageQueue: new MessageQueue(),
-      serviceRegistry: new ServiceRegistry()
-    };
+      serviceRegistry: new ServiceRegistry(),
+    }
   }
 }
 ```
@@ -449,24 +421,14 @@ class PerformanceOptimizer {
     frontend: [
       {
         area: 'Bundle Size',
-        techniques: [
-          'Code splitting',
-          'Tree shaking',
-          'Dynamic imports',
-          'Image optimization'
-        ],
-        tools: ['Webpack Bundle Analyzer', 'Lighthouse']
+        techniques: ['Code splitting', 'Tree shaking', 'Dynamic imports', 'Image optimization'],
+        tools: ['Webpack Bundle Analyzer', 'Lighthouse'],
       },
       {
         area: 'Rendering',
-        techniques: [
-          'Virtual scrolling',
-          'Lazy loading',
-          'Memoization',
-          'Debouncing/Throttling'
-        ],
-        metrics: ['FCP', 'LCP', 'TTI', 'CLS']
-      }
+        techniques: ['Virtual scrolling', 'Lazy loading', 'Memoization', 'Debouncing/Throttling'],
+        metrics: ['FCP', 'LCP', 'TTI', 'CLS'],
+      },
     ],
 
     backend: [
@@ -476,22 +438,17 @@ class PerformanceOptimizer {
           'Query optimization',
           'Indexing strategy',
           'Connection pooling',
-          'Caching layer'
+          'Caching layer',
         ],
-        monitoring: ['Query performance', 'Connection count']
+        monitoring: ['Query performance', 'Connection count'],
       },
       {
         area: 'API',
-        techniques: [
-          'Response compression',
-          'Field filtering',
-          'Pagination',
-          'Rate limiting'
-        ],
-        tools: ['DataLoader', 'Redis']
-      }
-    ]
-  };
+        techniques: ['Response compression', 'Field filtering', 'Pagination', 'Rate limiting'],
+        tools: ['DataLoader', 'Redis'],
+      },
+    ],
+  }
 }
 ```
 
@@ -502,17 +459,14 @@ class PerformanceOptimizer {
 ```typescript
 // 보안 아키텍처 구현
 class SecurityArchitecture {
-  async implementSecurityLayers(
-    architecture: Architecture
-  ): Promise<SecureArchitecture> {
-
+  async implementSecurityLayers(architecture: Architecture): Promise<SecureArchitecture> {
     return {
       // 네트워크 보안
       network: {
         firewall: 'WAF enabled',
         ddos: 'CloudFlare protection',
         ssl: 'TLS 1.3 enforced',
-        cors: 'Strict origin policy'
+        cors: 'Strict origin policy',
       },
 
       // 애플리케이션 보안
@@ -521,18 +475,18 @@ class SecurityArchitecture {
           method: 'JWT with refresh tokens',
           mfa: 'TOTP based',
           sessionTimeout: '30 minutes',
-          bruteForce: 'Rate limiting + captcha'
+          bruteForce: 'Rate limiting + captcha',
         },
         authorization: {
           model: 'RBAC + ABAC',
           implementation: 'Policy engine',
-          audit: 'All access logged'
+          audit: 'All access logged',
         },
         validation: {
           input: 'Schema validation',
           output: 'Data sanitization',
-          files: 'Type + size validation'
-        }
+          files: 'Type + size validation',
+        },
       },
 
       // 데이터 보안
@@ -540,13 +494,13 @@ class SecurityArchitecture {
         encryption: {
           atRest: 'AES-256-GCM',
           inTransit: 'TLS + certificate pinning',
-          keys: 'HSM managed'
+          keys: 'HSM managed',
         },
         privacy: {
           pii: 'Tokenization',
           anonymization: 'K-anonymity',
-          retention: 'Policy based'
-        }
+          retention: 'Policy based',
+        },
       },
 
       // 모니터링 및 감사
@@ -554,15 +508,15 @@ class SecurityArchitecture {
         logging: {
           access: 'All requests logged',
           errors: 'Detailed error tracking',
-          security: 'Security events highlighted'
+          security: 'Security events highlighted',
         },
         alerting: {
           realtime: 'Anomaly detection',
           thresholds: 'Custom alert rules',
-          escalation: 'Tiered response'
-        }
-      }
-    };
+          escalation: 'Tiered response',
+        },
+      },
+    }
   }
 }
 ```
@@ -612,7 +566,6 @@ class ArchitectureEvolution {
     currentArchitecture: Architecture,
     targetGoals: ArchitectureGoals
   ): Promise<EvolutionPlan> {
-
     const phases = [
       {
         phase: 1,
@@ -621,8 +574,8 @@ class ArchitectureEvolution {
         changes: [
           'Add comprehensive testing',
           'Implement proper error handling',
-          'Setup monitoring'
-        ]
+          'Setup monitoring',
+        ],
       },
       {
         phase: 2,
@@ -631,37 +584,29 @@ class ArchitectureEvolution {
         changes: [
           'Extract shared components',
           'Define clear interfaces',
-          'Implement dependency injection'
-        ]
+          'Implement dependency injection',
+        ],
       },
       {
         phase: 3,
         name: 'Performance Optimization',
         duration: '2 weeks',
-        changes: [
-          'Add caching layers',
-          'Optimize database queries',
-          'Implement CDN'
-        ]
+        changes: ['Add caching layers', 'Optimize database queries', 'Implement CDN'],
       },
       {
         phase: 4,
         name: 'Scale Preparation',
         duration: '4 weeks',
-        changes: [
-          'Introduce message queues',
-          'Implement horizontal scaling',
-          'Add load balancing'
-        ]
-      }
-    ];
+        changes: ['Introduce message queues', 'Implement horizontal scaling', 'Add load balancing'],
+      },
+    ]
 
     return {
       phases,
       risks: await this.assessRisks(phases),
       rollback: await this.planRollback(phases),
-      success: await this.defineSuccessMetrics(phases)
-    };
+      success: await this.defineSuccessMetrics(phases),
+    }
   }
 }
 ```

@@ -7,7 +7,7 @@
           <span class="back-icon">←</span>
           홈으로
         </RouterLink>
-        
+
         <div class="logo-section">
           <h1 class="logo">CupNote</h1>
           <p class="tagline">커피 테이스팅 노트</p>
@@ -17,16 +17,10 @@
       <!-- Auth Form -->
       <div class="auth-form-container">
         <div class="auth-tabs">
-          <button
-            :class="['tab-button', { active: mode === 'signin' }]"
-            @click="mode = 'signin'"
-          >
+          <button :class="['tab-button', { active: mode === 'signin' }]" @click="mode = 'signin'">
             로그인
           </button>
-          <button
-            :class="['tab-button', { active: mode === 'signup' }]"
-            @click="mode = 'signup'"
-          >
+          <button :class="['tab-button', { active: mode === 'signup' }]" @click="mode = 'signup'">
             회원가입
           </button>
         </div>
@@ -62,11 +56,7 @@
             />
           </div>
 
-          <button
-            type="button"
-            class="forgot-password-link"
-            @click="showForgotPassword = true"
-          >
+          <button type="button" class="forgot-password-link" @click="showForgotPassword = true">
             비밀번호를 잊으셨나요?
           </button>
 
@@ -190,10 +180,10 @@
       <div class="modal-content" @click.stop>
         <h3 class="modal-title">비밀번호 재설정</h3>
         <p class="modal-description">
-          가입하신 이메일 주소를 입력하시면<br>
+          가입하신 이메일 주소를 입력하시면<br />
           비밀번호 재설정 링크를 보내드립니다.
         </p>
-        
+
         <form @submit.prevent="handleForgotPassword">
           <div class="input-group">
             <label for="reset-email" class="input-label">이메일</label>
@@ -207,7 +197,7 @@
               :disabled="authStore.isLoading"
             />
           </div>
-          
+
           <div class="modal-actions">
             <button
               type="button"
@@ -236,55 +226,51 @@ import { ref, computed, watch } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '../../stores/auth'
 
-const router = useRouter();
-const authStore = useAuthStore();
+const router = useRouter()
+const authStore = useAuthStore()
 
 // State
-const mode = ref('signin'); // 'signin' | 'signup'
-const showForgotPassword = ref(false);
-const showSignUpSuccess = ref(false);
-const resetEmail = ref('');
+const mode = ref('signin') // 'signin' | 'signup'
+const showForgotPassword = ref(false)
+const showSignUpSuccess = ref(false)
+const resetEmail = ref('')
 
 const signInForm = ref({
   email: '',
-  password: ''
-});
+  password: '',
+})
 
 const signUpForm = ref({
   displayName: '',
   email: '',
   password: '',
-  confirmPassword: ''
-});
+  confirmPassword: '',
+})
 
 // Computed
 const isSignInFormValid = computed(() => {
   return signInForm.value.email && signInForm.value.password
-});
+})
 
 const isSignUpFormValid = computed(() => {
-  return (
-    signUpForm.value.email &&
-    signUpForm.value.password.length >= 6 &&
-    passwordsMatch.value
-  )
-});
+  return signUpForm.value.email && signUpForm.value.password.length >= 6 && passwordsMatch.value
+})
 
 const passwordsMatch = computed(() => {
   return signUpForm.value.password === signUpForm.value.confirmPassword
-});
+})
 
 const passwordStrength = computed(() => {
   const password = signUpForm.value.password
   let score = 0
-  
+
   if (password.length >= 6) score += 1
   if (password.length >= 8) score += 1
   if (/[A-Z]/.test(password)) score += 1
   if (/[0-9]/.test(password)) score += 1
-  
+
   return score
-});
+})
 
 const passwordStrengthClass = computed(() => {
   const score = passwordStrength.value
@@ -292,7 +278,7 @@ const passwordStrengthClass = computed(() => {
   if (score <= 2) return 'medium'
   if (score <= 3) return 'strong'
   return 'very-strong'
-});
+})
 
 const passwordStrengthText = computed(() => {
   const score = passwordStrength.value
@@ -301,81 +287,85 @@ const passwordStrengthText = computed(() => {
   if (score <= 2) return '보통'
   if (score <= 3) return '강함'
   return '매우 강함'
-});
+})
 
 // Methods
 const handleSignIn = async () => {
   try {
     await authStore.signIn(signInForm.value.email, signInForm.value.password)
-    
+
     // Redirect to original destination or home
-    const redirect = router.currentRoute.value.query.redirect as string | undefined;
-    router.push(redirect || '/');
+    const redirect = router.currentRoute.value.query.redirect as string | undefined
+    router.push(redirect || '/')
   } catch (error) {
     // Error is handled by the store
-    console.error('Sign in failed:', error);
+    console.error('Sign in failed:', error)
   }
-};
+}
 
 const handleSignUp = async () => {
   try {
     await authStore.signUp(
       signUpForm.value.email,
       signUpForm.value.password,
-      signUpForm.value.displayName
-    );
-    
-    showSignUpSuccess.value = true;
-    
+      signUpForm.value.displayName,
+    )
+
+    showSignUpSuccess.value = true
+
     // Switch to sign in mode after delay
     setTimeout(() => {
-      mode.value = 'signin';
-      showSignUpSuccess.value = false;
-      signInForm.value.email = signUpForm.value.email;
-    }, 3000);
+      mode.value = 'signin'
+      showSignUpSuccess.value = false
+      signInForm.value.email = signUpForm.value.email
+    }, 3000)
   } catch (error) {
-    console.error('Sign up failed:', error);
+    console.error('Sign up failed:', error)
   }
-};
+}
 
 const handleGoogleSignIn = async () => {
   try {
-    await authStore.signInWithGoogle();
+    await authStore.signInWithGoogle()
     // OAuth will redirect automatically
   } catch (error) {
-    console.error('Google sign in failed:', error);
+    console.error('Google sign in failed:', error)
   }
-};
+}
 
 const handleForgotPassword = async () => {
   try {
-    await authStore.resetPassword(resetEmail.value);
-    showForgotPassword.value = false;
-    resetEmail.value = '';
-    
+    await authStore.resetPassword(resetEmail.value)
+    showForgotPassword.value = false
+    resetEmail.value = ''
+
     // Show success message
-    alert('비밀번호 재설정 이메일을 보냈습니다. 이메일을 확인해주세요.');
+    alert('비밀번호 재설정 이메일을 보냈습니다. 이메일을 확인해주세요.')
   } catch (error) {
-    console.error('Password reset failed:', error);
+    console.error('Password reset failed:', error)
   }
-};
+}
 
 // Clear errors when switching modes
 watch(mode, () => {
-  authStore.clearError();
-  showSignUpSuccess.value = false;
-});
+  authStore.clearError()
+  showSignUpSuccess.value = false
+})
 
 // Clear errors when form changes
-watch([signInForm, signUpForm], () => {
-  authStore.clearError();
-}, { deep: true });
+watch(
+  [signInForm, signUpForm],
+  () => {
+    authStore.clearError()
+  },
+  { deep: true },
+)
 </script>
 
 <style scoped>
 .login-view {
   min-height: 100vh;
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5F0E8 100%);
+  background: linear-gradient(135deg, #fff8f0 0%, #f5f0e8 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -396,7 +386,7 @@ watch([signInForm, signUpForm], () => {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: #7C5842;
+  color: #7c5842;
   text-decoration: none;
   font-size: 0.9rem;
   margin-bottom: 1rem;
@@ -404,7 +394,7 @@ watch([signInForm, signUpForm], () => {
 }
 
 .back-link:hover {
-  color: #5D3F2E;
+  color: #5d3f2e;
 }
 
 .back-icon {
@@ -418,12 +408,12 @@ watch([signInForm, signUpForm], () => {
 .logo {
   font-size: 2.5rem;
   font-weight: 900;
-  color: #7C5842;
+  color: #7c5842;
   margin: 0 0 0.25rem 0;
 }
 
 .tagline {
-  color: #A0796A;
+  color: #a0796a;
   margin: 0;
 }
 
@@ -433,12 +423,12 @@ watch([signInForm, signUpForm], () => {
   border-radius: 20px;
   padding: 2rem;
   box-shadow: 0 8px 32px rgba(124, 88, 66, 0.15);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .auth-tabs {
   display: flex;
-  background: #F8F4F0;
+  background: #f8f4f0;
   border-radius: 12px;
   padding: 0.25rem;
   margin-bottom: 2rem;
@@ -451,14 +441,14 @@ watch([signInForm, signUpForm], () => {
   background: transparent;
   border-radius: 8px;
   font-weight: 500;
-  color: #A0796A;
+  color: #a0796a;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .tab-button.active {
   background: white;
-  color: #7C5842;
+  color: #7c5842;
   font-weight: 600;
   box-shadow: 0 2px 8px rgba(124, 88, 66, 0.1);
 }
@@ -470,13 +460,13 @@ watch([signInForm, signUpForm], () => {
 .form-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
   text-align: center;
 }
 
 .form-subtitle {
-  color: #A0796A;
+  color: #a0796a;
   text-align: center;
   margin-bottom: 2rem;
 }
@@ -488,7 +478,7 @@ watch([signInForm, signUpForm], () => {
 .input-label {
   display: block;
   font-weight: 500;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
 }
@@ -496,7 +486,7 @@ watch([signInForm, signUpForm], () => {
 .input-field {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.2s ease;
@@ -505,12 +495,12 @@ watch([signInForm, signUpForm], () => {
 
 .input-field:focus {
   outline: none;
-  border-color: #7C5842;
+  border-color: #7c5842;
   box-shadow: 0 0 0 3px rgba(124, 88, 66, 0.1);
 }
 
 .input-field:disabled {
-  background: #F8F4F0;
+  background: #f8f4f0;
   cursor: not-allowed;
 }
 
@@ -525,22 +515,22 @@ watch([signInForm, signUpForm], () => {
   flex: 1;
   height: 4px;
   border-radius: 2px;
-  background: #E8D5C4;
+  background: #e8d5c4;
   transition: all 0.3s ease;
 }
 
 .strength-bar.weak {
-  background: #EF4444;
+  background: #ef4444;
   width: 25%;
 }
 
 .strength-bar.medium {
-  background: #F59E0B;
+  background: #f59e0b;
   width: 50%;
 }
 
 .strength-bar.strong {
-  background: #10B981;
+  background: #10b981;
   width: 75%;
 }
 
@@ -558,7 +548,7 @@ watch([signInForm, signUpForm], () => {
 .forgot-password-link {
   background: none;
   border: none;
-  color: #7C5842;
+  color: #7c5842;
   font-size: 0.9rem;
   cursor: pointer;
   text-decoration: underline;
@@ -568,7 +558,7 @@ watch([signInForm, signUpForm], () => {
 }
 
 .forgot-password-link:hover {
-  color: #5D3F2E;
+  color: #5d3f2e;
 }
 
 /* Buttons */
@@ -590,7 +580,7 @@ watch([signInForm, signUpForm], () => {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #7C5842, #A0796A);
+  background: linear-gradient(135deg, #7c5842, #a0796a);
   color: white;
   box-shadow: 0 4px 15px rgba(124, 88, 66, 0.3);
 }
@@ -608,31 +598,31 @@ watch([signInForm, signUpForm], () => {
 
 .btn-secondary {
   background: white;
-  color: #7C5842;
-  border: 2px solid #E8D5C4;
+  color: #7c5842;
+  border: 2px solid #e8d5c4;
 }
 
 .btn-secondary:hover:not(:disabled) {
-  border-color: #D4B896;
-  background: #F8F4F0;
+  border-color: #d4b896;
+  background: #f8f4f0;
 }
 
 .btn-google {
   background: white;
   color: #333;
-  border: 2px solid #E5E7EB;
+  border: 2px solid #e5e7eb;
   margin-bottom: 1rem;
 }
 
 .btn-google:hover:not(:disabled) {
-  border-color: #D1D5DB;
-  background: #F9FAFB;
+  border-color: #d1d5db;
+  background: #f9fafb;
 }
 
 .google-icon {
   width: 20px;
   height: 20px;
-  background: #4285F4;
+  background: #4285f4;
   color: white;
   border-radius: 2px;
   display: flex;
@@ -665,13 +655,13 @@ watch([signInForm, signUpForm], () => {
   left: 0;
   right: 0;
   height: 1px;
-  background: #E8D5C4;
+  background: #e8d5c4;
 }
 
 .divider-text {
   background: white;
   padding: 0 1rem;
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.9rem;
 }
 
@@ -688,19 +678,19 @@ watch([signInForm, signUpForm], () => {
 }
 
 .error-message {
-  background: #FEF2F2;
-  color: #DC2626;
-  border: 1px solid #FECACA;
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
 }
 
 .success-message {
-  background: #F0FDF4;
-  color: #16A34A;
-  border: 1px solid #BBF7D0;
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
 }
 
 .error-text {
-  color: #DC2626;
+  color: #dc2626;
   font-size: 0.8rem;
   margin-top: 0.25rem;
 }
@@ -732,7 +722,7 @@ watch([signInForm, signUpForm], () => {
 .modal-title {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
   text-align: center;
 }
@@ -767,11 +757,11 @@ watch([signInForm, signUpForm], () => {
   .login-container {
     max-width: 100%;
   }
-  
+
   .auth-form-container {
     padding: 1.5rem;
   }
-  
+
   .modal-content {
     padding: 1.5rem;
   }

@@ -19,10 +19,7 @@ describe('TastingSession Store Integration Tests', () => {
   afterEach(async () => {
     // Cleanup: Delete all test records
     if (createdRecordIds.length > 0) {
-      await supabase
-        .from('tastings')
-        .delete()
-        .in('id', createdRecordIds)
+      await supabase.from('tastings').delete().in('id', createdRecordIds)
     }
     createdRecordIds = []
   })
@@ -39,16 +36,16 @@ describe('TastingSession Store Integration Tests', () => {
         coffee_name: 'Test Americano',
         cafe_name: 'Test Cafe',
         location: 'Seoul',
-        brewing_method: 'Espresso Machine'
+        brewing_method: 'Espresso Machine',
       })
-      
+
       expect(store.currentSession.coffeeInfo?.coffee_name).toBe('Test Americano')
       expect(store.currentSession.coffeeInfo?.cafe_name).toBe('Test Cafe')
 
       // Step 3: Update flavor selection
       const flavors = [
         { id: 'chocolate', text: '초콜릿' },
-        { id: 'nutty', text: '고소한' }
+        { id: 'nutty', text: '고소한' },
       ]
       store.updateFlavorSelection(flavors)
       expect(store.currentSession.selectedFlavors).toEqual(flavors)
@@ -56,7 +53,7 @@ describe('TastingSession Store Integration Tests', () => {
       // Step 4: Update sensory expression
       const sensory = [
         { id: 'acidity-1', category: 'acidity', text: '약한' },
-        { id: 'sweetness-3', category: 'sweetness', text: '달콤한' }
+        { id: 'sweetness-3', category: 'sweetness', text: '달콤한' },
       ]
       store.updateSensoryExpression(sensory)
       expect(store.currentSession.sensoryExpressions).toEqual(sensory)
@@ -74,7 +71,7 @@ describe('TastingSession Store Integration Tests', () => {
       const savedRecord = await store.saveCurrentSession(testUserId)
       expect(savedRecord).toBeDefined()
       expect(savedRecord.id).toBeDefined()
-      
+
       if (savedRecord?.id) {
         createdRecordIds.push(savedRecord.id)
       }
@@ -107,7 +104,7 @@ describe('TastingSession Store Integration Tests', () => {
         variety: 'Heirloom',
         altitude: '1900-2100m',
         process: 'Washed',
-        roast_level: 'Light'
+        roast_level: 'Light',
       })
 
       // Step 3: Update HomeCafe brewing data
@@ -119,9 +116,9 @@ describe('TastingSession Store Integration Tests', () => {
           ratio: 16.7,
           water_temp: 93,
           brew_time: 180,
-          lap_times: [30, 60, 90, 120, 150, 180]
+          lap_times: [30, 60, 90, 120, 150, 180],
         },
-        quick_notes: '30초 블루밍, 부드럽게 추출'
+        quick_notes: '30초 블루밍, 부드럽게 추출',
       }
       store.updateHomeCafeData(brewData)
       expect(store.currentSession.brewSettings).toEqual(brewData)
@@ -159,7 +156,7 @@ describe('TastingSession Store Integration Tests', () => {
         variety: 'Geisha',
         altitude: '1800m',
         process: 'Natural',
-        roast_level: 'Light-Medium'
+        roast_level: 'Light-Medium',
       })
 
       // Step 3: Update HomeCafe data (required for Pro)
@@ -171,8 +168,8 @@ describe('TastingSession Store Integration Tests', () => {
           ratio: 16.7,
           water_temp: 94,
           brew_time: 240,
-          lap_times: [240]
-        }
+          lap_times: [240],
+        },
       })
 
       // Step 4: Update Pro brewing data
@@ -181,7 +178,7 @@ describe('TastingSession Store Integration Tests', () => {
         grind_size: 'Medium-Coarse',
         bloom_time: 30,
         total_time: 240,
-        notes: 'Standard SCA cupping protocol'
+        notes: 'Standard SCA cupping protocol',
       })
 
       // Step 5: Update QC measurement data
@@ -190,14 +187,14 @@ describe('TastingSession Store Integration Tests', () => {
         extraction_yield: 19.5,
         water_tds: 120,
         water_ph: 7.2,
-        notes: 'Optimal extraction achieved'
+        notes: 'Optimal extraction achieved',
       })
 
       // Step 6: Update flavors and sensory
       store.updateFlavorSelection([
         { id: 'jasmine', text: '자스민' },
         { id: 'honey', text: '꿀' },
-        { id: 'bergamot', text: '베르가못' }
+        { id: 'bergamot', text: '베르가못' },
       ])
 
       // Step 7: Update sensory slider data (Pro specific)
@@ -212,10 +209,10 @@ describe('TastingSession Store Integration Tests', () => {
           uniformity: 10,
           clean_cup: 10,
           sweetness: 10,
-          defects: 0
+          defects: 0,
         },
         overall_score: 85.25,
-        quick_notes: 'Exceptional clarity and floral notes'
+        quick_notes: 'Exceptional clarity and floral notes',
       })
 
       // Step 8: Skip sensory expression for Pro mode
@@ -248,17 +245,17 @@ describe('TastingSession Store Integration Tests', () => {
     it('should fetch user records correctly', async () => {
       // Create multiple records
       const modes: Array<'cafe' | 'homecafe' | 'pro'> = ['cafe', 'homecafe', 'pro']
-      
+
       for (const mode of modes) {
         store.startNewSession(mode)
         store.updateCoffeeSetup({
           coffee_name: `Test Coffee ${mode}`,
           cafe_name: `Test Cafe ${mode}`,
           location: 'Seoul',
-          brewing_method: mode === 'pro' ? 'Cupping' : 'Espresso'
+          brewing_method: mode === 'pro' ? 'Cupping' : 'Espresso',
         })
         store.updateFlavorSelection([{ id: 'test', text: 'Test' }])
-        
+
         const record = await store.saveCurrentSession(testUserId)
         if (record?.id) {
           createdRecordIds.push(record.id)
@@ -267,13 +264,13 @@ describe('TastingSession Store Integration Tests', () => {
 
       // Fetch records
       await store.fetchUserRecords(testUserId)
-      
+
       expect(store.records).toHaveLength(3)
       expect(store.records[0].mode).toBeDefined()
       expect(store.records[0].coffee_info).toBeDefined()
-      
+
       // Verify sorting (newest first)
-      const timestamps = store.records.map(r => new Date(r.created_at).getTime())
+      const timestamps = store.records.map((r) => new Date(r.created_at).getTime())
       expect(timestamps[0]).toBeGreaterThanOrEqual(timestamps[1])
       expect(timestamps[1]).toBeGreaterThanOrEqual(timestamps[2])
     })
@@ -282,37 +279,37 @@ describe('TastingSession Store Integration Tests', () => {
       // Create multiple records for the same coffee
       const coffeeName = 'Test Statistics Coffee'
       const scores = [85, 90, 88]
-      
+
       for (const score of scores) {
         store.startNewSession('cafe')
         store.updateCoffeeSetup({
           coffee_name: coffeeName,
           cafe_name: 'Test Cafe',
           location: 'Seoul',
-          brewing_method: 'Espresso'
+          brewing_method: 'Espresso',
         })
         store.updateFlavorSelection([{ id: 'test', text: 'Test' }])
-        
+
         // Mock the score calculation to return specific values
         const originalCalculate = store.calculateMatchScores
         store.calculateMatchScores = () => ({
           flavor_match: score - 5,
           sensory_match: score - 3,
           total: score,
-          roaster_bonus: 0
+          roaster_bonus: 0,
         })
-        
+
         const record = await store.saveCurrentSession(testUserId)
         if (record?.id) {
           createdRecordIds.push(record.id)
         }
-        
+
         store.calculateMatchScores = originalCalculate
       }
 
       // Get statistics
       const stats = await store.getCoffeeStatistics(coffeeName)
-      
+
       expect(stats).toBeDefined()
       expect(stats?.total_records).toBe(3)
       expect(stats?.average_score).toBe(88) // (85 + 90 + 88) / 3 = 87.67 → 88
@@ -325,7 +322,7 @@ describe('TastingSession Store Integration Tests', () => {
     it('should handle save errors gracefully', async () => {
       store.startNewSession('cafe')
       // Don't set required coffee info
-      
+
       await expect(store.saveCurrentSession(testUserId)).rejects.toThrow('Incomplete session data')
       expect(store.error).toBe('Incomplete session data')
     })
@@ -341,7 +338,7 @@ describe('TastingSession Store Integration Tests', () => {
     it('should efficiently query by coffee name', async () => {
       // Create records with different coffee names
       const coffeeNames = ['Coffee A', 'Coffee B', 'Coffee C']
-      
+
       for (const name of coffeeNames) {
         for (let i = 0; i < 3; i++) {
           store.startNewSession('cafe')
@@ -349,10 +346,10 @@ describe('TastingSession Store Integration Tests', () => {
             coffee_name: name,
             cafe_name: 'Test Cafe',
             location: 'Seoul',
-            brewing_method: 'Espresso'
+            brewing_method: 'Espresso',
           })
           store.updateFlavorSelection([{ id: 'test', text: 'Test' }])
-          
+
           const record = await store.saveCurrentSession(testUserId)
           if (record?.id) {
             createdRecordIds.push(record.id)
@@ -364,7 +361,7 @@ describe('TastingSession Store Integration Tests', () => {
       const startTime = performance.now()
       const stats = await store.getCoffeeStatistics('Coffee B')
       const endTime = performance.now()
-      
+
       expect(stats?.total_records).toBe(3)
       expect(endTime - startTime).toBeLessThan(100) // Should be fast with proper indexing
     })

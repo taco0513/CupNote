@@ -1,17 +1,17 @@
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken')
 
 const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
 
   if (!token) {
     return res.status(401).json({
       success: false,
       error: {
         code: 'UNAUTHORIZED',
-        message: 'Authentication required'
-      }
-    });
+        message: 'Authentication required',
+      },
+    })
   }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
@@ -20,15 +20,15 @@ const authenticateToken = (req, res, next) => {
         success: false,
         error: {
           code: 'FORBIDDEN',
-          message: 'Invalid or expired token'
-        }
-      });
+          message: 'Invalid or expired token',
+        },
+      })
     }
 
-    req.user = user;
-    next();
-  });
-};
+    req.user = user
+    next()
+  })
+}
 
 const authorizeRoles = (...roles) => {
   return (req, res, next) => {
@@ -37,9 +37,9 @@ const authorizeRoles = (...roles) => {
         success: false,
         error: {
           code: 'UNAUTHORIZED',
-          message: 'Authentication required'
-        }
-      });
+          message: 'Authentication required',
+        },
+      })
     }
 
     if (!roles.includes(req.user.role)) {
@@ -47,16 +47,16 @@ const authorizeRoles = (...roles) => {
         success: false,
         error: {
           code: 'FORBIDDEN',
-          message: 'Insufficient permissions'
-        }
-      });
+          message: 'Insufficient permissions',
+        },
+      })
     }
 
-    next();
-  };
-};
+    next()
+  }
+}
 
 module.exports = {
   authenticateToken,
-  authorizeRoles
-};
+  authorizeRoles,
+}

@@ -7,6 +7,7 @@ BMAD Method를 활용한 **실제 프로젝트 사례**들을 단계별로 살�
 ## 📱 프로젝트 1: FitSize (AI 사이즈 추천)
 
 ### 비즈니스 정의 (Day 1-3)
+
 ```
 문제: 온라인 의류 쇼핑 시 사이즈 때문에 반품률 30%
 
@@ -21,40 +22,42 @@ BMAD Method를 활용한 **실제 프로젝트 사례**들을 단계별로 살�
 ```
 
 ### 데이터 모델 (Day 4-7)
+
 ```typescript
 // 핵심 엔티티
 interface User {
-  id: string;
-  email: string;
-  measurements?: BodyMeasurement;
+  id: string
+  email: string
+  measurements?: BodyMeasurement
 }
 
 interface BodyMeasurement {
-  height: number;
-  weight: number;
-  chest: number;
-  waist: number;
-  hip: number;
-  measured_at: Date;
+  height: number
+  weight: number
+  chest: number
+  waist: number
+  hip: number
+  measured_at: Date
 }
 
 interface Product {
-  id: string;
-  brand: string;
-  size_chart: SizeChart;
-  fit_type: 'slim' | 'regular' | 'loose';
+  id: string
+  brand: string
+  size_chart: SizeChart
+  fit_type: 'slim' | 'regular' | 'loose'
 }
 
 interface Recommendation {
-  product_id: string;
-  user_id: string;
-  recommended_size: string;
-  confidence: number;
-  reasons: string[];
+  product_id: string
+  user_id: string
+  recommended_size: string
+  confidence: number
+  reasons: string[]
 }
 ```
 
 ### API 설계 (Day 8-11)
+
 ```yaml
 # 측정 API
 POST /api/measurements
@@ -79,6 +82,7 @@ POST /api/feedback
 ```
 
 ### UI/UX (Day 12-15)
+
 ```jsx
 // 측정 플로우
 <MeasurementFlow>
@@ -99,12 +103,14 @@ POST /api/feedback
 ```
 
 ### 통합 및 결과 (Day 16-17)
+
 - 3주 만에 MVP 완성
 - 첫 달 30개 쇼핑몰 가입
 - 반품률 평균 22% 감소
 - 월 매출 5천만원 달성
 
 ### 핵심 교훈
+
 1. **간단한 MVP**: 사진 측정 → 복잡한 3D 스캔 대신
 2. **빠른 검증**: 3개 쇼핑몰 파일럿
 3. **데이터 수집**: 피드백으로 AI 개선
@@ -113,6 +119,7 @@ POST /api/feedback
 ## 💰 프로젝트 2: QuickInvoice (간편 인보이스)
 
 ### 비즈니스 정의 (Day 1-3)
+
 ```
 문제: 프리랜서들이 인보이스 작성/관리에 시간 낭비
 
@@ -127,31 +134,33 @@ POST /api/feedback
 ```
 
 ### 핵심 기능 구현
+
 ```typescript
 // 빠른 인보이스 생성
 const createQuickInvoice = async (data: QuickInvoiceDto) => {
   // 이전 거래처 자동완성
-  const client = await findOrCreateClient(data.clientEmail);
+  const client = await findOrCreateClient(data.clientEmail)
 
   // 인보이스 번호 자동 생성
-  const invoiceNumber = generateInvoiceNumber();
+  const invoiceNumber = generateInvoiceNumber()
 
   // PDF 생성
   const pdf = await generatePDF({
     ...data,
     client,
     invoiceNumber,
-    template: user.preferredTemplate
-  });
+    template: user.preferredTemplate,
+  })
 
   // 이메일 발송
-  await sendInvoice(client.email, pdf);
+  await sendInvoice(client.email, pdf)
 
-  return { invoiceId, trackingUrl };
-};
+  return { invoiceId, trackingUrl }
+}
 ```
 
 ### 차별화 기능
+
 ```jsx
 // 1. 자연어 입력
 <NaturalLanguageInput
@@ -185,12 +194,14 @@ if (invoice.daysOverdue > 7) {
 ```
 
 ### 성장 해킹
+
 1. **바이럴 기능**: 인보이스에 "Powered by QuickInvoice"
 2. **추천 프로그램**: 추천당 1개월 무료
 3. **템플릿 마켓**: 디자이너 템플릿 판매
 4. **회계 SW 연동**: QuickBooks, Xero 연동
 
 ### 결과
+
 - 2주 만에 런칭
 - 첫 달 1,000명 가입
 - 유료 전환율 15%
@@ -199,6 +210,7 @@ if (invoice.daysOverdue > 7) {
 ## 🤝 프로젝트 3: TeamSync (팀 협업 도구)
 
 ### 비즈니스 정의 (Day 1-3)
+
 ```
 문제: 리모트 팀의 비동기 협업 어려움
 
@@ -213,6 +225,7 @@ if (invoice.daysOverdue > 7) {
 ```
 
 ### 핵심 기능
+
 ```typescript
 // 1. 스마트 시간대 관리
 const findBestMeetingTime = (members: TeamMember[]) => {
@@ -259,12 +272,14 @@ const ContextThread = () => {
 ```
 
 ### 차별화 전략
+
 1. **시간대 우선**: 모든 기능에 시간대 고려
 2. **비동기 기본**: 실시간 요구 최소화
 3. **컨텍스트 보존**: 대화 맥락 유지
 4. **통합 간편**: Slack, GitHub 원클릭
 
 ### 성장 과정
+
 - Week 1: 10개 팀 베타 테스트
 - Week 2: Product Hunt 2위
 - Month 1: 500개 팀 가입
@@ -273,6 +288,7 @@ const ContextThread = () => {
 ## 📊 성공 패턴 분석
 
 ### 공통 성공 요인
+
 ```
 1. 명확한 문제 정의
    - 실제 고통점
@@ -298,6 +314,7 @@ const ContextThread = () => {
 ### 흔한 실수와 해결법
 
 #### 실수 1: 과도한 기능
+
 ```
 문제: "이것도 넣고 저것도 넣고..."
 해결:
@@ -307,6 +324,7 @@ const ContextThread = () => {
 ```
 
 #### 실수 2: 완벽주의
+
 ```
 문제: "아직 부족해서..."
 해결:
@@ -316,6 +334,7 @@ const ContextThread = () => {
 ```
 
 #### 실수 3: 잘못된 타겟
+
 ```
 문제: "모든 사람을 위한..."
 해결:
@@ -327,6 +346,7 @@ const ContextThread = () => {
 ## 🎯 당신의 프로젝트 시작하기
 
 ### Step 1: 아이디어 검증
+
 ```
 체크리스트:
 □ 내가 겪는 문제인가?
@@ -337,6 +357,7 @@ const ContextThread = () => {
 ```
 
 ### Step 2: MVP 범위 정하기
+
 ```
 핵심 질문:
 1. 가장 중요한 기능 1개는?
@@ -346,6 +367,7 @@ const ContextThread = () => {
 ```
 
 ### Step 3: 17일 계획
+
 ```
 Week 1 (Day 1-7):
 - Day 1-3: 비즈니스 정의
@@ -363,12 +385,14 @@ Week 3 (Day 15-17):
 ## 💡 마지막 조언
 
 ### 성공의 핵심
+
 1. **시작이 반**: 완벽보다 실행
 2. **고객 중심**: 기술보다 가치
 3. **빠른 실패**: 틀렸으면 빨리 피벗
 4. **지속적 개선**: 매일 1% 더 나은
 
 ### 격려의 말
+
 > "모든 유니콘도 처음엔 MVP였다"
 
 당신의 아이디어도 17일 후엔 실제 서비스가 될 수 있습니다.

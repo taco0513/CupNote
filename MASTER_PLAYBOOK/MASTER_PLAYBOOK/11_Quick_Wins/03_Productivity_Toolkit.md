@@ -981,47 +981,47 @@ echo "⏰ Remember to take breaks every 90 minutes"
 // productivity-tracker.ts - 생산성 측정 도구
 interface ProductivityMetrics {
   codeMetrics: {
-    linesWritten: number;
-    filesModified: number;
-    functionsCreated: number;
-    testsWritten: number;
-    bugsFixed: number;
-  };
+    linesWritten: number
+    filesModified: number
+    functionsCreated: number
+    testsWritten: number
+    bugsFixed: number
+  }
 
   timeMetrics: {
-    codingTime: number;        // 실제 코딩 시간
-    debuggingTime: number;     // 디버깅 시간
-    meetingTime: number;       // 회의 시간
-    learningTime: number;      // 학습 시간
-    breakTime: number;         // 휴식 시간
-  };
+    codingTime: number // 실제 코딩 시간
+    debuggingTime: number // 디버깅 시간
+    meetingTime: number // 회의 시간
+    learningTime: number // 학습 시간
+    breakTime: number // 휴식 시간
+  }
 
   qualityMetrics: {
-    testCoverage: number;      // 테스트 커버리지
-    codeReviewScore: number;   // 코드 리뷰 점수
-    bugRate: number;           // 버그 발생률
-    refactoringRate: number;   // 리팩토링 비율
-  };
+    testCoverage: number // 테스트 커버리지
+    codeReviewScore: number // 코드 리뷰 점수
+    bugRate: number // 버그 발생률
+    refactoringRate: number // 리팩토링 비율
+  }
 
   collaborationMetrics: {
-    pullRequests: number;      // PR 수
-    codeReviews: number;       // 리뷰한 코드 수
-    commentsGiven: number;     // 남긴 코멘트 수
-    commentsReceived: number;  // 받은 코멘트 수
-  };
+    pullRequests: number // PR 수
+    codeReviews: number // 리뷰한 코드 수
+    commentsGiven: number // 남긴 코멘트 수
+    commentsReceived: number // 받은 코멘트 수
+  }
 }
 
 class ProductivityTracker {
-  private metrics: ProductivityMetrics;
+  private metrics: ProductivityMetrics
 
   constructor() {
-    this.metrics = this.initializeMetrics();
+    this.metrics = this.initializeMetrics()
   }
 
   // Git 데이터에서 메트릭 추출
   async analyzeGitActivity(days: number = 30): Promise<GitMetrics> {
-    const commits = await this.getRecentCommits(days);
-    const diffStats = await this.analyzeDiffs(commits);
+    const commits = await this.getRecentCommits(days)
+    const diffStats = await this.analyzeDiffs(commits)
 
     return {
       commitsCount: commits.length,
@@ -1029,8 +1029,8 @@ class ProductivityTracker {
       linesDeleted: diffStats.deletions,
       filesChanged: diffStats.changedFiles.length,
       averageCommitSize: diffStats.additions / commits.length,
-      commitFrequency: commits.length / days
-    };
+      commitFrequency: commits.length / days,
+    }
   }
 
   // VS Code 활동 분석
@@ -1041,13 +1041,13 @@ class ProductivityTracker {
       keystrokes: this.getKeystrokeCount(),
       commandsUsed: this.getCommandUsage(),
       extensionsUsed: this.getExtensionUsage(),
-      focusTime: this.calculateFocusTime()
-    };
+      focusTime: this.calculateFocusTime(),
+    }
   }
 
   // 생산성 개선 제안
   generateImprovementSuggestions(): ProductivitySuggestion[] {
-    const suggestions: ProductivitySuggestion[] = [];
+    const suggestions: ProductivitySuggestion[] = []
 
     // 코딩 시간 분석
     if (this.metrics.timeMetrics.debuggingTime > this.metrics.timeMetrics.codingTime * 0.5) {
@@ -1059,10 +1059,10 @@ class ProductivityTracker {
           '더 많은 단위 테스트 작성',
           '타입 안전성 강화',
           '로깅 시스템 개선',
-          'IDE 디버거 활용도 증가'
+          'IDE 디버거 활용도 증가',
         ],
-        expectedImprovement: '20-30% 디버깅 시간 단축'
-      });
+        expectedImprovement: '20-30% 디버깅 시간 단축',
+      })
     }
 
     // 테스트 커버리지 분석
@@ -1071,16 +1071,12 @@ class ProductivityTracker {
         category: 'testing',
         title: '테스트 커버리지 향상',
         description: `현재 테스트 커버리지: ${this.metrics.qualityMetrics.testCoverage}%`,
-        actions: [
-          'TDD 방법론 적용',
-          '자동 테스트 생성 도구 활용',
-          '테스트 코드 리뷰 강화'
-        ],
-        expectedImprovement: '버그 발생률 40% 감소'
-      });
+        actions: ['TDD 방법론 적용', '자동 테스트 생성 도구 활용', '테스트 코드 리뷰 강화'],
+        expectedImprovement: '버그 발생률 40% 감소',
+      })
     }
 
-    return suggestions;
+    return suggestions
   }
 
   // 주간 생산성 리포트
@@ -1091,13 +1087,13 @@ class ProductivityTracker {
         totalCodingHours: this.metrics.timeMetrics.codingTime,
         linesWritten: this.metrics.codeMetrics.linesWritten,
         featuresCompleted: this.calculateFeaturesCompleted(),
-        bugsFixed: this.metrics.codeMetrics.bugsFixed
+        bugsFixed: this.metrics.codeMetrics.bugsFixed,
       },
       trends: this.analyzeTrends(),
       achievements: this.identifyAchievements(),
       areasForImprovement: this.generateImprovementSuggestions(),
-      nextWeekGoals: this.suggestNextWeekGoals()
-    };
+      nextWeekGoals: this.suggestNextWeekGoals(),
+    }
   }
 }
 ```

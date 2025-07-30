@@ -5,6 +5,7 @@
 ## 섹션 구성
 
 ### 🔄 01_Git_Worktrees_Parallel_Sessions.md ⭐
+
 - **AI 자동 작업 분석 시스템**: Claude가 할일 목록을 분석해서 최적 워크플로우 결정
 - **스마트 워크플로우 매트릭스**: 작업 간섭도, 안정성, 긴급도 기반 자동 분배
 - **지능형 충돌 방지**: 작업 간섭도 계산으로 사전 충돌 방지
@@ -12,26 +13,31 @@
 - **성과 분석 시스템**: 병렬 처리 효율성 측정 및 개선 제안
 
 ### 02_Context_Management.md
+
 - 컨텍스트 최적화 전략
 - 대용량 프로젝트 컨텍스트 관리
 - 효율적인 정보 구조화
 
 ### 03_Advanced_Prompting.md
+
 - 프롬프트 엔지니어링 고급 기법
 - 체인 오브 솟(Chain of Thought) 활용
 - 멀티스텝 추론 최적화
 
 ### 04_Code_Understanding.md
+
 - 코드베이스 분석 및 이해
 - 레거시 코드 해석
 - 아키텍처 패턴 인식
 
 ### 05_Collaborative_Workflows.md
+
 - 팀 협업 최적화
 - 지식 공유 시스템
 - 멘토링 및 교육 활용
 
 ### 06_Performance_Optimization.md
+
 - 응답 속도 최적화
 - 토큰 효율성 극대화
 - 배치 처리 전략

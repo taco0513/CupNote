@@ -7,11 +7,13 @@ CupNote는 커피 애호가들을 위한 전문적인 테이스팅 도구입니�
 ## 🎯 주요 기능
 
 ### 3가지 테이스팅 모드
+
 - **☕ Cafe Mode**: 카페에서 마시는 커피 (3-5분)
-- **🏠 HomeCafe Mode**: 집에서 내려 마시는 커피 (5-8분)  
+- **🏠 HomeCafe Mode**: 집에서 내려 마시는 커피 (5-8분)
 - **🎯 Pro Mode**: SCA 표준 전문 품질 평가 (8-12분)
 
 ### 핵심 기능
+
 - 🌸 **Flavor Wheel**: SCA 표준 향미 휠 기반 선택
 - 👅 **Sensory Analysis**: 단맛, 산미, 쓴맛 등 감각 표현
 - 📊 **Match Score**: AI 기반 로스터 노트 매칭 점수
@@ -19,6 +21,7 @@ CupNote는 커피 애호가들을 위한 전문적인 테이스팅 도구입니�
 - 🏆 **Achievement System**: 테이스팅 성취 및 레벨 시스템
 
 ### Pro Mode 전문 기능
+
 - ⚗️ **QC Measurement**: TDS, 추출율, 물 성분 분석
 - 📋 **SCA Cupping**: 전문 커핑 평가 시스템
 - 📊 **Golden Cup Chart**: 추출 품질 시각화
@@ -27,6 +30,7 @@ CupNote는 커피 애호가들을 위한 전문적인 테이스팅 도구입니�
 ## 🚀 빠른 시작
 
 ### 필수 요구사항
+
 - **Node.js** 18+ (권장: 20+)
 - **Bun** (권장) 또는 npm/yarn/pnpm
 - **Git**
@@ -54,6 +58,7 @@ bun dev
 ```
 
 ### 환경 설정
+
 ```bash
 # .env.local 파일 생성 후 설정
 VITE_SUPABASE_URL=your_supabase_url
@@ -92,6 +97,7 @@ src/
 ## 🛠️ 기술 스택
 
 ### Frontend
+
 - **Vue 3** - Composition API & TypeScript
 - **Vite** - 빠른 개발 서버 및 빌드
 - **Pinia** - 현대적인 상태 관리
@@ -100,12 +106,14 @@ src/
 - **TypeScript** - 타입 안정성
 
 ### Backend & Database
+
 - **Supabase** - Backend-as-a-Service
 - **PostgreSQL** - 메인 데이터베이스
 - **Row Level Security** - 보안 정책
 - **Real-time Subscriptions** - 실시간 데이터
 
 ### Development & Deployment
+
 - **Bun** - 고성능 패키지 매니저 (권장)
 - **ESLint** - 코드 품질 관리
 - **Capacitor** - 모바일 앱 빌드
@@ -114,23 +122,26 @@ src/
 ## 📱 사용자 플로우
 
 ### Cafe Mode (7단계)
+
 ```
-Mode Selection → Coffee Info → Flavor Selection → 
+Mode Selection → Coffee Info → Flavor Selection →
 Sensory Expression → Personal Comment → Roaster Notes → Result
 ```
 
-### HomeCafe Mode (8단계)  
+### HomeCafe Mode (8단계)
+
 ```
-Mode Selection → Coffee Info → HomeCafe Settings → 
-Flavor Selection → Sensory Expression → Personal Comment → 
+Mode Selection → Coffee Info → HomeCafe Settings →
+Flavor Selection → Sensory Expression → Personal Comment →
 Roaster Notes → Result
 ```
 
 ### Pro Mode (12단계)
+
 ```
-Mode Selection → Coffee Info → HomeCafe Settings → 
-Pro Brewing Data → QC Measurement → Pro QC Report → 
-Flavor Selection → Sensory Expression → Sensory Slider → 
+Mode Selection → Coffee Info → HomeCafe Settings →
+Pro Brewing Data → QC Measurement → Pro QC Report →
+Flavor Selection → Sensory Expression → Sensory Slider →
 Personal Comment → Roaster Notes → Result
 ```
 
@@ -165,17 +176,19 @@ bun run lint
 ## 📦 배포
 
 ### 프로덕션 빌드
+
 ```bash
 bun run build
 npm run build
 ```
 
 ### 모바일 앱 빌드
+
 ```bash
 # iOS
 bunx cap run ios
 
-# Android  
+# Android
 bunx cap run android
 ```
 
@@ -188,6 +201,7 @@ bunx cap run android
 5. Open a Pull Request
 
 ### 개발 가이드라인
+
 - **TypeScript**: 모든 새 코드는 TypeScript로 작성
 - **Composition API**: Vue 3 Composition API 사용
 - **Component**: 재사용 가능한 컴포넌트 설계
@@ -208,7 +222,7 @@ MIT License - 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
 ## 🎯 로드맵
 
 - [x] **Phase 1**: 기본 테이스팅 플로우 (Cafe/HomeCafe/Pro)
-- [x] **Phase 2**: 데이터 시각화 및 통계 대시보드  
+- [x] **Phase 2**: 데이터 시각화 및 통계 대시보드
 - [x] **Phase 3**: 실시간 진행도 추적 및 목표 설정
 - [x] **Phase 4**: UI/UX 안정성 및 에러 처리 시스템
 - [ ] **Phase 5**: 모바일 앱 및 PWA 최적화

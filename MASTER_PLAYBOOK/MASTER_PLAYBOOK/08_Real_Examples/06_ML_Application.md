@@ -5,59 +5,62 @@
 SuperClaude AI 워크플로우를 활용하여 실용적인 머신러닝 애플리케이션을 구축하는 종합 가이드입니다.
 
 ### 애플리케이션 컨셉: 스마트 추천 시스템
+
 ```yaml
 application_concept:
-  name: "SmartReco AI"
-  category: "머신러닝 기반 추천 엔진"
-  target_domain: "전자상거래, 콘텐츠 플랫폼, 개인화 서비스"
+  name: 'SmartReco AI'
+  category: '머신러닝 기반 추천 엔진'
+  target_domain: '전자상거래, 콘텐츠 플랫폼, 개인화 서비스'
 
 core_features:
-  - "실시간 개인화 추천"
-  - "협업 필터링 + 콘텐츠 기반 필터링"
-  - "A/B 테스트 기반 모델 최적화"
-  - "실시간 피드백 학습"
-  - "설명 가능한 AI (XAI)"
-  - "다중 채널 추천 (웹, 모바일, 이메일)"
+  - '실시간 개인화 추천'
+  - '협업 필터링 + 콘텐츠 기반 필터링'
+  - 'A/B 테스트 기반 모델 최적화'
+  - '실시간 피드백 학습'
+  - '설명 가능한 AI (XAI)'
+  - '다중 채널 추천 (웹, 모바일, 이메일)'
 
 technical_requirements:
-  scale: "100만+ 사용자, 1000만+ 아이템"
-  latency: "< 100ms 추천 응답시간"
-  accuracy: "CTR > 5%, Conversion > 2%"
-  availability: "99.9% 가용성"
-  explainability: "추천 이유 설명 제공"
+  scale: '100만+ 사용자, 1000만+ 아이템'
+  latency: '< 100ms 추천 응답시간'
+  accuracy: 'CTR > 5%, Conversion > 2%'
+  availability: '99.9% 가용성'
+  explainability: '추천 이유 설명 제공'
 ```
 
 ### 기술 스택 선택
+
 ```yaml
 technology_stack:
   ml_framework:
-    training: "PyTorch + Transformers"
-    serving: "TorchServe + ONNX Runtime"
-    feature_store: "Feast"
-    experiment_tracking: "MLflow + Weights & Biases"
+    training: 'PyTorch + Transformers'
+    serving: 'TorchServe + ONNX Runtime'
+    feature_store: 'Feast'
+    experiment_tracking: 'MLflow + Weights & Biases'
 
   backend:
-    runtime: "Python 3.11 + FastAPI"
-    database: "PostgreSQL + Redis + Elasticsearch"
-    message_queue: "Apache Kafka"
-    caching: "Redis Cluster"
+    runtime: 'Python 3.11 + FastAPI'
+    database: 'PostgreSQL + Redis + Elasticsearch'
+    message_queue: 'Apache Kafka'
+    caching: 'Redis Cluster'
 
   infrastructure:
-    cloud: "AWS / GCP"
-    containers: "Docker + Kubernetes"
-    model_serving: "KubeFlow + Seldon Core"
-    monitoring: "Prometheus + Grafana + ELK Stack"
+    cloud: 'AWS / GCP'
+    containers: 'Docker + Kubernetes'
+    model_serving: 'KubeFlow + Seldon Core'
+    monitoring: 'Prometheus + Grafana + ELK Stack'
 
   data_pipeline:
-    ingestion: "Apache Airflow"
-    processing: "Apache Spark + Pandas"
-    streaming: "Apache Flink"
-    storage: "AWS S3 / Google Cloud Storage"
+    ingestion: 'Apache Airflow'
+    processing: 'Apache Spark + Pandas'
+    streaming: 'Apache Flink'
+    storage: 'AWS S3 / Google Cloud Storage'
 ```
 
 ## Phase 1: 데이터 파이프라인 및 특성 엔지니어링
 
 ### SuperClaude를 활용한 데이터 설계
+
 ```bash
 # 1. 데이터 아키텍처 설계
 /design "ML 데이터 파이프라인" --think-hard --persona-architect
@@ -73,6 +76,7 @@ technology_stack:
 ```
 
 ### 데이터 모델 설계
+
 ```python
 # models/data_models.py
 from datetime import datetime
@@ -162,6 +166,7 @@ class RecommendationItem(BaseModel):
 ```
 
 ### 특성 엔지니어링 파이프라인
+
 ```python
 # features/feature_engineering.py
 import pandas as pd
@@ -360,6 +365,7 @@ class FeatureEngineering:
 ## Phase 2: 추천 모델 개발
 
 ### SuperClaude를 활용한 모델 구현
+
 ```bash
 # 1. 협업 필터링 모델 구현
 /implement "Matrix Factorization 모델" --pytorch --embedding --regularization
@@ -375,6 +381,7 @@ class FeatureEngineering:
 ```
 
 ### 협업 필터링 모델
+
 ```python
 # models/collaborative_filtering.py
 import torch
@@ -566,6 +573,7 @@ class RecommendationDataset(Dataset):
 ```
 
 ### 콘텐츠 기반 추천 모델
+
 ```python
 # models/content_based.py
 import numpy as np
@@ -738,6 +746,7 @@ class DeepContentModel(nn.Module):
 ## Phase 3: 하이브리드 추천 시스템
 
 ### 앙상블 추천 모델
+
 ```python
 # models/hybrid_recommender.py
 import numpy as np
@@ -1001,6 +1010,7 @@ class AttentionHybridModel(nn.Module):
 ## Phase 4: 실시간 추천 서비스
 
 ### FastAPI 기반 추천 서비스
+
 ```python
 # api/recommendation_service.py
 from fastapi import FastAPI, HTTPException, BackgroundTasks
@@ -1272,6 +1282,7 @@ if __name__ == "__main__":
 ## Phase 5: 모니터링 및 A/B 테스트
 
 ### A/B 테스트 프레임워크
+
 ```python
 # testing/ab_testing.py
 import numpy as np
@@ -1587,23 +1598,25 @@ class RecommendationMonitor:
 ## 프로젝트 성과 및 학습 포인트
 
 ### 개발 성과
+
 ```yaml
 performance_metrics:
-  development_time: "20주 → 14주 (30% 단축)"
-  model_accuracy: "NDCG@10: 0.89, Precision@10: 0.85"
-  system_performance: "평균 응답시간 95ms, 99.9% 가용성"
-  scalability: "100만 동시 사용자 지원"
-  cost_efficiency: "인프라 비용 40% 절감"
+  development_time: '20주 → 14주 (30% 단축)'
+  model_accuracy: 'NDCG@10: 0.89, Precision@10: 0.85'
+  system_performance: '평균 응답시간 95ms, 99.9% 가용성'
+  scalability: '100만 동시 사용자 지원'
+  cost_efficiency: '인프라 비용 40% 절감'
 
 business_metrics:
-  user_engagement: "세션 지속시간 35% 증가"
-  conversion_rate: "구매 전환율 2.5% → 3.8%"
-  revenue_impact: "추천 기반 매출 45% 증가"
-  user_satisfaction: "추천 만족도 4.6/5.0"
-  retention_rate: "사용자 유지율 78% 개선"
+  user_engagement: '세션 지속시간 35% 증가'
+  conversion_rate: '구매 전환율 2.5% → 3.8%'
+  revenue_impact: '추천 기반 매출 45% 증가'
+  user_satisfaction: '추천 만족도 4.6/5.0'
+  retention_rate: '사용자 유지율 78% 개선'
 ```
 
 ### AI 워크플로우 활용 효과
+
 1. **모델 개발**: 다양한 추천 알고리즘 신속한 프로토타이핑 및 비교
 2. **특성 엔지니어링**: 자동화된 특성 생성으로 개발 시간 60% 단축
 3. **하이브리드 시스템**: 복잡한 앙상블 모델 구현 지원
@@ -1612,6 +1625,7 @@ business_metrics:
 6. **모니터링**: 실시간 성능 추적 및 자동 알림 시스템
 
 ### 핵심 학습 포인트
+
 - **개인화의 중요성**: 사용자별 맞춤 추천이 전체 성과에 미치는 영향
 - **실시간 처리**: 낮은 지연시간이 사용자 경험에 핵심적 역할
 - **설명 가능성**: 추천 이유 제공이 사용자 신뢰도 향상에 기여

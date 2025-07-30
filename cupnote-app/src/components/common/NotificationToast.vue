@@ -8,7 +8,7 @@
           :class="[
             'toast',
             `toast-${notification.type}`,
-            { 'toast-dismissible': notification.dismissible }
+            { 'toast-dismissible': notification.dismissible },
           ]"
           @click="notification.dismissible && removeNotification(notification.id)"
         >
@@ -53,7 +53,7 @@ const getIcon = (type: string): string => {
     info: 'ℹ️',
     coffee: '☕',
     achievement: '🏆',
-    tip: '💡'
+    tip: '💡',
   }
   return icons[type as keyof typeof icons] || 'ℹ️'
 }
@@ -120,8 +120,8 @@ const removeNotification = (id: string) => {
 }
 
 .toast-coffee {
-  border-left-color: #7C5842;
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5F0E8 100%);
+  border-left-color: #7c5842;
+  background: linear-gradient(135deg, #fff8f0 0%, #f5f0e8 100%);
 }
 
 .toast-achievement {
@@ -212,20 +212,20 @@ const removeNotification = (id: string) => {
     top: 20px;
     max-width: none;
   }
-  
+
   .toast {
     margin-bottom: 8px;
     padding: 12px;
   }
-  
+
   .toast-icon {
     font-size: 18px;
   }
-  
+
   .toast-title {
     font-size: 13px;
   }
-  
+
   .toast-message {
     font-size: 12px;
   }
@@ -237,39 +237,39 @@ const removeNotification = (id: string) => {
     background: #2d3748;
     color: #e2e8f0;
   }
-  
+
   .toast-title {
     color: #f7fafc;
   }
-  
+
   .toast-message {
     color: #cbd5e0;
   }
-  
+
   .toast-success {
     background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
   }
-  
+
   .toast-error {
     background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
   }
-  
+
   .toast-warning {
     background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
   }
-  
+
   .toast-info {
     background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
   }
-  
+
   .toast-coffee {
     background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
   }
-  
+
   .toast-achievement {
     background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
   }
-  
+
   .toast-tip {
     background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
   }
@@ -291,25 +291,25 @@ const removeNotification = (id: string) => {
     border: 2px solid;
     box-shadow: none;
   }
-  
+
   .toast-success {
     border-color: #22543d;
     background: #f0fff4;
     color: #22543d;
   }
-  
+
   .toast-error {
     border-color: #742a2a;
     background: #fff5f5;
     color: #742a2a;
   }
-  
+
   .toast-warning {
     border-color: #744210;
     background: #fffaf0;
     color: #744210;
   }
-  
+
   .toast-info {
     border-color: #2a4365;
     background: #ebf8ff;

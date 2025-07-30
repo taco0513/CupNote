@@ -5,7 +5,7 @@
       <span v-else-if="showProgress">🔒</span>
       <span v-else>{{ achievement.icon }}</span>
     </div>
-    
+
     <div class="achievement-content">
       <div class="achievement-header">
         <h4 class="achievement-title">{{ achievement.title }}</h4>
@@ -13,27 +13,24 @@
           {{ getTierLabel(achievement.tier) }}
         </div>
       </div>
-      
+
       <p class="achievement-description">{{ achievement.description }}</p>
-      
+
       <div class="achievement-footer">
         <div class="achievement-points">
           <span class="points-icon">⭐</span>
           <span class="points-value">{{ achievement.points }}포인트</span>
         </div>
-        
+
         <div v-if="showProgress && userProgress" class="achievement-progress">
           <div class="progress-text">
             {{ userProgress.progress }}% ({{ userProgress.current }}/{{ achievement.target }})
           </div>
           <div class="progress-bar">
-            <div 
-              class="progress-fill"
-              :style="{ width: `${userProgress.progress}%` }"
-            ></div>
+            <div class="progress-fill" :style="{ width: `${userProgress.progress}%` }"></div>
           </div>
         </div>
-        
+
         <div v-if="isEarned && userProgress?.earned_at" class="earned-date">
           {{ formatEarnedDate(userProgress.earned_at) }}에 획득
         </div>
@@ -48,12 +45,12 @@ import { computed } from 'vue'
 const props = defineProps({
   achievement: {
     type: Object,
-    required: true
+    required: true,
   },
   userProgress: {
     type: Object,
-    default: null
-  }
+    default: null,
+  },
 })
 
 const isEarned = computed(() => {
@@ -71,10 +68,10 @@ const showProgress = computed(() => {
 const getTierLabel = (tier) => {
   const tiers = {
     1: '브론즈',
-    2: '실버', 
+    2: '실버',
     3: '골드',
     4: '플래티넘',
-    5: '다이아몬드'
+    5: '다이아몬드',
   }
   return tiers[tier] || '브론즈'
 }
@@ -84,7 +81,7 @@ const formatEarnedDate = (dateString) => {
   const now = new Date()
   const diffMs = now - date
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
-  
+
   if (diffDays === 0) return '오늘'
   if (diffDays === 1) return '어제'
   if (diffDays < 7) return `${diffDays}일 전`
@@ -100,15 +97,15 @@ const formatEarnedDate = (dateString) => {
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 15px rgba(124, 88, 66, 0.1);
-  border: 2px solid #F0E8DC;
+  border: 2px solid #f0e8dc;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
 }
 
 .achievement-card.earned {
-  border-color: #10B981;
-  background: linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 100%);
+  border-color: #10b981;
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
 }
 
 .achievement-card.earned::before {
@@ -120,7 +117,7 @@ const formatEarnedDate = (dateString) => {
   height: 0;
   border-style: solid;
   border-width: 0 40px 40px 0;
-  border-color: transparent #10B981 transparent transparent;
+  border-color: transparent #10b981 transparent transparent;
 }
 
 .achievement-card.earned::after {
@@ -135,7 +132,7 @@ const formatEarnedDate = (dateString) => {
 
 .achievement-card.locked {
   opacity: 0.6;
-  background: #F8F8F8;
+  background: #f8f8f8;
 }
 
 .achievement-card:hover:not(.locked) {
@@ -165,7 +162,7 @@ const formatEarnedDate = (dateString) => {
 .achievement-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin: 0;
   flex: 1;
 }
@@ -180,27 +177,27 @@ const formatEarnedDate = (dateString) => {
 }
 
 .tier-1 {
-  background: #CD7F32;
+  background: #cd7f32;
   color: white;
 }
 
 .tier-2 {
-  background: #C0C0C0;
+  background: #c0c0c0;
   color: #333;
 }
 
 .tier-3 {
-  background: #FFD700;
+  background: #ffd700;
   color: #333;
 }
 
 .tier-4 {
-  background: #E5E4E2;
+  background: #e5e4e2;
   color: #333;
 }
 
 .tier-5 {
-  background: #B9F2FF;
+  background: #b9f2ff;
   color: #333;
 }
 
@@ -222,12 +219,12 @@ const formatEarnedDate = (dateString) => {
   align-items: center;
   gap: 0.5rem;
   font-size: 0.9rem;
-  color: #7C5842;
+  color: #7c5842;
   font-weight: 600;
 }
 
 .points-icon {
-  color: #F59E0B;
+  color: #f59e0b;
 }
 
 .achievement-progress {
@@ -243,7 +240,7 @@ const formatEarnedDate = (dateString) => {
 }
 
 .progress-bar {
-  background: #E8D5C4;
+  background: #e8d5c4;
   border-radius: 4px;
   height: 6px;
   overflow: hidden;
@@ -251,14 +248,14 @@ const formatEarnedDate = (dateString) => {
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #7C5842, #A0796A);
+  background: linear-gradient(90deg, #7c5842, #a0796a);
   border-radius: 4px;
   transition: width 0.3s ease;
 }
 
 .earned-date {
   font-size: 0.8rem;
-  color: #10B981;
+  color: #10b981;
   font-weight: 500;
   text-align: center;
 }
@@ -268,11 +265,11 @@ const formatEarnedDate = (dateString) => {
   .achievement-card {
     padding: 1rem;
   }
-  
+
   .achievement-icon {
     font-size: 2.5rem;
   }
-  
+
   .achievement-header {
     flex-direction: column;
     gap: 0.5rem;

@@ -13,18 +13,21 @@ This is the AI Workflow Playbook repository containing comprehensive guides for 
 ## Key Concepts
 
 ### SuperClaude Framework
+
 - **Wave System**: Multi-stage command execution with compound intelligence (auto-activates on complexity ≥0.7 + files >20 + operation_types >2)
 - **Persona System**: 11 specialized AI personalities that auto-activate based on context
 - **MCP Integration**: Context7 (always active for dev tasks), Sequential, Magic, Playwright servers
 - **Command Categories**: Development, Analysis, Quality, Testing, Documentation, Version Control, Meta
 
 ### Vibe Coding Philosophy
+
 - Natural language first approach - no technical jargon required
 - Conversational development style with immediate feedback
 - Iterative improvement until satisfied
 - Focus on describing what you want, not how to implement it
 
 ### BMAD Method Structure
+
 1. **B (Business Logic)**: Core functionality without UI
 2. **M (Mockup)**: Working prototype with basic UI
 3. **A (API Integration)**: Backend connection and data flow
@@ -35,6 +38,7 @@ This is the AI Workflow Playbook repository containing comprehensive guides for 
 ### Initialize a New Project
 
 **🚀 빠른 시작 (추천)**:
+
 ```
 새 프로젝트에 AI Workflow Playbook 적용하기:
 
@@ -44,6 +48,7 @@ This is the AI Workflow Playbook repository containing comprehensive guides for 
 ```
 
 **기존 방식**:
+
 ```bash
 # SuperClaude approach
 /design "project description" --think-hard
@@ -61,6 +66,7 @@ This is the AI Workflow Playbook repository containing comprehensive guides for 
 ```
 
 ### Analyze and Understand Code
+
 ```bash
 # SuperClaude commands
 /analyze --think                    # Standard analysis (~4K tokens)
@@ -73,6 +79,7 @@ This is the AI Workflow Playbook repository containing comprehensive guides for 
 ```
 
 ### Implement Features
+
 ```bash
 # SuperClaude
 /implement "feature description" --type [component|api|auth|feature|database]
@@ -83,6 +90,7 @@ This is the AI Workflow Playbook repository containing comprehensive guides for 
 ```
 
 ### Improve Code Quality
+
 ```bash
 # SuperClaude iterative improvement
 /improve --loop                     # 3 iterations by default
@@ -94,6 +102,7 @@ This is the AI Workflow Playbook repository containing comprehensive guides for 
 ```
 
 ### Testing
+
 ```bash
 # Generate tests
 /test unit                          # Unit tests
@@ -105,6 +114,7 @@ This is the AI Workflow Playbook repository containing comprehensive guides for 
 ```
 
 ### Troubleshooting
+
 ```bash
 /troubleshoot --auto-fix --explain  # Automatic error resolution
 /troubleshoot --think              # Analyze complex issues
@@ -113,6 +123,7 @@ This is the AI Workflow Playbook repository containing comprehensive guides for 
 ## Architecture and Structure
 
 ### Document Organization
+
 ```
 _Documents/
 ├── SUPERCLAUSE_VIBE_CODING_GUIDE.md      # Korean guide for zero-to-MVP development
@@ -158,6 +169,7 @@ _Documents/
 ## Korean Language Support
 
 Many documents in this repository are written in Korean (한국어). The guides include:
+
 - Step-by-step tutorials for beginners
 - Natural language examples in Korean
 - Culturally adapted explanations

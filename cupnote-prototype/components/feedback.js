@@ -3,32 +3,32 @@
 
 class FeedbackWidget {
   constructor() {
-    this.isOpen = false;
+    this.isOpen = false
     this.feedbackTypes = {
       bug: '🐛 버그 신고',
       feature: '💡 기능 제안',
-      general: '💬 일반 피드백'
-    };
-    this.init();
+      general: '💬 일반 피드백',
+    }
+    this.init()
   }
 
   init() {
-    this.createWidget();
-    this.attachEventListeners();
+    this.createWidget()
+    this.attachEventListeners()
   }
 
   createWidget() {
     // Feedback button
-    const button = document.createElement('button');
-    button.id = 'feedback-button';
-    button.className = 'feedback-button';
-    button.innerHTML = '💬';
-    button.setAttribute('aria-label', '피드백 보내기');
-    
+    const button = document.createElement('button')
+    button.id = 'feedback-button'
+    button.className = 'feedback-button'
+    button.innerHTML = '💬'
+    button.setAttribute('aria-label', '피드백 보내기')
+
     // Feedback modal
-    const modal = document.createElement('div');
-    modal.id = 'feedback-modal';
-    modal.className = 'feedback-modal';
+    const modal = document.createElement('div')
+    modal.id = 'feedback-modal'
+    modal.className = 'feedback-modal'
     modal.innerHTML = `
       <div class="feedback-content">
         <div class="feedback-header">
@@ -38,12 +38,16 @@ class FeedbackWidget {
         
         <div class="feedback-body">
           <div class="feedback-types">
-            ${Object.entries(this.feedbackTypes).map(([key, label]) => `
+            ${Object.entries(this.feedbackTypes)
+              .map(
+                ([key, label]) => `
               <label class="feedback-type">
                 <input type="radio" name="feedback-type" value="${key}" ${key === 'general' ? 'checked' : ''}>
                 <span>${label}</span>
               </label>
-            `).join('')}
+            `
+              )
+              .join('')}
           </div>
           
           <textarea 
@@ -66,10 +70,10 @@ class FeedbackWidget {
           </div>
         </div>
       </div>
-    `;
-    
+    `
+
     // Add styles
-    const styles = document.createElement('style');
+    const styles = document.createElement('style')
     styles.textContent = `
       .feedback-button {
         position: fixed;
@@ -251,71 +255,71 @@ class FeedbackWidget {
           max-height: calc(100vh - 40px);
         }
       }
-    `;
-    
+    `
+
     // Append to DOM
-    document.head.appendChild(styles);
-    document.body.appendChild(button);
-    document.body.appendChild(modal);
+    document.head.appendChild(styles)
+    document.body.appendChild(button)
+    document.body.appendChild(modal)
   }
 
   attachEventListeners() {
     // Open modal
     document.getElementById('feedback-button').addEventListener('click', () => {
-      this.open();
-    });
-    
+      this.open()
+    })
+
     // Close modal
     document.querySelector('.feedback-close').addEventListener('click', () => {
-      this.close();
-    });
-    
+      this.close()
+    })
+
     document.querySelector('.btn-cancel').addEventListener('click', () => {
-      this.close();
-    });
-    
+      this.close()
+    })
+
     // Close on background click
-    document.getElementById('feedback-modal').addEventListener('click', (e) => {
+    document.getElementById('feedback-modal').addEventListener('click', e => {
       if (e.target.id === 'feedback-modal') {
-        this.close();
+        this.close()
       }
-    });
-    
+    })
+
     // Submit feedback
     document.getElementById('submit-feedback').addEventListener('click', () => {
-      this.submitFeedback();
-    });
+      this.submitFeedback()
+    })
   }
 
   open() {
-    this.isOpen = true;
-    document.getElementById('feedback-modal').classList.add('open');
-    document.getElementById('feedback-message').focus();
+    this.isOpen = true
+    document.getElementById('feedback-modal').classList.add('open')
+    document.getElementById('feedback-message').focus()
   }
 
   close() {
-    this.isOpen = false;
-    document.getElementById('feedback-modal').classList.remove('open');
+    this.isOpen = false
+    document.getElementById('feedback-modal').classList.remove('open')
     // Reset form
-    document.getElementById('feedback-message').value = '';
-    document.querySelector('input[value="general"]').checked = true;
+    document.getElementById('feedback-message').value = ''
+    document.querySelector('input[value="general"]').checked = true
   }
 
   async submitFeedback() {
-    const type = document.querySelector('input[name="feedback-type"]:checked').value;
-    const message = document.getElementById('feedback-message').value.trim();
-    const includeScreenshot = document.getElementById('include-screenshot').checked;
-    
+    const type = document.querySelector('input[name="feedback-type"]:checked').value
+    const message = document.getElementById('feedback-message').value.trim()
+    const includeScreenshot = document.getElementById('include-screenshot').checked
+
     if (!message) {
-      showToast('피드백 내용을 입력해주세요', 'warning');
-      return;
+      showToast('피드백 내용을 입력해주세요', 'warning')
+      return
     }
-    
+
     // Disable submit button
-    const submitBtn = document.getElementById('submit-feedback');
-    submitBtn.disabled = true;
-    submitBtn.textContent = '보내는 중...';
-    
+    const submitBtn = document.getElementById('submit-feedback')
+    submitBtn.disabled = true
+    submitBtn.textContent = '보내는 중...'
+
     try {
       const feedbackData = {
         type,
@@ -328,40 +332,39 @@ class FeedbackWidget {
         // App state context
         appState: {
           mode: window.appState?.selectedMode || 'unknown',
-          screen: window.appState?.currentScreen || 'unknown'
-        }
-      };
-      
+          screen: window.appState?.currentScreen || 'unknown',
+        },
+      }
+
       // Capture screenshot if requested
       if (includeScreenshot && typeof html2canvas !== 'undefined') {
         try {
-          const canvas = await html2canvas(document.body);
-          feedbackData.screenshot = canvas.toDataURL('image/png');
+          const canvas = await html2canvas(document.body)
+          feedbackData.screenshot = canvas.toDataURL('image/png')
         } catch (err) {
-          console.error('Screenshot capture failed:', err);
+          console.error('Screenshot capture failed:', err)
         }
       }
-      
+
       // Send feedback to server
       if (window.api && window.appState?.isAuthenticated) {
         // If authenticated, use API
-        await window.api.feedback.submit(feedbackData);
+        await window.api.feedback.submit(feedbackData)
       } else {
         // For prototype, store in localStorage
-        const feedbacks = JSON.parse(localStorage.getItem('cupnote_feedbacks') || '[]');
-        feedbacks.push(feedbackData);
-        localStorage.setItem('cupnote_feedbacks', JSON.stringify(feedbacks));
+        const feedbacks = JSON.parse(localStorage.getItem('cupnote_feedbacks') || '[]')
+        feedbacks.push(feedbackData)
+        localStorage.setItem('cupnote_feedbacks', JSON.stringify(feedbacks))
       }
-      
-      showToast('피드백이 전송되었습니다. 감사합니다!', 'success');
-      this.close();
-      
+
+      showToast('피드백이 전송되었습니다. 감사합니다!', 'success')
+      this.close()
     } catch (error) {
-      console.error('Feedback submission failed:', error);
-      showToast('피드백 전송에 실패했습니다', 'error');
+      console.error('Feedback submission failed:', error)
+      showToast('피드백 전송에 실패했습니다', 'error')
     } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = '보내기';
+      submitBtn.disabled = false
+      submitBtn.textContent = '보내기'
     }
   }
 }
@@ -369,8 +372,8 @@ class FeedbackWidget {
 // Initialize feedback widget when DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
-    new FeedbackWidget();
-  });
+    new FeedbackWidget()
+  })
 } else {
-  new FeedbackWidget();
+  new FeedbackWidget()
 }

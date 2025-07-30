@@ -8,12 +8,8 @@
         <pre>{{ errorDetails }}</pre>
       </div>
       <div class="error-actions">
-        <button @click="retry" class="btn-primary">
-          다시 시도
-        </button>
-        <button @click="goHome" class="btn-secondary">
-          홈으로 이동
-        </button>
+        <button @click="retry" class="btn-primary">다시 시도</button>
+        <button @click="goHome" class="btn-secondary">홈으로 이동</button>
         <button @click="toggleDetails" class="btn-text">
           {{ showDetails ? '상세 정보 숨기기' : '상세 정보 보기' }}
         </button>
@@ -37,30 +33,30 @@ const showDetails = ref(false)
 const props = defineProps({
   fallback: {
     type: String,
-    default: '예기치 않은 오류가 발생했습니다.'
+    default: '예기치 않은 오류가 발생했습니다.',
   },
   onError: {
     type: Function,
-    default: null
-  }
+    default: null,
+  },
 })
 
 const emit = defineEmits(['error', 'retry'])
 
 onErrorCaptured((err, instance, info) => {
   console.error('Error caught by boundary:', err)
-  
+
   hasError.value = true
   errorMessage.value = err.message || props.fallback
   errorDetails.value = `${err.stack || err}\n\nComponent: ${instance?.$options.name || 'Unknown'}\nInfo: ${info}`
-  
+
   // Call custom error handler if provided
   if (props.onError) {
     props.onError(err, instance, info)
   }
-  
+
   emit('error', { error: err, instance, info })
-  
+
   // Prevent error propagation
   return false
 })
@@ -83,7 +79,7 @@ const toggleDetails = () => {
 
 // Expose reset method
 defineExpose({
-  reset: retry
+  reset: retry,
 })
 </script>
 
@@ -203,11 +199,11 @@ defineExpose({
   .error-container {
     padding: var(--space-6);
   }
-  
+
   .error-actions {
     flex-direction: column;
   }
-  
+
   .error-actions button {
     width: 100%;
   }

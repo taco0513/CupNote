@@ -7,10 +7,7 @@
     "technicalAccuracy": 80,
     "completenessScore": 0,
     "languageQuality": 85,
-    "insights": [
-      "문서 길이가 적절합니다",
-      "기술 용어 설명이 부족합니다"
-    ]
+    "insights": ["문서 길이가 적절합니다", "기술 용어 설명이 부족합니다"]
   },
   "structureAnalysis": {
     "hierarchyScore": 0,

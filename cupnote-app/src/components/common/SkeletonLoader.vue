@@ -16,7 +16,7 @@
         </div>
       </div>
     </template>
-    
+
     <template v-else-if="type === 'list'">
       <div class="skeleton-list">
         <div v-for="i in count" :key="i" class="skeleton-list-item">
@@ -25,28 +25,33 @@
         </div>
       </div>
     </template>
-    
+
     <template v-else-if="type === 'text'">
       <div class="skeleton-text">
         <div v-for="i in count" :key="i" class="skeleton-line" :class="getLineClass(i)"></div>
       </div>
     </template>
-    
+
     <template v-else-if="type === 'image'">
       <div class="skeleton-image" :style="imageStyle"></div>
     </template>
-    
+
     <template v-else-if="type === 'chart'">
       <div class="skeleton-chart">
         <div class="skeleton-chart-bars">
-          <div v-for="i in 5" :key="i" class="skeleton-bar" :style="{ height: getRandomHeight() }"></div>
+          <div
+            v-for="i in 5"
+            :key="i"
+            class="skeleton-bar"
+            :style="{ height: getRandomHeight() }"
+          ></div>
         </div>
         <div class="skeleton-chart-labels">
           <div v-for="i in 5" :key="i" class="skeleton-line skeleton-label"></div>
         </div>
       </div>
     </template>
-    
+
     <template v-else-if="type === 'custom'">
       <slot />
     </template>
@@ -60,29 +65,29 @@ const props = defineProps({
   type: {
     type: String,
     default: 'text',
-    validator: (value) => ['card', 'list', 'text', 'image', 'chart', 'custom'].includes(value)
+    validator: (value) => ['card', 'list', 'text', 'image', 'chart', 'custom'].includes(value),
   },
   count: {
     type: Number,
-    default: 3
+    default: 3,
   },
   animation: {
     type: String,
     default: 'pulse',
-    validator: (value) => ['pulse', 'wave', 'none'].includes(value)
+    validator: (value) => ['pulse', 'wave', 'none'].includes(value),
   },
   width: {
     type: String,
-    default: '100%'
+    default: '100%',
   },
   height: {
     type: String,
-    default: 'auto'
+    default: 'auto',
   },
   aspectRatio: {
     type: String,
-    default: '16/9'
-  }
+    default: '16/9',
+  },
 })
 
 const typeClass = computed(() => `skeleton-${props.type}`)
@@ -91,7 +96,7 @@ const animationClass = computed(() => `animation-${props.animation}`)
 const imageStyle = computed(() => ({
   width: props.width,
   height: props.height,
-  aspectRatio: props.aspectRatio
+  aspectRatio: props.aspectRatio,
 }))
 
 const getLineClass = (index) => {
@@ -141,7 +146,8 @@ const getRandomHeight = () => {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.4;
   }
   50% {
@@ -295,11 +301,11 @@ const getRandomHeight = () => {
   .skeleton-line {
     height: 14px;
   }
-  
+
   .skeleton-title {
     height: 20px;
   }
-  
+
   .skeleton-subtitle {
     height: 12px;
   }

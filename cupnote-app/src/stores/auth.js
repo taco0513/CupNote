@@ -1,6 +1,6 @@
 /**
  * Authentication Store
- * 
+ *
  * Manages user authentication state, login/logout, and user profile data
  * using Supabase Auth with persistent session management.
  */
@@ -24,45 +24,47 @@ export const useAuthStore = defineStore('auth', () => {
   const userMetadata = computed(() => user.value?.user_metadata || {})
 
   // Actions
-  
+
   /**
    * Initialize auth state from existing session
    */
   const initializeAuth = async () => {
     try {
       loading.value = true
-      
+
       // Get existing session
-      const { data: { session: existingSession }, error } = await supabase.auth.getSession()
-      
+      const {
+        data: { session: existingSession },
+        error,
+      } = await supabase.auth.getSession()
+
       if (error) {
         console.error('Error getting session:', error)
         return false
       }
-      
+
       if (existingSession) {
         session.value = existingSession
         user.value = existingSession.user
-        
+
         // Set up user profile if needed
         await ensureUserProfile()
       }
-      
+
       // Listen for auth changes
       supabase.auth.onAuthStateChange((event, newSession) => {
         session.value = newSession
         user.value = newSession?.user || null
-        
+
         if (event === 'SIGNED_IN' && newSession?.user) {
           ensureUserProfile()
         } else if (event === 'SIGNED_OUT') {
           clearUserData()
         }
       })
-      
+
       initialized.value = true
       return !!existingSession
-      
     } catch (error) {
       console.error('Auth initialization error:', error)
       return false
@@ -77,7 +79,7 @@ export const useAuthStore = defineStore('auth', () => {
   const signUp = async (email, password, userData = {}) => {
     try {
       loading.value = true
-      
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -86,24 +88,23 @@ export const useAuthStore = defineStore('auth', () => {
             full_name: userData.fullName || '',
             coffee_experience: userData.coffeeExperience || 'beginner',
             preferred_mode: userData.preferredMode || 'cafe',
-            ...userData
-          }
-        }
+            ...userData,
+          },
+        },
       })
-      
+
       if (error) throw error
-      
+
       return {
         success: true,
         user: data.user,
-        message: 'Account created successfully! Please check your email for verification.'
+        message: 'Account created successfully! Please check your email for verification.',
       }
-      
     } catch (error) {
       console.error('Sign up error:', error)
       return {
         success: false,
-        error: error.message
+        error: error.message,
       }
     } finally {
       loading.value = false
@@ -116,29 +117,28 @@ export const useAuthStore = defineStore('auth', () => {
   const signIn = async (email, password) => {
     try {
       loading.value = true
-      
+
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
-        password
+        password,
       })
-      
+
       if (error) throw error
-      
+
       session.value = data.session
       user.value = data.user
-      
+
       await ensureUserProfile()
-      
+
       return {
         success: true,
-        user: data.user
+        user: data.user,
       }
-      
     } catch (error) {
       console.error('Sign in error:', error)
       return {
         success: false,
-        error: error.message
+        error: error.message,
       }
     } finally {
       loading.value = false
@@ -151,20 +151,19 @@ export const useAuthStore = defineStore('auth', () => {
   const signOut = async () => {
     try {
       loading.value = true
-      
+
       const { error } = await supabase.auth.signOut()
-      
+
       if (error) throw error
-      
+
       clearUserData()
-      
+
       return { success: true }
-      
     } catch (error) {
       console.error('Sign out error:', error)
       return {
         success: false,
-        error: error.message
+        error: error.message,
       }
     } finally {
       loading.value = false
@@ -177,23 +176,22 @@ export const useAuthStore = defineStore('auth', () => {
   const resetPassword = async (email) => {
     try {
       loading.value = true
-      
+
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/reset-password`
+        redirectTo: `${window.location.origin}/auth/reset-password`,
       })
-      
+
       if (error) throw error
-      
+
       return {
         success: true,
-        message: 'Password reset email sent! Please check your inbox.'
+        message: 'Password reset email sent! Please check your inbox.',
       }
-      
     } catch (error) {
       console.error('Password reset error:', error)
       return {
         success: false,
-        error: error.message
+        error: error.message,
       }
     } finally {
       loading.value = false
@@ -206,23 +204,22 @@ export const useAuthStore = defineStore('auth', () => {
   const updatePassword = async (newPassword) => {
     try {
       loading.value = true
-      
+
       const { error } = await supabase.auth.updateUser({
-        password: newPassword
+        password: newPassword,
       })
-      
+
       if (error) throw error
-      
+
       return {
         success: true,
-        message: 'Password updated successfully!'
+        message: 'Password updated successfully!',
       }
-      
     } catch (error) {
       console.error('Password update error:', error)
       return {
         success: false,
-        error: error.message
+        error: error.message,
       }
     } finally {
       loading.value = false
@@ -235,31 +232,30 @@ export const useAuthStore = defineStore('auth', () => {
   const updateProfile = async (updates) => {
     try {
       loading.value = true
-      
+
       const { error } = await supabase.auth.updateUser({
-        data: updates
+        data: updates,
       })
-      
+
       if (error) throw error
-      
+
       // Update local user data
       if (user.value) {
         user.value.user_metadata = {
           ...user.value.user_metadata,
-          ...updates
+          ...updates,
         }
       }
-      
+
       return {
         success: true,
-        message: 'Profile updated successfully!'
+        message: 'Profile updated successfully!',
       }
-      
     } catch (error) {
       console.error('Profile update error:', error)
       return {
         success: false,
-        error: error.message
+        error: error.message,
       }
     } finally {
       loading.value = false
@@ -271,7 +267,7 @@ export const useAuthStore = defineStore('auth', () => {
    */
   const ensureUserProfile = async () => {
     if (!user.value) return
-    
+
     try {
       // Check if profile exists
       const { data: existingProfile, error: fetchError } = await supabase
@@ -279,12 +275,12 @@ export const useAuthStore = defineStore('auth', () => {
         .select('*')
         .eq('id', user.value.id)
         .single()
-      
+
       if (fetchError && fetchError.code !== 'PGRST116') {
         console.error('Error fetching user profile:', fetchError)
         return
       }
-      
+
       // Create profile if it doesn't exist
       if (!existingProfile) {
         const profileData = {
@@ -294,18 +290,15 @@ export const useAuthStore = defineStore('auth', () => {
           coffee_experience: user.value.user_metadata?.coffee_experience || 'beginner',
           preferred_mode: user.value.user_metadata?.preferred_mode || 'cafe',
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         }
-        
-        const { error: insertError } = await supabase
-          .from('user_profiles')
-          .insert(profileData)
-        
+
+        const { error: insertError } = await supabase.from('user_profiles').insert(profileData)
+
         if (insertError) {
           console.error('Error creating user profile:', insertError)
         }
       }
-      
     } catch (error) {
       console.error('Error ensuring user profile:', error)
     }
@@ -324,9 +317,9 @@ export const useAuthStore = defineStore('auth', () => {
    */
   const hasAccess = (mode) => {
     if (!isAuthenticated.value) return mode === 'cafe'
-    
+
     const experience = userMetadata.value.coffee_experience || 'beginner'
-    
+
     switch (mode) {
       case 'cafe':
         return true
@@ -352,14 +345,14 @@ export const useAuthStore = defineStore('auth', () => {
     session,
     loading,
     initialized,
-    
+
     // Computed
     isAuthenticated,
     isLoading,
     userEmail,
     userId,
     userMetadata,
-    
+
     // Actions
     initializeAuth,
     signUp,
@@ -369,6 +362,6 @@ export const useAuthStore = defineStore('auth', () => {
     updatePassword,
     updateProfile,
     hasAccess,
-    getAccessToken
+    getAccessToken,
   }
 })

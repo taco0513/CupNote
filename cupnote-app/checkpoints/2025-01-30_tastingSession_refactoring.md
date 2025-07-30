@@ -5,13 +5,15 @@
 ## 🎯 완료된 작업
 
 ### 1. 데이터베이스 스키마 정렬 ✅
+
 - **문제점**: 코드는 `coffee_records` 테이블을 사용하지만 실제 스키마는 `tastings` 테이블 사용
-- **해결**: 
+- **해결**:
   - `coffeeRecord.ts` → `tastingSession.ts`로 리네이밍
   - 테이블 참조를 `tastings`로 변경
   - JSONB 구조로 데이터 모델 전환
 
 ### 2. 스토어 구조 개편 ✅
+
 ```typescript
 // 이전: 플랫한 구조
 interface CoffeeRecord {
@@ -23,36 +25,48 @@ interface CoffeeRecord {
 // 이후: JSONB 그룹화 구조
 interface TastingRecord {
   mode: 'cafe' | 'homecafe' | 'pro'
-  coffee_info: { /* JSONB */ }
-  brew_settings?: { /* JSONB */ }
-  experimental_data?: { /* JSONB */ }
+  coffee_info: {
+    /* JSONB */
+  }
+  brew_settings?: {
+    /* JSONB */
+  }
+  experimental_data?: {
+    /* JSONB */
+  }
   selected_flavors: Array<{ id: string; text: string }>
   sensory_expressions: Array<{ id: string; category: string; text: string }>
-  match_score?: { /* JSONB */ }
+  match_score?: {
+    /* JSONB */
+  }
 }
 ```
 
 ### 3. 전체 컴포넌트 업데이트 ✅
+
 - **16개 Vue 컴포넌트** 수정
 - `useCoffeeRecordStore` → `useTastingSessionStore` 변경
 - 모든 import와 store 참조 업데이트
 
 ### 4. 필드명 매핑 표준화 ✅
-| 이전 | 이후 |
-|-----|-----|
-| coffeeName | coffee_name |
-| cafeName | cafe_name |
-| brewingMethod | brewing_method |
+
+| 이전            | 이후               |
+| --------------- | ------------------ |
+| coffeeName      | coffee_name        |
+| cafeName        | cafe_name          |
+| brewingMethod   | brewing_method     |
 | selectedSensory | sensoryExpressions |
-| personalNotes | personalComment |
+| personalNotes   | personalComment    |
 
 ### 5. Pro 모드 완전 지원 ✅
+
 - `updateProBrewingData()`: Pro 모드 브루잉 데이터
 - `updateQcMeasurementData()`: QC 측정 데이터
 - `updateSensorySliderData()`: 감각 평가 슬라이더
 - `updateProQcReport()`: Pro QC 리포트
 
 ### 6. 타입 시스템 업데이트 ✅
+
 - `database.types.ts`에 tastings 스키마 반영
 - coffees, profiles 테이블 타입 추가
 - 모든 JSONB 필드 타입 정의
@@ -60,7 +74,8 @@ interface TastingRecord {
 ## 📊 영향 범위
 
 ### 수정된 파일들:
-1. **스토어**: 
+
+1. **스토어**:
    - `stores/coffeeRecord.ts` → `stores/tastingSession.ts`
    - `stores/__tests__/coffeeRecord.test.ts` → `stores/__tests__/tastingSession.test.ts`
 

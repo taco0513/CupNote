@@ -124,16 +124,19 @@ src/
 ### 아키텍처 패턴
 
 #### 1. **컴포넌트 아키텍처**
+
 - **Atomic Design**: 작은 컴포넌트부터 페이지까지 계층적 구조
 - **Composition API**: Vue 3의 최신 패턴 사용
 - **Props & Emits**: 명확한 컴포넌트 인터페이스
 
 #### 2. **상태 관리 패턴**
+
 - **Pinia**: Vue 3에 최적화된 상태 관리
 - **Store 분리**: 도메인별 스토어 분리 (session, auth, notification)
 - **Reactive**: 반응형 데이터로 UI 자동 업데이트
 
 #### 3. **라우팅 패턴**
+
 - **Route Guards**: 인증 및 세션 검증
 - **Lazy Loading**: 페이지별 코드 스플리팅
 - **Meta Fields**: 라우트별 메타데이터 관리
@@ -191,7 +194,7 @@ git add . && git commit       # 작업 내용 커밋
 ### 3. 코드 리뷰 체크리스트
 
 - [ ] **기능**: 요구사항에 맞게 구현되었는가?
-- [ ] **타입 안정성**: TypeScript 에러가 없는가?  
+- [ ] **타입 안정성**: TypeScript 에러가 없는가?
 - [ ] **테스트**: 적절한 테스트가 작성되었는가?
 - [ ] **성능**: 불필요한 렌더링이나 메모리 누수가 없는가?
 - [ ] **접근성**: 웹 접근성 가이드라인을 준수하는가?
@@ -216,7 +219,7 @@ import type { ComponentProps } from './types'
 // Props 정의
 const props = defineProps<ComponentProps>()
 
-// Emits 정의  
+// Emits 정의
 const emit = defineEmits<{
   update: [value: string]
   submit: [data: FormData]
@@ -277,7 +280,7 @@ type UserRole = 'admin' | 'user' | 'guest'
 
 # 타입 목록
 feat:     # 새로운 기능
-fix:      # 버그 수정  
+fix:      # 버그 수정
 docs:     # 문서 수정
 style:    # 코드 포매팅
 refactor: # 코드 리팩토링
@@ -309,7 +312,7 @@ describe('LoadingSpinner', () => {
   it('displays custom message', () => {
     const message = 'Loading data...'
     const wrapper = mount(LoadingSpinner, {
-      props: { message }
+      props: { message },
     })
     expect(wrapper.text()).toContain(message)
   })
@@ -324,16 +327,16 @@ import { test, expect } from '@playwright/test'
 
 test('cafe mode tasting flow', async ({ page }) => {
   await page.goto('/mode-selection')
-  
+
   // 모드 선택
   await page.click('[data-testid=\"cafe-mode\"]')
   await expect(page).toHaveURL('/coffee-info')
-  
+
   // 커피 정보 입력
   await page.fill('[data-testid=\"coffee-name\"]', 'Test Coffee')
   await page.fill('[data-testid=\"cafe-name\"]', 'Test Cafe')
   await page.click('[data-testid=\"next-button\"]')
-  
+
   // 결과 확인
   await expect(page).toHaveURL('/flavor-selection')
 })
@@ -347,7 +350,7 @@ bun test                    # 전체 테스트
 bun test --watch           # 변경사항 감지하여 자동 실행
 bun test LoadingSpinner    # 특정 테스트
 
-# E2E 테스트  
+# E2E 테스트
 bun test:e2e              # Playwright 테스트
 bun test:e2e --headed     # 브라우저 창으로 실행
 bun test:e2e --debug      # 디버그 모드
@@ -371,7 +374,7 @@ bun test --coverage       # 테스트 커버리지 확인
 ```typescript
 // 1. Console 디버깅
 console.log('Debug info:', { state, props })
-console.table(arrayData)  // 배열 데이터를 테이블로 출력
+console.table(arrayData) // 배열 데이터를 테이블로 출력
 
 // 2. Vue 컴포넌트 디버깅
 import { getCurrentInstance } from 'vue'
@@ -395,11 +398,11 @@ console.timeEnd('operation')
 // 1. 반응성 문제
 // 잘못된 방법
 const data = { items: [] }
-data.items.push(newItem)  // 반응성 X
+data.items.push(newItem) // 반응성 X
 
 // 올바른 방법
 const data = ref({ items: [] })
-data.value.items.push(newItem)  // 반응성 O
+data.value.items.push(newItem) // 반응성 O
 
 // 2. 비동기 처리
 // async/await 사용
@@ -417,7 +420,7 @@ const fetchData = async () => {
 onUnmounted(() => {
   // 이벤트 리스너 제거
   window.removeEventListener('resize', handleResize)
-  
+
   // 타이머 정리
   clearInterval(intervalId)
 })
@@ -432,11 +435,11 @@ onUnmounted(() => {
 const Chart = defineAsyncComponent(() => import('./Chart.vue'))
 
 // 2. Tree Shaking 활용
-import { ref, computed } from 'vue'  // 필요한 것만 import
+import { ref, computed } from 'vue' // 필요한 것만 import
 // import * as Vue from 'vue'  // 지양
 
 // 3. 라이브러리 최적화
-import debounce from 'lodash/debounce'  // 개별 함수만
+import debounce from 'lodash/debounce' // 개별 함수만
 // import _ from 'lodash'  // 전체 라이브러리 지양
 ```
 
@@ -447,12 +450,12 @@ import debounce from 'lodash/debounce'  // 개별 함수만
   <!-- 1. v-show vs v-if 적절히 사용 -->
   <div v-show=\"isVisible\">자주 토글되는 요소</div>
   <div v-if=\"shouldRender\">조건부 렌더링</div>
-  
+
   <!-- 2. key 사용으로 효율적인 리스트 렌더링 -->
   <li v-for=\"item in items\" :key=\"item.id\">
     {{ item.name }}
   </li>
-  
+
   <!-- 3. 큰 리스트는 가상화 고려 -->
   <VirtualList :items=\"manyItems\" />
 </template>
@@ -464,7 +467,7 @@ const expensiveValue = computed(() => {
 })
 
 // 5. 메모이제이션 활용
-const memoizedComponent = defineAsyncComponent(() => 
+const memoizedComponent = defineAsyncComponent(() =>
   import('./ExpensiveComponent.vue')
 )
 </script>
@@ -480,8 +483,8 @@ const fetchWithCache = async (url: string) => {
   if (cache.has(url)) {
     return cache.get(url)
   }
-  
-  const data = await fetch(url).then(r => r.json())
+
+  const data = await fetch(url).then((r) => r.json())
   cache.set(url, data)
   return data
 }
@@ -509,7 +512,7 @@ const preloadRoute = (routeName: string) => {
 node --version  # 18+ 확인
 nvm use 20      # nvm 사용시 버전 변경
 
-# 의존성 문제  
+# 의존성 문제
 rm -rf node_modules bun.lockb
 bun install
 
@@ -533,7 +536,7 @@ tsc --noEmit --skipLibCheck    # 더 상세한 타입 검사
 export NODE_OPTIONS=\"--max-old-space-size=4096\"
 bun run build
 
-# 환경변수 문제  
+# 환경변수 문제
 cat .env.local                 # 환경변수 파일 확인
 printenv | grep VITE          # 런타임 환경변수 확인
 ```
@@ -562,7 +565,7 @@ const retryFetch = async (url: string, retries = 3) => {
       return await fetch(url)
     } catch (error) {
       if (i === retries - 1) throw error
-      await new Promise(resolve => setTimeout(resolve, 1000 * i))
+      await new Promise((resolve) => setTimeout(resolve, 1000 * i))
     }
   }
 }
@@ -573,13 +576,13 @@ const retryFetch = async (url: string, retries = 3) => {
 ```typescript
 // 1. 반응성 손실
 // 문제: 객체 구조분해시 반응성 손실
-const { name } = toRefs(props)  // 올바른 방법
+const { name } = toRefs(props) // 올바른 방법
 // const { name } = props       // 반응성 손실
 
 // 2. 무한 루프
 // 문제: computed에서 상태 변경
 const badComputed = computed(() => {
-  someState.value = 'new value'  // 무한 루프!
+  someState.value = 'new value' // 무한 루프!
   return someValue
 })
 

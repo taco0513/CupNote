@@ -65,7 +65,7 @@ interface CurrentSession {
   // Basic info
   mode?: 'cafe' | 'homecafe' | 'pro'
   sessionStartTime?: number
-  
+
   // Coffee info
   coffeeInfo?: {
     coffee_name: string
@@ -78,18 +78,18 @@ interface CurrentSession {
     process?: string
     roast_level?: string
   }
-  
+
   // Mode-specific data
   brewSettings?: TastingRecord['brew_settings']
   experimentalData?: TastingRecord['experimental_data']
-  
+
   // Tasting data
   selectedFlavors?: Array<{ id: string; text: string }>
   sensoryExpressions?: Array<{ id: string; category: string; text: string }>
   personalComment?: string
   roasterNotes?: string | null
   roasterNotesLevel?: number // 1: no notes, 2: with notes
-  
+
   // Pro mode specific
   sensorySliderData?: {
     ratings: {
@@ -110,46 +110,48 @@ interface CurrentSession {
 export const useTastingSessionStore = defineStore('tastingSession', () => {
   // Current tasting session
   const currentSession = ref<CurrentSession>({})
-  
+
   // Loading states
   const isLoading = ref(false)
   const isSaving = ref(false)
   const error = ref<string | null>(null)
-  
+
   // Tasting records
   const records = ref<TastingRecord[]>([])
-  
+
   // Session management
   const startNewSession = (mode: 'cafe' | 'homecafe' | 'pro') => {
     currentSession.value = {
       mode,
-      sessionStartTime: Date.now()
+      sessionStartTime: Date.now(),
     }
   }
-  
+
   // Update methods for each step
-  const updateCoffeeSetup = (data: Partial<CurrentSession['coffeeInfo']> & { mode?: 'cafe' | 'homecafe' | 'pro' }) => {
+  const updateCoffeeSetup = (
+    data: Partial<CurrentSession['coffeeInfo']> & { mode?: 'cafe' | 'homecafe' | 'pro' },
+  ) => {
     if (data.mode) {
       currentSession.value.mode = data.mode
     }
-    
+
     currentSession.value.coffeeInfo = {
       ...currentSession.value.coffeeInfo,
-      ...data
+      ...data,
     } as CurrentSession['coffeeInfo']
   }
-  
+
   const updateHomeCafeData = (data: NonNullable<TastingRecord['brew_settings']>) => {
     currentSession.value.brewSettings = data
   }
-  
+
   const updateProBrewingData = (data: Partial<NonNullable<TastingRecord['experimental_data']>>) => {
     currentSession.value.experimentalData = {
       ...currentSession.value.experimentalData,
-      ...data
+      ...data,
     }
   }
-  
+
   const updateQcMeasurementData = (data: CurrentSession['qcMeasurementData']) => {
     currentSession.value.qcMeasurementData = data
     // Merge with experimental data
@@ -160,94 +162,99 @@ export const useTastingSessionStore = defineStore('tastingSession', () => {
         extraction_yield: data.extraction_yield,
         water_tds: data.water_tds,
         water_ph: data.water_ph,
-        notes: data.notes
+        notes: data.notes,
       }
     }
   }
-  
+
   const updateFlavorSelection = (flavors: Array<{ id: string; text: string }>) => {
     currentSession.value.selectedFlavors = flavors
   }
-  
-  const updateSensoryExpression = (sensory: Array<{ id: string; category: string; text: string }>) => {
+
+  const updateSensoryExpression = (
+    sensory: Array<{ id: string; category: string; text: string }>,
+  ) => {
     currentSession.value.sensoryExpressions = sensory
   }
-  
+
   const updateSensorySliderData = (data: CurrentSession['sensorySliderData']) => {
     currentSession.value.sensorySliderData = data
   }
-  
+
   const updatePersonalComment = (comment: string) => {
     currentSession.value.personalComment = comment
   }
-  
+
   const updateRoasterNotes = (notes: string | null, level: number) => {
     currentSession.value.roasterNotes = notes
     currentSession.value.roasterNotesLevel = level
   }
-  
+
   const updateProQcReport = (reportData: any) => {
     // Store Pro QC Report data in experimental_data
     currentSession.value.experimentalData = {
       ...currentSession.value.experimentalData,
-      qc_report: reportData
+      qc_report: reportData,
     }
   }
-  
+
   // Calculate match scores
   const calculateMatchScores = () => {
     // TODO: Implement real match score calculation
     const flavorScore = Math.floor(Math.random() * 30) + 70 // 70-100
     const sensoryScore = Math.floor(Math.random() * 30) + 70 // 70-100
     const roasterBonus = currentSession.value.roasterNotesLevel === 2 ? 10 : 0
-    
+
     const baseScore = Math.round((flavorScore + sensoryScore) / 2)
     const totalScore = Math.min(100, baseScore + roasterBonus)
-    
+
     return {
       flavor_match: flavorScore,
       sensory_match: sensoryScore,
       total: totalScore,
-      roaster_bonus: roasterBonus
+      roaster_bonus: roasterBonus,
     }
   }
-  
+
   // Save current session
   const saveCurrentSession = async (userId: string) => {
     // Validate required fields
     const validationErrors = []
-    
+
     if (!currentSession.value.mode) {
       validationErrors.push('테이스팅 모드가 선택되지 않았습니다')
     }
-    
+
     if (!currentSession.value.coffeeInfo?.coffee_name) {
       validationErrors.push('커피 이름이 입력되지 않았습니다')
     }
-    
+
     if (!currentSession.value.coffeeInfo?.cafe_name) {
       validationErrors.push('카페 이름이 입력되지 않았습니다')
     }
-    
-    if (!currentSession.value.selectedFlavors || currentSession.value.selectedFlavors.length === 0) {
+
+    if (
+      !currentSession.value.selectedFlavors ||
+      currentSession.value.selectedFlavors.length === 0
+    ) {
       validationErrors.push('향미를 하나 이상 선택해주세요')
     }
-    
+
     if (validationErrors.length > 0) {
       const errorMessage = validationErrors.join(', ')
       error.value = errorMessage
       throw new Error(errorMessage)
     }
-    
+
     try {
       isSaving.value = true
       error.value = null
-      
+
       const scores = calculateMatchScores()
-      const duration = currentSession.value.sessionStartTime 
+      const duration = currentSession.value.sessionStartTime
         ? Math.floor((Date.now() - currentSession.value.sessionStartTime) / 1000)
         : null
-      
+
       const recordData: Omit<TastingRecord, 'id' | 'created_at' | 'updated_at'> = {
         user_id: userId,
         mode: currentSession.value.mode,
@@ -260,21 +267,23 @@ export const useTastingSessionStore = defineStore('tastingSession', () => {
         roaster_notes: currentSession.value.roasterNotes || null,
         match_score: scores,
         total_duration: duration,
-        sensory_skipped: !currentSession.value.sensoryExpressions || currentSession.value.sensoryExpressions.length === 0,
-        completed_at: new Date().toISOString()
+        sensory_skipped:
+          !currentSession.value.sensoryExpressions ||
+          currentSession.value.sensoryExpressions.length === 0,
+        completed_at: new Date().toISOString(),
       }
-      
+
       const { data, error: saveError } = await supabase
         .from('tastings')
         .insert([recordData])
         .select()
         .single()
-      
+
       if (saveError) throw saveError
-      
+
       // Clear current session after successful save
       clearCurrentSession()
-      
+
       return data
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'Failed to save tasting record'
@@ -283,21 +292,21 @@ export const useTastingSessionStore = defineStore('tastingSession', () => {
       isSaving.value = false
     }
   }
-  
+
   // Fetch user's tasting records
   const fetchUserRecords = async (userId: string) => {
     try {
       isLoading.value = true
       error.value = null
-      
+
       const { data, error: fetchError } = await supabase
         .from('tastings')
         .select('*')
         .eq('user_id', userId)
         .order('created_at', { ascending: false })
-      
+
       if (fetchError) throw fetchError
-      
+
       records.value = data || []
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'Failed to fetch tasting records'
@@ -306,7 +315,7 @@ export const useTastingSessionStore = defineStore('tastingSession', () => {
       isLoading.value = false
     }
   }
-  
+
   // Get coffee statistics
   const getCoffeeStatistics = async (coffeeName: string) => {
     try {
@@ -315,36 +324,36 @@ export const useTastingSessionStore = defineStore('tastingSession', () => {
         .select('match_score, created_at')
         .eq('coffee_info->>coffee_name', coffeeName)
         .order('created_at', { ascending: false })
-      
+
       if (statsError) throw statsError
-      
+
       if (!data || data.length === 0) return null
-      
+
       // Calculate statistics
       const scores = data
-        .map(record => record.match_score?.total || 0)
-        .filter(score => score > 0)
-      
+        .map((record) => record.match_score?.total || 0)
+        .filter((score) => score > 0)
+
       const totalScore = scores.reduce((sum, score) => sum + score, 0)
       const averageScore = scores.length > 0 ? totalScore / scores.length : 0
-      
+
       return {
         total_records: data.length,
         average_score: Math.round(averageScore),
         best_score: Math.max(...scores),
-        latest_score: scores[0] || 0
+        latest_score: scores[0] || 0,
       }
     } catch (err) {
       console.error('Failed to fetch coffee statistics:', err)
       return null
     }
   }
-  
+
   // Clear current session
   const clearCurrentSession = () => {
     currentSession.value = {}
   }
-  
+
   return {
     // State
     currentSession: computed(() => currentSession.value),
@@ -352,7 +361,7 @@ export const useTastingSessionStore = defineStore('tastingSession', () => {
     isLoading: computed(() => isLoading.value),
     isSaving: computed(() => isSaving.value),
     error: computed(() => error.value),
-    
+
     // Methods
     startNewSession,
     updateCoffeeSetup,
@@ -369,6 +378,6 @@ export const useTastingSessionStore = defineStore('tastingSession', () => {
     fetchUserRecords,
     getCoffeeStatistics,
     clearCurrentSession,
-    calculateMatchScores
+    calculateMatchScores,
   }
 })

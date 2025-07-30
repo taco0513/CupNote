@@ -39,40 +39,40 @@ export const projectStructure = {
   src: {
     app: {
       api: {
-        auth: ["[...nextauth]/route.ts"],
-        users: ["route.ts", "[id]/route.ts"],
-        posts: ["route.ts", "[id]/route.ts"]
+        auth: ['[...nextauth]/route.ts'],
+        users: ['route.ts', '[id]/route.ts'],
+        posts: ['route.ts', '[id]/route.ts'],
       },
-      "(auth)": {
-        login: ["page.tsx", "layout.tsx"],
-        register: ["page.tsx"],
-        "forgot-password": ["page.tsx"]
+      '(auth)': {
+        login: ['page.tsx', 'layout.tsx'],
+        register: ['page.tsx'],
+        'forgot-password': ['page.tsx'],
       },
-      "(dashboard)": {
-        dashboard: ["page.tsx", "layout.tsx"],
-        profile: ["page.tsx"],
-        settings: ["page.tsx"]
+      '(dashboard)': {
+        dashboard: ['page.tsx', 'layout.tsx'],
+        profile: ['page.tsx'],
+        settings: ['page.tsx'],
       },
-      layout: ["page.tsx", "error.tsx", "loading.tsx", "not-found.tsx"]
+      layout: ['page.tsx', 'error.tsx', 'loading.tsx', 'not-found.tsx'],
     },
     components: {
-      ui: ["button.tsx", "input.tsx", "card.tsx", "dialog.tsx"],
-      forms: ["login-form.tsx", "register-form.tsx", "user-form.tsx"],
-      layouts: ["header.tsx", "footer.tsx", "sidebar.tsx", "nav.tsx"]
+      ui: ['button.tsx', 'input.tsx', 'card.tsx', 'dialog.tsx'],
+      forms: ['login-form.tsx', 'register-form.tsx', 'user-form.tsx'],
+      layouts: ['header.tsx', 'footer.tsx', 'sidebar.tsx', 'nav.tsx'],
     },
     lib: {
-      api: ["client.ts", "errors.ts"],
-      auth: ["config.ts", "session.ts"],
-      db: ["prisma.ts", "queries.ts"],
-      utils: ["cn.ts", "validators.ts", "formatters.ts"]
+      api: ['client.ts', 'errors.ts'],
+      auth: ['config.ts', 'session.ts'],
+      db: ['prisma.ts', 'queries.ts'],
+      utils: ['cn.ts', 'validators.ts', 'formatters.ts'],
     },
-    hooks: ["use-auth.ts", "use-user.ts", "use-toast.ts"],
-    types: ["index.d.ts", "api.d.ts", "db.d.ts"],
-    config: ["site.ts", "navigation.ts"]
+    hooks: ['use-auth.ts', 'use-user.ts', 'use-toast.ts'],
+    types: ['index.d.ts', 'api.d.ts', 'db.d.ts'],
+    config: ['site.ts', 'navigation.ts'],
   },
-  prisma: ["schema.prisma", "seed.ts"],
-  public: ["favicon.ico", "images/", "fonts/"]
-};
+  prisma: ['schema.prisma', 'seed.ts'],
+  public: ['favicon.ico', 'images/', 'fonts/'],
+}
 ```
 
 #### 환경 변수 템플릿
@@ -113,75 +113,60 @@ NEXT_PUBLIC_POSTHOG_KEY=""
 
 ```typescript
 // src/templates/saas-starter.ts
-import { createProject } from '@/lib/project-generator';
+import { createProject } from '@/lib/project-generator'
 
 export const saasTemplate = {
-  name: "SaaS Starter",
-  description: "Production-ready SaaS with auth, billing, and dashboard",
+  name: 'SaaS Starter',
+  description: 'Production-ready SaaS with auth, billing, and dashboard',
 
   features: [
-    "Multi-tenant architecture",
-    "Stripe subscription billing",
-    "Role-based access control",
-    "Admin dashboard",
-    "Email notifications",
-    "API rate limiting",
-    "Webhook handling"
+    'Multi-tenant architecture',
+    'Stripe subscription billing',
+    'Role-based access control',
+    'Admin dashboard',
+    'Email notifications',
+    'API rate limiting',
+    'Webhook handling',
   ],
 
   structure: {
     // 인증 및 온보딩
     auth: {
-      components: ["SignInForm", "SignUpForm", "OAuthButtons", "MagicLink"],
-      pages: ["signin", "signup", "verify-email", "onboarding"],
-      api: ["auth/[...nextauth]", "auth/magic-link", "auth/verify"]
+      components: ['SignInForm', 'SignUpForm', 'OAuthButtons', 'MagicLink'],
+      pages: ['signin', 'signup', 'verify-email', 'onboarding'],
+      api: ['auth/[...nextauth]', 'auth/magic-link', 'auth/verify'],
     },
 
     // 결제 시스템
     billing: {
-      components: ["PricingTable", "CheckoutForm", "BillingPortal"],
-      pages: ["pricing", "checkout", "billing"],
-      api: ["stripe/webhook", "stripe/checkout", "stripe/portal"]
+      components: ['PricingTable', 'CheckoutForm', 'BillingPortal'],
+      pages: ['pricing', 'checkout', 'billing'],
+      api: ['stripe/webhook', 'stripe/checkout', 'stripe/portal'],
     },
 
     // 대시보드
     dashboard: {
-      components: ["StatsCard", "UsageChart", "ActivityFeed"],
-      pages: ["dashboard", "analytics", "team", "settings"],
-      api: ["stats", "usage", "team/invite", "team/members"]
+      components: ['StatsCard', 'UsageChart', 'ActivityFeed'],
+      pages: ['dashboard', 'analytics', 'team', 'settings'],
+      api: ['stats', 'usage', 'team/invite', 'team/members'],
     },
 
     // 관리자 패널
     admin: {
-      components: ["UserTable", "SubscriptionManager", "SystemHealth"],
-      pages: ["admin/users", "admin/subscriptions", "admin/logs"],
-      api: ["admin/users", "admin/metrics", "admin/system"]
-    }
+      components: ['UserTable', 'SubscriptionManager', 'SystemHealth'],
+      pages: ['admin/users', 'admin/subscriptions', 'admin/logs'],
+      api: ['admin/users', 'admin/metrics', 'admin/system'],
+    },
   },
 
   dependencies: {
-    core: [
-      "next@14", "react@18", "typescript@5",
-      "tailwindcss@3", "@prisma/client@5"
-    ],
-    auth: [
-      "next-auth@4", "@next-auth/prisma-adapter",
-      "bcryptjs", "jsonwebtoken"
-    ],
-    billing: [
-      "stripe@14", "@stripe/stripe-js",
-      "react-stripe-js"
-    ],
-    ui: [
-      "@radix-ui/react-*", "lucide-react",
-      "react-hook-form", "zod"
-    ],
-    utils: [
-      "date-fns", "clsx", "tailwind-merge",
-      "@tanstack/react-query", "axios"
-    ]
-  }
-};
+    core: ['next@14', 'react@18', 'typescript@5', 'tailwindcss@3', '@prisma/client@5'],
+    auth: ['next-auth@4', '@next-auth/prisma-adapter', 'bcryptjs', 'jsonwebtoken'],
+    billing: ['stripe@14', '@stripe/stripe-js', 'react-stripe-js'],
+    ui: ['@radix-ui/react-*', 'lucide-react', 'react-hook-form', 'zod'],
+    utils: ['date-fns', 'clsx', 'tailwind-merge', '@tanstack/react-query', 'axios'],
+  },
+}
 ```
 
 ## 모바일 앱 템플릿
@@ -272,13 +257,13 @@ flutter pub get
 ```typescript
 // src/templates/ai-chatbot.ts
 export const aiChatbotTemplate = {
-  name: "AI Chatbot",
-  stack: ["Next.js", "OpenAI", "Vercel AI SDK", "Prisma"],
+  name: 'AI Chatbot',
+  stack: ['Next.js', 'OpenAI', 'Vercel AI SDK', 'Prisma'],
 
   structure: {
     api: {
       chat: {
-        "route.ts": `
+        'route.ts': `
 import { OpenAIStream, StreamingTextResponse } from 'ai';
 import { Configuration, OpenAIApi } from 'openai-edge';
 
@@ -313,10 +298,10 @@ export async function POST(req: Request) {
 
   return new StreamingTextResponse(stream);
 }
-        `
+        `,
       },
       embeddings: {
-        "route.ts": `
+        'route.ts': `
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
 import { PineconeStore } from 'langchain/vectorstores/pinecone';
 import { PineconeClient } from '@pinecone-database/pinecone';
@@ -346,13 +331,13 @@ export async function POST(req: Request) {
 
   return Response.json({ success: true });
 }
-        `
-      }
+        `,
+      },
     },
 
     components: {
       chat: {
-        "ChatInterface.tsx": `
+        'ChatInterface.tsx': `
 'use client';
 
 import { useChat } from 'ai/react';
@@ -388,11 +373,11 @@ export function ChatInterface() {
     </div>
   );
 }
-        `
-      }
-    }
-  }
-};
+        `,
+      },
+    },
+  },
+}
 ```
 
 ## API 서버 템플릿
@@ -401,39 +386,41 @@ export function ChatInterface() {
 
 ```typescript
 // server-template/src/index.ts
-import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import morgan from 'morgan';
-import { rateLimit } from 'express-rate-limit';
-import { PrismaClient } from '@prisma/client';
-import { errorHandler } from './middleware/error';
-import { authRouter } from './routes/auth';
-import { apiRouter } from './routes/api';
+import express from 'express'
+import cors from 'cors'
+import helmet from 'helmet'
+import morgan from 'morgan'
+import { rateLimit } from 'express-rate-limit'
+import { PrismaClient } from '@prisma/client'
+import { errorHandler } from './middleware/error'
+import { authRouter } from './routes/auth'
+import { apiRouter } from './routes/api'
 
-const app = express();
-const prisma = new PrismaClient();
+const app = express()
+const prisma = new PrismaClient()
 
 // 미들웨어
-app.use(helmet());
-app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
-  credentials: true,
-}));
-app.use(morgan('combined'));
-app.use(express.json());
+app.use(helmet())
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    credentials: true,
+  })
+)
+app.use(morgan('combined'))
+app.use(express.json())
 
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15분
   max: 100, // 최대 100개 요청
   message: 'Too many requests from this IP',
-});
-app.use('/api', limiter);
+})
+app.use('/api', limiter)
 
 // 라우트
-app.use('/api/auth', authRouter);
-app.use('/api/v1', apiRouter);
+app.use('/api/auth', authRouter)
+app.use('/api/v1', apiRouter)
 
 // 헬스 체크
 app.get('/health', (req, res) => {
@@ -441,23 +428,23 @@ app.get('/health', (req, res) => {
     status: 'ok',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-  });
-});
+  })
+})
 
 // 에러 핸들링
-app.use(errorHandler);
+app.use(errorHandler)
 
 // 서버 시작
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8080
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+  console.log(`Server running on port ${PORT}`)
+})
 
 // Graceful shutdown
 process.on('SIGTERM', async () => {
-  await prisma.$disconnect();
-  process.exit(0);
-});
+  await prisma.$disconnect()
+  process.exit(0)
+})
 ```
 
 ### FastAPI 템플릿 (Python)
@@ -615,7 +602,7 @@ services:
   gateway:
     build: ./gateway
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NODE_ENV=production
       - AUTH_SERVICE_URL=http://auth:4001

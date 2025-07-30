@@ -3,11 +3,11 @@
     <div v-if="$slots.header" class="card-header">
       <slot name="header" />
     </div>
-    
+
     <div class="card-content">
       <slot />
     </div>
-    
+
     <div v-if="$slots.footer" class="card-footer">
       <slot name="footer" />
     </div>
@@ -21,22 +21,22 @@ const props = defineProps({
   padding: {
     type: String,
     default: 'medium',
-    validator: (value) => ['none', 'small', 'medium', 'large'].includes(value)
+    validator: (value) => ['none', 'small', 'medium', 'large'].includes(value),
   },
   shadow: {
     type: String,
     default: 'medium',
-    validator: (value) => ['none', 'small', 'medium', 'large'].includes(value)
+    validator: (value) => ['none', 'small', 'medium', 'large'].includes(value),
   },
   borderRadius: {
     type: String,
     default: 'medium',
-    validator: (value) => ['none', 'small', 'medium', 'large'].includes(value)
+    validator: (value) => ['none', 'small', 'medium', 'large'].includes(value),
   },
   hoverable: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 const cardClasses = computed(() => [
@@ -45,8 +45,8 @@ const cardClasses = computed(() => [
   `base-card--shadow-${props.shadow}`,
   `base-card--radius-${props.borderRadius}`,
   {
-    'base-card--hoverable': props.hoverable
-  }
+    'base-card--hoverable': props.hoverable,
+  },
 ])
 </script>
 

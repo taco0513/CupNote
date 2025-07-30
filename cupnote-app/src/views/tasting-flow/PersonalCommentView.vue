@@ -2,19 +2,15 @@
   <div class="personal-notes-view">
     <!-- Header -->
     <header class="notes-header">
-      <h1 class="notes-title">
-        ✍️ 개인적인 느낌을 기록해주세요
-      </h1>
-      <p class="notes-subtitle">
-        이 커피에 대한 전반적인 느낌이나 생각을 자유롭게 적어보세요
-      </p>
+      <h1 class="notes-title">✍️ 개인적인 느낌을 기록해주세요</h1>
+      <p class="notes-subtitle">이 커피에 대한 전반적인 느낌이나 생각을 자유롭게 적어보세요</p>
     </header>
 
     <!-- Previous Selections Summary -->
     <section class="selections-summary">
       <h3 class="summary-title">선택한 향미와 감각</h3>
       <p class="summary-description">버튼을 클릭하면 메모에 자동으로 추가됩니다</p>
-      
+
       <div class="selections-content">
         <!-- Flavors -->
         <div v-if="mockFlavors.length > 0" class="selection-group">
@@ -51,13 +47,10 @@
       </div>
     </section>
 
-
     <!-- Notes Input -->
     <section class="notes-input-section">
       <div class="input-container">
-        <label for="personal-notes" class="input-label">
-          개인 메모
-        </label>
+        <label for="personal-notes" class="input-label"> 개인 메모 </label>
         <textarea
           id="personal-notes"
           v-model="personalNotes"
@@ -66,9 +59,7 @@
           maxlength="200"
           rows="5"
         ></textarea>
-        <div class="character-count">
-          {{ personalNotes.length }}/200
-        </div>
+        <div class="character-count">{{ personalNotes.length }}/200</div>
       </div>
     </section>
 
@@ -110,16 +101,8 @@
 
     <!-- Action Buttons -->
     <div class="action-buttons">
-      <button type="button" class="btn-secondary" @click="$router.go(-1)">
-        이전
-      </button>
-      <button
-        type="button"
-        class="btn-primary"
-        @click="handleNext"
-      >
-        다음 단계
-      </button>
+      <button type="button" class="btn-secondary" @click="$router.go(-1)">이전</button>
+      <button type="button" class="btn-primary" @click="handleNext">다음 단계</button>
     </div>
   </div>
 </template>
@@ -138,38 +121,39 @@ const usedSelections = ref([])
 
 // Get data from store
 const mockFlavors = computed(() => tastingSessionStore.currentSession.selectedFlavors || [])
-const mockSensoryExpressions = computed(() => tastingSessionStore.currentSession.sensoryExpressions || [])
-
+const mockSensoryExpressions = computed(
+  () => tastingSessionStore.currentSession.sensoryExpressions || [],
+)
 
 // Smart Suggestions based on selections
 const smartSuggestions = computed(() => {
   const suggestions = []
-  
+
   // Generate contextual suggestions based on flavors and sensory expressions
-  if (mockFlavors.value.some(f => f.text === '딸기')) {
+  if (mockFlavors.value.some((f) => f.text === '딸기')) {
     suggestions.push({ id: 's1', text: '베리 향이 인상적이었어요' })
   }
-  
-  if (mockFlavors.value.some(f => f.text === '초콜릿')) {
+
+  if (mockFlavors.value.some((f) => f.text === '초콜릿')) {
     suggestions.push({ id: 's2', text: '초콜릿 같은 깊은 맛' })
   }
-  
-  if (mockSensoryExpressions.value.some(s => s.text === '밝고 상큼한')) {
+
+  if (mockSensoryExpressions.value.some((s) => s.text === '밝고 상큼한')) {
     suggestions.push({ id: 's3', text: '상쾌한 산미가 좋았어요' })
   }
-  
+
   // Filter out suggestions that have already been used
-  return suggestions.filter(s => !usedSelections.value.includes(s.text))
+  return suggestions.filter((s) => !usedSelections.value.includes(s.text))
 })
 
 // Methods
 const addToNotes = (text) => {
   // Prevent adding duplicate text
   if (usedSelections.value.includes(text)) return
-  
+
   // Smart text processing
   const processedText = processTextForNotes(text)
-  
+
   // Add to notes with appropriate spacing and punctuation
   if (personalNotes.value.trim()) {
     // Check if the last character is punctuation
@@ -180,12 +164,12 @@ const addToNotes = (text) => {
       personalNotes.value += ' '
     }
   }
-  
+
   personalNotes.value += processedText
-  
+
   // Mark as used
   usedSelections.value.push(text)
-  
+
   // Auto-focus the textarea
   const textarea = document.getElementById('personal-notes')
   if (textarea) {
@@ -202,9 +186,9 @@ const processTextForNotes = (text) => {
     { pattern: /초콜릿$/, replacement: '초콜릿 같은 맛이 났고' },
     { pattern: /캐러멜$/, replacement: '캐러멜 향이 느껴졌고' },
     { pattern: /밝고 상큼한$/, replacement: '밝고 상큼한 산미였고' },
-    { pattern: /꿀 같은$/, replacement: '꿀 같은 단맛이 있었고' }
+    { pattern: /꿀 같은$/, replacement: '꿀 같은 단맛이 있었고' },
   ]
-  
+
   let processedText = text
   for (const rule of rules) {
     if (rule.pattern.test(text)) {
@@ -212,7 +196,7 @@ const processTextForNotes = (text) => {
       break
     }
   }
-  
+
   return processedText
 }
 
@@ -224,9 +208,9 @@ const clearNotes = () => {
 const handleNext = () => {
   // Save to store
   tastingSessionStore.updatePersonalComment(personalNotes.value)
-  
+
   console.log('Personal notes saved:', personalNotes.value)
-  
+
   // Navigate to next step (Roaster Notes)
   router.push('/roaster-notes')
 }
@@ -242,7 +226,7 @@ onMounted(() => {
   max-width: 800px;
   margin: 0 auto;
   padding: 1rem;
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5F0E8 100%);
+  background: linear-gradient(135deg, #fff8f0 0%, #f5f0e8 100%);
   min-height: 100vh;
 }
 
@@ -255,12 +239,12 @@ onMounted(() => {
 .notes-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .notes-subtitle {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 1.1rem;
   line-height: 1.4;
 }
@@ -271,19 +255,19 @@ onMounted(() => {
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
   margin-bottom: 2rem;
 }
 
 .summary-title {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .summary-description {
-  color: #A0796A;
+  color: #a0796a;
   font-size: 0.9rem;
   margin-bottom: 1.5rem;
 }
@@ -303,7 +287,7 @@ onMounted(() => {
 .group-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin: 0;
 }
 
@@ -314,8 +298,8 @@ onMounted(() => {
 }
 
 .selection-btn {
-  background: #F8F4F0;
-  border: 2px solid #E8D5C4;
+  background: #f8f4f0;
+  border: 2px solid #e8d5c4;
   border-radius: 20px;
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
@@ -327,8 +311,8 @@ onMounted(() => {
 }
 
 .selection-btn:hover:not(:disabled) {
-  border-color: #D4B896;
-  background: #F0E8DC;
+  border-color: #d4b896;
+  background: #f0e8dc;
   transform: translateY(-1px);
 }
 
@@ -337,8 +321,8 @@ onMounted(() => {
 }
 
 .selection-btn.used {
-  background: #E8D5C4;
-  border-color: #D4B896;
+  background: #e8d5c4;
+  border-color: #d4b896;
   color: #999;
   cursor: not-allowed;
   opacity: 0.6;
@@ -346,7 +330,7 @@ onMounted(() => {
 
 .sensory-category {
   font-size: 0.8rem;
-  color: #A0796A;
+  color: #a0796a;
   font-weight: 500;
 }
 
@@ -358,7 +342,7 @@ onMounted(() => {
 .section-title {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1rem;
 }
 
@@ -368,7 +352,7 @@ onMounted(() => {
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
   margin-bottom: 2rem;
 }
 
@@ -379,7 +363,7 @@ onMounted(() => {
 .input-label {
   display: block;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.75rem;
   font-size: 1rem;
 }
@@ -387,7 +371,7 @@ onMounted(() => {
 .notes-textarea {
   width: 100%;
   padding: 1rem;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 12px;
   font-size: 1rem;
   font-family: inherit;
@@ -399,7 +383,7 @@ onMounted(() => {
 
 .notes-textarea:focus {
   outline: none;
-  border-color: #7C5842;
+  border-color: #7c5842;
   box-shadow: 0 0 0 3px rgba(124, 88, 66, 0.1);
 }
 
@@ -408,7 +392,7 @@ onMounted(() => {
   bottom: 0.5rem;
   right: 1rem;
   font-size: 0.8rem;
-  color: #A0796A;
+  color: #a0796a;
   background: rgba(255, 255, 255, 0.9);
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
@@ -416,8 +400,8 @@ onMounted(() => {
 
 /* Smart Suggestions */
 .suggestions-section {
-  background: #FFF8F0;
-  border: 1px solid #F0E8DC;
+  background: #fff8f0;
+  border: 1px solid #f0e8dc;
   border-radius: 16px;
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -431,18 +415,18 @@ onMounted(() => {
 
 .suggestion-btn {
   background: white;
-  border: 1px solid #E8D5C4;
+  border: 1px solid #e8d5c4;
   border-radius: 20px;
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .suggestion-btn:hover {
-  border-color: #D4B896;
-  background: #F8F4F0;
+  border-color: #d4b896;
+  background: #f8f4f0;
   transform: translateY(-1px);
 }
 
@@ -452,15 +436,15 @@ onMounted(() => {
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
   margin-bottom: 2rem;
 }
 
 .notes-preview {
-  background: #F8F4F0;
+  background: #f8f4f0;
   border-radius: 8px;
   padding: 1rem;
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .preview-text {
@@ -475,8 +459,8 @@ onMounted(() => {
 }
 
 .help-card {
-  background: #FFF8F0;
-  border: 1px solid #F0E8DC;
+  background: #fff8f0;
+  border: 1px solid #f0e8dc;
   border-radius: 12px;
   padding: 1.5rem;
 }
@@ -484,7 +468,7 @@ onMounted(() => {
 .help-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1rem;
 }
 
@@ -506,7 +490,7 @@ onMounted(() => {
   justify-content: space-between;
   margin-top: 2rem;
   padding-top: 2rem;
-  border-top: 1px solid #E8D5C4;
+  border-top: 1px solid #e8d5c4;
 }
 
 .btn-primary,
@@ -521,25 +505,25 @@ onMounted(() => {
 }
 
 .btn-primary {
-  background: #7C5842;
+  background: #7c5842;
   color: white;
-  border: 2px solid #7C5842;
+  border: 2px solid #7c5842;
 }
 
 .btn-primary:hover {
-  background: #5D3F2E;
-  border-color: #5D3F2E;
+  background: #5d3f2e;
+  border-color: #5d3f2e;
   transform: translateY(-1px);
 }
 
 .btn-secondary {
   background: white;
-  color: #7C5842;
-  border: 2px solid #E8D5C4;
+  color: #7c5842;
+  border: 2px solid #e8d5c4;
 }
 
 .btn-secondary:hover {
-  border-color: #D4B896;
+  border-color: #d4b896;
   transform: translateY(-1px);
 }
 
@@ -548,22 +532,22 @@ onMounted(() => {
   .personal-notes-view {
     padding: 0.5rem;
   }
-  
+
   .notes-title {
     font-size: 1.5rem;
   }
-  
+
   .selections-summary,
   .notes-input-section,
   .suggestions-section,
   .preview-section {
     padding: 1rem;
   }
-  
+
   .selection-buttons {
     justify-content: flex-start;
   }
-  
+
   .action-buttons {
     flex-direction: column;
   }
@@ -573,17 +557,17 @@ onMounted(() => {
   .notes-header {
     margin-bottom: 1.5rem;
   }
-  
+
   .notes-subtitle {
     font-size: 1rem;
   }
-  
+
   .selection-buttons,
   .suggestions {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .selection-btn,
   .suggestion-btn {
     text-align: center;

@@ -16,6 +16,7 @@ CupNote의 Pinia 기반 상태 관리 시스템에 대한 종합 가이드입니
 ### 상태 관리 철학
 
 **핵심 원칙**:
+
 - **단일 진실 공급원**: 각 도메인의 상태는 해당 스토어에서만 관리
 - **반응형 설계**: Vue 3 Composition API와 완벽한 통합
 - **타입 안정성**: TypeScript를 통한 컴파일 타임 검증
@@ -25,8 +26,8 @@ CupNote의 Pinia 기반 상태 관리 시스템에 대한 종합 가이드입니
 
 ```typescript
 // 핵심 기술
-import { defineStore } from 'pinia'        // 상태 관리
-import { ref, computed } from 'vue'        // 반응형 상태
+import { defineStore } from 'pinia' // 상태 관리
+import { ref, computed } from 'vue' // 반응형 상태
 import { supabase } from '../lib/supabase' // 데이터 영속성
 import type { User, Session } from '@supabase/supabase-js' // 타입 정의
 ```
@@ -69,17 +70,19 @@ graph TD
 **역할**: 사용자 인증, 세션 관리, 프로필 정보
 
 **핵심 상태**:
+
 ```typescript
 interface AuthState {
-  user: User | null              // Supabase 사용자 객체
-  session: Session | null        // 인증 세션
+  user: User | null // Supabase 사용자 객체
+  session: Session | null // 인증 세션
   userProfile: UserProfile | null // 확장 프로필 정보
-  isLoading: boolean             // 로딩 상태
-  error: string | null           // 에러 메시지
+  isLoading: boolean // 로딩 상태
+  error: string | null // 에러 메시지
 }
 ```
 
 **주요 액션**:
+
 ```typescript
 // 회원가입
 const signUp = async (email: string, password: string, displayName?: string)
@@ -98,6 +101,7 @@ const initializeAuth = async ()
 ```
 
 **사용 예제**:
+
 ```vue
 <script setup>
 import { useAuthStore } from '@/stores/auth'
@@ -126,13 +130,14 @@ const handleLogin = async () => {
 **역할**: 테이스팅 세션의 핵심 상태 관리 (가장 중요한 스토어)
 
 **데이터 구조**:
+
 ```typescript
 interface TastingRecord {
   id?: string
   user_id: string
   mode: 'cafe' | 'homecafe' | 'pro'
   session_id?: string
-  
+
   // JSONB 필드들
   coffee_info: {
     coffee_name: string
@@ -143,7 +148,7 @@ interface TastingRecord {
     variety?: string | null
     // ... 추가 커피 정보
   }
-  
+
   brew_settings?: {
     dripper?: string
     recipe?: {
@@ -156,7 +161,7 @@ interface TastingRecord {
     }
     quick_notes?: string
   } | null
-  
+
   experimental_data?: {
     extraction_method?: string
     grind_size?: string
@@ -166,7 +171,7 @@ interface TastingRecord {
     water_ph?: number
     // ... Pro 모드 실험 데이터
   } | null
-  
+
   selected_flavors: Array<{ id: string; text: string }>
   sensory_expressions: Array<{ id: string; category: string; text: string }>
   personal_comment?: string | null
@@ -179,6 +184,7 @@ interface TastingRecord {
 ```
 
 **핵심 상태**:
+
 ```typescript
 const currentSession = ref<TastingRecord>({
   user_id: '',
@@ -187,10 +193,10 @@ const currentSession = ref<TastingRecord>({
     coffee_name: '',
     cafe_name: '',
     location: '',
-    brewing_method: ''
+    brewing_method: '',
   },
   selected_flavors: [],
-  sensory_expressions: []
+  sensory_expressions: [],
 })
 
 const isSessionActive = ref(false)
@@ -199,6 +205,7 @@ const completedSessions = ref<TastingRecord[]>([])
 ```
 
 **주요 액션**:
+
 ```typescript
 // 세션 시작
 const startSession = (mode: 'cafe' | 'homecafe' | 'pro') => {
@@ -210,10 +217,7 @@ const startSession = (mode: 'cafe' | 'homecafe' | 'pro') => {
 }
 
 // 세션 데이터 업데이트
-const updateSessionData = <K extends keyof TastingRecord>(
-  field: K, 
-  data: TastingRecord[K]
-) => {
+const updateSessionData = <K extends keyof TastingRecord>(field: K, data: TastingRecord[K]) => {
   currentSession.value[field] = data
   calculateProgress()
 }
@@ -226,9 +230,9 @@ const saveSession = async (): Promise<string | null> => {
       .insert([currentSession.value])
       .select()
       .single()
-    
+
     if (error) throw error
-    
+
     completedSessions.value.push(data)
     resetSession()
     return data.id
@@ -241,30 +245,31 @@ const saveSession = async (): Promise<string | null> => {
 // 진행도 계산
 const calculateProgress = () => {
   const requiredFields = getRequiredFieldsByMode(currentSession.value.mode)
-  const completedFields = requiredFields.filter(field => 
-    hasValidData(currentSession.value, field)
+  const completedFields = requiredFields.filter((field) =>
+    hasValidData(currentSession.value, field),
   )
   sessionProgress.value = (completedFields.length / requiredFields.length) * 100
 }
 ```
 
 **모드별 플로우 관리**:
+
 ```typescript
 const FLOW_STEPS = {
   cafe: [
     'coffee_info',
-    'selected_flavors', 
+    'selected_flavors',
     'sensory_expressions',
     'personal_comment',
-    'roaster_notes'
+    'roaster_notes',
   ],
   homecafe: [
     'coffee_info',
     'brew_settings',
     'selected_flavors',
-    'sensory_expressions', 
+    'sensory_expressions',
     'personal_comment',
-    'roaster_notes'
+    'roaster_notes',
   ],
   pro: [
     'coffee_info',
@@ -275,8 +280,8 @@ const FLOW_STEPS = {
     'sensory_expressions',
     'sensory_slider',
     'personal_comment',
-    'roaster_notes'
-  ]
+    'roaster_notes',
+  ],
 }
 ```
 
@@ -287,6 +292,7 @@ const FLOW_STEPS = {
 **역할**: 시스템 전반의 알림 관리
 
 **알림 타입**:
+
 ```typescript
 interface Notification {
   id: string
@@ -300,6 +306,7 @@ interface Notification {
 ```
 
 **특화된 알림 메서드**:
+
 ```typescript
 // 테이스팅 관련
 const showTastingStart = (coffeeName: string)
@@ -315,6 +322,7 @@ const showTip = (message: string, title?: string)
 ```
 
 **전역 헬퍼 사용**:
+
 ```typescript
 import { notify } from '@/stores/notification'
 
@@ -330,6 +338,7 @@ notify.achievement('새로운 배지를 획득했습니다!')
 **역할**: 사용자 통계, 성취, 진행도 추적
 
 **핵심 통계**:
+
 ```javascript
 const computed = {
   totalTastings: computed(() => stats.value?.total_tastings || 0),
@@ -337,15 +346,16 @@ const computed = {
   averageScaScore: computed(() => stats.value?.average_sca_score || 0),
   currentStreak: computed(() => stats.value?.streak_days || 0),
   longestStreak: computed(() => stats.value?.longest_streak || 0),
-  
+
   // 향미 분석
   favoriteOrigins: computed(() => stats.value?.favorite_origins || []),
   tastingFrequency: computed(() => stats.value?.weekly_frequency || 0),
-  skillLevel: computed(() => calculateSkillLevel(stats.value))
+  skillLevel: computed(() => calculateSkillLevel(stats.value)),
 }
 ```
 
 **성취 시스템**:
+
 ```javascript
 const achievements = ref([
   {
@@ -353,15 +363,15 @@ const achievements = ref([
     name: '첫 테이스팅',
     description: '첫 번째 커피 테이스팅 완료',
     icon: '☕',
-    condition: { total_tastings: 1 }
+    condition: { total_tastings: 1 },
   },
   {
     id: 'streak_7',
-    name: '일주일 연속',  
+    name: '일주일 연속',
     description: '7일 연속 테이스팅',
     icon: '🔥',
-    condition: { streak_days: 7 }
-  }
+    condition: { streak_days: 7 },
+  },
   // ... 더 많은 성취
 ])
 ```
@@ -373,18 +383,20 @@ const achievements = ref([
 **역할**: 개인 목표 설정 및 추적
 
 **목표 타입**:
+
 ```javascript
 const GOAL_TYPES = {
-  TASTINGS: 'tastings',      // 테이스팅 횟수
-  STREAK: 'streak',          // 연속 기록
-  SCORE: 'score',            // 점수 향상
+  TASTINGS: 'tastings', // 테이스팅 횟수
+  STREAK: 'streak', // 연속 기록
+  SCORE: 'score', // 점수 향상
   EXPLORATION: 'exploration', // 새로운 원두 탐색
-  SKILL: 'skill',            // 기술 향상
-  TIME: 'time'               // 시간별 목표
+  SKILL: 'skill', // 기술 향상
+  TIME: 'time', // 시간별 목표
 }
 ```
 
 **목표 생성 및 추적**:
+
 ```javascript
 const createGoal = async (goalData) => {
   const goal = {
@@ -393,9 +405,9 @@ const createGoal = async (goalData) => {
     target_value: goalData.target,
     current_value: 0,
     deadline: goalData.deadline,
-    status: 'active'
+    status: 'active',
   }
-  
+
   // DB에 저장 및 상태 업데이트
 }
 
@@ -413,16 +425,9 @@ const updateGoalProgress = async (goalId, progress) => {
 <template>
   <div class="tasting-progress">
     <h2>{{ currentSession.coffee_info.coffee_name }}</h2>
-    <progress :value="sessionProgress" max="100">
-      {{ sessionProgress }}%
-    </progress>
-    
-    <button 
-      @click="saveCurrentSession"
-      :disabled="!canSave"
-    >
-      저장하기
-    </button>
+    <progress :value="sessionProgress" max="100">{{ sessionProgress }}%</progress>
+
+    <button @click="saveCurrentSession" :disabled="!canSave">저장하기</button>
   </div>
 </template>
 
@@ -436,23 +441,17 @@ const sessionStore = useTastingSessionStore()
 const notificationStore = useNotificationStore()
 
 // 반응형 상태 구조분해 (반응성 유지)
-const { 
-  currentSession, 
-  sessionProgress, 
-  isSessionActive 
-} = storeToRefs(sessionStore)
+const { currentSession, sessionProgress, isSessionActive } = storeToRefs(sessionStore)
 
 // 계산된 속성
-const canSave = computed(() => 
-  sessionProgress.value >= 80 && isSessionActive.value
-)
+const canSave = computed(() => sessionProgress.value >= 80 && isSessionActive.value)
 
 // 액션 호출
 const saveCurrentSession = async () => {
   try {
     const sessionId = await sessionStore.saveSession()
     notificationStore.showSuccess('테이스팅이 저장되었습니다!')
-    
+
     // 페이지 이동 등 후속 처리
     router.push('/result')
   } catch (error) {
@@ -467,7 +466,7 @@ const saveCurrentSession = async () => {
 ```vue
 <script setup>
 import { useAuthStore } from '@/stores/auth'
-import { useTastingSessionStore } from '@/stores/tastingSession'  
+import { useTastingSessionStore } from '@/stores/tastingSession'
 import { useUserStatsStore } from '@/stores/userStats'
 import { useNotificationStore } from '@/stores/notification'
 
@@ -480,22 +479,22 @@ const notificationStore = useNotificationStore()
 const completeTasting = async () => {
   // 1. 세션 저장
   const sessionId = await sessionStore.saveSession()
-  
+
   // 2. 통계 데이터 다시 로드
   await statsStore.fetchUserStats(authStore.userId)
-  
+
   // 3. 성취 데이터 다시 로드 및 확인
   await statsStore.fetchUserAchievements(authStore.userId)
   const newAchievements = statsStore.earnedAchievements
-  
+
   // 4. 알림 발송
   if (newAchievements.length > 0) {
     notificationStore.showNewBadge('새로운 성취를 달성했습니다!')
   }
-  
+
   notificationStore.showTastingComplete(
     sessionStore.currentSession.coffee_info.coffee_name,
-    sessionStore.currentSession.match_score?.overall || 0
+    sessionStore.currentSession.match_score?.overall || 0,
   )
 }
 </script>
@@ -511,11 +510,11 @@ import { useRouter } from 'vue-router'
 export function useTastingFlow() {
   const sessionStore = useTastingSessionStore()
   const router = useRouter()
-  
+
   const navigateNext = (currentStep: string) => {
     const mode = sessionStore.currentSession.mode
     const nextStep = getNextStep(currentStep, mode)
-    
+
     if (nextStep) {
       router.push(`/${nextStep}`)
     } else {
@@ -523,18 +522,16 @@ export function useTastingFlow() {
       router.push('/result')
     }
   }
-  
+
   const canNavigateNext = (requiredFields: string[]) => {
-    return requiredFields.every(field => 
-      hasValidData(sessionStore.currentSession, field)
-    )
+    return requiredFields.every((field) => hasValidData(sessionStore.currentSession, field))
   }
-  
+
   return {
     navigateNext,
     canNavigateNext,
     currentSession: readonly(sessionStore.currentSession),
-    sessionProgress: readonly(sessionStore.sessionProgress)
+    sessionProgress: readonly(sessionStore.sessionProgress),
   }
 }
 ```
@@ -548,7 +545,7 @@ export function useTastingFlow() {
 const updateCoffeeInfo = (coffeeData) => {
   sessionStore.updateSessionData('coffee_info', {
     ...sessionStore.currentSession.coffee_info,
-    ...coffeeData
+    ...coffeeData,
   })
 }
 
@@ -577,9 +574,9 @@ const handleAsyncAction = async () => {
   try {
     loading.value = true
     error.value = null
-    
+
     const result = await someAsyncOperation()
-    
+
     // 성공 처리
     return result
   } catch (err) {
@@ -610,7 +607,7 @@ import type { CoffeeInfo } from '@/interfaces/tasting'
 const updateCoffeeInfo = (coffeeInfo: Partial<CoffeeInfo>) => {
   currentSession.value.coffee_info = {
     ...currentSession.value.coffee_info,
-    ...coffeeInfo
+    ...coffeeInfo,
   }
 }
 ```
@@ -621,14 +618,14 @@ const updateCoffeeInfo = (coffeeInfo: Partial<CoffeeInfo>) => {
 // computed를 활용한 파생 상태
 const expensiveCalculation = computed(() => {
   if (!currentSession.value.selected_flavors.length) return null
-  
+
   return complexFlavorAnalysis(currentSession.value.selected_flavors)
 })
 
 // 필요시에만 데이터 로드
 const loadUserStats = async () => {
   if (stats.value) return // 이미 로드됨
-  
+
   // 데이터 로드 로직
 }
 ```
@@ -649,7 +646,7 @@ describe('TastingSession Store', () => {
 
   it('should initialize with default state', () => {
     const store = useTastingSessionStore()
-    
+
     expect(store.currentSession.mode).toBe('cafe')
     expect(store.isSessionActive).toBe(false)
     expect(store.sessionProgress).toBe(0)
@@ -657,9 +654,9 @@ describe('TastingSession Store', () => {
 
   it('should start session correctly', () => {
     const store = useTastingSessionStore()
-    
+
     store.startSession('pro')
-    
+
     expect(store.currentSession.mode).toBe('pro')
     expect(store.isSessionActive).toBe(true)
     expect(store.currentSession.session_id).toBeDefined()
@@ -667,15 +664,15 @@ describe('TastingSession Store', () => {
 
   it('should calculate progress correctly', () => {
     const store = useTastingSessionStore()
-    
+
     store.startSession('cafe')
     store.updateSessionData('coffee_info', {
       coffee_name: 'Test Coffee',
       cafe_name: 'Test Cafe',
       location: 'Seoul',
-      brewing_method: 'V60'
+      brewing_method: 'V60',
     })
-    
+
     expect(store.sessionProgress).toBeGreaterThan(0)
   })
 })
@@ -702,15 +699,15 @@ describe('Tasting Session Integration', () => {
   it('should complete full tasting flow', async () => {
     // 세션 시작
     sessionStore.startSession('cafe')
-    
+
     // 단계별 데이터 입력
     sessionStore.updateSessionData('coffee_info', mockCoffeeInfo)
     sessionStore.updateSessionData('selected_flavors', mockFlavors)
     sessionStore.updateSessionData('sensory_expressions', mockExpressions)
-    
+
     // 세션 저장
     const sessionId = await sessionStore.saveSession()
-    
+
     expect(sessionId).toBeTruthy()
     expect(sessionStore.isSessionActive).toBe(false)
   })
@@ -725,22 +722,26 @@ export const mockSupabase = {
   from: jest.fn(() => ({
     insert: jest.fn(() => ({
       select: jest.fn(() => ({
-        single: jest.fn(() => Promise.resolve({
-          data: mockTastingRecord,
-          error: null
-        }))
-      }))
+        single: jest.fn(() =>
+          Promise.resolve({
+            data: mockTastingRecord,
+            error: null,
+          }),
+        ),
+      })),
     })),
-    select: jest.fn(() => Promise.resolve({
-      data: [mockTastingRecord],
-      error: null
-    }))
-  }))
+    select: jest.fn(() =>
+      Promise.resolve({
+        data: [mockTastingRecord],
+        error: null,
+      }),
+    ),
+  })),
 }
 
 // 테스트에서 사용
 jest.mock('@/lib/supabase', () => ({
-  supabase: mockSupabase
+  supabase: mockSupabase,
 }))
 ```
 
@@ -770,21 +771,18 @@ app.use(pinia)
 
 ```typescript
 // stores/tastingSession.ts
-const updateSessionData = <K extends keyof TastingRecord>(
-  field: K, 
-  data: TastingRecord[K]
-) => {
+const updateSessionData = <K extends keyof TastingRecord>(field: K, data: TastingRecord[K]) => {
   const oldValue = currentSession.value[field]
   currentSession.value[field] = data
-  
+
   // 개발 모드에서 변경사항 로깅
   if (process.env.NODE_ENV === 'development') {
     console.log(`Session updated: ${String(field)}`, {
       from: oldValue,
-      to: data
+      to: data,
     })
   }
-  
+
   calculateProgress()
 }
 ```

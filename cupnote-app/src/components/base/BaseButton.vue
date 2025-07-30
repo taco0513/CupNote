@@ -1,9 +1,5 @@
 <template>
-  <button 
-    :class="buttonClasses"
-    :disabled="disabled || loading"
-    @click="handleClick"
-  >
+  <button :class="buttonClasses" :disabled="disabled || loading" @click="handleClick">
     <span v-if="loading" class="loading-spinner">⏳</span>
     <slot v-else />
   </button>
@@ -16,25 +12,25 @@ const props = defineProps({
   variant: {
     type: String,
     default: 'primary',
-    validator: (value) => ['primary', 'secondary', 'outline', 'text'].includes(value)
+    validator: (value) => ['primary', 'secondary', 'outline', 'text'].includes(value),
   },
   size: {
     type: String,
     default: 'medium',
-    validator: (value) => ['small', 'medium', 'large'].includes(value)
+    validator: (value) => ['small', 'medium', 'large'].includes(value),
   },
   disabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   loading: {
     type: Boolean,
-    default: false
+    default: false,
   },
   fullWidth: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 const emit = defineEmits(['click'])
@@ -46,8 +42,8 @@ const buttonClasses = computed(() => [
   {
     'base-button--disabled': props.disabled || props.loading,
     'base-button--loading': props.loading,
-    'base-button--full-width': props.fullWidth
-  }
+    'base-button--full-width': props.fullWidth,
+  },
 ])
 
 const handleClick = (event) => {
@@ -85,7 +81,9 @@ const handleClick = (event) => {
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.3);
   transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
+  transition:
+    width 0.6s,
+    height 0.6s;
 }
 
 .base-button:active::before {
@@ -202,8 +200,12 @@ const handleClick = (event) => {
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Focus states for accessibility */

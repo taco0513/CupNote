@@ -2,9 +2,7 @@
   <div class="qc-measurement-view">
     <!-- Header -->
     <header class="screen-header">
-      <button class="back-btn" @click="$router.push('/pro-brewing')">
-        ←
-      </button>
+      <button class="back-btn" @click="$router.push('/pro-brewing')">←</button>
       <h1 class="screen-title">QC 측정</h1>
       <div class="progress-bar">
         <div class="progress-fill" :style="{ width: '57%' }"></div>
@@ -25,16 +23,12 @@
       <!-- TDS Measurement -->
       <section class="measurement-section">
         <h2 class="section-title">TDS 측정 (Total Dissolved Solids)</h2>
-        
+
         <div class="tds-measurement">
           <div class="tds-input-section">
             <div class="tds-toggle">
               <label class="toggle-label">
-                <input
-                  v-model="tdsEnabled"
-                  type="checkbox"
-                  class="toggle-checkbox"
-                />
+                <input v-model="tdsEnabled" type="checkbox" class="toggle-checkbox" />
                 <span class="toggle-slider"></span>
                 TDS 측정 사용
               </label>
@@ -55,7 +49,7 @@
                     max="5"
                     placeholder="1.30"
                     class="tds-input"
-                    :class="{ 'error': tdsValue && !isValidTds }"
+                    :class="{ error: tdsValue && !isValidTds }"
                   />
                   <span class="tds-unit">%</span>
                 </div>
@@ -87,7 +81,9 @@
             <div class="yield-calculation">
               <div class="yield-formula">
                 <span class="formula-text">추출 수율 = (TDS × 추출량) ÷ 원두량</span>
-                <span class="formula-calculation">= ({{ tdsValue }}% × {{ brewVolume }}ml) ÷ {{ coffeeAmount }}g</span>
+                <span class="formula-calculation"
+                  >= ({{ tdsValue }}% × {{ brewVolume }}ml) ÷ {{ coffeeAmount }}g</span
+                >
               </div>
               <div class="yield-result">
                 <span class="yield-value">{{ extractionYield }}%</span>
@@ -131,9 +127,9 @@
       <!-- Quality Assessment -->
       <section class="measurement-section">
         <h2 class="section-title">품질 평가</h2>
-        
+
         <div class="quality-metrics">
-          <div class="metric-card" :class="{ 'disabled': !tdsEnabled }">
+          <div class="metric-card" :class="{ disabled: !tdsEnabled }">
             <div class="metric-header">
               <span class="metric-icon">📈</span>
               <h3 class="metric-title">추출 효율성</h3>
@@ -173,7 +169,7 @@
       <!-- Additional Measurements -->
       <section class="measurement-section">
         <h2 class="section-title">추가 측정값</h2>
-        
+
         <div class="additional-measurements">
           <div class="measurement-group">
             <h3 class="group-title">추출 데이터</h3>
@@ -262,9 +258,7 @@
       <button type="button" class="btn-secondary" @click="$router.push('/pro-brewing')">
         이전
       </button>
-      <button type="button" class="btn-primary" @click="handleNext">
-        다음: 향미 평가
-      </button>
+      <button type="button" class="btn-primary" @click="handleNext">다음: 향미 평가</button>
     </div>
   </div>
 </template>
@@ -308,7 +302,7 @@ const extractionYield = computed(() => {
   if (!tdsEnabled.value || !tdsValue.value || !brewVolume.value || !coffeeAmount.value) {
     return '0.00'
   }
-  
+
   const yieldValue = (tdsValue.value * brewVolume.value) / coffeeAmount.value
   return yieldValue.toFixed(2)
 })
@@ -340,11 +334,11 @@ const yieldPosition = computed(() => {
 const scaComplianceScore = computed(() => {
   let score = 0
   const brewing = proBrewingData.value.sca_compliance || {}
-  
+
   if (brewing.ratio) score += 33
   if (brewing.temperature) score += 33
   if (brewing.water_quality) score += 34
-  
+
   return Math.round(score)
 })
 
@@ -366,7 +360,7 @@ const complianceText = computed(() => {
 // Predicted Quality
 const predictedQuality = computed(() => {
   let score = 3.0 // Base score
-  
+
   // TDS contribution
   if (tdsEnabled.value && tdsValue.value) {
     const yieldValue = parseFloat(extractionYield.value)
@@ -378,13 +372,13 @@ const predictedQuality = computed(() => {
       score -= 0.3
     }
   }
-  
+
   // SCA compliance contribution
   const compliance = scaComplianceScore.value
   if (compliance >= 90) score += 0.5
   else if (compliance >= 70) score += 0.3
   else if (compliance < 50) score -= 0.3
-  
+
   return Math.max(1.0, Math.min(5.0, score)).toFixed(1)
 })
 
@@ -403,7 +397,11 @@ const handleNext = () => {
   const qcMeasurementData = {
     tds_enabled: tdsEnabled.value,
     tds_value: tdsEnabled.value ? tdsValue.value : null,
-    tds_device: tdsEnabled.value ? (tdsDevice.value === 'other' ? customDevice.value : tdsDevice.value) : null,
+    tds_device: tdsEnabled.value
+      ? tdsDevice.value === 'other'
+        ? customDevice.value
+        : tdsDevice.value
+      : null,
     extraction_yield: tdsEnabled.value && tdsValue.value ? parseFloat(extractionYield.value) : null,
     yield_status: tdsEnabled.value && tdsValue.value ? yieldStatusText.value : null,
     brew_volume: brewVolume.value,
@@ -412,11 +410,11 @@ const handleNext = () => {
     humidity: humidity.value,
     sca_compliance_score: scaComplianceScore.value,
     predicted_quality: parseFloat(predictedQuality.value),
-    qc_notes: qcNotes.value
+    qc_notes: qcNotes.value,
   }
-  
+
   tastingSessionStore.updateQcMeasurementData(qcMeasurementData)
-  
+
   // Navigate to unified flavor (SCA flavor wheel will be integrated later)
   router.push('/flavor-selection')
 }
@@ -436,7 +434,7 @@ watch(tdsEnabled, (newValue) => {
   max-width: 800px;
   margin: 0 auto;
   padding: 1rem;
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5F0E8 100%);
+  background: linear-gradient(135deg, #fff8f0 0%, #f5f0e8 100%);
   min-height: 100vh;
 }
 
@@ -455,7 +453,7 @@ watch(tdsEnabled, (newValue) => {
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: #7C5842;
+  color: #7c5842;
   cursor: pointer;
   width: 40px;
   height: 40px;
@@ -473,14 +471,14 @@ watch(tdsEnabled, (newValue) => {
 .screen-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
 .progress-bar {
   max-width: 300px;
   height: 4px;
-  background: #E8D5C4;
+  background: #e8d5c4;
   border-radius: 2px;
   margin: 1rem auto 0;
   overflow: hidden;
@@ -488,13 +486,13 @@ watch(tdsEnabled, (newValue) => {
 
 .progress-fill {
   height: 100%;
-  background: #7C5842;
+  background: #7c5842;
   transition: width 0.3s ease;
 }
 
 /* QC Introduction */
 .qc-intro {
-  background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
   color: white;
   border-radius: 16px;
   padding: 1.5rem;
@@ -537,15 +535,15 @@ watch(tdsEnabled, (newValue) => {
   padding: 1.5rem;
   margin-bottom: 1.5rem;
   box-shadow: 0 2px 10px rgba(124, 88, 66, 0.1);
-  border: 1px solid #F0E8DC;
+  border: 1px solid #f0e8dc;
 }
 
 .section-title {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1.5rem;
-  border-bottom: 2px solid #F8F4F0;
+  border-bottom: 2px solid #f8f4f0;
   padding-bottom: 0.5rem;
 }
 
@@ -575,7 +573,7 @@ watch(tdsEnabled, (newValue) => {
   gap: 0.75rem;
   cursor: pointer;
   font-weight: 500;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .toggle-checkbox {
@@ -585,7 +583,7 @@ watch(tdsEnabled, (newValue) => {
 .toggle-slider {
   width: 50px;
   height: 24px;
-  background: #E8D5C4;
+  background: #e8d5c4;
   border-radius: 12px;
   position: relative;
   transition: all 0.3s ease;
@@ -605,7 +603,7 @@ watch(tdsEnabled, (newValue) => {
 }
 
 .toggle-checkbox:checked + .toggle-slider {
-  background: #4CAF50;
+  background: #4caf50;
 }
 
 .toggle-checkbox:checked + .toggle-slider::before {
@@ -634,7 +632,7 @@ watch(tdsEnabled, (newValue) => {
 .tds-label {
   font-size: 0.9rem;
   font-weight: 500;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .tds-input-wrapper {
@@ -646,7 +644,7 @@ watch(tdsEnabled, (newValue) => {
 .tds-input {
   flex: 1;
   padding: 0.75rem;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   font-size: 1.1rem;
   text-align: center;
@@ -655,17 +653,17 @@ watch(tdsEnabled, (newValue) => {
 
 .tds-input:focus {
   outline: none;
-  border-color: #FF9800;
+  border-color: #ff9800;
 }
 
 .tds-input.error {
-  border-color: #F44336;
-  background: #FFEBEE;
+  border-color: #f44336;
+  background: #ffebee;
 }
 
 .tds-unit {
   font-size: 1rem;
-  color: #A0796A;
+  color: #a0796a;
   font-weight: 500;
 }
 
@@ -684,13 +682,13 @@ watch(tdsEnabled, (newValue) => {
 .device-label {
   font-size: 0.9rem;
   font-weight: 500;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .device-select,
 .device-input {
   padding: 0.75rem;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   font-size: 0.95rem;
 }
@@ -698,21 +696,21 @@ watch(tdsEnabled, (newValue) => {
 .device-select:focus,
 .device-input:focus {
   outline: none;
-  border-color: #FF9800;
+  border-color: #ff9800;
 }
 
 /* TDS Results */
 .tds-results {
-  background: #F8F4F0;
+  background: #f8f4f0;
   border-radius: 12px;
   padding: 1.5rem;
-  border: 1px solid #E8D5C4;
+  border: 1px solid #e8d5c4;
 }
 
 .results-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1rem;
 }
 
@@ -747,13 +745,13 @@ watch(tdsEnabled, (newValue) => {
   padding: 1rem;
   background: white;
   border-radius: 8px;
-  border: 1px solid #E8D5C4;
+  border: 1px solid #e8d5c4;
 }
 
 .yield-value {
   font-size: 2rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
 }
 
 .yield-status {
@@ -764,18 +762,18 @@ watch(tdsEnabled, (newValue) => {
 }
 
 .yield-status.under {
-  background: #FFEBEE;
-  color: #D32F2F;
+  background: #ffebee;
+  color: #d32f2f;
 }
 
 .yield-status.optimal {
-  background: #E8F5E9;
-  color: #388E3C;
+  background: #e8f5e9;
+  color: #388e3c;
 }
 
 .yield-status.over {
-  background: #FFF3E0;
-  color: #F57C00;
+  background: #fff3e0;
+  color: #f57c00;
 }
 
 /* SCA Comparison Chart */
@@ -786,7 +784,7 @@ watch(tdsEnabled, (newValue) => {
 .comparison-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.75rem;
 }
 
@@ -805,11 +803,11 @@ watch(tdsEnabled, (newValue) => {
 
 .chart-label {
   padding: 0.5rem;
-  background: #F5F5F5;
+  background: #f5f5f5;
   font-size: 0.8rem;
   font-weight: 500;
   text-align: center;
-  border-bottom: 1px solid #E0E0E0;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .chart-range {
@@ -820,24 +818,24 @@ watch(tdsEnabled, (newValue) => {
 }
 
 .chart-range.under {
-  background: #FFCDD2;
-  color: #D32F2F;
+  background: #ffcdd2;
+  color: #d32f2f;
 }
 
 .chart-range.optimal {
-  background: #C8E6C9;
-  color: #388E3C;
+  background: #c8e6c9;
+  color: #388e3c;
 }
 
 .chart-range.over {
-  background: #FFE0B2;
-  color: #F57C00;
+  background: #ffe0b2;
+  color: #f57c00;
 }
 
 .current-position {
   position: relative;
   height: 30px;
-  background: #F5F5F5;
+  background: #f5f5f5;
   border-radius: 4px;
   margin-top: 0.5rem;
 }
@@ -846,7 +844,7 @@ watch(tdsEnabled, (newValue) => {
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
-  background: #7C5842;
+  background: #7c5842;
   color: white;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
@@ -863,17 +861,17 @@ watch(tdsEnabled, (newValue) => {
 }
 
 .metric-card {
-  background: #F8F4F0;
+  background: #f8f4f0;
   border-radius: 12px;
   padding: 1.5rem;
-  border: 1px solid #E8D5C4;
+  border: 1px solid #e8d5c4;
   text-align: center;
   transition: all 0.2s ease;
 }
 
 .metric-card.disabled {
   opacity: 0.6;
-  background: #F5F5F5;
+  background: #f5f5f5;
 }
 
 .metric-header {
@@ -891,14 +889,14 @@ watch(tdsEnabled, (newValue) => {
 .metric-title {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin: 0;
 }
 
 .metric-value {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 0.5rem;
 }
 
@@ -911,20 +909,20 @@ watch(tdsEnabled, (newValue) => {
 
 .metric-status.under,
 .metric-status.needs-improvement {
-  background: #FFEBEE;
-  color: #D32F2F;
+  background: #ffebee;
+  color: #d32f2f;
 }
 
 .metric-status.optimal,
 .metric-status.excellent {
-  background: #E8F5E9;
-  color: #388E3C;
+  background: #e8f5e9;
+  color: #388e3c;
 }
 
 .metric-status.over,
 .metric-status.good {
-  background: #E3F2FD;
-  color: #1976D2;
+  background: #e3f2fd;
+  color: #1976d2;
 }
 
 /* Additional Measurements */
@@ -935,16 +933,16 @@ watch(tdsEnabled, (newValue) => {
 }
 
 .measurement-group {
-  background: #F8F4F0;
+  background: #f8f4f0;
   border-radius: 12px;
   padding: 1.5rem;
-  border: 1px solid #E8D5C4;
+  border: 1px solid #e8d5c4;
 }
 
 .group-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #7C5842;
+  color: #7c5842;
   margin-bottom: 1rem;
 }
 
@@ -962,7 +960,7 @@ watch(tdsEnabled, (newValue) => {
 
 .measurement-label {
   font-size: 0.85rem;
-  color: #7C5842;
+  color: #7c5842;
   font-weight: 500;
 }
 
@@ -975,7 +973,7 @@ watch(tdsEnabled, (newValue) => {
 .measurement-input {
   flex: 1;
   padding: 0.5rem;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   font-size: 0.95rem;
   text-align: center;
@@ -983,12 +981,12 @@ watch(tdsEnabled, (newValue) => {
 
 .measurement-input:focus {
   outline: none;
-  border-color: #FF9800;
+  border-color: #ff9800;
 }
 
 .measurement-unit {
   font-size: 0.8rem;
-  color: #A0796A;
+  color: #a0796a;
 }
 
 /* QC Notes */
@@ -1001,7 +999,7 @@ watch(tdsEnabled, (newValue) => {
 .qc-textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 2px solid #E8D5C4;
+  border: 2px solid #e8d5c4;
   border-radius: 8px;
   font-size: 0.95rem;
   resize: vertical;
@@ -1010,7 +1008,7 @@ watch(tdsEnabled, (newValue) => {
 
 .qc-textarea:focus {
   outline: none;
-  border-color: #FF9800;
+  border-color: #ff9800;
 }
 
 /* Action Buttons */
@@ -1038,25 +1036,25 @@ watch(tdsEnabled, (newValue) => {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #FF9800, #F57C00);
+  background: linear-gradient(135deg, #ff9800, #f57c00);
   color: white;
-  border: 2px solid #FF9800;
+  border: 2px solid #ff9800;
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #F57C00, #E65100);
-  border-color: #F57C00;
+  background: linear-gradient(135deg, #f57c00, #e65100);
+  border-color: #f57c00;
   transform: translateY(-1px);
 }
 
 .btn-secondary {
   background: white;
-  color: #7C5842;
-  border: 2px solid #E8D5C4;
+  color: #7c5842;
+  border: 2px solid #e8d5c4;
 }
 
 .btn-secondary:hover {
-  border-color: #D4B896;
+  border-color: #d4b896;
   transform: translateY(-1px);
 }
 
@@ -1065,19 +1063,19 @@ watch(tdsEnabled, (newValue) => {
   .tds-input-group {
     grid-template-columns: 1fr;
   }
-  
+
   .quality-metrics {
     grid-template-columns: 1fr;
   }
-  
+
   .measurement-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .comparison-chart {
     flex-direction: column;
   }
-  
+
   .action-buttons {
     flex-direction: column;
   }

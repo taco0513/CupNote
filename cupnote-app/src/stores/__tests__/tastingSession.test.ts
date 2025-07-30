@@ -7,19 +7,19 @@ vi.mock('../../lib/supabase', () => ({
   supabase: {
     from: vi.fn(() => ({
       insert: vi.fn(() => ({
-        select: vi.fn(() => ({ 
-          single: vi.fn(() => Promise.resolve({ data: mockRecord, error: null }))
-        }))
+        select: vi.fn(() => ({
+          single: vi.fn(() => Promise.resolve({ data: mockRecord, error: null })),
+        })),
       })),
       select: vi.fn(() => ({
         eq: vi.fn(() => ({
           order: vi.fn(() => Promise.resolve({ data: [mockRecord], error: null })),
-          single: vi.fn(() => Promise.resolve({ data: mockRecord, error: null }))
-        }))
+          single: vi.fn(() => Promise.resolve({ data: mockRecord, error: null })),
+        })),
       })),
-      update: vi.fn(() => Promise.resolve({ error: null }))
-    }))
-  }
+      update: vi.fn(() => Promise.resolve({ error: null })),
+    })),
+  },
 }))
 
 const mockRecord = {
@@ -28,7 +28,7 @@ const mockRecord = {
   coffee_name: 'Test Coffee',
   total_match_score: 85,
   selected_flavors: ['chocolate', 'nutty'],
-  created_at: new Date().toISOString()
+  created_at: new Date().toISOString(),
 }
 
 describe('TastingSession Store', () => {
@@ -81,7 +81,7 @@ describe('TastingSession Store', () => {
     it('should update roaster notes correctly', () => {
       const roasterNotes = 'Chocolate and nut flavors with medium body'
       const level = 3
-      
+
       store.currentSession.roasterNotes = roasterNotes
       store.currentSession.roasterNotesLevel = level
 
@@ -143,9 +143,9 @@ describe('TastingSession Store', () => {
     it('should handle missing roaster notes gracefully', () => {
       store.currentSession.roasterNotes = ''
       store.currentSession.roasterNotesLevel = 1
-      
+
       const scores = store.calculateMatchScores()
-      
+
       // Should still calculate scores with defaults
       expect(scores.flavorMatchScore).toBeGreaterThanOrEqual(70)
       expect(scores.sensoryMatchScore).toBeGreaterThanOrEqual(70)
@@ -175,7 +175,7 @@ describe('TastingSession Store', () => {
   describe('Data Validation', () => {
     it('should handle empty coffee name', () => {
       store.currentSession.coffeeName = ''
-      
+
       // Should handle empty coffee name gracefully
       expect(store.currentSession.coffeeName).toBe('')
       expect(store.hasCompleteSession).toBe(false)
@@ -183,14 +183,14 @@ describe('TastingSession Store', () => {
 
     it('should handle empty flavor selections', () => {
       store.currentSession.selectedFlavors = []
-      
+
       expect(store.currentSession.selectedFlavors).toEqual([])
       expect(store.hasCompleteSession).toBe(false)
     })
 
     it('should handle missing sensory selections', () => {
       store.currentSession.selectedSensory = undefined
-      
+
       expect(store.hasCompleteSession).toBe(false)
     })
   })
@@ -220,9 +220,9 @@ describe('TastingSession Store', () => {
     it('should clear session after save', async () => {
       // Set up session
       store.currentSession.coffeeName = 'Test Coffee'
-      
+
       await store.saveCurrentSession('test-user')
-      
+
       // Session should be cleared after save
       expect(store.currentSession).toEqual({})
     })
@@ -232,7 +232,7 @@ describe('TastingSession Store', () => {
     it('should handle save errors gracefully', async () => {
       // Mock error
       vi.mocked(store).saveCurrentSession = vi.fn().mockRejectedValue(new Error('Save failed'))
-      
+
       try {
         await store.saveCurrentSession('test-user')
         expect.fail('Should have thrown error')
@@ -244,7 +244,7 @@ describe('TastingSession Store', () => {
     it('should handle fetch errors gracefully', async () => {
       // Mock error by setting up incomplete mock
       const errorStore = useCoffeeRecordStore()
-      
+
       // Should not throw but handle gracefully
       await expect(errorStore.fetchUserRecords('invalid-user')).resolves.not.toThrow()
     })
@@ -256,7 +256,7 @@ describe('TastingSession Store', () => {
       store.records = [
         { ...mockRecord, total_match_score: 85, location: 'Colombia' },
         { ...mockRecord, id: '2', total_match_score: 75, location: 'Ethiopia' },
-        { ...mockRecord, id: '3', total_match_score: 90, location: 'Colombia' }
+        { ...mockRecord, id: '3', total_match_score: 90, location: 'Colombia' },
       ]
     })
 
@@ -272,8 +272,10 @@ describe('TastingSession Store', () => {
     it('should calculate statistics correctly', () => {
       // Test that records are accessible for statistics calculation
       expect(store.records).toHaveLength(3)
-      
-      const avgScore = store.records.reduce((sum, record) => sum + (record.total_match_score || 0), 0) / store.records.length
+
+      const avgScore =
+        store.records.reduce((sum, record) => sum + (record.total_match_score || 0), 0) /
+        store.records.length
       expect(Math.round(avgScore)).toBe(83) // (85 + 75 + 90) / 3 = 83.33 -> 83
     })
   })
@@ -291,7 +293,7 @@ describe('TastingSession Store', () => {
     it('should clear session correctly', () => {
       store.currentSession.coffeeName = 'Test'
       store.clearCurrentSession()
-      
+
       expect(store.currentSession).toEqual({})
     })
   })

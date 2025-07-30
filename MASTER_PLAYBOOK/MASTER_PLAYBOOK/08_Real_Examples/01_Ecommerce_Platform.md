@@ -5,50 +5,53 @@
 현대적인 전자상거래 플랫폼을 SuperClaude와 AI 개발 워크플로우를 활용하여 구축하는 완전한 가이드입니다.
 
 ### 시스템 요구사항
+
 ```yaml
 business_requirements:
   core_features:
-    - "상품 카탈로그 관리"
-    - "사용자 인증 및 프로필"
-    - "장바구니 및 주문 처리"
-    - "결제 시스템 통합"
-    - "재고 관리"
-    - "주문 추적"
+    - '상품 카탈로그 관리'
+    - '사용자 인증 및 프로필'
+    - '장바구니 및 주문 처리'
+    - '결제 시스템 통합'
+    - '재고 관리'
+    - '주문 추적'
 
   non_functional:
-    - "동시 사용자 10,000명"
-    - "99.9% 가용성"
-    - "응답시간 < 2초"
-    - "PCI DSS 준수"
-    - "다국어 지원"
+    - '동시 사용자 10,000명'
+    - '99.9% 가용성'
+    - '응답시간 < 2초'
+    - 'PCI DSS 준수'
+    - '다국어 지원'
 ```
 
 ### 기술 스택 선택
+
 ```yaml
 technology_stack:
   frontend:
-    framework: "Next.js 14"
-    styling: "Tailwind CSS"
-    state: "Zustand"
-    testing: "Jest + React Testing Library"
+    framework: 'Next.js 14'
+    styling: 'Tailwind CSS'
+    state: 'Zustand'
+    testing: 'Jest + React Testing Library'
 
   backend:
-    runtime: "Node.js + TypeScript"
-    framework: "Express.js / Fastify"
-    database: "PostgreSQL + Redis"
-    search: "Elasticsearch"
-    message_queue: "Redis / RabbitMQ"
+    runtime: 'Node.js + TypeScript'
+    framework: 'Express.js / Fastify'
+    database: 'PostgreSQL + Redis'
+    search: 'Elasticsearch'
+    message_queue: 'Redis / RabbitMQ'
 
   infrastructure:
-    cloud: "AWS / Azure"
-    containers: "Docker + Kubernetes"
-    cdn: "CloudFlare"
-    monitoring: "Datadog / New Relic"
+    cloud: 'AWS / Azure'
+    containers: 'Docker + Kubernetes'
+    cdn: 'CloudFlare'
+    monitoring: 'Datadog / New Relic'
 ```
 
 ## Phase 1: 프로젝트 설계 및 아키텍처
 
 ### SuperClaude를 활용한 초기 설계
+
 ```bash
 # 1. 프로젝트 아키텍처 설계
 /design "전자상거래 플랫폼" --think-hard --persona-architect
@@ -64,35 +67,37 @@ technology_stack:
 ```
 
 ### 시스템 아키텍처
+
 ```yaml
 system_architecture:
   presentation_layer:
-    - "React.js SPA"
-    - "Admin Dashboard"
-    - "Mobile App (React Native)"
+    - 'React.js SPA'
+    - 'Admin Dashboard'
+    - 'Mobile App (React Native)'
 
   api_gateway:
-    - "인증/인가"
-    - "Rate Limiting"
-    - "API 버전 관리"
-    - "로드 밸런싱"
+    - '인증/인가'
+    - 'Rate Limiting'
+    - 'API 버전 관리'
+    - '로드 밸런싱'
 
   application_layer:
-    - "User Service"
-    - "Product Service"
-    - "Order Service"
-    - "Payment Service"
-    - "Inventory Service"
-    - "Notification Service"
+    - 'User Service'
+    - 'Product Service'
+    - 'Order Service'
+    - 'Payment Service'
+    - 'Inventory Service'
+    - 'Notification Service'
 
   data_layer:
-    - "PostgreSQL (Primary)"
-    - "Redis (Cache)"
-    - "Elasticsearch (Search)"
-    - "S3 (File Storage)"
+    - 'PostgreSQL (Primary)'
+    - 'Redis (Cache)'
+    - 'Elasticsearch (Search)'
+    - 'S3 (File Storage)'
 ```
 
 ### 데이터베이스 설계
+
 ```sql
 -- 사용자 테이블
 CREATE TABLE users (
@@ -138,6 +143,7 @@ CREATE TABLE orders (
 ## Phase 2: 백엔드 API 개발
 
 ### SuperClaude를 활용한 API 구현
+
 ```bash
 # 1. 사용자 인증 서비스 구현
 /implement "JWT 기반 사용자 인증" --persona-backend --security-first
@@ -153,147 +159,143 @@ CREATE TABLE orders (
 ```
 
 ### 인증 서비스 구현
+
 ```javascript
 // auth.service.js
 class AuthService {
   async register(userData) {
     // 입력 데이터 검증
-    const validatedData = await this.validateRegistrationData(userData);
+    const validatedData = await this.validateRegistrationData(userData)
 
     // 비밀번호 해싱
-    const hashedPassword = await bcrypt.hash(validatedData.password, 12);
+    const hashedPassword = await bcrypt.hash(validatedData.password, 12)
 
     // 사용자 생성
     const user = await User.create({
       ...validatedData,
-      password: hashedPassword
-    });
+      password: hashedPassword,
+    })
 
     // 이메일 인증 토큰 생성
-    const verificationToken = this.generateVerificationToken(user.id);
-    await this.sendVerificationEmail(user.email, verificationToken);
+    const verificationToken = this.generateVerificationToken(user.id)
+    await this.sendVerificationEmail(user.email, verificationToken)
 
-    return { user: this.sanitizeUser(user), message: '인증 이메일을 확인해주세요' };
+    return { user: this.sanitizeUser(user), message: '인증 이메일을 확인해주세요' }
   }
 
   async login(email, password) {
     // 사용자 조회
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email })
     if (!user) {
-      throw new AuthenticationError('잘못된 이메일 또는 비밀번호입니다');
+      throw new AuthenticationError('잘못된 이메일 또는 비밀번호입니다')
     }
 
     // 비밀번호 검증
-    const isValid = await bcrypt.compare(password, user.password);
+    const isValid = await bcrypt.compare(password, user.password)
     if (!isValid) {
-      throw new AuthenticationError('잘못된 이메일 또는 비밀번호입니다');
+      throw new AuthenticationError('잘못된 이메일 또는 비밀번호입니다')
     }
 
     // JWT 토큰 생성
-    const tokens = this.generateTokens(user);
+    const tokens = this.generateTokens(user)
 
     // 로그인 기록
-    await this.logLoginActivity(user.id);
+    await this.logLoginActivity(user.id)
 
-    return { user: this.sanitizeUser(user), tokens };
+    return { user: this.sanitizeUser(user), tokens }
   }
 
   generateTokens(user) {
-    const accessToken = jwt.sign(
-      { userId: user.id, email: user.email },
-      process.env.JWT_SECRET,
-      { expiresIn: '15m' }
-    );
+    const accessToken = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_SECRET, {
+      expiresIn: '15m',
+    })
 
-    const refreshToken = jwt.sign(
-      { userId: user.id },
-      process.env.JWT_REFRESH_SECRET,
-      { expiresIn: '7d' }
-    );
+    const refreshToken = jwt.sign({ userId: user.id }, process.env.JWT_REFRESH_SECRET, {
+      expiresIn: '7d',
+    })
 
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken }
   }
 }
 ```
 
 ### 상품 관리 API
+
 ```javascript
 // product.controller.js
 class ProductController {
   async getProducts(req, res) {
-    const { page = 1, limit = 20, category, search, sortBy = 'created_at' } = req.query;
+    const { page = 1, limit = 20, category, search, sortBy = 'created_at' } = req.query
 
-    let query = Product.query();
+    let query = Product.query()
 
     // 필터링
     if (category) {
-      query = query.where('category_id', category);
+      query = query.where('category_id', category)
     }
 
     if (search) {
       query = query.where(builder => {
-        builder.where('name', 'ilike', `%${search}%`)
-               .orWhere('description', 'ilike', `%${search}%`);
-      });
+        builder.where('name', 'ilike', `%${search}%`).orWhere('description', 'ilike', `%${search}%`)
+      })
     }
 
     // 정렬
-    query = query.orderBy(sortBy, 'desc');
+    query = query.orderBy(sortBy, 'desc')
 
     // 페이지네이션
-    const results = await query.page(page - 1, limit);
+    const results = await query.page(page - 1, limit)
 
     res.json({
       products: results.results,
       pagination: {
         page: parseInt(page),
         limit: parseInt(limit),
-        total: results.total
-      }
-    });
+        total: results.total,
+      },
+    })
   }
 
   async createProduct(req, res) {
-    const productData = req.body;
+    const productData = req.body
 
     // 유효성 검사
-    const { error, value } = productSchema.validate(productData);
+    const { error, value } = productSchema.validate(productData)
     if (error) {
-      return res.status(400).json({ error: error.details[0].message });
+      return res.status(400).json({ error: error.details[0].message })
     }
 
     // SKU 중복 확인
-    const existingSKU = await Product.query().where('sku', value.sku).first();
+    const existingSKU = await Product.query().where('sku', value.sku).first()
     if (existingSKU) {
-      return res.status(409).json({ error: 'SKU가 이미 존재합니다' });
+      return res.status(409).json({ error: 'SKU가 이미 존재합니다' })
     }
 
-    const product = await Product.query().insert(value);
+    const product = await Product.query().insert(value)
 
     // 이벤트 발행
-    await eventBus.publish('product.created', { productId: product.id });
+    await eventBus.publish('product.created', { productId: product.id })
 
-    res.status(201).json(product);
+    res.status(201).json(product)
   }
 }
 ```
 
 ### 주문 처리 워크플로우
+
 ```javascript
 // order.service.js
 class OrderService {
   async createOrder(userId, orderData) {
-    const transaction = await Order.startTransaction();
+    const transaction = await Order.startTransaction()
 
     try {
       // 1. 재고 확인
       for (const item of orderData.items) {
-        const product = await Product.query(transaction)
-          .findById(item.productId)
-          .forUpdate();
+        const product = await Product.query(transaction).findById(item.productId).forUpdate()
 
         if (product.stock < item.quantity) {
-          throw new InsufficientStockError(`상품 ${product.name}의 재고가 부족합니다`);
+          throw new InsufficientStockError(`상품 ${product.name}의 재고가 부족합니다`)
         }
       }
 
@@ -303,40 +305,37 @@ class OrderService {
         status: 'pending',
         totalAmount: this.calculateTotal(orderData.items),
         shippingAddress: orderData.shippingAddress,
-        billingAddress: orderData.billingAddress
-      });
+        billingAddress: orderData.billingAddress,
+      })
 
       // 3. 주문 아이템 생성
       const orderItems = orderData.items.map(item => ({
         orderId: order.id,
         productId: item.productId,
         quantity: item.quantity,
-        price: item.price
-      }));
+        price: item.price,
+      }))
 
-      await OrderItem.query(transaction).insert(orderItems);
+      await OrderItem.query(transaction).insert(orderItems)
 
       // 4. 재고 차감
       for (const item of orderData.items) {
-        await Product.query(transaction)
-          .findById(item.productId)
-          .decrement('stock', item.quantity);
+        await Product.query(transaction).findById(item.productId).decrement('stock', item.quantity)
       }
 
-      await transaction.commit();
+      await transaction.commit()
 
       // 5. 이벤트 발행
       await eventBus.publish('order.created', {
         orderId: order.id,
         userId,
-        totalAmount: order.totalAmount
-      });
+        totalAmount: order.totalAmount,
+      })
 
-      return order;
-
+      return order
     } catch (error) {
-      await transaction.rollback();
-      throw error;
+      await transaction.rollback()
+      throw error
     }
   }
 }
@@ -345,6 +344,7 @@ class OrderService {
 ## Phase 3: 프론트엔드 개발
 
 ### SuperClaude를 활용한 UI 구현
+
 ```bash
 # 1. Next.js 프로젝트 설정
 /build "ecommerce-frontend" --framework nextjs --typescript --tailwind
@@ -363,31 +363,32 @@ class OrderService {
 ```
 
 ### 상품 목록 컴포넌트
+
 ```tsx
 // components/ProductList.tsx
 interface Product {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  rating: number;
-  inStock: boolean;
+  id: string
+  name: string
+  price: number
+  image: string
+  rating: number
+  inStock: boolean
 }
 
 interface ProductListProps {
-  products: Product[];
-  loading: boolean;
-  onLoadMore: () => void;
-  hasMore: boolean;
+  products: Product[]
+  loading: boolean
+  onLoadMore: () => void
+  hasMore: boolean
 }
 
 export const ProductList: React.FC<ProductListProps> = ({
   products,
   loading,
   onLoadMore,
-  hasMore
+  hasMore,
 }) => {
-  const [view, setView] = useState<'grid' | 'list'>('grid');
+  const [view, setView] = useState<'grid' | 'list'>('grid')
 
   return (
     <div className="space-y-6">
@@ -411,16 +412,15 @@ export const ProductList: React.FC<ProductListProps> = ({
       </div>
 
       {/* 상품 그리드/리스트 */}
-      <div className={view === 'grid'
-        ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'
-        : 'space-y-4'
-      }>
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            view={view}
-          />
+      <div
+        className={
+          view === 'grid'
+            ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'
+            : 'space-y-4'
+        }
+      >
+        {products.map(product => (
+          <ProductCard key={product.id} product={product} view={view} />
         ))}
       </div>
 
@@ -443,34 +443,35 @@ export const ProductList: React.FC<ProductListProps> = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 ```
 
 ### 장바구니 상태 관리
+
 ```typescript
 // store/cartStore.ts
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 interface CartItem {
-  id: string;
-  productId: string;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string;
+  id: string
+  productId: string
+  name: string
+  price: number
+  quantity: number
+  image: string
 }
 
 interface CartStore {
-  items: CartItem[];
-  total: number;
-  itemCount: number;
-  addItem: (product: Product, quantity?: number) => void;
-  removeItem: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
-  clearCart: () => void;
-  calculateTotal: () => void;
+  items: CartItem[]
+  total: number
+  itemCount: number
+  addItem: (product: Product, quantity?: number) => void
+  removeItem: (productId: string) => void
+  updateQuantity: (productId: string, quantity: number) => void
+  clearCart: () => void
+  calculateTotal: () => void
 }
 
 export const useCartStore = create<CartStore>()(
@@ -481,11 +482,11 @@ export const useCartStore = create<CartStore>()(
       itemCount: 0,
 
       addItem: (product, quantity = 1) => {
-        const { items } = get();
-        const existingItem = items.find(item => item.productId === product.id);
+        const { items } = get()
+        const existingItem = items.find(item => item.productId === product.id)
 
         if (existingItem) {
-          get().updateQuantity(product.id, existingItem.quantity + quantity);
+          get().updateQuantity(product.id, existingItem.quantity + quantity)
         } else {
           const newItem: CartItem = {
             id: `${product.id}-${Date.now()}`,
@@ -493,68 +494,67 @@ export const useCartStore = create<CartStore>()(
             name: product.name,
             price: product.price,
             quantity,
-            image: product.image
-          };
+            image: product.image,
+          }
 
-          set((state) => ({
-            items: [...state.items, newItem]
-          }));
+          set(state => ({
+            items: [...state.items, newItem],
+          }))
         }
 
-        get().calculateTotal();
+        get().calculateTotal()
       },
 
-      removeItem: (productId) => {
-        set((state) => ({
-          items: state.items.filter(item => item.productId !== productId)
-        }));
-        get().calculateTotal();
+      removeItem: productId => {
+        set(state => ({
+          items: state.items.filter(item => item.productId !== productId),
+        }))
+        get().calculateTotal()
       },
 
       updateQuantity: (productId, quantity) => {
         if (quantity <= 0) {
-          get().removeItem(productId);
-          return;
+          get().removeItem(productId)
+          return
         }
 
-        set((state) => ({
+        set(state => ({
           items: state.items.map(item =>
-            item.productId === productId
-              ? { ...item, quantity }
-              : item
-          )
-        }));
-        get().calculateTotal();
+            item.productId === productId ? { ...item, quantity } : item
+          ),
+        }))
+        get().calculateTotal()
       },
 
       clearCart: () => {
-        set({ items: [], total: 0, itemCount: 0 });
+        set({ items: [], total: 0, itemCount: 0 })
       },
 
       calculateTotal: () => {
-        const { items } = get();
-        const total = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+        const { items } = get()
+        const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+        const itemCount = items.reduce((sum, item) => sum + item.quantity, 0)
 
-        set({ total, itemCount });
-      }
+        set({ total, itemCount })
+      },
     }),
     {
       name: 'cart-storage',
-      version: 1
+      version: 1,
     }
   )
-);
+)
 ```
 
 ## Phase 4: 결제 시스템 구축
 
 ### Stripe 결제 통합
+
 ```javascript
 // services/payment.service.js
 class PaymentService {
   constructor() {
-    this.stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+    this.stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
   }
 
   async createPaymentIntent(orderId, amount, currency = 'krw') {
@@ -564,9 +564,9 @@ class PaymentService {
         currency,
         metadata: { orderId },
         automatic_payment_methods: {
-          enabled: true
-        }
-      });
+          enabled: true,
+        },
+      })
 
       // 결제 의도 저장
       await Payment.query().insert({
@@ -576,16 +576,15 @@ class PaymentService {
         currency,
         status: 'pending',
         provider: 'stripe',
-        metadata: paymentIntent
-      });
+        metadata: paymentIntent,
+      })
 
       return {
         clientSecret: paymentIntent.client_secret,
-        paymentIntentId: paymentIntent.id
-      };
-
+        paymentIntentId: paymentIntent.id,
+      }
     } catch (error) {
-      throw new PaymentError('결제 생성 실패', error);
+      throw new PaymentError('결제 생성 실패', error)
     }
   }
 
@@ -595,71 +594,67 @@ class PaymentService {
         payload,
         signature,
         process.env.STRIPE_WEBHOOK_SECRET
-      );
+      )
 
       switch (event.type) {
         case 'payment_intent.succeeded':
-          await this.handlePaymentSuccess(event.data.object);
-          break;
+          await this.handlePaymentSuccess(event.data.object)
+          break
 
         case 'payment_intent.payment_failed':
-          await this.handlePaymentFailure(event.data.object);
-          break;
+          await this.handlePaymentFailure(event.data.object)
+          break
 
         default:
-          console.log(`처리되지 않은 이벤트 타입: ${event.type}`);
+          console.log(`처리되지 않은 이벤트 타입: ${event.type}`)
       }
-
     } catch (error) {
-      console.error('웹훅 처리 실패:', error);
-      throw error;
+      console.error('웹훅 처리 실패:', error)
+      throw error
     }
   }
 
   async handlePaymentSuccess(paymentIntent) {
-    const { orderId } = paymentIntent.metadata;
+    const { orderId } = paymentIntent.metadata
 
     await Promise.all([
       // 결제 상태 업데이트
-      Payment.query()
-        .where('id', paymentIntent.id)
-        .patch({ status: 'completed' }),
+      Payment.query().where('id', paymentIntent.id).patch({ status: 'completed' }),
 
       // 주문 상태 업데이트
-      Order.query()
-        .findById(orderId)
-        .patch({ status: 'paid' })
-    ]);
+      Order.query().findById(orderId).patch({ status: 'paid' }),
+    ])
 
     // 주문 확인 이벤트 발행
-    await eventBus.publish('order.paid', { orderId });
+    await eventBus.publish('order.paid', { orderId })
   }
 }
 ```
 
 ### 프론트엔드 결제 컴포넌트
+
 ```tsx
 // components/CheckoutForm.tsx
-import { useState } from 'react';
-import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
+import { useState } from 'react'
+import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js'
 
 export const CheckoutForm: React.FC<{ order: Order }> = ({ order }) => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [processing, setProcessing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const stripe = useStripe()
+  const elements = useElements()
+  const [processing, setProcessing] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+    event.preventDefault()
 
-    if (!stripe || !elements) return;
+    if (!stripe || !elements) return
 
-    setProcessing(true);
-    setError(null);
+    setProcessing(true)
+    setError(null)
 
     try {
       // 결제 의도 생성
-      const { clientSecret } = await createPaymentIntent(order.id, order.total);
+      const { clientSecret } = await createPaymentIntent(order.id, order.total)
 
       // 결제 확인
       const { error: stripeError } = await stripe.confirmCardPayment(clientSecret, {
@@ -672,25 +667,24 @@ export const CheckoutForm: React.FC<{ order: Order }> = ({ order }) => {
               line1: order.billingAddress.street,
               city: order.billingAddress.city,
               postal_code: order.billingAddress.postalCode,
-              country: order.billingAddress.country
-            }
-          }
-        }
-      });
+              country: order.billingAddress.country,
+            },
+          },
+        },
+      })
 
       if (stripeError) {
-        setError(stripeError.message || '결제 처리 중 오류가 발생했습니다.');
+        setError(stripeError.message || '결제 처리 중 오류가 발생했습니다.')
       } else {
         // 결제 성공
-        window.location.href = `/orders/${order.id}/success`;
+        window.location.href = `/orders/${order.id}/success`
       }
-
     } catch (err) {
-      setError('결제 처리 중 오류가 발생했습니다.');
+      setError('결제 처리 중 오류가 발생했습니다.')
     } finally {
-      setProcessing(false);
+      setProcessing(false)
     }
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -710,11 +704,7 @@ export const CheckoutForm: React.FC<{ order: Order }> = ({ order }) => {
         />
       </div>
 
-      {error && (
-        <div className="p-3 text-red-700 bg-red-100 rounded">
-          {error}
-        </div>
-      )}
+      {error && <div className="p-3 text-red-700 bg-red-100 rounded">{error}</div>}
 
       <button
         type="submit"
@@ -724,17 +714,18 @@ export const CheckoutForm: React.FC<{ order: Order }> = ({ order }) => {
         {processing ? '처리 중...' : `${order.total.toLocaleString()}원 결제하기`}
       </button>
     </form>
-  );
-};
+  )
+}
 ```
 
 ## Phase 5: 운영 및 모니터링
 
 ### 모니터링 및 로깅 설정
+
 ```javascript
 // monitoring/logger.js
-const winston = require('winston');
-const { ElasticsearchTransport } = require('winston-elasticsearch');
+const winston = require('winston')
+const { ElasticsearchTransport } = require('winston-elasticsearch')
 
 const logger = winston.createLogger({
   level: 'info',
@@ -750,17 +741,17 @@ const logger = winston.createLogger({
     new ElasticsearchTransport({
       level: 'info',
       clientOpts: { node: process.env.ELASTICSEARCH_URL },
-      index: 'ecommerce-logs'
-    })
-  ]
-});
+      index: 'ecommerce-logs',
+    }),
+  ],
+})
 
 // 성능 모니터링 미들웨어
 const performanceMonitor = (req, res, next) => {
-  const start = Date.now();
+  const start = Date.now()
 
   res.on('finish', () => {
-    const duration = Date.now() - start;
+    const duration = Date.now() - start
 
     logger.info('API Request', {
       method: req.method,
@@ -768,24 +759,25 @@ const performanceMonitor = (req, res, next) => {
       statusCode: res.statusCode,
       duration,
       userAgent: req.get('User-Agent'),
-      ip: req.ip
-    });
+      ip: req.ip,
+    })
 
     // 느린 요청 알림
     if (duration > 3000) {
       logger.warn('Slow Request', {
         method: req.method,
         url: req.url,
-        duration
-      });
+        duration,
+      })
     }
-  });
+  })
 
-  next();
-};
+  next()
+}
 ```
 
 ### 성능 최적화
+
 ```bash
 # SuperClaude를 활용한 성능 최적화
 /optimize performance --focus "database,cache,frontend"
@@ -803,6 +795,7 @@ const performanceMonitor = (req, res, next) => {
 ## 배포 및 확장
 
 ### Docker 컨테이너화
+
 ```dockerfile
 # Dockerfile
 FROM node:18-alpine AS builder
@@ -827,6 +820,7 @@ CMD ["npm", "start"]
 ```
 
 ### Kubernetes 배포
+
 ```yaml
 # k8s/deployment.yaml
 apiVersion: apps/v1
@@ -844,61 +838,63 @@ spec:
         app: ecommerce-api
     spec:
       containers:
-      - name: api
-        image: ecommerce-api:latest
-        ports:
-        - containerPort: 3000
-        env:
-        - name: DATABASE_URL
-          valueFrom:
-            secretKeyRef:
-              name: db-secret
-              key: url
-        - name: REDIS_URL
-          valueFrom:
-            secretKeyRef:
-              name: redis-secret
-              key: url
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 3000
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /ready
-            port: 3000
-          initialDelaySeconds: 5
-          periodSeconds: 5
+        - name: api
+          image: ecommerce-api:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: url
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secret
+                  key: url
+          resources:
+            requests:
+              memory: '256Mi'
+              cpu: '250m'
+            limits:
+              memory: '512Mi'
+              cpu: '500m'
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
 ```
 
 ## 프로젝트 성과 및 배운 점
 
 ### 주요 성과 지표
+
 ```yaml
 performance_metrics:
-  development_speed: "40% 향상 (AI 활용)"
-  code_quality: "90% 테스트 커버리지"
-  response_time: "평균 1.2초"
-  uptime: "99.95%"
-  user_satisfaction: "4.8/5.0"
+  development_speed: '40% 향상 (AI 활용)'
+  code_quality: '90% 테스트 커버리지'
+  response_time: '평균 1.2초'
+  uptime: '99.95%'
+  user_satisfaction: '4.8/5.0'
 
 business_metrics:
-  conversion_rate: "3.2% → 4.1%"
-  cart_abandonment: "65% → 52%"
-  page_load_speed: "3.5초 → 1.8초"
-  mobile_traffic: "65% 증가"
+  conversion_rate: '3.2% → 4.1%'
+  cart_abandonment: '65% → 52%'
+  page_load_speed: '3.5초 → 1.8초'
+  mobile_traffic: '65% 증가'
 ```
 
 ### AI 워크플로우 활용 효과
+
 1. **설계 단계**: 아키텍처 및 API 설계 시간 50% 단축
 2. **개발 단계**: 보일러플레이트 코드 자동 생성으로 70% 시간 절약
 3. **테스트 단계**: 자동 테스트 케이스 생성으로 품질 향상

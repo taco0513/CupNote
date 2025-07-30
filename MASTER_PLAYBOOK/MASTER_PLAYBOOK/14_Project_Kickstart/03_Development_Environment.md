@@ -81,12 +81,7 @@ echo "✅ 개발 환경 설정이 완료되었습니다!"
     "**/dist": true,
     "**/.next": true
   },
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ],
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -159,7 +154,7 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     ports:
-      - "3000:3000"
+      - '3000:3000'
     volumes:
       - .:/app
       - /app/node_modules
@@ -176,7 +171,7 @@ services:
   db:
     image: postgres:15-alpine
     ports:
-      - "5432:5432"
+      - '5432:5432'
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
@@ -188,7 +183,7 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - '6379:6379'
     volumes:
       - redis_data:/data
 
@@ -196,8 +191,8 @@ services:
   mail:
     image: mailhog/mailhog
     ports:
-      - "1025:1025" # SMTP
-      - "8025:8025" # Web UI
+      - '1025:1025' # SMTP
+      - '8025:8025' # Web UI
 
 volumes:
   postgres_data:
@@ -210,7 +205,7 @@ volumes:
 
 ```typescript
 // src/config/environment.ts
-import { z } from 'zod';
+import { z } from 'zod'
 
 // 환경 변수 스키마
 const envSchema = z.object({
@@ -236,23 +231,23 @@ const envSchema = z.object({
   // 모니터링
   SENTRY_DSN: z.string().optional(),
   POSTHOG_API_KEY: z.string().optional(),
-});
+})
 
 // 환경 변수 검증 및 로드
 export const env = (() => {
-  const parsed = envSchema.safeParse(process.env);
+  const parsed = envSchema.safeParse(process.env)
 
   if (!parsed.success) {
-    console.error('❌ 환경 변수 오류:');
-    console.error(parsed.error.flatten());
-    throw new Error('환경 변수 설정이 올바르지 않습니다.');
+    console.error('❌ 환경 변수 오류:')
+    console.error(parsed.error.flatten())
+    throw new Error('환경 변수 설정이 올바르지 않습니다.')
   }
 
-  return parsed.data;
-})();
+  return parsed.data
+})()
 
 // 타입 안전 환경 변수 접근
-export type Env = z.infer<typeof envSchema>;
+export type Env = z.infer<typeof envSchema>
 ```
 
 ### .env 템플릿 관리
@@ -294,7 +289,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
-    'prettier'
+    'prettier',
   ],
   plugins: ['@typescript-eslint', 'unused-imports'],
   rules: {
@@ -313,9 +308,9 @@ module.exports = {
     // 일반 규칙
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     'prefer-const': 'error',
-    'no-duplicate-imports': 'error'
-  }
-};
+    'no-duplicate-imports': 'error',
+  },
+}
 ```
 
 ### Prettier 설정
@@ -335,7 +330,7 @@ module.exports = {
   jsxBracketSameLine: false,
   plugins: ['prettier-plugin-tailwindcss'],
   tailwindConfig: './tailwind.config.js',
-};
+}
 ```
 
 ### TypeScript 설정
@@ -392,14 +387,10 @@ npx husky add .husky/commit-msg "npx commitlint --edit"
 ```javascript
 // .lintstagedrc.js
 module.exports = {
-  '*.{js,jsx,ts,tsx}': [
-    'eslint --fix',
-    'prettier --write',
-    'jest --bail --findRelatedTests'
-  ],
+  '*.{js,jsx,ts,tsx}': ['eslint --fix', 'prettier --write', 'jest --bail --findRelatedTests'],
   '*.{json,md,yml,yaml}': ['prettier --write'],
   '*.css': ['prettier --write'],
-};
+}
 ```
 
 ### Commitlint 설정
@@ -413,24 +404,24 @@ module.exports = {
       2,
       'always',
       [
-        'feat',     // 새 기능
-        'fix',      // 버그 수정
-        'docs',     // 문서 변경
-        'style',    // 코드 스타일 변경
+        'feat', // 새 기능
+        'fix', // 버그 수정
+        'docs', // 문서 변경
+        'style', // 코드 스타일 변경
         'refactor', // 코드 리팩토링
-        'perf',     // 성능 개선
-        'test',     // 테스트 추가/수정
-        'build',    // 빌드 시스템
-        'ci',       // CI 설정
-        'chore',    // 기타 작업
-        'revert'    // 커밋 되돌리기
-      ]
+        'perf', // 성능 개선
+        'test', // 테스트 추가/수정
+        'build', // 빌드 시스템
+        'ci', // CI 설정
+        'chore', // 기타 작업
+        'revert', // 커밋 되돌리기
+      ],
     ],
     'subject-case': [2, 'always', 'sentence-case'],
     'subject-min-length': [2, 'always', 10],
-    'body-max-line-length': [2, 'always', 100]
-  }
-};
+    'body-max-line-length': [2, 'always', 100],
+  },
+}
 ```
 
 ## 디버깅 환경
@@ -484,36 +475,36 @@ module.exports = {
 
 ```typescript
 // scripts/team-setup.ts
-import { execSync } from 'child_process';
-import * as fs from 'fs';
-import * as path from 'path';
+import { execSync } from 'child_process'
+import * as fs from 'fs'
+import * as path from 'path'
 
 class TeamEnvironmentSetup {
   async setupForNewMember(memberName: string) {
-    console.log(`🎉 ${memberName}님을 위한 환경 설정 시작...`);
+    console.log(`🎉 ${memberName}님을 위한 환경 설정 시작...`)
 
     // 1. 필수 도구 확인
-    this.checkRequiredTools();
+    this.checkRequiredTools()
 
     // 2. 저장소 클론
-    this.cloneRepository();
+    this.cloneRepository()
 
     // 3. 의존성 설치
-    this.installDependencies();
+    this.installDependencies()
 
     // 4. 환경 변수 설정
-    this.setupEnvironmentVariables();
+    this.setupEnvironmentVariables()
 
     // 5. 데이터베이스 초기화
-    this.initializeDatabase();
+    this.initializeDatabase()
 
     // 6. IDE 설정
-    this.configureIDE();
+    this.configureIDE()
 
     // 7. 팀 규칙 안내
-    this.showTeamGuidelines();
+    this.showTeamGuidelines()
 
-    console.log('✅ 환경 설정 완료!');
+    console.log('✅ 환경 설정 완료!')
   }
 
   private checkRequiredTools() {
@@ -521,17 +512,17 @@ class TeamEnvironmentSetup {
       { name: 'Node.js', command: 'node --version', minVersion: '18' },
       { name: 'Git', command: 'git --version', minVersion: '2.30' },
       { name: 'Docker', command: 'docker --version', minVersion: '20' },
-    ];
+    ]
 
     tools.forEach(tool => {
       try {
-        const version = execSync(tool.command, { encoding: 'utf8' });
-        console.log(`✅ ${tool.name}: ${version.trim()}`);
+        const version = execSync(tool.command, { encoding: 'utf8' })
+        console.log(`✅ ${tool.name}: ${version.trim()}`)
       } catch {
-        console.error(`❌ ${tool.name}가 설치되어 있지 않습니다.`);
-        process.exit(1);
+        console.error(`❌ ${tool.name}가 설치되어 있지 않습니다.`)
+        process.exit(1)
       }
-    });
+    })
   }
 }
 ```

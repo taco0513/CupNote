@@ -3,13 +3,14 @@
 ## 📱 전체 앱 구조
 
 ### **화면 플로우 개요**
+
 ```
-🏠 Mode Selection 
+🏠 Mode Selection
     ↓ (Cafe/Brew/Lab 선택)
-☕ Coffee Info 
+☕ Coffee Info
     ↓ (Cafe: 바로) ↓ (Brew/Lab: 추출 설정)
 ⚙️ Brew Settings (Brew/Lab Mode만)
-    ↓ (Lab Mode만) 
+    ↓ (Lab Mode만)
 🔬 Experimental Data (Lab Mode만)
     ↓
 🎯 Flavor Selection
@@ -28,6 +29,7 @@
 ## 📄 상세 페이지 구조
 
 ### **1. Mode Selection (모드 선택)**
+
 - **ID**: `mode-selection`
 - **Purpose**: 사용자 의도에 따른 테이스팅 모드 선택
 - **Components**:
@@ -37,17 +39,19 @@
 - **Navigation**: `selectMode(type)` → Coffee Info
 
 ### **2. Coffee Info (커피 정보)**
+
 - **ID**: `coffee-info`
 - **Purpose**: 기본 커피 정보 입력
 - **Components**:
   - Screen Header (뒤로가기, 제목, 진행률 29%)
   - 기본 정보: 카페명, 커피명, 온도선택
   - 상세 정보 (접힘): 원산지, 품종, 가공방식, 로스팅
-- **Navigation**: 
+- **Navigation**:
   - `goBack()` → Mode Selection
   - `nextFromCoffeeInfo()` → Brew Settings (Brew/Lab) | Flavor Selection (Cafe)
 
 ### **3. Brew Settings (추출 설정)**
+
 - **ID**: `brew-settings`
 - **Purpose**: Brew/Lab 모드 추출 설정
 - **Components**:
@@ -61,6 +65,7 @@
   - `nextFromBrewSettings()` → Experimental Data (Lab) | Flavor Selection (Brew)
 
 ### **4. Experimental Data (실험 데이터)**
+
 - **ID**: `experimental-data`
 - **Purpose**: Lab 모드 전용 상세 실험 데이터
 - **Components**:
@@ -73,6 +78,7 @@
   - `nextFromExperimentalData()` → Flavor Selection
 
 ### **5. Flavor Selection (향미 선택)**
+
 - **ID**: `flavor-selection`
 - **Purpose**: 카테고리별 향미 태그 선택 (최대 5개)
 - **Components**:
@@ -84,6 +90,7 @@
   - `nextFromFlavorSelection()` → Sensory Mouthfeel (Lab) | Sensory Expression (Cafe/Brew)
 
 ### **6. Sensory Mouthfeel (감각 평가)**
+
 - **ID**: `sensory-mouthfeel`
 - **Purpose**: Lab 모드 전용 6개 파라미터 정량 평가
 - **Components**:
@@ -95,6 +102,7 @@
   - `nextFromSensoryMouthfeel()` → Sensory Expression
 
 ### **7. Sensory Expression (감각 표현)**
+
 - **ID**: `sensory-expression`
 - **Purpose**: 한국식 감각 표현 선택
 - **Components**:
@@ -106,6 +114,7 @@
   - `nextFromSensoryExpression()` → Personal Notes
 
 ### **8. Personal Notes (개인 메모)**
+
 - **ID**: `personal-notes`
 - **Purpose**: 개인적인 기록 및 메모
 - **Components**:
@@ -119,6 +128,7 @@
   - `skipPersonalNotes()` → Roaster Notes
 
 ### **9. Roaster Notes (로스터 노트)**
+
 - **ID**: `roaster-notes`
 - **Purpose**: 공식 테이스팅 노트 입력 및 매칭
 - **Components**:
@@ -132,6 +142,7 @@
   - `skipRoasterNotes()` → Result
 
 ### **10. Result (결과 화면)**
+
 - **ID**: `result`
 - **Purpose**: 테이스팅 결과 표시 및 액션
 - **Components**:
@@ -147,6 +158,7 @@
 ## 🧭 네비게이션 패턴
 
 ### **공통 네비게이션 요소**
+
 - **뒤로가기 버튼** (`←`): 모든 화면 (첫 화면 제외)
 - **진행률 바**: 전체 과정 대비 현재 위치 표시
 - **다음 버튼**: 필수 입력 완료 시 활성화
@@ -154,37 +166,46 @@
 ### **모드별 화면 플로우**
 
 #### **Cafe Mode (간편 모드)**
+
 ```
 Mode Selection → Coffee Info → Flavor Selection → Sensory Expression → Personal Notes → Roaster Notes → Result
 ```
+
 - **건너뛰는 화면**: Brew Settings, Experimental Data, Sensory Mouthfeel
 - **소요시간**: 3-5분
 
 #### **Brew Mode (홈브루 모드)**
+
 ```
 Mode Selection → Coffee Info → Brew Settings → Flavor Selection → Sensory Expression → Personal Notes → Roaster Notes → Result
 ```
+
 - **건너뛰는 화면**: Experimental Data, Sensory Mouthfeel
 - **소요시간**: 5-8분
 
 #### **Lab Mode (전문가 모드)**
+
 ```
 Mode Selection → Coffee Info → Brew Settings → Experimental Data → Flavor Selection → Sensory Mouthfeel → Sensory Expression → Personal Notes → Roaster Notes → Result
 ```
+
 - **모든 화면 포함**
 - **소요시간**: 8-12분
 
 ### **상태 관리**
+
 - **현재 화면**: `.screen.active` 클래스로 표시
 - **데이터 저장**: 각 단계별 JavaScript 객체에 저장
 - **진행률 계산**: 모드별 총 단계 대비 현재 위치
 
 ### **반응형 설계**
+
 - **모바일 컨테이너**: `.mobile-container`로 스마트폰 뷰포트 시뮬레이션
 - **터치 최적화**: 버튼 크기, 간격 모바일 기준
 - **스크롤 최적화**: 긴 화면은 세로 스크롤 지원
 
 ## 🎨 UI/UX 설계 원칙
+
 - **단계별 진행**: 한 번에 하나의 작업만 집중
 - **시각적 피드백**: 선택 상태, 진행률 명확 표시
 - **직관적 아이콘**: 텍스트 없이도 이해 가능한 아이콘 사용

@@ -1,6 +1,6 @@
 /**
  * Mode-Based Attribute Mapping System
- * 
+ *
  * This module provides attribute configurations for different tasting modes
  * to ensure each mode has appropriate sensory evaluation criteria.
  */
@@ -18,7 +18,7 @@ export const cafeAttributes = [
     max: 5,
     step: 0.5,
     unit: '',
-    color: '#FFB74D'
+    color: '#FFB74D',
   },
   {
     key: 'bitterness',
@@ -29,7 +29,7 @@ export const cafeAttributes = [
     max: 5,
     step: 0.5,
     unit: '',
-    color: '#8D6E63'
+    color: '#8D6E63',
   },
   {
     key: 'acidity',
@@ -40,7 +40,7 @@ export const cafeAttributes = [
     max: 5,
     step: 0.5,
     unit: '',
-    color: '#FFC107'
+    color: '#FFC107',
   },
   {
     key: 'body',
@@ -51,7 +51,7 @@ export const cafeAttributes = [
     max: 5,
     step: 0.5,
     unit: '',
-    color: '#A1887F'
+    color: '#A1887F',
   },
   {
     key: 'aroma',
@@ -62,7 +62,7 @@ export const cafeAttributes = [
     max: 5,
     step: 0.5,
     unit: '',
-    color: '#E1BEE7'
+    color: '#E1BEE7',
   },
   {
     key: 'aftertaste',
@@ -73,8 +73,8 @@ export const cafeAttributes = [
     max: 5,
     step: 0.5,
     unit: '',
-    color: '#B39DDB'
-  }
+    color: '#B39DDB',
+  },
 ]
 
 /**
@@ -90,7 +90,7 @@ export const homeCafeAttributes = [
     max: 10,
     step: 0.5,
     unit: '',
-    color: '#FFB74D'
+    color: '#FFB74D',
   },
   {
     key: 'acidity',
@@ -101,7 +101,7 @@ export const homeCafeAttributes = [
     max: 10,
     step: 0.5,
     unit: '',
-    color: '#FFC107'
+    color: '#FFC107',
   },
   {
     key: 'bitterness',
@@ -112,7 +112,7 @@ export const homeCafeAttributes = [
     max: 10,
     step: 0.5,
     unit: '',
-    color: '#8D6E63'
+    color: '#8D6E63',
   },
   {
     key: 'body',
@@ -123,7 +123,7 @@ export const homeCafeAttributes = [
     max: 10,
     step: 0.5,
     unit: '',
-    color: '#A1887F'
+    color: '#A1887F',
   },
   {
     key: 'aroma',
@@ -134,7 +134,7 @@ export const homeCafeAttributes = [
     max: 10,
     step: 0.5,
     unit: '',
-    color: '#E1BEE7'
+    color: '#E1BEE7',
   },
   {
     key: 'flavor',
@@ -145,7 +145,7 @@ export const homeCafeAttributes = [
     max: 10,
     step: 0.5,
     unit: '',
-    color: '#81C784'
+    color: '#81C784',
   },
   {
     key: 'aftertaste',
@@ -156,7 +156,7 @@ export const homeCafeAttributes = [
     max: 10,
     step: 0.5,
     unit: '',
-    color: '#B39DDB'
+    color: '#B39DDB',
   },
   {
     key: 'balance',
@@ -167,8 +167,8 @@ export const homeCafeAttributes = [
     max: 10,
     step: 0.5,
     unit: '',
-    color: '#4FC3F7'
-  }
+    color: '#4FC3F7',
+  },
 ]
 
 /**
@@ -186,7 +186,7 @@ export const proAttributes = [
     unit: 'pts',
     color: '#E1BEE7',
     scaStandard: true,
-    weight: 15
+    weight: 15,
   },
   {
     key: 'flavor',
@@ -199,7 +199,7 @@ export const proAttributes = [
     unit: 'pts',
     color: '#81C784',
     scaStandard: true,
-    weight: 15
+    weight: 15,
   },
   {
     key: 'aftertaste',
@@ -212,7 +212,7 @@ export const proAttributes = [
     unit: 'pts',
     color: '#B39DDB',
     scaStandard: true,
-    weight: 15
+    weight: 15,
   },
   {
     key: 'acidity',
@@ -225,7 +225,7 @@ export const proAttributes = [
     unit: 'pts',
     color: '#FFC107',
     scaStandard: true,
-    weight: 15
+    weight: 15,
   },
   {
     key: 'body',
@@ -238,7 +238,7 @@ export const proAttributes = [
     unit: 'pts',
     color: '#A1887F',
     scaStandard: true,
-    weight: 15
+    weight: 15,
   },
   {
     key: 'balance',
@@ -251,7 +251,7 @@ export const proAttributes = [
     unit: 'pts',
     color: '#4FC3F7',
     scaStandard: true,
-    weight: 15
+    weight: 15,
   },
   {
     key: 'uniformity',
@@ -264,7 +264,7 @@ export const proAttributes = [
     unit: 'pts',
     color: '#90A4AE',
     scaStandard: true,
-    weight: 10
+    weight: 10,
   },
   {
     key: 'clean_cup',
@@ -277,7 +277,7 @@ export const proAttributes = [
     unit: 'pts',
     color: '#26C6DA',
     scaStandard: true,
-    weight: 10
+    weight: 10,
   },
   {
     key: 'sweetness',
@@ -290,7 +290,7 @@ export const proAttributes = [
     unit: 'pts',
     color: '#FFB74D',
     scaStandard: true,
-    weight: 10
+    weight: 10,
   },
   {
     key: 'overall',
@@ -303,8 +303,8 @@ export const proAttributes = [
     unit: 'pts',
     color: '#FF7043',
     scaStandard: true,
-    weight: 15
-  }
+    weight: 15,
+  },
 ]
 
 /**
@@ -341,7 +341,7 @@ export function getModeConfig(mode) {
       showTotal: false,
       colorScheme: 'warm',
       icon: '☕',
-      description: '카페에서 즐기는 커피를 간단하게 평가하는 모드입니다.'
+      description: '카페에서 즐기는 커피를 간단하게 평가하는 모드입니다.',
     },
     homecafe: {
       title: 'Home Cafe 모드 평가',
@@ -352,7 +352,7 @@ export function getModeConfig(mode) {
       showTotal: true,
       colorScheme: 'balanced',
       icon: '🏠',
-      description: '홈카페에서 더 자세한 분석을 통해 커피를 평가하는 모드입니다.'
+      description: '홈카페에서 더 자세한 분석을 통해 커피를 평가하는 모드입니다.',
     },
     pro: {
       title: 'Pro 모드 평가 (SCA 기준)',
@@ -364,10 +364,10 @@ export function getModeConfig(mode) {
       showScaScore: true,
       colorScheme: 'professional',
       icon: '🎯',
-      description: 'SCA(Specialty Coffee Association) 표준에 따른 전문가급 커피 평가 모드입니다.'
-    }
+      description: 'SCA(Specialty Coffee Association) 표준에 따른 전문가급 커피 평가 모드입니다.',
+    },
   }
-  
+
   return configs[mode] || configs.homecafe
 }
 
@@ -382,37 +382,37 @@ export function calculateScaScore(scores) {
       total: 0,
       grade: 'N/A',
       classification: '평가 없음',
-      color: '#9E9E9E'
+      color: '#9E9E9E',
     }
   }
-  
+
   const attributes = proAttributes
   let weightedTotal = 0
   let totalWeight = 0
-  
-  attributes.forEach(attr => {
+
+  attributes.forEach((attr) => {
     const score = scores[attr.key]
     if (score && score > 0) {
       weightedTotal += score * attr.weight
       totalWeight += attr.weight
     }
   })
-  
+
   if (totalWeight === 0) {
     return {
       total: 0,
       grade: 'N/A',
       classification: '평가 없음',
-      color: '#9E9E9E'
+      color: '#9E9E9E',
     }
   }
-  
+
   const finalScore = (weightedTotal / totalWeight).toFixed(2)
   const numericScore = parseFloat(finalScore)
-  
+
   // SCA grading system
   let grade, classification, color
-  
+
   if (numericScore >= 9.0) {
     grade = 'Outstanding'
     classification = '탁월함'
@@ -442,7 +442,7 @@ export function calculateScaScore(scores) {
     classification: '낮음'
     color = '#D32F2F'
   }
-  
+
   return {
     total: finalScore,
     grade,
@@ -451,8 +451,8 @@ export function calculateScaScore(scores) {
     breakdown: {
       weightedTotal: weightedTotal.toFixed(2),
       totalWeight,
-      averageScore: (weightedTotal / totalWeight).toFixed(2)
-    }
+      averageScore: (weightedTotal / totalWeight).toFixed(2),
+    },
   }
 }
 
@@ -467,22 +467,22 @@ export function getColorScheme(scheme) {
       primary: '#7C5842',
       secondary: '#A0796A',
       accent: '#FFB74D',
-      background: '#FFF8F0'
+      background: '#FFF8F0',
     },
     balanced: {
       primary: '#4CAF50',
       secondary: '#66BB6A',
       accent: '#81C784',
-      background: '#F1F8E9'
+      background: '#F1F8E9',
     },
     professional: {
       primary: '#1976D2',
       secondary: '#42A5F5',
       accent: '#2196F3',
-      background: '#E3F2FD'
-    }
+      background: '#E3F2FD',
+    },
   }
-  
+
   return schemes[scheme] || schemes.balanced
 }
 
@@ -496,13 +496,13 @@ export function validateScores(scores, mode) {
   const attributes = getAttributesForMode(mode)
   const errors = {}
   let isValid = true
-  
-  attributes.forEach(attr => {
+
+  attributes.forEach((attr) => {
     const score = scores[attr.key]
-    
+
     if (score !== undefined && score !== null && score !== '') {
       const numScore = parseFloat(score)
-      
+
       if (isNaN(numScore)) {
         errors[attr.key] = '유효한 숫자를 입력하세요'
         isValid = false
@@ -512,7 +512,7 @@ export function validateScores(scores, mode) {
       }
     }
   })
-  
+
   return { isValid, errors }
 }
 
@@ -525,26 +525,26 @@ export function validateScores(scores, mode) {
  */
 export function convertScoresBetweenModes(scores, fromMode, toMode) {
   if (fromMode === toMode) return scores
-  
+
   const fromAttributes = getAttributesForMode(fromMode)
   const toAttributes = getAttributesForMode(toMode)
   const convertedScores = {}
-  
+
   // Find matching attributes and convert scale
-  toAttributes.forEach(toAttr => {
-    const fromAttr = fromAttributes.find(attr => attr.key === toAttr.key)
-    
+  toAttributes.forEach((toAttr) => {
+    const fromAttr = fromAttributes.find((attr) => attr.key === toAttr.key)
+
     if (fromAttr && scores[fromAttr.key] !== undefined) {
       const originalScore = parseFloat(scores[fromAttr.key])
-      
+
       // Convert scale: normalize to 0-1, then scale to target range
       const normalized = (originalScore - fromAttr.min) / (fromAttr.max - fromAttr.min)
       const converted = normalized * (toAttr.max - toAttr.min) + toAttr.min
-      
+
       convertedScores[toAttr.key] = parseFloat(converted.toFixed(2))
     }
   })
-  
+
   return convertedScores
 }
 
@@ -556,13 +556,13 @@ export function convertScoresBetweenModes(scores, fromMode, toMode) {
 export function getDefaultScores(mode) {
   const attributes = getAttributesForMode(mode)
   const defaultScores = {}
-  
-  attributes.forEach(attr => {
+
+  attributes.forEach((attr) => {
     // Set default to middle value for most attributes
     const midValue = (attr.min + attr.max) / 2
     defaultScores[attr.key] = parseFloat(midValue.toFixed(2))
   })
-  
+
   return defaultScores
 }
 
@@ -576,5 +576,5 @@ export default {
   getDefaultScores,
   cafeAttributes,
   homeCafeAttributes,
-  proAttributes
+  proAttributes,
 }

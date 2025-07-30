@@ -14,71 +14,71 @@ interface CrossPlatformTokenSystem {
   // 공통 디자인 토큰 (모든 플랫폼 공유)
   universal: {
     colors: {
-      primary: '#4F46E5',
-      success: '#10B981',
-      error: '#EF4444',
+      primary: '#4F46E5'
+      success: '#10B981'
+      error: '#EF4444'
       warning: '#F59E0B'
-    },
+    }
     spacing: {
-      xs: 4,
-      sm: 8,
-      md: 16,
-      lg: 24,
+      xs: 4
+      sm: 8
+      md: 16
+      lg: 24
       xl: 32
-    },
+    }
     typography: {
-      fontSizes: [12, 14, 16, 18, 20, 24, 30, 36],
+      fontSizes: [12, 14, 16, 18, 20, 24, 30, 36]
       fontWeights: [300, 400, 500, 600, 700]
     }
-  };
+  }
 
   // 플랫폼별 토큰 매핑
   platform: {
     web: {
       colors: {
-        primary: 'var(--color-primary)',
+        primary: 'var(--color-primary)'
         primaryHover: 'var(--color-primary-hover)'
-      },
+      }
       spacing: {
-        xs: '0.25rem',
-        sm: '0.5rem',
+        xs: '0.25rem'
+        sm: '0.5rem'
         md: '1rem'
-      },
+      }
       typography: {
         fontFamily: 'system-ui, -apple-system, sans-serif'
       }
-    },
+    }
 
     ios: {
       colors: {
-        primary: 'UIColor(named: "PrimaryColor")',
+        primary: 'UIColor(named: "PrimaryColor")'
         primaryHover: 'UIColor(named: "PrimaryColorPressed")'
-      },
+      }
       spacing: {
-        xs: '4',
-        sm: '8',
+        xs: '4'
+        sm: '8'
         md: '16'
-      },
+      }
       typography: {
         fontFamily: '.SF UI Text'
       }
-    },
+    }
 
     android: {
       colors: {
-        primary: '@color/primary',
+        primary: '@color/primary'
         primaryHover: '@color/primary_pressed'
-      },
+      }
       spacing: {
-        xs: '4dp',
-        sm: '8dp',
+        xs: '4dp'
+        sm: '8dp'
         md: '16dp'
-      },
+      }
       typography: {
         fontFamily: 'Roboto'
       }
     }
-  };
+  }
 }
 ```
 
@@ -96,26 +96,26 @@ class PlatformDesignMapper {
           baseStyles: 'px-4 py-2 rounded-lg font-medium transition-colors',
           variants: {
             primary: 'bg-blue-600 text-white hover:bg-blue-700',
-            secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300'
-          }
+            secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300',
+          },
         },
 
         ios: {
           element: 'UIButton',
           baseStyles: {
             cornerRadius: 8,
-            titleLabelFont: '.systemFont(ofSize: 16, weight: .medium)'
+            titleLabelFont: '.systemFont(ofSize: 16, weight: .medium)',
           },
           variants: {
             primary: {
               backgroundColor: 'UIColor.systemBlue',
-              titleColor: 'UIColor.white'
+              titleColor: 'UIColor.white',
             },
             secondary: {
               backgroundColor: 'UIColor.systemGray5',
-              titleColor: 'UIColor.label'
-            }
-          }
+              titleColor: 'UIColor.label',
+            },
+          },
         },
 
         android: {
@@ -123,47 +123,48 @@ class PlatformDesignMapper {
           baseStyles: {
             cornerRadius: '8dp',
             textSize: '16sp',
-            textStyle: 'bold'
+            textStyle: 'bold',
           },
           variants: {
             primary: {
               backgroundTint: '@color/primary',
-              textColor: '@color/onPrimary'
+              textColor: '@color/onPrimary',
             },
             secondary: {
               style: '@style/Widget.MaterialComponents.Button.OutlinedButton',
-              strokeColor: '@color/primary'
-            }
-          }
-        }
+              strokeColor: '@color/primary',
+            },
+          },
+        },
       },
 
       // Input 컴포넌트 매핑
       Input: {
         web: {
           element: 'input',
-          baseStyles: 'px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500'
+          baseStyles:
+            'px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500',
         },
 
         ios: {
           element: 'UITextField',
           baseStyles: {
             borderStyle: '.roundedRect',
-            font: '.systemFont(ofSize: 16)'
-          }
+            font: '.systemFont(ofSize: 16)',
+          },
         },
 
         android: {
           element: 'TextInputLayout + TextInputEditText',
           baseStyles: {
             style: '@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox',
-            textSize: '16sp'
-          }
-        }
-      }
-    };
+            textSize: '16sp',
+          },
+        },
+      },
+    }
 
-    return mappings[component.type]?.[targetPlatform];
+    return mappings[component.type]?.[targetPlatform]
   }
 }
 ```
@@ -290,8 +291,8 @@ const AccessibleWebComponents = {
         </div>
       </div>
     </div>
-  `
-};
+  `,
+}
 ```
 
 ### 웹 성능 최적화
@@ -363,8 +364,8 @@ const PerformantWebPatterns = {
         </div>
       );
     };
-  `
-};
+  `,
+}
 ```
 
 ## iOS 플랫폼 최적화
@@ -944,70 +945,68 @@ enum class ButtonSize {
 
 ```javascript
 // style-dictionary.config.js - 크로스 플랫폼 토큰 생성
-const StyleDictionary = require('style-dictionary');
+const StyleDictionary = require('style-dictionary')
 
 // Web CSS 변수 생성
 StyleDictionary.registerFormat({
   name: 'css/variables',
-  formatter: function(dictionary) {
+  formatter: function (dictionary) {
     return `:root {\n${dictionary.allTokens
       .map(token => `  --${token.name}: ${token.value};`)
-      .join('\n')}\n}`;
-  }
-});
+      .join('\n')}\n}`
+  },
+})
 
 // iOS Swift 상수 생성
 StyleDictionary.registerFormat({
   name: 'ios/swift/class',
-  formatter: function(dictionary) {
+  formatter: function (dictionary) {
     const tokens = dictionary.allTokens
       .map(token => {
-        const value = token.type === 'color'
-          ? `Color("${token.name}")`
-          : `${token.value}`;
-        return `    static let ${token.name} = ${value}`;
+        const value = token.type === 'color' ? `Color("${token.name}")` : `${token.value}`
+        return `    static let ${token.name} = ${value}`
       })
-      .join('\n');
+      .join('\n')
 
-    return `import SwiftUI\n\nstruct DesignTokens {\n${tokens}\n}`;
-  }
-});
+    return `import SwiftUI\n\nstruct DesignTokens {\n${tokens}\n}`
+  },
+})
 
 // Android XML 리소스 생성
 StyleDictionary.registerFormat({
   name: 'android/xml',
-  formatter: function(dictionary) {
+  formatter: function (dictionary) {
     const colorTokens = dictionary.allTokens
       .filter(token => token.type === 'color')
       .map(token => `    <color name="${token.name}">${token.value}</color>`)
-      .join('\n');
+      .join('\n')
 
     const dimenTokens = dictionary.allTokens
       .filter(token => token.type === 'dimension')
       .map(token => `    <dimen name="${token.name}">${token.value}dp</dimen>`)
-      .join('\n');
+      .join('\n')
 
-    return `<?xml version="1.0" encoding="UTF-8"?>\n<resources>\n${colorTokens}\n${dimenTokens}\n</resources>`;
-  }
-});
+    return `<?xml version="1.0" encoding="UTF-8"?>\n<resources>\n${colorTokens}\n${dimenTokens}\n</resources>`
+  },
+})
 
 // Kotlin Compose 상수 생성
 StyleDictionary.registerFormat({
   name: 'android/compose/tokens',
-  formatter: function(dictionary) {
+  formatter: function (dictionary) {
     const colorTokens = dictionary.allTokens
       .filter(token => token.type === 'color')
       .map(token => `    val ${token.name} = Color(${token.value.replace('#', '0xFF')})`)
-      .join('\n');
+      .join('\n')
 
     const spacingTokens = dictionary.allTokens
       .filter(token => token.type === 'dimension')
       .map(token => `    val ${token.name} = ${token.value}.dp`)
-      .join('\n');
+      .join('\n')
 
-    return `package com.example.designsystem\n\nimport androidx.compose.ui.graphics.Color\nimport androidx.compose.ui.unit.dp\n\nobject DesignTokens {\n${colorTokens}\n${spacingTokens}\n}`;
-  }
-});
+    return `package com.example.designsystem\n\nimport androidx.compose.ui.graphics.Color\nimport androidx.compose.ui.unit.dp\n\nobject DesignTokens {\n${colorTokens}\n${spacingTokens}\n}`
+  },
+})
 
 module.exports = {
   source: ['tokens/**/*.json'],
@@ -1015,18 +1014,22 @@ module.exports = {
     web: {
       transformGroup: 'web',
       buildPath: 'dist/web/',
-      files: [{
-        destination: 'tokens.css',
-        format: 'css/variables'
-      }]
+      files: [
+        {
+          destination: 'tokens.css',
+          format: 'css/variables',
+        },
+      ],
     },
     ios: {
       transformGroup: 'ios',
       buildPath: 'dist/ios/',
-      files: [{
-        destination: 'DesignTokens.swift',
-        format: 'ios/swift/class'
-      }]
+      files: [
+        {
+          destination: 'DesignTokens.swift',
+          format: 'ios/swift/class',
+        },
+      ],
     },
     android: {
       transformGroup: 'android',
@@ -1035,25 +1038,27 @@ module.exports = {
         {
           destination: 'colors.xml',
           format: 'android/xml',
-          filter: token => token.type === 'color'
+          filter: token => token.type === 'color',
         },
         {
           destination: 'dimens.xml',
           format: 'android/xml',
-          filter: token => token.type === 'dimension'
-        }
-      ]
+          filter: token => token.type === 'dimension',
+        },
+      ],
     },
     compose: {
       transformGroup: 'compose',
       buildPath: 'dist/android/compose/',
-      files: [{
-        destination: 'DesignTokens.kt',
-        format: 'android/compose/tokens'
-      }]
-    }
-  }
-};
+      files: [
+        {
+          destination: 'DesignTokens.kt',
+          format: 'android/compose/tokens',
+        },
+      ],
+    },
+  },
+}
 ```
 
 ## SuperClaude 크로스 플랫폼 명령어
