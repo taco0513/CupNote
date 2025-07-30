@@ -110,8 +110,19 @@
 
     <!-- Loading State -->
     <section v-else-if="isLoading" class="loading-state">
-      <div class="loading-spinner"></div>
-      <p class="loading-text">기록을 불러오는 중...</p>
+      <!-- Loading Statistics Cards -->
+      <div class="stats-cards">
+        <SkeletonLoader type="card" v-for="i in 3" :key="i" />
+      </div>
+      
+      <!-- Loading Records Grid -->
+      <div class="records-grid">
+        <SkeletonLoader type="card" v-for="i in 6" :key="i" />
+      </div>
+      
+      <div class="loading-message">
+        <LoadingSpinner size="medium" message="기록을 불러오는 중..." />
+      </div>
     </section>
 
     <!-- Error State -->
@@ -135,9 +146,13 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTastingSessionStore } from '../stores/tastingSession'
+import LoadingSpinner from '../components/LoadingSpinner.vue'
+import SkeletonLoader from '../components/SkeletonLoader.vue'
+import { useErrorHandler } from '../composables/useErrorHandler'
 
 const router = useRouter()
 const tastingSessionStore = useTastingSessionStore()
+const { withErrorHandling } = useErrorHandler()
 
 // State
 const sortBy = ref('recent')
@@ -224,14 +239,24 @@ const startNewTasting = () => {
 const retry = async () => {
   // TODO: Get real user ID from auth
   const mockUserId = 'mock-user-id-123'
-  await tastingSessionStore.fetchUserRecords(mockUserId)
+  await withErrorHandling(async () => {
+    await tastingSessionStore.fetchUserRecords(mockUserId)
+  }, {
+    operation: 'retryFetchRecords',
+    component: 'RecordsListView'
+  })
 }
 
 // Initialize
 onMounted(async () => {
   // TODO: Get real user ID from auth
   const mockUserId = 'mock-user-id-123'
-  await tastingSessionStore.fetchUserRecords(mockUserId)
+  await withErrorHandling(async () => {
+    await tastingSessionStore.fetchUserRecords(mockUserId)
+  }, {
+    operation: 'fetchRecords',
+    component: 'RecordsListView'
+  })
 })
 </script>
 
@@ -533,18 +558,14 @@ onMounted(async () => {
   padding: 4rem 2rem;
 }
 
-.loading-spinner {
-  width: 50px;
-  height: 50px;
-  border: 3px solid #E8D5C4;
-  border-top-color: #7C5842;
-  border-radius: 50%;
-  margin: 0 auto 1rem;
-  animation: spin 1s linear infinite;
-}
+/* Loading state styles handled by LoadingSpinner component */
 
-.loading-text {
-  color: #A0796A;
+.loading-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  padding: 1rem;
 }
 
 /* Error State */

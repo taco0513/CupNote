@@ -214,8 +214,29 @@ export const useTastingSessionStore = defineStore('tastingSession', () => {
   
   // Save current session
   const saveCurrentSession = async (userId: string) => {
-    if (!currentSession.value.coffeeInfo || !currentSession.value.mode) {
-      throw new Error('Incomplete session data')
+    // Validate required fields
+    const validationErrors = []
+    
+    if (!currentSession.value.mode) {
+      validationErrors.push('테이스팅 모드가 선택되지 않았습니다')
+    }
+    
+    if (!currentSession.value.coffeeInfo?.coffee_name) {
+      validationErrors.push('커피 이름이 입력되지 않았습니다')
+    }
+    
+    if (!currentSession.value.coffeeInfo?.cafe_name) {
+      validationErrors.push('카페 이름이 입력되지 않았습니다')
+    }
+    
+    if (!currentSession.value.selectedFlavors || currentSession.value.selectedFlavors.length === 0) {
+      validationErrors.push('향미를 하나 이상 선택해주세요')
+    }
+    
+    if (validationErrors.length > 0) {
+      const errorMessage = validationErrors.join(', ')
+      error.value = errorMessage
+      throw new Error(errorMessage)
     }
     
     try {

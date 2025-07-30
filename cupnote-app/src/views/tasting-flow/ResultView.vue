@@ -127,21 +127,26 @@
     <section class="community-section">
       <h3 class="community-title">📊 다른 사람들의 선택</h3>
       <div class="community-card">
-        <div class="community-stats">
-          <div class="stat-item">
-            <span class="stat-number">{{ communityData.totalUsers }}</span>
-            <span class="stat-label">명이 기록함</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-number">{{ communityData.averageScore }}</span>
-            <span class="stat-label">평균 점수</span>
-          </div>
+        <div v-if="isLoadingStats" class="community-loading">
+          <LoadingSpinner size="small" message="통계 데이터 로딩 중..." />
         </div>
-        <div class="community-comparison">
-          <p class="comparison-text">
-            {{ communityComparisonMessage }}
-          </p>
-        </div>
+        <template v-else>
+          <div class="community-stats">
+            <div class="stat-item">
+              <span class="stat-number">{{ communityData.totalUsers }}</span>
+              <span class="stat-label">명이 기록함</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">{{ communityData.averageScore }}</span>
+              <span class="stat-label">평균 점수</span>
+            </div>
+          </div>
+          <div class="community-comparison">
+            <p class="comparison-text">
+              {{ communityComparisonMessage }}
+            </p>
+          </div>
+        </template>
       </div>
     </section>
 
@@ -171,13 +176,21 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTastingSessionStore } from '../../stores/tastingSession'
+import LoadingSpinner from '../../components/LoadingSpinner.vue'
+import { useErrorHandler } from '../../composables/useErrorHandler'
+import { useNotificationStore } from '../../stores/notification'
 
 const router = useRouter()
 const tastingSessionStore = useTastingSessionStore()
+const { handleError, withErrorHandling } = useErrorHandler()
+const notificationStore = useNotificationStore()
 
 // State
 const showAchievement = ref(false)
 const achievementMessage = ref('')
+const isSaving = ref(false)
+const saveError = ref(null)
+const isLoadingStats = ref(false)
 
 // Get data from store
 const currentSession = computed(() => tastingSessionStore.currentSession)
@@ -286,19 +299,33 @@ onMounted(async () => {
   const mockUserId = 'mock-user-id-123'
   
   try {
-    // Save the coffee record
-    const savedRecord = await tastingSessionStore.saveCurrentSession(mockUserId)
-    console.log('Coffee record saved:', savedRecord)
+    // Save the coffee record with error handling
+    await withErrorHandling(async () => {
+      const savedRecord = await tastingSessionStore.saveCurrentSession(mockUserId)
+      console.log('Coffee record saved:', savedRecord)
+    }, {
+      operation: 'saveResult',
+      component: 'ResultView'
+    })
     
-    // Get coffee statistics
-    const stats = await tastingSessionStore.getCoffeeStatistics(currentSession.value.coffeeInfo?.coffee_name)
-    if (stats) {
-      communityData.value.totalUsers = stats.total_records
-      communityData.value.averageScore = Math.round(stats.average_score)
-    }
+    // Get coffee statistics with separate error handling
+    await withErrorHandling(async () => {
+      isLoadingStats.value = true
+      const stats = await tastingSessionStore.getCoffeeStatistics(currentSession.value.coffeeInfo?.coffee_name)
+      if (stats) {
+        communityData.value.totalUsers = stats.total_records
+        communityData.value.averageScore = Math.round(stats.average_score)
+      }
+    }, {
+      operation: 'loadStats',
+      component: 'ResultView',
+      showNotification: false // Don't show notification for stats failures
+    })
   } catch (error) {
+    // Error already handled by withErrorHandling
     console.error('Failed to save coffee record:', error)
-    // Still show the result even if save fails
+  } finally {
+    isLoadingStats.value = false
   }
   
   // Show achievement popup for first-time or high score
@@ -702,6 +729,14 @@ onMounted(async () => {
   margin: 0;
   color: #666;
   font-weight: 500;
+}
+
+.community-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100px;
+  padding: 1rem;
 }
 
 /* Action Buttons */

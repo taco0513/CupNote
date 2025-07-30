@@ -21,7 +21,7 @@
             <h2 class="summary-title">SCA 품질 분석 종합 리포트</h2>
             <p class="summary-subtitle">{{ getCurrentDateTime() }}</p>
             <div class="coffee-info">
-              <span class="coffee-name">{{ coffeeInfo.name || '커피명 없음' }}</span>
+              <span class="coffee-name">{{ coffeeInfo.coffee_name || '커피명 없음' }}</span>
               <span class="coffee-origin">{{ coffeeInfo.origin || '원산지 미기록' }}</span>
             </div>
           </div>
@@ -302,13 +302,13 @@ const showExportMenu = ref(false)
 
 // Get data from store
 const currentSession = computed(() => tastingSessionStore.currentSession)
-const proBrewingData = computed(() => currentSession.value.proBrewingData || {})
+const proBrewingData = computed(() => currentSession.value.experimentalData || {})
 const qcMeasurementData = computed(() => currentSession.value.qcMeasurementData || {})
 const coffeeInfo = computed(() => currentSession.value.coffeeInfo || {})
 
 // Coffee Information
 const coffeeAmount = computed(() => {
-  return currentSession.value.homeCafeData?.recipe?.coffee_amount || 20
+  return currentSession.value.brewSettings?.recipe?.coffee_amount || 20
 })
 
 // Pro Brewing Data
