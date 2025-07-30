@@ -283,6 +283,8 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTastingSessionStore } from '../../stores/tastingSession'
+import ProBrewingChart from '../../components/pro/ProBrewingChart.vue'
+import ProModeStepper from '../../components/pro/ProModeStepper.vue'
 
 const router = useRouter()
 const tastingSessionStore = useTastingSessionStore()
