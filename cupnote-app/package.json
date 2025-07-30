@@ -26,6 +26,8 @@
     "@capacitor/core": "^7.4.2",
     "@capacitor/ios": "^7.4.2",
     "@supabase/supabase-js": "^2.53.0",
+    "chart.js": "^4.5.0",
+    "chartjs-adapter-date-fns": "^3.0.0",
     "pinia": "^3.0.3",
     "vue": "^3.5.18",
     "vue-router": "^4.5.1"

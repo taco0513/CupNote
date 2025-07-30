@@ -156,37 +156,37 @@ const showDemo = () => {
   // Master Playbook의 Vibe Coding 방법론을 활용한 인터랙티브 데모
   const demoSequence = [
     {
-      type: 'coffee' as const,
+      type: 'coffee',
       title: '☕ CupNote 데모 시작',
       message: '실제 커피 테이스팅 과정을 체험해보세요!',
       duration: 3000
     },
     {
-      type: 'info' as const,
+      type: 'info',
       title: '1단계: 커피 정보',
       message: '카페명과 커피 이름을 입력합니다',
       duration: 4000
     },
     {
-      type: 'tip' as const,
+      type: 'tip',
       title: '2단계: 향미 선택',
       message: '느껴지는 향과 맛을 자유롭게 선택하세요',
       duration: 4000
     },
     {
-      type: 'coffee' as const,
+      type: 'coffee',
       title: '3단계: 감각 표현',
       message: '산미, 단맛, 바디감 등을 슬라이더로 표현합니다',
       duration: 4000
     },
     {
-      type: 'achievement' as const,
+      type: 'achievement',
       title: '🎯 매치 결과',
       message: '로스터 의도와 85% 일치! 훌륭한 감각입니다',
       duration: 5000
     },
     {
-      type: 'success' as const,
+      type: 'success',
       title: '데모 완료!',
       message: '지금 바로 실제 테이스팅을 시작해보세요',
       duration: 4000

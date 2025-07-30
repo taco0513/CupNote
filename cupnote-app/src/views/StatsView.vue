@@ -123,56 +123,23 @@
         <div class="chart-card">
           <h3 class="chart-title">점수 추이</h3>
           <div class="chart-container">
-            <div class="simple-line-chart">
-              <div 
-                v-for="(point, index) in scoreChartData" 
-                :key="index"
-                class="chart-point"
-                :style="{ 
-                  left: `${(index / (scoreChartData.length - 1)) * 100}%`,
-                  bottom: `${(point.score / 100) * 100}%`
-                }"
-                :title="`${point.date}: ${point.score}점`"
-              >
-                <div class="point-dot"></div>
-                <div class="point-label">{{ point.score }}</div>
-              </div>
-              <!-- Connect lines -->
-              <svg class="chart-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <polyline
-                  :points="chartLinePoints"
-                  fill="none"
-                  stroke="#7C5842"
-                  stroke-width="0.5"
-                />
-              </svg>
-            </div>
-            <div class="chart-x-axis">
-              <span v-for="(point, index) in scoreChartData" :key="index" class="axis-label">
-                {{ formatChartDate(point.date) }}
-              </span>
-            </div>
+            <LineChart
+              chart-id="score-trend-chart"
+              :data="scoreChartData"
+              :height="200"
+            />
           </div>
         </div>
 
         <!-- Flavor Profile -->
         <div class="chart-card">
           <h3 class="chart-title">선호 플레이버 프로필</h3>
-          <div class="flavor-chart">
-            <div 
-              v-for="flavor in topFlavors" 
-              :key="flavor.name"
-              class="flavor-bar"
-            >
-              <div class="flavor-name">{{ flavor.name }}</div>
-              <div class="flavor-bar-container">
-                <div 
-                  class="flavor-bar-fill"
-                  :style="{ width: `${(flavor.count / topFlavors[0].count) * 100}%` }"
-                ></div>
-                <span class="flavor-count">{{ flavor.count }}회</span>
-              </div>
-            </div>
+          <div class="chart-container">
+            <DoughnutChart
+              chart-id="flavor-profile-chart"
+              :data="flavorChartData"
+              :height="250"
+            />
           </div>
         </div>
       </section>
@@ -206,17 +173,12 @@
           <!-- Time Analysis -->
           <div class="analysis-card">
             <h3 class="analysis-title">시간대별 테이스팅</h3>
-            <div class="time-analysis">
-              <div v-for="time in timeStats" :key="time.period" class="time-item">
-                <div class="time-period">{{ time.period }}</div>
-                <div class="time-bar">
-                  <div 
-                    class="time-fill"
-                    :style="{ width: `${(time.count / timeStats[0].count) * 100}%` }"
-                  ></div>
-                </div>
-                <div class="time-count">{{ time.count }}회</div>
-              </div>
+            <div class="chart-container">
+              <BarChart
+                chart-id="time-analysis-chart"
+                :data="timeChartData"
+                :height="180"
+              />
             </div>
           </div>
 
@@ -280,6 +242,9 @@ import { RouterLink } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { useCoffeeRecordStore } from '../stores/coffeeRecord'
 import { useUserStatsStore } from '../stores/userStats'
+import LineChart from '../components/charts/LineChart.vue'
+import DoughnutChart from '../components/charts/DoughnutChart.vue'
+import BarChart from '../components/charts/BarChart.vue'
 
 const authStore = useAuthStore()
 const coffeeRecordStore = useCoffeeRecordStore()
@@ -402,29 +367,68 @@ const streakDescription = computed(() => {
 })
 
 const scoreChartData = computed(() => {
-  if (filteredRecords.value.length === 0) return []
+  if (filteredRecords.value.length === 0) {
+    return {
+      labels: [],
+      datasets: [{
+        label: '점수 추이',
+        data: [],
+        fill: true
+      }]
+    }
+  }
   
-  // Get last 7 records for chart
+  // Get last 10 records for chart
   const lastRecords = filteredRecords.value
     .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
-    .slice(-7)
+    .slice(-10)
   
-  return lastRecords.map(record => ({
-    date: record.created_at,
-    score: record.total_match_score || 0
-  }))
+  return {
+    labels: lastRecords.map(record => formatChartDate(record.created_at)),
+    datasets: [{
+      label: '점수 추이',
+      data: lastRecords.map(record => record.total_match_score || 0),
+      fill: true
+    }]
+  }
 })
 
-const chartLinePoints = computed(() => {
-  if (scoreChartData.value.length < 2) return ''
+const flavorChartData = computed(() => {
+  if (topFlavors.value.length === 0) {
+    return {
+      labels: [],
+      datasets: [{
+        data: []
+      }]
+    }
+  }
   
-  return scoreChartData.value
-    .map((point, index) => {
-      const x = (index / (scoreChartData.value.length - 1)) * 100
-      const y = 100 - (point.score / 100) * 100
-      return `${x},${y}`
-    })
-    .join(' ')
+  return {
+    labels: topFlavors.value.map(flavor => flavor.name),
+    datasets: [{
+      data: topFlavors.value.map(flavor => flavor.count)
+    }]
+  }
+})
+
+const timeChartData = computed(() => {
+  if (timeStats.value.length === 0) {
+    return {
+      labels: [],
+      datasets: [{
+        label: '테이스팅 횟수',
+        data: []
+      }]
+    }
+  }
+  
+  return {
+    labels: timeStats.value.map(time => time.period),
+    datasets: [{
+      label: '테이스팅 횟수',
+      data: timeStats.value.map(time => time.count)
+    }]
+  }
 })
 
 const topFlavors = computed(() => {
@@ -928,111 +932,12 @@ onMounted(async () => {
   margin: 0 0 1.5rem 0;
 }
 
-/* Simple Line Chart */
+/* Chart Containers */
 .chart-container {
   position: relative;
-}
-
-.simple-line-chart {
-  position: relative;
-  height: 200px;
-  border-bottom: 2px solid #E8D5C4;
-  border-left: 2px solid #E8D5C4;
-}
-
-.chart-lines {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
-}
-
-.chart-point {
-  position: absolute;
-  transform: translate(-50%, 50%);
-}
-
-.point-dot {
-  width: 8px;
-  height: 8px;
-  background: #7C5842;
-  border-radius: 50%;
-  border: 2px solid white;
-  box-shadow: 0 2px 4px rgba(124, 88, 66, 0.3);
-}
-
-.point-label {
-  position: absolute;
-  top: -25px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.75rem;
-  color: #7C5842;
-  font-weight: 600;
-  background: white;
-  padding: 2px 6px;
-  border-radius: 4px;
-  border: 1px solid #E8D5C4;
-}
-
-.chart-x-axis {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0.5rem;
-}
-
-.axis-label {
-  font-size: 0.75rem;
-  color: #666;
-}
-
-/* Flavor Chart */
-.flavor-chart {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.flavor-bar {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.flavor-name {
-  font-weight: 500;
-  color: #7C5842;
-  font-size: 0.9rem;
-}
-
-.flavor-bar-container {
-  position: relative;
-  background: #F0E8DC;
-  border-radius: 8px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  padding: 0 0.5rem;
-}
-
-.flavor-bar-fill {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  background: linear-gradient(90deg, #7C5842, #A0796A);
-  border-radius: 8px;
-  transition: width 0.3s ease;
-}
-
-.flavor-count {
-  position: relative;
-  z-index: 1;
-  font-size: 0.8rem;
-  color: white;
-  font-weight: 600;
-  margin-left: auto;
+  height: 250px;
+  padding: 1rem 0;
 }
 
 /* Analysis Section */
@@ -1110,48 +1015,6 @@ onMounted(async () => {
   color: #666;
 }
 
-/* Time Analysis */
-.time-analysis {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.time-item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.time-period {
-  flex: 0 0 120px;
-  font-weight: 500;
-  color: #7C5842;
-  font-size: 0.9rem;
-}
-
-.time-bar {
-  flex: 1;
-  background: #F0E8DC;
-  border-radius: 6px;
-  height: 20px;
-  overflow: hidden;
-  position: relative;
-}
-
-.time-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #7C5842, #A0796A);
-  border-radius: 6px;
-}
-
-.time-count {
-  flex: 0 0 40px;
-  text-align: right;
-  font-weight: 600;
-  color: #7C5842;
-  font-size: 0.9rem;
-}
 
 /* Improvements */
 .improvements-list {
@@ -1392,8 +1255,8 @@ onMounted(async () => {
     grid-template-columns: 1fr;
   }
   
-  .simple-line-chart {
-    height: 150px;
+  .chart-container {
+    height: 200px;
   }
 }
 </style>
