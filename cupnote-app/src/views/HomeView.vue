@@ -145,69 +145,29 @@ import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useNotificationStore } from '../stores/notification'
 import { useAuthStore } from '../stores/auth'
+import { useDemoStore } from '../stores/demo'
 
 const notificationStore = useNotificationStore()
 const authStore = useAuthStore()
+const demoStore = useDemoStore()
+
 
 // Computed
 const isAuthenticated = computed(() => authStore.isAuthenticated)
 
 const showDemo = () => {
-  // Master Playbook의 Vibe Coding 방법론을 활용한 인터랙티브 데모
-  const demoSequence = [
-    {
-      type: 'coffee',
-      title: '☕ CupNote 데모 시작',
-      message: '실제 커피 테이스팅 과정을 체험해보세요!',
-      duration: 3000
-    },
-    {
-      type: 'info',
-      title: '1단계: 커피 정보',
-      message: '카페명과 커피 이름을 입력합니다',
-      duration: 4000
-    },
-    {
-      type: 'tip',
-      title: '2단계: 향미 선택',
-      message: '느껴지는 향과 맛을 자유롭게 선택하세요',
-      duration: 4000
-    },
-    {
-      type: 'coffee',
-      title: '3단계: 감각 표현',
-      message: '산미, 단맛, 바디감 등을 슬라이더로 표현합니다',
-      duration: 4000
-    },
-    {
-      type: 'achievement',
-      title: '🎯 매치 결과',
-      message: '로스터 의도와 85% 일치! 훌륭한 감각입니다',
-      duration: 5000
-    },
-    {
-      type: 'success',
-      title: '데모 완료!',
-      message: '지금 바로 실제 테이스팅을 시작해보세요',
-      duration: 4000
-    }
-  ]
-
-  // Quick Wins 30분 프로토타입 전략: 순차적 알림으로 사용자 경험 극대화
-  demoSequence.forEach((notification, index) => {
-    setTimeout(() => {
-      notificationStore.addNotification(notification)
-    }, index * 2000) // 2초 간격으로 순차 표시
-  })
-
-  // AI Experts 페르소나 시스템 활용: Frontend 페르소나의 사용자 경험 최적화
+  // 데모 체험하기 - 실제 카페모드 플로우로 이동
+  notificationStore.showSuccess(
+    '카페모드 데모를 시작합니다! 실제 테이스팅 과정을 체험해보세요 ☕',
+    '🎉 데모 시작',
+    { duration: 3000 }
+  )
+  
+  // 데모 스토어 초기화 및 라우팅
+  demoStore.startDemo()
   setTimeout(() => {
-    notificationStore.showTip(
-      '데모가 마음에 드셨나요? 실제 커피와 함께 테이스팅을 시작해보세요!',
-      '💡 다음 단계',
-      { duration: 6000 }
-    )
-  }, demoSequence.length * 2000 + 2000)
+    window.location.href = '/demo'
+  }, 1000)
 }
 </script>
 

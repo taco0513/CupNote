@@ -90,6 +90,49 @@ const router = createRouter({
       component: () => import('../views/tasting-flow/ResultView.vue'),
       meta: { requiresAuth: true }
     },
+    // Demo Mode Routes (Cafe Mode Only)
+    {
+      path: '/demo',
+      name: 'demo-start',
+      component: () => import('../views/tasting-flow/ModeSelectionView.vue'),
+      meta: { isDemo: true }
+    },
+    {
+      path: '/demo/coffee-info',
+      name: 'demo-coffee-info',
+      component: () => import('../views/tasting-flow/CoffeeInfoView.vue'),
+      meta: { isDemo: true }
+    },
+    {
+      path: '/demo/unified-flavor',
+      name: 'demo-unified-flavor',
+      component: () => import('../views/tasting-flow/UnifiedFlavorView.vue'),
+      meta: { isDemo: true }
+    },
+    {
+      path: '/demo/sensory-expression',
+      name: 'demo-sensory-expression',
+      component: () => import('../views/tasting-flow/SensoryExpressionView.vue'),
+      meta: { isDemo: true }
+    },
+    {
+      path: '/demo/personal-comment',
+      name: 'demo-personal-comment',
+      component: () => import('../views/tasting-flow/PersonalCommentView.vue'),
+      meta: { isDemo: true }
+    },
+    {
+      path: '/demo/roaster-notes',
+      name: 'demo-roaster-notes',
+      component: () => import('../views/tasting-flow/RoasterNotesView.vue'),
+      meta: { isDemo: true }
+    },
+    {
+      path: '/demo/result',
+      name: 'demo-result',
+      component: () => import('../views/tasting-flow/ResultView.vue'),
+      meta: { isDemo: true }
+    },
     // Legacy route redirects for backward compatibility
     {
       path: '/coffee-setup',
@@ -153,16 +196,24 @@ const router = createRouter({
       name: 'auth-callback',
       component: () => import('../views/auth/CallbackView.vue')
     },
-    {
-      path: '/auth/reset-password',
-      name: 'reset-password',
-      component: () => import('../views/auth/ResetPasswordView.vue')
-    },
+    // TODO: Create ResetPasswordView.vue when reset password functionality is needed
+    // {
+    //   path: '/auth/reset-password',
+    //   name: 'reset-password',
+    //   component: () => import('../views/auth/ResetPasswordView.vue')
+    // },
   ],
 })
 
 // Navigation guards
 router.beforeEach(async (to, from, next) => {
+  // Check if this is a demo mode route - bypass auth for demo
+  const isDemo = to.matched.some(record => record.meta.isDemo)
+  if (isDemo) {
+    next()
+    return
+  }
+  
   // Import auth store dynamically to avoid circular dependency
   const { useAuthStore } = await import('../stores/auth.js')
   const authStore = useAuthStore()

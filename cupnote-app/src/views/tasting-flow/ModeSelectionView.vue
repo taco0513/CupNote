@@ -35,10 +35,11 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useCoffeeRecordStore } from '../../stores/coffeeRecord'
 
 const router = useRouter()
+const route = useRoute()
 const coffeeRecordStore = useCoffeeRecordStore()
 
 // Mode options
@@ -75,8 +76,15 @@ const selectMode = (mode) => {
   
   console.log('Selected mode:', mode)
   
-  // Navigate to coffee info
-  router.push('/coffee-info')
+  // Check if we're in demo mode
+  const isDemo = route.path.startsWith('/demo')
+  
+  // Navigate to coffee info - use demo path if in demo mode
+  if (isDemo) {
+    router.push('/demo/coffee-info')
+  } else {
+    router.push('/coffee-info')
+  }
 }
 </script>
 
