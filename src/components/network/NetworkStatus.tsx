@@ -11,6 +11,12 @@ export default function NetworkStatus() {
   const { warning, info } = useNotification()
   const [showStatus, setShowStatus] = useState(false)
   const [wasOffline, setWasOffline] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  // 컴포넌트가 마운트된 후에만 렌더링
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // 네트워크 상태 변화 감지
   useEffect(() => {
@@ -39,6 +45,11 @@ export default function NetworkStatus() {
       warning('느린 연결', '연결 상태가 느립니다. 데이터 사용량을 확인해주세요.')
     }
   }, [isSlowConnection, warning])
+
+  // 마운트되기 전에는 렌더링하지 않음
+  if (!mounted) {
+    return null
+  }
 
   if (!showStatus && isOnline) {
     return null
@@ -93,6 +104,12 @@ export default function NetworkStatus() {
 export function ConnectionIndicator() {
   const { isOnline, isSlowConnection } = useNetworkStatus()
   const [visible, setVisible] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  // 컴포넌트가 마운트된 후에만 렌더링
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     if (!isOnline || isSlowConnection) {
@@ -102,6 +119,11 @@ export function ConnectionIndicator() {
       return () => clearTimeout(timer)
     }
   }, [isOnline, isSlowConnection])
+
+  // 마운트되기 전에는 렌더링하지 않음
+  if (!mounted) {
+    return null
+  }
 
   if (!visible) return null
 

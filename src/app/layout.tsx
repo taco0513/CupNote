@@ -4,10 +4,29 @@ import { NotificationProvider } from '@/contexts/NotificationContext'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import ErrorBoundary from '@/components/errors/ErrorBoundary'
 import NotificationContainer from '@/components/notifications/NotificationContainer'
-import NetworkStatus, { ConnectionIndicator } from '@/components/network/NetworkStatus'
 import MobileNavigation from '@/components/MobileNavigation'
-import PWAInstallPrompt from '@/components/PWAInstallPrompt'
-import SyncStatus from '@/components/SyncStatus'
+import dynamic from 'next/dynamic'
+
+// 클라이언트 전용 컴포넌트들을 동적 import
+const NetworkStatus = dynamic(() => import('@/components/network/NetworkStatus'), {
+  ssr: false,
+  loading: () => null
+})
+
+const ConnectionIndicator = dynamic(() => import('@/components/network/NetworkStatus').then(mod => ({ default: mod.ConnectionIndicator })), {
+  ssr: false,
+  loading: () => null
+})
+
+const PWAInstallPrompt = dynamic(() => import('@/components/PWAInstallPrompt'), {
+  ssr: false,
+  loading: () => null
+})
+
+const SyncStatus = dynamic(() => import('@/components/SyncStatus'), {
+  ssr: false,
+  loading: () => null
+})
 import './globals.css'
 
 export const metadata: Metadata = {
