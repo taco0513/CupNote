@@ -6,11 +6,10 @@ import { Zap, ArrowRight, ArrowLeft, Coffee, Star } from 'lucide-react'
 import Navigation from '../../../components/Navigation'
 import { TASTING_MODES_CONFIG, UI_LABELS } from '../../../config'
 
-interface Step1Data {
+interface QuickModeData {
   coffeeName: string
   roastery: string
   date: string
-  mode: 'quick' | 'cafe' | 'homecafe' | 'pro'
 }
 
 interface QuickData {
@@ -23,55 +22,67 @@ interface QuickData {
 export default function QuickModePage() {
   const router = useRouter()
   
-  const [step1Data, setStep1Data] = useState<Step1Data | null>(null)
+  const [basicData, setBasicData] = useState<QuickModeData>({
+    coffeeName: '',
+    roastery: '',
+    date: new Date().toISOString().split('T')[0]
+  })
   const [formData, setFormData] = useState<QuickData>({
     rating: 0,
   })
-
-  useEffect(() => {
-    // 이전 단계 데이터 불러오기
-    const saved1 = sessionStorage.getItem('recordStep1')
-    
-    if (saved1) {
-      const data1 = JSON.parse(saved1)
-      setStep1Data(data1)
-      
-      // Quick 모드가 아니면 리디렉션
-      if (data1.mode !== 'quick') {
-        router.push('/record/step2')
-        return
-      }
-    } else {
-      router.push('/mode-selection')
-      return
-    }
-  }, [router])
+  const [currentStep, setCurrentStep] = useState<'basic' | 'rating'>('basic')
 
   const handleRatingClick = (rating: number) => {
     setFormData({ ...formData, rating })
   }
 
-  const handleComplete = () => {
-    // Quick 데이터 저장
-    sessionStorage.setItem('recordQuick', JSON.stringify(formData))
+  const handleBasicNext = () => {
+    if (basicData.coffeeName.trim()) {
+      setCurrentStep('rating')
+    }
+  }
+
+  const handleComplete = async () => {
+    // Quick Mode 전체 데이터 결합
+    const completeData = {
+      ...basicData,
+      ...formData,
+      mode: 'quick' as const
+    }
     
-    // Step4 완료 페이지로 이동
+    // 세션에 저장
+    sessionStorage.setItem('recordQuick', JSON.stringify(completeData))
+    
+    // 기존 step3/step4와 호환을 위한 임시 데이터
+    const step1Data = {
+      coffeeName: basicData.coffeeName,
+      roastery: basicData.roastery,
+      date: basicData.date,
+      mode: 'quick' as const
+    }
+    const step3Data = {
+      rating: formData.rating,
+      tasteMode: 'simple' as const,
+      taste: formData.quickNote || '',
+      roasterNote: '',
+      memo: `위치: ${formData.location || '미기록'}, 동행: ${formData.companion || '미기록'}`,
+      location: formData.location,
+      companion: formData.companion
+    }
+    
+    sessionStorage.setItem('recordStep1', JSON.stringify(step1Data))
+    sessionStorage.setItem('recordStep3', JSON.stringify(step3Data))
+    
+    // 결과 페이지로 이동
     router.push('/record/step4')
   }
 
   const handleBack = () => {
-    router.push('/record/step1')
-  }
-
-  if (!step1Data) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-600 mx-auto mb-4"></div>
-          <p className="text-orange-600">데이터를 불러오는 중...</p>
-        </div>
-      </div>
-    )
+    if (currentStep === 'rating') {
+      setCurrentStep('basic')
+    } else {
+      router.push('/mode-selection')
+    }
   }
 
   return (
@@ -83,14 +94,14 @@ export default function QuickModePage() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-3xl font-bold text-orange-800">빠른 기록</h1>
-            <div className="text-sm text-orange-600">2 / 2</div>
+            <div className="text-sm text-orange-600">{currentStep === 'basic' ? '1' : '2'} / 2</div>
           </div>
 
           {/* 진행바 */}
           <div className="w-full bg-orange-200 rounded-full h-2 mb-4">
             <div
               className="bg-orange-600 h-2 rounded-full transition-all duration-300"
-              style={{ width: '100%' }}
+              style={{ width: currentStep === 'basic' ? '50%' : '100%' }}
             ></div>
           </div>
 
@@ -101,27 +112,82 @@ export default function QuickModePage() {
                 ⚡ {TASTING_MODES_CONFIG.quick.labelKr}
               </div>
             </div>
-            <div className="text-right">
-              <p className="font-medium text-orange-800">{step1Data.coffeeName}</p>
-              {step1Data.roastery && (
-                <p className="text-sm text-orange-600">{step1Data.roastery}</p>
-              )}
-            </div>
+            {currentStep === 'rating' && (
+              <div className="text-right">
+                <p className="font-medium text-orange-800">{basicData.coffeeName}</p>
+                {basicData.roastery && (
+                  <p className="text-sm text-orange-600">{basicData.roastery}</p>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
         <div className="space-y-6">
-          {/* 헤더 */}
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-100 rounded-full mb-4">
-              <Zap className="h-8 w-8 text-orange-600" />
-            </div>
-            <h2 className="text-2xl font-bold text-orange-800 mb-2">어떠셨나요?</h2>
-            <p className="text-orange-600">별점과 간단한 메모만으로 빠르게 기록해보세요</p>
-          </div>
+          {currentStep === 'basic' ? (
+            <>
+              {/* Step 1: 기본 정보 */}
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-100 rounded-full mb-4">
+                  <Coffee className="h-8 w-8 text-orange-600" />
+                </div>
+                <h2 className="text-2xl font-bold text-orange-800 mb-2">커피 정보</h2>
+                <p className="text-orange-600">마신 커피의 기본 정보를 입력해주세요</p>
+              </div>
 
-          {/* 메인 폼 */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 space-y-8">
+              <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    커피 이름 *
+                  </label>
+                  <input
+                    type="text"
+                    value={basicData.coffeeName}
+                    onChange={(e) => setBasicData({ ...basicData, coffeeName: e.target.value })}
+                    placeholder="예: 에티오피아 예가체프"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    카페/로스터리 (선택)
+                  </label>
+                  <input
+                    type="text"
+                    value={basicData.roastery}
+                    onChange={(e) => setBasicData({ ...basicData, roastery: e.target.value })}
+                    placeholder="예: 블루보틀"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    날짜
+                  </label>
+                  <input
+                    type="date"
+                    value={basicData.date}
+                    onChange={(e) => setBasicData({ ...basicData, date: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              {/* Step 2: 평가 */}
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-100 rounded-full mb-4">
+                  <Zap className="h-8 w-8 text-orange-600" />
+                </div>
+                <h2 className="text-2xl font-bold text-orange-800 mb-2">어떠셨나요?</h2>
+                <p className="text-orange-600">별점과 간단한 메모만으로 빠르게 기록해보세요</p>
+              </div>
+
+              {/* 메인 폼 */}
+              <div className="bg-white rounded-2xl shadow-lg p-8 space-y-8">
             
             {/* 별점 평가 */}
             <div>
@@ -205,6 +271,8 @@ export default function QuickModePage() {
               </p>
             </div>
           </div>
+            </>
+          )}
 
           {/* 하단 버튼 */}
           <div className="flex gap-4">
@@ -215,19 +283,32 @@ export default function QuickModePage() {
               <ArrowLeft className="h-5 w-5 mr-2" />
               이전
             </button>
-            <button
-              onClick={handleComplete}
-              disabled={formData.rating === 0}
-              className="flex-2 py-4 px-8 bg-orange-600 text-white rounded-xl hover:bg-orange-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors text-lg font-medium flex items-center justify-center"
-            >
-              기록 완료
-              <ArrowRight className="h-5 w-5 ml-2" />
-            </button>
+            {currentStep === 'basic' ? (
+              <button
+                onClick={handleBasicNext}
+                disabled={!basicData.coffeeName.trim()}
+                className="flex-2 py-4 px-8 bg-orange-600 text-white rounded-xl hover:bg-orange-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors text-lg font-medium flex items-center justify-center"
+              >
+                다음
+                <ArrowRight className="h-5 w-5 ml-2" />
+              </button>
+            ) : (
+              <button
+                onClick={handleComplete}
+                disabled={formData.rating === 0}
+                className="flex-2 py-4 px-8 bg-orange-600 text-white rounded-xl hover:bg-orange-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors text-lg font-medium flex items-center justify-center"
+              >
+                기록 완료
+                <ArrowRight className="h-5 w-5 ml-2" />
+              </button>
+            )}
           </div>
 
           {/* 다음 단계 미리보기 */}
           <div className="text-center">
-            <p className="text-sm text-orange-500">완료하면 커피 기록이 저장됩니다</p>
+            <p className="text-sm text-orange-500">
+              {currentStep === 'basic' ? '다음 단계에서 평가를 진행합니다' : '완료하면 커피 기록이 저장됩니다'}
+            </p>
           </div>
         </div>
       </div>

@@ -96,7 +96,7 @@ const GRINDER_DATA: Record<string, string[]> = {
   'Fellow': ['Ode', 'Opus'],
   'Niche': ['Zero', 'Duo'],
   'Eureka': ['Mignon Specialita', 'Mignon Silenzio', 'Atom 75'],
-}]
+}
 
 export default function HomeCafePage() {
   const router = useRouter()
@@ -199,8 +199,8 @@ export default function HomeCafePage() {
     sessionStorage.setItem('recordHomeCafe', JSON.stringify(updatedFormData))
     setShowTimer(false)
     
-    // Step 3으로 이동 (맛 평가)
-    router.push('/record/step3')
+    // HomeCafe Step 3으로 이동 (통합 향미 평가)
+    router.push('/record/homecafe/step3')
   }
 
   const handleStartBrewing = () => {
@@ -210,7 +210,7 @@ export default function HomeCafePage() {
   const handleNext = () => {
     // 타이머 없이 바로 다음 단계로
     sessionStorage.setItem('recordHomeCafe', JSON.stringify(formData))
-    router.push('/record/step3')
+    router.push('/record/homecafe/step3')
   }
 
   const handleBack = () => {
@@ -237,14 +237,14 @@ export default function HomeCafePage() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-3xl font-bold text-green-800">홈카페 레시피</h1>
-            <div className="text-sm text-green-600">2.5 / 4</div>
+            <div className="text-sm text-green-600">2 / 5</div>
           </div>
 
           {/* 진행바 */}
           <div className="w-full bg-green-200 rounded-full h-2 mb-4">
             <div
               className="bg-green-600 h-2 rounded-full transition-all duration-300"
-              style={{ width: '62.5%' }}
+              style={{ width: '40%' }}
             ></div>
           </div>
 

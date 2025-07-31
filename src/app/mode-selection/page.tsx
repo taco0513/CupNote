@@ -31,7 +31,7 @@ const ModeCard = ({
   popular = false,
   category,
 }: ModeCardProps) => (
-  <Link href={`/record/step1?mode=${mode}`}>
+  <Link href={TASTING_MODES_CONFIG[mode].route}>
     <div
       className={`
       relative p-4 md:p-6 bg-white rounded-2xl border-2 transition-all duration-300 cursor-pointer group
@@ -127,8 +127,8 @@ export default function ModeSelectionPage() {
           </div>
 
           {/* 모드 카드들 */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6">
-            {/* Quick Mode */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+            {/* Quick Mode - 임시 비활성화 
             <ModeCard
               mode="quick"
               icon={<Zap className="h-6 w-6" />}
@@ -144,6 +144,7 @@ export default function ModeSelectionPage() {
                 '나중에 상세 정보 추가 가능',
               ]}
             />
+            */}
 
             {/* Cafe Mode */}
             <ModeCard

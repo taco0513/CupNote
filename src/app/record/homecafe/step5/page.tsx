@@ -7,10 +7,12 @@ import {
   ArrowLeft, 
   Edit3,
   Smile,
-  Clock
+  Clock,
+  Save
 } from 'lucide-react'
 import Navigation from '../../../../components/Navigation'
 import { SupabaseStorage } from '../../../../lib/supabase-storage'
+import RecipeSaveDialog from '../../../../components/RecipeSaveDialog'
 
 interface Step1Data {
   coffeeName: string
@@ -19,18 +21,22 @@ interface Step1Data {
   mode: 'cafe' | 'homecafe' | 'pro'
 }
 
-interface CafeData {
-  cafe_name: string
-  cafe_location?: string
-  coffee_name: string
-  price?: string
-  temperature: 'hot' | 'iced'
-  origin?: string
-  roast_level?: string
-  processing?: string
+interface HomeCafeData {
+  dripper: string
+  coffeeAmount: number
+  waterAmount: number
+  ratio: number
+  grindSize?: string
+  grinderBrand?: string
+  grinderModel?: string
+  grinderSetting?: string
+  waterTemp?: number
+  brewTime?: number
+  notes?: string
+  timerData?: any
 }
 
-// Foundation 문서의 빠른 표현 및 감정 태그 (홈카페와 동일)
+// Foundation 문서의 빠른 표현 및 감정 태그
 const QUICK_EXPRESSIONS = [
   '아침에 좋을 것 같다',
   '다시 마시고 싶다', 
@@ -54,11 +60,11 @@ const EMOTION_TAGS = [
   { emoji: '☕', label: '일상' }
 ]
 
-export default function CafeStep4Page() {
+export default function HomeCafeStep5Page() {
   const router = useRouter()
   
   const [step1Data, setStep1Data] = useState<Step1Data | null>(null)
-  const [cafeData, setCafeData] = useState<CafeData | null>(null)
+  const [homeCafeData, setHomeCafeData] = useState<HomeCafeData | null>(null)
   const [flavorSelection, setFlavorSelection] = useState<any>(null)
   const [sensoryExpressions, setSensoryExpressions] = useState<any>(null)
   
@@ -68,21 +74,22 @@ export default function CafeStep4Page() {
   const [companion, setCompanion] = useState<string>('')
   
   const [submitting, setSubmitting] = useState(false)
+  const [showRecipeSave, setShowRecipeSave] = useState(false)
   const [startTime] = useState(Date.now())
   const [autoSaveStatus, setAutoSaveStatus] = useState<'saved' | 'saving' | 'unsaved'>('saved')
 
   useEffect(() => {
     // 모든 이전 단계 데이터 불러오기
     const saved1 = sessionStorage.getItem('recordStep1')
-    const savedCafe = sessionStorage.getItem('cafeStep1')
-    const savedStep2 = sessionStorage.getItem('cafeStep2')
-    const savedStep3 = sessionStorage.getItem('cafeStep3')
+    const savedHomeCafe = sessionStorage.getItem('recordHomeCafe')
+    const savedStep3 = sessionStorage.getItem('homecafeStep3')
+    const savedStep4 = sessionStorage.getItem('homecafeStep4')
     
     if (saved1) {
       const data1 = JSON.parse(saved1)
       setStep1Data(data1)
       
-      if (data1.mode !== 'cafe') {
+      if (data1.mode !== 'homecafe') {
         router.push('/mode-selection')
         return
       }
@@ -91,23 +98,23 @@ export default function CafeStep4Page() {
       return
     }
     
-    if (savedCafe) {
-      setCafeData(JSON.parse(savedCafe))
+    if (savedHomeCafe) {
+      setHomeCafeData(JSON.parse(savedHomeCafe))
     } else {
-      router.push('/record/cafe/step1')
+      router.push('/record/homecafe')
       return
     }
 
-    if (savedStep2) {
-      setFlavorSelection(JSON.parse(savedStep2))
+    if (savedStep3) {
+      setFlavorSelection(JSON.parse(savedStep3))
     }
 
-    if (savedStep3) {
-      setSensoryExpressions(JSON.parse(savedStep3))
+    if (savedStep4) {
+      setSensoryExpressions(JSON.parse(savedStep4))
     }
 
     // 드래프트 복구
-    const draft = sessionStorage.getItem('cafeDraft')
+    const draft = sessionStorage.getItem('homecafeDraft')
     if (draft) {
       const draftData = JSON.parse(draft)
       setCommentText(draftData.commentText || '')
@@ -120,7 +127,7 @@ export default function CafeStep4Page() {
   // Foundation 문서의 자동 저장 기능
   const saveDraft = useCallback((data: any) => {
     setAutoSaveStatus('saving')
-    sessionStorage.setItem('cafeDraft', JSON.stringify(data))
+    sessionStorage.setItem('homecafeDraft', JSON.stringify(data))
     setTimeout(() => setAutoSaveStatus('saved'), 500)
   }, [])
 
@@ -169,8 +176,18 @@ export default function CafeStep4Page() {
     return 'night'
   }
 
+  const handleRecipeSave = () => {
+    setShowRecipeSave(true)
+  }
+
+  const handleRecipeSaved = () => {
+    setShowRecipeSave(false)
+    // 성공 메시지 표시
+    alert('레시피가 성공적으로 저장되었습니다!')
+  }
+
   const handleSubmit = async () => {
-    if (!step1Data || !cafeData) return
+    if (!step1Data || !homeCafeData) return
 
     try {
       setSubmitting(true)
@@ -191,14 +208,14 @@ export default function CafeStep4Page() {
 
       // 모든 데이터를 통합하여 저장
       const recordToSubmit = {
-        coffeeName: cafeData.coffee_name,
-        roastery: cafeData.cafe_name,
+        coffeeName: step1Data.coffeeName,
+        roastery: step1Data.roastery || '',
         date: step1Data.date,
         mode: step1Data.mode,
         
-        // Cafe 특화 데이터
-        cafeData: {
-          ...cafeData,
+        // HomeCafe 특화 데이터
+        homecafeData: {
+          ...homeCafeData,
           satisfaction: 5 // 임시값, 실제로는 별점 입력 필요
         },
         
@@ -229,17 +246,17 @@ export default function CafeStep4Page() {
         throw new Error('기록 저장에 실패했습니다')
       }
 
-      console.log('Cafe 기록 저장됨:', savedRecord)
+      console.log('HomeCafe 기록 저장됨:', savedRecord)
 
       // 다른 컴포넌트에 변경사항 알림
       window.dispatchEvent(new CustomEvent('cupnote-record-added'))
 
       // 세션 스토리지 정리
       sessionStorage.removeItem('recordStep1')
-      sessionStorage.removeItem('cafeStep1')
-      sessionStorage.removeItem('cafeStep2')
-      sessionStorage.removeItem('cafeStep3')
-      sessionStorage.removeItem('cafeDraft')
+      sessionStorage.removeItem('recordHomeCafe')
+      sessionStorage.removeItem('homecafeStep3')
+      sessionStorage.removeItem('homecafeStep4')
+      sessionStorage.removeItem('homecafeDraft')
 
       // 결과 페이지로 이동
       router.push(`/result?id=${savedRecord.id}`)
@@ -252,43 +269,43 @@ export default function CafeStep4Page() {
   }
 
   const handleBack = () => {
-    router.push('/record/cafe/step3')
+    router.push('/record/homecafe/step4')
   }
 
-  if (!step1Data || !cafeData) {
+  if (!step1Data || !homeCafeData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-blue-600">데이터를 불러오는 중...</p>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600 mx-auto mb-4"></div>
+          <p className="text-green-600">데이터를 불러오는 중...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100">
       <div className="container mx-auto px-4 py-4 max-w-2xl">
         <Navigation showBackButton currentPage="record" />
 
         {/* 진행 상태 표시 */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-3xl font-bold text-blue-800">개인 코멘트</h1>
-            <div className="text-sm text-blue-600">4 / 4</div>
+            <h1 className="text-3xl font-bold text-green-800">개인 코멘트</h1>
+            <div className="text-sm text-green-600">5 / 5</div>
           </div>
 
           {/* 진행바 */}
-          <div className="w-full bg-blue-200 rounded-full h-2 mb-4">
+          <div className="w-full bg-green-200 rounded-full h-2 mb-4">
             <div
-              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+              className="bg-green-600 h-2 rounded-full transition-all duration-300"
               style={{ width: '100%' }}
             ></div>
           </div>
 
           {/* 완료 메시지 */}
           <div className="text-center">
-            <div className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+            <div className="inline-flex items-center space-x-2 px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium">
               <Check className="h-4 w-4" />
               <span>모든 정보 입력 완료</span>
             </div>
@@ -298,11 +315,11 @@ export default function CafeStep4Page() {
         <div className="space-y-6">
           {/* Foundation 문서의 헤더 구조 */}
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-              <Edit3 className="h-8 w-8 text-blue-600" />
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+              <Edit3 className="h-8 w-8 text-green-600" />
             </div>
-            <h2 className="text-2xl font-bold text-blue-800 mb-2">이 커피에 대한 개인적인 생각을 자유롭게 적어보세요</h2>
-            <p className="text-blue-600 mb-4">특별한 순간이나 느낌을 기록해두면 좋은 추억이 됩니다</p>
+            <h2 className="text-2xl font-bold text-green-800 mb-2">이 커피에 대한 개인적인 생각을 자유롭게 적어보세요</h2>
+            <p className="text-green-600 mb-4">특별한 순간이나 느낌을 기록해두면 좋은 추억이 됩니다</p>
           </div>
 
           {/* Foundation 문서의 메인 입력 영역 */}
@@ -319,7 +336,7 @@ export default function CafeStep4Page() {
                     <span className="text-xs text-gray-500">저장 중...</span>
                   )}
                   {autoSaveStatus === 'saved' && (
-                    <span className="text-xs text-blue-500">자동 저장됨</span>
+                    <span className="text-xs text-green-500">자동 저장됨</span>
                   )}
                   {/* Foundation 문서의 글자 수 카운터 */}
                   <span className="text-sm text-gray-500">
@@ -328,10 +345,10 @@ export default function CafeStep4Page() {
                 </div>
               </div>
               <textarea
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
                 rows={4}
                 maxLength={200}
-                placeholder="예) 카페 분위기가 너무 좋았다. 커피도 생각보다 산미가 강해서 좋았고, 다음에 또 오고 싶다..."
+                placeholder="예) 아침에 마시기 좋은 부드러운 맛이었다. 다음에는 분쇄도를 조금 더 굵게 해봐야겠다..."
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
               />
@@ -349,7 +366,7 @@ export default function CafeStep4Page() {
                     onClick={() => handleQuickExpressionToggle(expression)}
                     className={`px-3 py-2 rounded-full text-sm font-medium transition-all ${
                       selectedQuickExpressions.includes(expression)
-                        ? 'bg-blue-100 text-blue-800 border-2 border-blue-500'
+                        ? 'bg-green-100 text-green-800 border-2 border-green-500'
                         : 'bg-gray-100 text-gray-700 border-2 border-transparent hover:bg-gray-200'
                     }`}
                   >
@@ -371,7 +388,7 @@ export default function CafeStep4Page() {
                     onClick={() => handleEmotionTagToggle(tag.emoji)}
                     className={`p-3 rounded-xl border-2 text-center transition-all ${
                       selectedEmotionTags.includes(tag.emoji)
-                        ? 'border-blue-500 bg-blue-50 scale-110'
+                        ? 'border-green-500 bg-green-50 scale-110'
                         : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                     }`}
                   >
@@ -388,7 +405,7 @@ export default function CafeStep4Page() {
                 함께한 사람 (선택사항)
               </label>
               <select
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 value={companion}
                 onChange={(e) => setCompanion(e.target.value)}
               >
@@ -414,9 +431,28 @@ export default function CafeStep4Page() {
                 </div>
                 <div className="flex items-center space-x-1">
                   <Smile className="h-4 w-4" />
-                  <span>카페</span>
+                  <span>홈카페</span>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* HomeCafe 레시피 저장 */}
+          <div className="p-6 bg-green-50 rounded-xl border border-green-200">
+            <div className="text-center">
+              <h3 className="text-lg font-bold text-green-800 mb-2">
+                🏠 레시피 저장하기
+              </h3>
+              <p className="text-sm text-green-700 mb-4">
+                이 추출 설정을 저장해서 나중에 다시 사용할 수 있어요
+              </p>
+              <button
+                onClick={handleRecipeSave}
+                className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors font-medium"
+              >
+                <Save className="h-5 w-5 mr-2" />
+                레시피 저장하기
+              </button>
             </div>
           </div>
         </div>
@@ -433,7 +469,7 @@ export default function CafeStep4Page() {
           <button
             onClick={handleSubmit}
             disabled={submitting}
-            className="flex-2 py-4 px-8 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors text-lg font-medium flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-2 py-4 px-8 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors text-lg font-medium flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {submitting ? (
               <>
@@ -451,10 +487,36 @@ export default function CafeStep4Page() {
 
         {/* 다음 단계 미리보기 */}
         <div className="mt-6 text-center">
-          <p className="text-sm text-blue-500">
+          <p className="text-sm text-green-500">
             저장 후: Match Score 결과 및 개인화된 피드백 확인
           </p>
         </div>
+
+        {/* 레시피 저장 다이얼로그 */}
+        {showRecipeSave && step1Data && homeCafeData && (
+          <RecipeSaveDialog
+            recipeData={{
+              coffeeName: step1Data.coffeeName,
+              roastery: step1Data.roastery,
+              dripper: homeCafeData.dripper,
+              coffeeAmount: homeCafeData.coffeeAmount,
+              waterAmount: homeCafeData.waterAmount,
+              ratio: homeCafeData.ratio,
+              grindSize: homeCafeData.grindSize,
+              grinderBrand: homeCafeData.grinderBrand,
+              grinderModel: homeCafeData.grinderModel,
+              grinderSetting: homeCafeData.grinderSetting,
+              waterTemp: homeCafeData.waterTemp,
+              brewTime: homeCafeData.brewTime,
+              notes: homeCafeData.notes,
+              timerData: homeCafeData.timerData
+            }}
+            rating={5} // 임시값
+            tastingNotes={[...selectedQuickExpressions, commentText].filter(Boolean).join(', ')}
+            onSave={handleRecipeSaved}
+            onClose={() => setShowRecipeSave(false)}
+          />
+        )}
       </div>
     </div>
   )
