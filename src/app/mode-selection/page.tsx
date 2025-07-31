@@ -1,7 +1,9 @@
 'use client'
 
 import Link from 'next/link'
+
 import { Coffee, Home, Beaker, Clock, Users, TrendingUp, Zap } from 'lucide-react'
+
 import ProtectedRoute from '../../components/auth/ProtectedRoute'
 import Navigation from '../../components/Navigation'
 import { TASTING_MODES_CONFIG, getModeColor, getModeGradient, UI_LABELS } from '../../config'
