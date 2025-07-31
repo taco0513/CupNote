@@ -1,7 +1,9 @@
 {
-  "buildCommand": "npm run build",
+  "buildCommand": "cd . && npm install && npm run build",
+  "installCommand": "npm install",
   "outputDirectory": ".next",
   "framework": "nextjs",
+  "rootDirectory": "./",
   "regions": ["icn1"],
   "functions": {
     "src/app/api/**/*.ts": {
