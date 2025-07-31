@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import Navigation from '../../../../components/Navigation'
 import { SupabaseStorage } from '../../../../lib/supabase-storage'
+import { useAuth } from '../../../../contexts/AuthContext'
 
 interface Step1Data {
   coffeeName: string
@@ -56,6 +57,7 @@ const EMOTION_TAGS = [
 
 export default function CafeStep4Page() {
   const router = useRouter()
+  const { user } = useAuth()
   
   const [step1Data, setStep1Data] = useState<Step1Data | null>(null)
   const [cafeData, setCafeData] = useState<CafeData | null>(null)
@@ -65,7 +67,6 @@ export default function CafeStep4Page() {
   const [commentText, setCommentText] = useState('')
   const [selectedQuickExpressions, setSelectedQuickExpressions] = useState<string[]>([])
   const [selectedEmotionTags, setSelectedEmotionTags] = useState<string[]>([])
-  const [companion, setCompanion] = useState<string>('')
   
   const [submitting, setSubmitting] = useState(false)
   const [startTime] = useState(Date.now())
@@ -113,7 +114,6 @@ export default function CafeStep4Page() {
       setCommentText(draftData.commentText || '')
       setSelectedQuickExpressions(draftData.selectedQuickExpressions || [])
       setSelectedEmotionTags(draftData.selectedEmotionTags || [])
-      setCompanion(draftData.companion || '')
     }
   }, [router])
 
@@ -130,16 +130,15 @@ export default function CafeStep4Page() {
       const draftData = {
         commentText,
         selectedQuickExpressions,
-        selectedEmotionTags, 
-        companion
+        selectedEmotionTags
       }
-      if (commentText || selectedQuickExpressions.length > 0 || selectedEmotionTags.length > 0 || companion) {
+      if (commentText || selectedQuickExpressions.length > 0 || selectedEmotionTags.length > 0) {
         saveDraft(draftData)
       }
     }, 10000)
 
     return () => clearInterval(interval)
-  }, [commentText, selectedQuickExpressions, selectedEmotionTags, companion, saveDraft])
+  }, [commentText, selectedQuickExpressions, selectedEmotionTags, saveDraft])
 
   // Foundation 문서의 빠른 표현 선택
   const handleQuickExpressionToggle = (expression: string) => {
@@ -181,55 +180,111 @@ export default function CafeStep4Page() {
         quick_expressions: selectedQuickExpressions,
         emotion_tags: selectedEmotionTags,
         context_info: {
-          time_of_day: getTimeOfDay(),
-          companion: companion || 'alone'
+          time_of_day: getTimeOfDay()
         },
         writing_duration: Math.round((Date.now() - startTime) / 1000),
         character_count: commentText.length,
         created_at: new Date()
       }
 
-      // 모든 데이터를 통합하여 저장
+      // 향미 선택 데이터를 FlavorProfile[] 형식으로 변환
+      const convertedFlavors = flavorSelection?.selectedFlavors?.map((flavorChoice, index) => ({
+        id: `sca-${flavorChoice.level2}-${index}`,
+        name: flavorChoice.level2, // Level 2 ID를 이름으로 사용 (임시)
+        category: 'other' as const, // FlavorCategory에 맞는 값
+        intensity: 3 // 기본값
+      })) || []
+
+      // 감각 표현 데이터를 SensoryExpression[] 형식으로 변환
+      const convertedSensoryExpressions = Object.entries(sensoryExpressions?.expressions || {})
+        .map(([category, expressions]) => ({
+          category: category as 'acidity' | 'sweetness' | 'body' | 'aftertaste',
+          expressions: expressions as string[]
+        }))
+        .filter(item => 
+          ['acidity', 'sweetness', 'body', 'aftertaste'].includes(item.category)
+        )
+
+      // 모든 데이터를 통합하여 저장 (CoffeeRecord 인터페이스에 맞춤)
       const recordToSubmit = {
         coffeeName: cafeData.coffee_name,
         roastery: cafeData.cafe_name,
         date: step1Data.date,
-        mode: step1Data.mode,
+        mode: step1Data.mode as 'cafe' | 'homecafe' | 'pro',
         
-        // Cafe 특화 데이터
-        cafeData: {
-          ...cafeData,
-          satisfaction: 5 // 임시값, 실제로는 별점 입력 필요
-        },
-        
-        // 향미 선택 데이터
-        selectedFlavors: flavorSelection?.selectedFlavors || [],
-        
-        // 감각 표현 데이터
-        sensoryExpressions: sensoryExpressions?.expressions || {},
-        
-        // 개인 코멘트
-        personalComment,
-        
-        // 통합 맛 기록
+        // 통합 맛 기록 (필수 필드)
         taste: [
           ...selectedQuickExpressions,
-          commentText
-        ].filter(Boolean).join(', ') || '기록 없음',
+          commentText.trim()
+        ].filter(Boolean).join(', ') || '카페에서 마신 커피',
         
-        rating: 5, // 임시값
-        tasteMode: 'professional' as const
+        rating: 5, // 임시값, 실제로는 별점 입력 필요
+        tasteMode: 'professional' as const,
+        
+        // 선택적 필드들
+        origin: cafeData.origin,
+        roastLevel: cafeData.roast_level,
+        temperature: (cafeData.temperature as 'hot' | 'iced') || 'hot',
+        memo: commentText || undefined,
+        
+        // 향미 선택 데이터 (FlavorProfile[] 형식)
+        selectedFlavors: convertedFlavors,
+        
+        // 감각 표현 데이터 (SensoryExpression[] 형식)
+        sensoryExpressions: convertedSensoryExpressions,
+        
+        // 태그 데이터
+        tags: selectedEmotionTags,
+        
+        // Cafe 모드 특화 데이터
+        cafeData: {
+          cafeName: cafeData.cafe_name,
+          cafeLocation: cafeData.cafe_location,
+          menuName: cafeData.coffee_name,
+          price: cafeData.price ? parseFloat(cafeData.price) : undefined,
+          atmosphere: undefined // 현재 단계에서는 없음
+        },
+        
+        // 이미지는 현재 없음
+        images: undefined
       }
 
+      console.log('Cafe 기록 저장 데이터:', recordToSubmit)
+
       // Supabase에 저장
-      const result = await SupabaseStorage.addRecordWithAchievements(recordToSubmit)
+      console.log('저장 시도 중...')
+      console.log('완전한 저장 데이터:', JSON.stringify(recordToSubmit, null, 2))
+      
+      // 디버그: 현재 인증 상태 확인
+      const { createClient } = await import('@supabase/supabase-js')
+      const supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      )
+      const { data: authData, error: authError } = await supabase.auth.getUser()
+      console.log('현재 인증 상태:', authData, authError)
+      console.log('AuthContext 사용자:', user)
+      
+      // 로그인 상태에 따라 다른 저장 방법 사용
+      let result
+      if (user) {
+        console.log('로그인된 사용자 - addRecordWithAchievements 사용')
+        result = await SupabaseStorage.addRecordWithAchievements(recordToSubmit)
+      } else {
+        console.log('게스트 모드 - addGuestRecord 사용')
+        result = await SupabaseStorage.addGuestRecord(recordToSubmit)
+      }
+      console.log('저장 결과:', result)
+      
       const savedRecord = result.record
 
       if (!savedRecord) {
-        throw new Error('기록 저장에 실패했습니다')
+        console.error('저장 결과가 null입니다. 전체 결과:', result)
+        console.error('newAchievements:', result.newAchievements)
+        throw new Error('기록 저장에 실패했습니다 - Supabase에서 null 반환')
       }
 
-      console.log('Cafe 기록 저장됨:', savedRecord)
+      console.log('Cafe 기록 저장 성공:', savedRecord)
 
       // 다른 컴포넌트에 변경사항 알림
       window.dispatchEvent(new CustomEvent('cupnote-record-added'))
@@ -244,8 +299,15 @@ export default function CafeStep4Page() {
       // 결과 페이지로 이동
       router.push(`/result?id=${savedRecord.id}`)
     } catch (error) {
-      console.error('기록 저장 오류:', error)
-      alert('기록 저장 중 오류가 발생했습니다')
+      console.error('기록 저장 오류 상세:', error)
+      console.error('오류 스택:', error instanceof Error ? error.stack : 'Unknown error')
+      console.error('전송한 데이터:', JSON.stringify({
+        coffeeName: cafeData.coffee_name,
+        roastery: cafeData.cafe_name,
+        hasFlavorSelection: !!flavorSelection,
+        hasSensoryExpressions: !!sensoryExpressions
+      }))
+      alert(`기록 저장 중 오류가 발생했습니다: ${error instanceof Error ? error.message : String(error)}`)
     } finally {
       setSubmitting(false)
     }
@@ -382,24 +444,6 @@ export default function CafeStep4Page() {
               </div>
             </div>
 
-            {/* Foundation 문서의 컨텍스트 정보 */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                함께한 사람 (선택사항)
-              </label>
-              <select
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                value={companion}
-                onChange={(e) => setCompanion(e.target.value)}
-              >
-                <option value="">선택하세요</option>
-                <option value="alone">혼자</option>
-                <option value="with_friends">친구와</option>
-                <option value="with_family">가족과</option>
-                <option value="date">연인과</option>
-                <option value="business">동료와</option>
-              </select>
-            </div>
 
             {/* 컨텍스트 정보 표시 */}
             <div className="flex items-center justify-between text-sm text-gray-500 bg-gray-50 p-3 rounded-lg">

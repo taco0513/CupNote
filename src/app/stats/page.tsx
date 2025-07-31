@@ -205,13 +205,64 @@ export default function StatsPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const loadRecords = () => {
+    const loadRecords = async () => {
       try {
-        const stored = localStorage.getItem('coffeeRecords')
-        if (stored) {
-          const parsedRecords = JSON.parse(stored)
-          setRecords(parsedRecords)
+        console.log('Loading records for stats page...')
+        
+        // 통합 저장소에서 데이터 로드
+        const { SupabaseStorage } = await import('../../lib/supabase-storage')
+        const { offlineStorage } = await import('../../lib/offline-storage')
+        
+        let allRecords: CoffeeRecord[] = []
+        
+        // 1. Supabase에서 로드 (로그인된 경우)
+        try {
+          console.log('Trying to load from Supabase...')
+          const supabaseRecords = await SupabaseStorage.getAllRecords()
+          if (supabaseRecords && supabaseRecords.length > 0) {
+            console.log(`Found ${supabaseRecords.length} records in Supabase`)
+            allRecords = [...allRecords, ...supabaseRecords]
+          }
+        } catch (error) {
+          console.log('Supabase load failed (expected if not logged in):', error)
         }
+        
+        // 2. IndexedDB에서 로드 (게스트 모드 또는 오프라인 데이터)
+        try {
+          console.log('Loading from IndexedDB...')
+          const offlineRecords = await offlineStorage.getAllRecords()
+          if (offlineRecords && offlineRecords.length > 0) {
+            console.log(`Found ${offlineRecords.length} records in IndexedDB`)
+            // 중복 제거 (ID 기준)
+            const existingIds = new Set(allRecords.map(r => r.id))
+            const uniqueOfflineRecords = offlineRecords.filter(r => !existingIds.has(r.id))
+            allRecords = [...allRecords, ...uniqueOfflineRecords]
+          }
+        } catch (error) {
+          console.error('IndexedDB load failed:', error)
+        }
+        
+        // 3. 레거시 localStorage에서 로드 (하위 호환성)
+        try {
+          console.log('Checking legacy localStorage...')
+          const stored = localStorage.getItem('coffeeRecords')
+          if (stored) {
+            const parsedRecords = JSON.parse(stored)
+            if (parsedRecords && parsedRecords.length > 0) {
+              console.log(`Found ${parsedRecords.length} records in localStorage`)
+              // 중복 제거
+              const existingIds = new Set(allRecords.map(r => r.id))
+              const uniqueLegacyRecords = parsedRecords.filter(r => !existingIds.has(r.id))
+              allRecords = [...allRecords, ...uniqueLegacyRecords]
+            }
+          }
+        } catch (error) {
+          console.error('localStorage load failed:', error)
+        }
+        
+        console.log(`Total unique records loaded: ${allRecords.length}`)
+        setRecords(allRecords)
+        
       } catch (error) {
         console.error('Failed to load records:', error)
       } finally {

@@ -20,8 +20,8 @@ export class SupabaseStorage {
         data: { user },
       } = await supabase.auth.getUser()
       if (!user) {
-        console.log('No authenticated user, returning empty records')
-        return []
+        console.log('No authenticated user, checking for guest records')
+        return await this.getGuestRecords()
       }
 
       // Try to get from Supabase first
@@ -91,7 +91,11 @@ export class SupabaseStorage {
       const {
         data: { user },
       } = await supabase.auth.getUser()
-      if (!user) return null
+      // 사용자가 로그인되어 있지 않은 경우 게스트 기록에서 찾기
+      if (!user) {
+        console.log('게스트 모드: 로컬 스토리지에서 기록 검색')
+        return await this.getGuestRecordById(id)
+      }
 
       const { data, error } = await supabase
         .from('coffee_records')
@@ -102,7 +106,8 @@ export class SupabaseStorage {
 
       if (error || !data) {
         console.error('Supabase 단일 기록 로드 오류:', error)
-        return null
+        // Supabase에서 찾지 못한 경우 게스트 기록도 확인
+        return await this.getGuestRecordById(id)
       }
 
       // Transform Supabase record to match CoffeeRecord interface
@@ -153,28 +158,152 @@ export class SupabaseStorage {
     newAchievements: string[]
   }> {
     try {
+      console.log('addRecordWithAchievements 시작')
       const {
         data: { user },
       } = await supabase.auth.getUser()
+      
+      // 사용자가 로그인되어 있지 않은 경우 게스트 모드로 처리
       if (!user) {
-        throw new Error('사용자가 로그인되어 있지 않습니다')
+        console.log('사용자가 로그인되어 있지 않음 - 게스트 모드로 처리')
+        return await this.handleGuestRecord(record)
       }
+      console.log('사용자 확인됨:', user.id)
 
       // Initialize achievements for new users
+      console.log('성취 시스템 초기화 중...')
       await SupabaseAchievements.initializeUserAchievements(user.id)
 
       // Add the record
+      console.log('기록 추가 시도 중...')
       const newRecord = await this.addRecord(record)
+      console.log('addRecord 결과:', newRecord)
+      
       if (!newRecord) {
+        console.error('addRecord가 null을 반환했습니다')
         return { record: null, newAchievements: [] }
       }
 
       // Update achievements
+      console.log('성취 업데이트 중...')
       const newAchievements = await SupabaseAchievements.updateAchievements(user.id)
+      console.log('성취 업데이트 완료:', newAchievements)
 
       return { record: newRecord, newAchievements }
     } catch (error) {
-      console.error('기록 추가 및 성취 업데이트 오류:', error)
+      console.error('기록 추가 및 성취 업데이트 오류 상세:', error)
+      console.error('오류 스택:', error instanceof Error ? error.stack : 'Unknown error')
+      return { record: null, newAchievements: [] }
+    }
+  }
+
+  // 게스트 사용자 기록 가져오기
+  static async getGuestRecords(): Promise<CoffeeRecord[]> {
+    try {
+      const guestUserId = localStorage.getItem('cupnote-guest-id')
+      if (!guestUserId) {
+        console.log('게스트 ID가 없음, 빈 배열 반환')
+        return []
+      }
+
+      console.log('게스트 기록 조회:', guestUserId)
+      const offlineRecords = await offlineStorage.getRecords(guestUserId)
+      return offlineRecords.map(({ syncStatus, syncError, lastAttempt, ...record }) => record)
+    } catch (error) {
+      console.error('게스트 기록 조회 오류:', error)
+      return []
+    }
+  }
+
+  // 게스트 사용자 기록을 ID로 찾기
+  static async getGuestRecordById(id: string): Promise<CoffeeRecord | null> {
+    try {
+      const guestUserId = localStorage.getItem('cupnote-guest-id')
+      if (!guestUserId) {
+        console.log('게스트 ID가 없음')
+        return null
+      }
+
+      console.log('게스트 기록 ID 검색:', id, guestUserId)
+      const offlineRecords = await offlineStorage.getRecords(guestUserId)
+      
+      // ID로 기록 찾기
+      const foundRecord = offlineRecords.find(record => record.id === id)
+      if (foundRecord) {
+        // syncStatus 등 오프라인 전용 필드 제거
+        const { syncStatus, syncError, lastAttempt, ...cleanRecord } = foundRecord
+        console.log('게스트 기록 찾음:', cleanRecord)
+        return cleanRecord
+      }
+
+      console.log('게스트 기록을 찾을 수 없음')
+      return null
+    } catch (error) {
+      console.error('게스트 기록 ID 검색 오류:', error)
+      return null
+    }
+  }
+
+  // 게스트 사용자를 위한 기록 처리 (로그인하지 않은 경우)
+  static async handleGuestRecord(
+    record: Omit<CoffeeRecord, 'id' | 'userId' | 'createdAt'>
+  ): Promise<{
+    record: CoffeeRecord | null
+    newAchievements: string[]
+  }> {
+    try {
+      console.log('게스트 모드: 로컬 스토리지에 저장')
+      
+      // 게스트 사용자 ID 생성/가져오기
+      let guestUserId = localStorage.getItem('cupnote-guest-id')
+      if (!guestUserId) {
+        guestUserId = `guest-${crypto.randomUUID()}`
+        localStorage.setItem('cupnote-guest-id', guestUserId)
+        console.log('새 게스트 ID 생성:', guestUserId)
+      }
+
+      // 게스트 기록 생성
+      const guestRecord: CoffeeRecord = {
+        id: crypto.randomUUID(),
+        userId: guestUserId,
+        coffeeName: record.coffeeName,
+        roastery: record.roastery || '',
+        origin: record.origin || undefined,
+        roastLevel: record.roastLevel || undefined,
+        temperature: record.temperature || 'Hot',
+        date: record.date || new Date().toISOString().split('T')[0],
+        taste: record.taste || '',
+        roasterNote: record.roasterNote || undefined,
+        tasteMode: record.tasteMode || 'simple',
+        mode: record.mode,
+        memo: record.memo || undefined,
+        rating: record.rating || 0,
+        createdAt: new Date().toISOString(),
+        selectedFlavors: record.selectedFlavors || [],
+        sensoryExpressions: record.sensoryExpressions || [],
+        tags: record.tags || [],
+        images: record.images || undefined,
+        matchScore: {
+          overall: 0,
+          flavorMatching: 0,
+          expressionAccuracy: 0,
+          consistency: 0,
+          strengths: [],
+          improvements: [],
+        },
+      }
+
+      // 로컬 스토리지에 저장 (오프라인 스토리지 사용)
+      await offlineStorage.saveRecord(guestRecord, 'pending')
+      
+      console.log('게스트 기록 저장 완료:', guestRecord)
+      
+      return { 
+        record: guestRecord, 
+        newAchievements: [] // 게스트 모드에서는 성취 없음
+      }
+    } catch (error) {
+      console.error('게스트 기록 저장 오류:', error)
       return { record: null, newAchievements: [] }
     }
   }
@@ -184,12 +313,15 @@ export class SupabaseStorage {
     record: Omit<CoffeeRecord, 'id' | 'userId' | 'createdAt'>
   ): Promise<CoffeeRecord | null> {
     try {
+      console.log('addRecord 시작, 받은 데이터:', record)
       const {
         data: { user },
       } = await supabase.auth.getUser()
       if (!user) {
+        console.error('addRecord: 사용자가 로그인되어 있지 않습니다')
         throw new Error('사용자가 로그인되어 있지 않습니다')
       }
+      console.log('addRecord: 사용자 확인됨:', user.id)
 
       // Calculate match score
       const matchScore = this.calculateMatchScore(
@@ -199,28 +331,27 @@ export class SupabaseStorage {
         record.roasterNote
       )
 
+      // Map to existing database schema columns only
       const supabaseRecord = {
         user_id: user.id,
         coffee_name: record.coffeeName,
         roastery: record.roastery || null,
         origin: record.origin || null,
         roasting_level: record.roastLevel || null,
-        brewing_method: null,
-        rating: record.rating,
-        taste_notes: record.taste,
+        brewing_method: record.brewMethod || null,
+        rating: record.rating || 0,
+        taste_notes: record.taste || '',
         roaster_notes: record.roasterNote || null,
         personal_notes: record.memo || null,
-        mode: record.mode,
-        match_score: matchScore,
-        image_url: record.images?.[0] || null,
-        thumbnail_url: record.images?.[0]
-          ? `${record.images[0]}?width=300&height=300&resize=cover`
-          : null,
-        additional_images: record.images?.slice(1) || null,
+        mode: record.mode || 'cafe',
+        match_score: matchScore || 0,
+        // Image fields are not available in current schema - skip for now
         created_at: record.date ? record.date + 'T00:00:00Z' : new Date().toISOString(),
         updated_at: new Date().toISOString(),
       }
 
+      console.log('Match score 계산됨:', matchScore)
+      
       // Create the record object first
       const newRecord: CoffeeRecord = {
         id: crypto.randomUUID(),
@@ -229,14 +360,14 @@ export class SupabaseStorage {
         roastery: record.roastery || '',
         origin: record.origin || undefined,
         roastLevel: record.roastLevel || undefined,
-        temperature: 'Hot',
+        temperature: record.temperature || 'Hot',
         date: record.date || new Date().toISOString().split('T')[0],
-        taste: record.taste,
+        taste: record.taste || '',
         roasterNote: record.roasterNote || undefined,
-        tasteMode: 'simple',
+        tasteMode: record.tasteMode || 'simple',
         mode: record.mode,
         memo: record.memo || undefined,
-        rating: record.rating,
+        rating: record.rating || 0,
         createdAt: new Date().toISOString(),
         selectedFlavors: record.selectedFlavors || [],
         sensoryExpressions: record.sensoryExpressions || [],
@@ -251,35 +382,47 @@ export class SupabaseStorage {
           improvements: [],
         },
       }
+      
+      console.log('newRecord 생성됨:', newRecord)
 
+      console.log('Supabase에 저장할 데이터:', supabaseRecord)
+      
       // Try to save online first
       if (navigator.onLine) {
+        console.log('온라인 상태, Supabase에 저장 시도')
+        const insertData = {
+          ...supabaseRecord,
+          id: newRecord.id,
+        }
+        console.log('실제 insert 데이터:', insertData)
+        
         const { data, error } = await supabase
           .from('coffee_records')
-          .insert({
-            ...supabaseRecord,
-            id: newRecord.id,
-          })
+          .insert(insertData)
           .select()
           .single()
 
         if (error) {
-          console.error('Online save failed, saving offline:', error)
+          console.error('Supabase insert 실패:', error)
+          console.error('에러 세부사항:', error.message, error.details, error.hint)
           // Save to offline storage with pending status
           await offlineStorage.saveRecord(newRecord, 'pending')
           return newRecord
         }
 
+        console.log('Supabase 저장 성공:', data)
         // Save to offline storage as synced
         await offlineStorage.saveRecord(newRecord, 'synced')
         return newRecord
       } else {
+        console.log('오프라인 상태, IndexedDB에 저장')
         // Offline - save to IndexedDB
         await offlineStorage.saveRecord(newRecord, 'pending')
         return newRecord
       }
     } catch (error) {
-      console.error('Supabase 기록 추가 오류:', error)
+      console.error('Supabase 기록 추가 오류 상세:', error)
+      console.error('오류 스택:', error instanceof Error ? error.stack : 'Unknown error')
       return null
     }
   }

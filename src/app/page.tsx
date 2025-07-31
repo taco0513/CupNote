@@ -19,6 +19,7 @@ export default function HomePage() {
   const { user, loading } = useAuth()
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login')
+  const [stats, setStats] = useState({ totalRecords: 0, averageRating: 0, achievements: 0 })
 
   useEffect(() => {
     // 온보딩 완료 여부 체크
@@ -28,6 +29,59 @@ export default function HomePage() {
       router.push('/onboarding')
     }
   }, [router])
+
+  // 통계 데이터 로드
+  useEffect(() => {
+    const loadStats = async () => {
+      try {
+        // 통합 저장소에서 데이터 로드
+        const { SupabaseStorage } = await import('../lib/supabase-storage')
+        const { offlineStorage } = await import('../lib/offline-storage')
+        
+        let allRecords = []
+        
+        // Supabase에서 로드 (로그인된 경우)
+        try {
+          const supabaseRecords = await SupabaseStorage.getAllRecords()
+          if (supabaseRecords) {
+            allRecords = [...allRecords, ...supabaseRecords]
+          }
+        } catch (error) {
+          console.log('Supabase load failed (expected if not logged in)')
+        }
+        
+        // IndexedDB에서 로드 (게스트 모드)
+        try {
+          const offlineRecords = await offlineStorage.getAllRecords()
+          if (offlineRecords) {
+            // 중복 제거
+            const existingIds = new Set(allRecords.map(r => r.id))
+            const uniqueOfflineRecords = offlineRecords.filter(r => !existingIds.has(r.id))
+            allRecords = [...allRecords, ...uniqueOfflineRecords]
+          }
+        } catch (error) {
+          console.log('IndexedDB load failed')
+        }
+        
+        // 통계 계산
+        const totalRecords = allRecords.length
+        const averageRating = totalRecords > 0 
+          ? allRecords.reduce((sum, r) => sum + (r.rating || 0), 0) / totalRecords 
+          : 0
+        
+        setStats({
+          totalRecords,
+          averageRating: Math.round(averageRating * 10) / 10,
+          achievements: 12 // 일단 하드코딩, 나중에 성취 시스템에서 불러올 예정
+        })
+        
+      } catch (error) {
+        console.error('Failed to load stats:', error)
+      }
+    }
+
+    loadStats()
+  }, [user]) // user가 변경될 때마다 다시 로드
 
   const handleAuthSuccess = () => {
     setShowAuthModal(false)
@@ -83,17 +137,17 @@ export default function HomePage() {
               <div className="bg-white rounded-xl shadow-sm p-4 text-center">
                 <Coffee className="h-8 w-8 text-coffee-600 mx-auto mb-2" />
                 <h3 className="font-bold text-coffee-800">총 기록</h3>
-                <p className="text-2xl font-bold text-coffee-600">5개</p>
+                <p className="text-2xl font-bold text-coffee-600">{stats.totalRecords}개</p>
               </div>
               <div className="bg-white rounded-xl shadow-sm p-4 text-center">
                 <TrendingUp className="h-8 w-8 text-green-600 mx-auto mb-2" />
                 <h3 className="font-bold text-coffee-800">평균 평점</h3>
-                <p className="text-2xl font-bold text-green-600">4.0</p>
+                <p className="text-2xl font-bold text-green-600">{stats.averageRating > 0 ? stats.averageRating : '-'}</p>
               </div>
               <div className="bg-white rounded-xl shadow-sm p-4 text-center">
                 <Award className="h-8 w-8 text-yellow-600 mx-auto mb-2" />
                 <h3 className="font-bold text-coffee-800">달성 성취</h3>
-                <p className="text-2xl font-bold text-yellow-600">12개</p>
+                <p className="text-2xl font-bold text-yellow-600">{stats.achievements}개</p>
               </div>
             </section>
 

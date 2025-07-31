@@ -12,30 +12,50 @@ const supabase = createClient(supabaseUrl, supabaseKey)
 export class SupabaseAchievements {
   // 사용자 성취 초기화 (첫 로그인 시)
   static async initializeUserAchievements(userId: string): Promise<void> {
-    const { data: existingAchievements } = await supabase
-      .from('user_achievements')
-      .select('achievement_id')
-      .eq('user_id', userId)
-
-    const existingIds = new Set(existingAchievements?.map(a => a.achievement_id) || [])
-
-    // 새로운 성취들만 추가
-    const newAchievements = DEFAULT_ACHIEVEMENTS.filter(
-      achievement => !existingIds.has(achievement.id)
-    ).map(achievement => ({
-      user_id: userId,
-      achievement_id: achievement.id,
-      progress_current: 0,
-      progress_target: achievement.condition.target,
-      unlocked_at: null,
-    }))
-
-    if (newAchievements.length > 0) {
-      const { error } = await supabase.from('user_achievements').insert(newAchievements)
-
-      if (error) {
-        console.error('성취 초기화 오류:', error)
+    try {
+      // 사용자 인증 확인
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        console.log('성취 초기화 건너뜀: 사용자가 로그인하지 않음')
+        return
       }
+
+      const { data: existingAchievements, error: selectError } = await supabase
+        .from('user_achievements')
+        .select('achievement_id')
+        .eq('user_id', userId)
+
+      if (selectError) {
+        console.error('기존 성취 조회 오류:', selectError)
+        return
+      }
+
+      const existingIds = new Set(existingAchievements?.map(a => a.achievement_id) || [])
+
+      // 새로운 성취들만 추가
+      const newAchievements = DEFAULT_ACHIEVEMENTS.filter(
+        achievement => !existingIds.has(achievement.id)
+      ).map(achievement => ({
+        user_id: userId,
+        achievement_id: achievement.id,
+        progress_current: 0,
+        progress_target: achievement.condition.target,
+        unlocked_at: null,
+      }))
+
+      if (newAchievements.length > 0) {
+        const { error } = await supabase.from('user_achievements').insert(newAchievements)
+
+        if (error) {
+          console.error('성취 초기화 오류:', error)
+          // 오류가 발생해도 앱 동작을 막지 않음
+        } else {
+          console.log(`${newAchievements.length}개의 새로운 성취가 초기화되었습니다`)
+        }
+      }
+    } catch (error) {
+      console.error('성취 초기화 전체 오류:', error)
+      // 성취 시스템 오류가 발생해도 앱 동작을 막지 않음
     }
   }
 

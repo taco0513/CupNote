@@ -111,7 +111,7 @@ const ModeCard = ({
 
 export default function ModeSelectionPage() {
   return (
-    <ProtectedRoute>
+    // <ProtectedRoute> {/* 임시로 비활성화 - 게스트 사용자 테스트를 위해 */}
       <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100">
         <div className="container mx-auto px-4 py-4 md:py-8 max-w-4xl">
           <Navigation showBackButton currentPage="record" />
@@ -250,6 +250,6 @@ export default function ModeSelectionPage() {
           </div>
         </div>
       </div>
-    </ProtectedRoute>
+    // </ProtectedRoute> {/* 임시로 비활성화 - 게스트 사용자 테스트를 위해 */}
   )
 }

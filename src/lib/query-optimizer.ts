@@ -55,60 +55,123 @@ export class QueryOptimizer {
 
     try {
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        return {
-          data: [],
-          total: 0,
-          page,
-          pageSize,
-          hasMore: false
+      
+      let allRecords: CoffeeRecord[] = []
+      
+      // 로그인된 경우 Supabase에서 데이터 가져오기
+      if (user) {
+        // Build query
+        let query = supabase
+          .from('coffee_records')
+          .select(select, { count: 'exact' })
+          .eq('user_id', user.id)
+
+        // Apply filters
+        if (filters.mode) {
+          query = query.eq('mode', filters.mode)
         }
+        if (filters.rating) {
+          query = query.gte('rating', filters.rating)
+        }
+        if (filters.hasImages) {
+          query = query.not('image_url', 'is', null)
+        }
+        if (filters.dateFrom) {
+          query = query.gte('created_at', filters.dateFrom)
+        }
+        if (filters.dateTo) {
+          query = query.lte('created_at', filters.dateTo)
+        }
+
+        // Apply sorting
+        query = query.order(sortBy, { ascending: sortOrder === 'asc' })
+
+        const { data, error, count } = await query
+
+        if (error) throw error
+
+        // Transform data
+        allRecords = (data || []).map(record => this.transformRecord(record))
       }
-
-      // Build query
-      let query = supabase
-        .from('coffee_records')
-        .select(select, { count: 'exact' })
-        .eq('user_id', user.id)
-
+      
+      // 게스트 모드이거나 추가 데이터가 필요한 경우 IndexedDB에서도 가져오기
+      try {
+        const { offlineStorage } = await import('./offline-storage')
+        const offlineRecords = await offlineStorage.getAllRecords()
+        
+        if (offlineRecords && offlineRecords.length > 0) {
+          // 중복 제거 (Supabase 데이터와 중복되지 않도록)
+          const existingIds = new Set(allRecords.map(r => r.id))
+          const uniqueOfflineRecords = offlineRecords.filter(r => !existingIds.has(r.id))
+          allRecords = [...allRecords, ...uniqueOfflineRecords]
+        }
+      } catch (error) {
+        console.log('IndexedDB access failed:', error)
+      }
+      
+      // 클라이언트 사이드에서 필터링, 정렬, 페이지네이션 적용
+      let filteredRecords = allRecords
+      
       // Apply filters
       if (filters.mode) {
-        query = query.eq('mode', filters.mode)
+        filteredRecords = filteredRecords.filter(r => r.mode === filters.mode)
       }
       if (filters.rating) {
-        query = query.gte('rating', filters.rating)
+        filteredRecords = filteredRecords.filter(r => (r.rating || 0) >= filters.rating)
       }
       if (filters.hasImages) {
-        query = query.not('image_url', 'is', null)
+        filteredRecords = filteredRecords.filter(r => r.images && r.images.length > 0)
       }
       if (filters.dateFrom) {
-        query = query.gte('created_at', filters.dateFrom)
+        const dateFrom = new Date(filters.dateFrom)
+        filteredRecords = filteredRecords.filter(r => new Date(r.date) >= dateFrom)
       }
       if (filters.dateTo) {
-        query = query.lte('created_at', filters.dateTo)
+        const dateTo = new Date(filters.dateTo)
+        filteredRecords = filteredRecords.filter(r => new Date(r.date) <= dateTo)
       }
-
+      
       // Apply sorting
-      query = query.order(sortBy, { ascending: sortOrder === 'asc' })
-
+      filteredRecords.sort((a, b) => {
+        let aVal, bVal
+        
+        switch (sortBy) {
+          case 'created_at':
+            aVal = new Date(a.createdAt || a.date)
+            bVal = new Date(b.createdAt || b.date)
+            break
+          case 'rating':
+            aVal = a.rating || 0
+            bVal = b.rating || 0
+            break
+          case 'coffee_name':
+            aVal = a.coffeeName
+            bVal = b.coffeeName
+            break
+          default:
+            aVal = a.createdAt || a.date
+            bVal = b.createdAt || b.date
+        }
+        
+        if (sortOrder === 'asc') {
+          return aVal > bVal ? 1 : -1
+        } else {
+          return aVal < bVal ? 1 : -1
+        }
+      })
+      
       // Apply pagination
+      const total = filteredRecords.length
       const from = (page - 1) * pageSize
-      const to = from + pageSize - 1
-      query = query.range(from, to)
-
-      const { data, error, count } = await query
-
-      if (error) throw error
-
-      // Transform data
-      const records = (data || []).map(record => this.transformRecord(record))
+      const to = from + pageSize
+      const paginatedRecords = filteredRecords.slice(from, to)
 
       const result: PaginatedResult<CoffeeRecord> = {
-        data: records,
-        total: count || 0,
+        data: paginatedRecords,
+        total: total,
         page,
         pageSize,
-        hasMore: (count || 0) > page * pageSize
+        hasMore: total > page * pageSize
       }
 
       // Cache the result
