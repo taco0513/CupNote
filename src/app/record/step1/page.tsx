@@ -61,6 +61,8 @@ function RecordStep1Content() {
       // 모드에 따라 다른 경로로 이동
       if (formData.mode === 'quick') {
         router.push('/record/quick')
+      } else if (formData.mode === 'cafe') {
+        router.push('/record/cafe/step2')
       } else if (formData.mode === 'homecafe') {
         router.push('/record/homecafe')
       } else {
@@ -228,7 +230,7 @@ function RecordStep1Content() {
             {formData.mode === 'quick'
               ? '빠른 평가 및 완료'
               : formData.mode === 'cafe'
-                ? '간단한 맛 기록'
+                ? '카페 정보 입력'
                 : formData.mode === 'homecafe'
                   ? '추출 방법 설정'
                   : '전문 분석 설정'}
