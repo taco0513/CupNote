@@ -203,7 +203,7 @@ export default function CafeStep4Page() {
         },
         
         // 향미 선택 데이터
-        selectedFlavors: flavorSelection?.selected_flavors || [],
+        selectedFlavors: flavorSelection?.selectedFlavors || [],
         
         // 감각 표현 데이터
         sensoryExpressions: sensoryExpressions?.expressions || {},
