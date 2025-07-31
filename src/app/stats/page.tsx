@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
-import { CoffeeRecord } from '@/types/coffee'
-import Navigation from '@/components/Navigation'
-import ProtectedRoute from '@/components/auth/ProtectedRoute'
+import { CoffeeRecord } from '../../types/coffee'
+import Navigation from '../../components/Navigation'
+import ProtectedRoute from '../../components/auth/ProtectedRoute'
 import {
   BarChart3,
   TrendingUp,

@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Navigation from '@/components/Navigation'
-import ProtectedRoute from '@/components/auth/ProtectedRoute'
+import Navigation from '../../components/Navigation'
+import ProtectedRoute from '../../components/auth/ProtectedRoute'
 import {
   Download,
   Upload,
@@ -15,7 +15,7 @@ import {
   Database,
   Zap,
 } from 'lucide-react'
-import { CoffeeRecord } from '@/types/coffee'
+import { CoffeeRecord } from '../../types/coffee'
 
 interface UserSettings {
   displayName: string

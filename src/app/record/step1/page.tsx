@@ -2,9 +2,9 @@
 
 import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import Navigation from '@/components/Navigation'
-import ProtectedRoute from '@/components/auth/ProtectedRoute'
-import HelpTooltip from '@/components/HelpTooltip'
+import Navigation from '../../../components/Navigation'
+import ProtectedRoute from '../../../components/auth/ProtectedRoute'
+import HelpTooltip from '../../../components/HelpTooltip'
 import { Coffee, ArrowRight, Calendar, MapPin } from 'lucide-react'
 
 interface Step1Data {

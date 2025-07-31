@@ -3,9 +3,9 @@
 import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { CoffeeRecord } from '@/types/coffee'
-import { SupabaseStorage } from '@/lib/supabase-storage'
-import Navigation from '@/components/Navigation'
+import { CoffeeRecord } from '../../types/coffee'
+import { SupabaseStorage } from '../../lib/supabase-storage'
+import Navigation from '../../components/Navigation'
 import {
   CheckCircle,
   TrendingUp,

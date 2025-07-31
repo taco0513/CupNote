@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import Navigation from '@/components/Navigation'
-import { CacheService } from '@/lib/cache-service'
-import { getPerformanceReport } from '@/hooks/usePerformanceMonitor'
+import Navigation from '../../../components/Navigation'
+import { CacheService } from '../../../lib/cache-service'
+import { getPerformanceReport } from '../../../hooks/usePerformanceMonitor'
 import { ChevronLeft, Zap, Database, Activity, Trash2 } from 'lucide-react'
 
 export default function PerformanceSettingsPage() {

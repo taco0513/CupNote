@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import Navigation from '@/components/Navigation'
-import ImageUpload from '@/components/ImageUpload'
+import Navigation from '../../../components/Navigation'
+import ImageUpload from '../../../components/ImageUpload'
 import { Star, ArrowRight, ArrowLeft, Heart, Smile, Coffee, Camera } from 'lucide-react'
 
 interface Step1Data {

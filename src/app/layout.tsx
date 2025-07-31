@@ -1,30 +1,26 @@
 import type { Metadata, Viewport } from 'next'
-import { AuthProvider } from '@/contexts/AuthContext'
-import { NotificationProvider } from '@/contexts/NotificationContext'
-import { ThemeProvider } from '@/contexts/ThemeContext'
-import ErrorBoundary from '@/components/errors/ErrorBoundary'
-import NotificationContainer from '@/components/notifications/NotificationContainer'
-import MobileNavigation from '@/components/MobileNavigation'
+import { AuthProvider } from '../contexts/AuthContext'
+import { NotificationProvider } from '../contexts/NotificationContext'
+import { ThemeProvider } from '../contexts/ThemeContext'
+import ErrorBoundary from '../components/errors/ErrorBoundary'
+import NotificationContainer from '../components/notifications/NotificationContainer'
+import MobileNavigation from '../components/MobileNavigation'
 import dynamic from 'next/dynamic'
 
 // 클라이언트 전용 컴포넌트들을 동적 import
-const NetworkStatus = dynamic(() => import('@/components/network/NetworkStatus'), {
-  ssr: false,
+const NetworkStatus = dynamic(() => import('../components/network/NetworkStatus'), {
   loading: () => null
 })
 
-const ConnectionIndicator = dynamic(() => import('@/components/network/NetworkStatus').then(mod => ({ default: mod.ConnectionIndicator })), {
-  ssr: false,
+const ConnectionIndicator = dynamic(() => import('../components/network/NetworkStatus').then(mod => ({ default: mod.ConnectionIndicator })), {
   loading: () => null
 })
 
-const PWAInstallPrompt = dynamic(() => import('@/components/PWAInstallPrompt'), {
-  ssr: false,
+const PWAInstallPrompt = dynamic(() => import('../components/PWAInstallPrompt'), {
   loading: () => null
 })
 
-const SyncStatus = dynamic(() => import('@/components/SyncStatus'), {
-  ssr: false,
+const SyncStatus = dynamic(() => import('../components/SyncStatus'), {
   loading: () => null
 })
 import './globals.css'

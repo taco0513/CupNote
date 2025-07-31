@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import Navigation from '@/components/Navigation'
-import { SupabaseStorage } from '@/lib/supabase-storage'
-import { CoffeeRecord } from '@/types/coffee'
+import Navigation from '../../../components/Navigation'
+import { SupabaseStorage } from '../../../lib/supabase-storage'
+import { CoffeeRecord } from '../../../types/coffee'
 import {
   Check,
   ArrowLeft,
