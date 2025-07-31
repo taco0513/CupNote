@@ -102,7 +102,7 @@ function ResultPageContent() {
       }
       setLoading(false)
     }
-    
+
     loadRecord()
   }, [recordId, router])
 

@@ -231,17 +231,17 @@ export default function RecordStep1Page() {
   return (
     <ProtectedRoute>
       <Suspense
-      fallback={
-        <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100 flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-coffee-600 mx-auto mb-4"></div>
-            <p className="text-coffee-600">로딩 중...</p>
+        fallback={
+          <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100 flex items-center justify-center">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-coffee-600 mx-auto mb-4"></div>
+              <p className="text-coffee-600">로딩 중...</p>
+            </div>
           </div>
-        </div>
-      }
-    >
-      <RecordStep1Content />
-    </Suspense>
+        }
+      >
+        <RecordStep1Content />
+      </Suspense>
     </ProtectedRoute>
   )
 }

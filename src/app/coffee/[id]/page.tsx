@@ -22,7 +22,7 @@ export default function CoffeeDetailPage() {
         setLoading(false)
       }
     }
-    
+
     loadRecord()
   }, [params.id])
 
@@ -151,6 +151,25 @@ function BasicInfoCard({ record }: { record: CoffeeRecord }) {
         {record.temperature && <InfoItem icon="🌡️" label="온도" value={record.temperature} />}
         <InfoItem icon="📅" label="기록일" value={record.date} />
       </div>
+
+      {/* 이미지 섹션 */}
+      {record.images && record.images.length > 0 && (
+        <div className="mt-8">
+          <h3 className="text-lg font-semibold text-coffee-800 mb-4">📸 사진</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {record.images.map((imageUrl, index) => (
+              <div key={index} className="relative aspect-square rounded-xl overflow-hidden">
+                <img
+                  src={imageUrl}
+                  alt={`${record.coffeeName} ${index + 1}`}
+                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-300 cursor-pointer"
+                  onClick={() => window.open(imageUrl, '_blank')}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

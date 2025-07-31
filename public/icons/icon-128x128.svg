@@ -1,0 +1,23 @@
+
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <rect width="128" height="128" fill="#FFF8F3" rx="12.8"/>
+  <g transform="translate(19.2, 25.6)">
+    <path d="M12.8 19.2
+             L12.8 64
+             Q12.8 76.8 25.6 76.8
+             L64 76.8
+             Q76.8 76.8 76.8 64
+             L76.8 19.2
+             Z
+             M76.8 32
+             Q89.6 32 89.6 44.8
+             Q89.6 57.6 76.8 57.6"
+          fill="#6F4E37" stroke="none"/>
+    <path d="M25.6 6.4
+             Q38.4 0 44.8 6.4
+             M44.8 6.4
+             Q51.2 0 64 6.4"
+          fill="none" stroke="#6F4E37" stroke-width="2.56"/>
+  </g>
+  <text x="64" y="108.8" font-family="Arial, sans-serif" font-size="19.2" font-weight="bold" text-anchor="middle" fill="#6F4E37">CupNote</text>
+</svg>

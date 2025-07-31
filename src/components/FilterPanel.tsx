@@ -1,15 +1,20 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { CoffeeMode, TasteMode } from '@/types/coffee'
+import MultiTagSearch from './MultiTagSearch'
+import { SupabaseStorage } from '@/lib/supabase-storage'
 
 export interface FilterOptions {
   mode?: CoffeeMode
   tasteMode?: TasteMode
   rating?: number
-  dateRange?: 'all' | 'today' | 'week' | 'month'
-  sortBy?: 'date' | 'name' | 'rating'
+  dateRange?: 'all' | 'today' | 'week' | 'month' | 'custom'
+  customDateRange?: { start: string; end: string }
+  sortBy?: 'date' | 'name' | 'rating' | 'matchScore' | 'updated' | 'imageCount'
   sortOrder?: 'asc' | 'desc'
+  hasImages?: boolean
+  tags?: string[]
 }
 
 interface FilterPanelProps {
@@ -25,6 +30,25 @@ export default function FilterPanel({
   isOpen,
   onToggle,
 }: FilterPanelProps) {
+  const [allTags, setAllTags] = useState<string[]>([])
+
+  useEffect(() => {
+    // Load all available tags from records
+    const loadTags = async () => {
+      try {
+        const records = await SupabaseStorage.getRecords()
+        const tagSet = new Set<string>()
+        records.forEach(record => {
+          record.tags?.forEach(tag => tagSet.add(tag))
+        })
+        setAllTags(Array.from(tagSet).sort())
+      } catch (error) {
+        console.error('Failed to load tags:', error)
+      }
+    }
+    loadTags()
+  }, [])
+
   const handleFilterChange = (key: keyof FilterOptions, value: any) => {
     onFiltersChange({ ...filters, [key]: value })
   }
@@ -117,14 +141,51 @@ export default function FilterPanel({
               <label className="block text-sm font-medium text-gray-700 mb-2">기간</label>
               <select
                 value={filters.dateRange || 'all'}
-                onChange={e => handleFilterChange('dateRange', e.target.value)}
+                onChange={e => {
+                  handleFilterChange('dateRange', e.target.value)
+                  if (e.target.value !== 'custom') {
+                    handleFilterChange('customDateRange', undefined)
+                  }
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-500"
               >
                 <option value="all">전체</option>
                 <option value="today">오늘</option>
                 <option value="week">이번 주</option>
                 <option value="month">이번 달</option>
+                <option value="custom">직접 선택</option>
               </select>
+              
+              {filters.dateRange === 'custom' && (
+                <div className="mt-2 space-y-2">
+                  <input
+                    type="date"
+                    value={filters.customDateRange?.start || ''}
+                    onChange={e => 
+                      handleFilterChange('customDateRange', {
+                        ...filters.customDateRange,
+                        start: e.target.value,
+                        end: filters.customDateRange?.end || e.target.value
+                      })
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-500"
+                    placeholder="시작일"
+                  />
+                  <input
+                    type="date"
+                    value={filters.customDateRange?.end || ''}
+                    onChange={e => 
+                      handleFilterChange('customDateRange', {
+                        ...filters.customDateRange,
+                        start: filters.customDateRange?.start || e.target.value,
+                        end: e.target.value
+                      })
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-500"
+                    placeholder="종료일"
+                  />
+                </div>
+              )}
             </div>
 
             {/* 정렬 옵션 */}
@@ -139,6 +200,9 @@ export default function FilterPanel({
                   <option value="date">날짜순</option>
                   <option value="name">이름순</option>
                   <option value="rating">평점순</option>
+                  <option value="matchScore">매치 스코어순</option>
+                  <option value="updated">최근 수정순</option>
+                  <option value="imageCount">이미지 개수순</option>
                 </select>
                 <select
                   value={filters.sortOrder || 'desc'}
@@ -149,6 +213,31 @@ export default function FilterPanel({
                   <option value="asc">오름차순</option>
                 </select>
               </div>
+            </div>
+
+            {/* 이미지 필터 */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">이미지</label>
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={filters.hasImages || false}
+                  onChange={e => handleFilterChange('hasImages', e.target.checked || undefined)}
+                  className="mr-2 text-coffee-600 focus:ring-coffee-500 rounded"
+                />
+                <span className="text-sm text-gray-600">이미지가 있는 기록만 표시</span>
+              </label>
+            </div>
+
+            {/* 태그 필터 */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">태그 검색</label>
+              <MultiTagSearch
+                tags={filters.tags || []}
+                onTagsChange={tags => handleFilterChange('tags', tags.length > 0 ? tags : undefined)}
+                placeholder="태그 입력 후 Enter"
+                allAvailableTags={allTags}
+              />
             </div>
 
             {/* 필터 초기화 */}

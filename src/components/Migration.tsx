@@ -31,32 +31,43 @@ interface LocalRecord {
 }
 
 // Match Score 계산 함수 (Supabase의 함수와 동일한 로직)
-function calculateMatchScore(rating: number, mode: string, tasteNotes: string, roasterNotes?: string): number {
-  let score = rating * 12; // 0-60 points
-  
+function calculateMatchScore(
+  rating: number,
+  mode: string,
+  tasteNotes: string,
+  roasterNotes?: string
+): number {
+  let score = rating * 12 // 0-60 points
+
   // Mode bonus
   switch (mode) {
-    case 'cafe': score += 10; break;
-    case 'homecafe': score += 15; break;
-    case 'lab': score += 20; break;
+    case 'cafe':
+      score += 10
+      break
+    case 'homecafe':
+      score += 15
+      break
+    case 'lab':
+      score += 20
+      break
   }
-  
+
   // Detail bonus
-  let detailBonus = 0;
-  if (tasteNotes.length > 50) detailBonus = 10;
-  else if (tasteNotes.length > 20) detailBonus = 5;
-  
+  let detailBonus = 0
+  if (tasteNotes.length > 50) detailBonus = 10
+  else if (tasteNotes.length > 20) detailBonus = 5
+
   if (roasterNotes && roasterNotes.length > 0) {
-    detailBonus += 10;
+    detailBonus += 10
   }
-  
+
   // Quality multiplier
-  let qualityMultiplier = 1.0;
-  if (rating >= 4) qualityMultiplier = 1.2;
-  else if (rating <= 2) qualityMultiplier = 0.8;
-  
-  score = Math.round((score + detailBonus) * qualityMultiplier);
-  return Math.min(Math.max(score, 0), 100);
+  let qualityMultiplier = 1.0
+  if (rating >= 4) qualityMultiplier = 1.2
+  else if (rating <= 2) qualityMultiplier = 0.8
+
+  score = Math.round((score + detailBonus) * qualityMultiplier)
+  return Math.min(Math.max(score, 0), 100)
 }
 
 export default function Migration() {
@@ -71,7 +82,9 @@ export default function Migration() {
 
     try {
       // 1. 현재 사용자 확인
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) {
         throw new Error('사용자가 로그인되어 있지 않습니다')
       }
@@ -91,9 +104,8 @@ export default function Migration() {
         .select('coffee_name, created_at')
         .eq('user_id', user.id)
 
-      const existingRecords_keys = existingRecords?.map(r => 
-        `${r.coffee_name}_${r.created_at?.split('T')[0]}`
-      ) || []
+      const existingRecords_keys =
+        existingRecords?.map(r => `${r.coffee_name}_${r.created_at?.split('T')[0]}`) || []
       console.log('기존 데이터 키:', existingRecords_keys)
 
       const migrationResults = []
@@ -107,7 +119,7 @@ export default function Migration() {
             id: record.id,
             coffeeName: record.coffeeName,
             status: 'skipped',
-            message: '이미 마이그레이션됨'
+            message: '이미 마이그레이션됨',
           })
           continue
         }
@@ -137,7 +149,7 @@ export default function Migration() {
             mode: record.mode,
             match_score: matchScore,
             created_at: record.createdAt || record.date + 'T00:00:00Z',
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
           }
 
           // Supabase에 삽입
@@ -155,21 +167,19 @@ export default function Migration() {
             coffeeName: record.coffeeName,
             status: 'success',
             message: `Match Score: ${matchScore}`,
-            supabaseId: data?.[0]?.id
+            supabaseId: data?.[0]?.id,
           })
-
         } catch (recordError: any) {
           migrationResults.push({
             id: record.id,
             coffeeName: record.coffeeName,
             status: 'error',
-            message: recordError.message || '알 수 없는 오류'
+            message: recordError.message || '알 수 없는 오류',
           })
         }
       }
 
       setResults(migrationResults)
-
     } catch (err: any) {
       setError(err.message || '마이그레이션 중 오류가 발생했습니다')
     } finally {
@@ -188,12 +198,12 @@ export default function Migration() {
     <div className="p-6 max-w-4xl mx-auto">
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-bold mb-6">🔄 데이터 마이그레이션</h2>
-        
+
         <div className="mb-6">
           <p className="text-gray-600 mb-4">
             LocalStorage에 저장된 커피 기록을 Supabase 데이터베이스로 마이그레이션합니다.
           </p>
-          
+
           <div className="flex gap-4">
             <button
               onClick={migrateData}
@@ -202,7 +212,7 @@ export default function Migration() {
             >
               {isLoading ? '마이그레이션 중...' : '데이터 마이그레이션 시작'}
             </button>
-            
+
             <button
               onClick={clearLocalData}
               className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700"
@@ -221,27 +231,39 @@ export default function Migration() {
         {results.length > 0 && (
           <div className="bg-gray-50 rounded-lg p-4">
             <h3 className="text-lg font-semibold mb-4">마이그레이션 결과</h3>
-            
+
             <div className="space-y-2">
               {results.map((result, index) => (
-                <div key={index} className={`p-3 rounded ${
-                  result.status === 'success' ? 'bg-green-50 border border-green-200' :
-                  result.status === 'skipped' ? 'bg-yellow-50 border border-yellow-200' :
-                  'bg-red-50 border border-red-200'
-                }`}>
+                <div
+                  key={index}
+                  className={`p-3 rounded ${
+                    result.status === 'success'
+                      ? 'bg-green-50 border border-green-200'
+                      : result.status === 'skipped'
+                        ? 'bg-yellow-50 border border-yellow-200'
+                        : 'bg-red-50 border border-red-200'
+                  }`}
+                >
                   <div className="flex justify-between items-center">
                     <div>
                       <span className="font-medium">{result.coffeeName}</span>
                       <span className="text-sm text-gray-500 ml-2">(ID: {result.id})</span>
                     </div>
                     <div className="text-right">
-                      <div className={`inline-block px-2 py-1 text-xs rounded ${
-                        result.status === 'success' ? 'bg-green-100 text-green-800' :
-                        result.status === 'skipped' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
-                        {result.status === 'success' ? '✅ 성공' :
-                         result.status === 'skipped' ? '⏭️ 스킵' : '❌ 실패'}
+                      <div
+                        className={`inline-block px-2 py-1 text-xs rounded ${
+                          result.status === 'success'
+                            ? 'bg-green-100 text-green-800'
+                            : result.status === 'skipped'
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : 'bg-red-100 text-red-800'
+                        }`}
+                      >
+                        {result.status === 'success'
+                          ? '✅ 성공'
+                          : result.status === 'skipped'
+                            ? '⏭️ 스킵'
+                            : '❌ 실패'}
                       </div>
                       <div className="text-sm text-gray-600">{result.message}</div>
                     </div>
@@ -250,9 +272,7 @@ export default function Migration() {
               ))}
             </div>
 
-            <div className="mt-4 text-sm text-gray-600">
-              총 {results.length}개 항목 처리 완료
-            </div>
+            <div className="mt-4 text-sm text-gray-600">총 {results.length}개 항목 처리 완료</div>
           </div>
         )}
       </div>

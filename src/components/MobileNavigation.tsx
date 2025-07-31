@@ -78,7 +78,10 @@ export default function MobileNavigation() {
 
   return (
     <>
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-coffee-200 md:hidden z-50">
+      <nav 
+        className="fixed bottom-0 left-0 right-0 bg-background border-t border-border md:hidden z-50 safe-area-inset"
+        data-testid="mobile-navigation"
+      >
         <div className={`grid h-16 ${user ? 'grid-cols-5' : 'grid-cols-2'}`}>
           {navItems.map(item => {
             const active = isActive(item)
@@ -90,11 +93,16 @@ export default function MobileNavigation() {
                 href={item.href}
                 className={`
                   flex flex-col items-center justify-center space-y-1 relative
-                  ${isRecordButton ? 'text-white' : active ? 'text-coffee-800' : 'text-coffee-400'}
+                  ${isRecordButton 
+                    ? 'text-primary-foreground' 
+                    : active 
+                      ? 'text-foreground' 
+                      : 'text-foreground-muted'
+                  }
                 `}
               >
                 {isRecordButton && (
-                  <div className="absolute inset-2 bg-coffee-600 rounded-xl shadow-lg" />
+                  <div className="absolute inset-2 bg-primary rounded-xl shadow-lg" />
                 )}
                 <div
                   className={`relative ${active && !isRecordButton ? 'scale-110' : ''} transition-transform`}
@@ -112,7 +120,7 @@ export default function MobileNavigation() {
           {!user && !loading && (
             <button
               onClick={() => setShowAuthModal(true)}
-              className="flex flex-col items-center justify-center space-y-1 text-amber-600"
+              className="flex flex-col items-center justify-center space-y-1 text-accent"
             >
               <LogIn className="h-5 w-5" />
               <span className="text-xs">로그인</span>
@@ -122,8 +130,8 @@ export default function MobileNavigation() {
           {/* 로딩 상태 */}
           {loading && (
             <div className="flex flex-col items-center justify-center space-y-1">
-              <div className="w-5 h-5 bg-gray-300 rounded-full animate-pulse" />
-              <span className="text-xs text-gray-400">로딩...</span>
+              <div className="w-5 h-5 bg-secondary rounded-full animate-pulse" />
+              <span className="text-xs text-foreground-muted">로딩...</span>
             </div>
           )}
         </div>

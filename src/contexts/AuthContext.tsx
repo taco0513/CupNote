@@ -114,7 +114,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.log('Starting signup process...', { email, username })
       const result = await AuthService.signUp(email, password, username)
       console.log('Signup result:', result)
-      
+
       if (result.user) {
         console.log('User created, fetching profile...')
         const userProfile = await fetchUserProfile(result.user)

@@ -63,12 +63,8 @@ export default function ProtectedRoute({
             <div className="text-center max-w-md mx-auto px-4">
               <div className="bg-white rounded-2xl shadow-lg p-8">
                 <div className="text-6xl mb-4">☕</div>
-                <h1 className="text-2xl font-bold text-coffee-800 mb-4">
-                  로그인이 필요해요
-                </h1>
-                <p className="text-coffee-600 mb-6">
-                  이 기능을 사용하려면 먼저 로그인해주세요
-                </p>
+                <h1 className="text-2xl font-bold text-coffee-800 mb-4">로그인이 필요해요</h1>
+                <p className="text-coffee-600 mb-6">이 기능을 사용하려면 먼저 로그인해주세요</p>
                 <button
                   onClick={() => setShowAuthModal(true)}
                   className="w-full bg-coffee-600 text-white px-6 py-3 rounded-lg hover:bg-coffee-700 transition-colors font-medium"
@@ -94,7 +90,7 @@ export default function ProtectedRoute({
         </>
       )
     }
-    
+
     return null // 리다이렉트 처리됨
   }
 

@@ -146,7 +146,12 @@ export default function ModeSelectionPage() {
               description="집에서 내린 커피 + 레시피"
               duration="5-8분"
               badge="NEW"
-              features={['추출 방법 및 레시피', '사용한 도구 기록', '상세한 맛 분석', '개선점 메모']}
+              features={[
+                '추출 방법 및 레시피',
+                '사용한 도구 기록',
+                '상세한 맛 분석',
+                '개선점 메모',
+              ]}
             />
 
             {/* Lab Mode */}

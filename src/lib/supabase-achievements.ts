@@ -19,20 +19,18 @@ export class SupabaseAchievements {
     const existingIds = new Set(existingAchievements?.map(a => a.achievement_id) || [])
 
     // 새로운 성취들만 추가
-    const newAchievements = DEFAULT_ACHIEVEMENTS
-      .filter(achievement => !existingIds.has(achievement.id))
-      .map(achievement => ({
-        user_id: userId,
-        achievement_id: achievement.id,
-        progress_current: 0,
-        progress_target: achievement.condition.target,
-        unlocked_at: null,
-      }))
+    const newAchievements = DEFAULT_ACHIEVEMENTS.filter(
+      achievement => !existingIds.has(achievement.id)
+    ).map(achievement => ({
+      user_id: userId,
+      achievement_id: achievement.id,
+      progress_current: 0,
+      progress_target: achievement.condition.target,
+      unlocked_at: null,
+    }))
 
     if (newAchievements.length > 0) {
-      const { error } = await supabase
-        .from('user_achievements')
-        .insert(newAchievements)
+      const { error } = await supabase.from('user_achievements').insert(newAchievements)
 
       if (error) {
         console.error('성취 초기화 오류:', error)
@@ -42,7 +40,9 @@ export class SupabaseAchievements {
 
   // 사용자 통계 및 성취 정보 조회
   static async getUserStats(): Promise<UserStats | null> {
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
     if (!user) return null
 
     try {
@@ -53,10 +53,7 @@ export class SupabaseAchievements {
           .select('*')
           .eq('user_id', user.id)
           .order('created_at', { ascending: false }),
-        supabase
-          .from('user_achievements')
-          .select('*')
-          .eq('user_id', user.id)
+        supabase.from('user_achievements').select('*').eq('user_id', user.id),
       ])
 
       if (recordsResult.error) throw recordsResult.error
@@ -79,6 +76,7 @@ export class SupabaseAchievements {
         roasterNote: record.roaster_notes,
         memo: record.personal_notes,
         mode: record.mode as 'cafe' | 'homecafe' | 'lab',
+        tasteMode: 'simple', // 기본값 설정
         date: record.created_at.split('T')[0],
         createdAt: record.created_at,
       }))
@@ -86,7 +84,6 @@ export class SupabaseAchievements {
       // 통계 계산
       const stats = await this.calculateUserStats(coffeeRecords, userAchievements)
       return stats
-
     } catch (error) {
       console.error('사용자 통계 조회 오류:', error)
       return null
@@ -118,6 +115,7 @@ export class SupabaseAchievements {
         roasterNote: record.roaster_notes,
         memo: record.personal_notes,
         mode: record.mode as 'cafe' | 'homecafe' | 'lab',
+        tasteMode: 'simple', // 기본값 설정
         date: record.created_at.split('T')[0],
         createdAt: record.created_at,
       }))
@@ -153,7 +151,10 @@ export class SupabaseAchievements {
           achievementUpdates.push({
             id: userAchievement.id,
             progress_current: progress.current,
-            unlocked_at: isNowUnlocked && !wasUnlocked ? new Date().toISOString() : userAchievement.unlocked_at,
+            unlocked_at:
+              isNowUnlocked && !wasUnlocked
+                ? new Date().toISOString()
+                : userAchievement.unlocked_at,
           })
 
           // 새로 달성한 성취 기록
@@ -181,7 +182,6 @@ export class SupabaseAchievements {
       }
 
       return newlyUnlocked
-
     } catch (error) {
       console.error('성취 시스템 업데이트 오류:', error)
       return []
@@ -217,9 +217,7 @@ export class SupabaseAchievements {
 
     // 성취 데이터 변환
     const achievements: Achievement[] = DEFAULT_ACHIEVEMENTS.map(achievementDef => {
-      const userAchievement = userAchievements.find(
-        ua => ua.achievement_id === achievementDef.id
-      )
+      const userAchievement = userAchievements.find(ua => ua.achievement_id === achievementDef.id)
 
       const progress = this.calculateAchievementProgress(achievementDef, records)
       const unlocked = userAchievement?.unlocked_at !== null
@@ -366,7 +364,8 @@ export class SupabaseAchievements {
     const nextLevel = LEVEL_SYSTEM[level.level] || LEVEL_SYSTEM[LEVEL_SYSTEM.length - 1]
     const progress =
       nextLevel.requiredPoints > level.requiredPoints
-        ? ((points - level.requiredPoints) / (nextLevel.requiredPoints - level.requiredPoints)) * 100
+        ? ((points - level.requiredPoints) / (nextLevel.requiredPoints - level.requiredPoints)) *
+          100
         : 100
 
     return {
@@ -380,7 +379,10 @@ export class SupabaseAchievements {
     }
   }
 
-  private static countBy(records: CoffeeRecord[], field: keyof CoffeeRecord): Record<string, number> {
+  private static countBy(
+    records: CoffeeRecord[],
+    field: keyof CoffeeRecord
+  ): Record<string, number> {
     const counts: Record<string, number> = {}
 
     records.forEach(record => {

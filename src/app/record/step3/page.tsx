@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Navigation from '@/components/Navigation'
-import { Star, ArrowRight, ArrowLeft, Heart, Smile, Coffee } from 'lucide-react'
+import ImageUpload from '@/components/ImageUpload'
+import { Star, ArrowRight, ArrowLeft, Heart, Smile, Coffee, Camera } from 'lucide-react'
 
 interface Step1Data {
   coffeeName: string
@@ -22,6 +23,8 @@ interface Step3Data {
   taste: string
   roasterNote: string
   memo: string
+  imageUrl?: string
+  thumbnailUrl?: string
 }
 
 const RATING_LABELS = ['별로예요', '그냥 그래요', '괜찮아요', '맛있어요', '최고예요!']
@@ -37,6 +40,8 @@ export default function RecordStep3Page() {
     taste: '',
     roasterNote: '',
     memo: '',
+    imageUrl: undefined,
+    thumbnailUrl: undefined,
   })
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
   const [hoveredRating, setHoveredRating] = useState(0)
@@ -294,6 +299,32 @@ export default function RecordStep3Page() {
                 placeholder="함께한 사람, 그날의 기분, 특별한 순간..."
                 value={formData.memo}
                 onChange={e => setFormData({ ...formData, memo: e.target.value })}
+              />
+            </div>
+
+            {/* 사진 추가 */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                <Camera className="inline h-4 w-4 mr-1" />
+                사진 추가 (선택)
+              </label>
+              <ImageUpload
+                onImageUploaded={(imageUrl, thumbnailUrl) => {
+                  setFormData({
+                    ...formData,
+                    imageUrl,
+                    thumbnailUrl,
+                  })
+                }}
+                onImageRemoved={() => {
+                  setFormData({
+                    ...formData,
+                    imageUrl: undefined,
+                    thumbnailUrl: undefined,
+                  })
+                }}
+                existingImageUrl={formData.imageUrl}
+                className="max-w-md mx-auto"
               />
             </div>
           </div>

@@ -14,7 +14,13 @@ import {
   User,
   Database,
   Palette,
+  Zap,
+  Sun,
+  Moon,
+  Monitor,
 } from 'lucide-react'
+import { useTheme } from '@/contexts/ThemeContext'
+import ThemeToggle from '@/components/ThemeToggle'
 import { CoffeeRecord } from '@/types/coffee'
 
 interface UserSettings {
@@ -43,6 +49,7 @@ export default function SettingsPage() {
     type: 'success' | 'error'
     message: string
   } | null>(null)
+  const { theme, setTheme, effectiveTheme } = useTheme()
 
   useEffect(() => {
     // 설정 불러오기
@@ -168,17 +175,17 @@ export default function SettingsPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100">
+      <div className="min-h-screen bg-gradient-to-br from-background to-background-secondary">
         <div className="container mx-auto px-4 py-4 md:py-8 max-w-4xl">
           <Navigation showBackButton currentPage="settings" />
 
         {/* 헤더 */}
         <div className="mb-6 md:mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold text-coffee-800 flex items-center">
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground flex items-center">
             <SettingsIcon className="h-6 w-6 md:h-8 md:w-8 mr-2 md:mr-3" />
             설정
           </h1>
-          <p className="text-base md:text-lg text-coffee-600 mt-1">앱 설정 및 데이터 관리</p>
+          <p className="text-base md:text-lg text-foreground-secondary mt-1">앱 설정 및 데이터 관리</p>
         </div>
 
         {/* 알림 */}
@@ -258,17 +265,92 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          {/* 앱 설정 */}
-          <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm border border-coffee-100">
-            <h2 className="text-lg md:text-xl font-semibold text-coffee-800 mb-4 flex items-center">
-              <Palette className="h-5 w-5 mr-2" />앱 설정
+          {/* 테마 설정 */}
+          <div className="bg-background rounded-xl p-4 md:p-6 shadow-sm border border-border">
+            <h2 className="text-lg md:text-xl font-semibold text-foreground mb-4 flex items-center">
+              <Palette className="h-5 w-5 mr-2" />
+              테마 설정
             </h2>
 
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="font-medium text-coffee-700">자동 저장</div>
-                  <div className="text-sm text-coffee-500">입력하는 동안 자동으로 저장</div>
+                  <div className="font-medium text-foreground">테마 모드</div>
+                  <div className="text-sm text-foreground-muted">
+                    현재: {effectiveTheme === 'light' ? '라이트' : '다크'} 모드
+                  </div>
+                </div>
+                <ThemeToggle variant="dropdown" size="md" />
+              </div>
+
+              <div className="grid grid-cols-3 gap-3">
+                <button
+                  onClick={() => setTheme('light')}
+                  className={`
+                    p-3 rounded-lg border-2 transition-all duration-200
+                    flex flex-col items-center gap-2
+                    ${theme === 'light'
+                      ? 'border-primary bg-primary/10 text-primary'
+                      : 'border-border hover:border-border-secondary text-foreground-secondary'
+                    }
+                  `}
+                >
+                  <Sun size={20} className={theme === 'light' ? 'text-amber-500' : ''} />
+                  <span className="text-sm font-medium">라이트</span>
+                </button>
+
+                <button
+                  onClick={() => setTheme('dark')}
+                  className={`
+                    p-3 rounded-lg border-2 transition-all duration-200
+                    flex flex-col items-center gap-2
+                    ${theme === 'dark'
+                      ? 'border-primary bg-primary/10 text-primary'
+                      : 'border-border hover:border-border-secondary text-foreground-secondary'
+                    }
+                  `}
+                >
+                  <Moon size={20} className={theme === 'dark' ? 'text-blue-400' : ''} />
+                  <span className="text-sm font-medium">다크</span>
+                </button>
+
+                <button
+                  onClick={() => setTheme('system')}
+                  className={`
+                    p-3 rounded-lg border-2 transition-all duration-200
+                    flex flex-col items-center gap-2
+                    ${theme === 'system'
+                      ? 'border-primary bg-primary/10 text-primary'
+                      : 'border-border hover:border-border-secondary text-foreground-secondary'
+                    }
+                  `}
+                >
+                  <Monitor size={20} />
+                  <span className="text-sm font-medium">시스템</span>
+                </button>
+              </div>
+
+              <div className="p-3 bg-background-secondary rounded-lg border border-border-secondary">
+                <div className="text-sm text-foreground-secondary">
+                  <strong>시스템 모드</strong>는 기기의 설정을 따릅니다.
+                  <br />
+                  다크 모드에서는 눈의 피로를 줄이고 배터리를 절약할 수 있습니다.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 앱 설정 */}
+          <div className="bg-background rounded-xl p-4 md:p-6 shadow-sm border border-border">
+            <h2 className="text-lg md:text-xl font-semibold text-foreground mb-4 flex items-center">
+              <SettingsIcon className="h-5 w-5 mr-2" />앱 설정
+            </h2>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="font-medium text-foreground">자동 저장</div>
+                  <div className="text-sm text-foreground-muted">입력하는 동안 자동으로 저장</div>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -280,14 +362,14 @@ export default function SettingsPage() {
                     }}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-coffee-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-coffee-500"></div>
+                  <div className="w-11 h-6 bg-secondary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                 </label>
               </div>
 
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="font-medium text-coffee-700">목록에서 평점 표시</div>
-                  <div className="text-sm text-coffee-500">커피 카드에 별점 표시</div>
+                  <div className="font-medium text-foreground">목록에서 평점 표시</div>
+                  <div className="text-sm text-foreground-muted">커피 카드에 별점 표시</div>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -299,14 +381,14 @@ export default function SettingsPage() {
                     }}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-coffee-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-coffee-500"></div>
+                  <div className="w-11 h-6 bg-secondary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                 </label>
               </div>
 
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="font-medium text-coffee-700">컴팩트 보기</div>
-                  <div className="text-sm text-coffee-500">목록을 더 촘촘하게 표시</div>
+                  <div className="font-medium text-foreground">컴팩트 보기</div>
+                  <div className="text-sm text-foreground-muted">목록을 더 촘촘하게 표시</div>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -318,9 +400,29 @@ export default function SettingsPage() {
                     }}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-coffee-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-coffee-500"></div>
+                  <div className="w-11 h-6 bg-secondary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                 </label>
               </div>
+            </div>
+          </div>
+
+          {/* 성능 설정 */}
+          <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm border border-coffee-100">
+            <h2 className="text-lg md:text-xl font-semibold text-coffee-800 mb-4 flex items-center">
+              <Zap className="h-5 w-5 mr-2" />
+              성능 최적화
+            </h2>
+            <div className="space-y-4">
+              <p className="text-sm text-coffee-600">
+                앱 성능을 모니터링하고 캐시를 관리합니다.
+              </p>
+              <a
+                href="/settings/performance"
+                className="w-full flex items-center justify-center px-4 py-3 bg-yellow-100 text-yellow-700 rounded-lg hover:bg-yellow-200 transition-colors"
+              >
+                <Zap className="h-4 w-4 mr-2" />
+                성능 설정 열기
+              </a>
             </div>
           </div>
 
@@ -432,6 +534,7 @@ export default function SettingsPage() {
               <div>CupNote Team</div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </ProtectedRoute>

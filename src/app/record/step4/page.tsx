@@ -16,6 +16,7 @@ import {
   Heart,
   Smile,
   Edit3,
+  Camera,
 } from 'lucide-react'
 
 interface Step1Data {
@@ -80,6 +81,8 @@ export default function RecordStep4Page() {
         memo: step3Data.memo || '',
         rating: step3Data.rating,
         mode: step1Data.mode,
+        // 이미지 추가
+        images: (step3Data as any).imageUrl ? [(step3Data as any).imageUrl] : undefined,
 
         // Step 2 데이터 추가
         ...(step2Data || {}),
@@ -88,7 +91,7 @@ export default function RecordStep4Page() {
       // Supabase에 저장 (성취 시스템 포함)
       const result = await SupabaseStorage.addRecordWithAchievements(recordToSubmit)
       const savedRecord = result.record
-      
+
       if (!savedRecord) {
         throw new Error('기록 저장에 실패했습니다')
       }
@@ -330,6 +333,20 @@ export default function RecordStep4Page() {
                       메모
                     </p>
                     <p className="text-coffee-600 bg-coffee-50 p-3 rounded-lg">{step3Data.memo}</p>
+                  </div>
+                )}
+
+                {(step3Data as any).imageUrl && (
+                  <div>
+                    <p className="font-medium text-coffee-700 mb-1 flex items-center">
+                      <Camera className="h-4 w-4 mr-1" />
+                      사진
+                    </p>
+                    <img
+                      src={(step3Data as any).imageUrl}
+                      alt="커피 사진"
+                      className="w-full rounded-lg"
+                    />
                   </div>
                 )}
               </div>

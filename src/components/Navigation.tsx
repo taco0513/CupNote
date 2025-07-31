@@ -6,6 +6,7 @@ import { BarChart3, Settings, Plus, ArrowLeft, Trophy, User, LogIn } from 'lucid
 import { useAuth } from '@/contexts/AuthContext'
 import AuthModal from '@/components/auth/AuthModal'
 import UserProfile from '@/components/auth/UserProfile'
+import ThemeToggle from '@/components/ThemeToggle'
 
 interface NavigationProps {
   showBackButton?: boolean
@@ -35,32 +36,35 @@ export default function Navigation({
   }
 
   return (
-    <nav className="flex items-center justify-between mb-4 md:mb-8 bg-white rounded-xl p-3 md:p-4 shadow-sm border border-coffee-100">
+    <nav className="flex items-center justify-between mb-4 md:mb-8 bg-background rounded-xl p-3 md:p-4 shadow-sm border border-border">
       <div className="flex items-center">
         {showBackButton && (
           <Link
             href={backHref}
-            className="flex items-center text-coffee-600 hover:text-coffee-800 mr-4 transition-colors"
+            className="flex items-center text-foreground-secondary hover:text-foreground mr-4 transition-colors"
           >
             <ArrowLeft className="h-5 w-5 mr-1" />
             돌아가기
           </Link>
         )}
-        <Link href="/" className="text-xl md:text-2xl font-bold text-coffee-800">
+        <Link href="/" className="text-xl md:text-2xl font-bold text-foreground">
           ☕ CupNote
         </Link>
       </div>
 
       {/* 데스크톱 네비게이션 - 모바일에서는 숨김 */}
       <div className="hidden md:flex items-center space-x-2">
+        {/* 테마 토글 - 항상 표시 */}
+        <ThemeToggle variant="button" size="md" />
+        
         {user && (
           <>
             <Link
               href="/achievements"
               className={`flex items-center px-3 py-2 rounded-lg transition-colors ${
                 isActive('achievements')
-                  ? 'bg-coffee-100 text-coffee-800'
-                  : 'text-coffee-600 hover:text-coffee-800 hover:bg-coffee-50'
+                  ? 'bg-secondary text-foreground'
+                  : 'text-foreground-secondary hover:text-foreground hover:bg-secondary'
               }`}
             >
               <Trophy className="h-4 w-4 mr-1" />
@@ -70,8 +74,8 @@ export default function Navigation({
               href="/stats"
               className={`flex items-center px-3 py-2 rounded-lg transition-colors ${
                 isActive('stats')
-                  ? 'bg-coffee-100 text-coffee-800'
-                  : 'text-coffee-600 hover:text-coffee-800 hover:bg-coffee-50'
+                  ? 'bg-secondary text-foreground'
+                  : 'text-foreground-secondary hover:text-foreground hover:bg-secondary'
               }`}
             >
               <BarChart3 className="h-4 w-4 mr-1" />
@@ -81,8 +85,8 @@ export default function Navigation({
               href="/settings"
               className={`flex items-center px-3 py-2 rounded-lg transition-colors ${
                 isActive('settings')
-                  ? 'bg-coffee-100 text-coffee-800'
-                  : 'text-coffee-600 hover:text-coffee-800 hover:bg-coffee-50'
+                  ? 'bg-secondary text-foreground'
+                  : 'text-foreground-secondary hover:text-foreground hover:bg-secondary'
               }`}
             >
               <Settings className="h-4 w-4 mr-1" />
@@ -92,8 +96,8 @@ export default function Navigation({
               href="/mode-selection"
               className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
                 isActive('record')
-                  ? 'bg-coffee-700 text-white'
-                  : 'bg-coffee-600 text-white hover:bg-coffee-700'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-primary hover:bg-primary-hover text-primary-foreground'
               }`}
             >
               <Plus className="h-4 w-4 mr-2" />
@@ -105,13 +109,13 @@ export default function Navigation({
         {/* 인증 영역 */}
         <div className="relative">
           {loading ? (
-            <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse" />
+            <div className="w-8 h-8 bg-secondary rounded-full animate-pulse" />
           ) : user ? (
             <button
               onClick={() => setShowUserProfile(!showUserProfile)}
-              className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-amber-50 hover:bg-amber-100 transition-colors"
+              className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors"
             >
-              <div className="w-8 h-8 bg-amber-200 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center">
                 {user.avatar_url ? (
                   <img
                     src={user.avatar_url}
@@ -119,23 +123,23 @@ export default function Navigation({
                     className="w-8 h-8 rounded-full object-cover"
                   />
                 ) : (
-                  <User size={16} className="text-amber-600" />
+                  <User size={16} className="text-accent" />
                 )}
               </div>
-              <span className="text-sm font-medium text-amber-800">{user.username}</span>
+              <span className="text-sm font-medium text-foreground">{user.username}</span>
             </button>
           ) : (
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => openAuthModal('login')}
-                className="flex items-center px-3 py-2 text-coffee-600 hover:text-coffee-800 hover:bg-coffee-50 rounded-lg transition-colors"
+                className="flex items-center px-3 py-2 text-foreground-secondary hover:text-foreground hover:bg-secondary rounded-lg transition-colors"
               >
                 <LogIn className="h-4 w-4 mr-1" />
                 로그인
               </button>
               <button
                 onClick={() => openAuthModal('signup')}
-                className="flex items-center px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition-colors"
+                className="flex items-center px-4 py-2 bg-accent hover:bg-accent-hover text-accent-foreground rounded-lg transition-colors"
               >
                 회원가입
               </button>

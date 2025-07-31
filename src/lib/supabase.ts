@@ -1,12 +1,28 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
 // Supabase 프로젝트 URL과 API Key
 // 실제 사용 시에는 환경변수로 관리해야 합니다
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://your-project.supabase.co'
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'your-anon-key'
 
-// Supabase 클라이언트 생성
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Singleton pattern으로 Supabase 클라이언트 생성 (중복 인스턴스 방지)
+let supabaseInstance: SupabaseClient | null = null
+
+function createSupabaseClient() {
+  if (!supabaseInstance) {
+    supabaseInstance = createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        persistSession: true,
+        storageKey: 'cupnote-auth',
+        storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+      },
+    })
+  }
+  return supabaseInstance
+}
+
+// Supabase 클라이언트 내보내기
+export const supabase = createSupabaseClient()
 
 // Database Types (자동 생성될 예정)
 export interface Database {

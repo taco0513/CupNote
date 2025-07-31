@@ -340,6 +340,7 @@ export default function StatsPage() {
             )}
           </div>
         </div>
+        </div>
       </div>
     </ProtectedRoute>
   )

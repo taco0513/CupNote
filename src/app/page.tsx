@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Navigation from '@/components/Navigation'
-import CoffeeList from '@/components/CoffeeList'
+import OptimizedCoffeeList from '@/components/OptimizedCoffeeList'
 import SupabaseTest from '@/components/SupabaseTest'
 import AuthModal from '@/components/auth/AuthModal'
 import { useAuth } from '@/contexts/AuthContext'
@@ -98,7 +98,7 @@ export default function HomePage() {
               <h2 className="text-2xl md:text-3xl font-bold text-coffee-800 mb-4 md:mb-6">
                 최근 커피 기록
               </h2>
-              <CoffeeList />
+              <OptimizedCoffeeList />
             </section>
           </>
         ) : (
@@ -110,7 +110,8 @@ export default function HomePage() {
                 ☕ CupNote
               </h1>
               <p className="text-xl md:text-2xl text-coffee-600 mb-8 md:mb-10 px-4 max-w-3xl mx-auto">
-                누구나 전문가처럼, 그러나 자기만의 방식으로<br />
+                누구나 전문가처럼, 그러나 자기만의 방식으로
+                <br />
                 커피를 기록하고 나눌 수 있는 공간
               </p>
 
@@ -142,7 +143,7 @@ export default function HomePage() {
                   직관적인 인터페이스로 누구나 쉽게 커피 경험을 기록할 수 있어요
                 </p>
               </div>
-              
+
               <div className="text-center">
                 <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                   <TrendingUp className="h-8 w-8 text-green-600" />
@@ -152,7 +153,7 @@ export default function HomePage() {
                   Match Score로 커피 감각의 발달 과정을 시각적으로 확인하세요
                 </p>
               </div>
-              
+
               <div className="text-center">
                 <div className="bg-yellow-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                   <Award className="h-8 w-8 text-yellow-600" />
@@ -181,7 +182,7 @@ export default function HomePage() {
             </section>
           </>
         )}
-        
+
         {/* Supabase 연결 테스트 (개발용) */}
         <SupabaseTest />
       </main>

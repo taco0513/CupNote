@@ -9,8 +9,10 @@
 구현된 기능들의 상세 설명과 사용법
 
 - [검색 및 필터링](./features/SEARCH_AND_FILTER.md) - 커피 기록 검색/필터링 시스템 ✅
-- [상세 페이지](./features/DETAIL_PAGE.md) - Foundation 기반 완전한 상세 보기 ✅
-- [데이터 저장](./features/LOCAL_STORAGE.md) - 로컬 스토리지 기반 데이터 관리 ✅
+- [성취 시스템](./features/ACHIEVEMENTS_SYSTEM.md) - 30+ 배지 및 레벨링 시스템 ✅
+- [모바일 최적화](./features/MOBILE_OPTIMIZATION.md) - 반응형 디자인 및 터치 최적화 ✅
+- [다크 모드 시스템](./features/DARK_MODE_THEME_SYSTEM.md) - 라이트/다크/시스템 테마 지원 ✅
+- [테스트 커버리지](./features/TEST_COVERAGE_SYSTEM.md) - 단위/컴포넌트/E2E 테스트 ✅
 - [커뮤니티 커핑](./features/COMMUNITY_CUPPING.md) - 그룹 커핑 세션 및 평가 비교 🚧
 
 ### 🛠️ [API 문서](./api/)
@@ -66,23 +68,30 @@ http://localhost:3001
 ## 🏗️ 기술 스택
 
 - **Frontend**: Next.js 15.4.5, React 19, TypeScript
-- **Styling**: Tailwind CSS 3.4.1
-- **데이터**: Local Storage API
+- **Styling**: Tailwind CSS 4.0, CSS Variables
+- **Database**: Supabase (PostgreSQL + Storage)
+- **Authentication**: Supabase Auth
+- **Testing**: Vitest, React Testing Library, Playwright
+- **데이터**: Supabase + LocalStorage (Hybrid)
+- **Theme**: Light/Dark/System 모드 지원
 - **빌드**: npm scripts
-- **배포**: 미정
+- **배포**: 준비 완료
 
 ## 📊 프로젝트 현황
 
-- ✅ 기본 커피 기록 시스템
-- ✅ 검색 및 필터링 기능
-- ✅ Foundation 기반 상세 페이지
-- ✅ 로컬 스토리지 데이터 관리
-- ✅ 코드 품질 도구 (ESLint/Prettier)
-- ✅ 통계 페이지 (데이터 시각화 및 분석)
-- ✅ 설정 페이지 (개인화 및 데이터 관리)
-- ✅ 네비게이션 시스템 (통합 UI/UX)
-- 🚧 커뮤니티 커핑 기능 (설계 완료, 구현 준비)
-- 📋 모바일 최적화 (예정)
+- ✅ **기본 커피 기록 시스템** - 4단계 플로우, 모드별 특화
+- ✅ **Supabase 백엔드 통합** - 클라우드 데이터베이스, 인증, 스토리지
+- ✅ **검색 및 필터링 기능** - 실시간 검색, 고급 필터, 다중 태그
+- ✅ **PWA 지원** - 오프라인 동작, 설치 가능, 백그라운드 동기화
+- ✅ **성능 최적화** - 2단계 캐싱, 지연 로딩, 페이지네이션
+- ✅ **이미지 업로드** - Supabase Storage, 자동 압축, 썸네일
+- ✅ **테스트 커버리지** - 단위/컴포넌트/E2E 테스트 (Vitest, Playwright)
+- ✅ **다크 모드 시스템** - 라이트/다크/시스템 모드, CSS Variables
+- ✅ **모바일 최적화** - 반응형 디자인, 터치 최적화, 하단 네비게이션
+- ✅ **성취 시스템** - 30+ 배지, 레벨링, 포인트 시스템
+- ✅ **통계 & 설정** - 데이터 분석, 시각화, 내보내기/가져오기
+- 🚧 **커뮤니티 커핑** - 설계 완료, 구현 준비
+- 📋 **푸시 알림** - 예정
 
 ## 🤝 기여하기
 
@@ -94,6 +103,6 @@ http://localhost:3001
 
 ---
 
-**문서 버전**: 1.0  
-**최종 업데이트**: 2025-01-30  
+**문서 버전**: 1.1  
+**최종 업데이트**: 2025-01-31  
 **관리자**: CupNote Team

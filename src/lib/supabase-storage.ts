@@ -3,6 +3,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { CoffeeRecord } from '@/types/coffee'
 import { SupabaseAchievements } from './supabase-achievements'
+import { offlineStorage } from './offline-storage'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -14,53 +15,69 @@ export class SupabaseStorage {
   static async getRecords(): Promise<CoffeeRecord[]> {
     try {
       // Check if user is authenticated
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) {
         console.log('No authenticated user, returning empty records')
         return []
       }
 
-      const { data, error } = await supabase
-        .from('coffee_records')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
+      // Try to get from Supabase first
+      if (navigator.onLine) {
+        const { data, error } = await supabase
+          .from('coffee_records')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
 
-      if (error) {
-        console.error('Supabase 데이터 로드 오류:', error)
-        return []
+        if (error) {
+          console.error('Supabase 데이터 로드 오류:', error)
+          // Fall back to offline storage
+          const offlineRecords = await offlineStorage.getRecords(user.id)
+          return offlineRecords.map(({ syncStatus, syncError, lastAttempt, ...record }) => record)
+        }
+
+        // Transform Supabase records to match CoffeeRecord interface
+        return (data || []).map(record => ({
+          id: record.id,
+          userId: record.user_id,
+          coffeeName: record.coffee_name,
+          roastery: record.roastery || '',
+          origin: record.origin || undefined,
+          roastLevel: record.roasting_level || undefined,
+          temperature: 'Hot', // Default since not stored in Supabase
+          date: record.created_at?.split('T')[0] || new Date().toISOString().split('T')[0],
+          taste: record.taste_notes,
+          roasterNote: record.roaster_notes || undefined,
+          tasteMode: 'simple', // Default since not stored in Supabase
+          mode: record.mode,
+          memo: record.personal_notes || undefined,
+          rating: record.rating,
+          createdAt: record.created_at,
+          // Optional fields that might be missing from Supabase
+          selectedFlavors: [],
+          sensoryExpressions: [],
+          tags: [],
+          images: record.image_url
+            ? [record.image_url, ...(record.additional_images || [])].filter(Boolean)
+            : undefined,
+          matchScore: record.match_score
+            ? {
+                overall: record.match_score,
+                flavorMatching: 0,
+                expressionAccuracy: 0,
+                consistency: 0,
+                strengths: [],
+                improvements: [],
+              }
+            : undefined,
+        }))
+      } else {
+        // Offline - get from IndexedDB
+        const offlineRecords = await offlineStorage.getRecords(user.id)
+        return offlineRecords.map(({ syncStatus, syncError, lastAttempt, ...record }) => record)
       }
-
-      // Transform Supabase records to match CoffeeRecord interface
-      return (data || []).map(record => ({
-        id: record.id,
-        userId: record.user_id,
-        coffeeName: record.coffee_name,
-        roastery: record.roastery || '',
-        origin: record.origin || undefined,
-        roastLevel: record.roasting_level || undefined,
-        temperature: 'Hot', // Default since not stored in Supabase
-        date: record.created_at?.split('T')[0] || new Date().toISOString().split('T')[0],
-        taste: record.taste_notes,
-        roasterNote: record.roaster_notes || undefined,
-        tasteMode: 'simple', // Default since not stored in Supabase
-        mode: record.mode,
-        memo: record.personal_notes || undefined,
-        rating: record.rating,
-        createdAt: record.created_at,
-        // Optional fields that might be missing from Supabase
-        selectedFlavors: [],
-        sensoryExpressions: [],
-        tags: [],
-        matchScore: record.match_score ? {
-          overall: record.match_score,
-          flavorMatching: 0,
-          expressionAccuracy: 0,
-          consistency: 0,
-          strengths: [],
-          improvements: []
-        } : undefined
-      }))
     } catch (error) {
       console.error('Supabase 기록 가져오기 오류:', error)
       return []
@@ -70,7 +87,9 @@ export class SupabaseStorage {
   // ID로 기록 찾기
   static async getRecordById(id: string): Promise<CoffeeRecord | null> {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) return null
 
       const { data, error } = await supabase
@@ -105,14 +124,19 @@ export class SupabaseStorage {
         selectedFlavors: [],
         sensoryExpressions: [],
         tags: [],
-        matchScore: data.match_score ? {
-          overall: data.match_score,
-          flavorMatching: 0,
-          expressionAccuracy: 0,
-          consistency: 0,
-          strengths: [],
-          improvements: []
-        } : undefined
+        images: data.image_url
+          ? [data.image_url, ...(data.additional_images || [])].filter(Boolean)
+          : undefined,
+        matchScore: data.match_score
+          ? {
+              overall: data.match_score,
+              flavorMatching: 0,
+              expressionAccuracy: 0,
+              consistency: 0,
+              strengths: [],
+              improvements: [],
+            }
+          : undefined,
       }
     } catch (error) {
       console.error('Supabase 단일 기록 가져오기 오류:', error)
@@ -121,12 +145,16 @@ export class SupabaseStorage {
   }
 
   // 새 기록 추가 (성취 시스템 포함)
-  static async addRecordWithAchievements(record: Omit<CoffeeRecord, 'id' | 'userId' | 'createdAt'>): Promise<{
+  static async addRecordWithAchievements(
+    record: Omit<CoffeeRecord, 'id' | 'userId' | 'createdAt'>
+  ): Promise<{
     record: CoffeeRecord | null
     newAchievements: string[]
   }> {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) {
         throw new Error('사용자가 로그인되어 있지 않습니다')
       }
@@ -151,18 +179,22 @@ export class SupabaseStorage {
   }
 
   // 새 기록 추가
-  static async addRecord(record: Omit<CoffeeRecord, 'id' | 'userId' | 'createdAt'>): Promise<CoffeeRecord | null> {
+  static async addRecord(
+    record: Omit<CoffeeRecord, 'id' | 'userId' | 'createdAt'>
+  ): Promise<CoffeeRecord | null> {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) {
         throw new Error('사용자가 로그인되어 있지 않습니다')
       }
 
       // Calculate match score
       const matchScore = this.calculateMatchScore(
-        record.rating,
-        record.mode,
-        record.taste,
+        record.rating || 0,
+        record.mode || 'cafe',
+        record.taste || '',
         record.roasterNote
       )
 
@@ -179,48 +211,71 @@ export class SupabaseStorage {
         personal_notes: record.memo || null,
         mode: record.mode,
         match_score: matchScore,
+        image_url: record.images?.[0] || null,
+        thumbnail_url: record.images?.[0]
+          ? `${record.images[0]}?width=300&height=300&resize=cover`
+          : null,
+        additional_images: record.images?.slice(1) || null,
         created_at: record.date ? record.date + 'T00:00:00Z' : new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       }
 
-      const { data, error } = await supabase
-        .from('coffee_records')
-        .insert(supabaseRecord)
-        .select()
-        .single()
-
-      if (error) {
-        throw error
-      }
-
-      // Transform back to CoffeeRecord format
-      return {
-        id: data.id,
-        userId: data.user_id,
-        coffeeName: data.coffee_name,
-        roastery: data.roastery || '',
-        origin: data.origin || undefined,
-        roastLevel: data.roasting_level || undefined,
+      // Create the record object first
+      const newRecord: CoffeeRecord = {
+        id: crypto.randomUUID(),
+        userId: user.id,
+        coffeeName: record.coffeeName,
+        roastery: record.roastery || '',
+        origin: record.origin || undefined,
+        roastLevel: record.roastLevel || undefined,
         temperature: 'Hot',
-        date: data.created_at?.split('T')[0] || new Date().toISOString().split('T')[0],
-        taste: data.taste_notes,
-        roasterNote: data.roaster_notes || undefined,
+        date: record.date || new Date().toISOString().split('T')[0],
+        taste: record.taste,
+        roasterNote: record.roasterNote || undefined,
         tasteMode: 'simple',
-        mode: data.mode,
-        memo: data.personal_notes || undefined,
-        rating: data.rating,
-        createdAt: data.created_at,
+        mode: record.mode,
+        memo: record.memo || undefined,
+        rating: record.rating,
+        createdAt: new Date().toISOString(),
         selectedFlavors: record.selectedFlavors || [],
         sensoryExpressions: record.sensoryExpressions || [],
         tags: record.tags || [],
+        images: record.images || undefined,
         matchScore: {
-          overall: data.match_score || 0,
+          overall: matchScore || 0,
           flavorMatching: 0,
           expressionAccuracy: 0,
           consistency: 0,
           strengths: [],
-          improvements: []
+          improvements: [],
+        },
+      }
+
+      // Try to save online first
+      if (navigator.onLine) {
+        const { data, error } = await supabase
+          .from('coffee_records')
+          .insert({
+            ...supabaseRecord,
+            id: newRecord.id,
+          })
+          .select()
+          .single()
+
+        if (error) {
+          console.error('Online save failed, saving offline:', error)
+          // Save to offline storage with pending status
+          await offlineStorage.saveRecord(newRecord, 'pending')
+          return newRecord
         }
+
+        // Save to offline storage as synced
+        await offlineStorage.saveRecord(newRecord, 'synced')
+        return newRecord
+      } else {
+        // Offline - save to IndexedDB
+        await offlineStorage.saveRecord(newRecord, 'pending')
+        return newRecord
       }
     } catch (error) {
       console.error('Supabase 기록 추가 오류:', error)
@@ -229,42 +284,58 @@ export class SupabaseStorage {
   }
 
   // Match Score 계산 함수 (Migration.tsx와 동일한 로직)
-  private static calculateMatchScore(rating: number, mode: string, tasteNotes: string, roasterNotes?: string): number {
-    let score = rating * 12; // 0-60 points
-    
+  private static calculateMatchScore(
+    rating: number,
+    mode: string,
+    tasteNotes: string,
+    roasterNotes?: string
+  ): number {
+    let score = rating * 12 // 0-60 points
+
     // Mode bonus
     switch (mode) {
-      case 'cafe': score += 10; break;
-      case 'homecafe': score += 15; break;
-      case 'lab': score += 20; break;
+      case 'cafe':
+        score += 10
+        break
+      case 'homecafe':
+        score += 15
+        break
+      case 'lab':
+        score += 20
+        break
     }
-    
+
     // Detail bonus
-    let detailBonus = 0;
-    if (tasteNotes.length > 50) detailBonus = 10;
-    else if (tasteNotes.length > 20) detailBonus = 5;
-    
+    let detailBonus = 0
+    if (tasteNotes.length > 50) detailBonus = 10
+    else if (tasteNotes.length > 20) detailBonus = 5
+
     if (roasterNotes && roasterNotes.length > 0) {
-      detailBonus += 10;
+      detailBonus += 10
     }
-    
+
     // Quality multiplier
-    let qualityMultiplier = 1.0;
-    if (rating >= 4) qualityMultiplier = 1.2;
-    else if (rating <= 2) qualityMultiplier = 0.8;
-    
-    score = Math.round((score + detailBonus) * qualityMultiplier);
-    return Math.min(Math.max(score, 0), 100);
+    let qualityMultiplier = 1.0
+    if (rating >= 4) qualityMultiplier = 1.2
+    else if (rating <= 2) qualityMultiplier = 0.8
+
+    score = Math.round((score + detailBonus) * qualityMultiplier)
+    return Math.min(Math.max(score, 0), 100)
   }
 
   // 기록 업데이트
-  static async updateRecord(id: string, updates: Partial<CoffeeRecord>): Promise<CoffeeRecord | null> {
+  static async updateRecord(
+    id: string,
+    updates: Partial<CoffeeRecord>
+  ): Promise<CoffeeRecord | null> {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) return null
 
       const supabaseUpdates: any = {
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       }
 
       // Map CoffeeRecord fields to Supabase fields
@@ -279,13 +350,18 @@ export class SupabaseStorage {
       if (updates.mode !== undefined) supabaseUpdates.mode = updates.mode
 
       // Recalculate match score if relevant fields changed
-      if (updates.rating !== undefined || updates.mode !== undefined || updates.taste !== undefined || updates.roasterNote !== undefined) {
+      if (
+        updates.rating !== undefined ||
+        updates.mode !== undefined ||
+        updates.taste !== undefined ||
+        updates.roasterNote !== undefined
+      ) {
         const currentRecord = await this.getRecordById(id)
         if (currentRecord) {
           supabaseUpdates.match_score = this.calculateMatchScore(
-            updates.rating ?? currentRecord.rating,
-            updates.mode ?? currentRecord.mode,
-            updates.taste ?? currentRecord.taste,
+            updates.rating ?? currentRecord.rating ?? 0,
+            updates.mode ?? currentRecord.mode ?? 'cafe',
+            updates.taste ?? currentRecord.taste ?? '',
             updates.roasterNote ?? currentRecord.roasterNote
           )
         }
@@ -330,8 +406,8 @@ export class SupabaseStorage {
           expressionAccuracy: 0,
           consistency: 0,
           strengths: [],
-          improvements: []
-        }
+          improvements: [],
+        },
       }
     } catch (error) {
       console.error('Supabase 기록 업데이트 오류:', error)
@@ -342,7 +418,9 @@ export class SupabaseStorage {
   // 기록 삭제
   static async deleteRecord(id: string): Promise<boolean> {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) return false
 
       const { error } = await supabase

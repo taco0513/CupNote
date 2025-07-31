@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { X, Eye, EyeOff, Mail, Lock, User } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
+import { useNotification } from '@/contexts/NotificationContext'
+import { mapSupabaseError, logError } from '@/lib/error-handler'
 
 interface AuthModalProps {
   isOpen: boolean
@@ -18,6 +20,7 @@ export default function AuthModal({
   initialMode = 'login',
 }: AuthModalProps) {
   const { signIn, signUp } = useAuth()
+  const { success, error: showError } = useNotification()
   const [mode, setMode] = useState<'login' | 'signup'>(initialMode)
   const [formData, setFormData] = useState({
     email: '',
@@ -59,29 +62,24 @@ export default function AuthModal({
 
         await signUp(formData.email, formData.password, formData.username)
 
-        // 회원가입 성공 메시지
-        alert('회원가입이 완료되었습니다!')
+        // 회원가입 성공 알림
+        success('회원가입 완료', '환영합니다! 로그인되었습니다.')
       } else {
         await signIn(formData.email, formData.password)
+        success('로그인 성공', `안녕하세요! 다시 만나서 반가워요.`)
       }
 
       // 성공 시 모달 닫기 및 콜백 실행
       onSuccess()
       onClose()
     } catch (error: any) {
-      console.error('Auth error:', error)
+      // 개선된 에러 처리
+      const mappedError = mapSupabaseError(error)
+      logError(mappedError, 'AuthModal')
 
-      // 에러 메시지 한국어화
-      const errorMessage = error.message || '오류가 발생했습니다.'
-      if (errorMessage.includes('Invalid login credentials')) {
-        setError('이메일 또는 비밀번호가 잘못되었습니다.')
-      } else if (errorMessage.includes('User already registered')) {
-        setError('이미 등록된 이메일입니다.')
-      } else if (errorMessage.includes('Invalid email')) {
-        setError('올바른 이메일 형식을 입력해주세요.')
-      } else {
-        setError(errorMessage)
-      }
+      // 사용자에게 에러 표시
+      setError(mappedError.userMessage)
+      showError('인증 오류', mappedError.userMessage)
     } finally {
       setLoading(false)
     }
