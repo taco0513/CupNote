@@ -1,5 +1,8 @@
+// Import from central config
+import { TastingModeId } from '../config/tasting-modes.config'
+
 export type TasteMode = 'simple' | 'professional'
-export type CoffeeMode = 'cafe' | 'homecafe' | 'pro'
+export type CoffeeMode = TastingModeId // 'quick' | 'cafe' | 'homecafe' | 'pro'
 
 // 향미 카테고리
 export type FlavorCategory = 'fruity' | 'nutty' | 'chocolate' | 'floral' | 'spicy' | 'other'
@@ -16,6 +19,21 @@ export interface FlavorProfile {
 export interface SensoryExpression {
   category: 'acidity' | 'sweetness' | 'body' | 'aftertaste'
   expressions: string[]
+}
+
+// Quick 모드 전용 데이터 (최소 정보)
+export interface QuickData {
+  // 간단한 메모 정도만
+  quickNote?: string
+}
+
+// Cafe 모드 전용 데이터 (카페 방문)
+export interface CafeData {
+  cafeName?: string // 카페 이름
+  cafeLocation?: string // 카페 위치
+  menuName?: string // 메뉴명
+  price?: number // 가격
+  atmosphere?: string // 분위기
 }
 
 // HomeCafe 모드 전용 데이터
@@ -80,7 +98,9 @@ export interface CoffeeRecord {
   memo?: string
 
   // 모드별 데이터
-  mode?: CoffeeMode // 'cafe', 'homecafe', 'pro'
+  mode?: CoffeeMode // 'quick', 'cafe', 'homecafe', 'pro'
+  quickData?: QuickData
+  cafeData?: CafeData
   homecafeData?: HomeCafeData
   proData?: ProData
 
