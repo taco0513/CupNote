@@ -130,13 +130,13 @@ export class AchievementPage extends BasePage {
   // Achievement verification methods
   async expectAchievementUnlocked(achievementId: string) {
     const achievement = this.page.locator(`[data-testid="achievement-${achievementId}"]`)
-    await expect(achievement).toHaveClass(/unlocked/)
+    await expect(achievement).toHaveAttribute('class', /.*unlocked.*/)
     await expect(achievement.locator('[data-testid="achievement-icon"]')).toBeVisible()
   }
 
   async expectAchievementLocked(achievementId: string) {
     const achievement = this.page.locator(`[data-testid="achievement-${achievementId}"]`)
-    await expect(achievement).toHaveClass(/locked/)
+    await expect(achievement).toHaveAttribute('class', /.*locked.*/)
     await expect(achievement.locator('[data-testid="achievement-progress"]')).toBeVisible()
   }
 
@@ -321,7 +321,7 @@ export class AchievementPage extends BasePage {
       await expect(achievement.locator('[data-testid="achievement-icon"]')).toBeVisible()
       
       // Should have proper styling
-      await expect(achievement).toHaveClass(/achievement-unlocked/)
+      await expect(achievement).toHaveAttribute('class', /.*achievement-unlocked.*/)
     }
   }
 

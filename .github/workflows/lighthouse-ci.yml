@@ -1,0 +1,122 @@
+name: Lighthouse CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build application
+        run: npm run build
+        env:
+          # Supabase 환경변수 (GitHub Secrets에서 설정)
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          
+      - name: Run Lighthouse CI
+        run: npx lhci autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          
+      - name: Upload Lighthouse results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-results
+          path: .lighthouseci/
+          retention-days: 30
+          
+      - name: Comment PR with Lighthouse results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Lighthouse 결과 파일 찾기
+            const resultsDir = '.lighthouseci';
+            if (!fs.existsSync(resultsDir)) {
+              console.log('No Lighthouse results found');
+              return;
+            }
+            
+            // 최신 결과 파일 읽기
+            const files = fs.readdirSync(resultsDir);
+            const jsonFiles = files.filter(f => f.endsWith('.json'));
+            
+            if (jsonFiles.length === 0) {
+              console.log('No JSON results found');
+              return;
+            }
+            
+            // 성능 점수 집계
+            let totalPerformance = 0;
+            let totalAccessibility = 0;
+            let totalBestPractices = 0;
+            let totalSEO = 0;
+            let count = 0;
+            
+            jsonFiles.forEach(file => {
+              const content = JSON.parse(fs.readFileSync(path.join(resultsDir, file), 'utf8'));
+              if (content.categories) {
+                totalPerformance += content.categories.performance?.score || 0;
+                totalAccessibility += content.categories.accessibility?.score || 0;
+                totalBestPractices += content.categories['best-practices']?.score || 0;
+                totalSEO += content.categories.seo?.score || 0;
+                count++;
+              }
+            });
+            
+            if (count === 0) return;
+            
+            const avgPerformance = Math.round((totalPerformance / count) * 100);
+            const avgAccessibility = Math.round((totalAccessibility / count) * 100);
+            const avgBestPractices = Math.round((totalBestPractices / count) * 100);
+            const avgSEO = Math.round((totalSEO / count) * 100);
+            
+            const getEmoji = (score) => {
+              if (score >= 90) return '🟢';
+              if (score >= 70) return '🟡';
+              return '🔴';
+            };
+            
+            const comment = `## 🚀 Lighthouse CI 결과
+            
+            | 카테고리 | 점수 | 상태 |
+            |---------|------|------|
+            | 성능 | ${avgPerformance}/100 | ${getEmoji(avgPerformance)} |
+            | 접근성 | ${avgAccessibility}/100 | ${getEmoji(avgAccessibility)} |
+            | 베스트 프랙티스 | ${avgBestPractices}/100 | ${getEmoji(avgBestPractices)} |
+            | SEO | ${avgSEO}/100 | ${getEmoji(avgSEO)} |
+            
+            ### 📊 평가 기준
+            - 🟢 90점 이상: 우수
+            - 🟡 70-89점: 개선 필요
+            - 🔴 70점 미만: 문제 있음
+            
+            자세한 결과는 Actions 탭의 Lighthouse 아티팩트를 확인하세요.`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });

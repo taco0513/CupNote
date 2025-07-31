@@ -1,9 +1,11 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
-import { LocalStorage } from '../storage'
+
 import { AchievementSystem } from '../achievements'
 import { generateSampleFlavorProfile, generateSampleSensoryExpressions } from '../flavorData'
-import type { CoffeeRecord } from '../../types/coffee'
+import { LocalStorage } from '../storage'
+
 import type { UserStats } from '../../types/achievement'
+import type { CoffeeRecord } from '../../types/coffee'
 
 // Mock dependencies
 vi.mock('../achievements', () => ({

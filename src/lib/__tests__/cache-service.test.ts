@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
+
 import { CacheService } from '../cache-service'
 
 // Mock localStorage

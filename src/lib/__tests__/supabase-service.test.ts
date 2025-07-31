@@ -1,11 +1,13 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
+
+import * as errorHandler from '../error-handler'
 import {
   CoffeeRecordService,
   AchievementService,
   UserProfileService,
   AuthService,
 } from '../supabase-service'
-import * as errorHandler from '../error-handler'
+
 import type { CoffeeRecord } from '../../types/coffee'
 
 // Mock the supabase client

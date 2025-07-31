@@ -1,6 +1,8 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
-import { QueryOptimizer, type QueryOptions, type PaginatedResult } from '../query-optimizer'
+
 import { CacheService } from '../cache-service'
+import { QueryOptimizer, type QueryOptions, type PaginatedResult } from '../query-optimizer'
+
 import type { CoffeeRecord } from '../../types/coffee'
 
 // Mock the Supabase client

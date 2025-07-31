@@ -26,6 +26,10 @@ const PWAInstallPrompt = dynamic(() => import('../components/PWAInstallPrompt'),
 const SyncStatus = dynamic(() => import('../components/SyncStatus'), {
   loading: () => null
 })
+
+const WebVitalsInitializer = dynamic(() => import('../components/performance/WebVitalsInitializer'), {
+  loading: () => null
+})
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -126,6 +130,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <NotificationContainer />
                 <ConnectionIndicator />
                 <PWAInstallPrompt />
+                <WebVitalsInitializer />
               </AuthProvider>
             </NotificationProvider>
           </ErrorBoundary>

@@ -130,10 +130,11 @@ async function globalSetup(config: FullConfig) {
             })
           }
           return response
-        } catch (error) {
+        } catch (error: unknown) {
+          const errorMessage = error instanceof Error ? error.message : String(error)
           failedRequests.push({
             url: args[0],
-            error: error.message,
+            error: errorMessage,
             timestamp: Date.now()
           })
           throw error

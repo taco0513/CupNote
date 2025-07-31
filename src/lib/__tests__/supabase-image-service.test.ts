@@ -1,11 +1,12 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
+
+import * as errorHandler from '../error-handler'
 import {
   ImageUploadService,
   createImagePreview,
   revokeImagePreview,
   type ImageUploadOptions,
 } from '../supabase-image-service'
-import * as errorHandler from '../error-handler'
 
 // Mock the supabase client
 const mockSupabase = {
