@@ -13,14 +13,8 @@ import {
   Settings as SettingsIcon,
   User,
   Database,
-  Palette,
   Zap,
-  Sun,
-  Moon,
-  Monitor,
 } from 'lucide-react'
-import { useTheme } from '@/contexts/ThemeContext'
-import ThemeToggle from '@/components/ThemeToggle'
 import { CoffeeRecord } from '@/types/coffee'
 
 interface UserSettings {
@@ -49,7 +43,6 @@ export default function SettingsPage() {
     type: 'success' | 'error'
     message: string
   } | null>(null)
-  const { theme, setTheme, effectiveTheme } = useTheme()
 
   useEffect(() => {
     // 설정 불러오기
@@ -265,80 +258,6 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          {/* 테마 설정 */}
-          <div className="bg-background rounded-xl p-4 md:p-6 shadow-sm border border-border">
-            <h2 className="text-lg md:text-xl font-semibold text-foreground mb-4 flex items-center">
-              <Palette className="h-5 w-5 mr-2" />
-              테마 설정
-            </h2>
-
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="font-medium text-foreground">테마 모드</div>
-                  <div className="text-sm text-foreground-muted">
-                    현재: {effectiveTheme === 'light' ? '라이트' : '다크'} 모드
-                  </div>
-                </div>
-                <ThemeToggle variant="dropdown" size="md" />
-              </div>
-
-              <div className="grid grid-cols-3 gap-3">
-                <button
-                  onClick={() => setTheme('light')}
-                  className={`
-                    p-3 rounded-lg border-2 transition-all duration-200
-                    flex flex-col items-center gap-2
-                    ${theme === 'light'
-                      ? 'border-primary bg-primary/10 text-primary'
-                      : 'border-border hover:border-border-secondary text-foreground-secondary'
-                    }
-                  `}
-                >
-                  <Sun size={20} className={theme === 'light' ? 'text-amber-500' : ''} />
-                  <span className="text-sm font-medium">라이트</span>
-                </button>
-
-                <button
-                  onClick={() => setTheme('dark')}
-                  className={`
-                    p-3 rounded-lg border-2 transition-all duration-200
-                    flex flex-col items-center gap-2
-                    ${theme === 'dark'
-                      ? 'border-primary bg-primary/10 text-primary'
-                      : 'border-border hover:border-border-secondary text-foreground-secondary'
-                    }
-                  `}
-                >
-                  <Moon size={20} className={theme === 'dark' ? 'text-blue-400' : ''} />
-                  <span className="text-sm font-medium">다크</span>
-                </button>
-
-                <button
-                  onClick={() => setTheme('system')}
-                  className={`
-                    p-3 rounded-lg border-2 transition-all duration-200
-                    flex flex-col items-center gap-2
-                    ${theme === 'system'
-                      ? 'border-primary bg-primary/10 text-primary'
-                      : 'border-border hover:border-border-secondary text-foreground-secondary'
-                    }
-                  `}
-                >
-                  <Monitor size={20} />
-                  <span className="text-sm font-medium">시스템</span>
-                </button>
-              </div>
-
-              <div className="p-3 bg-background-secondary rounded-lg border border-border-secondary">
-                <div className="text-sm text-foreground-secondary">
-                  <strong>시스템 모드</strong>는 기기의 설정을 따릅니다.
-                  <br />
-                  다크 모드에서는 눈의 피로를 줄이고 배터리를 절약할 수 있습니다.
-                </div>
-              </div>
-            </div>
-          </div>
 
           {/* 앱 설정 */}
           <div className="bg-background rounded-xl p-4 md:p-6 shadow-sm border border-border">

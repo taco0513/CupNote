@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# 사이트맵
+Sitemap: https://cupnote.vercel.app/sitemap.xml
+
+# 크롤링 금지 페이지
+Disallow: /api/
+Disallow: /migration
+Disallow: /onboarding
+Disallow: /_next/
+Disallow: /static/
+
+# 크롤 속도 제한
+Crawl-delay: 1

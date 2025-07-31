@@ -6,7 +6,6 @@ import { BarChart3, Settings, Plus, ArrowLeft, Trophy, User, LogIn } from 'lucid
 import { useAuth } from '@/contexts/AuthContext'
 import AuthModal from '@/components/auth/AuthModal'
 import UserProfile from '@/components/auth/UserProfile'
-import ThemeToggle from '@/components/ThemeToggle'
 
 interface NavigationProps {
   showBackButton?: boolean
@@ -54,9 +53,6 @@ export default function Navigation({
 
       {/* 데스크톱 네비게이션 - 모바일에서는 숨김 */}
       <div className="hidden md:flex items-center space-x-2">
-        {/* 테마 토글 - 항상 표시 */}
-        <ThemeToggle variant="button" size="md" />
-        
         {user && (
           <>
             <Link
