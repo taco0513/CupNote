@@ -1,14 +1,13 @@
 'use client'
 
 import Link from 'next/link'
-
-import { Coffee, Home, Beaker, Clock, Users, TrendingUp } from 'lucide-react'
-
+import { Coffee, Home, Beaker, Clock, Users, TrendingUp, Zap } from 'lucide-react'
 import ProtectedRoute from '../../components/auth/ProtectedRoute'
 import Navigation from '../../components/Navigation'
+import { TASTING_MODES_CONFIG, getModeColor, getModeGradient, UI_LABELS } from '../../config'
 
 interface ModeCardProps {
-  mode: 'cafe' | 'homecafe' | 'pro'
+  mode: 'quick' | 'cafe' | 'homecafe' | 'pro'
   icon: React.ReactNode
   title: string
   description: string
@@ -16,6 +15,7 @@ interface ModeCardProps {
   badge?: string
   features: string[]
   popular?: boolean
+  category?: '카페방문' | '직접추출'
 }
 
 const ModeCard = ({
@@ -27,6 +27,7 @@ const ModeCard = ({
   badge,
   features,
   popular = false,
+  category,
 }: ModeCardProps) => (
   <Link href={`/record/step1?mode=${mode}`}>
     <div
@@ -54,11 +55,13 @@ const ModeCard = ({
           className={`
           p-3 rounded-xl mr-4 group-hover:scale-110 transition-transform
           ${
-            mode === 'cafe'
-              ? 'bg-blue-100 text-blue-600'
-              : mode === 'homecafe'
-                ? 'bg-green-100 text-green-600'
-                : 'bg-purple-100 text-purple-600'
+            mode === 'quick'
+              ? 'bg-orange-100 text-orange-600'
+              : mode === 'cafe'
+                ? 'bg-blue-100 text-blue-600'
+                : mode === 'homecafe'
+                  ? 'bg-green-100 text-green-600'
+                  : 'bg-purple-100 text-purple-600'
           }
         `}
         >
@@ -114,29 +117,47 @@ export default function ModeSelectionPage() {
           {/* 헤더 */}
           <div className="text-center mb-8 md:mb-12">
             <h1 className="text-2xl md:text-4xl font-bold text-coffee-800 mb-3 md:mb-4">
-              어떤 방식으로 기록하시겠어요?
+              {UI_LABELS.record.selectMode}
             </h1>
             <p className="text-base md:text-xl text-coffee-600 max-w-2xl mx-auto px-4">
-              상황과 목적에 맞는 모드를 선택하면, 최적화된 커피 기록 경험을 제공해드려요
+              {UI_LABELS.tips.selectMode}
             </p>
           </div>
 
           {/* 모드 카드들 */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6">
+            {/* Quick Mode */}
+            <ModeCard
+              mode="quick"
+              icon={<Zap className="h-6 w-6" />}
+              title={TASTING_MODES_CONFIG.quick.labelKr}
+              description={TASTING_MODES_CONFIG.quick.description}
+              duration={TASTING_MODES_CONFIG.quick.estimatedTime}
+              badge="NEW"
+              category="카페방문"
+              features={[
+                '최소한의 정보만 입력',
+                '별점과 간단한 메모',
+                '1-2분 내 완성',
+                '나중에 상세 정보 추가 가능',
+              ]}
+            />
+
             {/* Cafe Mode */}
             <ModeCard
               mode="cafe"
               icon={<Coffee className="h-6 w-6" />}
-              title="카페 모드"
-              description="카페에서 간단히 기록"
-              duration="3-5분"
+              title={TASTING_MODES_CONFIG.cafe.labelKr}
+              description={TASTING_MODES_CONFIG.cafe.description}
+              duration={TASTING_MODES_CONFIG.cafe.estimatedTime}
               badge="가장 인기"
               popular={true}
+              category="카페방문"
               features={[
-                '빠른 커피 기본 정보 입력',
-                '직관적인 향미 선택 (5개 내)',
-                '한국어 감각 표현 6가지',
-                '퀵 태그와 개인 코멘트',
+                '카페와 로스터 정보',
+                '향미 선택 (최대 5개)',
+                '한국어 감각 표현',
+                '개인 코멘트와 태그',
               ]}
             />
 
@@ -144,10 +165,11 @@ export default function ModeSelectionPage() {
             <ModeCard
               mode="homecafe"
               icon={<Home className="h-6 w-6" />}
-              title="홈쩐페 모드"
-              description="홈브루잉 추출 레시피 기록"
-              duration="5-8분"
+              title={TASTING_MODES_CONFIG.homecafe.labelKr}
+              description={TASTING_MODES_CONFIG.homecafe.description}
+              duration={TASTING_MODES_CONFIG.homecafe.estimatedTime}
               badge="레시피"
+              category="직접추출"
               features={[
                 '드리퍼 및 추출 비율 설정',
                 '원두량 다이얼 제어(±1g)',
@@ -160,12 +182,43 @@ export default function ModeSelectionPage() {
             <ModeCard
               mode="pro"
               icon={<Beaker className="h-6 w-6" />}
-              title="프로 모드"
-              description="SCA 표준 전문가 평가"
-              duration="8-12분"
+              title={TASTING_MODES_CONFIG.pro.labelKr}
+              description={TASTING_MODES_CONFIG.pro.description}
+              duration={TASTING_MODES_CONFIG.pro.estimatedTime}
               badge="전문가용"
-              features={['SCA 표준 기반 품질 평가', 'TDS 측정 및 추출 수율 분석', 'SCA Flavor Wheel 국제 표준 향미 평가', '전문 QC 리포트 및 품질 등급 판정']}
+              category="직접추출"
+              features={[
+                'SCA 표준 기반 품질 평가',
+                'TDS 측정 및 추출 수율 분석',
+                'SCA Flavor Wheel 표준 향미',
+                '전문 QC 리포트 및 등급 판정',
+              ]}
             />
+          </div>
+
+          {/* 모드 카테고리 설명 */}
+          <div className="mt-8 grid md:grid-cols-2 gap-4">
+            <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+              <h4 className="font-bold text-blue-800 mb-2 flex items-center">
+                <Coffee className="h-5 w-5 mr-2" />
+                카페에서 마신 커피
+              </h4>
+              <p className="text-blue-700 text-sm">
+                <strong>Quick Mode</strong>: {UI_LABELS.tips.quickMode}<br />
+                <strong>Cafe Mode</strong>: {UI_LABELS.tips.cafeMode}
+              </p>
+            </div>
+            
+            <div className="bg-green-50 rounded-xl p-6 border border-green-200">
+              <h4 className="font-bold text-green-800 mb-2 flex items-center">
+                <Home className="h-5 w-5 mr-2" />
+                직접 내린 커피
+              </h4>
+              <p className="text-green-700 text-sm">
+                <strong>HomeCafe Mode</strong>: {UI_LABELS.tips.homecafeMode}<br />
+                <strong>Pro Mode</strong>: {UI_LABELS.tips.proMode}
+              </p>
+            </div>
           </div>
 
           {/* 하단 안내 */}
@@ -178,7 +231,7 @@ export default function ModeSelectionPage() {
               </div>
               <h3 className="text-lg font-semibold text-coffee-800 mb-2">처음이신가요?</h3>
               <p className="text-coffee-600 mb-4">
-                카페 모드부터 시작해보세요. 익숙해지면 다른 모드도 시도해볼 수 있어요!
+                Quick 모드로 가볍게 시작해보세요. 익숙해지면 더 상세한 모드로 도전해보세요!
               </p>
               <div className="flex justify-center space-x-4 text-sm text-coffee-500">
                 <div className="flex items-center">
