@@ -20,6 +20,24 @@ interface Step2Data {
   [key: string]: any
 }
 
+interface HomeCafeData {
+  dripper: string
+  coffeeAmount: number
+  waterAmount: number
+  ratio: number
+  grindSize?: string
+  grindSetting?: string // deprecated
+  grinderBrand?: string
+  grinderModel?: string
+  grinderSetting?: string
+  timerData?: {
+    totalTime: number
+    lapTimes: { time: number, note: string, timestamp: Date }[]
+    completed: boolean
+  }
+  [key: string]: any
+}
+
 interface Step3Data {
   rating: number
   tasteMode: 'simple' | 'professional'
@@ -37,6 +55,7 @@ export default function RecordStep3Page() {
 
   const [step1Data, setStep1Data] = useState<Step1Data | null>(null)
   const [step2Data, setStep2Data] = useState<Step2Data | null>(null)
+  const [homeCafeData, setHomeCafeData] = useState<HomeCafeData | null>(null)
   const [formData, setFormData] = useState<Step3Data>({
     rating: 0,
     tasteMode: 'simple',
@@ -69,6 +88,14 @@ export default function RecordStep3Page() {
 
     if (saved2) {
       setStep2Data(JSON.parse(saved2))
+    }
+
+    // HomeCafe 데이터 불러오기 (타이머 데이터 포함)
+    if (data1?.mode === 'homecafe') {
+      const savedHomeCafe = sessionStorage.getItem('recordHomeCafe')
+      if (savedHomeCafe) {
+        setHomeCafeData(JSON.parse(savedHomeCafe))
+      }
     }
   }, [router])
 
@@ -214,6 +241,81 @@ export default function RecordStep3Page() {
                 <p className="mt-2 text-sm text-red-600 text-center">{errors.rating}</p>
               )}
             </div>
+
+            {/* HomeCafe 타이머 정보 표시 */}
+            {step1Data.mode === 'homecafe' && homeCafeData?.timerData && (
+              <div className="p-6 bg-green-50 border border-green-200 rounded-xl">
+                <h3 className="text-lg font-medium text-green-800 mb-4 flex items-center">
+                  <Coffee className="h-5 w-5 mr-2" />
+                  추출 정보
+                </h3>
+                
+                <div className="grid md:grid-cols-2 gap-4 mb-4">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="text-center p-3 bg-white rounded-lg">
+                      <div className="text-sm text-green-600 mb-1">드리퍼</div>
+                      <div className="text-lg font-bold text-green-800">
+                        {homeCafeData.dripper.toUpperCase()}
+                      </div>
+                    </div>
+                    <div className="text-center p-3 bg-white rounded-lg">
+                      <div className="text-sm text-green-600 mb-1">비율</div>
+                      <div className="text-lg font-bold text-green-800">
+                        {homeCafeData.coffeeAmount}g : {homeCafeData.waterAmount}ml
+                      </div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="text-center p-3 bg-white rounded-lg">
+                      <div className="text-sm text-green-600 mb-1">분쇄도</div>
+                      <div className="text-lg font-bold text-green-800">
+                        {homeCafeData.grindSize === 'custom' 
+                          ? (homeCafeData.grinderBrand && homeCafeData.grinderModel && homeCafeData.grinderSetting)
+                            ? `${homeCafeData.grinderBrand} ${homeCafeData.grinderModel}`
+                            : (homeCafeData.grinderBrand)
+                            ? `${homeCafeData.grinderBrand}`
+                            : homeCafeData.grindSetting || '직접설정'
+                          : homeCafeData.grindSize === 'coarse' ? '굵게'
+                          : homeCafeData.grindSize === 'medium-coarse' ? '중굵게'
+                          : homeCafeData.grindSize === 'medium' ? '중간'
+                          : homeCafeData.grindSize === 'medium-fine' ? '중세세'
+                          : homeCafeData.grindSize === 'fine' ? '세게'
+                          : '미설정'
+                        }
+                      </div>
+                      {homeCafeData.grindSize === 'custom' && homeCafeData.grinderSetting && (
+                        <div className="text-sm text-green-600 mt-1">
+                          {homeCafeData.grinderSetting}
+                        </div>
+                      )}
+                    </div>
+                    <div className="text-center p-3 bg-white rounded-lg">
+                      <div className="text-sm text-green-600 mb-1">총 추출 시간</div>
+                      <div className="text-lg font-bold text-green-800">
+                        {Math.floor(homeCafeData.timerData.totalTime / 60)}:
+                        {(homeCafeData.timerData.totalTime % 60).toString().padStart(2, '0')}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {homeCafeData.timerData.lapTimes.length > 0 && (
+                  <div>
+                    <h4 className="text-sm font-medium text-green-700 mb-2">단계별 기록</h4>
+                    <div className="space-y-1">
+                      {homeCafeData.timerData.lapTimes.map((lap, index) => (
+                        <div key={index} className="flex justify-between items-center text-sm p-2 bg-white rounded">
+                          <span className="text-gray-600">{lap.note}</span>
+                          <span className="font-mono text-green-800">
+                            {Math.floor(lap.time / 60)}:{(lap.time % 60).toString().padStart(2, '0')}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* 맛 표현 모드 선택 (Lab 모드가 아닌 경우만) */}
             {step1Data.mode !== 'pro' && (

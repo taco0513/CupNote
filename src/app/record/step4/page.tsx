@@ -16,11 +16,13 @@ import {
   Smile,
   Edit3,
   Camera,
+  Save,
 } from 'lucide-react'
 
 import Navigation from '../../../components/Navigation'
 import { SupabaseStorage } from '../../../lib/supabase-storage'
 import { CoffeeRecord } from '../../../types/coffee'
+import RecipeSaveDialog from '../../../components/RecipeSaveDialog'
 
 interface Step1Data {
   coffeeName: string
@@ -41,6 +43,23 @@ interface Step3Data {
   memo: string
   location?: string
   companion?: string
+  imageUrl?: string
+  thumbnailUrl?: string
+}
+
+interface HomeCafeData {
+  dripper: string
+  coffeeAmount: number
+  waterAmount: number
+  ratio: number
+  grindSize?: string
+  grinderBrand?: string
+  grinderModel?: string
+  grinderSetting?: string
+  waterTemp?: number
+  brewTime?: number
+  notes?: string
+  timerData?: any
 }
 
 const RATING_LABELS = ['별로예요', '그냥 그래요', '괜찮아요', '맛있어요', '최고예요!']
@@ -51,7 +70,9 @@ export default function RecordStep4Page() {
   const [step1Data, setStep1Data] = useState<Step1Data | null>(null)
   const [step2Data, setStep2Data] = useState<Step2Data | null>(null)
   const [step3Data, setStep3Data] = useState<Step3Data | null>(null)
+  const [homeCafeData, setHomeCafeData] = useState<HomeCafeData | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [showRecipeSave, setShowRecipeSave] = useState(false)
 
   useEffect(() => {
     // 모든 단계 데이터 불러오기
@@ -59,6 +80,7 @@ export default function RecordStep4Page() {
     const saved2 = sessionStorage.getItem('recordStep2')
     const saved3 = sessionStorage.getItem('recordStep3')
     const savedQuick = sessionStorage.getItem('recordQuick')
+    const savedHomeCafe = sessionStorage.getItem('recordHomeCafe')
 
     if (saved1) {
       const step1 = JSON.parse(saved1)
@@ -81,6 +103,11 @@ export default function RecordStep4Page() {
         // 일반 모드인 경우
         setStep2Data(JSON.parse(saved2))
         setStep3Data(JSON.parse(saved3))
+
+        // HomeCafe 데이터 불러오기
+        if (savedHomeCafe && step1.mode === 'homecafe') {
+          setHomeCafeData(JSON.parse(savedHomeCafe))
+        }
       } else {
         // 필요한 데이터가 없으면 처음으로 돌아감
         router.push('/mode-selection')
@@ -90,6 +117,19 @@ export default function RecordStep4Page() {
       router.push('/mode-selection')
     }
   }, [router])
+
+  // 레시피 저장 핸들러
+  const handleRecipeSave = () => {
+    if (step1Data?.mode === 'homecafe' && homeCafeData) {
+      setShowRecipeSave(true)
+    }
+  }
+
+  const handleRecipeSaved = () => {
+    setShowRecipeSave(false)
+    // 성공 메시지 표시
+    alert('레시피가 성공적으로 저장되었습니다!')
+  }
 
   const handleSubmit = async () => {
     if (!step1Data || !step3Data) return
@@ -389,6 +429,27 @@ export default function RecordStep4Page() {
           </div>
         </div>
 
+        {/* HomeCafe 레시피 저장 */}
+        {step1Data?.mode === 'homecafe' && homeCafeData && (
+          <div className="mt-8 p-6 bg-green-50 rounded-xl border border-green-200">
+            <div className="text-center">
+              <h3 className="text-lg font-bold text-green-800 mb-2">
+                🏠 HomeCafe 레시피 저장하기
+              </h3>
+              <p className="text-sm text-green-700 mb-4">
+                이 추출 설정을 저장해서 나중에 다시 사용할 수 있어요
+              </p>
+              <button
+                onClick={handleRecipeSave}
+                className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors font-medium"
+              >
+                <Save className="h-5 w-5 mr-2" />
+                레시피 저장하기
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* 하단 버튼 */}
         <div className="flex gap-4 mt-8">
           <button
@@ -423,6 +484,32 @@ export default function RecordStep4Page() {
             저장 후: Match Score 결과 및 개인화된 피드백 확인
           </p>
         </div>
+
+        {/* 레시피 저장 다이얼로그 */}
+        {showRecipeSave && step1Data && homeCafeData && (
+          <RecipeSaveDialog
+            recipeData={{
+              coffeeName: step1Data.coffeeName,
+              roastery: step1Data.roastery,
+              dripper: homeCafeData.dripper,
+              coffeeAmount: homeCafeData.coffeeAmount,
+              waterAmount: homeCafeData.waterAmount,
+              ratio: homeCafeData.ratio,
+              grindSize: homeCafeData.grindSize,
+              grinderBrand: homeCafeData.grinderBrand,
+              grinderModel: homeCafeData.grinderModel,
+              grinderSetting: homeCafeData.grinderSetting,
+              waterTemp: homeCafeData.waterTemp,
+              brewTime: homeCafeData.brewTime,
+              notes: homeCafeData.notes,
+              timerData: homeCafeData.timerData
+            }}
+            rating={step3Data?.rating}
+            tastingNotes={Array.isArray(step3Data?.taste) ? step3Data.taste.join(', ') : step3Data?.taste}
+            onSave={handleRecipeSaved}
+            onClose={() => setShowRecipeSave(false)}
+          />
+        )}
       </div>
     </div>
   )

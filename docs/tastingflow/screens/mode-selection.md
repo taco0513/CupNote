@@ -24,8 +24,8 @@ Hero Section:
   - 서브 타이틀: "상황에 맞는 기록 방식을 추천드릴게요"
 
 Mode Cards Grid:
-  - 3개 모드 카드 (2x2 그리드, 마지막 빈칸)
-  - 모바일: 1열, 태블릿+: 2-3열
+  - 4개 모드 카드 (2x2 그리드)
+  - 모바일: 1열, 태블릿+: 2열
 
 Footer:
   - 데모 체험하기 링크
@@ -57,6 +57,31 @@ Target User:
   - 커피 초보자
   - 간편한 기록을 원하는 사용자
   - 시간이 제한적인 상황
+```
+
+### Quick Mode Card
+
+```yaml
+Visual:
+  - 아이콘: ⚡ (번개)
+  - 색상: Orange 계열 (#EA580C)
+  - 배경: 에너지틱한 그라데이션
+
+Content:
+  - 제목: "퀵 모드"
+  - 설명: "1분 만에 빠른 평가"
+  - 소요시간: "1-2분"
+  - 특징 태그: ["초간편", "빠름", "즉석"]
+
+Use Cases:
+  - "출근길 테이크아웃"
+  - "바쁜 상황에서 간단히"
+  - "첫 인상만 남기고 싶을 때"
+
+Target User:
+  - 모든 사용자 (특히 바쁜 상황)
+  - 최소 입력으로 기록하고 싶은 사용자
+  - 커피 기록 초보자
 ```
 
 ### HomeCafe Mode Card
@@ -115,14 +140,16 @@ Target User:
 
 ```mermaid
 graph TD
-    A[Mode Selection 진입] --> B[3개 모드 카드 표시]
+    A[Mode Selection 진입] --> B[4개 모드 카드 표시]
     B --> C{사용자 터치/클릭}
     C --> D[카드 선택 확인 애니메이션]
     D --> E[모드 설명 팝업]
     E --> F{확인/취소}
-    F -->|확인| G[Step1으로 이동]
+    F -->|확인| G[해당 모드로 이동]
     F -->|취소| B
-    G --> H[Coffee Info Screen]
+    G --> H{Quick Mode?}
+    H -->|Yes| I[/record/quick]
+    H -->|No| J[/record/step1?mode=selected]
 ```
 
 ### 모드 선택 확인 플로우
