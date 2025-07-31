@@ -25,19 +25,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```
 CupNote/
-├── cupnote/                 # Next.js 애플리케이션
-│   ├── src/
-│   │   ├── app/            # App Router pages
-│   │   ├── components/     # React components
-│   │   ├── lib/           # Utility functions
-│   │   ├── types/         # TypeScript types
-│   │   ├── hooks/         # Custom React hooks
-│   │   └── utils/         # Helper functions
-│   ├── public/            # Static assets
-│   └── ...
-├── MASTER_PLAYBOOK/       # AI 개발 가이드
-├── auto-docs/             # 문서 자동화 시스템
-└── docs/                  # 프로젝트 문서
+├── src/                    # 🚀 메인 Next.js 애플리케이션
+│   ├── app/               # App Router pages
+│   ├── components/        # React components
+│   ├── contexts/          # React contexts
+│   ├── hooks/             # Custom React hooks
+│   ├── lib/              # Supabase client & utilities
+│   ├── types/            # TypeScript types
+│   ├── config/           # 🆕 Configuration files (modes, UI labels)
+│   └── utils/            # Helper functions
+├── public/               # Static assets (icons, images)
+├── docs/                 # 📚 현재 문서 (정리됨)
+│   ├── current/          # 최신 기능 문서
+│   ├── development/      # 개발 히스토리
+│   └── archive/          # 과거 문서 보관
+├── e2e/                  # 🧪 E2E 테스트 (Playwright)
+├── supabase/             # 🗄️ 데이터베이스 설정
+├── archive/              # 📦 보관용 파일들
+├── scripts/              # 🔧 유틸리티 스크립트
+└── MASTER_PLAYBOOK/      # 🤖 AI 개발 가이드
 ```
 
 ## Development Commands
@@ -107,6 +113,14 @@ npm install                  # Install all dependencies
 - **User Authentication**: Complete auth flow with protected routes
 - **Stats & Analytics**: Data visualization, export/import functionality
 - **Error Handling**: Comprehensive error boundaries and user feedback
+
+🔄 **현재 개발 중 - 4-Mode 시스템** (2025-07-31):
+
+- **4-Mode 확장**: Quick, Cafe, HomeCafe, Pro 모드로 전환 중
+- **Token System**: `src/config/` 폴더에 중앙집중화된 설정 관리
+- **UI Labels Config**: 다국어 지원 및 모드별 라벨 관리
+- **Routing 재구성**: 모드별 독립적인 페이지 구조
+- **Step Flow 개선**: 모드에 따른 차별화된 단계별 기록
 
 📋 **v2.0 Planned Features**:
 
