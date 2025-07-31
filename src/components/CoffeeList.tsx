@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useCallback } from 'react'
 
 import FilterPanel, { FilterOptions } from './FilterPanel'
 import SearchBar from './SearchBar'
@@ -17,11 +17,7 @@ export default function CoffeeList() {
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const { error } = useNotification()
 
-  useEffect(() => {
-    loadRecords()
-  }, [])
-
-  const loadRecords = async () => {
+  const loadRecords = useCallback(async () => {
     try {
       setLoading(true)
       // Supabase에서 기록 로드
@@ -35,7 +31,11 @@ export default function CoffeeList() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [error])
+
+  useEffect(() => {
+    loadRecords()
+  }, [loadRecords])
 
   // 외부에서 새 기록 추가시 목록 새로고침
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function CoffeeList() {
       window.removeEventListener('cupnote-record-updated', handleRecordChange)
       window.removeEventListener('cupnote-record-deleted', handleRecordChange)
     }
-  }, [])
+  }, [loadRecords])
 
   // 검색 및 필터링된 결과
   const filteredRecords = useMemo(() => {

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 
 interface LazyImageProps {
   src: string
@@ -24,6 +24,25 @@ export default function LazyImage({
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
   const observerRef = useRef<IntersectionObserver | null>(null)
+
+  const loadImage = useCallback(() => {
+    const img = new Image()
+    
+    img.onload = () => {
+      setImageSrc(src)
+      setIsLoading(false)
+      setHasError(false)
+      onLoad?.()
+    }
+
+    img.onerror = () => {
+      setHasError(true)
+      setIsLoading(false)
+      onError?.()
+    }
+
+    img.src = src
+  }, [src, onLoad, onError])
 
   useEffect(() => {
     // Create intersection observer
@@ -56,26 +75,7 @@ export default function LazyImage({
         observerRef.current.disconnect()
       }
     }
-  }, [imageRef, src])
-
-  const loadImage = () => {
-    const img = new Image()
-    
-    img.onload = () => {
-      setImageSrc(src)
-      setIsLoading(false)
-      setHasError(false)
-      onLoad?.()
-    }
-
-    img.onerror = () => {
-      setHasError(true)
-      setIsLoading(false)
-      onError?.()
-    }
-
-    img.src = src
-  }
+  }, [imageRef, src, loadImage])
 
   return (
     <div className={`relative ${className}`}>

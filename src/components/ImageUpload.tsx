@@ -97,7 +97,7 @@ export default function ImageUpload({
         }
       }
     },
-    [user, maxFileSize, acceptedTypes, onImageUploaded, success, error]
+    [user, maxFileSize, acceptedTypes, onImageUploaded, success, error, previewUrl]
   )
 
   const handleRemoveImage = useCallback(() => {

@@ -46,7 +46,7 @@ export default function NetworkStatus() {
     if (isOnline && isSlowConnection) {
       warning('느린 연결', '연결 상태가 느립니다. 데이터 사용량을 확인해주세요.')
     }
-  }, [isSlowConnection, warning])
+  }, [isSlowConnection, warning, isOnline])
 
   // 마운트되기 전에는 렌더링하지 않음
   if (!mounted) {
