@@ -1,34 +1,35 @@
-const withPWA = require('next-pwa')({
-  dest: 'public',
-  register: true,
-  skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development',
-  buildExcludes: [/middleware-manifest\.json$/],
-  runtimeCaching: [
-    {
-      urlPattern: /^https:\/\/.*\.supabase\.co\/.*$/,
-      handler: 'NetworkFirst',
-      options: {
-        cacheName: 'supabase-cache',
-        expiration: {
-          maxEntries: 50,
-          maxAgeSeconds: 60 * 60 * 24 // 24 hours
-        }
-      }
-    },
-    {
-      urlPattern: /^https:\/\/.*\.supabase\.co\/storage\/.*$/,
-      handler: 'CacheFirst',
-      options: {
-        cacheName: 'supabase-images',
-        expiration: {
-          maxEntries: 100,
-          maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
-        }
-      }
-    }
-  ]
-})
+// PWA 설정 임시 비활성화
+// const withPWA = require('next-pwa')({
+//   dest: 'public',
+//   register: true,
+//   skipWaiting: true,
+//   disable: process.env.NODE_ENV === 'development',
+//   buildExcludes: [/middleware-manifest\.json$/],
+//   runtimeCaching: [
+//     {
+//       urlPattern: /^https:\/\/.*\.supabase\.co\/.*$/,
+//       handler: 'NetworkFirst',
+//       options: {
+//         cacheName: 'supabase-cache',
+//         expiration: {
+//           maxEntries: 50,
+//           maxAgeSeconds: 60 * 60 * 24 // 24 hours
+//         }
+//       }
+//     },
+//     {
+//       urlPattern: /^https:\/\/.*\.supabase\.co\/storage\/.*$/,
+//       handler: 'CacheFirst',
+//       options: {
+//         cacheName: 'supabase-images',
+//         expiration: {
+//           maxEntries: 100,
+//           maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
+//         }
+//       }
+//     }
+//   ]
+// })
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -62,4 +63,6 @@ const nextConfig = {
   pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
 }
 
-module.exports = withPWA(nextConfig)
+// PWA 임시 비활성화
+module.exports = nextConfig
+// module.exports = withPWA(nextConfig)
