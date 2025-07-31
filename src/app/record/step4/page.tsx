@@ -35,10 +35,12 @@ interface Step2Data {
 
 interface Step3Data {
   rating: number
-  tasteMode: 'simple' | 'professional'
-  taste: string
+  tasteMode: 'simple' | 'professional' | 'basic'
+  taste: string | string[]
   roasterNote: string
   memo: string
+  location?: string
+  companion?: string
 }
 
 const RATING_LABELS = ['별로예요', '그냥 그래요', '괜찮아요', '맛있어요', '최고예요!']
@@ -56,13 +58,35 @@ export default function RecordStep4Page() {
     const saved1 = sessionStorage.getItem('recordStep1')
     const saved2 = sessionStorage.getItem('recordStep2')
     const saved3 = sessionStorage.getItem('recordStep3')
+    const savedQuick = sessionStorage.getItem('recordQuick')
 
-    if (saved1 && saved2 && saved3) {
-      setStep1Data(JSON.parse(saved1))
-      setStep2Data(JSON.parse(saved2))
-      setStep3Data(JSON.parse(saved3))
+    if (saved1) {
+      const step1 = JSON.parse(saved1)
+      setStep1Data(step1)
+
+      // Quick Mode인 경우
+      if (step1.mode === 'quick' && savedQuick) {
+        const quickData = JSON.parse(savedQuick)
+        // Quick 데이터를 Step3 형식으로 변환
+        setStep3Data({
+          taste: [],
+          tasteMode: 'basic',
+          rating: quickData.rating,
+          memo: quickData.quickNote || '',
+          roasterNote: '',
+          location: quickData.location,
+          companion: quickData.companion
+        })
+      } else if (saved2 && saved3) {
+        // 일반 모드인 경우
+        setStep2Data(JSON.parse(saved2))
+        setStep3Data(JSON.parse(saved3))
+      } else {
+        // 필요한 데이터가 없으면 처음으로 돌아감
+        router.push('/mode-selection')
+        return
+      }
     } else {
-      // 필요한 데이터가 없으면 처음으로 돌아감
       router.push('/mode-selection')
     }
   }, [router])

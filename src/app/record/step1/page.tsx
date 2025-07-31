@@ -58,8 +58,14 @@ function RecordStep1Content() {
       // 세션 스토리지에 데이터 저장
       sessionStorage.setItem('recordStep1', JSON.stringify(formData))
 
-      // Step 2로 이동
-      router.push('/record/step2')
+      // 모드에 따라 다른 경로로 이동
+      if (formData.mode === 'quick') {
+        router.push('/record/quick')
+      } else if (formData.mode === 'homecafe') {
+        router.push('/record/homecafe')
+      } else {
+        router.push('/record/step2')
+      }
     }
   }
 
@@ -219,11 +225,13 @@ function RecordStep1Content() {
         <div className="mt-6 text-center">
           <p className="text-sm text-coffee-500">
             다음:{' '}
-            {formData.mode === 'cafe'
-              ? '간단한 맛 기록'
-              : formData.mode === 'homecafe'
-                ? '추출 방법 설정'
-                : '전문 분석 설정'}
+            {formData.mode === 'quick'
+              ? '빠른 평가 및 완료'
+              : formData.mode === 'cafe'
+                ? '간단한 맛 기록'
+                : formData.mode === 'homecafe'
+                  ? '추출 방법 설정'
+                  : '전문 분석 설정'}
           </p>
         </div>
       </div>
