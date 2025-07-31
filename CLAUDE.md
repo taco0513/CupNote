@@ -16,10 +16,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS v4
 - **Package Manager**: npm (IMPORTANT: Always use npm, NOT bun or yarn)
-- **State Management**: React hooks (Zustand 예정)
-- **Database**: PostgreSQL + Prisma (예정)
-- **Authentication**: NextAuth.js (예정)
-- **Image Storage**: Cloudinary (예정)
+- **State Management**: React hooks + Context API
+- **Database**: Supabase (PostgreSQL + Auth + Storage)
+- **Authentication**: Supabase Auth
+- **Image Storage**: Supabase Storage
 
 ## Project Structure
 
@@ -87,8 +87,13 @@ npm install                  # Install all dependencies
 
 ## Current Implementation Status
 
-✅ **Completed**:
+✅ **v1.0.0 RC - Production Deployment Completed** (2025-07-31):
 
+- **Production Deployment**: Live at https://cupnote.vercel.app
+- **Light Mode Only**: Dark mode removed, unified UX experience  
+- **Hydration Issues Fixed**: SSR mismatch errors completely resolved
+- **SEO Optimization**: Complete metadata, robots.txt, sitemap
+- **Performance Optimization**: Vercel deployment configuration
 - **Core System**: Next.js 15.4.5 + TypeScript + Tailwind CSS 4.0
 - **Database**: Supabase integration (PostgreSQL + Auth + Storage)  
 - **Coffee Recording**: 4-step flow with mode selection (Cafe/HomeCafe/Lab)
@@ -97,19 +102,15 @@ npm install                  # Install all dependencies
 - **PWA Features**: Offline support, installable, background sync
 - **Performance**: 2-tier caching, pagination, lazy loading, query optimization
 - **Testing**: Vitest + React Testing Library + Playwright (70% coverage goal)
-- **Theme System**: Light/Dark/System modes with CSS Variables
 - **Mobile Optimization**: Responsive design, touch optimization, bottom nav
 - **Achievement System**: 30+ badges, leveling, progress tracking
 - **User Authentication**: Complete auth flow with protected routes
 - **Stats & Analytics**: Data visualization, export/import functionality
 - **Error Handling**: Comprehensive error boundaries and user feedback
 
-🔄 **In Progress**:
+📋 **v2.0 Planned Features**:
 
-- Community cupping features (design completed)
-
-📋 **Pending**:
-
+- Community cupping features
 - Push notifications
 - OCR functionality for coffee package scanning
 - Advanced analytics and ML insights
