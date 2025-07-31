@@ -1,10 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { useRouter } from 'next/navigation'
-import Navigation from '../../../components/Navigation'
-import { SupabaseStorage } from '../../../lib/supabase-storage'
-import { CoffeeRecord } from '../../../types/coffee'
+
 import {
   Check,
   ArrowLeft,
@@ -18,6 +17,10 @@ import {
   Edit3,
   Camera,
 } from 'lucide-react'
+
+import Navigation from '../../../components/Navigation'
+import { SupabaseStorage } from '../../../lib/supabase-storage'
+import { CoffeeRecord } from '../../../types/coffee'
 
 interface Step1Data {
   coffeeName: string

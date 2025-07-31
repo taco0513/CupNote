@@ -1,7 +1,8 @@
-import { supabase } from './supabase'
-import type { CoffeeRecord } from '../types/coffee'
-import type { Achievement } from '../types/achievement'
 import { createError, mapSupabaseError, logError } from './error-handler'
+import { supabase } from './supabase'
+
+import type { Achievement } from '../types/achievement'
+import type { CoffeeRecord } from '../types/coffee'
 
 // Coffee Records Service
 export class CoffeeRecordService {
@@ -51,7 +52,7 @@ export class CoffeeRecordService {
       await this.updateAchievements()
 
       return { data, matchScore }
-    } catch (error: any) {
+    } catch (error: unknown) {
       const mappedError = mapSupabaseError(error)
       logError(mappedError, 'CoffeeRecordService.createRecord')
       throw mappedError
@@ -69,7 +70,7 @@ export class CoffeeRecordService {
 
       if (error) throw error
       return data
-    } catch (error: any) {
+    } catch (error: unknown) {
       const mappedError = mapSupabaseError(error)
       logError(mappedError, 'CoffeeRecordService.getRecords')
       throw mappedError
@@ -87,7 +88,7 @@ export class CoffeeRecordService {
 
       if (error) throw error
       return data
-    } catch (error: any) {
+    } catch (error: unknown) {
       const mappedError = mapSupabaseError(error)
       logError(mappedError, 'CoffeeRecordService.getRecord')
       throw mappedError
@@ -117,7 +118,7 @@ export class CoffeeRecordService {
 
       if (error) throw error
       return data
-    } catch (error: any) {
+    } catch (error: unknown) {
       const mappedError = mapSupabaseError(error)
       logError(mappedError, 'CoffeeRecordService.updateRecord')
       throw mappedError
@@ -130,7 +131,7 @@ export class CoffeeRecordService {
       const { error } = await supabase.from('coffee_records').delete().eq('id', id)
 
       if (error) throw error
-    } catch (error: any) {
+    } catch (error: unknown) {
       const mappedError = mapSupabaseError(error)
       logError(mappedError, 'CoffeeRecordService.deleteRecord')
       throw mappedError
@@ -193,7 +194,7 @@ export class CoffeeRecordService {
           longest: 0,
         },
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       const mappedError = mapSupabaseError(error)
       logError(mappedError, 'CoffeeRecordService.getStats')
       throw mappedError
@@ -238,7 +239,7 @@ export class CoffeeRecordService {
           unlocked_at: unlocked ? new Date().toISOString() : null,
         })
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       const mappedError = mapSupabaseError(error)
       logError(mappedError, 'CoffeeRecordService.updateAchievements')
       // Achievement 업데이트 실패는 주요 기능이 아니므로 에러를 throw하지 않음
@@ -273,7 +274,7 @@ export class AchievementService {
 
       if (error) throw error
       return data
-    } catch (error: any) {
+    } catch (error: unknown) {
       const mappedError = mapSupabaseError(error)
       logError(mappedError, 'AchievementService.getUserAchievements')
       throw mappedError
@@ -291,7 +292,7 @@ export class AchievementService {
 
       if (error) throw error
       return data
-    } catch (error: any) {
+    } catch (error: unknown) {
       const mappedError = mapSupabaseError(error)
       logError(mappedError, 'AchievementService.getAllAchievements')
       throw mappedError
@@ -315,7 +316,7 @@ export class UserProfileService {
 
       if (error) throw error
       return data
-    } catch (error: any) {
+    } catch (error: unknown) {
       const mappedError = mapSupabaseError(error)
       logError(mappedError, 'UserProfileService.getProfile')
       throw mappedError
@@ -341,7 +342,7 @@ export class UserProfileService {
 
       if (error) throw error
       return data
-    } catch (error: any) {
+    } catch (error: unknown) {
       const mappedError = mapSupabaseError(error)
       logError(mappedError, 'UserProfileService.createProfile')
       throw mappedError
@@ -363,7 +364,7 @@ export class UserProfileService {
 
       if (error) throw error
       return data
-    } catch (error: any) {
+    } catch (error: unknown) {
       const mappedError = mapSupabaseError(error)
       logError(mappedError, 'UserProfileService.updateProfile')
       throw mappedError
@@ -396,7 +397,7 @@ export class AuthService {
       // 가입 성공 로그
       console.log('Signup successful:', data)
       return data
-    } catch (error: any) {
+    } catch (error: unknown) {
       const mappedError = mapSupabaseError(error)
       logError(mappedError, 'AuthService.signUp')
       throw mappedError
@@ -413,7 +414,7 @@ export class AuthService {
 
       if (error) throw error
       return data
-    } catch (error: any) {
+    } catch (error: unknown) {
       const mappedError = mapSupabaseError(error)
       logError(mappedError, 'AuthService.signIn')
       throw mappedError
@@ -425,7 +426,7 @@ export class AuthService {
     try {
       const { error } = await supabase.auth.signOut()
       if (error) throw error
-    } catch (error: any) {
+    } catch (error: unknown) {
       const mappedError = mapSupabaseError(error)
       logError(mappedError, 'AuthService.signOut')
       throw mappedError
@@ -439,7 +440,7 @@ export class AuthService {
         data: { user },
       } = await supabase.auth.getUser()
       return user
-    } catch (error: any) {
+    } catch (error: unknown) {
       const mappedError = mapSupabaseError(error)
       logError(mappedError, 'AuthService.getCurrentUser')
       return null

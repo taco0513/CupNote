@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { CoffeeMode, TasteMode } from '../types/coffee'
+
 import MultiTagSearch from './MultiTagSearch'
 import { SupabaseStorage } from '../lib/supabase-storage'
+import { CoffeeMode, TasteMode } from '../types/coffee'
 
 export interface FilterOptions {
   mode?: CoffeeMode

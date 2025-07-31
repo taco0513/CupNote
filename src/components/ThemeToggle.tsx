@@ -1,7 +1,8 @@
 'use client'
 
-import { useTheme } from '../contexts/ThemeContext'
 import { Sun } from 'lucide-react'
+
+import { useTheme } from '../contexts/ThemeContext'
 
 interface ThemeToggleProps {
   variant?: 'button' | 'dropdown'

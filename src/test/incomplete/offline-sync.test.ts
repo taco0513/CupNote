@@ -1,6 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { OfflineSync } from '../offline-sync'
+
 import { OfflineStorage } from '../offline-storage'
+import { OfflineSync } from '../offline-sync'
+
 import type { CoffeeRecord } from '@/types/coffee'
 
 // Mock dependencies

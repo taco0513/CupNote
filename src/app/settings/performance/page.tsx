@@ -1,11 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { useRouter } from 'next/navigation'
-import Navigation from '../../../components/Navigation'
-import { CacheService } from '../../../lib/cache-service'
-import { getPerformanceReport } from '../../../hooks/usePerformanceMonitor'
+
 import { ChevronLeft, Zap, Database, Activity, Trash2 } from 'lucide-react'
+
+import Navigation from '../../../components/Navigation'
+import { getPerformanceReport } from '../../../hooks/usePerformanceMonitor'
+import { CacheService } from '../../../lib/cache-service'
 
 export default function PerformanceSettingsPage() {
   const router = useRouter()

@@ -1,6 +1,7 @@
+import { createClient } from '@supabase/supabase-js'
+
 import { offlineStorage } from './offline-storage'
 import { SupabaseStorage } from './supabase-storage'
-import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { supabase } from '../lib/supabase'
 import { AuthService } from '../lib/supabase-service'
 
@@ -26,8 +27,9 @@ export default function SupabaseTest() {
         } else {
           setConnectionStatus('connected')
         }
-      } catch (err: any) {
-        setError(err.message || '연결 실패')
+      } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : '연결 실패'
+        setError(errorMessage)
         setConnectionStatus('error')
       }
     }
@@ -61,11 +63,12 @@ export default function SupabaseTest() {
         message: `직접 가입 성공! User ID: ${data.user?.id}`,
         data,
       })
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Direct signup test error:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
       setResult({
         type: 'error',
-        message: `직접 가입 실패: ${error.message}`,
+        message: `직접 가입 실패: ${errorMessage}`,
         error,
       })
     } finally {
@@ -91,11 +94,12 @@ export default function SupabaseTest() {
         message: `AuthService 가입 성공! User ID: ${result.user?.id}`,
         data: result,
       })
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('AuthService signup test error:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
       setResult({
         type: 'error',
-        message: `AuthService 가입 실패: ${error.message}`,
+        message: `AuthService 가입 실패: ${errorMessage}`,
         error,
       })
     } finally {
@@ -114,8 +118,9 @@ export default function SupabaseTest() {
         message: `현재 인증 상태: ${user.data.user ? '로그인됨' : '비로그인'}`,
         data: user.data,
       })
-    } catch (error: any) {
-      setResult({ type: 'error', message: error.message })
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      setResult({ type: 'error', message: errorMessage })
     } finally {
       setLoading(false)
     }
@@ -152,11 +157,12 @@ export default function SupabaseTest() {
         message: authError ? `인증 실패: ${authError.message}` : '테스트 성공!',
         data: { profiles, profileError, authData, authError },
       })
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Settings test error:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
       setResult({
         type: 'error',
-        message: `설정 테스트 실패: ${error.message}`,
+        message: `설정 테스트 실패: ${errorMessage}`,
         error,
       })
     } finally {

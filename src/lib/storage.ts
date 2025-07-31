@@ -1,7 +1,7 @@
-import { CoffeeRecord } from '../types/coffee'
-import { UserStats } from '../types/achievement'
 import { AchievementSystem } from './achievements'
 import { generateSampleFlavorProfile, generateSampleSensoryExpressions } from './flavorData'
+import { UserStats } from '../types/achievement'
+import { CoffeeRecord } from '../types/coffee'
 
 const STORAGE_KEY = 'cupnote-records'
 const ACHIEVEMENTS_KEY = 'cupnote-achievements'

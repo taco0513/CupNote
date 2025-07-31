@@ -1,11 +1,10 @@
 'use client'
 
 import { useEffect, useState, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+
 import Link from 'next/link'
-import { CoffeeRecord } from '../../types/coffee'
-import { SupabaseStorage } from '../../lib/supabase-storage'
-import Navigation from '../../components/Navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+
 import {
   CheckCircle,
   TrendingUp,
@@ -19,6 +18,11 @@ import {
   ArrowRight,
   Trophy,
 } from 'lucide-react'
+
+import Navigation from '../../components/Navigation'
+import { SupabaseStorage } from '../../lib/supabase-storage'
+import { CoffeeRecord } from '../../types/coffee'
+
 
 // Match Score 계산 함수
 const calculateMatchScore = (record: CoffeeRecord): number => {

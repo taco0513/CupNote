@@ -1,8 +1,11 @@
 'use client'
 
-import Link from 'next/link'
 import { useState } from 'react'
+
+import Link from 'next/link'
+
 import { BarChart3, Settings, Plus, ArrowLeft, Trophy, User, LogIn } from 'lucide-react'
+
 import { useAuth } from '../contexts/AuthContext'
 import AuthModal from './auth/AuthModal'
 import UserProfile from './auth/UserProfile'

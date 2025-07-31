@@ -1,7 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+
 import { useRouter } from 'next/navigation'
+
 import { Coffee, ArrowRight, ArrowLeft, CheckCircle, Star, Trophy, Target } from 'lucide-react'
 
 interface OnboardingStep {

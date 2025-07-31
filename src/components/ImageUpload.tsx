@@ -1,15 +1,17 @@
 'use client'
 
 import { useState, useRef, useCallback } from 'react'
+
 import { Camera, Upload, X, Image as ImageIcon } from 'lucide-react'
+
+import { useAuth } from '../contexts/AuthContext'
+import { useNotification } from '../contexts/NotificationContext'
 import {
   ImageUploadService,
   createImagePreview,
   revokeImagePreview,
 } from '../lib/supabase-image-service'
-import { useNotification } from '../contexts/NotificationContext'
-import { useAuth } from '../contexts/AuthContext'
-import LoadingSpinner from './common/LoadingSpinner'
+import LoadingSpinner from './ui/LoadingSpinner'
 
 interface ImageUploadProps {
   onImageUploaded?: (imageUrl: string, thumbnailUrl?: string) => void
@@ -76,8 +78,9 @@ export default function ImageUpload({
         onImageUploaded?.(url, thumbnailUrl)
 
         success('이미지 업로드 완료', '이미지가 성공적으로 업로드되었습니다.')
-      } catch (err: any) {
-        error('업로드 실패', err.userMessage || '이미지 업로드 중 오류가 발생했습니다.')
+      } catch (err: unknown) {
+        const errorMessage = (err as any)?.userMessage || '이미지 업로드 중 오류가 발생했습니다.'
+        error('업로드 실패', errorMessage)
 
         // 미리보기 정리
         if (previewUrl) {
@@ -255,8 +258,9 @@ export function MultiImageUpload({
         onImagesChanged?.(updatedImages)
 
         success('업로드 완료', `${uploadedImages.length}개의 이미지가 업로드되었습니다.`)
-      } catch (err: any) {
-        error('업로드 실패', err.userMessage || '이미지 업로드 중 오류가 발생했습니다.')
+      } catch (err: unknown) {
+        const errorMessage = (err as any)?.userMessage || '이미지 업로드 중 오류가 발생했습니다.'
+        error('업로드 실패', errorMessage)
       } finally {
         setIsUploading(false)
 

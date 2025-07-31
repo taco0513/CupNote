@@ -1,12 +1,13 @@
 'use client'
 
 import { useEffect, useState, useMemo } from 'react'
-import { CoffeeRecord } from '../types/coffee'
-import { SupabaseStorage } from '../lib/supabase-storage'
+
+import FilterPanel, { FilterOptions } from './FilterPanel'
+import SearchBar from './SearchBar'
 import { useNotification } from '../contexts/NotificationContext'
 import { mapSupabaseError, logError } from '../lib/error-handler'
-import SearchBar from './SearchBar'
-import FilterPanel, { FilterOptions } from './FilterPanel'
+import { SupabaseStorage } from '../lib/supabase-storage'
+import { CoffeeRecord } from '../types/coffee'
 
 export default function CoffeeList() {
   const [records, setRecords] = useState<CoffeeRecord[]>([])
@@ -26,7 +27,7 @@ export default function CoffeeList() {
       // Supabase에서 기록 로드
       const data = await SupabaseStorage.getRecords()
       setRecords(data)
-    } catch (err: any) {
+    } catch (err: unknown) {
       const mappedError = mapSupabaseError(err)
       logError(mappedError, 'CoffeeList.loadRecords')
       error('기록 로드 실패', mappedError.userMessage)

@@ -1,9 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+
 import { useRouter } from 'next/navigation'
-import { useAuth } from '../../contexts/AuthContext'
+
 import AuthModal from './AuthModal'
+import { useAuth } from '../../contexts/AuthContext'
 
 interface ProtectedRouteProps {
   children: React.ReactNode

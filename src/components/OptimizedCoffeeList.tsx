@@ -1,15 +1,16 @@
 'use client'
 
 import { useEffect, useState, useMemo, useCallback } from 'react'
-import { CoffeeRecord } from '../types/coffee'
-import { QueryOptimizer, PaginatedResult } from '../lib/query-optimizer'
-import { CacheService } from '../lib/cache-service'
-import { useNotification } from '../contexts/NotificationContext'
-import { mapSupabaseError, logError } from '../lib/error-handler'
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor'
-import SearchBar from './SearchBar'
+
 import FilterPanel, { FilterOptions } from './FilterPanel'
 import LazyImage from './LazyImage'
+import SearchBar from './SearchBar'
+import { useNotification } from '../contexts/NotificationContext'
+import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor'
+import { CacheService } from '../lib/cache-service'
+import { mapSupabaseError, logError } from '../lib/error-handler'
+import { QueryOptimizer, PaginatedResult } from '../lib/query-optimizer'
+import { CoffeeRecord } from '../types/coffee'
 
 const PAGE_SIZE = 20
 
@@ -123,7 +124,7 @@ export default function OptimizedCoffeeList() {
           data: filteredData
         })
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       const mappedError = mapSupabaseError(err)
       logError(mappedError, 'OptimizedCoffeeList.loadRecords')
       error('기록 로드 실패', mappedError.userMessage)

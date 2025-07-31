@@ -1,7 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+
 import { X, Eye, EyeOff, Mail, Lock, User } from 'lucide-react'
+
 import { useAuth } from '../../contexts/AuthContext'
 import { useNotification } from '../../contexts/NotificationContext'
 import { mapSupabaseError, logError } from '../../lib/error-handler'
@@ -72,7 +74,7 @@ export default function AuthModal({
       // 성공 시 모달 닫기 및 콜백 실행
       onSuccess()
       onClose()
-    } catch (error: any) {
+    } catch (error: unknown) {
       // 개선된 에러 처리
       const mappedError = mapSupabaseError(error)
       logError(mappedError, 'AuthModal')

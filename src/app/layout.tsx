@@ -1,11 +1,14 @@
 import type { Metadata, Viewport } from 'next'
+
+import dynamic from 'next/dynamic'
+
+import ErrorBoundary from '../components/errors/ErrorBoundary'
+import MobileNavigation from '../components/MobileNavigation'
+import NotificationContainer from '../components/notifications/NotificationContainer'
 import { AuthProvider } from '../contexts/AuthContext'
 import { NotificationProvider } from '../contexts/NotificationContext'
 import { ThemeProvider } from '../contexts/ThemeContext'
-import ErrorBoundary from '../components/errors/ErrorBoundary'
-import NotificationContainer from '../components/notifications/NotificationContainer'
-import MobileNavigation from '../components/MobileNavigation'
-import dynamic from 'next/dynamic'
+
 
 // 클라이언트 전용 컴포넌트들을 동적 import
 const NetworkStatus = dynamic(() => import('../components/network/NetworkStatus'), {

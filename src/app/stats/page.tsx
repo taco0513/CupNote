@@ -1,9 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
-import { CoffeeRecord } from '../../types/coffee'
-import Navigation from '../../components/Navigation'
-import ProtectedRoute from '../../components/auth/ProtectedRoute'
+
 import {
   BarChart3,
   TrendingUp,
@@ -14,6 +12,11 @@ import {
   PieChart,
   Target,
 } from 'lucide-react'
+
+import ProtectedRoute from '../../components/auth/ProtectedRoute'
+import Navigation from '../../components/Navigation'
+import { CoffeeRecord } from '../../types/coffee'
+
 
 // 통계 분석 유틸리티 함수들
 const analyzeRecords = (records: CoffeeRecord[]) => {

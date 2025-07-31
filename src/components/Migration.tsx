@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+
 import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(
@@ -169,19 +170,21 @@ export default function Migration() {
             message: `Match Score: ${matchScore}`,
             supabaseId: data?.[0]?.id,
           })
-        } catch (recordError: any) {
+        } catch (recordError: unknown) {
+          const errorMessage = recordError instanceof Error ? recordError.message : '알 수 없는 오류'
           migrationResults.push({
             id: record.id,
             coffeeName: record.coffeeName,
             status: 'error',
-            message: recordError.message || '알 수 없는 오류',
+            message: errorMessage,
           })
         }
       }
 
       setResults(migrationResults)
-    } catch (err: any) {
-      setError(err.message || '마이그레이션 중 오류가 발생했습니다')
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : '마이그레이션 중 오류가 발생했습니다'
+      setError(errorMessage)
     } finally {
       setIsLoading(false)
     }

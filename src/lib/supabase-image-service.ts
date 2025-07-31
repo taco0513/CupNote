@@ -1,5 +1,5 @@
-import { supabase } from './supabase'
 import { mapSupabaseError, logError, createError, ERROR_CODES } from './error-handler'
+import { supabase } from './supabase'
 
 export interface ImageUploadOptions {
   bucket?: string
@@ -61,7 +61,7 @@ export class ImageUploadService {
         path: data.path,
         thumbnailUrl,
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       const mappedError = mapSupabaseError(error)
       logError(mappedError, 'ImageUploadService.uploadImage')
       throw mappedError
@@ -74,7 +74,7 @@ export class ImageUploadService {
       const { error } = await supabase.storage.from(bucket).remove([path])
 
       if (error) throw error
-    } catch (error: any) {
+    } catch (error: unknown) {
       const mappedError = mapSupabaseError(error)
       logError(mappedError, 'ImageUploadService.deleteImage')
       throw mappedError
@@ -103,7 +103,7 @@ export class ImageUploadService {
       }
 
       return successfulUploads
-    } catch (error: any) {
+    } catch (error: unknown) {
       const mappedError = mapSupabaseError(error)
       logError(mappedError, 'ImageUploadService.uploadMultipleImages')
       throw mappedError
@@ -134,7 +134,7 @@ export class ImageUploadService {
       })
 
       return urls
-    } catch (error: any) {
+    } catch (error: unknown) {
       const mappedError = mapSupabaseError(error)
       logError(mappedError, 'ImageUploadService.listImages')
       throw mappedError

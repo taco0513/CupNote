@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { useRouter } from 'next/navigation'
-import Navigation from '../../../components/Navigation'
+
 import {
   Settings,
   ArrowRight,
@@ -14,6 +15,8 @@ import {
   Thermometer,
   Droplets,
 } from 'lucide-react'
+
+import Navigation from '../../../components/Navigation'
 
 interface Step1Data {
   coffeeName: string

@@ -1,6 +1,7 @@
-import { CoffeeRecord } from '../types/coffee'
 import { createClient } from '@supabase/supabase-js'
+
 import { CacheService } from './cache-service'
+import { CoffeeRecord } from '../types/coffee'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,

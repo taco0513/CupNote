@@ -1,8 +1,10 @@
 'use client'
 
-import { useNotification } from '../../contexts/NotificationContext'
-import { CheckCircle, XCircle, AlertTriangle, Info, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
+
+import { CheckCircle, XCircle, AlertTriangle, Info, X } from 'lucide-react'
+
+import { useNotification } from '../../contexts/NotificationContext'
 
 const NotificationItem = ({ notification }: { notification: any }) => {
   const { removeNotification } = useNotification()

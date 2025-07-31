@@ -1,6 +1,7 @@
 'use client'
 
 import { Component, ReactNode, ErrorInfo } from 'react'
+
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react'
 
 interface Props {

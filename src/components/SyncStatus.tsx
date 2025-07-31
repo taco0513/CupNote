@@ -1,10 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+
 import { Cloud, CloudOff, RefreshCw } from 'lucide-react'
-import { offlineSync } from '../lib/offline-sync'
-import { offlineStorage } from '../lib/offline-storage'
+
 import { useAuth } from '../contexts/AuthContext'
+import { offlineStorage } from '../lib/offline-storage'
+import { offlineSync } from '../lib/offline-sync'
 
 export default function SyncStatus() {
   const { user } = useAuth()

@@ -1,9 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import Navigation from '../../components/Navigation'
-import ProtectedRoute from '../../components/auth/ProtectedRoute'
+
 import { Coffee, Home, Beaker, Clock, Users, TrendingUp } from 'lucide-react'
+
+import ProtectedRoute from '../../components/auth/ProtectedRoute'
+import Navigation from '../../components/Navigation'
 
 interface ModeCardProps {
   mode: 'cafe' | 'homecafe' | 'lab'

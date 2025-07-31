@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
+
 import {
   checkAchievements,
   getNextMilestones,
@@ -6,6 +7,7 @@ import {
   formatAchievementDate,
   type Achievement,
 } from '../achievements'
+
 import type { CoffeeRecord } from '@/types/coffee'
 
 describe('achievements', () => {

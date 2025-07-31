@@ -1,9 +1,10 @@
 'use client'
 
 import { createClient } from '@supabase/supabase-js'
-import { CoffeeRecord } from '../types/coffee'
-import { SupabaseAchievements } from './supabase-achievements'
+
 import { offlineStorage } from './offline-storage'
+import { SupabaseAchievements } from './supabase-achievements'
+import { CoffeeRecord } from '../types/coffee'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,

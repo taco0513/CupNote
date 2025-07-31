@@ -1,9 +1,12 @@
 'use client'
 
+import { useState } from 'react'
+
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+
 import { Home, Trophy, BarChart3, Settings, Plus, User, LogIn } from 'lucide-react'
+
 import { useAuth } from '../contexts/AuthContext'
 import AuthModal from './auth/AuthModal'
 

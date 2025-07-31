@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+
 import { X, Download } from 'lucide-react'
 
 interface BeforeInstallPromptEvent extends Event {

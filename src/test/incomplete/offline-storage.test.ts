@@ -1,5 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
+
 import { OfflineStorage } from '../offline-storage'
+
 import type { CoffeeRecord } from '@/types/coffee'
 
 // Mock IndexedDB

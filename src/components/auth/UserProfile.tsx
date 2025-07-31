@@ -1,7 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+
 import { User, Settings, LogOut, Trophy, Coffee } from 'lucide-react'
+
 import { useAuth } from '../../contexts/AuthContext'
 
 interface UserProfileProps {
