@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import Navigation from '@/components/Navigation'
-import OptimizedCoffeeList from '@/components/OptimizedCoffeeList'
-import SupabaseTest from '@/components/SupabaseTest'
-import AuthModal from '@/components/auth/AuthModal'
-import { useAuth } from '@/contexts/AuthContext'
+import Navigation from '../components/Navigation'
+import OptimizedCoffeeList from '../components/OptimizedCoffeeList'
+import SupabaseTest from '../components/SupabaseTest'
+import AuthModal from '../components/auth/AuthModal'
+import { useAuth } from '../contexts/AuthContext'
 import { LogIn, Coffee, TrendingUp, Award } from 'lucide-react'
 
 export default function HomePage() {
