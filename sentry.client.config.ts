@@ -49,9 +49,6 @@ Sentry.init({
     return event
   },
   
-  // 사용자 정보 자동 설정 비활성화 (개인정보 보호)
-  autoSessionTracking: false,
-  
   // 네트워크 에러 추적
   captureUnhandledRejections: true,
   
