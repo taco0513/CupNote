@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
-import { CoffeeRecord, FlavorProfile, SensoryExpression } from '@/types/coffee'
+import { CoffeeRecord, FlavorProfile, SensoryExpression } from '../../../types/coffee'
 import { SupabaseStorage } from '../../../lib/supabase-storage'
 import { FLAVOR_COLORS, SENSORY_CATEGORY_NAMES } from '../../../lib/flavorData'
 import Navigation from '../../../components/Navigation'

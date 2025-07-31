@@ -1,4 +1,4 @@
-import { FlavorProfile, FlavorCategory, SensoryExpression } from '@/types/coffee'
+import { FlavorProfile, FlavorCategory, SensoryExpression } from '../types/coffee'
 
 // 향미 데이터베이스
 export const FLAVOR_DATABASE: FlavorProfile[] = [

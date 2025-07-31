@@ -1,7 +1,7 @@
 'use client'
 
 import { createClient } from '@supabase/supabase-js'
-import { CoffeeRecord } from '@/types/coffee'
+import { CoffeeRecord } from '../types/coffee'
 import { SupabaseAchievements } from './supabase-achievements'
 import { offlineStorage } from './offline-storage'
 

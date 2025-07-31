@@ -1,5 +1,5 @@
-import { CoffeeRecord } from '@/types/coffee'
-import { Achievement, AchievementCondition, UserLevel, UserStats } from '@/types/achievement'
+import { CoffeeRecord } from '../types/coffee'
+import { Achievement, AchievementCondition, UserLevel, UserStats } from '../types/achievement'
 
 // 기본 성취 목록 정의
 export const DEFAULT_ACHIEVEMENTS: Omit<Achievement, 'unlocked' | 'unlockedAt' | 'progress'>[] = [

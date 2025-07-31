@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { CoffeeRecord } from '@/types/coffee'
+import { CoffeeRecord } from '../../../types/coffee'
 
 // 로컬 스토리지 대신 서버에서 관리할 임시 데이터
 let records: CoffeeRecord[] = [

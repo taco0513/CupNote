@@ -1,4 +1,4 @@
-import { CoffeeRecord } from '@/types/coffee'
+import { CoffeeRecord } from '../types/coffee'
 
 const DB_NAME = 'cupnote-offline'
 const DB_VERSION = 1

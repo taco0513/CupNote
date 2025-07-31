@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
-import { CoffeeRecord } from '@/types/coffee'
-import { Achievement, UserStats, UserLevel } from '@/types/achievement'
+import { CoffeeRecord } from '../types/coffee'
+import { Achievement, UserStats, UserLevel } from '../types/achievement'
 import { DEFAULT_ACHIEVEMENTS, LEVEL_SYSTEM } from './achievements'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!

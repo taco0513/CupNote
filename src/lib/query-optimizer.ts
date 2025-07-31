@@ -1,4 +1,4 @@
-import { CoffeeRecord } from '@/types/coffee'
+import { CoffeeRecord } from '../types/coffee'
 import { createClient } from '@supabase/supabase-js'
 import { CacheService } from './cache-service'
 

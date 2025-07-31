@@ -1,6 +1,6 @@
 import { supabase } from './supabase'
-import type { CoffeeRecord } from '@/types/coffee'
-import type { Achievement } from '@/types/achievement'
+import type { CoffeeRecord } from '../types/coffee'
+import type { Achievement } from '../types/achievement'
 import { createError, mapSupabaseError, logError } from './error-handler'
 
 // Coffee Records Service

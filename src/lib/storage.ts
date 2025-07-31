@@ -1,5 +1,5 @@
-import { CoffeeRecord } from '@/types/coffee'
-import { UserStats } from '@/types/achievement'
+import { CoffeeRecord } from '../types/coffee'
+import { UserStats } from '../types/achievement'
 import { AchievementSystem } from './achievements'
 import { generateSampleFlavorProfile, generateSampleSensoryExpressions } from './flavorData'
 
