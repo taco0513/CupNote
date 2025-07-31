@@ -24,22 +24,23 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.53.0",
     "@tailwindcss/line-clamp": "^0.4.4",
+    "@types/node": "^24.1.0",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
     "autoprefixer": "^10.4.21",
     "lucide-react": "^0.534.0",
     "next": "^15.4.5",
     "postcss": "^8.5.6",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.1",
     "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
-    "@types/node": "^24.1.0",
-    "@types/react": "^19.1.9",
-    "@types/react-dom": "^19.1.7",
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
     "@vitejs/plugin-react": "^4.7.0",
@@ -50,7 +51,6 @@
     "jsdom": "^26.1.0",
     "next-pwa": "^5.6.0",
     "prettier": "^3.6.2",
-    "typescript": "^5.8.3",
     "vitest": "^3.2.4"
   },
   "description": "나만의 커피 여정을 기록하는 온라인 커피 일기",
