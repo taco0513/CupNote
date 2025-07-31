@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Navigation from '@/components/Navigation'
-import ProtectedRoute from '@/components/auth/ProtectedRoute'
-import { SupabaseStorage } from '@/lib/supabase-storage'
+import Navigation from '../../components/Navigation'
+import ProtectedRoute from '../../components/auth/ProtectedRoute'
+import { SupabaseStorage } from '../../lib/supabase-storage'
 import { UserStats, Achievement } from '@/types/achievement'
 import { Trophy, Target, TrendingUp, Award, Star, Zap, Users, Crown } from 'lucide-react'
 
