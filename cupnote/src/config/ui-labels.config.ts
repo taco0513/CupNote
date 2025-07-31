@@ -103,7 +103,9 @@ export const getLabel = <T extends UILabelCategory>(
   category: T,
   key: UILabel<T>
 ): string => {
-  return UI_LABELS[category][key]
+  const categoryObj = UI_LABELS[category]
+  const value = (categoryObj as any)[key]
+  return value as string
 }
 
 export const getRatingLabel = (rating: number): string => {
