@@ -1,5 +1,5 @@
 export type TasteMode = 'simple' | 'professional'
-export type CoffeeMode = 'cafe' | 'homecafe' | 'lab'
+export type CoffeeMode = 'cafe' | 'homecafe' | 'pro'
 
 // 향미 카테고리
 export type FlavorCategory = 'fruity' | 'nutty' | 'chocolate' | 'floral' | 'spicy' | 'other'
@@ -32,8 +32,8 @@ export interface HomeCafeData {
   satisfaction?: number // 1-5 별점
 }
 
-// Lab 모드 전용 데이터
-export interface LabData {
+// Pro 모드 전용 데이터
+export interface ProData {
   tds?: number // 1.28
   extractionYield?: number // 21.3
   scaScore?: number // 85.5
@@ -80,9 +80,9 @@ export interface CoffeeRecord {
   memo?: string
 
   // 모드별 데이터
-  mode?: CoffeeMode // 'cafe', 'homecafe', 'lab'
+  mode?: CoffeeMode // 'cafe', 'homecafe', 'pro'
   homecafeData?: HomeCafeData
-  labData?: LabData
+  proData?: ProData
 
   // 향미 프로파일
   selectedFlavors?: FlavorProfile[]

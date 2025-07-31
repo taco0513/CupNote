@@ -22,7 +22,7 @@ interface Step1Data {
   coffeeName: string
   roastery: string
   date: string
-  mode: 'cafe' | 'homecafe' | 'lab'
+  mode: 'cafe' | 'homecafe' | 'pro'
 }
 
 interface Step2Data {
@@ -218,14 +218,14 @@ export default function RecordStep2Page() {
     </div>
   )
 
-  const renderLabMode = () => (
+  const renderProMode = () => (
     <div className="space-y-6">
       <div className="text-center mb-8">
         <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-4">
           <Beaker className="h-8 w-8 text-purple-600" />
         </div>
-        <h2 className="text-2xl font-bold text-coffee-800 mb-2">전문 분석</h2>
-        <p className="text-coffee-600">상세한 커피 정보와 분석 데이터를 입력해주세요</p>
+        <h2 className="text-2xl font-bold text-coffee-800 mb-2">SCA 표준 분석</h2>
+        <p className="text-coffee-600">SCA 기준에 따른 전문가급 커피 품질 평가 데이터를 입력해주세요</p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
@@ -268,27 +268,93 @@ export default function RecordStep2Page() {
         />
       </div>
 
+      {/* SCA 표준 품질 측정 */}
+      <div className="bg-purple-50 rounded-xl p-6 border border-purple-200">
+        <h3 className="text-lg font-medium text-purple-800 mb-4 flex items-center">
+          <Beaker className="h-5 w-5 mr-2" />
+          SCA 표준 품질 측정
+        </h3>
+        
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-purple-700 mb-2">
+              TDS (%) - 농도 측정
+            </label>
+            <input
+              type="number"
+              step="0.01"
+              className="w-full px-4 py-3 border border-purple-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg"
+              placeholder="1.35"
+              value={formData.tds || ''}
+              onChange={e => setFormData({ ...formData, tds: e.target.value })}
+            />
+            <p className="text-xs text-purple-600 mt-1">표준: 1.15-1.35% (커피강도 기준)</p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-purple-700 mb-2">
+              추출 수율 (%) - 자동 계산
+            </label>
+            <input
+              type="number"
+              step="0.1"
+              className="w-full px-4 py-3 border border-purple-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg"
+              placeholder="20.5"
+              value={formData.extraction || ''}
+              onChange={e => setFormData({ ...formData, extraction: e.target.value })}
+            />
+            <p className="text-xs text-purple-600 mt-1">SCA 표준: 18-22% (최적 추출 범위)</p>
+          </div>
+        </div>
+
+        {/* SCA 기준 상태 표시 */}
+        {formData.extraction && (
+          <div className="mt-4 p-3 rounded-lg flex items-center">
+            {Number(formData.extraction) < 18 ? (
+              <div className="flex items-center text-red-700 bg-red-100 px-3 py-2 rounded-lg">
+                <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
+                미추출 (Under-extracted)
+              </div>
+            ) : Number(formData.extraction) > 22 ? (
+              <div className="flex items-center text-orange-700 bg-orange-100 px-3 py-2 rounded-lg">
+                <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                과추출 (Over-extracted)
+              </div>
+            ) : (
+              <div className="flex items-center text-green-700 bg-green-100 px-3 py-2 rounded-lg">
+                <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                적정 추출 (Optimal)
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* 추가 SCA 파라미터 */}
       <div className="grid md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">TDS (%)</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">물 경도 (ppm)</label>
           <input
-            type="text"
+            type="number"
             className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent text-lg"
-            placeholder="예: 1.35"
-            value={formData.tds || ''}
-            onChange={e => setFormData({ ...formData, tds: e.target.value })}
+            placeholder="150"
+            value={formData.waterHardness || ''}
+            onChange={e => setFormData({ ...formData, waterHardness: e.target.value })}
           />
+          <p className="text-xs text-gray-500 mt-1">SCA 권장: 150-300 ppm</p>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">추출 수율 (%)</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">물 pH</label>
           <input
-            type="text"
+            type="number"
+            step="0.1"
             className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent text-lg"
-            placeholder="예: 20.5"
-            value={formData.extraction || ''}
-            onChange={e => setFormData({ ...formData, extraction: e.target.value })}
+            placeholder="7.0"
+            value={formData.waterPH || ''}
+            onChange={e => setFormData({ ...formData, waterPH: e.target.value })}
           />
+          <p className="text-xs text-gray-500 mt-1">SCA 표준: 6.5-7.5</p>
         </div>
       </div>
     </div>
@@ -331,7 +397,7 @@ export default function RecordStep2Page() {
               >
                 {step1Data.mode === 'cafe' && '☕ 카페 모드'}
                 {step1Data.mode === 'homecafe' && '🏠 홈카페 모드'}
-                {step1Data.mode === 'lab' && '🔬 랩 모드'}
+                {step1Data.mode === 'pro' && '🔬 프로 모드'}
               </div>
             </div>
             <div className="text-right">
@@ -347,7 +413,7 @@ export default function RecordStep2Page() {
         <div className="bg-white rounded-2xl shadow-lg p-8">
           {step1Data.mode === 'cafe' && renderCafeMode()}
           {step1Data.mode === 'homecafe' && renderHomeCafeMode()}
-          {step1Data.mode === 'lab' && renderLabMode()}
+          {step1Data.mode === 'pro' && renderProMode()}
 
           {/* 안내 메시지 */}
           <div className="mt-8 p-4 bg-coffee-50 rounded-xl border border-coffee-200">
@@ -357,7 +423,7 @@ export default function RecordStep2Page() {
                 ' 모르는 정보는 비워두셔도 괜찮아요. 나중에 수정할 수 있어요!'}
               {step1Data.mode === 'homecafe' &&
                 ' 정확한 레시피를 기록하면 다음에 같은 맛을 재현하기 쉬워요!'}
-              {step1Data.mode === 'lab' &&
+              {step1Data.mode === 'pro' &&
                 ' 전문 데이터가 있으면 더 정확한 분석을 제공할 수 있어요!'}
             </p>
           </div>

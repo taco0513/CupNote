@@ -15,13 +15,13 @@ interface Step1Data {
   coffeeName: string
   roastery: string
   date: string
-  mode: 'cafe' | 'homecafe' | 'lab'
+  mode: 'cafe' | 'homecafe' | 'pro'
 }
 
 function RecordStep1Content() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const selectedMode = searchParams.get('mode') as 'cafe' | 'homecafe' | 'lab' | null
+  const selectedMode = searchParams.get('mode') as 'cafe' | 'homecafe' | 'pro' | null
 
   const [formData, setFormData] = useState<Step1Data>({
     coffeeName: '',
@@ -103,12 +103,12 @@ function RecordStep1Content() {
             >
               {formData.mode === 'cafe' && '☕ 카페 모드'}
               {formData.mode === 'homecafe' && '🏠 홈카페 모드'}
-              {formData.mode === 'lab' && '🔬 랩 모드'}
+              {formData.mode === 'pro' && '🔬 프로 모드'}
             </div>
             <span className="text-coffee-600 text-sm">
               {formData.mode === 'cafe' && '카페에서 간단히 기록'}
               {formData.mode === 'homecafe' && '집에서 내린 커피 + 레시피'}
-              {formData.mode === 'lab' && '전문적인 분석과 평가'}
+              {formData.mode === 'pro' && '전문적인 분석과 평가'}
             </span>
           </div>
         </div>

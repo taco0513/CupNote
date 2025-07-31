@@ -76,7 +76,7 @@ export class SupabaseAchievements {
         taste: record.taste_notes,
         roasterNote: record.roaster_notes,
         memo: record.personal_notes,
-        mode: record.mode as 'cafe' | 'homecafe' | 'lab',
+        mode: record.mode as 'cafe' | 'homecafe' | 'pro',
         tasteMode: 'simple', // 기본값 설정
         date: record.created_at.split('T')[0],
         createdAt: record.created_at,
@@ -115,7 +115,7 @@ export class SupabaseAchievements {
         taste: record.taste_notes,
         roasterNote: record.roaster_notes,
         memo: record.personal_notes,
-        mode: record.mode as 'cafe' | 'homecafe' | 'lab',
+        mode: record.mode as 'cafe' | 'homecafe' | 'pro',
         tasteMode: 'simple', // 기본값 설정
         date: record.created_at.split('T')[0],
         createdAt: record.created_at,

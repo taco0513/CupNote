@@ -8,7 +8,7 @@ import ProtectedRoute from '../../components/auth/ProtectedRoute'
 import Navigation from '../../components/Navigation'
 
 interface ModeCardProps {
-  mode: 'cafe' | 'homecafe' | 'lab'
+  mode: 'cafe' | 'homecafe' | 'pro'
   icon: React.ReactNode
   title: string
   description: string
@@ -133,10 +133,10 @@ export default function ModeSelectionPage() {
               badge="가장 인기"
               popular={true}
               features={[
-                '빠른 기본 정보 입력',
-                '간단한 맛 표현',
-                '카페 분위기 기록',
-                '즉석 평가 시스템',
+                '빠른 커피 기본 정보 입력',
+                '직관적인 향미 선택 (5개 내)',
+                '한국어 감각 표현 6가지',
+                '퀵 태그와 개인 코멘트',
               ]}
             />
 
@@ -144,27 +144,27 @@ export default function ModeSelectionPage() {
             <ModeCard
               mode="homecafe"
               icon={<Home className="h-6 w-6" />}
-              title="홈카페 모드"
-              description="집에서 내린 커피 + 레시피"
+              title="홈쩐페 모드"
+              description="홈브루잉 추출 레시피 기록"
               duration="5-8분"
-              badge="NEW"
+              badge="레시피"
               features={[
-                '추출 방법 및 레시피',
-                '사용한 도구 기록',
-                '상세한 맛 분석',
-                '개선점 메모',
+                '드리퍼 및 추출 비율 설정',
+                '원두량 다이얼 제어(±1g)',
+                '실시간 물량 자동 계산',
+                '추출 타이머 및 레시피 저장',
               ]}
             />
 
-            {/* Lab Mode */}
+            {/* Pro Mode */}
             <ModeCard
-              mode="lab"
+              mode="pro"
               icon={<Beaker className="h-6 w-6" />}
-              title="랩 모드"
-              description="전문적인 분석과 평가"
+              title="프로 모드"
+              description="SCA 표준 전문가 평가"
               duration="8-12분"
               badge="전문가용"
-              features={['SCA 표준 평가', 'TDS 및 추출 수율', '상세 감각 분석', '종합 QC 리포트']}
+              features={['SCA 표준 기반 품질 평가', 'TDS 측정 및 추출 수율 분석', 'SCA Flavor Wheel 국제 표준 향미 평가', '전문 QC 리포트 및 품질 등급 판정']}
             />
           </div>
 

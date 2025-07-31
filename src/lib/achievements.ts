@@ -108,7 +108,7 @@ export const DEFAULT_ACHIEVEMENTS: Omit<Achievement, 'unlocked' | 'unlockedAt' |
     description: '랩 모드로 10번 기록했어요',
     icon: '🔬',
     category: 'special',
-    condition: { type: 'count', target: 10, field: 'modes', value: 'lab' },
+    condition: { type: 'count', target: 10, field: 'modes', value: 'pro' },
     reward: { points: 120 },
   },
   {

@@ -301,7 +301,7 @@ export class SupabaseStorage {
       case 'homecafe':
         score += 15
         break
-      case 'lab':
+      case 'pro':
         score += 20
         break
     }
