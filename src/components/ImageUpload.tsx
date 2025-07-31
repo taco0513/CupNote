@@ -6,9 +6,9 @@ import {
   ImageUploadService,
   createImagePreview,
   revokeImagePreview,
-} from '@/lib/supabase-image-service'
-import { useNotification } from '@/contexts/NotificationContext'
-import { useAuth } from '@/contexts/AuthContext'
+} from '../lib/supabase-image-service'
+import { useNotification } from '../contexts/NotificationContext'
+import { useAuth } from '../contexts/AuthContext'
 import LoadingSpinner from './common/LoadingSpinner'
 
 interface ImageUploadProps {

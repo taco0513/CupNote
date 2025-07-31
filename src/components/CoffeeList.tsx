@@ -1,10 +1,10 @@
 'use client'
 
 import { useEffect, useState, useMemo } from 'react'
-import { CoffeeRecord } from '@/types/coffee'
-import { SupabaseStorage } from '@/lib/supabase-storage'
-import { useNotification } from '@/contexts/NotificationContext'
-import { mapSupabaseError, logError } from '@/lib/error-handler'
+import { CoffeeRecord } from '../types/coffee'
+import { SupabaseStorage } from '../lib/supabase-storage'
+import { useNotification } from '../contexts/NotificationContext'
+import { mapSupabaseError, logError } from '../lib/error-handler'
 import SearchBar from './SearchBar'
 import FilterPanel, { FilterOptions } from './FilterPanel'
 

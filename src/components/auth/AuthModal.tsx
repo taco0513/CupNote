@@ -2,9 +2,9 @@
 
 import { useState } from 'react'
 import { X, Eye, EyeOff, Mail, Lock, User } from 'lucide-react'
-import { useAuth } from '@/contexts/AuthContext'
-import { useNotification } from '@/contexts/NotificationContext'
-import { mapSupabaseError, logError } from '@/lib/error-handler'
+import { useAuth } from '../../contexts/AuthContext'
+import { useNotification } from '../../contexts/NotificationContext'
+import { mapSupabaseError, logError } from '../../lib/error-handler'
 
 interface AuthModalProps {
   isOpen: boolean

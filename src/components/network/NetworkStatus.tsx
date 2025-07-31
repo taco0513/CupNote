@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { WifiOff, Wifi, Signal } from 'lucide-react'
-import { useNetworkStatus, useDataSync } from '@/hooks/useNetworkStatus'
-import { useNotification } from '@/contexts/NotificationContext'
+import { useNetworkStatus, useDataSync } from '../../hooks/useNetworkStatus'
+import { useNotification } from '../../contexts/NotificationContext'
 
 export default function NetworkStatus() {
   const { isOnline, isSlowConnection, connectionType } = useNetworkStatus()

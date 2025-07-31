@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabase'
-import { AuthService } from '@/lib/supabase-service'
+import { supabase } from '../lib/supabase'
+import { AuthService } from '../lib/supabase-service'
 
 export default function SupabaseTest() {
   const [connectionStatus, setConnectionStatus] = useState<'checking' | 'connected' | 'error'>(

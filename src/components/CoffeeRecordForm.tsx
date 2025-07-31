@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { CoffeeRecord, TasteMode } from '@/types/coffee'
+import { CoffeeRecord, TasteMode } from '../types/coffee'
 
 interface CoffeeRecordFormProps {
   onClose: () => void
