@@ -98,7 +98,6 @@ function HeaderSection({ record, router }: { record: CoffeeRecord; router: any }
     if (mode === 'cafe') return { icon: '🏪', text: 'Cafe', color: 'bg-blue-100 text-blue-800' }
     if (mode === 'homecafe')
       return { icon: '🏠', text: 'HomeCafe', color: 'bg-green-100 text-green-800' }
-    if (mode === 'pro') return { icon: '🔬', text: 'Pro', color: 'bg-purple-100 text-purple-800' }
 
     // 기본 모드 (tasteMode 기반)
     if (tasteMode === 'simple')

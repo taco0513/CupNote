@@ -14,7 +14,7 @@ interface Step1Data {
   coffeeName: string
   roastery: string
   date: string
-  mode: 'cafe' | 'homecafe' | 'pro'
+  mode: 'cafe' | 'homecafe'
 }
 
 interface CafeData {

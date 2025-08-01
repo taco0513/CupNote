@@ -13,7 +13,7 @@ interface Step1Data {
   coffeeName: string
   roastery: string
   date: string
-  mode: 'cafe' | 'homecafe' | 'pro'
+  mode: 'cafe' | 'homecafe'
 }
 
 interface Step2Data {
@@ -77,10 +77,7 @@ export default function RecordStep3Page() {
       const data1 = JSON.parse(saved1)
       setStep1Data(data1)
 
-      // Lab 모드는 기본적으로 professional 모드
-      if (data1.mode === 'pro') {
-        setFormData(prev => ({ ...prev, tasteMode: 'professional' }))
-      }
+      // 기본 모드 설정 (pro 모드 제거됨)
     } else {
       router.push('/mode-selection')
       return
@@ -180,7 +177,7 @@ export default function RecordStep3Page() {
               >
                 {step1Data.mode === 'cafe' && '☕ 카페 모드'}
                 {step1Data.mode === 'homecafe' && '🏠 홈카페 모드'}
-                {step1Data.mode === 'pro' && '🔬 프로 모드'}
+                {false && '🔬 프로 모드'}
               </div>
             </div>
             <div className="text-right">
@@ -318,7 +315,7 @@ export default function RecordStep3Page() {
             )}
 
             {/* 맛 표현 모드 선택 (Lab 모드가 아닌 경우만) */}
-            {step1Data.mode !== 'pro' && (
+            {/* 맛 표현 모드 선택 */ true && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-3">
                   어떻게 기록하시겠어요?

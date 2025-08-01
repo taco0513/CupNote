@@ -98,8 +98,7 @@ export default function ModeSelectionExample() {
               🏠 직접 내린 커피
             </h4>
             <p className="text-green-700">
-              <strong>HomeCafe Mode</strong>: {UI_LABELS.tips.homecafeMode}<br />
-              <strong>Pro Mode</strong>: {UI_LABELS.tips.proMode}
+              <strong>HomeCafe Mode</strong>: {UI_LABELS.tips.homecafeMode}
             </p>
           </div>
         </div>

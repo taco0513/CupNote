@@ -17,7 +17,7 @@ interface Step1Data {
   coffeeName: string
   roastery: string
   date: string
-  mode: 'cafe' | 'homecafe' | 'pro'
+  mode: 'cafe' | 'homecafe'
 }
 
 interface CafeData {
@@ -210,7 +210,7 @@ export default function CafeStep4Page() {
         coffeeName: cafeData.coffee_name,
         roastery: cafeData.cafe_name,
         date: step1Data.date,
-        mode: step1Data.mode as 'cafe' | 'homecafe' | 'pro',
+        mode: step1Data.mode as 'cafe' | 'homecafe',
         
         // 통합 맛 기록 (필수 필드)
         taste: [

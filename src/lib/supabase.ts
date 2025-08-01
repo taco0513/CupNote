@@ -41,7 +41,7 @@ export interface Database {
           taste_notes: string
           roaster_notes?: string
           personal_notes?: string
-          mode: 'cafe' | 'homecafe' | 'pro'
+          mode: 'cafe' | 'homecafe'
           match_score?: number
           created_at: string
           updated_at: string
@@ -58,7 +58,7 @@ export interface Database {
           taste_notes: string
           roaster_notes?: string
           personal_notes?: string
-          mode: 'cafe' | 'homecafe' | 'pro'
+          mode: 'cafe' | 'homecafe'
           match_score?: number
           created_at?: string
           updated_at?: string
@@ -75,7 +75,7 @@ export interface Database {
           taste_notes?: string
           roaster_notes?: string
           personal_notes?: string
-          mode?: 'cafe' | 'homecafe' | 'pro'
+          mode?: 'cafe' | 'homecafe'
           match_score?: number
           created_at?: string
           updated_at?: string

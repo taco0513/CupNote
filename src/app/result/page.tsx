@@ -30,9 +30,7 @@ const calculateMatchScore = (record: CoffeeRecord): number => {
   let score = ((record.rating || 0) / 5) * 100
 
   // 모드별 가중치
-  if (record.mode === 'pro') {
-    score += 10 // 전문 모드 보너스
-  } else if (record.mode === 'homecafe') {
+  if (record.mode === 'homecafe') {
     score += 5 // 홈카페 정성 보너스
   }
 
@@ -65,7 +63,7 @@ const getScoreGrade = (score: number) => {
 // 개인적 메시지
 const getPersonalMessage = (score: number, mode: string) => {
   if (score >= 90) {
-    return mode === 'pro' ? 'SCA 표준에 따른 전문가급 평가입니다!' : '정말 특별한 커피를 만나셨네요!'
+    return '정말 특별한 커피를 만나셨네요!'
   } else if (score >= 80) {
     return '훌륭한 커피 경험이었습니다 ✨'
   } else if (score >= 70) {
@@ -249,7 +247,6 @@ function ResultPageContent() {
                 >
                   {record.mode === 'cafe' && '☕ 카페 모드'}
                   {record.mode === 'homecafe' && '🏠 홈카페 모드'}
-                  {record.mode === 'pro' && '🔬 프로 모드'}
                 </div>
               </div>
 

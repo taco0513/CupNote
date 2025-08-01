@@ -28,7 +28,7 @@ interface Step1Data {
   coffeeName: string
   roastery: string
   date: string
-  mode: 'cafe' | 'homecafe' | 'pro'
+  mode: 'cafe' | 'homecafe'
 }
 
 interface Step2Data {
@@ -273,7 +273,7 @@ export default function RecordStep4Page() {
                   >
                     {step1Data.mode === 'cafe' && '☕ 카페 모드'}
                     {step1Data.mode === 'homecafe' && '🏠 홈카페 모드'}
-                    {step1Data.mode === 'pro' && '🔬 프로 모드'}
+                    {false && '🔬 프로 모드'}
                   </div>
                 </div>
                 <p className="text-xl font-bold text-coffee-800">{step1Data.coffeeName}</p>

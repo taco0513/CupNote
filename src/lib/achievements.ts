@@ -103,15 +103,6 @@ export const DEFAULT_ACHIEVEMENTS: Omit<Achievement, 'unlocked' | 'unlockedAt' |
 
   // 특별 성취
   {
-    id: 'lab-scientist',
-    title: '랩 과학자',
-    description: '랩 모드로 10번 기록했어요',
-    icon: '🔬',
-    category: 'special',
-    condition: { type: 'count', target: 10, field: 'modes', value: 'pro' },
-    reward: { points: 120 },
-  },
-  {
     id: 'home-barista',
     title: '홈 바리스타',
     description: '홈카페 모드로 20번 기록했어요',

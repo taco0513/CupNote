@@ -96,5 +96,6 @@ export const isValidMode = (mode: string): mode is TastingModeId => {
 
 // Legacy support (for gradual migration)
 export const LEGACY_MODE_MAPPING = {
-  lab: 'pro', // lab 모드를 pro로 매핑
+  lab: 'homecafe', // lab 모드를 homecafe로 매핑
+  pro: 'homecafe', // pro 모드를 homecafe로 매핑
 } as const
