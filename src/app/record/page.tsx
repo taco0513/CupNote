@@ -4,12 +4,14 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
 /**
- * Legacy Step3 redirect handler
+ * Legacy /record route redirect handler
+ * 레거시 /record 경로를 새로운 TastingFlow로 리다이렉트
  */
-export default function LegacyStep3Page() {
+export default function LegacyRecordPage() {
   const router = useRouter()
 
   useEffect(() => {
+    // 새로운 TastingFlow로 리다이렉트
     router.replace('/tasting-flow')
   }, [router])
 

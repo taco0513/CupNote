@@ -97,7 +97,6 @@ export default function FilterPanel({
                 <option value="">전체</option>
                 <option value="cafe">🏪 Cafe</option>
                 <option value="homecafe">🏠 HomeCafe</option>
-                <option value="lab">🔬 Lab</option>
               </select>
             </div>
 

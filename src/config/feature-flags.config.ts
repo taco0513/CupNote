@@ -35,12 +35,12 @@ const getEnvFlag = (key: string, defaultValue: boolean = false): boolean => {
 
 // Feature Flags 기본값
 export const FEATURE_FLAGS: FeatureFlags = {
-  // TastingFlow v2.0 - 점진적 활성화
-  ENABLE_NEW_TASTING_FLOW: getEnvFlag('ENABLE_NEW_TASTING_FLOW', false),
-  ENABLE_MATCH_SCORE: getEnvFlag('ENABLE_MATCH_SCORE', false),
-  ENABLE_ACHIEVEMENTS: getEnvFlag('ENABLE_ACHIEVEMENTS', false),
-  ENABLE_SCA_FLAVOR_WHEEL_V2: getEnvFlag('ENABLE_SCA_FLAVOR_WHEEL_V2', false),
-  ENABLE_CASCADE_AUTOCOMPLETE: getEnvFlag('ENABLE_CASCADE_AUTOCOMPLETE', false),
+  // TastingFlow v2.0 - 활성화됨
+  ENABLE_NEW_TASTING_FLOW: getEnvFlag('ENABLE_NEW_TASTING_FLOW', true),
+  ENABLE_MATCH_SCORE: getEnvFlag('ENABLE_MATCH_SCORE', true),
+  ENABLE_ACHIEVEMENTS: getEnvFlag('ENABLE_ACHIEVEMENTS', true),
+  ENABLE_SCA_FLAVOR_WHEEL_V2: getEnvFlag('ENABLE_SCA_FLAVOR_WHEEL_V2', true),
+  ENABLE_CASCADE_AUTOCOMPLETE: getEnvFlag('ENABLE_CASCADE_AUTOCOMPLETE', true),
   
   // 마이그레이션 - 항상 활성화
   REDIRECT_OLD_ROUTES: getEnvFlag('REDIRECT_OLD_ROUTES', true),

@@ -12,93 +12,67 @@ export type TastingMode = 'cafe' | 'homecafe'
 
 // ===== Coffee Info Types =====
 
-export interface CoffeeInfoData {
-  // Cafe Mode specific
-  cafeName?: string
-  
-  // Common fields
-  coffeeName: string
+export interface CoffeeInfo {
+  name: string
   roastery: string
-  temperature: 'hot' | 'iced'
-  
-  // Optional details
   origin?: string
-  variety?: string
-  altitude?: string
-  roastLevel?: string
-  processing?: string
-  price?: string
-  
-  // Metadata
-  inputTimestamp: Date
-  completionTime: number // seconds
+  purchaseLocation?: string // Cafe mode only
 }
 
 // ===== Brew Setup Types (HomeCafe only) =====
 
-export interface BrewSetupData {
-  dripper: 'v60' | 'kalita' | 'origami' | 'april'
-  ratio: string // e.g., '1:16'
+export interface BrewSetup {
+  dripper: string
   coffeeAmount: number // grams
-  waterAmount: number // ml (auto-calculated)
-  temperature: number // celsius
-  grindSetting: string // free text
-  bloomTime: number // seconds
-  totalTime: number // seconds
-  notes?: string
+  waterAmount: number // ml
+  ratio: number // calculated ratio
+  grindSize: string
+  customDripper?: string
+  grinderBrand?: string
+  grinderModel?: string
+  grinderSetting?: string
+  waterTemp?: number // celsius
+  brewTime: number // seconds
+  timerData?: {
+    totalTime: number
+    lapTimes: Array<{ time: number; note: string; timestamp: Date }>
+    completed: boolean
+  }
 }
 
 // ===== Flavor Selection Types =====
 
-export interface FlavorChoice {
-  level2: string // Level 2 ID (required)
-  level3?: string[] // Level 3 IDs (optional)
-}
-
-export interface FlavorSelectionData {
-  selectedFlavors: FlavorChoice[]
-  timestamp: Date
-  selectionDuration: number // seconds
+export interface FlavorProfile {
+  selectedFlavors: string[]
+  intensity: 'low' | 'medium' | 'high'
+  complexity: number
 }
 
 // ===== Sensory Expression Types =====
 
-export type SensoryCategoryKey = 'acidity' | 'sweetness' | 'bitterness' | 'body' | 'aftertaste' | 'balance'
-
-export interface SensoryExpressionData {
-  acidity: string[] // max 3
-  sweetness: string[] // max 3
-  bitterness: string[] // max 3
-  body: string[] // max 3
-  aftertaste: string[] // max 3
-  balance: string[] // max 3
-  timestamp: Date
-  completionTime: number // seconds
+export interface SensoryExpression {
+  selectedExpressions: string[]
 }
 
 // ===== Sensory Mouthfeel Types (Optional) =====
 
-export interface SensoryMouthFeelData {
-  body: number // 1-5
-  acidity: number // 1-5
-  sweetness: number // 1-5
-  finish: number // 1-5
-  bitterness: number // 1-5
-  balance: number // 1-5
-  timestamp: Date
-  skipped: boolean
+export interface SensoryMouthFeel {
+  ratings: Record<string, number>
+  totalScore: number
+  averageScore: number
+  strengths: string[]
+  weaknesses: string[]
+  autoComment: string
 }
 
 // ===== Personal Notes Types =====
 
-export interface PersonalNotesData {
-  mainNote: string // max 200 chars
-  quickInputs: string[] // selected quick inputs
-  emotionTags: string[] // selected emotion tags
-  timestamp: Date
-  context: {
-    timeOfDay: 'morning' | 'afternoon' | 'evening' | 'night'
-  }
+export interface PersonalNotes {
+  noteText: string
+  selectedQuickInputs: string[]
+  selectedEmotions: string[]
+  timeContext: string
+  createdAt: string
 }
 
 // ===== Match Score Types =====
@@ -142,33 +116,26 @@ export interface UserStatistics {
   unlockedAchievements: string[] // achievement IDs
 }
 
-// ===== Main TastingFlow Data Structure =====
+// ===== Main TastingFlow Session Structure =====
 
-export interface TastingFlowData {
-  // Metadata
-  id: string
-  userId: string
+export interface TastingSession {
   mode: TastingMode
-  createdAt: Date
-  completedAt?: Date
+  startedAt: string
+  completedAt?: string
+  currentScreen: string
+  tastingDate?: string
   
   // Flow Data
-  coffeeInfo: CoffeeInfoData
-  brewSetup?: BrewSetupData // HomeCafe only
-  flavorSelection: FlavorSelectionData
-  sensoryExpression: SensoryExpressionData
-  sensoryMouthfeel?: SensoryMouthFeelData // Optional
-  personalNotes: PersonalNotesData
+  coffeeInfo?: CoffeeInfo
+  brewSetup?: BrewSetup // HomeCafe only
+  flavorProfile?: FlavorProfile
+  sensoryExpression?: SensoryExpression
+  sensoryMouthFeel?: SensoryMouthFeel // Optional
+  personalNotes?: PersonalNotes
   
   // Computed Results
   matchScore?: MatchScoreResult
   achievements?: AchievementUnlock[]
-  
-  // Session Management
-  sessionId: string
-  currentStep: number
-  totalSteps: number
-  progress: number // percentage
 }
 
 // ===== Navigation Types =====
@@ -246,7 +213,7 @@ export interface TastingFlowSession {
   lastActiveAt: Date
   currentStep: string
   completedSteps: StepProgressMap
-  data: Partial<TastingFlowData>
+  data: Partial<TastingSession>
 }
 
 // ===== Migration Types =====

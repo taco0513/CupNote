@@ -1,12 +1,14 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
 
 import Link from 'next/link'
 
 import { BarChart3, Settings, Plus, ArrowLeft, Trophy, User, LogIn } from 'lucide-react'
 
 import { useAuth } from '../contexts/AuthContext'
+import { isFeatureEnabled } from '../config/feature-flags.config'
 import AuthModal from './auth/AuthModal'
 import UserProfile from './auth/UserProfile'
 
@@ -18,13 +20,55 @@ interface NavigationProps {
 
 export default function Navigation({
   showBackButton = false,
-  backHref = '/',
+  backHref,
   currentPage = 'home',
 }: NavigationProps) {
   const { user, loading } = useAuth()
+  const router = useRouter()
+  const pathname = usePathname()
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [showUserProfile, setShowUserProfile] = useState(false)
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login')
+
+  // TastingFlow에서 스마트 뒤로가기 경로 계산
+  const getSmartBackHref = (): string => {
+    if (backHref) return backHref
+
+    // TastingFlow 경로 매핑
+    if (pathname?.includes('/tasting-flow/')) {
+      if (pathname.includes('/result')) return '/'
+      if (pathname.includes('/personal-notes')) {
+        return pathname.includes('/homecafe/') 
+          ? pathname.replace('/personal-notes', '/sensory-mouthfeel')
+          : pathname.replace('/personal-notes', '/sensory-expression')
+      }
+      if (pathname.includes('/sensory-mouthfeel')) {
+        return pathname.replace('/sensory-mouthfeel', '/sensory-expression')
+      }
+      if (pathname.includes('/sensory-expression')) {
+        return pathname.replace('/sensory-expression', '/flavor-selection')
+      }
+      if (pathname.includes('/flavor-selection')) {
+        return pathname.includes('/homecafe/')
+          ? pathname.replace('/flavor-selection', '/brew-setup')
+          : pathname.replace('/flavor-selection', '/coffee-info')
+      }
+      if (pathname.includes('/brew-setup')) {
+        return pathname.replace('/brew-setup', '/coffee-info')
+      }
+      if (pathname.includes('/coffee-info')) {
+        return '/tasting-flow'
+      }
+    }
+
+    return '/'
+  }
+
+  const handleBackClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    const targetPath = getSmartBackHref()
+    router.push(targetPath)
+  }
 
   const isActive = (page: string) => currentPage === page
 
@@ -41,13 +85,13 @@ export default function Navigation({
     <nav className="flex items-center justify-between mb-4 md:mb-8 bg-background rounded-xl p-3 md:p-4 shadow-sm border border-border">
       <div className="flex items-center">
         {showBackButton && (
-          <Link
-            href={backHref}
+          <button
+            onClick={handleBackClick}
             className="flex items-center text-foreground-secondary hover:text-foreground mr-4 transition-colors"
           >
             <ArrowLeft className="h-5 w-5 mr-1" />
             돌아가기
-          </Link>
+          </button>
         )}
         <Link href="/" className="text-xl md:text-2xl font-bold text-foreground">
           ☕ CupNote
@@ -92,7 +136,7 @@ export default function Navigation({
               설정
             </Link>
             <Link
-              href="/mode-selection"
+              href={isFeatureEnabled('ENABLE_NEW_TASTING_FLOW') ? '/tasting-flow' : '/mode-selection'}
               className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
                 isActive('record')
                   ? 'bg-primary text-primary-foreground'

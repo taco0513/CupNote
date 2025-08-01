@@ -16,7 +16,7 @@ export const TASTING_MODES_CONFIG = {
     estimatedTime: '5-7분',
     description: '카페 방문 경험을 상세히 기록',
     target: '카페에서 마신 커피',
-    route: '/record/cafe', // TODO: Update to /tasting-flow/cafe
+    route: '/tasting-flow/cafe'
   },
   homecafe: {
     id: 'homecafe',
@@ -28,7 +28,7 @@ export const TASTING_MODES_CONFIG = {
     estimatedTime: '8-12분',
     description: '홈카페 레시피와 추출 과정 기록',
     target: '집에서 직접 내린 커피',
-    route: '/record/homecafe', // TODO: Update to /tasting-flow/homecafe
+    route: '/tasting-flow/homecafe'
   },
   // Lab mode removed - migrated to HomeCafe mode
 } as const

@@ -18,53 +18,16 @@ export default function RouteGuard({ children }: { children: React.ReactNode }) 
   const pathname = usePathname()
 
   useEffect(() => {
-    // Feature flag가 비활성화되면 리다이렉트 처리 안함
-    if (!FEATURE_FLAGS.REDIRECT_OLD_ROUTES) return
-
-    // Lab mode 리다이렉트
-    if (pathname.includes('/record/lab')) {
-      const newPath = pathname.replace('/record/lab', '/record/homecafe')
-      console.log(`🔄 Redirecting Lab mode: ${pathname} → ${newPath}`)
-      router.replace(newPath)
+    // 레거시 /record 라우트를 새로운 TastingFlow로 리다이렉트
+    // 이제 모든 레거시 페이지가 자체적으로 리다이렉트하므로 여기서는 간단한 처리만
+    
+    // Lab/Pro mode 쿼리 파라미터가 있는 경우 HomeCafe로 변경
+    if (pathname.includes('mode=lab') || pathname.includes('mode=pro')) {
+      const url = new URL(window.location.href)
+      url.searchParams.set('mode', 'homecafe')
+      console.log(`🔄 Redirecting Lab/Pro mode to HomeCafe`)
+      router.replace(url.pathname + url.search)
       return
-    }
-
-    // Pro mode 리다이렉트  
-    if (pathname.includes('/record/pro')) {
-      const newPath = pathname.replace('/record/pro', '/record/homecafe')
-      console.log(`🔄 Redirecting Pro mode: ${pathname} → ${newPath}`)
-      router.replace(newPath)
-      return
-    }
-
-    // 새로운 TastingFlow가 활성화된 경우에만 처리
-    if (FEATURE_FLAGS.ENABLE_NEW_TASTING_FLOW) {
-      // 구 라우트 → 신 라우트 매핑
-      const routeMapping: Record<string, string> = {
-        '/record/cafe/step1': '/tasting-flow/cafe/coffee-info',
-        '/record/cafe/step2': '/tasting-flow/cafe/flavor-selection',
-        '/record/cafe/step3': '/tasting-flow/cafe/sensory-expression',
-        '/record/cafe/step4': '/tasting-flow/cafe/sensory-mouthfeel',
-        '/record/cafe/step5': '/tasting-flow/cafe/personal-notes',
-        '/record/cafe/step6': '/tasting-flow/cafe/personal-notes',
-        '/record/cafe/step7': '/tasting-flow/cafe/result',
-        
-        '/record/homecafe/step1': '/tasting-flow/homecafe/coffee-info',
-        '/record/homecafe/step2': '/tasting-flow/homecafe/brew-setup',
-        '/record/homecafe/step3': '/tasting-flow/homecafe/flavor-selection',
-        '/record/homecafe/step4': '/tasting-flow/homecafe/sensory-expression',
-        '/record/homecafe/step5': '/tasting-flow/homecafe/sensory-mouthfeel',
-        '/record/homecafe/step6': '/tasting-flow/homecafe/personal-notes',
-        '/record/homecafe/step7': '/tasting-flow/homecafe/personal-notes',
-        '/record/homecafe/step8': '/tasting-flow/homecafe/result',
-      }
-
-      const newPath = routeMapping[pathname]
-      if (newPath) {
-        console.log(`🔄 Redirecting to new TastingFlow: ${pathname} → ${newPath}`)
-        router.replace(newPath)
-        return
-      }
     }
   }, [pathname, router])
 
@@ -73,17 +36,10 @@ export default function RouteGuard({ children }: { children: React.ReactNode }) 
 
 // 라우트 검증 유틸리티
 export const isValidTastingRoute = (pathname: string): boolean => {
-  // 새로운 TastingFlow 라우트 패턴
+  // 새로운 TastingFlow 라우트 패턴만 유효
   const newRoutePattern = /^\/tasting-flow\/(cafe|homecafe)\/(coffee-info|brew-setup|flavor-selection|sensory-expression|sensory-mouthfeel|personal-notes|result)$/
   
-  // 구 라우트 패턴 (마이그레이션 중에만 유효)
-  const oldRoutePattern = /^\/record\/(cafe|homecafe)\/step\d+$/
-  
-  if (FEATURE_FLAGS.ENABLE_NEW_TASTING_FLOW) {
-    return newRoutePattern.test(pathname)
-  } else {
-    return oldRoutePattern.test(pathname)
-  }
+  return newRoutePattern.test(pathname)
 }
 
 // 마이그레이션 배너 컴포넌트

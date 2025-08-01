@@ -69,15 +69,6 @@ export default function OnboardingPage() {
               </div>
             </div>
 
-            <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 flex items-center space-x-4">
-              <div className="bg-purple-100 rounded-full p-3">
-                <Coffee className="h-6 w-6 text-purple-600" />
-              </div>
-              <div>
-                <h3 className="font-bold text-purple-800">🔬 랩 모드</h3>
-                <p className="text-purple-600 text-sm">전문적인 분석과 평가 (8-12분)</p>
-              </div>
-            </div>
           </div>
         </div>
       ),

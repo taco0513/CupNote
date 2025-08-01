@@ -42,18 +42,6 @@ export const TASTING_MODES_CONFIG = {
     target: '집에서 직접 내린 커피',
     route: '/record/homecafe',
   },
-  pro: {
-    id: 'pro',
-    label: 'Pro Mode',
-    labelKr: '프로 모드',
-    icon: '🔬',
-    color: 'purple',
-    steps: 8,
-    estimatedTime: '8-10분',
-    description: 'SCA 표준 기반 전문가급 분석',
-    target: '전문적인 커피 분석',
-    route: '/record/pro',
-  },
 } as const
 
 // Type exports
@@ -74,7 +62,6 @@ export const getModeColor = (id: TastingModeId): string => {
     quick: 'bg-orange-100 text-orange-800 border-orange-300',
     cafe: 'bg-blue-100 text-blue-800 border-blue-300',
     homecafe: 'bg-green-100 text-green-800 border-green-300',
-    pro: 'bg-purple-100 text-purple-800 border-purple-300',
   }
   return colors[id]
 }
@@ -84,7 +71,6 @@ export const getModeGradient = (id: TastingModeId): string => {
     quick: 'from-orange-50 to-orange-100',
     cafe: 'from-blue-50 to-blue-100',
     homecafe: 'from-green-50 to-green-100',
-    pro: 'from-purple-50 to-purple-100',
   }
   return gradients[id]
 }
