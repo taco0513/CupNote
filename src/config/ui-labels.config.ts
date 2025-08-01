@@ -87,10 +87,9 @@ export const UI_LABELS = {
   // Tips & Helpers
   tips: {
     selectMode: '어떤 상황에서 커피를 마셨나요?',
-    quickMode: '빠르게 기록하고 싶을 때',
     cafeMode: '카페에서 마신 커피를 기록할 때',
     homecafeMode: '집에서 직접 내린 커피를 기록할 때',
-    proMode: '전문적인 분석이 필요할 때',
+    labMode: '전문적인 분석이 필요할 때',
   },
 } as const
 

@@ -6,18 +6,6 @@
  */
 
 export const TASTING_MODES_CONFIG = {
-  quick: {
-    id: 'quick',
-    label: 'Quick Mode',
-    labelKr: '빠른 기록',
-    icon: '⚡',
-    color: 'orange',
-    steps: 4,
-    estimatedTime: '1-2분',
-    description: '간단하고 빠른 커피 기록',
-    target: '빠른 기록이 필요한 순간',
-    route: '/record/quick',
-  },
   cafe: {
     id: 'cafe',
     label: 'Cafe Mode',
@@ -25,7 +13,7 @@ export const TASTING_MODES_CONFIG = {
     icon: '☕',
     color: 'blue',
     steps: 7,
-    estimatedTime: '3-5분',
+    estimatedTime: '5-7분',
     description: '카페 방문 경험을 상세히 기록',
     target: '카페에서 마신 커피',
     route: '/record/cafe',
@@ -37,22 +25,22 @@ export const TASTING_MODES_CONFIG = {
     icon: '🏠',
     color: 'green',
     steps: 8,
-    estimatedTime: '5-8분',
+    estimatedTime: '8-12분',
     description: '홈카페 레시피와 추출 과정 기록',
     target: '집에서 직접 내린 커피',
     route: '/record/homecafe',
   },
-  pro: {
-    id: 'pro',
-    label: 'Pro Mode',
-    labelKr: '프로 모드',
-    icon: '🔬',
+  lab: {
+    id: 'lab',
+    label: 'Lab Mode',
+    labelKr: '랩 모드',
+    icon: '🧪',
     color: 'purple',
     steps: 8,
-    estimatedTime: '8-10분',
+    estimatedTime: '15-20분',
     description: 'SCA 표준 기반 전문가급 분석',
     target: '전문적인 커피 분석',
-    route: '/record/pro',
+    route: '/record/lab',
   },
 } as const
 
@@ -71,20 +59,18 @@ export const getAllModes = (): TastingMode[] => {
 
 export const getModeColor = (id: TastingModeId): string => {
   const colors = {
-    quick: 'bg-orange-100 text-orange-800 border-orange-300',
     cafe: 'bg-blue-100 text-blue-800 border-blue-300',
     homecafe: 'bg-green-100 text-green-800 border-green-300',
-    pro: 'bg-purple-100 text-purple-800 border-purple-300',
+    lab: 'bg-purple-100 text-purple-800 border-purple-300',
   }
   return colors[id]
 }
 
 export const getModeGradient = (id: TastingModeId): string => {
   const gradients = {
-    quick: 'from-orange-50 to-orange-100',
     cafe: 'from-blue-50 to-blue-100',
     homecafe: 'from-green-50 to-green-100',
-    pro: 'from-purple-50 to-purple-100',
+    lab: 'from-purple-50 to-purple-100',
   }
   return gradients[id]
 }
@@ -96,5 +82,5 @@ export const isValidMode = (mode: string): mode is TastingModeId => {
 
 // Legacy support (for gradual migration)
 export const LEGACY_MODE_MAPPING = {
-  lab: 'pro', // lab 모드를 pro로 매핑
+  pro: 'lab', // pro 모드를 lab으로 매핑
 } as const

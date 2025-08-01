@@ -140,8 +140,7 @@ CupNote/
 ├── e2e/                # 🧪 E2E 테스트 (Playwright)
 ├── supabase/           # 🗄️ 데이터베이스 설정
 ├── archive/            # 📦 보관용 (프로토타입, 개발 파일)
-├── scripts/            # 🔧 유틸리티 스크립트
-└── MASTER_PLAYBOOK/    # 🤖 AI 개발 가이드
+└── scripts/            # 🔧 유틸리티 스크립트
 ```
 
 ## 🤝 기여하기

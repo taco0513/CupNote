@@ -9,7 +9,7 @@ import Navigation from '../../components/Navigation'
 import { TASTING_MODES_CONFIG, getModeColor, getModeGradient, UI_LABELS } from '../../config'
 
 interface ModeCardProps {
-  mode: 'quick' | 'cafe' | 'homecafe' | 'pro'
+  mode: 'cafe' | 'homecafe' | 'lab'
   icon: React.ReactNode
   title: string
   description: string
@@ -57,13 +57,11 @@ const ModeCard = ({
           className={`
           p-3 rounded-xl mr-4 group-hover:scale-110 transition-transform
           ${
-            mode === 'quick'
-              ? 'bg-orange-100 text-orange-600'
-              : mode === 'cafe'
-                ? 'bg-blue-100 text-blue-600'
-                : mode === 'homecafe'
-                  ? 'bg-green-100 text-green-600'
-                  : 'bg-purple-100 text-purple-600'
+            mode === 'cafe'
+              ? 'bg-blue-100 text-blue-600'
+              : mode === 'homecafe'
+                ? 'bg-green-100 text-green-600'
+                : 'bg-purple-100 text-purple-600'
           }
         `}
         >
@@ -181,13 +179,13 @@ export default function ModeSelectionPage() {
               ]}
             />
 
-            {/* Pro Mode */}
+            {/* Lab Mode */}
             <ModeCard
-              mode="pro"
+              mode="lab"
               icon={<Beaker className="h-6 w-6" />}
-              title={TASTING_MODES_CONFIG.pro.labelKr}
-              description={TASTING_MODES_CONFIG.pro.description}
-              duration={TASTING_MODES_CONFIG.pro.estimatedTime}
+              title={TASTING_MODES_CONFIG.lab.labelKr}
+              description={TASTING_MODES_CONFIG.lab.description}
+              duration={TASTING_MODES_CONFIG.lab.estimatedTime}
               badge="전문가용"
               category="직접추출"
               features={[
@@ -207,7 +205,6 @@ export default function ModeSelectionPage() {
                 카페에서 마신 커피
               </h4>
               <p className="text-blue-700 text-sm">
-                <strong>Quick Mode</strong>: {UI_LABELS.tips.quickMode}<br />
                 <strong>Cafe Mode</strong>: {UI_LABELS.tips.cafeMode}
               </p>
             </div>
@@ -219,7 +216,7 @@ export default function ModeSelectionPage() {
               </h4>
               <p className="text-green-700 text-sm">
                 <strong>HomeCafe Mode</strong>: {UI_LABELS.tips.homecafeMode}<br />
-                <strong>Pro Mode</strong>: {UI_LABELS.tips.proMode}
+                <strong>Lab Mode</strong>: {UI_LABELS.tips.labMode}
               </p>
             </div>
           </div>
@@ -234,7 +231,7 @@ export default function ModeSelectionPage() {
               </div>
               <h3 className="text-lg font-semibold text-coffee-800 mb-2">처음이신가요?</h3>
               <p className="text-coffee-600 mb-4">
-                Quick 모드로 가볍게 시작해보세요. 익숙해지면 더 상세한 모드로 도전해보세요!
+                카페 모드로 가볍게 시작해보세요. 익숙해지면 더 상세한 모드로 도전해보세요!
               </p>
               <div className="flex justify-center space-x-4 text-sm text-coffee-500">
                 <div className="flex items-center">

@@ -42,8 +42,7 @@ CupNote/
 ├── e2e/                  # 🧪 E2E 테스트 (Playwright)
 ├── supabase/             # 🗄️ 데이터베이스 설정
 ├── archive/              # 📦 보관용 파일들
-├── scripts/              # 🔧 유틸리티 스크립트
-└── MASTER_PLAYBOOK/      # 🤖 AI 개발 가이드
+└── scripts/              # 🔧 유틸리티 스크립트
 ```
 
 ## Development Commands
@@ -68,12 +67,12 @@ npm install                  # Install all dependencies
    - 로스터 노트 vs 내 느낌 비교
    - 사진, 날짜, 장소, 함께한 사람 기록
 
-2. **맛 표현 시스템**
-   - 전문가 모드: SCA 기준 용어
-   - 일반인 모드: 일상적인 표현
-   - 둘을 연결하는 번역 시스템
+2. **3-Mode 기록 시스템**
+   - **Cafe Mode**: 카페에서 마신 커피 경험 기록 (7단계)
+   - **HomeCafe Mode**: 집에서 직접 내린 커피 레시피 관리 (8-12분)
+   - **Lab Mode**: SCA 기준 전문가 평가 (15-20분)
 
-3. **커뮤니티 커핑**
+3. **커뮤니티 커핑** (v2.0 계획)
    - 같은 원두 마신 사람들의 기록 비교
    - 온라인 블라인드 테이스팅
    - 서로의 표현 공유 & 학습
@@ -102,7 +101,7 @@ npm install                  # Install all dependencies
 - **Performance Optimization**: Vercel deployment configuration
 - **Core System**: Next.js 15.4.5 + TypeScript + Tailwind CSS 4.0
 - **Database**: Supabase integration (PostgreSQL + Auth + Storage)  
-- **Coffee Recording**: **NEW 4-Mode System** (Quick/Cafe/HomeCafe/Pro) ✨
+- **Coffee Recording**: **3-Mode System** (Cafe/HomeCafe/Lab) ✨
 - **Search & Filter**: Real-time search, advanced filters, multi-tag support
 - **Image Upload**: Supabase Storage with compression and thumbnails
 - **PWA Features**: Offline support, installable, background sync
@@ -114,27 +113,22 @@ npm install                  # Install all dependencies
 - **Stats & Analytics**: Data visualization, export/import functionality
 - **Error Handling**: Comprehensive error boundaries and user feedback
 
-✅ **4-Mode 시스템 구현 완료** (2025-12-01):
+✅ **3-Mode 시스템 구현 완료** (2025-12-01):
 
-### 🎯 4가지 전문화된 기록 모드:
+### 🎯 3가지 전문화된 기록 모드:
 
-1. **Quick Mode** ⚡ (1-2분)
-   - 간단한 2단계 플로우
-   - 별점 평가 + 선택적 메모
-   - 바쁜 순간을 위한 빠른 기록
-
-2. **Cafe Mode** ☕ (5-7분)
+1. **Cafe Mode** ☕ (5-7분)
    - 7단계 상세 카페 경험 기록
    - 카페 정보, 커피 상세, 감각 평가
    - 환경 평가 및 소셜 요소 포함
 
-3. **HomeCafe Mode** 🏠 (8-12분)
+2. **HomeCafe Mode** 🏠 (8-12분)
    - 상세한 레시피 관리
    - 정밀 추출 제어 (±1g 원두량)
    - 통합 추출 타이머
    - 레시피 라이브러리 시스템
 
-4. **Pro Mode** 🧪 (15-20분)
+3. **Lab Mode** 🧪 (15-20분)
    - SCA 커핑 표준 (9개 평가 항목)
    - 전문가 평가 도구
    - TDS 측정 및 추출 수율
@@ -147,14 +141,12 @@ npm install                  # Install all dependencies
 - OCR functionality for coffee package scanning
 - Advanced analytics and ML insights
 
-## AI Development Approach
+## Development Guidelines
 
-이 프로젝트는 MASTER_PLAYBOOK의 가이드라인을 따릅니다:
-
-- **BMAD Method**: Business → Mockup → API → Design 순서로 개발
-- **SuperClaude Commands**: `/build`, `/analyze`, `/improve` 등 활용
-- **Wave System**: 복잡한 작업은 자동으로 Wave 모드 활성화
-- **Context7**: 라이브러리 문서 자동 참조 (항상 활성)
+- **Component-First**: React 컴포넌트 기반 개발
+- **TypeScript First**: 타입 안전성 우선
+- **Responsive Design**: 모바일 친화적 UI/UX
+- **Performance**: 최적화된 사용자 경험
 
 ## Common Tasks
 
