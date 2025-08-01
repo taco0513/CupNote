@@ -13,10 +13,22 @@ export type TastingMode = 'cafe' | 'homecafe'
 // ===== Coffee Info Types =====
 
 export interface CoffeeInfo {
-  name: string
-  roastery: string
+  // 모드별 필수 정보
+  cafeName?: string // Cafe mode only
+  roasterName: string
+  coffeeName: string
+  temperature: 'hot' | 'iced'
+  
+  // 선택 정보 (Progressive Disclosure)
   origin?: string
-  purchaseLocation?: string // Cafe mode only
+  variety?: string
+  processing?: string
+  roastLevel?: string
+  altitude?: number
+  
+  // 메타데이터
+  isNewCoffee?: boolean
+  autoFilled?: boolean
 }
 
 // ===== Brew Setup Types (HomeCafe only) =====
