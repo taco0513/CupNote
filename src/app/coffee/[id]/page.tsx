@@ -240,64 +240,8 @@ function ModeSpecificSection({ record }: { record: CoffeeRecord }) {
     )
   }
 
-  if (record.mode === 'pro' && record.proData) {
-    return (
-      <div className="bg-white rounded-2xl shadow-lg p-8">
-        <h2 className="text-xl font-semibold text-coffee-800 mb-6">🔬 Lab 분석 데이터</h2>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {record.labData.tds && (
-            <InfoItem icon="💧" label="TDS" value={`${record.labData.tds}%`} />
-          )}
-          {record.labData.extractionYield && (
-            <InfoItem icon="📊" label="추출수율" value={`${record.labData.extractionYield}%`} />
-          )}
-          {record.labData.scaScore && (
-            <InfoItem icon="🏆" label="SCA 점수" value={`${record.labData.scaScore}/100`} />
-          )}
-          {record.labData.calibrationScore && (
-            <InfoItem
-              icon="🎯"
-              label="캘리브레이션"
-              value={`${record.labData.calibrationScore}%`}
-            />
-          )}
-        </div>
-
-        {record.labData.radarChart && (
-          <div className="mt-6">
-            <h3 className="font-medium text-gray-800 mb-4">레이더 차트 분석</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              <div className="text-center">
-                <span className="block text-sm text-gray-600">Aroma</span>
-                <span className="font-bold">{record.labData.radarChart.aroma}/10</span>
-              </div>
-              <div className="text-center">
-                <span className="block text-sm text-gray-600">Flavor</span>
-                <span className="font-bold">{record.labData.radarChart.flavor}/10</span>
-              </div>
-              <div className="text-center">
-                <span className="block text-sm text-gray-600">Aftertaste</span>
-                <span className="font-bold">{record.labData.radarChart.aftertaste}/10</span>
-              </div>
-              <div className="text-center">
-                <span className="block text-sm text-gray-600">Acidity</span>
-                <span className="font-bold">{record.labData.radarChart.acidity}/10</span>
-              </div>
-              <div className="text-center">
-                <span className="block text-sm text-gray-600">Body</span>
-                <span className="font-bold">{record.labData.radarChart.body}/10</span>
-              </div>
-              <div className="text-center">
-                <span className="block text-sm text-gray-600">Balance</span>
-                <span className="font-bold">{record.labData.radarChart.balance}/10</span>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    )
-  }
+  // Pro/Lab mode removed - features migrated to HomeCafe mode
+  // Legacy records with pro mode are displayed as HomeCafe mode
 
   return null
 }

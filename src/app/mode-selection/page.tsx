@@ -9,7 +9,7 @@ import Navigation from '../../components/Navigation'
 import { TASTING_MODES_CONFIG, getModeColor, getModeGradient, UI_LABELS } from '../../config'
 
 interface ModeCardProps {
-  mode: 'cafe' | 'homecafe' | 'lab'
+  mode: 'cafe' | 'homecafe'
   icon: React.ReactNode
   title: string
   description: string
@@ -179,22 +179,7 @@ export default function ModeSelectionPage() {
               ]}
             />
 
-            {/* Lab Mode */}
-            <ModeCard
-              mode="lab"
-              icon={<Beaker className="h-6 w-6" />}
-              title={TASTING_MODES_CONFIG.lab.labelKr}
-              description={TASTING_MODES_CONFIG.lab.description}
-              duration={TASTING_MODES_CONFIG.lab.estimatedTime}
-              badge="전문가용"
-              category="직접추출"
-              features={[
-                'SCA 표준 기반 품질 평가',
-                'TDS 측정 및 추출 수율 분석',
-                'SCA Flavor Wheel 표준 향미',
-                '전문 QC 리포트 및 등급 판정',
-              ]}
-            />
+            {/* Lab Mode removed - features merged into HomeCafe Mode */}
           </div>
 
           {/* 모드 카테고리 설명 */}
@@ -215,8 +200,7 @@ export default function ModeSelectionPage() {
                 직접 내린 커피
               </h4>
               <p className="text-green-700 text-sm">
-                <strong>HomeCafe Mode</strong>: {UI_LABELS.tips.homecafeMode}<br />
-                <strong>Lab Mode</strong>: {UI_LABELS.tips.labMode}
+                <strong>HomeCafe Mode</strong>: {UI_LABELS.tips.homecafeMode}
               </p>
             </div>
           </div>

@@ -50,21 +50,8 @@ export interface HomeCafeData {
   satisfaction?: number // 1-5 별점
 }
 
-// Pro 모드 전용 데이터
-export interface ProData {
-  tds?: number // 1.28
-  extractionYield?: number // 21.3
-  scaScore?: number // 85.5
-  radarChart?: {
-    aroma: number
-    flavor: number
-    aftertaste: number
-    acidity: number
-    body: number
-    balance: number
-  }
-  calibrationScore?: number
-}
+// Pro/Lab mode data removed - migrated to HomeCafe mode
+// For professional features, use HomeCafe mode with extended options
 
 // Match Score 분석
 export interface MatchScore {
@@ -98,11 +85,11 @@ export interface CoffeeRecord {
   memo?: string
 
   // 모드별 데이터
-  mode?: CoffeeMode // 'quick', 'cafe', 'homecafe', 'pro'
+  mode?: CoffeeMode // 'cafe', 'homecafe'
   quickData?: QuickData
   cafeData?: CafeData
   homecafeData?: HomeCafeData
-  proData?: ProData
+  // proData removed - use homecafeData for professional features
 
   // 향미 프로파일
   selectedFlavors?: FlavorProfile[]
