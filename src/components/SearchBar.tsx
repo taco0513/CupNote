@@ -33,11 +33,11 @@ export default function SearchBar({
           value={query}
           onChange={handleChange}
           placeholder={placeholder}
-          className="w-full px-4 py-3 pl-12 pr-4 text-gray-700 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-coffee-500 focus:border-transparent"
+          className="w-full px-4 py-3 pl-12 pr-4 text-coffee-700 bg-white/80 backdrop-blur-sm border border-coffee-200/50 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-coffee-500 focus:border-coffee-500 focus:shadow-md transition-all duration-200"
         />
         <div className="absolute inset-y-0 left-0 flex items-center pl-4">
           <svg
-            className="w-5 h-5 text-gray-400"
+            className="w-5 h-5 text-coffee-400"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

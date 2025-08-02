@@ -1,11 +1,13 @@
+/**
+ * Navigation v2.0 - 하이브리드 디자인 시스템
+ * Minimal Structure + Premium Visual Quality
+ */
 'use client'
 
 import { useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
-
 import Link from 'next/link'
-
-import { BarChart3, Settings, Plus, ArrowLeft, Trophy, User, LogIn, Coffee } from 'lucide-react'
+import { BarChart3, Settings, Plus, ArrowLeft, Trophy, User, LogIn, Coffee, ChevronDown, LogOut, Bell, HelpCircle } from 'lucide-react'
 
 import { useAuth } from '../contexts/AuthContext'
 import { isFeatureEnabled } from '../config/feature-flags.config'
@@ -24,14 +26,15 @@ export default function Navigation({
   backHref,
   currentPage = 'home',
 }: NavigationProps) {
-  const { user, loading } = useAuth()
+  const { user, loading, logout } = useAuth()
   const router = useRouter()
   const pathname = usePathname()
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [showUserProfile, setShowUserProfile] = useState(false)
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false)
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login')
 
-  // TastingFlow에서 스마트 뒤로가기 경로 계산
+  // 스마트 뒤로가기 경로 계산
   const getSmartBackHref = (): string => {
     if (backHref) return backHref
 
@@ -82,118 +85,329 @@ export default function Navigation({
     setShowAuthModal(true)
   }
 
+  const handleLogout = async () => {
+    try {
+      await logout()
+      setShowProfileDropdown(false)
+      router.push('/')
+    } catch (error) {
+      console.error('로그아웃 오류:', error)
+    }
+  }
+
   return (
-    <nav className="hidden md:flex items-center justify-between mb-4 md:mb-8 bg-background rounded-xl p-3 md:p-4 shadow-sm border border-border">
-      <div className="flex items-center">
-        {showBackButton && (
-          <button
-            onClick={handleBackClick}
-            className="flex items-center text-foreground-secondary hover:text-foreground mr-4 transition-colors"
-          >
-            <ArrowLeft className="h-5 w-5 mr-1" />
-            돌아가기
-          </button>
-        )}
-        <Link href="/" className="text-xl md:text-2xl font-bold text-foreground">
-          ☕ CupNote
-        </Link>
-      </div>
+    <>
+      {/* 하이브리드 데스크톱 네비게이션 */}
+      <nav className="hidden md:block bg-white/80 backdrop-blur-sm border-b border-coffee-200/30 shadow-sm sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            {/* 왼쪽: 로고 + 뒤로가기 */}
+            <div className="flex items-center">
+              {showBackButton && (
+                <button
+                  onClick={handleBackClick}
+                  className="flex items-center text-coffee-600 hover:text-coffee-800 mr-6 transition-colors group"
+                >
+                  <ArrowLeft className="h-5 w-5 mr-2 group-hover:-translate-x-1 transition-transform" />
+                  <span className="font-medium">돌아가기</span>
+                </button>
+              )}
+              <Link href="/" className="text-xl md:text-2xl font-bold text-coffee-800 hover:text-coffee-600 transition-colors">
+                ☕ CupNote
+              </Link>
+            </div>
 
-      {/* 데스크톱 네비게이션 - 모바일에서는 숨김 */}
-      <div className="hidden md:flex items-center space-x-2">
-        {/* 게스트 모드에서도 일부 기능 사용 가능 */}
-        <Link
-          href={isFeatureEnabled('ENABLE_NEW_TASTING_FLOW') ? '/tasting-flow' : '/mode-selection'}
-          className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
-            isActive('record')
-              ? 'bg-primary text-primary-foreground'
-              : 'bg-primary hover:bg-primary-hover text-primary-foreground'
-          }`}
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          기록하기
-        </Link>
-        
-        {user && (
-          <>
-            <Link
-              href="/achievements"
-              className={`flex items-center px-3 py-2 rounded-lg transition-colors ${
-                isActive('achievements')
-                  ? 'bg-secondary text-foreground'
-                  : 'text-foreground-secondary hover:text-foreground hover:bg-secondary'
-              }`}
-            >
-              <Trophy className="h-4 w-4 mr-1" />
-              성취
-            </Link>
-            <Link
-              href="/my-records"
-              className={`flex items-center px-3 py-2 rounded-lg transition-colors ${
-                isActive('my-records')
-                  ? 'bg-secondary text-foreground'
-                  : 'text-foreground-secondary hover:text-foreground hover:bg-secondary'
-              }`}
-            >
-              <Coffee className="h-4 w-4 mr-1" />
-              내 기록
-            </Link>
-            <Link
-              href="/settings"
-              className={`flex items-center px-3 py-2 rounded-lg transition-colors ${
-                isActive('settings')
-                  ? 'bg-secondary text-foreground'
-                  : 'text-foreground-secondary hover:text-foreground hover:bg-secondary'
-              }`}
-            >
-              <Settings className="h-4 w-4 mr-1" />
-              설정
-            </Link>
-          </>
-        )}
+            {/* 오른쪽: 메뉴 + 사용자 */}
+            <div className="flex items-center space-x-2">
+              {/* 기록하기 버튼 - 하이브리드 프리미엄 스타일 */}
+              <Link
+                href={isFeatureEnabled('ENABLE_NEW_TASTING_FLOW') ? '/tasting-flow' : '/mode-selection'}
+                className="flex items-center px-4 py-2 bg-gradient-to-r from-coffee-500 to-coffee-600 hover:from-coffee-600 hover:to-coffee-700 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                <span className="font-medium">기록하기</span>
+              </Link>
+              
+              {user && (
+                <>
+                  {/* 네비게이션 메뉴 - 하이브리드 스타일 */}
+                  <Link
+                    href="/achievements"
+                    className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${
+                      isActive('achievements')
+                        ? 'bg-coffee-100/80 text-coffee-800 shadow-sm backdrop-blur-sm'
+                        : 'text-coffee-600 hover:text-coffee-800 hover:bg-coffee-50/80'
+                    }`}
+                  >
+                    <Trophy className="h-4 w-4 mr-1" />
+                    <span className="font-medium">성취</span>
+                  </Link>
+                  
+                  <Link
+                    href="/my-records"
+                    className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${
+                      isActive('my-records')
+                        ? 'bg-coffee-100/80 text-coffee-800 shadow-sm backdrop-blur-sm'
+                        : 'text-coffee-600 hover:text-coffee-800 hover:bg-coffee-50/80'
+                    }`}
+                  >
+                    <Coffee className="h-4 w-4 mr-1" />
+                    <span className="font-medium">내 기록</span>
+                  </Link>
+                  
+                  <Link
+                    href="/settings"
+                    className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${
+                      isActive('settings')
+                        ? 'bg-coffee-100/80 text-coffee-800 shadow-sm backdrop-blur-sm'
+                        : 'text-coffee-600 hover:text-coffee-800 hover:bg-coffee-50/80'
+                    }`}
+                  >
+                    <Settings className="h-4 w-4 mr-1" />
+                    <span className="font-medium">설정</span>
+                  </Link>
+                </>
+              )}
 
-        {/* 인증 영역 */}
-        <div className="relative">
-          {loading ? (
-            <div className="w-8 h-8 bg-secondary rounded-full animate-pulse" />
-          ) : user ? (
-            <button
-              onClick={() => setShowUserProfile(!showUserProfile)}
-              className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors"
-            >
-              <div className="w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center">
-                {user.avatar_url ? (
-                  <img
-                    src={user.avatar_url}
-                    alt={user.username}
-                    className="w-8 h-8 rounded-full object-cover"
-                  />
+              {/* 사용자 프로필 영역 - 하이브리드 스타일 */}
+              <div className="relative">
+                {loading ? (
+                  <div className="w-10 h-10 bg-coffee-100/80 rounded-full animate-pulse backdrop-blur-sm" />
+                ) : user ? (
+                  <button
+                    onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                    className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-coffee-50/80 hover:bg-coffee-100/80 border border-coffee-200/50 transition-all duration-200 backdrop-blur-sm shadow-sm hover:shadow-md"
+                  >
+                    <div className="w-8 h-8 bg-gradient-to-r from-coffee-400 to-coffee-500 rounded-full flex items-center justify-center shadow-sm">
+                      {user.avatar_url ? (
+                        <img
+                          src={user.avatar_url}
+                          alt={user.username}
+                          className="w-8 h-8 rounded-full object-cover"
+                        />
+                      ) : (
+                        <User size={16} className="text-white" />
+                      )}
+                    </div>
+                    <span className="text-sm font-medium text-coffee-800">{user.username}</span>
+                    <ChevronDown className={`h-4 w-4 text-coffee-600 transition-transform duration-200 ${showProfileDropdown ? 'rotate-180' : ''}`} />
+                  </button>
                 ) : (
-                  <User size={16} className="text-accent" />
+                  <div className="flex items-center space-x-3">
+                    <NavigationGuestIndicator onLoginClick={() => openAuthModal('login')} />
+                    <button
+                      onClick={() => openAuthModal('signup')}
+                      className="flex items-center px-4 py-2 bg-coffee-500 hover:bg-coffee-600 text-white rounded-lg transition-all duration-200 shadow-sm hover:shadow-md font-medium"
+                    >
+                      회원가입
+                    </button>
+                  </div>
+                )}
+
+                {/* 프로필 드롭다운 메뉴 */}
+                {showProfileDropdown && user && (
+                  <div className="absolute right-0 top-full mt-2 w-56 bg-white/95 backdrop-blur-sm border border-coffee-200/50 rounded-xl shadow-lg z-50 overflow-hidden">
+                    <div className="p-4 border-b border-coffee-200/30">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-gradient-to-r from-coffee-400 to-coffee-500 rounded-full flex items-center justify-center shadow-sm">
+                          {user.avatar_url ? (
+                            <img
+                              src={user.avatar_url}
+                              alt={user.username}
+                              className="w-10 h-10 rounded-full object-cover"
+                            />
+                          ) : (
+                            <User size={20} className="text-white" />
+                          )}
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-coffee-800">{user.username}</p>
+                          <p className="text-xs text-coffee-600">{user.email}</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="py-2">
+                      <Link
+                        href="/profile"
+                        onClick={() => setShowProfileDropdown(false)}
+                        className="flex items-center px-4 py-3 text-coffee-700 hover:bg-coffee-50/80 transition-colors"
+                      >
+                        <User className="h-4 w-4 mr-3" />
+                        <span className="text-sm font-medium">내 프로필</span>
+                      </Link>
+                      
+                      <Link
+                        href="/settings"
+                        onClick={() => setShowProfileDropdown(false)}
+                        className="flex items-center px-4 py-3 text-coffee-700 hover:bg-coffee-50/80 transition-colors"
+                      >
+                        <Settings className="h-4 w-4 mr-3" />
+                        <span className="text-sm font-medium">설정</span>
+                      </Link>
+                      
+                      <button
+                        className="flex items-center px-4 py-3 text-coffee-700 hover:bg-coffee-50/80 transition-colors w-full"
+                      >
+                        <HelpCircle className="h-4 w-4 mr-3" />
+                        <span className="text-sm font-medium">도움말</span>
+                      </button>
+                    </div>
+                    
+                    <div className="border-t border-coffee-200/30 py-2">
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center px-4 py-3 text-red-600 hover:bg-red-50/80 transition-colors w-full"
+                      >
+                        <LogOut className="h-4 w-4 mr-3" />
+                        <span className="text-sm font-medium">로그아웃</span>
+                      </button>
+                    </div>
+                  </div>
                 )}
               </div>
-              <span className="text-sm font-medium text-foreground">{user.username}</span>
-            </button>
-          ) : (
-            <div className="flex items-center space-x-3">
-              <NavigationGuestIndicator onLoginClick={() => openAuthModal('login')} />
-              <button
-                onClick={() => openAuthModal('signup')}
-                className="flex items-center px-4 py-2 bg-accent hover:bg-accent-hover text-accent-foreground rounded-lg transition-colors"
-              >
-                회원가입
-              </button>
             </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* 하이브리드 모바일 네비게이션 */}
+      <nav className="fixed bottom-0 left-0 right-0 md:hidden bg-white/95 backdrop-blur-md border-t border-coffee-200/30 shadow-lg z-50">
+        <div className={`grid h-16 ${user ? 'grid-cols-4' : 'grid-cols-2'}`}>
+          {/* 홈 */}
+          <Link
+            href="/"
+            className={`flex flex-col items-center justify-center space-y-1 relative h-full w-full transition-all duration-200 ease-out ${
+              currentPage === 'home' 
+                ? 'text-coffee-800' 
+                : 'text-coffee-400'
+            } active:scale-95 active:bg-coffee-50 rounded-lg mx-1 my-1`}
+          >
+            <div className={`relative transition-all duration-200 ${
+              currentPage === 'home' ? 'scale-110' : ''
+            }`}>
+              <Coffee className="h-5 w-5" />
+            </div>
+            <span className={`text-xs relative transition-all duration-200 ${
+              currentPage === 'home' ? 'font-semibold transform scale-105' : 'font-medium'
+            }`}>
+              홈
+            </span>
+            {currentPage === 'home' && (
+              <div className="absolute -top-1 w-1 h-1 bg-coffee-600 rounded-full animate-pulse" />
+            )}
+          </Link>
+
+          {user && (
+            <>
+              {/* 내 기록 */}
+              <Link
+                href="/my-records"
+                className={`flex flex-col items-center justify-center space-y-1 relative h-full w-full transition-all duration-200 ease-out ${
+                  currentPage === 'my-records' 
+                    ? 'text-coffee-800' 
+                    : 'text-coffee-400'
+                } active:scale-95 active:bg-coffee-50 rounded-lg mx-1 my-1`}
+              >
+                <div className={`relative transition-all duration-200 ${
+                  currentPage === 'my-records' ? 'scale-110' : ''
+                }`}>
+                  <BarChart3 className="h-5 w-5" />
+                </div>
+                <span className={`text-xs relative transition-all duration-200 ${
+                  currentPage === 'my-records' ? 'font-semibold transform scale-105' : 'font-medium'
+                }`}>
+                  내 기록
+                </span>
+                {currentPage === 'my-records' && (
+                  <div className="absolute -top-1 w-1 h-1 bg-coffee-600 rounded-full animate-pulse" />
+                )}
+              </Link>
+
+              {/* 기록하기 (중앙 버튼) - 하이브리드 프리미엄 */}
+              <Link
+                href={isFeatureEnabled('ENABLE_NEW_TASTING_FLOW') ? '/tasting-flow' : '/mode-selection'}
+                className="flex flex-col items-center justify-center space-y-1 relative h-full w-full transition-all duration-200 ease-out text-white active:scale-95 rounded-lg mx-1 my-1"
+              >
+                <div className="absolute inset-2 bg-gradient-to-br from-coffee-500 to-coffee-600 rounded-xl shadow-xl transition-all duration-200 hover:shadow-2xl" />
+                <div className="relative transition-all duration-200 z-10">
+                  <Plus className="h-6 w-6" />
+                </div>
+                <span className="text-xs relative transition-all duration-200 z-10 font-semibold">
+                  작성
+                </span>
+              </Link>
+
+              {/* 성취 */}
+              <Link
+                href="/achievements"
+                className={`flex flex-col items-center justify-center space-y-1 relative h-full w-full transition-all duration-200 ease-out ${
+                  currentPage === 'achievements' 
+                    ? 'text-coffee-800' 
+                    : 'text-coffee-400'
+                } active:scale-95 active:bg-coffee-50 rounded-lg mx-1 my-1`}
+              >
+                <div className={`relative transition-all duration-200 ${
+                  currentPage === 'achievements' ? 'scale-110' : ''
+                }`}>
+                  <Trophy className="h-5 w-5" />
+                </div>
+                <span className={`text-xs relative transition-all duration-200 ${
+                  currentPage === 'achievements' ? 'font-semibold transform scale-105' : 'font-medium'
+                }`}>
+                  성취
+                </span>
+                {currentPage === 'achievements' && (
+                  <div className="absolute -top-1 w-1 h-1 bg-coffee-600 rounded-full animate-pulse" />
+                )}
+              </Link>
+
+              {/* 설정 */}
+              <Link
+                href="/settings"
+                className={`flex flex-col items-center justify-center space-y-1 relative h-full w-full transition-all duration-200 ease-out ${
+                  currentPage === 'settings' 
+                    ? 'text-coffee-800' 
+                    : 'text-coffee-400'
+                } active:scale-95 active:bg-coffee-50 rounded-lg mx-1 my-1`}
+              >
+                <div className={`relative transition-all duration-200 ${
+                  currentPage === 'settings' ? 'scale-110' : ''
+                }`}>
+                  <Settings className="h-5 w-5" />
+                </div>
+                <span className={`text-xs relative transition-all duration-200 ${
+                  currentPage === 'settings' ? 'font-semibold transform scale-105' : 'font-medium'
+                }`}>
+                  설정
+                </span>
+                {currentPage === 'settings' && (
+                  <div className="absolute -top-1 w-1 h-1 bg-coffee-600 rounded-full animate-pulse" />
+                )}
+              </Link>
+            </>
           )}
 
-          {/* 사용자 프로필 드롭다운 */}
-          {showUserProfile && user && (
-            <div className="absolute right-0 top-full mt-2 z-50">
-              <UserProfile onClose={() => setShowUserProfile(false)} />
+          {/* 로그인 버튼 (비로그인 사용자용) */}
+          {!user && !loading && (
+            <button
+              onClick={() => openAuthModal('login')}
+              className="flex flex-col items-center justify-center space-y-1 text-coffee-600 active:scale-95 active:bg-coffee-50 rounded-lg mx-1 my-1 font-medium"
+            >
+              <LogIn className="h-5 w-5" />
+              <span className="text-xs">로그인</span>
+            </button>
+          )}
+
+          {/* 로딩 상태 */}
+          {loading && (
+            <div className="flex flex-col items-center justify-center space-y-1">
+              <div className="w-5 h-5 bg-coffee-200 rounded-full animate-pulse" />
+              <span className="text-xs text-coffee-400">로딩...</span>
             </div>
           )}
         </div>
-      </div>
+      </nav>
 
       {/* 인증 모달 */}
       <AuthModal
@@ -202,6 +416,6 @@ export default function Navigation({
         onSuccess={handleAuthSuccess}
         initialMode={authMode}
       />
-    </nav>
+    </>
   )
 }

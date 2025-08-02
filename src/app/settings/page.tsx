@@ -22,6 +22,12 @@ import ProtectedRoute from '../../components/auth/ProtectedRoute'
 import Navigation from '../../components/Navigation'
 import { CoffeeRecord } from '../../types/coffee'
 import '../../utils/demo-equipment' // 개발 모드에서 데모 함수 사용 가능
+import PageLayout from '../../components/ui/PageLayout'
+import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
+import UnifiedInput from '../../components/ui/UnifiedInput'
+import UnifiedButton from '../../components/ui/UnifiedButton'
+import Alert from '../../components/ui/Alert'
+import SectionHeader from '../../components/ui/SectionHeader'
 
 interface UserSettings {
   displayName: string
@@ -221,108 +227,85 @@ export default function SettingsPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-br from-background to-background-secondary">
-        <div className="container mx-auto px-4 py-4 md:py-8 max-w-4xl pb-20 md:pb-8">
-          <Navigation showBackButton currentPage="settings" />
-
-        {/* 헤더 */}
-        <div className="mb-6 md:mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground flex items-center">
-            <SettingsIcon className="h-6 w-6 md:h-8 md:w-8 mr-2 md:mr-3" />
-            설정
-          </h1>
-          <p className="text-base md:text-lg text-foreground-secondary mt-1">앱 설정 및 데이터 관리</p>
-        </div>
+      <Navigation showBackButton currentPage="settings" />
+      <PageLayout
+        showHeader={false}
+      >
 
         {/* 알림 */}
         {notification && (
-          <div
-            className={`mb-6 p-4 rounded-lg flex items-center ${
-              notification.type === 'success'
-                ? 'bg-green-50 text-green-800 border border-green-200'
-                : 'bg-red-50 text-red-800 border border-red-200'
-            }`}
+          <Alert
+            variant={notification.type === 'success' ? 'success' : 'error'}
+            onClose={() => setNotification(null)}
+            className="mb-6"
           >
-            <CheckCircle className="h-5 w-5 mr-2" />
             {notification.message}
-          </div>
+          </Alert>
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
           {/* 개인 설정 */}
-          <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm border border-coffee-100">
-            <h2 className="text-lg md:text-xl font-semibold text-coffee-800 mb-4 flex items-center">
-              <User className="h-5 w-5 mr-2" />
-              개인 설정
-            </h2>
-
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-coffee-700 mb-2">표시 이름</label>
-                <input
-                  type="text"
+          <Card variant="default">
+            <CardHeader>
+              <CardTitle>
+                <SectionHeader
+                  title="개인 설정"
+                  icon={<User className="h-5 w-5" />}
+                />
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <UnifiedInput
+                  label="표시 이름"
                   value={settings.displayName}
                   onChange={e => setSettings(prev => ({ ...prev, displayName: e.target.value }))}
                   onBlur={() => saveSettings(settings)}
-                  className="w-full px-3 py-2 border border-coffee-300 rounded-lg focus:outline-none focus:border-coffee-500"
                   placeholder="이름을 입력하세요"
+                  fullWidth
                 />
-              </div>
 
               {/* 홈카페 장비 설정 */}
-              <div className="pt-4 border-t border-coffee-200">
-                <h3 className="text-md font-semibold text-coffee-800 mb-3 flex items-center">
-                  <Home className="h-4 w-4 mr-2" />
-                  홈카페 장비 설정
-                </h3>
-                <p className="text-sm text-coffee-600 mb-4">
-                  HomeCafe 모드에서 사용할 기본 장비를 설정하세요
-                </p>
+              <div className="pt-4 border-t border-coffee-200/30">
+                <SectionHeader
+                  title="홈카페 장비 설정"
+                  description="HomeCafe 모드에서 사용할 기본 장비를 설정하세요"
+                  icon={<Home className="h-4 w-4" />}
+                  className="mb-4"
+                />
 
                 <div className="space-y-3">
-                  <div>
-                    <label className="block text-sm font-medium text-coffee-700 mb-1">그라인더</label>
-                    <input
-                      type="text"
-                      value={settings.homeCafeEquipment.grinder}
-                      onChange={e => updateEquipment('grinder', e.target.value)}
-                      className="w-full px-3 py-2 border border-coffee-300 rounded-lg focus:outline-none focus:border-coffee-500 text-sm"
-                      placeholder="예: 코만단테 C40, 바라짜 엔코어"
-                    />
-                  </div>
+                  <UnifiedInput
+                    label="그라인더"
+                    value={settings.homeCafeEquipment.grinder}
+                    onChange={e => updateEquipment('grinder', e.target.value)}
+                    placeholder="예: 코만단테 C40, 바라짜 엔코어"
+                    fullWidth
+                  />
 
-                  <div>
-                    <label className="block text-sm font-medium text-coffee-700 mb-1">추출 도구</label>
-                    <input
-                      type="text"
-                      value={settings.homeCafeEquipment.brewingMethod}
-                      onChange={e => updateEquipment('brewingMethod', e.target.value)}
-                      className="w-full px-3 py-2 border border-coffee-300 rounded-lg focus:outline-none focus:border-coffee-500 text-sm"
-                      placeholder="예: V60, 칼리타 웨이브, 에어로프레스"
-                    />
-                  </div>
+                  <UnifiedInput
+                    label="추출 도구"
+                    value={settings.homeCafeEquipment.brewingMethod}
+                    onChange={e => updateEquipment('brewingMethod', e.target.value)}
+                    placeholder="예: V60, 칼리타 웨이브, 에어로프레스"
+                    fullWidth
+                  />
 
-                  <div>
-                    <label className="block text-sm font-medium text-coffee-700 mb-1">저울</label>
-                    <input
-                      type="text"
-                      value={settings.homeCafeEquipment.scale}
-                      onChange={e => updateEquipment('scale', e.target.value)}
-                      className="w-full px-3 py-2 border border-coffee-300 rounded-lg focus:outline-none focus:border-coffee-500 text-sm"
-                      placeholder="예: 아카이아 펄, 하리오 V60 드립스케일"
-                    />
-                  </div>
+                  <UnifiedInput
+                    label="저울"
+                    value={settings.homeCafeEquipment.scale}
+                    onChange={e => updateEquipment('scale', e.target.value)}
+                    placeholder="예: 아카이아 펄, 하리오 V60 드립스케일"
+                    fullWidth
+                  />
 
-                  <div>
-                    <label className="block text-sm font-medium text-coffee-700 mb-1">케틀</label>
-                    <input
-                      type="text"
-                      value={settings.homeCafeEquipment.kettle}
-                      onChange={e => updateEquipment('kettle', e.target.value)}
-                      className="w-full px-3 py-2 border border-coffee-300 rounded-lg focus:outline-none focus:border-coffee-500 text-sm"
-                      placeholder="예: 펠로우 스타그 EKG, 하리오 부오노"
-                    />
-                  </div>
+                  <UnifiedInput
+                    label="케틀"
+                    value={settings.homeCafeEquipment.kettle}
+                    onChange={e => updateEquipment('kettle', e.target.value)}
+                    placeholder="예: 펠로우 스타그 EKG, 하리오 부오노"
+                    fullWidth
+                  />
 
                   {/* 추가 장비 */}
                   <div>
@@ -344,41 +327,47 @@ export default function SettingsPage() {
                     ))}
 
                     {/* 새 장비 추가 */}
-                    <div className="flex items-center mt-2">
-                      <input
-                        type="text"
+                    <div className="flex items-center mt-2 gap-2">
+                      <UnifiedInput
                         value={newEquipmentItem}
                         onChange={e => setNewEquipmentItem(e.target.value)}
                         onKeyPress={e => e.key === 'Enter' && addEquipmentItem()}
-                        className="flex-1 px-3 py-2 border border-coffee-300 rounded-lg focus:outline-none focus:border-coffee-500 text-sm"
                         placeholder="추가 장비 입력 (온도계, 타이머 등)"
+                        fullWidth
                       />
-                      <button
+                      <UnifiedButton
                         onClick={addEquipmentItem}
-                        className="ml-2 p-2 bg-coffee-600 text-white rounded-lg hover:bg-coffee-700 transition-colors"
+                        variant="primary"
+                        size="icon"
                       >
                         <Plus className="h-4 w-4" />
-                      </button>
+                      </UnifiedButton>
                     </div>
                   </div>
                 </div>
               </div>
-
-            </div>
-          </div>
+              </div>
+            </CardContent>
+          </Card>
 
 
           {/* 앱 설정 */}
-          <div className="bg-background rounded-xl p-4 md:p-6 shadow-sm border border-border">
-            <h2 className="text-lg md:text-xl font-semibold text-foreground mb-4 flex items-center">
-              <SettingsIcon className="h-5 w-5 mr-2" />앱 설정
-            </h2>
+          <Card variant="default">
+            <CardHeader>
+              <CardTitle>
+                <SectionHeader
+                  title="앱 설정"
+                  icon={<SettingsIcon className="h-5 w-5" />}
+                />
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
 
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="font-medium text-foreground">자동 저장</div>
-                  <div className="text-sm text-foreground-muted">입력하는 동안 자동으로 저장</div>
+                  <div className="font-medium text-coffee-800">자동 저장</div>
+                  <div className="text-sm text-coffee-600">입력하는 동안 자동으로 저장</div>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -390,14 +379,14 @@ export default function SettingsPage() {
                     }}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-secondary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                  <div className="w-11 h-6 bg-coffee-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-coffee-500"></div>
                 </label>
               </div>
 
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="font-medium text-foreground">목록에서 평점 표시</div>
-                  <div className="text-sm text-foreground-muted">커피 카드에 별점 표시</div>
+                  <div className="font-medium text-coffee-800">목록에서 평점 표시</div>
+                  <div className="text-sm text-coffee-600">커피 카드에 별점 표시</div>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -409,14 +398,14 @@ export default function SettingsPage() {
                     }}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-secondary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                  <div className="w-11 h-6 bg-coffee-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-coffee-500"></div>
                 </label>
               </div>
 
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="font-medium text-foreground">컴팩트 보기</div>
-                  <div className="text-sm text-foreground-muted">목록을 더 촘촘하게 표시</div>
+                  <div className="font-medium text-coffee-800">컴팩트 보기</div>
+                  <div className="text-sm text-coffee-600">목록을 더 촘촘하게 표시</div>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -428,143 +417,171 @@ export default function SettingsPage() {
                     }}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-secondary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                  <div className="w-11 h-6 bg-coffee-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-coffee-500"></div>
                 </label>
               </div>
             </div>
-          </div>
+            </CardContent>
+          </Card>
 
           {/* 성능 설정 */}
-          <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm border border-coffee-100">
-            <h2 className="text-lg md:text-xl font-semibold text-coffee-800 mb-4 flex items-center">
-              <Zap className="h-5 w-5 mr-2" />
-              성능 최적화
-            </h2>
-            <div className="space-y-4">
-              <p className="text-sm text-coffee-600">
+          <Card variant="default">
+            <CardHeader>
+              <CardTitle>
+                <SectionHeader
+                  title="성능 최적화"
+                  icon={<Zap className="h-5 w-5" />}
+                />
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-coffee-600 mb-4">
                 앱 성능을 모니터링하고 캐시를 관리합니다.
               </p>
-              <a
-                href="/settings/performance"
-                className="w-full flex items-center justify-center px-4 py-3 bg-yellow-100 text-yellow-700 rounded-lg hover:bg-yellow-200 transition-colors"
+              <UnifiedButton
+                variant="secondary"
+                fullWidth
+                onClick={() => window.location.href = '/settings/performance'}
               >
                 <Zap className="h-4 w-4 mr-2" />
                 성능 설정 열기
-              </a>
-            </div>
-          </div>
+              </UnifiedButton>
+            </CardContent>
+          </Card>
 
           {/* 데이터 관리 */}
-          <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm border border-coffee-100">
-            <h2 className="text-lg md:text-xl font-semibold text-coffee-800 mb-4 flex items-center">
-              <Database className="h-5 w-5 mr-2" />
-              데이터 관리
-            </h2>
-
-            <div className="space-y-4">
+          <Card variant="default">
+            <CardHeader>
+              <CardTitle>
+                <SectionHeader
+                  title="데이터 관리"
+                  icon={<Database className="h-5 w-5" />}
+                />
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
               <div className="text-sm text-coffee-600 mb-4">
                 현재 <strong>{records.length}개</strong>의 커피 기록이 있습니다.
               </div>
 
-              <button
-                onClick={exportData}
-                className="w-full flex items-center justify-center px-4 py-3 bg-coffee-100 text-coffee-700 rounded-lg hover:bg-coffee-200 transition-colors"
-              >
-                <Download className="h-4 w-4 mr-2" />
-                데이터 내보내기 (JSON)
-              </button>
-
-              <div>
-                <input
-                  type="file"
-                  accept=".json"
-                  onChange={importData}
-                  className="hidden"
-                  id="import-file"
-                />
-                <label
-                  htmlFor="import-file"
-                  className="w-full flex items-center justify-center px-4 py-3 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors cursor-pointer"
+              <div className="space-y-3">
+                <UnifiedButton
+                  onClick={exportData}
+                  variant="secondary"
+                  fullWidth
                 >
-                  <Upload className="h-4 w-4 mr-2" />
-                  데이터 가져오기
-                </label>
+                  <Download className="h-4 w-4 mr-2" />
+                  데이터 내보내기 (JSON)
+                </UnifiedButton>
+
+                <div>
+                  <input
+                    type="file"
+                    accept=".json"
+                    onChange={importData}
+                    className="hidden"
+                    id="import-file"
+                  />
+                  <label htmlFor="import-file">
+                    <UnifiedButton
+                      as="span"
+                      variant="outline"
+                      fullWidth
+                      className="cursor-pointer"
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      데이터 가져오기
+                    </UnifiedButton>
+                  </label>
+                </div>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
           {/* 위험한 작업 */}
-          <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm border border-red-200">
-            <h2 className="text-lg md:text-xl font-semibold text-red-700 mb-4 flex items-center">
-              <AlertTriangle className="h-5 w-5 mr-2" />
-              위험한 작업
-            </h2>
-
-            <div className="space-y-4">
+          <Card variant="bordered" className="border-red-200">
+            <CardHeader>
+              <CardTitle>
+                <SectionHeader
+                  title="위험한 작업"
+                  icon={<AlertTriangle className="h-5 w-5 text-red-600" />}
+                />
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
               <div className="text-sm text-coffee-600 mb-4">
                 이 작업들은 되돌릴 수 없습니다. 신중히 진행해주세요.
               </div>
 
               {!showDeleteConfirm ? (
-                <button
+                <UnifiedButton
                   onClick={() => setShowDeleteConfirm(true)}
-                  className="w-full flex items-center justify-center px-4 py-3 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors"
+                  variant="danger"
+                  fullWidth
                 >
                   <Trash2 className="h-4 w-4 mr-2" />
                   모든 데이터 삭제
-                </button>
+                </UnifiedButton>
               ) : (
                 <div className="space-y-3">
-                  <div className="p-3 bg-red-50 rounded-lg border border-red-200">
-                    <p className="text-sm text-red-800 font-medium mb-2">
+                  <Alert variant="error">
+                    <p className="font-medium mb-2">
                       정말로 모든 데이터를 삭제하시겠습니까?
                     </p>
-                    <p className="text-xs text-red-600">
+                    <p className="text-xs">
                       {records.length}개의 커피 기록과 모든 설정이 영구적으로 삭제됩니다.
                     </p>
-                  </div>
+                  </Alert>
                   <div className="flex space-x-3">
-                    <button
+                    <UnifiedButton
                       onClick={deleteAllData}
-                      className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                      variant="danger"
+                      fullWidth
                     >
                       삭제
-                    </button>
-                    <button
+                    </UnifiedButton>
+                    <UnifiedButton
                       onClick={() => setShowDeleteConfirm(false)}
-                      className="flex-1 px-4 py-2 bg-coffee-100 text-coffee-700 rounded-lg hover:bg-coffee-200 transition-colors"
+                      variant="secondary"
+                      fullWidth
                     >
                       취소
-                    </button>
+                    </UnifiedButton>
                   </div>
                 </div>
               )}
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* 앱 정보 */}
-        <div className="mt-6 md:mt-8 bg-white rounded-xl p-4 md:p-6 shadow-sm border border-coffee-100">
-          <h2 className="text-lg md:text-xl font-semibold text-coffee-800 mb-4 flex items-center">
-            <Coffee className="h-5 w-5 mr-2" />앱 정보
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-coffee-600">
-            <div>
-              <div className="font-medium">버전</div>
-              <div>0.4.0</div>
+        <Card variant="default" className="mt-6 md:mt-8">
+          <CardHeader>
+            <CardTitle>
+              <SectionHeader
+                title="앱 정보"
+                icon={<Coffee className="h-5 w-5" />}
+              />
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-coffee-600">
+              <div>
+                <div className="font-medium">버전</div>
+                <div>0.4.0</div>
+              </div>
+              <div>
+                <div className="font-medium">데이터 저장</div>
+                <div>로컬 브라우저 저장소</div>
+              </div>
+              <div>
+                <div className="font-medium">개발자</div>
+                <div>CupNote Team</div>
+              </div>
             </div>
-            <div>
-              <div className="font-medium">데이터 저장</div>
-              <div>로컬 브라우저 저장소</div>
-            </div>
-            <div>
-              <div className="font-medium">개발자</div>
-              <div>CupNote Team</div>
-            </div>
-          </div>
-        </div>
-        </div>
-      </div>
+          </CardContent>
+        </Card>
+      </PageLayout>
     </ProtectedRoute>
   )
 }

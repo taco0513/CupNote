@@ -22,18 +22,33 @@ module.exports = {
           800: '#292524',  // Strong text
           900: '#1C1917',  // Headings
         },
-        // Purple accent for primary actions
-        purple: {
-          50: '#faf7ff',
-          100: '#f3f1ff',
-          200: '#e9e5ff',
-          300: '#d5ccff',
-          400: '#a78bfa',  // accent-warm
-          500: '#8b5cf6',
-          600: '#7c3aed',
-          700: '#6d28d9',
-          800: '#5b21b6',
-          900: '#4c1d95',
+        // Coffee theme color system
+        'coffee': {
+          DEFAULT: '#8B4513', // coffee brown
+          50: '#FAF7F2',   // cream
+          100: '#F5E6D3',  // light latte
+          200: '#E8D5BE',  // latte
+          300: '#D4B896',  // medium latte
+          400: '#B8956A',  // cappuccino
+          500: '#8B4513',  // coffee brown
+          600: '#6D3410',  // dark roast
+          700: '#4A240B',  // espresso
+          800: '#3C1D09',  // dark espresso
+          900: '#2D1507',  // darkest
+        },
+        // Keep accent-warm as alias for backwards compatibility
+        'accent-warm': {
+          DEFAULT: '#8B4513',
+          50: '#FAF7F2',
+          100: '#F5E6D3',
+          200: '#E8D5BE',
+          300: '#D4B896',
+          400: '#B8956A',
+          500: '#8B4513',
+          600: '#6D3410',
+          700: '#4A240B',
+          800: '#3C1D09',
+          900: '#2D1507',
         },
         // 테마 대응 색상 시스템
         background: {

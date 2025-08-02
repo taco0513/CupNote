@@ -251,7 +251,7 @@ export default function CoffeeInfoPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100">
+    <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-neutral-50">
       <div className="container mx-auto px-4 py-4 md:py-8 max-w-2xl pb-20 md:pb-8">
         <Navigation showBackButton currentPage="record" />
 
@@ -273,9 +273,9 @@ export default function CoffeeInfoPage() {
           </div>
 
           {/* 진행바 */}
-          <div className="w-full bg-coffee-200 rounded-full h-2">
+          <div className="w-full bg-coffee-200/50 rounded-full h-2">
             <div
-              className="bg-coffee-600 h-2 rounded-full transition-all duration-300"
+              className="bg-coffee-500 h-2 rounded-full transition-all duration-300"
               style={{ width: mode === 'cafe' ? '16.67%' : '14.29%' }}
             />
           </div>
@@ -283,9 +283,9 @@ export default function CoffeeInfoPage() {
 
         <div className="space-y-6">
           {/* 필수 정보 섹션 */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+          <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-coffee-200/30 p-6 md:p-8">
             <div className="text-center mb-6">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-coffee-100 rounded-full mb-4">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-coffee-100/80 rounded-xl shadow-sm mb-4">
                 <Coffee className="h-8 w-8 text-coffee-600" />
               </div>
               <h2 className="text-xl md:text-2xl font-bold text-coffee-800 mb-2">
@@ -298,12 +298,12 @@ export default function CoffeeInfoPage() {
               {/* Cafe 모드만: 카페명 Cascade 자동완성 */}
               {mode === 'cafe' && (
                 <div className="relative">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-coffee-700 mb-2">
                     <MapPin className="inline h-4 w-4 mr-1" />
                     카페명 *
                   </label>
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-coffee-400" />
                     <input
                       type="text"
                       value={cafeQuery}
@@ -315,20 +315,20 @@ export default function CoffeeInfoPage() {
                       onFocus={() => setShowCafeResults(true)}
                       onBlur={() => setTimeout(() => setShowCafeResults(false), 200)}
                       placeholder="카페명을 검색하거나 입력해주세요"
-                      className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent ${
-                        errors.cafeName ? 'border-red-500' : 'border-gray-300'
+                      className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent bg-white/80 backdrop-blur-sm text-coffee-800 placeholder-coffee-400 transition-all duration-200 ${
+                        errors.cafeName ? 'border-red-500' : 'border-coffee-200/50'
                       }`}
                     />
                   </div>
                   
                   {/* 카페 검색 결과 */}
                   {showCafeResults && cafeQuery && cafeResults.length > 0 && (
-                    <div className="absolute z-10 w-full mt-2 bg-white rounded-xl shadow-lg border border-gray-200 max-h-60 overflow-y-auto">
+                    <div className="absolute z-10 w-full mt-2 bg-white/95 backdrop-blur-sm rounded-xl shadow-lg border border-coffee-200/30 max-h-60 overflow-y-auto">
                       {cafeResults.map((cafe) => (
                         <button
                           key={cafe.id}
                           onClick={() => handleCafeSelect(cafe)}
-                          className="w-full px-4 py-3 text-left hover:bg-coffee-50 transition-colors border-b border-gray-100 last:border-b-0"
+                          className="w-full px-4 py-3 text-left hover:bg-coffee-50 transition-all duration-200 hover:scale-[1.01] border-b border-coffee-100 last:border-b-0"
                         >
                           <div className="font-medium text-coffee-800">{cafe.name}</div>
                           <div className="text-sm text-coffee-600">{cafe.location}</div>
@@ -342,12 +342,12 @@ export default function CoffeeInfoPage() {
 
               {/* 로스터명 Cascade 자동완성 */}
               <div className="relative">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-coffee-700 mb-2">
                   <Factory className="inline h-4 w-4 mr-1" />
                   로스터명 *
                 </label>
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-coffee-400" />
                   <input
                     type="text"
                     value={roasterQuery}
@@ -359,20 +359,20 @@ export default function CoffeeInfoPage() {
                     onFocus={() => setShowRoasterResults(true)}
                     onBlur={() => setTimeout(() => setShowRoasterResults(false), 200)}
                     placeholder="로스터명을 검색하거나 입력해주세요"
-                    className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent ${
-                      errors.roasterName ? 'border-red-500' : 'border-gray-300'
+                    className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent bg-white/80 backdrop-blur-sm text-coffee-800 placeholder-coffee-400 transition-all duration-200 ${
+                      errors.roasterName ? 'border-red-500' : 'border-coffee-200/50'
                     }`}
                   />
                 </div>
                 
                 {/* 로스터 검색 결과 */}
                 {showRoasterResults && roasterQuery && roasterResults.length > 0 && (
-                  <div className="absolute z-10 w-full mt-2 bg-white rounded-xl shadow-lg border border-gray-200 max-h-60 overflow-y-auto">
+                  <div className="absolute z-10 w-full mt-2 bg-white/95 backdrop-blur-sm rounded-xl shadow-lg border border-coffee-200/30 max-h-60 overflow-y-auto">
                     {roasterResults.map((roaster) => (
                       <button
                         key={roaster.id}
                         onClick={() => handleRoasterSelect(roaster)}
-                        className="w-full px-4 py-3 text-left hover:bg-coffee-50 transition-colors border-b border-gray-100 last:border-b-0"
+                        className="w-full px-4 py-3 text-left hover:bg-coffee-50 transition-all duration-200 hover:scale-[1.01] border-b border-coffee-100 last:border-b-0"
                       >
                         <div className="font-medium text-coffee-800">{roaster.name}</div>
                         <div className="text-sm text-coffee-600">{roaster.region}</div>
@@ -385,12 +385,12 @@ export default function CoffeeInfoPage() {
 
               {/* 커피명 Cascade 자동완성 */}
               <div className="relative">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-coffee-700 mb-2">
                   <Coffee className="inline h-4 w-4 mr-1" />
                   커피명 *
                 </label>
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-coffee-400" />
                   <input
                     type="text"
                     value={coffeeQuery}
@@ -402,20 +402,20 @@ export default function CoffeeInfoPage() {
                     onFocus={() => setShowCoffeeResults(true)}
                     onBlur={() => setTimeout(() => setShowCoffeeResults(false), 200)}
                     placeholder="커피명을 검색하거나 입력해주세요"
-                    className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent ${
-                      errors.coffeeName ? 'border-red-500' : 'border-gray-300'
+                    className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent bg-white/80 backdrop-blur-sm text-coffee-800 placeholder-coffee-400 transition-all duration-200 ${
+                      errors.coffeeName ? 'border-red-500' : 'border-coffee-200/50'
                     }`}
                   />
                 </div>
                 
                 {/* 커피 검색 결과 */}
                 {showCoffeeResults && coffeeQuery && coffeeResults.length > 0 && (
-                  <div className="absolute z-10 w-full mt-2 bg-white rounded-xl shadow-lg border border-gray-200 max-h-60 overflow-y-auto">
+                  <div className="absolute z-10 w-full mt-2 bg-white/95 backdrop-blur-sm rounded-xl shadow-lg border border-coffee-200/30 max-h-60 overflow-y-auto">
                     {coffeeResults.map((coffee) => (
                       <button
                         key={coffee.id}
                         onClick={() => handleCoffeeSelect(coffee)}
-                        className="w-full px-4 py-3 text-left hover:bg-coffee-50 transition-colors border-b border-gray-100 last:border-b-0"
+                        className="w-full px-4 py-3 text-left hover:bg-coffee-50 transition-all duration-200 hover:scale-[1.01] border-b border-coffee-100 last:border-b-0"
                       >
                         <div className="font-medium text-coffee-800">{coffee.name}</div>
                         <div className="text-sm text-coffee-600">{coffee.origin} • {coffee.roastLevel}</div>
@@ -428,33 +428,33 @@ export default function CoffeeInfoPage() {
 
               {/* 온도 선택 (필수) */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
+                <label className="block text-sm font-medium text-coffee-700 mb-3">
                   온도 *
                 </label>
                 <div className="flex space-x-4">
                   <button
                     onClick={() => setTemperature('hot')}
-                    className={`flex-1 py-4 px-6 rounded-xl border-2 transition-all ${
+                    className={`flex-1 py-4 px-6 rounded-xl border-2 transition-all duration-200 hover:scale-[1.02] ${
                       temperature === 'hot'
                         ? 'border-orange-500 bg-orange-50 text-orange-800'
-                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                        : 'border-coffee-200/50 hover:border-coffee-300 hover:bg-coffee-50'
                     }`}
                   >
                     <Thermometer className="h-6 w-6 mx-auto mb-2" />
                     <div className="font-medium">뜨거움</div>
-                    <div className="text-sm text-gray-500">Hot</div>
+                    <div className="text-sm text-coffee-500">Hot</div>
                   </button>
                   <button
                     onClick={() => setTemperature('iced')}
-                    className={`flex-1 py-4 px-6 rounded-xl border-2 transition-all ${
+                    className={`flex-1 py-4 px-6 rounded-xl border-2 transition-all duration-200 hover:scale-[1.02] ${
                       temperature === 'iced'
                         ? 'border-blue-500 bg-blue-50 text-blue-800'
-                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                        : 'border-coffee-200/50 hover:border-coffee-300 hover:bg-coffee-50'
                     }`}
                   >
                     <Snowflake className="h-6 w-6 mx-auto mb-2" />
                     <div className="font-medium">차가움</div>
-                    <div className="text-sm text-gray-500">Iced</div>
+                    <div className="text-sm text-coffee-500">Iced</div>
                   </button>
                 </div>
                 {errors.temperature && <p className="mt-2 text-sm text-red-600">{errors.temperature}</p>}
@@ -462,7 +462,7 @@ export default function CoffeeInfoPage() {
 
               {/* 날짜 선택 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-coffee-700 mb-2">
                   <Calendar className="inline h-4 w-4 mr-1" />
                   테이스팅 날짜
                 </label>
@@ -471,14 +471,14 @@ export default function CoffeeInfoPage() {
                   value={tastingDate}
                   onChange={(e) => setTastingDate(e.target.value)}
                   max={new Date().toISOString().split('T')[0]}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-coffee-200 rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent bg-white/80 backdrop-blur-sm text-coffee-800"
                 />
               </div>
             </div>
           </div>
 
           {/* Progressive Disclosure - 추가 정보 섹션 */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+          <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-coffee-200/30 p-6 md:p-8">
             <button
               onClick={() => setShowAdditionalInfo(!showAdditionalInfo)}
               className="w-full flex items-center justify-between py-2 text-left"
@@ -497,7 +497,7 @@ export default function CoffeeInfoPage() {
               <div className="mt-4 space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-coffee-700 mb-2">
                       원산지
                     </label>
                     <input
@@ -505,12 +505,12 @@ export default function CoffeeInfoPage() {
                       value={additionalInfo.origin}
                       onChange={(e) => setAdditionalInfo(prev => ({ ...prev, origin: e.target.value }))}
                       placeholder="예: 에티오피아"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-coffee-200 rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent bg-white/80 backdrop-blur-sm text-coffee-800 placeholder-coffee-400"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-coffee-700 mb-2">
                       <Wheat className="inline h-4 w-4 mr-1" />
                       품종
                     </label>
@@ -519,12 +519,12 @@ export default function CoffeeInfoPage() {
                       value={additionalInfo.variety}
                       onChange={(e) => setAdditionalInfo(prev => ({ ...prev, variety: e.target.value }))}
                       placeholder="예: 헤어룸, 부르봉"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-coffee-200 rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent bg-white/80 backdrop-blur-sm text-coffee-800 placeholder-coffee-400"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-coffee-700 mb-2">
                       가공방식
                     </label>
                     <input
@@ -532,12 +532,12 @@ export default function CoffeeInfoPage() {
                       value={additionalInfo.processing}
                       onChange={(e) => setAdditionalInfo(prev => ({ ...prev, processing: e.target.value }))}
                       placeholder="예: 워시드, 내추럴"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-coffee-200 rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent bg-white/80 backdrop-blur-sm text-coffee-800 placeholder-coffee-400"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-coffee-700 mb-2">
                       로스팅 레벨
                     </label>
                     <input
@@ -545,12 +545,12 @@ export default function CoffeeInfoPage() {
                       value={additionalInfo.roastLevel}
                       onChange={(e) => setAdditionalInfo(prev => ({ ...prev, roastLevel: e.target.value }))}
                       placeholder="예: 미디엄, 다크"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-coffee-200 rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent bg-white/80 backdrop-blur-sm text-coffee-800 placeholder-coffee-400"
                     />
                   </div>
                   
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-coffee-700 mb-2">
                       <Mountain className="inline h-4 w-4 mr-1" />
                       고도 (m)
                     </label>
@@ -559,7 +559,7 @@ export default function CoffeeInfoPage() {
                       value={additionalInfo.altitude}
                       onChange={(e) => setAdditionalInfo(prev => ({ ...prev, altitude: e.target.value }))}
                       placeholder="예: 1800"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-coffee-200 rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent bg-white/80 backdrop-blur-sm text-coffee-800 placeholder-coffee-400"
                     />
                   </div>
                 </div>
@@ -595,7 +595,7 @@ export default function CoffeeInfoPage() {
         <div className="mt-8">
           <button
             onClick={handleNext}
-            className="w-full py-4 px-8 bg-coffee-600 text-white rounded-xl hover:bg-coffee-700 transition-colors text-lg font-medium flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-4 px-8 bg-coffee-500 text-white rounded-xl hover:bg-coffee-600 transition-all duration-200 hover:scale-[1.02] text-lg font-medium flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
             disabled={!temperature || !manualInput.roasterName || !manualInput.coffeeName || (mode === 'cafe' && !manualInput.cafeName)}
           >
             다음 단계

@@ -31,7 +31,7 @@ export default function CoffeeCard({ record, variant = 'default' }: CoffeeCardPr
   if (variant === 'compact') {
     return (
       <Link href={`/coffee/${record.id}`}>
-        <div className="bg-white rounded-2xl p-4 hover:shadow-md transition-all group">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 border border-coffee-200/30 shadow-sm hover:shadow-lg hover:bg-white/90 transition-all duration-200 group">
           <div className="flex items-start space-x-4">
             {/* 이미지 또는 아이콘 */}
             <div className="relative w-16 h-16 flex-shrink-0">
@@ -39,10 +39,10 @@ export default function CoffeeCard({ record, variant = 'default' }: CoffeeCardPr
                 <LazyImage
                   src={record.images[0]}
                   alt={record.coffeeName}
-                  className="w-full h-full rounded-xl object-cover"
+                  className="w-full h-full rounded-xl object-cover shadow-sm"
                 />
               ) : (
-                <div className={`w-full h-full rounded-xl bg-gradient-to-br ${getModeStyle(record.mode)} flex items-center justify-center`}>
+                <div className={`w-full h-full rounded-xl bg-gradient-to-br ${getModeStyle(record.mode)} flex items-center justify-center shadow-sm`}>
                   <Coffee className="h-8 w-8 text-white" />
                 </div>
               )}
@@ -50,10 +50,10 @@ export default function CoffeeCard({ record, variant = 'default' }: CoffeeCardPr
             
             {/* 정보 */}
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-neutral-800 truncate group-hover:text-neutral-600 transition-colors">
+              <h3 className="font-semibold text-coffee-800 truncate group-hover:text-coffee-600 transition-colors">
                 {record.coffeeName}
               </h3>
-              <div className="flex items-center space-x-3 mt-1 text-sm text-neutral-600">
+              <div className="flex items-center space-x-3 mt-1 text-sm text-coffee-600">
                 {record.roastery && (
                   <span className="truncate">{record.roastery}</span>
                 )}
@@ -66,8 +66,8 @@ export default function CoffeeCard({ record, variant = 'default' }: CoffeeCardPr
                       key={i}
                       className={`h-3 w-3 ${
                         i < record.rating
-                          ? 'fill-yellow-400 text-yellow-400'
-                          : 'text-gray-300'
+                          ? 'fill-amber-400 text-amber-400'
+                          : 'text-coffee-300'
                       }`}
                     />
                   ))}
@@ -82,9 +82,9 @@ export default function CoffeeCard({ record, variant = 'default' }: CoffeeCardPr
 
   return (
     <Link href={`/coffee/${record.id}`}>
-      <div className="bg-white rounded-2xl overflow-hidden hover:shadow-xl transition-all group transform hover:-translate-y-1">
+      <div className="bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-coffee-200/30 shadow-md hover:shadow-xl hover:bg-white/90 transition-all duration-200 group transform hover:-translate-y-1">
         {/* 이미지 영역 */}
-        <div className="relative aspect-[4/3] bg-gradient-to-br from-neutral-100 to-neutral-200">
+        <div className="relative aspect-[4/3] bg-gradient-to-br from-coffee-100/50 to-coffee-200/50">
           {record.images?.[0] ? (
             <>
               <LazyImage
@@ -101,7 +101,7 @@ export default function CoffeeCard({ record, variant = 'default' }: CoffeeCardPr
             </>
           ) : (
             <div className="w-full h-full flex items-center justify-center">
-              <Coffee className="h-16 w-16 text-neutral-300" />
+              <Coffee className="h-16 w-16 text-coffee-300" />
             </div>
           )}
           
@@ -115,19 +115,19 @@ export default function CoffeeCard({ record, variant = 'default' }: CoffeeCardPr
         <div className="p-5">
           {/* 제목과 평점 */}
           <div className="flex items-start justify-between mb-2">
-            <h3 className="font-bold text-lg text-neutral-800 flex-1 mr-2 group-hover:text-neutral-600 transition-colors">
+            <h3 className="font-bold text-lg text-coffee-800 flex-1 mr-2 group-hover:text-coffee-600 transition-colors">
               {record.coffeeName}
             </h3>
             {record.rating && (
               <div className="flex items-center space-x-1">
-                <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                <span className="text-sm font-medium text-neutral-700">{record.rating}</span>
+                <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                <span className="text-sm font-medium text-coffee-700">{record.rating}</span>
               </div>
             )}
           </div>
           
           {/* 부가 정보 */}
-          <div className="flex items-center space-x-3 text-sm text-neutral-600 mb-3">
+          <div className="flex items-center space-x-3 text-sm text-coffee-600 mb-3">
             {record.roastery && (
               <div className="flex items-center">
                 <MapPin className="h-3 w-3 mr-1" />
@@ -142,21 +142,21 @@ export default function CoffeeCard({ record, variant = 'default' }: CoffeeCardPr
           
           {/* 테이스팅 노트 */}
           {record.taste && (
-            <p className="text-sm text-neutral-700 line-clamp-2 mb-3">
+            <p className="text-sm text-coffee-700 line-clamp-2 mb-3">
               {record.taste}
             </p>
           )}
           
           {/* 매치 스코어 */}
           {record.matchScore && (
-            <div className="mt-3 pt-3 border-t border-neutral-100">
+            <div className="mt-3 pt-3 border-t border-coffee-100/50">
               <div className="flex items-center justify-between text-xs">
-                <span className="text-neutral-500">Match Score</span>
-                <span className="font-medium text-neutral-700">{record.matchScore.overall}%</span>
+                <span className="text-coffee-500">Match Score</span>
+                <span className="font-medium text-coffee-700">{record.matchScore.overall}%</span>
               </div>
-              <div className="mt-1 h-2 bg-neutral-100 rounded-full overflow-hidden">
+              <div className="mt-1 h-2 bg-coffee-100/50 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-purple-400 to-purple-600 transition-all"
+                  className="h-full bg-gradient-to-r from-coffee-400 to-coffee-600 transition-all duration-300"
                   style={{ width: `${record.matchScore.overall}%` }}
                 />
               </div>

@@ -1,3 +1,8 @@
+/**
+ * @document-ref NEXTJS_PATTERNS.md#layout-first-component-strategy
+ * @design-ref DESIGN_SYSTEM.md#global-layouts
+ * @compliance-check 2025-08-02 - NextJS Production Reality 패턴 적용
+ */
 import type { Metadata, Viewport } from 'next'
 
 import dynamic from 'next/dynamic'
@@ -8,30 +13,15 @@ import NotificationContainer from '../components/notifications/NotificationConta
 import { AuthProvider } from '../contexts/AuthContext'
 import { NotificationProvider } from '../contexts/NotificationContext'
 import { ThemeProvider } from '../contexts/ThemeContext'
+import { SearchProvider } from '../contexts/SearchContext'
 
+// 개발용 컴포넌트 - 클라이언트에서만 렌더링
+const OnboardingTrigger = dynamic(() => import('../components/ui/OnboardingTrigger'), {
+  loading: () => null
+})
 
 // 클라이언트 전용 컴포넌트들을 동적 import
-const NetworkStatus = dynamic(() => import('../components/network/NetworkStatus'), {
-  loading: () => null
-})
-
-const ConnectionIndicator = dynamic(() => import('../components/network/NetworkStatus').then(mod => ({ default: mod.ConnectionIndicator })), {
-  loading: () => null
-})
-
-const PWAInstallPrompt = dynamic(() => import('../components/PWAInstallPrompt'), {
-  loading: () => null
-})
-
-const SyncStatus = dynamic(() => import('../components/SyncStatus'), {
-  loading: () => null
-})
-
 const AppHeader = dynamic(() => import('../components/AppHeader'), {
-  loading: () => null
-})
-
-const WebVitalsInitializer = dynamic(() => import('../components/performance/WebVitalsInitializer'), {
   loading: () => null
 })
 import './globals.css'
@@ -118,7 +108,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko" suppressHydrationWarning>
       <head>
-        <meta name="theme-color" content="#6F4E37" />
+        <meta name="theme-color" content="#8B4513" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="alternate icon" href="/favicon.ico" />
       </head>
@@ -127,15 +117,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ErrorBoundary>
             <NotificationProvider>
               <AuthProvider>
-                <NetworkStatus />
-                <SyncStatus />
+                <SearchProvider>
                 <AppHeader />
                 <div className="pb-16 md:pb-0 safe-area-inset">{children}</div>
                 <MobileNavigation />
                 <NotificationContainer />
-                <ConnectionIndicator />
-                <PWAInstallPrompt />
-                <WebVitalsInitializer />
+                <OnboardingTrigger />
+                </SearchProvider>
               </AuthProvider>
             </NotificationProvider>
           </ErrorBoundary>

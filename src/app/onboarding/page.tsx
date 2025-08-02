@@ -5,6 +5,8 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { Coffee, ArrowRight, ArrowLeft, CheckCircle, Star, Trophy, Target } from 'lucide-react'
+import Navigation from '../../components/Navigation'
+import PageLayout from '../../components/ui/PageLayout'
 
 interface OnboardingStep {
   id: number
@@ -26,12 +28,12 @@ export default function OnboardingPage() {
       icon: <Coffee className="h-12 w-12 text-purple-600" />,
       content: (
         <div className="text-center space-y-6">
-          <div className="bg-neutral-100 rounded-full p-8 w-32 h-32 mx-auto flex items-center justify-center">
-            <Coffee className="h-16 w-16 text-purple-600" />
+          <div className="bg-coffee-100/80 rounded-full p-8 w-32 h-32 mx-auto flex items-center justify-center backdrop-blur-sm border border-coffee-200/30">
+            <Coffee className="h-16 w-16 text-coffee-600" />
           </div>
           <div>
-            <h2 className="text-3xl font-bold text-neutral-800 mb-4">반갑습니다!</h2>
-            <p className="text-lg text-neutral-600 leading-relaxed">
+            <h2 className="text-3xl font-bold text-coffee-800 mb-4">반갑습니다!</h2>
+            <p className="text-lg text-coffee-600 leading-relaxed">
               CupNote는 여러분의 커피 경험을 기록하고 분석하여
               <br />
               개인화된 커피 취향을 발견할 수 있도록 도와드립니다.
@@ -47,7 +49,7 @@ export default function OnboardingPage() {
       icon: <Target className="h-12 w-12 text-blue-600" />,
       content: (
         <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-neutral-800 text-center mb-8">상황별 기록 모드</h2>
+          <h2 className="text-2xl font-bold text-coffee-800 text-center mb-8">상황별 기록 모드</h2>
           <div className="grid gap-4">
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-center space-x-4">
               <div className="bg-blue-100 rounded-full p-3">
@@ -144,7 +146,7 @@ export default function OnboardingPage() {
           <h2 className="text-2xl font-bold text-coffee-800 text-center mb-8">성취와 레벨업</h2>
 
           <div className="grid gap-4">
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-xl p-4">
+            <div className="bg-gradient-to-r from-blue-50/80 to-purple-50/80 border border-blue-200/30 rounded-xl p-4 backdrop-blur-sm">
               <div className="flex items-center space-x-4 mb-3">
                 <div className="text-2xl">🎉</div>
                 <div>
@@ -155,7 +157,7 @@ export default function OnboardingPage() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-4">
+            <div className="bg-gradient-to-r from-green-50/80 to-blue-50/80 border border-green-200/30 rounded-xl p-4 backdrop-blur-sm">
               <div className="flex items-center space-x-4 mb-3">
                 <div className="text-2xl">🌍</div>
                 <div>
@@ -166,7 +168,7 @@ export default function OnboardingPage() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-xl p-4">
+            <div className="bg-gradient-to-r from-yellow-50/80 to-orange-50/80 border border-yellow-200/30 rounded-xl p-4 backdrop-blur-sm">
               <div className="flex items-center space-x-4 mb-3">
                 <div className="text-2xl">👑</div>
                 <div>
@@ -178,10 +180,10 @@ export default function OnboardingPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl border-2 border-coffee-200 p-4">
+          <div className="bg-white/90 backdrop-blur-sm rounded-xl border-2 border-coffee-200/30 p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="bg-purple-100 rounded-full p-2">
+                <div className="bg-purple-100/80 rounded-full p-2 backdrop-blur-sm">
                   <Trophy className="h-6 w-6 text-purple-600" />
                 </div>
                 <div>
@@ -190,9 +192,9 @@ export default function OnboardingPage() {
                 </div>
               </div>
             </div>
-            <div className="w-full bg-coffee-200 rounded-full h-2 mt-3">
+            <div className="w-full bg-coffee-200/50 rounded-full h-2 mt-3">
               <div
-                className="bg-gradient-to-r from-purple-400 to-purple-600 h-2 rounded-full"
+                className="bg-gradient-to-r from-coffee-400 to-coffee-600 h-2 rounded-full"
                 style={{ width: '0%' }}
               ></div>
             </div>
@@ -207,7 +209,7 @@ export default function OnboardingPage() {
       icon: <CheckCircle className="h-12 w-12 text-green-600" />,
       content: (
         <div className="text-center space-y-6">
-          <div className="bg-green-100 rounded-full p-8 w-32 h-32 mx-auto flex items-center justify-center">
+          <div className="bg-green-100/80 rounded-full p-8 w-32 h-32 mx-auto flex items-center justify-center backdrop-blur-sm border border-green-200/30">
             <CheckCircle className="h-16 w-16 text-green-600" />
           </div>
           <div>
@@ -217,7 +219,7 @@ export default function OnboardingPage() {
               <br />매 한 잔이 새로운 발견이 될 거예요.
             </p>
 
-            <div className="bg-coffee-50 rounded-xl p-4 border border-coffee-200">
+            <div className="bg-coffee-50/80 rounded-xl p-4 border border-coffee-200/30 backdrop-blur-sm">
               <p className="text-sm text-coffee-700">
                 <span className="font-medium">💡 시작 팁:</span>
                 처음이시라면 카페 모드부터 시작해보세요!
@@ -255,20 +257,9 @@ export default function OnboardingPage() {
   const currentStepData = steps[currentStep]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
-      <div className="container mx-auto px-4 py-8 max-w-2xl">
-        {/* 헤더 */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center space-x-2">
-            <div className="text-2xl font-bold text-coffee-800">☕ CupNote</div>
-          </div>
-          <button
-            onClick={handleSkip}
-            className="text-coffee-500 hover:text-coffee-700 transition-colors text-sm"
-          >
-            건너뛰기
-          </button>
-        </div>
+    <>
+      <Navigation showBackButton currentPage="home" />
+      <PageLayout showHeader={false}>
 
         {/* 진행 상태 */}
         <div className="mb-8">
@@ -289,7 +280,7 @@ export default function OnboardingPage() {
         </div>
 
         {/* 메인 콘텐츠 */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
+        <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-coffee-200/30 p-8 mb-8">
           <div className="text-center mb-8">
             <div className="mb-4">{currentStepData.icon}</div>
             <h1 className="text-2xl font-bold text-coffee-800 mb-2">{currentStepData.title}</h1>
@@ -304,7 +295,7 @@ export default function OnboardingPage() {
           <button
             onClick={handlePrev}
             disabled={currentStep === 0}
-            className="flex items-center px-6 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center px-6 py-3 border border-coffee-200 rounded-xl hover:bg-coffee-50 transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             이전
@@ -312,7 +303,7 @@ export default function OnboardingPage() {
 
           <button
             onClick={handleNext}
-            className="flex items-center px-8 py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors font-medium"
+            className="flex items-center px-8 py-3 bg-coffee-500 text-white rounded-xl hover:bg-coffee-600 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg font-medium"
           >
             {currentStep === steps.length - 1 ? '시작하기' : '다음'}
             <ArrowRight className="h-4 w-4 ml-2" />
@@ -334,8 +325,9 @@ export default function OnboardingPage() {
               }`}
             />
           ))}
+          </div>
         </div>
-      </div>
-    </div>
+      </PageLayout>
+    </>
   )
 }

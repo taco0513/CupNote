@@ -59,10 +59,10 @@ export default function FilterPanel({
       {/* 필터 토글 버튼 */}
       <button
         onClick={onToggle}
-        className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+        className="flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm border border-coffee-200/50 rounded-xl shadow-sm hover:bg-white/90 hover:shadow-md transition-all duration-200"
       >
         <svg
-          className="w-5 h-5 mr-2 text-gray-600"
+          className="w-5 h-5 mr-2 text-coffee-600"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

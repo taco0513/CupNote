@@ -1,16 +1,17 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-
 import { Trophy, Target, TrendingUp, Award, Star, Zap, Users, Crown } from 'lucide-react'
 
 import ProtectedRoute from '../../components/auth/ProtectedRoute'
 import Navigation from '../../components/Navigation'
+import PageLayout from '../../components/ui/PageLayout'
+import PageHeader from '../../components/ui/PageHeader'
+import { Card, CardContent } from '../../components/ui/Card'
 import { SupabaseStorage } from '../../lib/supabase-storage'
 import { UserStats, Achievement } from '../../types/achievement'
 import { simpleDemoStats } from '../../data/simple-demo'
-import { StatsGridSkeleton, AchievementGridSkeleton, SkeletonLoader } from '../../components/SkeletonLoader'
-
+import { StatsGridSkeleton, AchievementGridSkeleton } from '../../components/SkeletonLoader'
 
 export default function AchievementsPage() {
   const [userStats, setUserStats] = useState<UserStats | null>(null)
@@ -57,54 +58,57 @@ export default function AchievementsPage() {
   if (loading) {
     return (
       <ProtectedRoute>
-        <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
-          <div className="container mx-auto px-4 py-4 md:py-8 max-w-4xl pb-20 md:pb-8">
-            <Navigation showBackButton currentPage="achievements" />
-            
-            {/* 헤더 스켈레톤 */}
-            <div className="text-center mb-6 md:mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-gray-200 rounded-full mb-4 animate-pulse"></div>
-              <div className="h-8 bg-gray-200 rounded w-32 mx-auto mb-2 animate-pulse"></div>
-              <div className="h-6 bg-gray-200 rounded w-64 mx-auto mb-4 animate-pulse"></div>
-              
-              {/* 전체 진행률 스켈레톤 */}
-              <div className="bg-white rounded-xl p-4 shadow-sm border border-neutral-200 max-w-md mx-auto animate-pulse">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="h-4 bg-gray-200 rounded w-16"></div>
-                  <div className="h-4 bg-gray-200 rounded w-12"></div>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-3 mb-1"></div>
-                <div className="h-3 bg-gray-200 rounded w-20 mx-auto"></div>
+        <Navigation showBackButton currentPage="achievements" />
+        <PageLayout>
+          <PageHeader 
+            title="성취"
+            description="커피 여정의 발자취를 확인해보세요"
+            icon={<Trophy className="h-6 w-6" />}
+          />
+          
+          {/* 전체 진행률 스켈레톤 */}
+          <Card variant="default" className="max-w-md mx-auto mb-8 bg-white/80 backdrop-blur-sm border border-coffee-200/30">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <div className="h-4 bg-gray-200 rounded w-16 animate-pulse"></div>
+                <div className="h-4 bg-gray-200 rounded w-12 animate-pulse"></div>
               </div>
-            </div>
-            
-            {/* 통계 카드 스켈레톤 */}
-            <StatsGridSkeleton count={3} />
-            
-            {/* 카테고리 필터 스켈레톤 */}
-            <div className="flex flex-wrap gap-2 mb-6 justify-center mt-6">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-10 w-24 bg-gray-200 rounded-full animate-pulse"></div>
-              ))}
-            </div>
-            
-            {/* 성취 목록 스켈레톤 */}
-            <AchievementGridSkeleton count={4} />
+              <div className="w-full bg-gray-200 rounded-full h-3 mb-1 animate-pulse"></div>
+              <div className="h-3 bg-gray-200 rounded w-20 mx-auto animate-pulse"></div>
+            </CardContent>
+          </Card>
+          
+          {/* 통계 카드 스켈레톤 */}
+          <StatsGridSkeleton count={3} />
+          
+          {/* 카테고리 필터 스켈레톤 */}
+          <div className="flex flex-wrap gap-2 mb-6 justify-center mt-6">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="h-10 w-24 bg-gray-200 rounded-full animate-pulse"></div>
+            ))}
           </div>
-        </div>
+          
+          {/* 성취 목록 스켈레톤 */}
+          <AchievementGridSkeleton count={4} />
+        </PageLayout>
       </ProtectedRoute>
     )
   }
 
   if (!userStats) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100 flex items-center justify-center">
-        <div className="text-center">
-          <Trophy className="h-16 w-16 text-neutral-400 mx-auto mb-4" />
-          <h1 className="text-xl font-bold text-neutral-800 mb-2">아직 성취가 없어요</h1>
-          <p className="text-neutral-600">첫 커피 기록을 만들어보세요!</p>
-        </div>
-      </div>
+      <ProtectedRoute>
+        <Navigation showBackButton currentPage="achievements" />
+        <PageLayout>
+          <div className="text-center py-16">
+            <div className="w-16 h-16 bg-coffee-100/80 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <Trophy className="h-8 w-8 text-coffee-300" />
+            </div>
+            <h1 className="text-xl font-bold text-coffee-800 mb-2">아직 성취가 없어요</h1>
+            <p className="text-coffee-600">첫 커피 기록을 만들어보세요!</p>
+          </div>
+        </PageLayout>
+      </ProtectedRoute>
     )
   }
 
@@ -149,133 +153,125 @@ export default function AchievementsPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
-        <div className="container mx-auto px-4 py-4 md:py-8 max-w-4xl pb-20 md:pb-8">
-          <Navigation showBackButton currentPage="achievements" />
+      <Navigation showBackButton currentPage="achievements" />
+      <PageLayout>
+        {/* 하이브리드 디자인 페이지 헤더 */}
+        <PageHeader 
+          title="성취"
+          description="커피 여정의 발자취를 확인해보세요"
+          icon={<Trophy className="h-6 w-6" />}
+        />
 
-          {/* 헤더 */}
-          <div className="text-center mb-6 md:mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full mb-4">
-              <Trophy className="h-8 w-8 md:h-10 md:w-10 text-white" />
+        {/* 전체 진행률 - 하이브리드 프리미엄 카드 */}
+        <Card variant="elevated" className="max-w-md mx-auto mb-8 bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-lg">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm font-semibold text-coffee-700">달성률</span>
+              <span className="text-sm font-bold text-coffee-800">
+                {unlockedCount}/{totalCount}
+              </span>
             </div>
-            <h1 className="text-2xl md:text-4xl font-bold text-neutral-800 mb-2">성취</h1>
-            <p className="text-base md:text-xl text-neutral-600 mb-4 px-4">
-              커피 여정의 발자취를 확인해보세요
+            <div className="w-full bg-coffee-200/50 rounded-full h-3 mb-2">
+              <div
+                className="bg-gradient-to-r from-amber-400 to-amber-500 h-3 rounded-full transition-all duration-300 shadow-sm"
+                style={{ width: `${(unlockedCount / totalCount) * 100}%` }}
+              ></div>
+            </div>
+            <p className="text-xs text-coffee-600 text-center">
+              {Math.round((unlockedCount / totalCount) * 100)}% 완료
             </p>
+          </CardContent>
+        </Card>
 
-            {/* 전체 진행률 */}
-            <div className="bg-white rounded-xl p-4 shadow-sm border border-neutral-200 max-w-md mx-auto">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-neutral-700">달성률</span>
-                <span className="text-sm font-bold text-neutral-800">
-                  {unlockedCount}/{totalCount}
-                </span>
+        {/* 레벨 및 통계 카드 - 하이브리드 그리드 */}
+        <div className="grid grid-cols-3 gap-4 mb-8">
+          {/* 레벨 카드 */}
+          <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-shadow">
+            <CardContent className="p-4 text-center">
+              <div className="w-10 h-10 bg-gradient-to-r from-purple-400 to-purple-500 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-md">
+                <Crown className="h-5 w-5 text-white" />
               </div>
-              <div className="w-full bg-neutral-200 rounded-full h-3">
+              <div className="text-lg font-bold text-coffee-700 mb-1">Lv.{userStats.level.level}</div>
+              <div className="text-xs text-coffee-600 mb-2">{userStats.level.title}</div>
+              <div className="w-full bg-coffee-200/50 rounded-full h-1.5 mb-1">
                 <div
-                  className="bg-gradient-to-r from-yellow-400 to-orange-500 h-3 rounded-full transition-all duration-300"
-                  style={{ width: `${(unlockedCount / totalCount) * 100}%` }}
+                  className="bg-gradient-to-r from-purple-400 to-purple-500 h-1.5 rounded-full transition-all duration-300"
+                  style={{ width: `${userStats.level.progress}%` }}
                 ></div>
               </div>
-              <p className="text-xs text-neutral-600 mt-1">
-                {Math.round((unlockedCount / totalCount) * 100)}% 완료
-              </p>
-            </div>
-          </div>
-
-          {/* 레벨 및 통계 카드 */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
-            {/* 레벨 카드 */}
-            <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6 border border-neutral-200">
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full mb-3 md:mb-4">
-                  <Crown className="h-6 w-6 md:h-8 md:w-8 text-white" />
-                </div>
-                <h3 className="text-lg font-bold text-coffee-800 mb-1">
-                  레벨 {userStats.level.level}
-                </h3>
-                <p className="text-coffee-600 mb-3">{userStats.level.title}</p>
-                <div className="w-full bg-coffee-200 rounded-full h-2 mb-2">
-                  <div
-                    className="bg-gradient-to-r from-purple-400 to-purple-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${userStats.level.progress}%` }}
-                  ></div>
-                </div>
-                <p className="text-xs text-coffee-600">
-                  {userStats.level.currentPoints}/{userStats.level.nextLevelPoints} P
-                </p>
+              <div className="text-xs text-coffee-500">
+                {userStats.level.currentPoints}/{userStats.level.nextLevelPoints}P
               </div>
-            </div>
+            </CardContent>
+          </Card>
 
-            {/* 연속 기록 카드 */}
-            <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6 border border-coffee-200">
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-full mb-3 md:mb-4">
-                  <Zap className="h-6 w-6 md:h-8 md:w-8 text-white" />
-                </div>
-                <h3 className="text-lg font-bold text-coffee-800 mb-1">
-                  {userStats.streaks.current}일 연속
-                </h3>
-                <p className="text-coffee-600 mb-3">현재 연속 기록</p>
-                <p className="text-sm text-coffee-500">최고 기록: {userStats.streaks.longest}일</p>
+          {/* 연속 기록 카드 */}
+          <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-shadow">
+            <CardContent className="p-4 text-center">
+              <div className="w-10 h-10 bg-gradient-to-r from-orange-400 to-orange-500 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-md">
+                <Zap className="h-5 w-5 text-white" />
               </div>
-            </div>
+              <div className="text-lg font-bold text-coffee-700 mb-1">{userStats.streaks.current}일</div>
+              <div className="text-xs text-coffee-600 mb-2">연속 기록</div>
+              <div className="text-xs text-coffee-500">최고: {userStats.streaks.longest}일</div>
+            </CardContent>
+          </Card>
 
-            {/* 총 포인트 카드 */}
-            <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6 border border-coffee-200">
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-green-400 to-blue-500 rounded-full mb-3 md:mb-4">
-                  <Award className="h-6 w-6 md:h-8 md:w-8 text-white" />
-                </div>
-                <h3 className="text-lg font-bold text-coffee-800 mb-1">
-                  {userStats.totalPoints} P
-                </h3>
-                <p className="text-coffee-600 mb-3">총 획득 포인트</p>
-                <p className="text-sm text-coffee-500">기록 {userStats.totalRecords}개</p>
+          {/* 총 포인트 카드 */}
+          <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-shadow">
+            <CardContent className="p-4 text-center">
+              <div className="w-10 h-10 bg-gradient-to-r from-green-400 to-green-500 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-md">
+                <Award className="h-5 w-5 text-white" />
               </div>
-            </div>
-          </div>
+              <div className="text-lg font-bold text-coffee-700 mb-1">{userStats.totalPoints}P</div>
+              <div className="text-xs text-coffee-600 mb-2">총 포인트</div>
+              <div className="text-xs text-coffee-500">{userStats.totalRecords}개 기록</div>
+            </CardContent>
+          </Card>
+        </div>
 
-          {/* 카테고리 필터 */}
-          <div className="flex flex-wrap gap-2 mb-6 justify-center">
-            {categories.map(category => {
-              const Icon = category.icon
-              return (
-                <button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
-                  className={`flex items-center px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    selectedCategory === category.id
-                      ? 'bg-purple-600 text-white'
-                      : 'bg-white text-neutral-600 hover:bg-neutral-50 border border-neutral-200'
-                  }`}
-                >
-                  <Icon className="h-4 w-4 mr-2" />
-                  {category.name}
-                </button>
-              )
-            })}
-          </div>
+        {/* 카테고리 필터 - 하이브리드 버튼 */}
+        <div className="flex flex-wrap gap-2 mb-8 justify-center">
+          {categories.map(category => {
+            const Icon = category.icon
+            return (
+              <button
+                key={category.id}
+                onClick={() => setSelectedCategory(category.id)}
+                className={`flex items-center px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                  selectedCategory === category.id
+                    ? 'bg-gradient-to-r from-coffee-500 to-coffee-600 text-white shadow-md hover:shadow-lg'
+                    : 'bg-white/70 backdrop-blur-sm text-coffee-600 hover:bg-white/90 border border-coffee-200/30 shadow-sm hover:shadow-md'
+                }`}
+              >
+                <Icon className="h-4 w-4 mr-2" />
+                {category.name}
+              </button>
+            )
+          })}
+        </div>
 
-          {/* 성취 목록 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {filteredAchievements.map(achievement => {
-              const CategoryIcon = getCategoryIcon(achievement.category)
-              const categoryColor = getCategoryColor(achievement.category)
+        {/* 성취 목록 - 하이브리드 카드들 */}
+        <div className="grid grid-cols-1 gap-4">
+          {filteredAchievements.map(achievement => {
+            const CategoryIcon = getCategoryIcon(achievement.category)
+            const categoryColor = getCategoryColor(achievement.category)
 
-              return (
-                <div
-                  key={achievement.id}
-                  className={`bg-white rounded-2xl shadow-lg p-4 md:p-6 border transition-all ${
-                    achievement.unlocked
-                      ? 'border-coffee-200 hover:shadow-xl'
-                      : 'border-gray-200 opacity-60'
-                  }`}
-                >
+            return (
+              <Card
+                key={achievement.id}
+                variant="default"
+                className={`bg-white/80 backdrop-blur-sm border transition-all duration-200 shadow-md hover:shadow-lg ${
+                  achievement.unlocked
+                    ? 'border-coffee-200/50 hover:bg-white/90'
+                    : 'border-gray-200/50 opacity-60'
+                }`}
+              >
+                <CardContent className="p-6">
                   <div className="flex items-start space-x-4">
                     <div
-                      className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-2xl ${
-                        achievement.unlocked ? 'bg-coffee-100' : 'bg-gray-100'
+                      className={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-sm ${
+                        achievement.unlocked ? 'bg-coffee-100/80' : 'bg-gray-100/80'
                       }`}
                     >
                       {achievement.icon}
@@ -289,7 +285,7 @@ export default function AchievementsPage() {
                           {achievement.title}
                         </h3>
                         <div
-                          className={`px-2 py-1 rounded-full text-xs font-medium border ${categoryColor}`}
+                          className={`px-3 py-1 rounded-full text-xs font-medium border backdrop-blur-sm ${categoryColor}`}
                         >
                           <CategoryIcon className="inline h-3 w-3 mr-1" />
                           {achievement.category}
@@ -310,9 +306,9 @@ export default function AchievementsPage() {
                               {achievement.progress.current}/{achievement.progress.target}
                             </span>
                           </div>
-                          <div className="w-full bg-coffee-200 rounded-full h-2">
+                          <div className="w-full bg-coffee-200/50 rounded-full h-2">
                             <div
-                              className={`h-2 rounded-full transition-all duration-300 ${
+                              className={`h-2 rounded-full transition-all duration-300 shadow-sm ${
                                 achievement.unlocked
                                   ? 'bg-gradient-to-r from-green-400 to-green-600'
                                   : 'bg-gradient-to-r from-coffee-400 to-coffee-600'
@@ -342,19 +338,21 @@ export default function AchievementsPage() {
                       )}
                     </div>
                   </div>
-                </div>
-              )
-            })}
-          </div>
-
-          {filteredAchievements.length === 0 && (
-            <div className="text-center py-12">
-              <Trophy className="h-16 w-16 text-coffee-300 mx-auto mb-4" />
-              <p className="text-coffee-500">이 카테고리에는 성취가 없어요</p>
-            </div>
-          )}
+                </CardContent>
+              </Card>
+            )
+          })}
         </div>
-      </div>
+
+        {filteredAchievements.length === 0 && (
+          <div className="text-center py-12">
+            <div className="w-16 h-16 bg-coffee-100/80 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <Trophy className="h-8 w-8 text-coffee-300" />
+            </div>
+            <p className="text-coffee-500">이 카테고리에는 성취가 없어요</p>
+          </div>
+        )}
+      </PageLayout>
     </ProtectedRoute>
   )
 }

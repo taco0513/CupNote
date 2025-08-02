@@ -11,6 +11,10 @@ import GuestModeIndicator from '../../components/GuestModeIndicator'
 import { useAuth } from '../../contexts/AuthContext'
 import { useState } from 'react'
 import AuthModal from '../../components/auth/AuthModal'
+import PageLayout from '../../components/ui/PageLayout'
+import { Card, CardContent } from '../../components/ui/Card'
+import Badge from '../../components/ui/Badge'
+import Alert from '../../components/ui/Alert'
 
 interface ModeCardProps {
   mode: 'cafe' | 'homecafe'
@@ -35,103 +39,68 @@ const ModeCard = ({
   popular = false,
   category,
 }: ModeCardProps) => {
-  // Mode별 고유 스타일
-  const modeStyles = {
-    cafe: {
-      bgGradient: 'bg-gradient-to-br from-blue-50 to-sky-50',
-      borderColor: popular ? 'border-blue-400' : 'border-blue-200',
-      hoverBorder: 'hover:border-blue-400',
-      iconBg: 'bg-gradient-to-br from-blue-400 to-sky-500',
-      iconText: 'text-white',
-      badgeBg: popular ? 'bg-gradient-to-r from-blue-500 to-sky-500' : 'bg-blue-100',
-      badgeText: popular ? 'text-white' : 'text-blue-800',
-      accentColor: 'text-blue-600',
-      dotColor: 'bg-blue-400',
-    },
-    homecafe: {
-      bgGradient: 'bg-gradient-to-br from-green-50 to-emerald-50',
-      borderColor: 'border-green-200',
-      hoverBorder: 'hover:border-green-400',
-      iconBg: 'bg-gradient-to-br from-green-400 to-emerald-500',
-      iconText: 'text-white',
-      badgeBg: 'bg-gradient-to-r from-green-500 to-emerald-500',
-      badgeText: 'text-white',
-      accentColor: 'text-green-600',
-      dotColor: 'bg-green-400',
-    },
-  }
-  
-  const styles = modeStyles[mode]
+  const badgeVariant = mode === 'cafe' && popular ? 'primary' : mode === 'homecafe' ? 'success' : 'default'
   
   return (
     <Link href={TASTING_MODES_CONFIG[mode].route}>
-      <div
-        className={`
-        relative p-4 md:p-6 rounded-2xl border-2 transition-all duration-300 cursor-pointer group
-        hover:shadow-xl md:hover:scale-105 md:hover:-translate-y-1
-        ${styles.bgGradient} ${styles.borderColor} ${styles.hoverBorder}
-        ${popular ? 'shadow-lg ring-2 ring-offset-2 ring-blue-200' : ''}
-      `}
+      <Card 
+        variant={popular ? 'elevated' : 'bordered'}
+        hover
+        className="h-full relative"
       >
         {/* 배지 */}
         {badge && (
-          <div
-            className={`
-            absolute -top-3 -right-3 px-3 py-1 rounded-full text-xs font-semibold shadow-md
-            ${styles.badgeBg} ${styles.badgeText}
-          `}
-          >
-            {badge}
+          <div className="absolute -top-3 -right-3">
+            <Badge variant={badgeVariant} size="medium">
+              {badge}
+            </Badge>
           </div>
         )}
 
-        {/* 아이콘 및 제목 */}
-        <div className="flex items-center mb-4">
-          <div
-            className={`
-            p-3 rounded-xl mr-4 group-hover:scale-110 transition-transform shadow-lg
-            ${styles.iconBg} ${styles.iconText}
-          `}
-          >
-            {icon}
-          </div>
-          <div>
-            <h3 className="text-xl font-bold text-neutral-800">{title}</h3>
-            <p className="text-neutral-600 text-sm">{description}</p>
-          </div>
-        </div>
-
-      {/* 소요 시간 */}
-      <div className="flex items-center mb-4 text-neutral-500">
-        <Clock className="h-4 w-4 mr-2" />
-        <span className="text-sm">{duration}</span>
-      </div>
-
-        {/* 주요 기능 */}
-        <div className="space-y-2">
-          {features.map((feature, index) => (
-            <div key={index} className="flex items-center text-sm text-neutral-700">
-              <div className={`w-1.5 h-1.5 rounded-full mr-3 ${styles.dotColor}`} />
-              {feature}
+        <CardContent>
+          {/* 아이콘 및 제목 */}
+          <div className="flex items-center mb-4">
+            <div className="p-3 rounded-xl mr-4 bg-coffee-500/10 text-coffee-500 shadow-sm">
+              {icon}
             </div>
-          ))}
-        </div>
-
-        {/* 호버 효과 */}
-        <div className="mt-4 pt-4 border-t border-neutral-100/50 opacity-0 group-hover:opacity-100 transition-opacity">
-          <div className={`flex items-center text-sm font-medium ${styles.accentColor}`}>
-            <span>시작하기</span>
-            <svg
-              className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+            <div>
+              <h3 className="text-xl font-bold text-coffee-800">{title}</h3>
+              <p className="text-coffee-600 text-sm">{description}</p>
+            </div>
           </div>
-        </div>
-      </div>
+
+          {/* 소요 시간 */}
+          <div className="flex items-center mb-4 text-coffee-500">
+            <Clock className="h-4 w-4 mr-2" />
+            <span className="text-sm">{duration}</span>
+          </div>
+
+          {/* 주요 기능 */}
+          <div className="space-y-2">
+            {features.map((feature, index) => (
+              <div key={index} className="flex items-center text-sm text-coffee-700">
+                <div className="w-1.5 h-1.5 rounded-full mr-3 bg-coffee-500" />
+                {feature}
+              </div>
+            ))}
+          </div>
+
+          {/* 호버 효과 */}
+          <div className="mt-4 pt-4 border-t border-coffee-100/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <div className="flex items-center text-sm font-medium text-coffee-500">
+              <span>시작하기</span>
+              <svg
+                className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-200"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </Link>
   )
 }
@@ -152,28 +121,37 @@ export default function ModeSelectionPage() {
 
   return (
     // <ProtectedRoute> {/* 임시로 비활성화 - 게스트 사용자 테스트를 위해 */}
-      <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
-        <div className="container mx-auto px-4 py-4 md:py-8 max-w-4xl pb-20 md:pb-8">
-          <Navigation showBackButton currentPage="record" />
-          
-          {/* 게스트 모드 표시 */}
-          {!user && (
-            <GuestModeIndicator 
-              variant="banner" 
-              onLoginClick={() => openAuthModal('login')}
-              className="mb-6"
-            />
-          )}
+    <>
+      <Navigation showBackButton currentPage="record" />
+      <PageLayout
+        title={UI_LABELS.record.selectMode}
+        description={UI_LABELS.tips.selectMode}
+        showHeader={false}
+      >
+        
+        {/* 게스트 모드 표시 */}
+        {!user && (
+          <GuestModeIndicator 
+            variant="banner" 
+            onLoginClick={() => openAuthModal('login')}
+            className="mb-6"
+          />
+        )}
 
-          {/* 헤더 */}
-          <div className="text-center mb-8 md:mb-12">
-            <h1 className="text-2xl md:text-4xl font-bold text-neutral-800 mb-3 md:mb-4">
+        {/* 헤더 - 하이브리드 디자인 */}
+        <div className="text-center mb-8 md:mb-12">
+          <div className="inline-flex items-center space-x-2 mb-3">
+            <div className="w-10 h-10 bg-gradient-to-r from-coffee-400 to-coffee-500 rounded-xl flex items-center justify-center shadow-lg">
+              <Coffee className="h-5 w-5 text-white" />
+            </div>
+            <h1 className="text-2xl md:text-3xl font-bold text-coffee-800">
               {UI_LABELS.record.selectMode}
             </h1>
-            <p className="text-base md:text-xl text-neutral-600 max-w-2xl mx-auto px-4">
-              {UI_LABELS.tips.selectMode}
-            </p>
           </div>
+          <p className="text-base md:text-lg text-coffee-600 max-w-2xl mx-auto px-4">
+            {UI_LABELS.tips.selectMode}
+          </p>
+        </div>
 
           {/* 모드 카드들 */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
@@ -235,56 +213,41 @@ export default function ModeSelectionPage() {
 
           {/* 모드 카테고리 설명 */}
           <div className="mt-8 grid md:grid-cols-2 gap-4">
-            <div className="bg-gradient-to-br from-blue-50 to-sky-50 rounded-xl p-6 border-2 border-blue-200">
-              <h4 className="font-bold text-blue-800 mb-2 flex items-center">
-                <div className="p-2 bg-gradient-to-br from-blue-400 to-sky-500 text-white rounded-lg mr-2">
-                  <Coffee className="h-5 w-5" />
-                </div>
-                카페에서 마신 커피
-              </h4>
-              <p className="text-blue-700 text-sm">
-                <strong>Cafe Mode</strong>: {UI_LABELS.tips.cafeMode}
-              </p>
-            </div>
+            <Alert variant="info" title="카페에서 마신 커피">
+              <strong>Cafe Mode</strong>: {UI_LABELS.tips.cafeMode}
+            </Alert>
             
-            <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border-2 border-green-200">
-              <h4 className="font-bold text-green-800 mb-2 flex items-center">
-                <div className="p-2 bg-gradient-to-br from-green-400 to-emerald-500 text-white rounded-lg mr-2">
-                  <Home className="h-5 w-5" />
-                </div>
-                직접 내린 커피
-              </h4>
-              <p className="text-green-700 text-sm">
-                <strong>HomeCafe Mode</strong>: {UI_LABELS.tips.homecafeMode}
-              </p>
-            </div>
+            <Alert variant="success" title="직접 내린 커피">
+              <strong>HomeCafe Mode</strong>: {UI_LABELS.tips.homecafeMode}
+            </Alert>
           </div>
 
-          {/* 하단 안내 */}
-          <div className="mt-8 md:mt-16 bg-white rounded-2xl p-6 md:p-8 border border-neutral-200">
-            <div className="text-center">
-              <div className="flex justify-center mb-4">
-                <div className="p-3 bg-neutral-100 rounded-full">
-                  <TrendingUp className="h-6 w-6 text-neutral-600" />
+          {/* 하단 안내 - 하이브리드 디자인 */}
+          <Card variant="default" className="mt-8 md:mt-16">
+            <CardContent>
+              <div className="text-center">
+                <div className="flex justify-center mb-4">
+                  <div className="p-3 bg-coffee-100/80 rounded-xl shadow-sm">
+                    <TrendingUp className="h-6 w-6 text-coffee-600" />
+                  </div>
+                </div>
+                <h3 className="text-lg font-semibold text-coffee-800 mb-2">처음이신가요?</h3>
+                <p className="text-coffee-600 mb-4">
+                  카페 모드로 가볍게 시작해보세요. 익숙해지면 더 상세한 모드로 도전해보세요!
+                </p>
+                <div className="flex justify-center space-x-4 text-sm text-coffee-500">
+                  <div className="flex items-center">
+                    <Users className="h-4 w-4 mr-1" />
+                    <span>85% 사용자가 카페 모드 선택</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Coffee className="h-4 w-4 mr-1" />
+                    <span>모든 모드 언제든 변경 가능</span>
+                  </div>
                 </div>
               </div>
-              <h3 className="text-lg font-semibold text-neutral-800 mb-2">처음이신가요?</h3>
-              <p className="text-neutral-600 mb-4">
-                카페 모드로 가볍게 시작해보세요. 익숙해지면 더 상세한 모드로 도전해보세요!
-              </p>
-              <div className="flex justify-center space-x-4 text-sm text-neutral-500">
-                <div className="flex items-center">
-                  <Users className="h-4 w-4 mr-1" />
-                  <span>85% 사용자가 카페 모드 선택</span>
-                </div>
-                <div className="flex items-center">
-                  <Coffee className="h-4 w-4 mr-1" />
-                  <span>모든 모드 언제든 변경 가능</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+            </CardContent>
+          </Card>
         
         {/* 인증 모달 */}
         <AuthModal
@@ -293,7 +256,8 @@ export default function ModeSelectionPage() {
           onSuccess={handleAuthSuccess}
           initialMode={authMode}
         />
-      </div>
+      </PageLayout>
+    </>
     // </ProtectedRoute> {/* 임시로 비활성화 - 게스트 사용자 테스트를 위해 */}
   )
 }

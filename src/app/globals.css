@@ -2,30 +2,62 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Critical CSS for above-the-fold content */
+@layer critical {
+  /* Preload critical fonts */
+  @font-face {
+    font-family: 'Pretendard Variable';
+    font-weight: 100 900;
+    font-display: swap;
+    src: local('Pretendard Variable'),
+         url('/fonts/PretendardVariable.woff2') format('woff2-variations');
+  }
+
+  /* Critical layout styles */
+  .min-h-screen {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  /* Prevent layout shift */
+  img, video {
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: attr(width) / attr(height);
+  }
+
+  /* Smooth scrolling with reduced motion support */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+}
+
 @layer base {
   :root {
-    /* Light theme colors */
-    --color-background: 255 255 255; /* white */
-    --color-background-secondary: 249 250 251; /* gray-50 */
-    --color-background-tertiary: 243 244 246; /* gray-100 */
+    /* Hybrid Design System - Coffee Theme Colors */
+    --color-background: 250 247 242; /* coffee-50 - very light cream */
+    --color-background-secondary: 245 230 211; /* coffee-100 - light latte */
+    --color-background-tertiary: 232 213 190; /* coffee-200 - latte */
     
-    --color-foreground: 17 24 39; /* gray-900 */
-    --color-foreground-secondary: 55 65 81; /* gray-700 */
-    --color-foreground-muted: 107 114 128; /* gray-500 */
+    --color-foreground: 45 21 7; /* coffee-900 - darkest coffee */
+    --color-foreground-secondary: 74 36 11; /* coffee-700 - espresso */
+    --color-foreground-muted: 139 69 19; /* coffee-500 - coffee brown */
     
-    --color-border: 229 231 235; /* gray-200 */
-    --color-border-secondary: 209 213 219; /* gray-300 */
+    --color-border: 232 213 190; /* coffee-200 - latte */
+    --color-border-secondary: 212 184 150; /* coffee-300 - medium latte */
     
-    --color-primary: 167 139 250; /* purple-400 - accent-warm */
-    --color-primary-hover: 139 92 246; /* purple-500 */
+    --color-primary: 139 69 19; /* coffee-500 */
+    --color-primary-hover: 109 52 16; /* coffee-600 */
     --color-primary-foreground: 255 255 255;
     
-    --color-secondary: 243 244 246; /* gray-100 */
-    --color-secondary-hover: 229 231 235; /* gray-200 */
-    --color-secondary-foreground: 55 65 81; /* gray-700 */
+    --color-secondary: 245 230 211; /* coffee-100 */
+    --color-secondary-hover: 232 213 190; /* coffee-200 */
+    --color-secondary-foreground: 74 36 11; /* coffee-700 */
     
-    --color-accent: 167 139 250; /* purple-400 - accent-warm */
-    --color-accent-hover: 139 92 246; /* purple-500 */
+    --color-accent: 139 69 19; /* coffee-500 */
+    --color-accent-hover: 109 52 16; /* coffee-600 */
     --color-accent-foreground: 255 255 255;
     
     --color-destructive: 239 68 68; /* red-500 */
@@ -39,6 +71,23 @@
     --color-warning: 245 158 11; /* amber-500 */
     --color-warning-hover: 217 119 6; /* amber-600 */
     --color-warning-foreground: 255 255 255;
+
+    /* Micro Animation System */
+    --animation-duration-fast: 150ms;
+    --animation-duration-normal: 250ms;
+    --animation-duration-slow: 350ms;
+    --animation-duration-modal: 400ms;
+    
+    --easing-out-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --easing-in-out-gentle: cubic-bezier(0.4, 0, 0.2, 1);
+    --easing-spring: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --easing-bounce: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+    
+    /* Coffee-themed animation values */
+    --coffee-scale-hover: 1.02;
+    --coffee-scale-active: 0.98;
+    --coffee-blur-subtle: 0.5px;
+    --coffee-shadow-elevation: 0 4px 20px -4px rgba(139, 69, 19, 0.15);
   }
 
   .dark {
@@ -213,6 +262,14 @@
   .focus-ring {
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
   }
+  
+  /* Search highlight */
+  mark {
+    background-color: rgba(139, 69, 19, 0.3);
+    color: inherit;
+    padding: 0;
+    border-radius: 2px;
+  }
 }
 
 /* 마이크로인터랙션 애니메이션 */
@@ -356,7 +413,166 @@
   }
   
   .hover-glow:hover {
-    box-shadow: 0 0 20px rgba(111, 78, 55, 0.3);
+    box-shadow: 0 0 20px rgba(139, 69, 19, 0.3);
+  }
+
+  /* Enhanced button interactions */
+  .coffee-button {
+    transition: all var(--animation-duration-fast) var(--easing-out-smooth);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Scale transform utilities */
+  .hover\:scale-102:hover {
+    transform: scale(1.02);
+  }
+
+  .scale-102 {
+    transform: scale(1.02);
+  }
+
+  /* Hybrid design specific styles */
+  .h-18 {
+    height: 4.5rem; /* 72px */
+  }
+
+  /* Glass effect variations */
+  .backdrop-blur-sm {
+    backdrop-filter: blur(4px);
+  }
+  
+  .coffee-button:hover {
+    transform: scale(var(--coffee-scale-hover)) translateY(-1px);
+    box-shadow: 0 8px 25px rgba(139, 69, 19, 0.25);
+  }
+  
+  .coffee-button:active {
+    transform: scale(var(--coffee-scale-active)) translateY(0);
+    box-shadow: 0 4px 15px rgba(139, 69, 19, 0.2);
+  }
+
+  /* Enhanced primary button */
+  .primary-cta {
+    position: relative;
+    background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+    box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+    transition: all 0.2s ease-out;
+  }
+
+  .primary-cta:hover {
+    box-shadow: 0 8px 25px rgba(139, 69, 19, 0.4);
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  .primary-cta:active {
+    transform: translateY(-1px) scale(0.98);
+    box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+  }
+
+  /* Ripple effect for buttons */
+  .button-ripple::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+  }
+
+  .button-ripple:active::after {
+    width: 300px;
+    height: 300px;
+  }
+  
+  .coffee-pulse {
+    animation: coffee-pulse 2s infinite;
+  }
+  
+  @keyframes coffee-pulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
+  }
+  
+  /* Steam animation for coffee icons */
+  @keyframes steam-rise {
+    0% {
+      opacity: 0.7;
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-20px) scale(1.2);
+    }
+  }
+  
+  .steam-effect::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 15px;
+    background: linear-gradient(transparent, rgba(139, 69, 19, 0.3), transparent);
+    border-radius: 50%;
+    animation: steam-rise 3s infinite ease-out;
+  }
+  
+  /* Rating animation */
+  @keyframes star-twinkle {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.8;
+    }
+  }
+  
+  .star-twinkle {
+    animation: star-twinkle 0.6s ease-in-out;
+  }
+  
+  /* Progress animation */
+  @keyframes progress-fill {
+    from {
+      width: 0%;
+    }
+    to {
+      width: var(--progress-width, 100%);
+    }
+  }
+  
+  .progress-animated {
+    animation: progress-fill 1s ease-out;
+  }
+  
+  /* Number counter animation */
+  .number-counter {
+    animation: count-up 1s ease-out;
+  }
+  
+  @keyframes count-up {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 }
 

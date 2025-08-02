@@ -1,6 +1,8 @@
 import { Metadata } from 'next'
 
 import PerformanceDashboard from '../../components/performance/PerformanceDashboard'
+import Navigation from '../../components/Navigation'
+import PageLayout from '../../components/ui/PageLayout'
 
 export const metadata: Metadata = {
   title: '성능 대시보드',
@@ -9,10 +11,11 @@ export const metadata: Metadata = {
 
 export default function PerformancePage() {
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto max-w-7xl">
+    <>
+      <Navigation showBackButton currentPage="settings" />
+      <PageLayout showHeader={false}>
         <PerformanceDashboard />
-      </div>
-    </div>
+      </PageLayout>
+    </>
   )
 }

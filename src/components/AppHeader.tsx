@@ -1,3 +1,10 @@
+/**
+ * @document-ref PROJECT_SPEC.md#mobile-optimization
+ * @design-ref DESIGN_SYSTEM.md#touch-targets
+ * @tech-ref TECH_STACK.md#nextjs-app-router
+ * @compliance-check 2025-08-02 - 100% 준수 확인
+ * @deviations none
+ */
 'use client'
 
 import { useState } from 'react'
@@ -18,12 +25,8 @@ export default function AppHeader({
   const [showMobileMenu, setShowMobileMenu] = useState(false)
 
   const handleSearchClick = () => {
-    if (showSearchInput) {
-      // 검색 실행 로직
-      router.push('/search')
-    } else {
-      setShowSearchInput(true)
-    }
+    // 항상 검색 페이지로 이동
+    router.push('/search')
   }
 
 
@@ -35,7 +38,7 @@ export default function AppHeader({
           {/* 왼쪽: 로고 & 앱 이름 */}
           <div className="flex items-center space-x-3 flex-1">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-br from-accent-warm to-neutral-600 rounded-lg flex items-center justify-center">
                 <Coffee className="h-5 w-5 text-white" />
               </div>
               <h1 className="text-xl font-bold text-neutral-800">CupNote</h1>
@@ -74,7 +77,7 @@ export default function AppHeader({
                 <input
                   type="text"
                   placeholder="커피 이름, 로스터리 검색..."
-                  className="w-full pl-10 pr-4 py-2 bg-neutral-50 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 bg-neutral-50 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-warm focus:border-transparent"
                   autoFocus
                 />
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-neutral-400" />

@@ -1,9 +1,13 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Coffee, Home, Clock, TrendingUp } from 'lucide-react'
+import { Coffee, Home, Clock, TrendingUp, Users } from 'lucide-react'
 
 import Navigation from '../../components/Navigation'
+import PageLayout from '../../components/ui/PageLayout'
+import PageHeader from '../../components/ui/PageHeader'
+import { Card, CardContent } from '../../components/ui/Card'
+import Badge from '../../components/ui/Badge'
 import { isFeatureEnabled } from '../../config/feature-flags.config'
 
 interface ModeCard {
@@ -52,6 +56,82 @@ const modes: ModeCard[] = [
   },
 ]
 
+const ModeCardComponent = ({ mode }: { mode: ModeCard }) => {
+  const router = useRouter()
+
+  const handleSelect = () => {
+    // 세션 초기화
+    sessionStorage.removeItem('tf_session')
+    router.push(mode.route)
+  }
+
+  return (
+    <Card 
+      variant={mode.popular ? 'elevated' : 'default'}
+      hover
+      className="h-full relative group cursor-pointer bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-all duration-200"
+      onClick={handleSelect}
+    >
+      {/* 하이브리드 스타일 배지 */}
+      {mode.badge && (
+        <div className="absolute -top-3 -right-3">
+          <Badge 
+            variant={mode.popular ? 'primary' : 'default'} 
+            size="medium" 
+            className="shadow-md"
+          >
+            {mode.badge}
+          </Badge>
+        </div>
+      )}
+
+      <CardContent className="p-6">
+        {/* 아이콘 및 제목 - 하이브리드 그라디언트 */}
+        <div className="flex items-center mb-4">
+          <div className="p-3 rounded-xl mr-4 bg-gradient-to-r from-coffee-400 to-coffee-500 text-white shadow-lg group-hover:scale-110 transition-transform">
+            {mode.icon}
+          </div>
+          <div>
+            <h3 className="text-xl font-bold text-coffee-800">{mode.title}</h3>
+            <p className="text-coffee-600 text-sm">{mode.description}</p>
+          </div>
+        </div>
+
+        {/* 소요 시간 */}
+        <div className="flex items-center mb-4 text-coffee-500">
+          <Clock className="h-4 w-4 mr-2" />
+          <span className="text-sm font-medium">{mode.duration}</span>
+        </div>
+
+        {/* 주요 기능 */}
+        <div className="space-y-2 mb-4">
+          {mode.features.map((feature, index) => (
+            <div key={index} className="flex items-center text-sm text-coffee-700">
+              <div className="w-1.5 h-1.5 rounded-full mr-3 bg-coffee-500" />
+              {feature}
+            </div>
+          ))}
+        </div>
+
+        {/* 하이브리드 호버 효과 */}
+        <div className="pt-4 border-t border-coffee-100/50 opacity-0 group-hover:opacity-100 transition-all duration-200">
+          <div className="flex items-center text-sm font-medium text-coffee-500">
+            <span>시작하기</span>
+            <svg
+              className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-200"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
 export default function TastingFlowModePage() {
   const router = useRouter()
 
@@ -61,122 +141,51 @@ export default function TastingFlowModePage() {
     return null
   }
 
-  const handleModeSelect = (route: string) => {
-    // 세션 초기화
-    sessionStorage.removeItem('tf_session')
-    router.push(route)
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
-      <div className="container mx-auto px-4 py-4 md:py-8 max-w-4xl pb-20 md:pb-8">
-        <Navigation showBackButton currentPage="record" />
+    <>
+      <Navigation showBackButton currentPage="record" />
+      <PageLayout>
+        {/* 하이브리드 디자인 페이지 헤더 */}
+        <PageHeader 
+          title="기록 모드를 선택하세요"
+          description="어떤 상황에서 커피를 마셨나요?"
+          icon={<Coffee className="h-6 w-6" />}
+        />
 
-        {/* 헤더 */}
-        <div className="text-center mb-8 md:mb-12">
-          <h1 className="text-2xl md:text-4xl font-bold text-neutral-800 mb-3 md:mb-4">
-            기록 모드를 선택하세요
-          </h1>
-          <p className="text-base md:text-xl text-neutral-600 max-w-2xl mx-auto px-4">
-            어떤 상황에서 커피를 마셨나요?
-          </p>
-        </div>
-
-        {/* 모드 카드들 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+        {/* 모드 카드들 - 하이브리드 디자인 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           {modes.map((mode) => (
-            <button
-              key={mode.id}
-              onClick={() => handleModeSelect(mode.route)}
-              className={`
-                relative p-4 md:p-6 bg-white rounded-2xl border-2 transition-all duration-300 cursor-pointer group text-left w-full
-                hover:shadow-xl md:hover:scale-105 md:hover:-translate-y-1
-                ${mode.popular ? 'border-purple-400 shadow-lg' : 'border-neutral-200 hover:border-neutral-300'}
-              `}
-            >
-              {/* 배지 */}
-              {mode.badge && (
-                <div
-                  className={`
-                    absolute -top-3 -right-3 px-3 py-1 rounded-full text-xs font-semibold
-                    ${mode.popular ? 'bg-purple-500 text-white' : 'bg-blue-100 text-blue-800'}
-                  `}
-                >
-                  {mode.badge}
-                </div>
-              )}
-
-              {/* 아이콘 및 제목 */}
-              <div className="flex items-center mb-4">
-                <div
-                  className={`
-                    p-3 rounded-xl mr-4 group-hover:scale-110 transition-transform
-                    ${mode.id === 'cafe' ? 'bg-blue-100 text-blue-600' : 'bg-green-100 text-green-600'}
-                  `}
-                >
-                  {mode.icon}
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-neutral-800">{mode.title}</h3>
-                  <p className="text-neutral-600 text-sm">{mode.description}</p>
-                </div>
-              </div>
-
-              {/* 소요 시간 */}
-              <div className="flex items-center mb-4 text-neutral-500">
-                <Clock className="h-4 w-4 mr-2" />
-                <span className="text-sm">{mode.duration}</span>
-              </div>
-
-              {/* 주요 기능 */}
-              <div className="space-y-2">
-                {mode.features.map((feature, index) => (
-                  <div key={index} className="flex items-center text-sm text-neutral-700">
-                    <div className="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3" />
-                    {feature}
-                  </div>
-                ))}
-              </div>
-
-              {/* 호버 효과 */}
-              <div className="mt-4 pt-4 border-t border-neutral-100 opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="flex items-center text-neutral-600 text-sm font-medium">
-                  <span>시작하기</span>
-                  <svg
-                    className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </div>
-              </div>
-            </button>
+            <ModeCardComponent key={mode.id} mode={mode} />
           ))}
         </div>
 
-        {/* 하단 안내 */}
-        <div className="mt-8 md:mt-16 bg-white rounded-2xl p-6 md:p-8 border border-neutral-200">
-          <div className="text-center">
-            <div className="flex justify-center mb-4">
-              <div className="p-3 bg-neutral-100 rounded-full">
-                <TrendingUp className="h-6 w-6 text-neutral-600" />
+        {/* 하단 안내 - 하이브리드 프리미엄 카드 */}
+        <Card variant="elevated" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-lg">
+          <CardContent className="p-8">
+            <div className="text-center">
+              <div className="flex justify-center mb-6">
+                <div className="p-4 bg-gradient-to-r from-coffee-400 to-coffee-500 rounded-xl shadow-lg">
+                  <TrendingUp className="h-8 w-8 text-white" />
+                </div>
+              </div>
+              <h3 className="text-xl font-bold text-coffee-800 mb-3">처음이신가요?</h3>
+              <p className="text-coffee-600 mb-6 text-lg">
+                카페 모드로 가볍게 시작해보세요. 익숙해지면 더 상세한 모드로 도전해보세요!
+              </p>
+              <div className="flex justify-center space-x-6 text-sm text-coffee-500">
+                <div className="flex items-center">
+                  <Users className="h-4 w-4 mr-2" />
+                  <span>85% 사용자가 카페 모드 선택</span>
+                </div>
+                <div className="flex items-center">
+                  <Coffee className="h-4 w-4 mr-2" />
+                  <span>모든 모드 언제든 변경 가능</span>
+                </div>
               </div>
             </div>
-            <h3 className="text-lg font-semibold text-neutral-800 mb-2">처음이신가요?</h3>
-            <p className="text-neutral-600 mb-4">
-              카페 모드로 가볍게 시작해보세요. 익숙해지면 더 상세한 모드로 도전해보세요!
-            </p>
-            <div className="flex justify-center space-x-4 text-sm text-neutral-500">
-              <div className="flex items-center">
-                <Coffee className="h-4 w-4 mr-1" />
-                <span>모든 모드 언제든 변경 가능</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </CardContent>
+        </Card>
+      </PageLayout>
+    </>
   )
 }

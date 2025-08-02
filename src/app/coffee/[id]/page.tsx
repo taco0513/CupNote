@@ -181,8 +181,8 @@ function InfoItem({ icon, label, value }: { icon: string; label: string; value: 
     <div className="flex items-center space-x-3">
       <span className="text-2xl">{icon}</span>
       <div>
-        <p className="text-sm text-gray-600">{label}</p>
-        <p className="font-medium text-gray-900">{value}</p>
+        <p className="text-sm text-coffee-600">{label}</p>
+        <p className="font-medium text-coffee-800">{value}</p>
       </div>
     </div>
   )

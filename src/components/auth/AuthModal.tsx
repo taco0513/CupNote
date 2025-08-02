@@ -7,6 +7,10 @@ import { X, Eye, EyeOff, Mail, Lock, User } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useNotification } from '../../contexts/NotificationContext'
 import { mapSupabaseError, logError } from '../../lib/error-handler'
+import UnifiedModal from '../ui/UnifiedModal'
+import UnifiedInput from '../ui/UnifiedInput'
+import UnifiedButton from '../ui/UnifiedButton'
+import Alert from '../ui/Alert'
 
 interface AuthModalProps {
   isOpen: boolean
@@ -118,152 +122,129 @@ export default function AuthModal({
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl w-full max-w-md relative">
-        {/* Header */}
-        <div className="p-6 border-b border-gray-100">
-          <button
-            onClick={onClose}
-            className="absolute top-6 right-6 text-gray-400 hover:text-gray-600"
-          >
-            <X size={24} />
-          </button>
-          <h2 className="text-2xl font-bold text-gray-900">
-            {mode === 'login' ? '로그인' : '회원가입'}
-          </h2>
-          <p className="text-gray-600 mt-1">
-            {mode === 'login'
-              ? 'CupNote에 다시 오신 것을 환영합니다'
-              : 'CupNote와 함께 커피 여정을 시작하세요'}
-          </p>
+    <UnifiedModal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={mode === 'login' ? '로그인' : '회원가입'}
+      size="small"
+    >
+      <div className="mb-4">
+        <p className="text-coffee-600">
+          {mode === 'login'
+            ? 'CupNote에 다시 오신 것을 환영합니다'
+            : 'CupNote와 함께 커피 여정을 시작하세요'}
+        </p>
+      </div>
+
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {error && (
+          <Alert variant="error" onClose={() => setError('')}>
+            {error}
+          </Alert>
+        )}
+
+        {/* Username (회원가입 시에만) */}
+        {mode === 'signup' && (
+          <UnifiedInput
+            label="사용자명"
+            icon={<User size={20} />}
+            value={formData.username}
+            onChange={e => handleInputChange('username', e.target.value)}
+            placeholder="사용자명을 입력하세요"
+            required
+            fullWidth
+          />
+        )}
+
+        {/* Email */}
+        <UnifiedInput
+          label="이메일"
+          icon={<Mail size={20} />}
+          type="email"
+          value={formData.email}
+          onChange={e => handleInputChange('email', e.target.value)}
+          placeholder="이메일을 입력하세요"
+          required
+          fullWidth
+        />
+
+        {/* Password */}
+        <div>
+          <label className="block text-sm font-medium text-coffee-700 mb-1">비밀번호</label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-coffee-400">
+              <Lock size={20} />
+            </div>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              value={formData.password}
+              onChange={e => handleInputChange('password', e.target.value)}
+              className="block w-full pl-10 pr-10 px-3 py-2 bg-white/80 backdrop-blur-sm border border-coffee-200/50 rounded-xl text-coffee-900 placeholder-coffee-400 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-coffee-500 focus:border-coffee-500 shadow-sm focus:shadow-md transition-all duration-200"
+              placeholder="비밀번호를 입력하세요"
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-coffee-400 hover:text-coffee-600 transition-colors"
+            >
+              {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-              <p className="text-red-600 text-sm">{error}</p>
-            </div>
-          )}
-
-          {/* Username (회원가입 시에만) */}
-          {mode === 'signup' && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">사용자명</label>
-              <div className="relative">
-                <User
-                  size={20}
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                />
-                <input
-                  type="text"
-                  value={formData.username}
-                  onChange={e => handleInputChange('username', e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                  placeholder="사용자명을 입력하세요"
-                  required
-                />
+        {/* Confirm Password (회원가입 시에만) */}
+        {mode === 'signup' && (
+          <div>
+            <label className="block text-sm font-medium text-coffee-700 mb-1">비밀번호 확인</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-coffee-400">
+                <Lock size={20} />
               </div>
-            </div>
-          )}
-
-          {/* Email */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">이메일</label>
-            <div className="relative">
-              <Mail
-                size={20}
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              />
               <input
-                type="email"
-                value={formData.email}
-                onChange={e => handleInputChange('email', e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                placeholder="이메일을 입력하세요"
-                required
-              />
-            </div>
-          </div>
-
-          {/* Password */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">비밀번호</label>
-            <div className="relative">
-              <Lock
-                size={20}
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              />
-              <input
-                type={showPassword ? 'text' : 'password'}
-                value={formData.password}
-                onChange={e => handleInputChange('password', e.target.value)}
-                className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                placeholder="비밀번호를 입력하세요"
+                type={showConfirmPassword ? 'text' : 'password'}
+                value={formData.confirmPassword}
+                onChange={e => handleInputChange('confirmPassword', e.target.value)}
+                className="block w-full pl-10 pr-10 px-3 py-2 bg-white/80 backdrop-blur-sm border border-coffee-200/50 rounded-xl text-coffee-900 placeholder-coffee-400 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-coffee-500 focus:border-coffee-500 shadow-sm focus:shadow-md transition-all duration-200"
+                placeholder="비밀번호를 다시 입력하세요"
                 required
               />
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-coffee-400 hover:text-coffee-600 transition-colors"
               >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
               </button>
             </div>
           </div>
+        )}
 
-          {/* Confirm Password (회원가입 시에만) */}
-          {mode === 'signup' && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">비밀번호 확인</label>
-              <div className="relative">
-                <Lock
-                  size={20}
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                />
-                <input
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  value={formData.confirmPassword}
-                  onChange={e => handleInputChange('confirmPassword', e.target.value)}
-                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                  placeholder="비밀번호를 다시 입력하세요"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
-              </div>
-            </div>
-          )}
+        {/* Submit Button */}
+        <UnifiedButton
+          type="submit"
+          variant="primary"
+          fullWidth
+          loading={loading}
+        >
+          {mode === 'login' ? '로그인' : '회원가입'}
+        </UnifiedButton>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-amber-500 hover:bg-amber-600 disabled:bg-gray-300 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
-          >
-            {loading ? '처리중...' : mode === 'login' ? '로그인' : '회원가입'}
-          </button>
-
-          {/* Toggle Mode */}
-          <div className="text-center pt-4 border-t border-gray-100">
-            <p className="text-gray-600">
-              {mode === 'login' ? '아직 계정이 없으신가요?' : '이미 계정이 있으신가요?'}
-              <button
-                type="button"
-                onClick={toggleMode}
-                className="text-amber-600 hover:text-amber-700 font-medium ml-1"
-              >
-                {mode === 'login' ? '회원가입' : '로그인'}
-              </button>
-            </p>
-          </div>
-        </form>
-      </div>
-    </div>
+        {/* Toggle Mode */}
+        <div className="text-center pt-4 border-t border-coffee-100/50">
+          <p className="text-coffee-600">
+            {mode === 'login' ? '아직 계정이 없으신가요?' : '이미 계정이 있으신가요?'}
+            <button
+              type="button"
+              onClick={toggleMode}
+              className="text-coffee-500 hover:text-coffee-600 font-medium ml-1 transition-colors"
+            >
+              {mode === 'login' ? '회원가입' : '로그인'}
+            </button>
+          </p>
+        </div>
+      </form>
+    </UnifiedModal>
   )
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { BarChart3, TrendingUp, Coffee, Calendar, MapPin, Award, Star } from 'lucide-react'
+import { BarChart3, TrendingUp, Coffee, Calendar, Award, Star } from 'lucide-react'
 
 import { CoffeeRecord } from '../../types/coffee'
 import { QueryOptimizer } from '../../lib/query-optimizer'
