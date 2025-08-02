@@ -96,25 +96,36 @@ export default function MobileNavigation() {
                 href={item.href}
                 className={`
                   flex flex-col items-center justify-center space-y-1 relative
+                  transition-all duration-200 ease-out touch-target
                   ${isRecordButton 
-                    ? 'text-primary-foreground' 
+                    ? 'text-primary-foreground hover-scale' 
                     : active 
                       ? 'text-foreground' 
-                      : 'text-foreground-muted'
+                      : 'text-foreground-muted hover:text-foreground'
                   }
+                  ${!isRecordButton ? 'hover:scale-105 active:scale-95' : ''}
                 `}
               >
                 {isRecordButton && (
-                  <div className="absolute inset-2 bg-primary rounded-xl shadow-lg" />
+                  <div className="absolute inset-2 bg-primary rounded-xl shadow-lg hover-glow transition-all duration-200" />
                 )}
                 <div
-                  className={`relative ${active && !isRecordButton ? 'scale-110' : ''} transition-transform`}
+                  className={`relative transition-all duration-200 ${
+                    active && !isRecordButton ? 'scale-110 animate-bounce-once' : ''
+                  }`}
                 >
                   {item.icon}
                 </div>
-                <span className={`text-xs relative ${active ? 'font-medium' : ''}`}>
+                <span className={`text-xs relative transition-all duration-200 ${
+                  active ? 'font-medium transform scale-105' : ''
+                }`}>
                   {item.label}
                 </span>
+                
+                {/* 활성 상태 인디케이터 */}
+                {active && !isRecordButton && (
+                  <div className="absolute -top-1 w-1 h-1 bg-primary rounded-full animate-pulse" />
+                )}
               </Link>
             )
           })}
