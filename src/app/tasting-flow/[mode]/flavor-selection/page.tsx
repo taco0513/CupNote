@@ -116,17 +116,31 @@ const FLAVOR_CATEGORIES = {
       }
     }
   },
+  sour_fermented: {
+    name: '신맛/발효',
+    color: 'bg-yellow-100 border-yellow-300 text-yellow-800',
+    subcategories: {
+      sour: {
+        name: '신맛',
+        flavors: ['사워체리', '타마린드', '라임', '식초', '유산균']
+      },
+      fermented: {
+        name: '발효',
+        flavors: ['와인', '위스키', '브랜디', '럼', '사과주']
+      }
+    }
+  },
   other: {
     name: '기타',
     color: 'bg-gray-100 border-gray-300 text-gray-800',
     subcategories: {
-      fermented: {
-        name: '발효',
-        flavors: ['와인', '위스키', '브랜디', '럼']
-      },
       chemical: {
         name: '화학적',
-        flavors: ['메디신', '이오드', '고무', '페놀']
+        flavors: ['메디신', '이오드', '고무', '페놀', '암모니아']
+      },
+      earthy: {
+        name: '흙냄새',
+        flavors: ['흙', '버섯', '습한 나무', '곰팡이']
       }
     }
   }
@@ -273,6 +287,69 @@ export default function FlavorSelectionPage() {
             </p>
           </div>
 
+          {/* 검색 바 */}
+          <div className="mb-6">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="향미 검색 (예: 베리, 초콜릿, 시트러스)"
+                className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              )}
+            </div>
+            
+            {/* 검색 결과 */}
+            {searchQuery && searchFlavors().length > 0 && (
+              <div className="mt-4 p-4 bg-gray-50 rounded-xl">
+                <h4 className="text-sm font-medium text-gray-700 mb-3">
+                  검색 결과 ({searchFlavors().length}개)
+                </h4>
+                <div className="space-y-2">
+                  {searchFlavors().map((result, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        handleFlavorToggle(result.flavor)
+                        setSearchQuery('')
+                      }}
+                      disabled={selectedFlavors.length >= maxFlavors && !selectedFlavors.includes(result.flavor)}
+                      className={`w-full text-left p-3 rounded-lg border transition-all ${
+                        selectedFlavors.includes(result.flavor)
+                          ? 'border-coffee-600 bg-coffee-50'
+                          : selectedFlavors.length >= maxFlavors
+                          ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                          : 'border-gray-200 hover:border-coffee-400 hover:bg-coffee-50'
+                      }`}
+                    >
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium">{result.flavor}</span>
+                        <span className="text-sm text-gray-500">
+                          {result.category} › {result.subcategory}
+                        </span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {searchQuery && searchFlavors().length === 0 && (
+              <div className="mt-4 p-4 bg-gray-50 rounded-xl text-center text-gray-500">
+                "{searchQuery}"에 대한 검색 결과가 없습니다
+              </div>
+            )}
+          </div>
+
           {/* 선택된 향미 표시 */}
           {selectedFlavors.length > 0 && (
             <div className="mb-8 p-4 bg-coffee-50 rounded-xl border border-coffee-200">
@@ -286,47 +363,6 @@ export default function FlavorSelectionPage() {
                   >
                     {flavor}
                     <X className="h-3 w-3 ml-1" />
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* 검색 */}
-          <div className="mb-6">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="향미 검색 (예: 블루베리, 초콜릿)"
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent"
-              />
-            </div>
-          </div>
-
-          {/* 검색 결과 */}
-          {searchQuery && searchResults.length > 0 && (
-            <div className="mb-8">
-              <h3 className="text-lg font-medium text-coffee-800 mb-4">검색 결과</h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                {searchResults.map((result) => (
-                  <button
-                    key={result.flavor}
-                    onClick={() => handleFlavorToggle(result.flavor)}
-                    disabled={!selectedFlavors.includes(result.flavor) && selectedFlavors.length >= maxFlavors}
-                    className={`p-3 rounded-xl border-2 transition-all text-center disabled:opacity-50 disabled:cursor-not-allowed ${
-                      selectedFlavors.includes(result.flavor)
-                        ? 'border-coffee-500 bg-coffee-50 text-coffee-800'
-                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                    }`}
-                  >
-                    <div className="text-sm font-medium">{result.flavor}</div>
-                    <div className="text-xs text-gray-500 mt-1">{result.category}</div>
-                    {selectedFlavors.includes(result.flavor) && (
-                      <Check className="h-4 w-4 mx-auto mt-1 text-coffee-600" />
-                    )}
                   </button>
                 ))}
               </div>

@@ -108,6 +108,7 @@ export default function AchievementNotification({
                 </span>
               </div>
               
+              {/* Title reward - currently not supported in achievement.ts type
               {achievement.reward?.type === 'title' && (
                 <div className="flex items-center space-x-2 px-4 py-2 bg-purple-100 rounded-full">
                   <Gift className="h-4 w-4 text-purple-600" />
@@ -115,7 +116,7 @@ export default function AchievementNotification({
                     새 타이틀 획득
                   </span>
                 </div>
-              )}
+              )} */}
             </div>
 
             {/* 액션 버튼 */}

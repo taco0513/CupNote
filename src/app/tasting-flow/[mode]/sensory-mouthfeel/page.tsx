@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
-import { ArrowRight, ArrowLeft, BarChart3, Skip, Info, CheckCircle, X } from 'lucide-react'
+import { ArrowRight, ArrowLeft, BarChart3, FastForward, Info, CheckCircle, X } from 'lucide-react'
 
 import Navigation from '../../../../components/Navigation'
 import { isFeatureEnabled } from '../../../../config/feature-flags.config'
@@ -138,10 +138,10 @@ export default function SensoryMouthFeelPage() {
     const items = Object.entries(ratings)
     const strengths = items.filter(([_, rating]) => rating >= 4).map(([id]) => 
       EVALUATION_ITEMS.find(item => item.id === id)?.name.split(' ')[0]
-    )
+    ).filter((item): item is string => item !== undefined)
     const weaknesses = items.filter(([_, rating]) => rating <= 2).map(([id]) => 
       EVALUATION_ITEMS.find(item => item.id === id)?.name.split(' ')[0]
-    )
+    ).filter((item): item is string => item !== undefined)
     return { strengths, weaknesses }
   }
 
@@ -222,7 +222,7 @@ export default function SensoryMouthFeelPage() {
                 onClick={handleSkip}
                 className="text-sm text-coffee-600 hover:text-coffee-800 transition-colors flex items-center"
               >
-                <Skip className="h-4 w-4 mr-1" />
+                <FastForward className="h-4 w-4 mr-1" />
                 건너뛰기
               </button>
               <div className="text-sm text-coffee-600">
@@ -395,7 +395,7 @@ export default function SensoryMouthFeelPage() {
             onClick={handleSkip}
             className="flex-1 py-4 px-6 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors text-lg font-medium flex items-center justify-center"
           >
-            <Skip className="h-5 w-5 mr-2" />
+            <FastForward className="h-5 w-5 mr-2" />
             건너뛰기
           </button>
           <button

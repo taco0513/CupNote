@@ -41,14 +41,7 @@ Sentry.init({
   // 통합 설정
   integrations: [
     // HTTP 요청 추적
-    Sentry.httpIntegration({
-      tracing: {
-        // Supabase API 호출 추적
-        shouldCreateSpanForRequest: (url) => {
-          return url.includes('supabase') || url.includes('/api/')
-        }
-      }
-    })
+    Sentry.httpIntegration()
   ],
   
   // 성능 트레이싱 설정

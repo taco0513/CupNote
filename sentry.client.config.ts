@@ -49,9 +49,6 @@ Sentry.init({
     return event
   },
   
-  // 네트워크 에러 추적
-  captureUnhandledRejections: true,
-  
   // 성능 모니터링 설정
   beforeSendTransaction(event) {
     // 너무 짧은 트랜잭션은 제외

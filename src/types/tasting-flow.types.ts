@@ -108,7 +108,7 @@ export interface Achievement {
   icon: string
   rarity: 'bronze' | 'silver' | 'gold' | 'platinum'
   points: number
-  condition: (stats: UserStatistics, newTasting?: TastingFlowData) => boolean
+  condition: (stats: UserStatistics, newTasting?: TastingSession) => boolean
 }
 
 export interface AchievementUnlock {

@@ -218,7 +218,7 @@ export default function StatsPage() {
         // 1. Supabase에서 로드 (로그인된 경우)
         try {
           console.log('Trying to load from Supabase...')
-          const supabaseRecords = await SupabaseStorage.getAllRecords()
+          const supabaseRecords = await SupabaseStorage.getRecords()
           if (supabaseRecords && supabaseRecords.length > 0) {
             console.log(`Found ${supabaseRecords.length} records in Supabase`)
             allRecords = [...allRecords, ...supabaseRecords]
@@ -230,7 +230,7 @@ export default function StatsPage() {
         // 2. IndexedDB에서 로드 (게스트 모드 또는 오프라인 데이터)
         try {
           console.log('Loading from IndexedDB...')
-          const offlineRecords = await offlineStorage.getAllRecords()
+          const offlineRecords = await offlineStorage.getRecords('guest')
           if (offlineRecords && offlineRecords.length > 0) {
             console.log(`Found ${offlineRecords.length} records in IndexedDB`)
             // 중복 제거 (ID 기준)
@@ -252,7 +252,7 @@ export default function StatsPage() {
               console.log(`Found ${parsedRecords.length} records in localStorage`)
               // 중복 제거
               const existingIds = new Set(allRecords.map(r => r.id))
-              const uniqueLegacyRecords = parsedRecords.filter(r => !existingIds.has(r.id))
+              const uniqueLegacyRecords = parsedRecords.filter((r: any) => !existingIds.has(r.id))
               allRecords = [...allRecords, ...uniqueLegacyRecords]
             }
           }

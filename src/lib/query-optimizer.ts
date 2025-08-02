@@ -97,7 +97,7 @@ export class QueryOptimizer {
       // 게스트 모드이거나 추가 데이터가 필요한 경우 IndexedDB에서도 가져오기
       try {
         const { offlineStorage } = await import('./offline-storage')
-        const offlineRecords = await offlineStorage.getAllRecords()
+        const offlineRecords = await offlineStorage.getRecords('guest')
         
         if (offlineRecords && offlineRecords.length > 0) {
           // 중복 제거 (Supabase 데이터와 중복되지 않도록)

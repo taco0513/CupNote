@@ -26,8 +26,8 @@ export default function AchievementCard({ achievement, showProgress = true }: Ac
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'tasting': return 'bg-coffee-100 text-coffee-800'
-      case 'expertise': return 'bg-blue-100 text-blue-800'
+      case 'milestone': return 'bg-coffee-100 text-coffee-800'
+      case 'quality': return 'bg-blue-100 text-blue-800'
       case 'exploration': return 'bg-green-100 text-green-800'
       case 'consistency': return 'bg-orange-100 text-orange-800'
       case 'special': return 'bg-purple-100 text-purple-800'
@@ -59,9 +59,9 @@ export default function AchievementCard({ achievement, showProgress = true }: Ac
               {achievement.title}
             </h3>
             <span className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(achievement.category)}`}>
-              {achievement.category === 'tasting' && '테이스팅'}
-              {achievement.category === 'expertise' && '전문성'}
+              {achievement.category === 'milestone' && '마일스톤'}
               {achievement.category === 'exploration' && '탐험'}
+              {achievement.category === 'quality' && '품질'}
               {achievement.category === 'consistency' && '꾸준함'}
               {achievement.category === 'special' && '특별'}
             </span>
@@ -114,9 +114,9 @@ export default function AchievementCard({ achievement, showProgress = true }: Ac
         <div className="mt-4 pt-4 border-t border-gray-200">
           <p className="text-xs text-gray-500">
             {achievement.condition.type === 'count' && `${achievement.condition.target}회 달성`}
+            {achievement.condition.type === 'rating' && `평점 ${achievement.condition.target}점 이상`}
             {achievement.condition.type === 'variety' && `${achievement.condition.target}가지 종류`}
             {achievement.condition.type === 'streak' && `${achievement.condition.target}일 연속`}
-            {achievement.condition.type === 'match_score' && `Match Score ${achievement.condition.value}점 이상`}
             {achievement.condition.type === 'special' && '특별 조건 달성'}
           </p>
         </div>

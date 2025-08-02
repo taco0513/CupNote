@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
-import { ArrowRight, ArrowLeft, Edit3, Clock, Info } from 'lucide-react'
+import { ArrowRight, ArrowLeft, Edit3, Clock, Info, CheckCircle, Loader2 } from 'lucide-react'
 
 import Navigation from '../../../../components/Navigation'
 import { isFeatureEnabled } from '../../../../config/feature-flags.config'
@@ -43,11 +43,14 @@ export default function PersonalNotesPage() {
   const [selectedQuickInputs, setSelectedQuickInputs] = useState<string[]>([])
   const [selectedEmotions, setSelectedEmotions] = useState<string[]>([])
   const [currentTime, setCurrentTime] = useState('')
+  const [lastSavedTime, setLastSavedTime] = useState<Date | null>(null)
+  const [isSaving, setIsSaving] = useState(false)
 
   // 자동 저장 타이머
   useEffect(() => {
     const interval = setInterval(() => {
-      if (noteText.trim()) {
+      if (noteText.trim() || selectedQuickInputs.length > 0 || selectedEmotions.length > 0) {
+        setIsSaving(true)
         // 10초마다 자동 저장 (실제로는 sessionStorage에 임시 저장)
         const tempData = {
           noteText: noteText.trim(),
@@ -56,11 +59,28 @@ export default function PersonalNotesPage() {
           savedAt: new Date().toISOString()
         }
         sessionStorage.setItem('tf_temp_notes', JSON.stringify(tempData))
+        
+        setTimeout(() => {
+          setIsSaving(false)
+          setLastSavedTime(new Date())
+        }, 500) // 저장 애니메이션을 위한 짧은 딜레이
       }
     }, 10000)
 
     return () => clearInterval(interval)
   }, [noteText, selectedQuickInputs, selectedEmotions])
+
+  // 저장 시간 업데이트 타이머
+  useEffect(() => {
+    const timer = setInterval(() => {
+      // 매초마다 컴포넌트를 리렌더링하여 저장 시간을 업데이트
+      if (lastSavedTime) {
+        setCurrentTime(prev => prev) // 강제 리렌더링
+      }
+    }, 1000)
+
+    return () => clearInterval(timer)
+  }, [lastSavedTime])
 
   // 세션 로드 및 검증
   useEffect(() => {
@@ -221,7 +241,21 @@ export default function PersonalNotesPage() {
                 rows={5}
               />
               <div className="flex justify-between items-center mt-2">
-                <p className="text-xs text-gray-500">10초마다 자동 저장됩니다</p>
+                <div className="flex items-center text-xs text-gray-500">
+                  {isSaving ? (
+                    <>
+                      <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                      저장 중...
+                    </>
+                  ) : lastSavedTime ? (
+                    <>
+                      <CheckCircle className="h-3 w-3 mr-1 text-green-500" />
+                      {Math.floor((new Date().getTime() - lastSavedTime.getTime()) / 1000)}초 전 저장됨
+                    </>
+                  ) : (
+                    '10초마다 자동 저장됩니다'
+                  )}
+                </div>
                 <div className={`text-xs ${
                   getCharacterCount() > maxCharacters * 0.9 
                     ? 'text-red-500' 

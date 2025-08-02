@@ -38,11 +38,11 @@ export default function HomePage() {
         const { SupabaseStorage } = await import('../lib/supabase-storage')
         const { offlineStorage } = await import('../lib/offline-storage')
         
-        let allRecords = []
+        let allRecords: any[] = []
         
         // Supabase에서 로드 (로그인된 경우)
         try {
-          const supabaseRecords = await SupabaseStorage.getAllRecords()
+          const supabaseRecords = await SupabaseStorage.getRecords()
           if (supabaseRecords) {
             allRecords = [...allRecords, ...supabaseRecords]
           }
@@ -52,7 +52,7 @@ export default function HomePage() {
         
         // IndexedDB에서 로드 (게스트 모드)
         try {
-          const offlineRecords = await offlineStorage.getAllRecords()
+          const offlineRecords = await offlineStorage.getRecords(user?.id || 'guest')
           if (offlineRecords) {
             // 중복 제거
             const existingIds = new Set(allRecords.map(r => r.id))

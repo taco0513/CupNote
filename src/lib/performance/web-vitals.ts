@@ -86,8 +86,8 @@ function getCustomMetrics() {
   return {
     domContentLoaded: navigation?.domContentLoadedEventEnd - navigation?.domContentLoadedEventStart || 0,
     firstPaint: paint.find(entry => entry.name === 'first-paint')?.startTime || 0,
-    domComplete: navigation?.domComplete - navigation?.navigationStart || 0,
-    loadComplete: navigation?.loadEventEnd - navigation?.navigationStart || 0
+    domComplete: navigation?.domComplete - navigation?.startTime || 0,
+    loadComplete: navigation?.loadEventEnd - navigation?.startTime || 0
   }
 }
 
@@ -131,7 +131,7 @@ class PerformanceStore {
       userAgent: navigator.userAgent,
       metrics: {
         cls: this.metrics.get('CLS') || null,
-        fid: this.metrics.get('FID') || null,
+        inp: this.metrics.get('INP') || null,
         fcp: this.metrics.get('FCP') || null,
         lcp: this.metrics.get('LCP') || null,
         ttfb: this.metrics.get('TTFB') || null

@@ -125,7 +125,7 @@ export default function BrewTimer({ dripper, totalWaterAmount, onTimerComplete, 
   const [isPaused, setIsPaused] = useState(false)
   const [lapTimes, setLapTimes] = useState<LapTime[]>([])
   const [currentPhase, setCurrentPhase] = useState(0)
-  const intervalRef = useRef<NodeJS.Timeout>()
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
   const phases = POURING_GUIDES[dripper] || []
   const currentPhaseData = phases[currentPhase]
