@@ -8,7 +8,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Search, Bell, User, Settings, Menu, X, Coffee, TrendingUp } from 'lucide-react'
+import { Search, Bell, User, Settings, Menu, X, Coffee, TrendingUp, HelpCircle, LogOut } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 
@@ -19,7 +19,7 @@ interface AppHeaderProps {
 export default function AppHeader({ 
   showSearch = true
 }: AppHeaderProps) {
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
   const router = useRouter()
   const [showSearchInput, setShowSearchInput] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
@@ -27,6 +27,16 @@ export default function AppHeader({
   const handleSearchClick = () => {
     // 항상 검색 페이지로 이동
     router.push('/search')
+  }
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+      setShowMobileMenu(false)
+      router.push('/')
+    } catch (error) {
+      console.error('로그아웃 오류:', error)
+    }
   }
 
 
@@ -45,26 +55,29 @@ export default function AppHeader({
             </div>
           </div>
 
-          {/* 오른쪽: 에센셜 버튼들만 */}
-          <div className="flex items-center space-x-2">
-            {/* 검색 버튼 */}
-            {showSearch && (
-              <button
-                onClick={handleSearchClick}
-                className="p-2 rounded-lg hover:bg-neutral-50 active:bg-neutral-100 transition-colors"
-                aria-label="검색"
-              >
-                <Search className="h-5 w-5 text-neutral-600" />
-              </button>
-            )}
-
-            {/* 햄버거 메뉴 */}
+          {/* 오른쪽: 프로필 버튼만 */}
+          <div className="flex items-center">
+            {/* 프로필 버튼 */}
             <button
               onClick={() => setShowMobileMenu(true)}
-              className="p-2 rounded-lg hover:bg-neutral-50 active:bg-neutral-100 transition-colors"
-              aria-label="메뉴"
+              className="p-2 rounded-lg hover:bg-coffee-50/80 active:bg-coffee-100/80 transition-colors"
+              aria-label="프로필 메뉴"
             >
-              <Menu className="h-5 w-5 text-neutral-600" />
+              {user ? (
+                <div className="w-7 h-7 bg-gradient-to-r from-coffee-400 to-coffee-500 rounded-full flex items-center justify-center shadow-sm">
+                  {user.avatar_url ? (
+                    <img
+                      src={user.avatar_url}
+                      alt={user.username}
+                      className="w-7 h-7 rounded-full object-cover"
+                    />
+                  ) : (
+                    <User className="h-4 w-4 text-white" />
+                  )}
+                </div>
+              ) : (
+                <User className="h-5 w-5 text-coffee-600" />
+              )}
             </button>
           </div>
         </div>
@@ -93,7 +106,7 @@ export default function AppHeader({
         )}
       </header>
 
-      {/* 모바일 메뉴 오버레이 */}
+      {/* 모바일 프로필 슬라이더 */}
       {showMobileMenu && (
         <div className="md:hidden fixed inset-0 z-50">
           {/* 배경 오버레이 */}
@@ -102,104 +115,102 @@ export default function AppHeader({
             onClick={() => setShowMobileMenu(false)}
           />
           
-          {/* 메뉴 패널 */}
-          <div className="absolute top-0 right-0 w-80 max-w-[90vw] h-full bg-white shadow-xl">
-            {/* 메뉴 헤더 */}
-            <div className="flex items-center justify-between p-4 border-b border-neutral-100">
-              <h2 className="text-lg font-semibold text-neutral-800">메뉴</h2>
+          {/* 프로필 슬라이더 */}
+          <div className="absolute top-0 right-0 w-80 max-w-[90vw] h-full bg-white/95 backdrop-blur-md shadow-xl animate-slide-in-right">
+            {/* 슬라이더 헤더 */}
+            <div className="flex items-center justify-between p-4 border-b border-coffee-200/30">
+              <h2 className="text-lg font-semibold text-coffee-800">프로필 메뉴</h2>
               <button
                 onClick={() => setShowMobileMenu(false)}
-                className="p-2 rounded-lg hover:bg-neutral-50"
+                className="p-2 rounded-lg hover:bg-coffee-50/80"
               >
-                <X className="h-5 w-5 text-neutral-600" />
+                <X className="h-5 w-5 text-coffee-600" />
               </button>
             </div>
 
-            {/* 메뉴 아이템들 */}
+            {/* 프로필 슬라이더 콘텐츠 */}
             <div className="p-4 space-y-1">
-              {/* 사용자 프로필 섹션 */}
+              {/* 사용자 정보 섹션 */}
               {user ? (
-                <div className="pb-4 border-b border-neutral-100 mb-4">
-                  <button
-                    onClick={() => {
-                      router.push('/profile')
-                      setShowMobileMenu(false)
-                    }}
-                    className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-neutral-50 text-left"
-                  >
-                    <div className="w-12 h-12 bg-neutral-100 rounded-full flex items-center justify-center">
-                      <User className="h-6 w-6 text-neutral-600" />
+                <div className="pb-6 border-b border-coffee-200/30 mb-6">
+                  <div className="flex items-center space-x-4 mb-4">
+                    <div className="w-16 h-16 bg-gradient-to-r from-coffee-400 to-coffee-500 rounded-full flex items-center justify-center shadow-md">
+                      {user.avatar_url ? (
+                        <img
+                          src={user.avatar_url}
+                          alt={user.username}
+                          className="w-16 h-16 rounded-full object-cover"
+                        />
+                      ) : (
+                        <User className="h-8 w-8 text-white" />
+                      )}
                     </div>
                     <div>
-                      <p className="font-medium text-neutral-800">{user.username}</p>
-                      <p className="text-sm text-neutral-500">레벨 {user.level} • 프로필 보기</p>
+                      <p className="text-lg font-semibold text-coffee-800">{user.username}</p>
+                      <p className="text-sm text-coffee-600">{user.email}</p>
+                      <p className="text-xs text-coffee-500 mt-1">⭐ Level 1 커피 입문자</p>
+                      <p className="text-xs text-coffee-500">🏆 0P • 1개 기록</p>
                     </div>
-                  </button>
+                  </div>
                 </div>
               ) : (
-                <div className="pb-4 border-b border-neutral-100 mb-4">
+                <div className="pb-6 border-b border-coffee-200/30 mb-6">
                   <button
                     onClick={() => {
-                      router.push('/login')
+                      router.push('/auth')
                       setShowMobileMenu(false)
                     }}
-                    className="w-full bg-neutral-600 text-white py-3 rounded-lg hover:bg-neutral-700 transition-colors font-medium"
+                    className="w-full bg-gradient-to-r from-coffee-500 to-coffee-600 text-white py-3 rounded-xl hover:from-coffee-600 hover:to-coffee-700 transition-all duration-200 font-medium shadow-md"
                   >
                     로그인 / 회원가입
                   </button>
                 </div>
               )}
 
-              {/* 주요 메뉴들 */}
-              <button
-                onClick={() => {
-                  router.push('/my-records')
-                  setShowMobileMenu(false)
-                }}
-                className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-neutral-50 text-left"
-              >
-                <Coffee className="h-5 w-5 text-neutral-600" />
-                <span className="text-neutral-800">내 기록</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  router.push('/stats')
-                  setShowMobileMenu(false)
-                }}
-                className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-neutral-50 text-left"
-              >
-                <TrendingUp className="h-5 w-5 text-neutral-600" />
-                <span className="text-neutral-800">통계</span>
-              </button>
-
-              {/* 알림 (로그인된 사용자만) */}
-              {user && (
+              {/* 메뉴 항목들 */}
+              <div className="space-y-2">
                 <button
                   onClick={() => {
-                    router.push('/notifications')
+                    router.push('/profile')
                     setShowMobileMenu(false)
                   }}
-                  className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-neutral-50 text-left"
+                  className="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-coffee-50/80 text-left transition-colors"
                 >
-                  <div className="relative">
-                    <Bell className="h-5 w-5 text-neutral-600" />
-                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                  </div>
-                  <span className="text-neutral-800">알림</span>
+                  <User className="h-5 w-5 text-coffee-600" />
+                  <span className="text-coffee-800 font-medium">내 프로필</span>
                 </button>
-              )}
 
-              <button
-                onClick={() => {
-                  router.push('/settings')
-                  setShowMobileMenu(false)
-                }}
-                className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-neutral-50 text-left"
-              >
-                <Settings className="h-5 w-5 text-neutral-600" />
-                <span className="text-neutral-800">설정</span>
-              </button>
+                <button
+                  onClick={() => {
+                    router.push('/settings')
+                    setShowMobileMenu(false)
+                  }}
+                  className="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-coffee-50/80 text-left transition-colors"
+                >
+                  <Settings className="h-5 w-5 text-coffee-600" />
+                  <span className="text-coffee-800 font-medium">설정</span>
+                </button>
+
+                <button
+                  className="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-coffee-50/80 text-left transition-colors"
+                >
+                  <HelpCircle className="h-5 w-5 text-coffee-600" />
+                  <span className="text-coffee-800 font-medium">도움말</span>
+                </button>
+
+                {/* 로그아웃 (로그인된 사용자만) */}
+                {user && (
+                  <div className="pt-4 border-t border-coffee-200/30">
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-red-50/80 text-left transition-colors"
+                    >
+                      <LogOut className="h-5 w-5 text-red-600" />
+                      <span className="text-red-600 font-medium">로그아웃</span>
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

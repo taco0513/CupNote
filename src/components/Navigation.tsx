@@ -4,7 +4,7 @@
  */
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { BarChart3, Settings, Plus, ArrowLeft, Trophy, User, LogIn, Coffee, ChevronDown, LogOut, Bell, HelpCircle } from 'lucide-react'
@@ -33,6 +33,21 @@ export default function Navigation({
   const [showUserProfile, setShowUserProfile] = useState(false)
   const [showProfileDropdown, setShowProfileDropdown] = useState(false)
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login')
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  // 드롭다운 외부 클릭 감지
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowProfileDropdown(false)
+      }
+    }
+
+    if (showProfileDropdown) {
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showProfileDropdown])
 
   // 스마트 뒤로가기 경로 계산
   const getSmartBackHref = (): string => {
@@ -170,7 +185,7 @@ export default function Navigation({
               )}
 
               {/* 사용자 프로필 영역 - 하이브리드 스타일 */}
-              <div className="relative">
+              <div className="relative" ref={dropdownRef}>
                 {loading ? (
                   <div className="w-10 h-10 bg-coffee-100/80 rounded-full animate-pulse backdrop-blur-sm" />
                 ) : user ? (
@@ -358,30 +373,6 @@ export default function Navigation({
                   성취
                 </span>
                 {currentPage === 'achievements' && (
-                  <div className="absolute -top-1 w-1 h-1 bg-coffee-600 rounded-full animate-pulse" />
-                )}
-              </Link>
-
-              {/* 설정 */}
-              <Link
-                href="/settings"
-                className={`flex flex-col items-center justify-center space-y-1 relative h-full w-full transition-all duration-200 ease-out ${
-                  currentPage === 'settings' 
-                    ? 'text-coffee-800' 
-                    : 'text-coffee-400'
-                } active:scale-95 active:bg-coffee-50 rounded-lg mx-1 my-1`}
-              >
-                <div className={`relative transition-all duration-200 ${
-                  currentPage === 'settings' ? 'scale-110' : ''
-                }`}>
-                  <Settings className="h-5 w-5" />
-                </div>
-                <span className={`text-xs relative transition-all duration-200 ${
-                  currentPage === 'settings' ? 'font-semibold transform scale-105' : 'font-medium'
-                }`}>
-                  설정
-                </span>
-                {currentPage === 'settings' && (
                   <div className="absolute -top-1 w-1 h-1 bg-coffee-600 rounded-full animate-pulse" />
                 )}
               </Link>

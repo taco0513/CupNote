@@ -1,0 +1,439 @@
+/**
+ * 프로필 페이지 - 하이브리드 디자인 시스템
+ * 개인정보와 커피 여정 중심의 독립적인 프로필 관리
+ */
+'use client'
+
+import { useState, useEffect } from 'react'
+import { User, Award, Coffee, Settings, TrendingUp, Calendar, MapPin, Star, Trophy, Target } from 'lucide-react'
+
+import ProtectedRoute from '../../components/auth/ProtectedRoute'
+import Navigation from '../../components/Navigation'
+import PageLayout from '../../components/ui/PageLayout'
+import PageHeader from '../../components/ui/PageHeader'
+import { Card, CardContent } from '../../components/ui/Card'
+import { useAuth } from '../../contexts/AuthContext'
+import { SupabaseStorage } from '../../lib/supabase-storage'
+import Link from 'next/link'
+
+interface UserProfile {
+  id: string
+  username: string
+  email: string
+  avatar_url?: string
+  level: number
+  title: string
+  total_points: number
+  total_records: number
+  current_streak: number
+  longest_streak: number
+  join_date: string
+}
+
+interface CoffeeJourneySummary {
+  monthly_records: number
+  avg_rating: number
+  favorite_roaster: string
+  favorite_origin: string
+  favorite_cafe: string
+  recent_achievements: Array<{
+    id: string
+    title: string
+    icon: string
+    unlocked_at: string
+  }>
+}
+
+interface HomeCafeEquipment {
+  grinder: string
+  dripper: string
+  scale: string
+  kettle: string
+  other_equipment: string[]
+}
+
+export default function ProfilePage() {
+  const { user } = useAuth()
+  const [profile, setProfile] = useState<UserProfile | null>(null)
+  const [journeySummary, setJourneySummary] = useState<CoffeeJourneySummary | null>(null)
+  const [equipment, setEquipment] = useState<HomeCafeEquipment | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (user) {
+      loadProfileData()
+    }
+  }, [user])
+
+  const loadProfileData = async () => {
+    try {
+      setLoading(true)
+      
+      // 임시 데모 데이터 (실제 구현 시 Supabase에서 로드)
+      const demoProfile: UserProfile = {
+        id: user?.id || '',
+        username: user?.username || 'beanzimo',
+        email: user?.email || 'zbrianjin@gmail.com',
+        avatar_url: user?.avatar_url,
+        level: 1,
+        title: '커피 입문자',
+        total_points: 150,
+        total_records: 8,
+        current_streak: 3,
+        longest_streak: 5,
+        join_date: '2025-01-15'
+      }
+
+      const demoJourney: CoffeeJourneySummary = {
+        monthly_records: 5,
+        avg_rating: 4.2,
+        favorite_roaster: '블루보틀',
+        favorite_origin: '에티오피아',
+        favorite_cafe: '커피스미스',
+        recent_achievements: [
+          { id: '1', title: '첫 기록 작성', icon: '🎯', unlocked_at: '2025-01-15' },
+          { id: '2', title: '연속 3일 기록', icon: '🔥', unlocked_at: '2025-01-18' },
+          { id: '3', title: '홈카페 도전', icon: '🏠', unlocked_at: '2025-01-20' }
+        ]
+      }
+
+      const demoEquipment: HomeCafeEquipment = {
+        grinder: '바라짜 엔코 그라인더',
+        dripper: 'V60 02',
+        scale: '하리오 드립 스케일',
+        kettle: '보나비타 전기포트',
+        other_equipment: ['온도계', '타이머']
+      }
+
+      setProfile(demoProfile)
+      setJourneySummary(demoJourney)
+      setEquipment(demoEquipment)
+    } catch (error) {
+      console.error('프로필 데이터 로드 오류:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <ProtectedRoute>
+        <Navigation showBackButton currentPage="settings" />
+        <PageLayout>
+          <PageHeader 
+            title="내 프로필"
+            description="커피 여정과 개인 정보를 관리하세요"
+            icon={<User className="h-6 w-6" />}
+          />
+          
+          <div className="space-y-6">
+            {/* 프로필 헤더 스켈레톤 */}
+            <Card variant="elevated" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30">
+              <CardContent className="p-6">
+                <div className="flex items-center space-x-4">
+                  <div className="w-20 h-20 bg-coffee-200/50 rounded-full animate-pulse"></div>
+                  <div className="flex-1">
+                    <div className="h-6 bg-coffee-200/50 rounded w-32 mb-2 animate-pulse"></div>
+                    <div className="h-4 bg-coffee-200/50 rounded w-48 mb-2 animate-pulse"></div>
+                    <div className="h-4 bg-coffee-200/50 rounded w-24 animate-pulse"></div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* 통계 카드 스켈레톤 */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[...Array(4)].map((_, i) => (
+                <Card key={i} variant="default" className="bg-white/70 backdrop-blur-sm">
+                  <CardContent className="p-4 text-center">
+                    <div className="w-10 h-10 bg-coffee-200/50 rounded-xl mx-auto mb-3 animate-pulse"></div>
+                    <div className="h-5 bg-coffee-200/50 rounded w-12 mx-auto mb-1 animate-pulse"></div>
+                    <div className="h-3 bg-coffee-200/50 rounded w-16 mx-auto animate-pulse"></div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </PageLayout>
+      </ProtectedRoute>
+    )
+  }
+
+  if (!profile) {
+    return (
+      <ProtectedRoute>
+        <Navigation showBackButton currentPage="settings" />
+        <PageLayout>
+          <div className="text-center py-16">
+            <div className="w-16 h-16 bg-coffee-100/80 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <User className="h-8 w-8 text-coffee-300" />
+            </div>
+            <h1 className="text-xl font-bold text-coffee-800 mb-2">프로필을 불러올 수 없어요</h1>
+            <p className="text-coffee-600">잠시 후 다시 시도해주세요.</p>
+          </div>
+        </PageLayout>
+      </ProtectedRoute>
+    )
+  }
+
+  return (
+    <ProtectedRoute>
+      <Navigation showBackButton currentPage="settings" />
+      <PageLayout>
+        {/* 하이브리드 디자인 페이지 헤더 */}
+        <PageHeader 
+          title="내 프로필"
+          description="커피 여정과 개인 정보를 관리하세요"
+          icon={<User className="h-6 w-6" />}
+        />
+
+        <div className="space-y-8">
+          {/* 프로필 정보 - 하이브리드 프리미엄 카드 */}
+          <Card variant="elevated" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-lg">
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-6">
+                <div className="w-20 h-20 bg-gradient-to-r from-coffee-400 to-coffee-500 rounded-full flex items-center justify-center shadow-lg">
+                  {profile.avatar_url ? (
+                    <img
+                      src={profile.avatar_url}
+                      alt={profile.username}
+                      className="w-20 h-20 rounded-full object-cover"
+                    />
+                  ) : (
+                    <User className="h-10 w-10 text-white" />
+                  )}
+                </div>
+                <div className="flex-1">
+                  <h2 className="text-2xl font-bold text-coffee-800 mb-1">{profile.username}</h2>
+                  <p className="text-coffee-600 mb-2">{profile.email}</p>
+                  <div className="flex items-center space-x-4 text-sm">
+                    <span className="bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 px-3 py-1 rounded-full font-medium">
+                      ⭐ Level {profile.level} {profile.title}
+                    </span>
+                    <span className="text-coffee-500">
+                      <Calendar className="h-4 w-4 inline mr-1" />
+                      가입: {new Date(profile.join_date).toLocaleDateString('ko-KR')}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* 커피 여정 통계 - 하이브리드 그리드 */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {/* 총 포인트 */}
+            <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-shadow">
+              <CardContent className="p-4 text-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-amber-400 to-amber-500 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-md">
+                  <Trophy className="h-6 w-6 text-white" />
+                </div>
+                <div className="text-lg font-bold text-coffee-700 mb-1">{profile.total_points}P</div>
+                <div className="text-xs text-coffee-600">총 포인트</div>
+              </CardContent>
+            </Card>
+
+            {/* 총 기록 */}
+            <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-shadow">
+              <CardContent className="p-4 text-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-blue-500 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-md">
+                  <Coffee className="h-6 w-6 text-white" />
+                </div>
+                <div className="text-lg font-bold text-coffee-700 mb-1">{profile.total_records}개</div>
+                <div className="text-xs text-coffee-600">총 기록</div>
+              </CardContent>
+            </Card>
+
+            {/* 현재 연속 */}
+            <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-shadow">
+              <CardContent className="p-4 text-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-orange-400 to-orange-500 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-md">
+                  <Target className="h-6 w-6 text-white" />
+                </div>
+                <div className="text-lg font-bold text-coffee-700 mb-1">{profile.current_streak}일</div>
+                <div className="text-xs text-coffee-600">연속 기록</div>
+              </CardContent>
+            </Card>
+
+            {/* 평균 평점 */}
+            <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-shadow">
+              <CardContent className="p-4 text-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-green-400 to-green-500 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-md">
+                  <Star className="h-6 w-6 text-white" />
+                </div>
+                <div className="text-lg font-bold text-coffee-700 mb-1">{journeySummary?.avg_rating.toFixed(1)}</div>
+                <div className="text-xs text-coffee-600">평균 평점</div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* 커피 여정 요약 */}
+          <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md">
+            <CardContent className="p-6">
+              <h3 className="text-lg font-semibold text-coffee-800 mb-4 flex items-center">
+                <TrendingUp className="h-5 w-5 mr-2" />
+                이번 달 커피 여정
+              </h3>
+              
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="font-medium text-coffee-700 mb-3">활동 요약</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-coffee-600">이번 달 기록</span>
+                      <span className="font-medium text-coffee-800">{journeySummary?.monthly_records}개</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-coffee-600">평균 평점</span>
+                      <span className="font-medium text-coffee-800 flex items-center">
+                        {journeySummary?.avg_rating.toFixed(1)}
+                        <Star className="h-3 w-3 text-amber-400 fill-current ml-1" />
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-coffee-600">최고 연속 기록</span>
+                      <span className="font-medium text-coffee-800">{profile.longest_streak}일</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h4 className="font-medium text-coffee-700 mb-3">즐겨찾는 항목</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-coffee-600">로스터리</span>
+                      <span className="font-medium text-coffee-800">{journeySummary?.favorite_roaster}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-coffee-600">원산지</span>
+                      <span className="font-medium text-coffee-800">{journeySummary?.favorite_origin}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-coffee-600">카페</span>
+                      <span className="font-medium text-coffee-800">{journeySummary?.favorite_cafe}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* 최근 성취 */}
+          {journeySummary?.recent_achievements && journeySummary.recent_achievements.length > 0 && (
+            <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-coffee-800 flex items-center">
+                    <Award className="h-5 w-5 mr-2" />
+                    최근 성취
+                  </h3>
+                  <Link 
+                    href="/achievements"
+                    className="text-sm text-coffee-500 hover:text-coffee-700 transition-colors"
+                  >
+                    전체 보기 →
+                  </Link>
+                </div>
+                
+                <div className="grid gap-3">
+                  {journeySummary.recent_achievements.map((achievement) => (
+                    <div key={achievement.id} className="flex items-center space-x-3 p-3 bg-coffee-50/50 rounded-lg">
+                      <div className="text-2xl">{achievement.icon}</div>
+                      <div className="flex-1">
+                        <p className="font-medium text-coffee-800">{achievement.title}</p>
+                        <p className="text-xs text-coffee-500">
+                          {new Date(achievement.unlocked_at).toLocaleDateString('ko-KR')}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* 홈카페 장비 */}
+          {equipment && (
+            <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold text-coffee-800 mb-4 flex items-center">
+                  <Coffee className="h-5 w-5 mr-2" />
+                  홈카페 장비
+                </h3>
+                
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-3">
+                    <div>
+                      <label className="text-sm font-medium text-coffee-700">그라인더</label>
+                      <p className="text-coffee-600">{equipment.grinder}</p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium text-coffee-700">드리퍼</label>
+                      <p className="text-coffee-600">{equipment.dripper}</p>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="text-sm font-medium text-coffee-700">저울</label>
+                      <p className="text-coffee-600">{equipment.scale}</p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium text-coffee-700">케틀</label>
+                      <p className="text-coffee-600">{equipment.kettle}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                {equipment.other_equipment.length > 0 && (
+                  <div className="mt-4">
+                    <label className="text-sm font-medium text-coffee-700">기타 장비</label>
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      {equipment.other_equipment.map((item, index) => (
+                        <span key={index} className="px-3 py-1 bg-coffee-100/50 text-coffee-700 rounded-full text-sm">
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
+          {/* 빠른 링크 */}
+          <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md">
+            <CardContent className="p-6">
+              <h3 className="text-lg font-semibold text-coffee-800 mb-4">빠른 링크</h3>
+              
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <Link 
+                  href="/achievements"
+                  className="flex items-center space-x-3 p-3 rounded-lg bg-coffee-50/50 hover:bg-coffee-100/50 transition-colors"
+                >
+                  <Trophy className="h-5 w-5 text-coffee-600" />
+                  <span className="text-coffee-700 font-medium">전체 성취</span>
+                </Link>
+                
+                <Link 
+                  href="/my-records"
+                  className="flex items-center space-x-3 p-3 rounded-lg bg-coffee-50/50 hover:bg-coffee-100/50 transition-colors"
+                >
+                  <TrendingUp className="h-5 w-5 text-coffee-600" />
+                  <span className="text-coffee-700 font-medium">상세 통계</span>
+                </Link>
+                
+                <Link 
+                  href="/settings"
+                  className="flex items-center space-x-3 p-3 rounded-lg bg-coffee-50/50 hover:bg-coffee-100/50 transition-colors"
+                >
+                  <Settings className="h-5 w-5 text-coffee-600" />
+                  <span className="text-coffee-700 font-medium">앱 설정</span>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </PageLayout>
+    </ProtectedRoute>
+  )
+}
