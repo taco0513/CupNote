@@ -23,15 +23,15 @@ export default function OnboardingPage() {
       id: 1,
       title: 'CupNote에 오신 것을 환영합니다!',
       description: '나만의 커피 여정을 기록하는 온라인 커피 일기',
-      icon: <Coffee className="h-12 w-12 text-coffee-600" />,
+      icon: <Coffee className="h-12 w-12 text-purple-600" />,
       content: (
         <div className="text-center space-y-6">
-          <div className="bg-coffee-100 rounded-full p-8 w-32 h-32 mx-auto flex items-center justify-center">
-            <Coffee className="h-16 w-16 text-coffee-600" />
+          <div className="bg-neutral-100 rounded-full p-8 w-32 h-32 mx-auto flex items-center justify-center">
+            <Coffee className="h-16 w-16 text-purple-600" />
           </div>
           <div>
-            <h2 className="text-3xl font-bold text-coffee-800 mb-4">반갑습니다!</h2>
-            <p className="text-lg text-coffee-600 leading-relaxed">
+            <h2 className="text-3xl font-bold text-neutral-800 mb-4">반갑습니다!</h2>
+            <p className="text-lg text-neutral-600 leading-relaxed">
               CupNote는 여러분의 커피 경험을 기록하고 분석하여
               <br />
               개인화된 커피 취향을 발견할 수 있도록 도와드립니다.
@@ -47,7 +47,7 @@ export default function OnboardingPage() {
       icon: <Target className="h-12 w-12 text-blue-600" />,
       content: (
         <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-coffee-800 text-center mb-8">상황별 기록 모드</h2>
+          <h2 className="text-2xl font-bold text-neutral-800 text-center mb-8">상황별 기록 모드</h2>
           <div className="grid gap-4">
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-center space-x-4">
               <div className="bg-blue-100 rounded-full p-3">
@@ -255,7 +255,7 @@ export default function OnboardingPage() {
   const currentStepData = steps[currentStep]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
       <div className="container mx-auto px-4 py-8 max-w-2xl">
         {/* 헤더 */}
         <div className="flex items-center justify-between mb-8">
@@ -312,7 +312,7 @@ export default function OnboardingPage() {
 
           <button
             onClick={handleNext}
-            className="flex items-center px-8 py-3 bg-coffee-600 text-white rounded-xl hover:bg-coffee-700 transition-colors font-medium"
+            className="flex items-center px-8 py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors font-medium"
           >
             {currentStep === steps.length - 1 ? '시작하기' : '다음'}
             <ArrowRight className="h-4 w-4 ml-2" />

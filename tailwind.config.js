@@ -9,17 +9,31 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        coffee: {
-          50: '#f9f6f3',
-          100: '#f0e6dc',
-          200: '#e0ccb9',
-          300: '#c9a580',
-          400: '#b27c4b',
-          500: '#9b5d2f',
-          600: '#814923',
-          700: '#68391d',
-          800: '#562f1b',
-          900: '#48291a',
+        // Neutral color system
+        neutral: {
+          50: '#FAFAF9',   // Background
+          100: '#F5F5F4',  // Card background
+          200: '#E7E5E4',  // Borders
+          300: '#D6D3D1',  // Inactive elements
+          400: '#A8A29E',  // Muted text
+          500: '#78716C',  // Secondary text
+          600: '#57534E',  // Primary text
+          700: '#44403C',  // Emphasis text
+          800: '#292524',  // Strong text
+          900: '#1C1917',  // Headings
+        },
+        // Purple accent for primary actions
+        purple: {
+          50: '#faf7ff',
+          100: '#f3f1ff',
+          200: '#e9e5ff',
+          300: '#d5ccff',
+          400: '#a78bfa',  // accent-warm
+          500: '#8b5cf6',
+          600: '#7c3aed',
+          700: '#6d28d9',
+          800: '#5b21b6',
+          900: '#4c1d95',
         },
         // 테마 대응 색상 시스템
         background: {

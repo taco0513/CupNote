@@ -1,0 +1,71 @@
+{
+  "timestamp": "2025-08-02T07:12:11.205Z",
+  "config": {
+    "baseUrl": "http://localhost:5173",
+    "browsers": [
+      "chromium",
+      "firefox",
+      "webkit"
+    ],
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "timeout": 10000
+  },
+  "results": [
+    {
+      "browser": "chromium",
+      "success": true,
+      "loadTime": 71,
+      "pageTitle": "CupNote - 나만의 커피 여정",
+      "hasMainHeading": true,
+      "optimizations": {
+        "coreWebVitalsOptimizer": true,
+        "optimizedLayout": true,
+        "resourceHints": true,
+        "criticalContent": true,
+        "preloadLinks": 17,
+        "performanceObserver": true
+      },
+      "timestamp": "2025-08-02T07:12:02.485Z"
+    },
+    {
+      "browser": "firefox",
+      "success": true,
+      "loadTime": 830,
+      "pageTitle": "CupNote - 나만의 커피 여정",
+      "hasMainHeading": true,
+      "optimizations": {
+        "coreWebVitalsOptimizer": false,
+        "optimizedLayout": true,
+        "resourceHints": true,
+        "criticalContent": false,
+        "preloadLinks": 17,
+        "performanceObserver": true
+      },
+      "timestamp": "2025-08-02T07:12:07.563Z"
+    },
+    {
+      "browser": "webkit",
+      "success": true,
+      "loadTime": 119,
+      "pageTitle": "CupNote - 나만의 커피 여정",
+      "hasMainHeading": true,
+      "optimizations": {
+        "coreWebVitalsOptimizer": false,
+        "optimizedLayout": true,
+        "resourceHints": true,
+        "criticalContent": false,
+        "preloadLinks": 17,
+        "performanceObserver": true
+      },
+      "timestamp": "2025-08-02T07:12:10.701Z"
+    }
+  ],
+  "summary": {
+    "totalBrowsers": 3,
+    "successfulBrowsers": 3,
+    "avgLoadTime": 340
+  }
+}

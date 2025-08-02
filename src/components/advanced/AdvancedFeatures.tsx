@@ -332,7 +332,7 @@ export default function AdvancedFeatures({ className = '' }: AdvancedFeaturesPro
 
       {/* 제스처 활성화된 컨테이너 */}
       <div 
-        ref={gestureRef}
+        ref={gestureRef as any}
         data-gesture-enabled={settings.gestureSupport}
         className="hidden"
       />

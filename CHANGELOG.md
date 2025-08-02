@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### 🚀 Added (2025-08-02)
+- **Equipment Integration System**: Complete HomeCafe equipment management
+  - Equipment settings in personal preferences (grinder, dripper, scale, kettle)
+  - Auto-population of saved equipment in HomeCafe brew-setup
+  - Intelligent brewing recommendations based on equipment
+  - Grinder-specific grind size recommendations (Comandante, 1zpresso, Baratza)
+  - Visual equipment indicators with ⭐ badges
+  - Demo testing utilities for development workflow
+- **My Records Integration**: Unified records and statistics page
+  - Tab-based interface with URL state management
+  - Comprehensive analytics dashboard with 8+ key metrics
+  - Trend analysis, distribution charts, and insights
+  - Seamless navigation between list and stats views
+- **Mobile UX Enhancements**: Improved mobile experience
+  - Fixed content visibility behind bottom navigation
+  - Added proper safe area insets for all pages
+  - Native app-style mobile navigation
+  - Responsive padding adjustments
+
 ### 🧪 Added
 - **Comprehensive Testing Suite**: 546+ test cases covering all critical functionality
   - **Unit Tests**: 6 files, 361+ test cases for core services and utilities
@@ -18,12 +37,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Test Infrastructure**: Page Object Model, cross-browser testing, mocking system
   - **Coverage Target**: 70% line/function/branch coverage configured
 
+### 🔧 Fixed (2025-08-02)
+- **Production Server Issues**: Resolved 500 errors through clean rebuild
+- **Client-Side Exceptions**: Fixed QueryOptimizer method errors in RecentCoffeePreview
+- **Navigation Issues**: Ensured navigation appears on all pages including empty states
+- **AuthModal UX**: Fixed confusing signup/login button behavior
+- **Mobile Content Visibility**: Added pb-20 padding to prevent bottom nav overlap
+- **Imperial Units**: Removed unnecessary imperial unit options
+
 ### 🔧 Fixed
 - **Code Quality**: Resolved all ESLint warnings
   - Fixed 5 react-hooks/exhaustive-deps warnings
   - Added missing dependencies to useEffect and useCallback
   - Reorganized function declarations to fix hoisting issues
   - Improved TypeScript type safety
+
+### 🎨 Changed (2025-08-02)
+- **Information Architecture**: Improved navigation and organization
+  - Merged "기록 목록" and "통계" into unified "내 기록" page
+  - Reordered mobile navigation: [홈] [내 기록] [작성] [성취] [설정]
+  - Removed Pro Mode references (30 files updated)
+- **Match Score v2.0**: Community-based matching system
+  - Removed letter grades (A+, A, B+, B, C)
+  - Implemented real-time community data integration
+  - Personalized feedback based on score ranges
 
 ### 🎨 Changed
 - **Component Consistency**: Standardized Props interface naming

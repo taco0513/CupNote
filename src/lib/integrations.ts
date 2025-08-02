@@ -180,11 +180,11 @@ export function initializePerformanceMonitoring() {
       }
       
       if (entry.entryType === 'first-input') {
-        console.log('FID:', entry.processingStart - entry.startTime)
+        console.log('FID:', (entry as any).processingStart - entry.startTime)
       }
       
       if (entry.entryType === 'layout-shift') {
-        console.log('CLS:', entry.value)
+        console.log('CLS:', (entry as any).value)
       }
     })
   })

@@ -5,6 +5,9 @@ import { useEffect, useState, useMemo, useCallback } from 'react'
 import FilterPanel, { FilterOptions } from './FilterPanel'
 import LazyImage from './LazyImage'
 import SearchBar from './SearchBar'
+import EmptyState from './EmptyState'
+import OptimizedCoffeeCard from './OptimizedCoffeeCard'
+import { CardGridSkeleton } from './SkeletonLoader'
 import { useNotification } from '../contexts/NotificationContext'
 import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor'
 import { CacheService } from '../lib/cache-service'
@@ -166,25 +169,22 @@ export default function OptimizedCoffeeList() {
     }
   }
 
-  // Render loading skeleton
-  const renderSkeleton = (count: number) => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-      {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="bg-white rounded-xl shadow-sm p-4 md:p-6 animate-pulse">
-          <div className="aspect-video bg-gray-200 rounded-lg mb-4"></div>
-          <div className="h-4 bg-gray-200 rounded mb-2"></div>
-          <div className="h-3 bg-gray-200 rounded mb-4 w-2/3"></div>
-          <div className="space-y-2">
-            <div className="h-3 bg-gray-200 rounded"></div>
-            <div className="h-3 bg-gray-200 rounded w-3/4"></div>
-          </div>
-        </div>
-      ))}
-    </div>
-  )
-
   if (loading && result.page === 1) {
-    return renderSkeleton(6)
+    return (
+      <div className="space-y-6">
+        {/* Search and filter section skeleton */}
+        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+          <div className="flex-1 h-12 bg-gray-200 rounded-lg animate-pulse"></div>
+          <div className="w-32 h-12 bg-gray-200 rounded-lg animate-pulse"></div>
+        </div>
+        
+        {/* Results info skeleton */}
+        <div className="h-6 bg-gray-200 rounded w-48 animate-pulse"></div>
+        
+        {/* Cards skeleton */}
+        <CardGridSkeleton count={6} />
+      </div>
+    )
   }
 
   if (result.data.length === 0 && !loading) {
@@ -203,19 +203,11 @@ export default function OptimizedCoffeeList() {
           />
         </div>
 
-        <div className="text-center py-12">
-          <div className="text-6xl mb-4">☕</div>
-          <p className="text-gray-600 text-lg mb-2">
-            {searchQuery || Object.keys(filters).length > 0 
-              ? '검색 결과가 없습니다' 
-              : '아직 기록된 커피가 없어요'}
-          </p>
-          <p className="text-gray-500">
-            {searchQuery || Object.keys(filters).length > 0
-              ? '다른 검색어나 필터를 시도해보세요'
-              : '첫 커피를 기록해보세요!'}
-          </p>
-        </div>
+        <EmptyState 
+          type={searchQuery || Object.keys(filters).length > 0 ? 'no-search-results' : 'no-records'}
+          searchQuery={searchQuery}
+          hasFilters={Object.keys(filters).length > 0}
+        />
       </div>
     )
   }
@@ -285,7 +277,7 @@ export default function OptimizedCoffeeList() {
         </div>
       )}
 
-      {loadingMore && renderSkeleton(3)}
+      {loadingMore && <CardGridSkeleton count={3} />}
     </div>
   )
 }

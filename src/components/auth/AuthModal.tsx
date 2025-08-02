@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import { X, Eye, EyeOff, Mail, Lock, User } from 'lucide-react'
 
@@ -34,6 +34,20 @@ export default function AuthModal({
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  // initialMode가 변경될 때마다 mode 업데이트
+  useEffect(() => {
+    if (isOpen) {
+      setMode(initialMode)
+      setError('')
+      setFormData({
+        email: '',
+        password: '',
+        username: '',
+        confirmPassword: '',
+      })
+    }
+  }, [isOpen, initialMode])
 
   if (!isOpen) return null
 

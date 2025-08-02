@@ -142,7 +142,7 @@ function ResultPageContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100">
-      <div className="container mx-auto px-4 py-4 max-w-4xl">
+      <div className="container mx-auto px-4 py-4 max-w-4xl pb-20 md:pb-8">
         <Navigation showBackButton currentPage="result" />
 
         {/* 성공 헤더 */}

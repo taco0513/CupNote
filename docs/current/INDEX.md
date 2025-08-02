@@ -13,9 +13,10 @@
 ## 🎯 주요 기능 문서
 
 ### `/features/` - 기능별 상세 문서
-- **[4-MODE-SYSTEM.md](features/4-MODE-SYSTEM.md)** - 🆕 새로운 4-Mode 시스템 가이드
+- **[EQUIPMENT_INTEGRATION.md](features/EQUIPMENT_INTEGRATION.md)** - 🆕 장비 통합 시스템
 - **[ACHIEVEMENTS_SYSTEM.md](features/ACHIEVEMENTS_SYSTEM.md)** - 성취 시스템
 - **[COMMUNITY_CUPPING.md](features/COMMUNITY_CUPPING.md)** - 커뮤니티 커핑 (v2.0 예정)
+- **[COMMUNITY_MATCH_SCORE_V2.md](features/COMMUNITY_MATCH_SCORE_V2.md)** - 커뮤니티 매치 스코어 v2.0
 - **[CURRENT_PAGES.md](features/CURRENT_PAGES.md)** - 현재 구현된 페이지들
 - **[MATCH_SCORE_ALGORITHM.md](features/MATCH_SCORE_ALGORITHM.md)** - 매치 스코어 알고리즘
 - **[MOBILE_OPTIMIZATION.md](features/MOBILE_OPTIMIZATION.md)** - 모바일 최적화
@@ -25,10 +26,9 @@
 - **[TEST_COVERAGE_SYSTEM.md](features/TEST_COVERAGE_SYSTEM.md)** - 테스트 커버리지 시스템
 
 ### `/modes/` - 모드별 상세 가이드
-- **[quick-mode.md](modes/quick-mode.md)** - 빠른 기록 모드
 - **[cafe-mode.md](modes/cafe-mode.md)** - 카페 방문 모드
 - **[homecafe-mode.md](modes/homecafe-mode.md)** - 홈카페 모드
-- **[pro-mode.md](modes/pro-mode.md)** - 전문가 모드
+- **[lab-mode.md](modes/lab-mode.md)** - 전문가 평가 모드
 
 ## 🏗️ 아키텍처 문서
 

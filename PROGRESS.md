@@ -8,7 +8,14 @@ _마지막 업데이트: 2025-08-02_
 
 **모든 핵심 기능 구현 완료 - 라이트 모드 전용 배포**
 
-#### 최신 완성 기능 (v1.0.0-rc.1)
+#### 최신 완성 기능 (2025-08-02)
+- [✅] **장비 통합 시스템**: HomeCafe 모드와 개인 장비 설정 완벽 연동
+- [✅] **내 기록 통합**: 기록 목록과 통계를 하나의 탭 인터페이스로 통합
+- [✅] **모바일 UX 개선**: 하단 네비게이션 가림 문제 완전 해결
+- [✅] **Match Score v2.0**: 커뮤니티 기반 점수 시스템 (등급 제거)
+- [✅] **3-Mode 시스템**: Pro Mode 제거, Cafe/HomeCafe/Lab 모드로 정리
+
+#### 이전 완성 기능 (v1.0.0-rc.1)
 - [✅] **프로덕션 배포**: Vercel 배포 완료, SEO 최적화, 성능 최적화
 - [✅] **라이트 모드 전용**: 다크 모드 제거, 라이트 모드로 통일된 UX
 - [✅] **Hydration 오류 해결**: SSR 불일치 문제 완전 해결
@@ -150,6 +157,32 @@ CupNote/
 - **user_stats**: 통게 및 분석 데이터
 
 ## 📦 최신 완료 작업 (2025-08-02)
+
+### 🛠️ **Equipment Integration & UX Improvements** - 장비 통합 및 사용성 개선
+
+#### ✅ 장비 통합 시스템 (완료)
+- **Equipment Settings**: 개인 설정에서 홈카페 장비 등록 (그라인더, 드리퍼, 저울, 케틀)
+- **Auto-Population**: HomeCafe 모드에서 저장된 장비 자동 표시
+- **Smart Recommendations**: 장비별 맞춤 추출 가이드라인
+  - 그라인더별 분쇄도 추천 (코만단테, 바라짜, 1zpresso)
+  - 드리퍼별 추출 파라미터 (비율, 온도, 시간)
+- **Visual Feedback**: ⭐ 아이콘으로 사용자 장비 표시
+- **Demo Utilities**: 개발 테스트용 데모 함수 제공
+
+#### ✅ 내 기록 페이지 통합 (완료)
+- **Unified Interface**: 기록 목록과 통계를 탭으로 통합
+- **Analytics Dashboard**: 8+ 주요 지표 포함
+  - 월별 트렌드, 평점 분포, 모드별 통계
+  - 선호 로스터리, 원산지, 플레이버 분석
+- **URL State Management**: 탭 상태 URL 쿼리로 관리
+- **Mobile Optimization**: 모바일 네비게이션 순서 최적화
+
+#### ✅ UX/UI 개선사항 (완료)
+- **Mobile Navigation Fix**: pb-20 padding으로 콘텐츠 가림 해결
+- **Navigation Enhancement**: 데이터 없을 때도 네비게이션 표시
+- **AuthModal Clarity**: 회원가입/로그인 버튼 동작 명확화
+- **Imperial Units Removal**: 커피는 미터법만 사용
+- **Client Error Fix**: QueryOptimizer 메서드 오류 해결
 
 ### 🎨 **3-Phase IA/UX/UI 개선 완료** - 세계급 사용자 경험 구현
 

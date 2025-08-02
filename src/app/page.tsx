@@ -9,9 +9,16 @@ import { LogIn, Coffee, TrendingUp, Award } from 'lucide-react'
 
 import AuthModal from '../components/auth/AuthModal'
 import Navigation from '../components/Navigation'
-import OptimizedCoffeeList from '../components/OptimizedCoffeeList'
+import RecentCoffeePreview from '../components/RecentCoffeePreview'
 import SupabaseTest from '../components/SupabaseTest'
 import { useAuth } from '../contexts/AuthContext'
+import { OptimizedLayout, OptimizedHero } from '../components/performance/OptimizedLayout'
+import CoreWebVitalsOptimizer from '../components/performance/CoreWebVitalsOptimizer'
+import { StatsGridSkeleton } from '../components/SkeletonLoader'
+import GuestModeIndicator from '../components/GuestModeIndicator'
+import FeedbackButton from '../components/FeedbackButton'
+import CoffeeTip from '../components/CoffeeTip'
+import CoffeeJourneyWidget from '../components/CoffeeJourneyWidget'
 
 
 export default function HomePage() {
@@ -20,6 +27,8 @@ export default function HomePage() {
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login')
   const [stats, setStats] = useState({ totalRecords: 0, averageRating: 0, achievements: 0 })
+  const [statsLoading, setStatsLoading] = useState(true)
+  const [hasGuestRecords, setHasGuestRecords] = useState(false)
 
   useEffect(() => {
     // 온보딩 완료 여부 체크
@@ -34,6 +43,7 @@ export default function HomePage() {
   useEffect(() => {
     const loadStats = async () => {
       try {
+        setStatsLoading(true)
         // 통합 저장소에서 데이터 로드
         const { SupabaseStorage } = await import('../lib/supabase-storage')
         const { offlineStorage } = await import('../lib/offline-storage')
@@ -63,20 +73,49 @@ export default function HomePage() {
           console.log('IndexedDB load failed')
         }
         
+        // 게스트 기록 확인
+        if (!user) {
+          const guestUserId = localStorage.getItem('cupnote-guest-id')
+          if (guestUserId) {
+            try {
+              const guestRecords = await offlineStorage.getRecords(guestUserId)
+              if (guestRecords && guestRecords.length > 0) {
+                setHasGuestRecords(true)
+              }
+            } catch (error) {
+              console.log('Failed to check guest records')
+            }
+          }
+        }
+        
         // 통계 계산
         const totalRecords = allRecords.length
         const averageRating = totalRecords > 0 
           ? allRecords.reduce((sum, r) => sum + (r.rating || 0), 0) / totalRecords 
           : 0
         
+        // 성취 개수 가져오기
+        let achievementCount = 0
+        if (user) {
+          try {
+            const { AchievementService } = await import('../lib/supabase-service')
+            const userAchievements = await AchievementService.getUserAchievements()
+            achievementCount = userAchievements?.length || 0
+          } catch (error) {
+            console.log('Failed to load achievements')
+          }
+        }
+        
         setStats({
           totalRecords,
           averageRating: Math.round(averageRating * 10) / 10,
-          achievements: 12 // 일단 하드코딩, 나중에 성취 시스템에서 불러올 예정
+          achievements: achievementCount
         })
         
       } catch (error) {
         console.error('Failed to load stats:', error)
+      } finally {
+        setStatsLoading(false)
       }
     }
 
@@ -98,106 +137,100 @@ export default function HomePage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-coffee-600 mx-auto mb-4"></div>
-          <p className="text-coffee-600">로딩 중...</p>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-neutral-600 mx-auto mb-4"></div>
+          <p className="text-neutral-600">로딩 중...</p>
         </div>
       </div>
     )
   }
   return (
     <>
-      <main className="container mx-auto px-4 py-4 md:py-8 max-w-6xl">
-        <Navigation currentPage="home" />
+      <CoreWebVitalsOptimizer />
+      <OptimizedLayout showNavigation={false} critical={true}>
+        <div className="container mx-auto px-4 py-4 md:py-8 max-w-6xl pb-20 md:pb-8">
+          <Navigation currentPage="home" />
 
         {user ? (
           // 로그인된 사용자를 위한 대시보드
           <>
-            {/* 사용자 환영 메시지 */}
-            <section className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-2xl md:text-3xl font-bold text-coffee-800 mb-2">
-                    안녕하세요, {user.username}님! ☕
-                  </h1>
-                  <p className="text-coffee-600">
-                    Level {user.level} • {user.total_points} 포인트
-                  </p>
-                </div>
-                <Link
-                  href="/mode-selection"
-                  className="bg-coffee-600 text-white px-4 md:px-6 py-2 md:py-3 rounded-full hover:bg-coffee-700 transition-colors text-sm md:text-base font-medium"
-                >
-                  새 기록 작성
-                </Link>
-              </div>
+            {/* 커피 팁 위젯 */}
+            <div className="mb-6">
+              <CoffeeTip />
+            </div>
+
+            {/* 사용자 환영 메시지 - 더 간결하게 */}
+            <section className="mb-8">
+              <h1 className="text-2xl md:text-3xl font-bold text-neutral-800 mb-2">
+                안녕하세요, {user.username}님! ☕
+              </h1>
+              <p className="text-neutral-600">
+                오늘은 어떤 커피를 마셨나요?
+              </p>
             </section>
 
-            {/* 빠른 통계 */}
-            <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              <div className="bg-white rounded-xl shadow-sm p-4 text-center">
-                <Coffee className="h-8 w-8 text-coffee-600 mx-auto mb-2" />
-                <h3 className="font-bold text-coffee-800">총 기록</h3>
-                <p className="text-2xl font-bold text-coffee-600">{stats.totalRecords}개</p>
-              </div>
-              <div className="bg-white rounded-xl shadow-sm p-4 text-center">
-                <TrendingUp className="h-8 w-8 text-green-600 mx-auto mb-2" />
-                <h3 className="font-bold text-coffee-800">평균 평점</h3>
-                <p className="text-2xl font-bold text-green-600">{stats.averageRating > 0 ? stats.averageRating : '-'}</p>
-              </div>
-              <div className="bg-white rounded-xl shadow-sm p-4 text-center">
-                <Award className="h-8 w-8 text-yellow-600 mx-auto mb-2" />
-                <h3 className="font-bold text-coffee-800">달성 성취</h3>
-                <p className="text-2xl font-bold text-yellow-600">{stats.achievements}개</p>
-              </div>
-            </section>
+            {/* 커피 여정 위젯으로 대체 */}
+            <div className="mb-8">
+              <CoffeeJourneyWidget 
+                stats={{
+                  totalCoffees: stats.totalRecords,
+                  averageRating: stats.averageRating,
+                  currentStreak: 0, // TODO: 실제 연속 기록 계산
+                  journeyDays: stats.totalRecords > 0 ? Math.max(1, Math.floor(stats.totalRecords / 2)) : 0 // 추정값 사용
+                }}
+              />
+            </div>
 
             {/* 최근 기록 섹션 */}
             <section>
-              <h2 className="text-2xl md:text-3xl font-bold text-coffee-800 mb-4 md:mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-neutral-800 mb-4 md:mb-6">
                 최근 커피 기록
               </h2>
-              <OptimizedCoffeeList />
+              <RecentCoffeePreview />
             </section>
           </>
         ) : (
           // 비로그인 사용자를 위한 랜딩 페이지
           <>
-            {/* 히어로 섹션 */}
-            <section className="text-center mb-12 md:mb-16">
-              <h1 className="text-4xl md:text-6xl font-bold text-coffee-800 mb-4 md:mb-6">
-                ☕ CupNote
-              </h1>
-              <p className="text-xl md:text-2xl text-coffee-600 mb-8 md:mb-10 px-4 max-w-3xl mx-auto">
-                누구나 전문가처럼, 그러나 자기만의 방식으로
-                <br />
-                커피를 기록하고 나눌 수 있는 공간
-              </p>
+            {/* 게스트 모드 배너 - 게스트 기록이 있을 때만 표시 */}
+            {hasGuestRecords && (
+              <GuestModeIndicator 
+                variant="banner" 
+                onLoginClick={() => openAuthModal('login')}
+                className="mb-6"
+              />
+            )}
+            
+            {/* 히어로 섹션 - 최적화됨 */}
+            <OptimizedHero
+              title="☕ CupNote"
+              subtitle="누구나 전문가처럼, 그러나 자기만의 방식으로 커피를 기록하고 나눌 수 있는 공간"
+            >
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <button
                   onClick={() => openAuthModal('signup')}
-                  className="w-full sm:w-auto bg-coffee-600 text-white px-8 py-4 rounded-full hover:bg-coffee-700 transition-colors text-lg font-medium"
+                  className="w-full sm:w-auto bg-neutral-600 text-white px-8 py-4 rounded-full hover:bg-neutral-700 transition-colors text-lg font-medium"
                 >
                   지금 시작하기
                 </button>
                 <button
                   onClick={() => openAuthModal('login')}
-                  className="w-full sm:w-auto flex items-center justify-center border-2 border-coffee-600 text-coffee-600 px-8 py-4 rounded-full hover:bg-coffee-50 transition-colors text-lg font-medium"
+                  className="w-full sm:w-auto flex items-center justify-center border-2 border-neutral-600 text-neutral-600 px-8 py-4 rounded-full hover:bg-neutral-50 transition-colors text-lg font-medium"
                 >
                   <LogIn className="h-5 w-5 mr-2" />
                   로그인
                 </button>
               </div>
-            </section>
+            </OptimizedHero>
 
             {/* 기능 소개 섹션 */}
             <section className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
               <div className="text-center">
-                <div className="bg-coffee-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                  <Coffee className="h-8 w-8 text-coffee-600" />
+                <div className="bg-neutral-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <Coffee className="h-8 w-8 text-neutral-600" />
                 </div>
-                <h3 className="text-xl font-bold text-coffee-800 mb-2">쉬운 기록</h3>
-                <p className="text-coffee-600">
+                <h3 className="text-xl font-bold text-neutral-800 mb-2">쉬운 기록</h3>
+                <p className="text-neutral-600">
                   직관적인 인터페이스로 누구나 쉽게 커피 경험을 기록할 수 있어요
                 </p>
               </div>
@@ -206,8 +239,8 @@ export default function HomePage() {
                 <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                   <TrendingUp className="h-8 w-8 text-green-600" />
                 </div>
-                <h3 className="text-xl font-bold text-coffee-800 mb-2">성장 추적</h3>
-                <p className="text-coffee-600">
+                <h3 className="text-xl font-bold text-neutral-800 mb-2">성장 추적</h3>
+                <p className="text-neutral-600">
                   Match Score로 커피 감각의 발달 과정을 시각적으로 확인하세요
                 </p>
               </div>
@@ -216,8 +249,8 @@ export default function HomePage() {
                 <div className="bg-yellow-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                   <Award className="h-8 w-8 text-yellow-600" />
                 </div>
-                <h3 className="text-xl font-bold text-coffee-800 mb-2">성취 시스템</h3>
-                <p className="text-coffee-600">
+                <h3 className="text-xl font-bold text-neutral-800 mb-2">성취 시스템</h3>
+                <p className="text-neutral-600">
                   다양한 성취를 달성하며 커피 여정을 더욱 재미있게 만들어요
                 </p>
               </div>
@@ -225,15 +258,15 @@ export default function HomePage() {
 
             {/* 데모 섹션 */}
             <section className="bg-white rounded-2xl shadow-lg p-8 text-center">
-              <h2 className="text-2xl md:text-3xl font-bold text-coffee-800 mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold text-neutral-800 mb-4">
                 무료로 시작해보세요
               </h2>
-              <p className="text-coffee-600 mb-6">
+              <p className="text-neutral-600 mb-6">
                 회원가입 후 바로 커피 기록을 시작할 수 있습니다
               </p>
               <button
                 onClick={() => openAuthModal('signup')}
-                className="bg-coffee-600 text-white px-8 py-3 rounded-full hover:bg-coffee-700 transition-colors text-lg font-medium"
+                className="bg-neutral-600 text-white px-8 py-3 rounded-full hover:bg-neutral-700 transition-colors text-lg font-medium"
               >
                 계정 만들기
               </button>
@@ -242,8 +275,9 @@ export default function HomePage() {
         )}
 
         {/* Supabase 연결 테스트 (개발용) */}
-        <SupabaseTest />
-      </main>
+        {process.env.NODE_ENV === 'development' && <SupabaseTest />}
+        </div>
+      </OptimizedLayout>
 
       {/* 인증 모달 */}
       <AuthModal
@@ -252,6 +286,9 @@ export default function HomePage() {
         onSuccess={handleAuthSuccess}
         initialMode={authMode}
       />
+
+      {/* Beta Feedback Button - 모든 사용자에게 표시 */}
+      <FeedbackButton />
     </>
   )
 }

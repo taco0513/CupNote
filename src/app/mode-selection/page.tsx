@@ -7,6 +7,10 @@ import { Coffee, Home, Beaker, Clock, Users, TrendingUp, Zap } from 'lucide-reac
 import ProtectedRoute from '../../components/auth/ProtectedRoute'
 import Navigation from '../../components/Navigation'
 import { TASTING_MODES_CONFIG, getModeColor, getModeGradient, UI_LABELS } from '../../config'
+import GuestModeIndicator from '../../components/GuestModeIndicator'
+import { useAuth } from '../../contexts/AuthContext'
+import { useState } from 'react'
+import AuthModal from '../../components/auth/AuthModal'
 
 interface ModeCardProps {
   mode: 'cafe' | 'homecafe'
@@ -30,96 +34,143 @@ const ModeCard = ({
   features,
   popular = false,
   category,
-}: ModeCardProps) => (
-  <Link href={TASTING_MODES_CONFIG[mode].route}>
-    <div
-      className={`
-      relative p-4 md:p-6 bg-white rounded-2xl border-2 transition-all duration-300 cursor-pointer group
-      hover:shadow-xl md:hover:scale-105 md:hover:-translate-y-1
-      ${popular ? 'border-coffee-400 shadow-lg' : 'border-coffee-200 hover:border-coffee-300'}
-    `}
-    >
-      {/* 배지 */}
-      {badge && (
-        <div
-          className={`
-          absolute -top-3 -right-3 px-3 py-1 rounded-full text-xs font-semibold
-          ${popular ? 'bg-coffee-500 text-white' : 'bg-blue-100 text-blue-800'}
-        `}
-        >
-          {badge}
-        </div>
-      )}
+}: ModeCardProps) => {
+  // Mode별 고유 스타일
+  const modeStyles = {
+    cafe: {
+      bgGradient: 'bg-gradient-to-br from-blue-50 to-sky-50',
+      borderColor: popular ? 'border-blue-400' : 'border-blue-200',
+      hoverBorder: 'hover:border-blue-400',
+      iconBg: 'bg-gradient-to-br from-blue-400 to-sky-500',
+      iconText: 'text-white',
+      badgeBg: popular ? 'bg-gradient-to-r from-blue-500 to-sky-500' : 'bg-blue-100',
+      badgeText: popular ? 'text-white' : 'text-blue-800',
+      accentColor: 'text-blue-600',
+      dotColor: 'bg-blue-400',
+    },
+    homecafe: {
+      bgGradient: 'bg-gradient-to-br from-green-50 to-emerald-50',
+      borderColor: 'border-green-200',
+      hoverBorder: 'hover:border-green-400',
+      iconBg: 'bg-gradient-to-br from-green-400 to-emerald-500',
+      iconText: 'text-white',
+      badgeBg: 'bg-gradient-to-r from-green-500 to-emerald-500',
+      badgeText: 'text-white',
+      accentColor: 'text-green-600',
+      dotColor: 'bg-green-400',
+    },
+  }
+  
+  const styles = modeStyles[mode]
+  
+  return (
+    <Link href={TASTING_MODES_CONFIG[mode].route}>
+      <div
+        className={`
+        relative p-4 md:p-6 rounded-2xl border-2 transition-all duration-300 cursor-pointer group
+        hover:shadow-xl md:hover:scale-105 md:hover:-translate-y-1
+        ${styles.bgGradient} ${styles.borderColor} ${styles.hoverBorder}
+        ${popular ? 'shadow-lg ring-2 ring-offset-2 ring-blue-200' : ''}
+      `}
+      >
+        {/* 배지 */}
+        {badge && (
+          <div
+            className={`
+            absolute -top-3 -right-3 px-3 py-1 rounded-full text-xs font-semibold shadow-md
+            ${styles.badgeBg} ${styles.badgeText}
+          `}
+          >
+            {badge}
+          </div>
+        )}
 
-      {/* 아이콘 및 제목 */}
-      <div className="flex items-center mb-4">
-        <div
-          className={`
-          p-3 rounded-xl mr-4 group-hover:scale-110 transition-transform
-          ${
-            mode === 'cafe'
-              ? 'bg-blue-100 text-blue-600'
-              : mode === 'homecafe'
-                ? 'bg-green-100 text-green-600'
-                : 'bg-purple-100 text-purple-600'
-          }
-        `}
-        >
-          {icon}
+        {/* 아이콘 및 제목 */}
+        <div className="flex items-center mb-4">
+          <div
+            className={`
+            p-3 rounded-xl mr-4 group-hover:scale-110 transition-transform shadow-lg
+            ${styles.iconBg} ${styles.iconText}
+          `}
+          >
+            {icon}
+          </div>
+          <div>
+            <h3 className="text-xl font-bold text-neutral-800">{title}</h3>
+            <p className="text-neutral-600 text-sm">{description}</p>
+          </div>
         </div>
-        <div>
-          <h3 className="text-xl font-bold text-coffee-800">{title}</h3>
-          <p className="text-coffee-600 text-sm">{description}</p>
-        </div>
-      </div>
 
       {/* 소요 시간 */}
-      <div className="flex items-center mb-4 text-coffee-500">
+      <div className="flex items-center mb-4 text-neutral-500">
         <Clock className="h-4 w-4 mr-2" />
         <span className="text-sm">{duration}</span>
       </div>
 
-      {/* 주요 기능 */}
-      <div className="space-y-2">
-        {features.map((feature, index) => (
-          <div key={index} className="flex items-center text-sm text-coffee-700">
-            <div className="w-1.5 h-1.5 bg-coffee-400 rounded-full mr-3" />
-            {feature}
-          </div>
-        ))}
-      </div>
+        {/* 주요 기능 */}
+        <div className="space-y-2">
+          {features.map((feature, index) => (
+            <div key={index} className="flex items-center text-sm text-neutral-700">
+              <div className={`w-1.5 h-1.5 rounded-full mr-3 ${styles.dotColor}`} />
+              {feature}
+            </div>
+          ))}
+        </div>
 
-      {/* 호버 효과 */}
-      <div className="mt-4 pt-4 border-t border-coffee-100 opacity-0 group-hover:opacity-100 transition-opacity">
-        <div className="flex items-center text-coffee-600 text-sm font-medium">
-          <span>시작하기</span>
-          <svg
-            className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
+        {/* 호버 효과 */}
+        <div className="mt-4 pt-4 border-t border-neutral-100/50 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className={`flex items-center text-sm font-medium ${styles.accentColor}`}>
+            <span>시작하기</span>
+            <svg
+              className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
         </div>
       </div>
-    </div>
-  </Link>
-)
+    </Link>
+  )
+}
 
 export default function ModeSelectionPage() {
+  const { user } = useAuth()
+  const [showAuthModal, setShowAuthModal] = useState(false)
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login')
+
+  const handleAuthSuccess = () => {
+    setShowAuthModal(false)
+  }
+
+  const openAuthModal = (mode: 'login' | 'signup') => {
+    setAuthMode(mode)
+    setShowAuthModal(true)
+  }
+
   return (
     // <ProtectedRoute> {/* 임시로 비활성화 - 게스트 사용자 테스트를 위해 */}
-      <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100">
-        <div className="container mx-auto px-4 py-4 md:py-8 max-w-4xl">
+      <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
+        <div className="container mx-auto px-4 py-4 md:py-8 max-w-4xl pb-20 md:pb-8">
           <Navigation showBackButton currentPage="record" />
+          
+          {/* 게스트 모드 표시 */}
+          {!user && (
+            <GuestModeIndicator 
+              variant="banner" 
+              onLoginClick={() => openAuthModal('login')}
+              className="mb-6"
+            />
+          )}
 
           {/* 헤더 */}
           <div className="text-center mb-8 md:mb-12">
-            <h1 className="text-2xl md:text-4xl font-bold text-coffee-800 mb-3 md:mb-4">
+            <h1 className="text-2xl md:text-4xl font-bold text-neutral-800 mb-3 md:mb-4">
               {UI_LABELS.record.selectMode}
             </h1>
-            <p className="text-base md:text-xl text-coffee-600 max-w-2xl mx-auto px-4">
+            <p className="text-base md:text-xl text-neutral-600 max-w-2xl mx-auto px-4">
               {UI_LABELS.tips.selectMode}
             </p>
           </div>
@@ -184,9 +235,11 @@ export default function ModeSelectionPage() {
 
           {/* 모드 카테고리 설명 */}
           <div className="mt-8 grid md:grid-cols-2 gap-4">
-            <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+            <div className="bg-gradient-to-br from-blue-50 to-sky-50 rounded-xl p-6 border-2 border-blue-200">
               <h4 className="font-bold text-blue-800 mb-2 flex items-center">
-                <Coffee className="h-5 w-5 mr-2" />
+                <div className="p-2 bg-gradient-to-br from-blue-400 to-sky-500 text-white rounded-lg mr-2">
+                  <Coffee className="h-5 w-5" />
+                </div>
                 카페에서 마신 커피
               </h4>
               <p className="text-blue-700 text-sm">
@@ -194,9 +247,11 @@ export default function ModeSelectionPage() {
               </p>
             </div>
             
-            <div className="bg-green-50 rounded-xl p-6 border border-green-200">
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border-2 border-green-200">
               <h4 className="font-bold text-green-800 mb-2 flex items-center">
-                <Home className="h-5 w-5 mr-2" />
+                <div className="p-2 bg-gradient-to-br from-green-400 to-emerald-500 text-white rounded-lg mr-2">
+                  <Home className="h-5 w-5" />
+                </div>
                 직접 내린 커피
               </h4>
               <p className="text-green-700 text-sm">
@@ -206,18 +261,18 @@ export default function ModeSelectionPage() {
           </div>
 
           {/* 하단 안내 */}
-          <div className="mt-8 md:mt-16 bg-white rounded-2xl p-6 md:p-8 border border-coffee-200">
+          <div className="mt-8 md:mt-16 bg-white rounded-2xl p-6 md:p-8 border border-neutral-200">
             <div className="text-center">
               <div className="flex justify-center mb-4">
-                <div className="p-3 bg-coffee-100 rounded-full">
-                  <TrendingUp className="h-6 w-6 text-coffee-600" />
+                <div className="p-3 bg-neutral-100 rounded-full">
+                  <TrendingUp className="h-6 w-6 text-neutral-600" />
                 </div>
               </div>
-              <h3 className="text-lg font-semibold text-coffee-800 mb-2">처음이신가요?</h3>
-              <p className="text-coffee-600 mb-4">
+              <h3 className="text-lg font-semibold text-neutral-800 mb-2">처음이신가요?</h3>
+              <p className="text-neutral-600 mb-4">
                 카페 모드로 가볍게 시작해보세요. 익숙해지면 더 상세한 모드로 도전해보세요!
               </p>
-              <div className="flex justify-center space-x-4 text-sm text-coffee-500">
+              <div className="flex justify-center space-x-4 text-sm text-neutral-500">
                 <div className="flex items-center">
                   <Users className="h-4 w-4 mr-1" />
                   <span>85% 사용자가 카페 모드 선택</span>
@@ -230,6 +285,14 @@ export default function ModeSelectionPage() {
             </div>
           </div>
         </div>
+        
+        {/* 인증 모달 */}
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          onSuccess={handleAuthSuccess}
+          initialMode={authMode}
+        />
       </div>
     // </ProtectedRoute> {/* 임시로 비활성화 - 게스트 사용자 테스트를 위해 */}
   )

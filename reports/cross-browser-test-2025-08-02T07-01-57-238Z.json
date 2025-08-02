@@ -1,0 +1,150 @@
+{
+  "timestamp": "2025-08-02T07:01:57.238Z",
+  "config": {
+    "urls": [
+      "http://localhost:3000",
+      "http://localhost:3000/mode-selection",
+      "http://localhost:3000/stats"
+    ],
+    "browsers": [
+      "chromium",
+      "firefox",
+      "webkit"
+    ],
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "timeout": 30000,
+    "waitForNetworkIdle": true
+  },
+  "thresholds": {
+    "lcp": 2500,
+    "fcp": 1800,
+    "cls": 0.1,
+    "tbt": 300
+  },
+  "results": [
+    {
+      "browser": "chromium",
+      "success": true,
+      "results": [
+        {
+          "url": "http://localhost:3000",
+          "success": true,
+          "loadTime": 12811,
+          "metrics": {
+            "fcp": null,
+            "lcp": null,
+            "cls": null,
+            "tbt": null,
+            "loadTime": 0,
+            "domContentLoaded": 0
+          },
+          "timestamp": "2025-08-02T07:00:12.142Z"
+        },
+        {
+          "url": "http://localhost:3000/mode-selection",
+          "success": true,
+          "loadTime": 13067,
+          "metrics": {
+            "fcp": null,
+            "lcp": null,
+            "cls": null,
+            "tbt": null,
+            "loadTime": 0,
+            "domContentLoaded": 0.10000002384185791
+          },
+          "timestamp": "2025-08-02T07:00:26.214Z"
+        },
+        {
+          "url": "http://localhost:3000/stats",
+          "success": true,
+          "loadTime": 12779,
+          "metrics": {
+            "fcp": null,
+            "lcp": null,
+            "cls": null,
+            "tbt": null,
+            "loadTime": 0,
+            "domContentLoaded": 0
+          },
+          "timestamp": "2025-08-02T07:00:39.997Z"
+        }
+      ],
+      "timestamp": "2025-08-02T07:00:41.013Z"
+    },
+    {
+      "browser": "firefox",
+      "success": true,
+      "results": [
+        {
+          "url": "http://localhost:3000",
+          "success": true,
+          "loadTime": 12910,
+          "metrics": {
+            "fcp": null,
+            "lcp": null,
+            "cls": null,
+            "tbt": null,
+            "loadTime": 0,
+            "domContentLoaded": 1
+          },
+          "timestamp": "2025-08-02T07:00:57.325Z"
+        },
+        {
+          "url": "http://localhost:3000/mode-selection",
+          "success": false,
+          "error": "page.evaluate: Execution context was destroyed, most likely because of a navigation.",
+          "timestamp": "2025-08-02T07:01:08.784Z"
+        },
+        {
+          "url": "http://localhost:3000/stats",
+          "success": false,
+          "error": "page.evaluate: Execution context was destroyed, most likely because of a navigation.",
+          "timestamp": "2025-08-02T07:01:17.729Z"
+        }
+      ],
+      "timestamp": "2025-08-02T07:01:19.121Z"
+    },
+    {
+      "browser": "webkit",
+      "success": true,
+      "results": [
+        {
+          "url": "http://localhost:3000",
+          "success": true,
+          "loadTime": 12903,
+          "metrics": {
+            "fcp": null,
+            "lcp": null,
+            "cls": null,
+            "tbt": null,
+            "loadTime": 0,
+            "domContentLoaded": 0
+          },
+          "timestamp": "2025-08-02T07:01:34.700Z"
+        },
+        {
+          "url": "http://localhost:3000/mode-selection",
+          "success": false,
+          "error": "page.evaluate: Execution context was destroyed, most likely because of a navigation",
+          "timestamp": "2025-08-02T07:01:42.954Z"
+        },
+        {
+          "url": "http://localhost:3000/stats",
+          "success": false,
+          "error": "page.evaluate: Execution context was destroyed, most likely because of a navigation",
+          "timestamp": "2025-08-02T07:01:54.219Z"
+        }
+      ],
+      "timestamp": "2025-08-02T07:01:55.233Z"
+    }
+  ],
+  "summary": {
+    "totalBrowsers": 3,
+    "successfulBrowsers": 3,
+    "totalURLs": 3,
+    "testDuration": 118163
+  }
+}

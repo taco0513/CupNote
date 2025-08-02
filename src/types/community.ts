@@ -207,7 +207,7 @@ export interface CommunityLocalStorage {
   sharedResults: SessionAnalysis[]
   userProfile: {
     nickname: string
-    preferredUnits: 'metric' | 'imperial'
+    preferredUnits: 'metric'
     showRealName: boolean
   }
 }

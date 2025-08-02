@@ -68,16 +68,16 @@ export default function TastingFlowModePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100">
-      <div className="container mx-auto px-4 py-4 md:py-8 max-w-4xl">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
+      <div className="container mx-auto px-4 py-4 md:py-8 max-w-4xl pb-20 md:pb-8">
         <Navigation showBackButton currentPage="record" />
 
         {/* 헤더 */}
         <div className="text-center mb-8 md:mb-12">
-          <h1 className="text-2xl md:text-4xl font-bold text-coffee-800 mb-3 md:mb-4">
+          <h1 className="text-2xl md:text-4xl font-bold text-neutral-800 mb-3 md:mb-4">
             기록 모드를 선택하세요
           </h1>
-          <p className="text-base md:text-xl text-coffee-600 max-w-2xl mx-auto px-4">
+          <p className="text-base md:text-xl text-neutral-600 max-w-2xl mx-auto px-4">
             어떤 상황에서 커피를 마셨나요?
           </p>
         </div>
@@ -91,7 +91,7 @@ export default function TastingFlowModePage() {
               className={`
                 relative p-4 md:p-6 bg-white rounded-2xl border-2 transition-all duration-300 cursor-pointer group text-left w-full
                 hover:shadow-xl md:hover:scale-105 md:hover:-translate-y-1
-                ${mode.popular ? 'border-coffee-400 shadow-lg' : 'border-coffee-200 hover:border-coffee-300'}
+                ${mode.popular ? 'border-purple-400 shadow-lg' : 'border-neutral-200 hover:border-neutral-300'}
               `}
             >
               {/* 배지 */}
@@ -99,7 +99,7 @@ export default function TastingFlowModePage() {
                 <div
                   className={`
                     absolute -top-3 -right-3 px-3 py-1 rounded-full text-xs font-semibold
-                    ${mode.popular ? 'bg-coffee-500 text-white' : 'bg-blue-100 text-blue-800'}
+                    ${mode.popular ? 'bg-purple-500 text-white' : 'bg-blue-100 text-blue-800'}
                   `}
                 >
                   {mode.badge}
@@ -117,13 +117,13 @@ export default function TastingFlowModePage() {
                   {mode.icon}
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-coffee-800">{mode.title}</h3>
-                  <p className="text-coffee-600 text-sm">{mode.description}</p>
+                  <h3 className="text-xl font-bold text-neutral-800">{mode.title}</h3>
+                  <p className="text-neutral-600 text-sm">{mode.description}</p>
                 </div>
               </div>
 
               {/* 소요 시간 */}
-              <div className="flex items-center mb-4 text-coffee-500">
+              <div className="flex items-center mb-4 text-neutral-500">
                 <Clock className="h-4 w-4 mr-2" />
                 <span className="text-sm">{mode.duration}</span>
               </div>
@@ -131,16 +131,16 @@ export default function TastingFlowModePage() {
               {/* 주요 기능 */}
               <div className="space-y-2">
                 {mode.features.map((feature, index) => (
-                  <div key={index} className="flex items-center text-sm text-coffee-700">
-                    <div className="w-1.5 h-1.5 bg-coffee-400 rounded-full mr-3" />
+                  <div key={index} className="flex items-center text-sm text-neutral-700">
+                    <div className="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3" />
                     {feature}
                   </div>
                 ))}
               </div>
 
               {/* 호버 효과 */}
-              <div className="mt-4 pt-4 border-t border-coffee-100 opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="flex items-center text-coffee-600 text-sm font-medium">
+              <div className="mt-4 pt-4 border-t border-neutral-100 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="flex items-center text-neutral-600 text-sm font-medium">
                   <span>시작하기</span>
                   <svg
                     className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"
@@ -157,18 +157,18 @@ export default function TastingFlowModePage() {
         </div>
 
         {/* 하단 안내 */}
-        <div className="mt-8 md:mt-16 bg-white rounded-2xl p-6 md:p-8 border border-coffee-200">
+        <div className="mt-8 md:mt-16 bg-white rounded-2xl p-6 md:p-8 border border-neutral-200">
           <div className="text-center">
             <div className="flex justify-center mb-4">
-              <div className="p-3 bg-coffee-100 rounded-full">
-                <TrendingUp className="h-6 w-6 text-coffee-600" />
+              <div className="p-3 bg-neutral-100 rounded-full">
+                <TrendingUp className="h-6 w-6 text-neutral-600" />
               </div>
             </div>
-            <h3 className="text-lg font-semibold text-coffee-800 mb-2">처음이신가요?</h3>
-            <p className="text-coffee-600 mb-4">
+            <h3 className="text-lg font-semibold text-neutral-800 mb-2">처음이신가요?</h3>
+            <p className="text-neutral-600 mb-4">
               카페 모드로 가볍게 시작해보세요. 익숙해지면 더 상세한 모드로 도전해보세요!
             </p>
-            <div className="flex justify-center space-x-4 text-sm text-coffee-500">
+            <div className="flex justify-center space-x-4 text-sm text-neutral-500">
               <div className="flex items-center">
                 <Coffee className="h-4 w-4 mr-1" />
                 <span>모든 모드 언제든 변경 가능</span>

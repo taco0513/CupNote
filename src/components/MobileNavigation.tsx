@@ -5,7 +5,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import { Home, Trophy, BarChart3, Settings, Plus, User, LogIn } from 'lucide-react'
+import { Home, Trophy, BarChart3, Settings, Plus, User, LogIn, Coffee } from 'lucide-react'
 
 import { useAuth } from '../contexts/AuthContext'
 import AuthModal from './auth/AuthModal'
@@ -39,22 +39,22 @@ export default function MobileNavigation() {
   // 인증된 사용자를 위한 네비게이션 아이템들
   const authenticatedNavItems: NavItem[] = [
     {
-      href: '/achievements',
-      icon: <Trophy className="h-5 w-5" />,
-      label: '성취',
-      matchPaths: ['/achievements'],
+      href: '/my-records',
+      icon: <Coffee className="h-5 w-5" />,
+      label: '내 기록',
+      matchPaths: ['/my-records', '/records', '/stats'],
     },
     {
       href: '/mode-selection',
       icon: <Plus className="h-6 w-6" />,
-      label: '기록',
+      label: '작성',
       matchPaths: ['/mode-selection', '/record', '/result'],
     },
     {
-      href: '/stats',
-      icon: <BarChart3 className="h-5 w-5" />,
-      label: '통계',
-      matchPaths: ['/stats'],
+      href: '/achievements',
+      icon: <Trophy className="h-5 w-5" />,
+      label: '성취',
+      matchPaths: ['/achievements'],
     },
     {
       href: '/settings',
@@ -82,7 +82,7 @@ export default function MobileNavigation() {
   return (
     <>
       <nav 
-        className="fixed bottom-0 left-0 right-0 bg-background border-t border-border md:hidden z-50 safe-area-inset"
+        className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-md border-t border-border md:hidden z-50 safe-area-inset shadow-lg"
         data-testid="mobile-navigation"
       >
         <div className={`grid h-16 ${user ? 'grid-cols-5' : 'grid-cols-2'}`}>
@@ -95,19 +95,19 @@ export default function MobileNavigation() {
                 key={item.href}
                 href={item.href}
                 className={`
-                  flex flex-col items-center justify-center space-y-1 relative
+                  flex flex-col items-center justify-center space-y-1 relative h-full w-full
                   transition-all duration-200 ease-out touch-target
                   ${isRecordButton 
-                    ? 'text-primary-foreground hover-scale' 
+                    ? 'text-primary-foreground' 
                     : active 
                       ? 'text-foreground' 
-                      : 'text-foreground-muted hover:text-foreground'
+                      : 'text-foreground-muted'
                   }
-                  ${!isRecordButton ? 'hover:scale-105 active:scale-95' : ''}
+                  active:scale-95 active:bg-secondary/20 rounded-lg mx-1 my-1
                 `}
               >
                 {isRecordButton && (
-                  <div className="absolute inset-2 bg-primary rounded-xl shadow-lg hover-glow transition-all duration-200" />
+                  <div className="absolute inset-2 bg-gradient-to-br from-primary to-primary-hover rounded-xl shadow-xl transition-all duration-200" />
                 )}
                 <div
                   className={`relative transition-all duration-200 ${

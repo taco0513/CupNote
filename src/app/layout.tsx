@@ -27,6 +27,10 @@ const SyncStatus = dynamic(() => import('../components/SyncStatus'), {
   loading: () => null
 })
 
+const AppHeader = dynamic(() => import('../components/AppHeader'), {
+  loading: () => null
+})
+
 const WebVitalsInitializer = dynamic(() => import('../components/performance/WebVitalsInitializer'), {
   loading: () => null
 })
@@ -125,6 +129,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <AuthProvider>
                 <NetworkStatus />
                 <SyncStatus />
+                <AppHeader />
                 <div className="pb-16 md:pb-0 safe-area-inset">{children}</div>
                 <MobileNavigation />
                 <NotificationContainer />

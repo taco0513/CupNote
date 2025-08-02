@@ -13,34 +13,49 @@ import {
   User,
   Database,
   Zap,
+  Home,
+  Plus,
+  X,
 } from 'lucide-react'
 
 import ProtectedRoute from '../../components/auth/ProtectedRoute'
 import Navigation from '../../components/Navigation'
 import { CoffeeRecord } from '../../types/coffee'
+import '../../utils/demo-equipment' // 개발 모드에서 데모 함수 사용 가능
 
 interface UserSettings {
   displayName: string
-  preferredUnits: 'metric' | 'imperial'
-  defaultTasteMode: 'simple' | 'advanced'
   autoSaveEnabled: boolean
   showRatingInList: boolean
   compactView: boolean
+  homeCafeEquipment: {
+    grinder: string
+    brewingMethod: string
+    scale: string
+    kettle: string
+    other: string[]
+  }
 }
 
 const defaultSettings: UserSettings = {
   displayName: '',
-  preferredUnits: 'metric',
-  defaultTasteMode: 'simple',
   autoSaveEnabled: true,
   showRatingInList: true,
   compactView: false,
+  homeCafeEquipment: {
+    grinder: '',
+    brewingMethod: '',
+    scale: '',
+    kettle: '',
+    other: []
+  }
 }
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState<UserSettings>(defaultSettings)
   const [records, setRecords] = useState<CoffeeRecord[]>([])
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [newEquipmentItem, setNewEquipmentItem] = useState('')
   const [notification, setNotification] = useState<{
     type: 'success' | 'error'
     message: string
@@ -91,6 +106,42 @@ export default function SettingsPage() {
   const showNotification = (type: 'success' | 'error', message: string) => {
     setNotification({ type, message })
     setTimeout(() => setNotification(null), 3000)
+  }
+
+  const updateEquipment = (field: keyof typeof settings.homeCafeEquipment, value: string) => {
+    const newSettings = {
+      ...settings,
+      homeCafeEquipment: {
+        ...settings.homeCafeEquipment,
+        [field]: value
+      }
+    }
+    saveSettings(newSettings)
+  }
+
+  const addEquipmentItem = () => {
+    if (newEquipmentItem.trim()) {
+      const newSettings = {
+        ...settings,
+        homeCafeEquipment: {
+          ...settings.homeCafeEquipment,
+          other: [...settings.homeCafeEquipment.other, newEquipmentItem.trim()]
+        }
+      }
+      saveSettings(newSettings)
+      setNewEquipmentItem('')
+    }
+  }
+
+  const removeEquipmentItem = (index: number) => {
+    const newSettings = {
+      ...settings,
+      homeCafeEquipment: {
+        ...settings.homeCafeEquipment,
+        other: settings.homeCafeEquipment.other.filter((_, i) => i !== index)
+      }
+    }
+    saveSettings(newSettings)
   }
 
   const exportData = () => {
@@ -171,7 +222,7 @@ export default function SettingsPage() {
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-gradient-to-br from-background to-background-secondary">
-        <div className="container mx-auto px-4 py-4 md:py-8 max-w-4xl">
+        <div className="container mx-auto px-4 py-4 md:py-8 max-w-4xl pb-20 md:pb-8">
           <Navigation showBackButton currentPage="settings" />
 
         {/* 헤더 */}
@@ -218,45 +269,101 @@ export default function SettingsPage() {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-coffee-700 mb-2">
-                  기본 측정 단위
-                </label>
-                <select
-                  value={settings.preferredUnits}
-                  onChange={e => {
-                    const newSettings = {
-                      ...settings,
-                      preferredUnits: e.target.value as 'metric' | 'imperial',
-                    }
-                    saveSettings(newSettings)
-                  }}
-                  className="w-full px-3 py-2 border border-coffee-300 rounded-lg focus:outline-none focus:border-coffee-500"
-                >
-                  <option value="metric">미터법 (g, ml, °C)</option>
-                  <option value="imperial">야드파운드법 (oz, fl oz, °F)</option>
-                </select>
+              {/* 홈카페 장비 설정 */}
+              <div className="pt-4 border-t border-coffee-200">
+                <h3 className="text-md font-semibold text-coffee-800 mb-3 flex items-center">
+                  <Home className="h-4 w-4 mr-2" />
+                  홈카페 장비 설정
+                </h3>
+                <p className="text-sm text-coffee-600 mb-4">
+                  HomeCafe 모드에서 사용할 기본 장비를 설정하세요
+                </p>
+
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium text-coffee-700 mb-1">그라인더</label>
+                    <input
+                      type="text"
+                      value={settings.homeCafeEquipment.grinder}
+                      onChange={e => updateEquipment('grinder', e.target.value)}
+                      className="w-full px-3 py-2 border border-coffee-300 rounded-lg focus:outline-none focus:border-coffee-500 text-sm"
+                      placeholder="예: 코만단테 C40, 바라짜 엔코어"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-coffee-700 mb-1">추출 도구</label>
+                    <input
+                      type="text"
+                      value={settings.homeCafeEquipment.brewingMethod}
+                      onChange={e => updateEquipment('brewingMethod', e.target.value)}
+                      className="w-full px-3 py-2 border border-coffee-300 rounded-lg focus:outline-none focus:border-coffee-500 text-sm"
+                      placeholder="예: V60, 칼리타 웨이브, 에어로프레스"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-coffee-700 mb-1">저울</label>
+                    <input
+                      type="text"
+                      value={settings.homeCafeEquipment.scale}
+                      onChange={e => updateEquipment('scale', e.target.value)}
+                      className="w-full px-3 py-2 border border-coffee-300 rounded-lg focus:outline-none focus:border-coffee-500 text-sm"
+                      placeholder="예: 아카이아 펄, 하리오 V60 드립스케일"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-coffee-700 mb-1">케틀</label>
+                    <input
+                      type="text"
+                      value={settings.homeCafeEquipment.kettle}
+                      onChange={e => updateEquipment('kettle', e.target.value)}
+                      className="w-full px-3 py-2 border border-coffee-300 rounded-lg focus:outline-none focus:border-coffee-500 text-sm"
+                      placeholder="예: 펠로우 스타그 EKG, 하리오 부오노"
+                    />
+                  </div>
+
+                  {/* 추가 장비 */}
+                  <div>
+                    <label className="block text-sm font-medium text-coffee-700 mb-1">기타 장비</label>
+                    
+                    {/* 기존 추가 장비 목록 */}
+                    {settings.homeCafeEquipment.other.map((item, index) => (
+                      <div key={index} className="flex items-center mb-2">
+                        <span className="flex-1 px-3 py-2 bg-coffee-50 border border-coffee-200 rounded-lg text-sm">
+                          {item}
+                        </span>
+                        <button
+                          onClick={() => removeEquipmentItem(index)}
+                          className="ml-2 p-1 text-red-500 hover:text-red-700 transition-colors"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ))}
+
+                    {/* 새 장비 추가 */}
+                    <div className="flex items-center mt-2">
+                      <input
+                        type="text"
+                        value={newEquipmentItem}
+                        onChange={e => setNewEquipmentItem(e.target.value)}
+                        onKeyPress={e => e.key === 'Enter' && addEquipmentItem()}
+                        className="flex-1 px-3 py-2 border border-coffee-300 rounded-lg focus:outline-none focus:border-coffee-500 text-sm"
+                        placeholder="추가 장비 입력 (온도계, 타이머 등)"
+                      />
+                      <button
+                        onClick={addEquipmentItem}
+                        className="ml-2 p-2 bg-coffee-600 text-white rounded-lg hover:bg-coffee-700 transition-colors"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-coffee-700 mb-2">
-                  기본 맛 표현 모드
-                </label>
-                <select
-                  value={settings.defaultTasteMode}
-                  onChange={e => {
-                    const newSettings = {
-                      ...settings,
-                      defaultTasteMode: e.target.value as 'simple' | 'advanced',
-                    }
-                    saveSettings(newSettings)
-                  }}
-                  className="w-full px-3 py-2 border border-coffee-300 rounded-lg focus:outline-none focus:border-coffee-500"
-                >
-                  <option value="simple">편하게</option>
-                  <option value="advanced">전문가</option>
-                </select>
-              </div>
             </div>
           </div>
 

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 
 import { User, Settings, LogOut, Trophy, Coffee } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 import { useAuth } from '../../contexts/AuthContext'
 
@@ -12,6 +13,7 @@ interface UserProfileProps {
 
 export default function UserProfile({ onClose }: UserProfileProps) {
   const { user, signOut } = useAuth()
+  const router = useRouter()
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
 
   if (!user) return null
@@ -87,8 +89,8 @@ export default function UserProfile({ onClose }: UserProfileProps) {
         <button
           className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
           onClick={() => {
-            // TODO: 설정 페이지로 이동
-            console.log('Settings clicked')
+            router.push('/settings')
+            onClose?.()
           }}
         >
           <Settings size={20} className="text-gray-500" />

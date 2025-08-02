@@ -1,0 +1,71 @@
+{
+  "timestamp": "2025-08-02T07:06:02.030Z",
+  "config": {
+    "baseUrl": "http://localhost:3000",
+    "browsers": [
+      "chromium",
+      "firefox",
+      "webkit"
+    ],
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "timeout": 10000
+  },
+  "results": [
+    {
+      "browser": "chromium",
+      "success": true,
+      "loadTime": 62,
+      "pageTitle": "DINO v2.0 | Digital Nomad Travel Manager",
+      "hasMainHeading": true,
+      "optimizations": {
+        "coreWebVitalsOptimizer": false,
+        "optimizedLayout": true,
+        "resourceHints": false,
+        "criticalContent": false,
+        "preloadLinks": 3,
+        "performanceObserver": true
+      },
+      "timestamp": "2025-08-02T07:05:53.999Z"
+    },
+    {
+      "browser": "firefox",
+      "success": true,
+      "loadTime": 122,
+      "pageTitle": "DINO v2.0 | Digital Nomad Travel Manager",
+      "hasMainHeading": true,
+      "optimizations": {
+        "coreWebVitalsOptimizer": false,
+        "optimizedLayout": true,
+        "resourceHints": false,
+        "criticalContent": false,
+        "preloadLinks": 3,
+        "performanceObserver": true
+      },
+      "timestamp": "2025-08-02T07:05:58.368Z"
+    },
+    {
+      "browser": "webkit",
+      "success": true,
+      "loadTime": 131,
+      "pageTitle": "DINO v2.0 | Digital Nomad Travel Manager",
+      "hasMainHeading": true,
+      "optimizations": {
+        "coreWebVitalsOptimizer": false,
+        "optimizedLayout": true,
+        "resourceHints": false,
+        "criticalContent": false,
+        "preloadLinks": 3,
+        "performanceObserver": true
+      },
+      "timestamp": "2025-08-02T07:06:01.528Z"
+    }
+  ],
+  "summary": {
+    "totalBrowsers": 3,
+    "successfulBrowsers": 3,
+    "avgLoadTime": 105
+  }
+}

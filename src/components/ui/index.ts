@@ -11,8 +11,8 @@ export {
   useWarningToast, 
   useInfoToast 
 } from './Toast'
+export { default as LoadingSpinner } from './LoadingSpinner'
 export { 
-  LoadingSpinner, 
   InlineSpinner, 
   SkeletonLoader, 
   LoadingButton as LoadingButtonSpinner, 

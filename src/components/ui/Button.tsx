@@ -126,13 +126,13 @@ export const LoadingButton = forwardRef<HTMLButtonElement, ButtonProps>(
   )
 )
 
-// Coffee 테마 특별 버튼
+// Purple Accent 테마 특별 버튼 (구 Coffee 버튼)
 export const CoffeeButton = forwardRef<HTMLButtonElement, Omit<ButtonProps, 'variant'>>(
   ({ className, ...props }, ref) => (
     <Button 
       ref={ref} 
       variant="default"
-      className={`bg-coffee-600 text-white hover:bg-coffee-700 shadow-lg hover:shadow-xl ${className}`}
+      className={`bg-purple-600 text-white hover:bg-purple-700 shadow-lg hover:shadow-xl ${className}`}
       {...props} 
     />
   )

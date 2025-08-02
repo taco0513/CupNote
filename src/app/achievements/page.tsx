@@ -8,6 +8,8 @@ import ProtectedRoute from '../../components/auth/ProtectedRoute'
 import Navigation from '../../components/Navigation'
 import { SupabaseStorage } from '../../lib/supabase-storage'
 import { UserStats, Achievement } from '../../types/achievement'
+import { simpleDemoStats } from '../../data/simple-demo'
+import { StatsGridSkeleton, AchievementGridSkeleton, SkeletonLoader } from '../../components/SkeletonLoader'
 
 
 export default function AchievementsPage() {
@@ -19,10 +21,23 @@ export default function AchievementsPage() {
     const loadStats = async () => {
       try {
         setLoading(true)
-        const stats = await SupabaseStorage.getUserStats()
-        setUserStats(stats)
+        // 실제 데이터 로드 시도
+        try {
+          const stats = await SupabaseStorage.getUserStats()
+          if (stats) {
+            setUserStats(stats)
+          } else {
+            // 데이터가 없으면 데모 데이터 사용
+            setUserStats(simpleDemoStats as UserStats)
+          }
+        } catch (error) {
+          console.log('실제 데이터 로드 실패, 데모 데이터 사용:', error)
+          // 에러 발생 시 데모 데이터 사용
+          setUserStats(simpleDemoStats as UserStats)
+        }
       } catch (error) {
         console.error('성취 데이터 로드 오류:', error)
+        setUserStats(simpleDemoStats as UserStats) // 최종 fallback
       } finally {
         setLoading(false)
       }
@@ -41,22 +56,53 @@ export default function AchievementsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-coffee-600 mx-auto mb-4"></div>
-          <p className="text-coffee-600">성취를 불러오는 중...</p>
+      <ProtectedRoute>
+        <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
+          <div className="container mx-auto px-4 py-4 md:py-8 max-w-4xl pb-20 md:pb-8">
+            <Navigation showBackButton currentPage="achievements" />
+            
+            {/* 헤더 스켈레톤 */}
+            <div className="text-center mb-6 md:mb-8">
+              <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-gray-200 rounded-full mb-4 animate-pulse"></div>
+              <div className="h-8 bg-gray-200 rounded w-32 mx-auto mb-2 animate-pulse"></div>
+              <div className="h-6 bg-gray-200 rounded w-64 mx-auto mb-4 animate-pulse"></div>
+              
+              {/* 전체 진행률 스켈레톤 */}
+              <div className="bg-white rounded-xl p-4 shadow-sm border border-neutral-200 max-w-md mx-auto animate-pulse">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="h-4 bg-gray-200 rounded w-16"></div>
+                  <div className="h-4 bg-gray-200 rounded w-12"></div>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-3 mb-1"></div>
+                <div className="h-3 bg-gray-200 rounded w-20 mx-auto"></div>
+              </div>
+            </div>
+            
+            {/* 통계 카드 스켈레톤 */}
+            <StatsGridSkeleton count={3} />
+            
+            {/* 카테고리 필터 스켈레톤 */}
+            <div className="flex flex-wrap gap-2 mb-6 justify-center mt-6">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="h-10 w-24 bg-gray-200 rounded-full animate-pulse"></div>
+              ))}
+            </div>
+            
+            {/* 성취 목록 스켈레톤 */}
+            <AchievementGridSkeleton count={4} />
+          </div>
         </div>
-      </div>
+      </ProtectedRoute>
     )
   }
 
   if (!userStats) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100 flex items-center justify-center">
         <div className="text-center">
-          <Trophy className="h-16 w-16 text-coffee-400 mx-auto mb-4" />
-          <h1 className="text-xl font-bold text-coffee-800 mb-2">아직 성취가 없어요</h1>
-          <p className="text-coffee-600">첫 커피 기록을 만들어보세요!</p>
+          <Trophy className="h-16 w-16 text-neutral-400 mx-auto mb-4" />
+          <h1 className="text-xl font-bold text-neutral-800 mb-2">아직 성취가 없어요</h1>
+          <p className="text-neutral-600">첫 커피 기록을 만들어보세요!</p>
         </div>
       </div>
     )
@@ -103,8 +149,8 @@ export default function AchievementsPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100">
-        <div className="container mx-auto px-4 py-4 md:py-8 max-w-4xl">
+      <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100">
+        <div className="container mx-auto px-4 py-4 md:py-8 max-w-4xl pb-20 md:pb-8">
           <Navigation showBackButton currentPage="achievements" />
 
           {/* 헤더 */}
@@ -112,26 +158,26 @@ export default function AchievementsPage() {
             <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full mb-4">
               <Trophy className="h-8 w-8 md:h-10 md:w-10 text-white" />
             </div>
-            <h1 className="text-2xl md:text-4xl font-bold text-coffee-800 mb-2">성취</h1>
-            <p className="text-base md:text-xl text-coffee-600 mb-4 px-4">
+            <h1 className="text-2xl md:text-4xl font-bold text-neutral-800 mb-2">성취</h1>
+            <p className="text-base md:text-xl text-neutral-600 mb-4 px-4">
               커피 여정의 발자취를 확인해보세요
             </p>
 
             {/* 전체 진행률 */}
-            <div className="bg-white rounded-xl p-4 shadow-sm border border-coffee-200 max-w-md mx-auto">
+            <div className="bg-white rounded-xl p-4 shadow-sm border border-neutral-200 max-w-md mx-auto">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-coffee-700">달성률</span>
-                <span className="text-sm font-bold text-coffee-800">
+                <span className="text-sm font-medium text-neutral-700">달성률</span>
+                <span className="text-sm font-bold text-neutral-800">
                   {unlockedCount}/{totalCount}
                 </span>
               </div>
-              <div className="w-full bg-coffee-200 rounded-full h-3">
+              <div className="w-full bg-neutral-200 rounded-full h-3">
                 <div
                   className="bg-gradient-to-r from-yellow-400 to-orange-500 h-3 rounded-full transition-all duration-300"
                   style={{ width: `${(unlockedCount / totalCount) * 100}%` }}
                 ></div>
               </div>
-              <p className="text-xs text-coffee-600 mt-1">
+              <p className="text-xs text-neutral-600 mt-1">
                 {Math.round((unlockedCount / totalCount) * 100)}% 완료
               </p>
             </div>
@@ -140,7 +186,7 @@ export default function AchievementsPage() {
           {/* 레벨 및 통계 카드 */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
             {/* 레벨 카드 */}
-            <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6 border border-coffee-200">
+            <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6 border border-neutral-200">
               <div className="text-center">
                 <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full mb-3 md:mb-4">
                   <Crown className="h-6 w-6 md:h-8 md:w-8 text-white" />
@@ -200,8 +246,8 @@ export default function AchievementsPage() {
                   onClick={() => setSelectedCategory(category.id)}
                   className={`flex items-center px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                     selectedCategory === category.id
-                      ? 'bg-coffee-600 text-white'
-                      : 'bg-white text-coffee-600 hover:bg-coffee-50 border border-coffee-200'
+                      ? 'bg-purple-600 text-white'
+                      : 'bg-white text-neutral-600 hover:bg-neutral-50 border border-neutral-200'
                   }`}
                 >
                   <Icon className="h-4 w-4 mr-2" />

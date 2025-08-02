@@ -5,17 +5,18 @@ import { useRouter, usePathname } from 'next/navigation'
 
 import Link from 'next/link'
 
-import { BarChart3, Settings, Plus, ArrowLeft, Trophy, User, LogIn } from 'lucide-react'
+import { BarChart3, Settings, Plus, ArrowLeft, Trophy, User, LogIn, Coffee } from 'lucide-react'
 
 import { useAuth } from '../contexts/AuthContext'
 import { isFeatureEnabled } from '../config/feature-flags.config'
 import AuthModal from './auth/AuthModal'
 import UserProfile from './auth/UserProfile'
+import { NavigationGuestIndicator } from './GuestModeIndicator'
 
 interface NavigationProps {
   showBackButton?: boolean
   backHref?: string
-  currentPage?: 'home' | 'stats' | 'settings' | 'record' | 'detail' | 'result' | 'achievements'
+  currentPage?: 'home' | 'settings' | 'record' | 'detail' | 'result' | 'achievements' | 'my-records'
 }
 
 export default function Navigation({
@@ -82,7 +83,7 @@ export default function Navigation({
   }
 
   return (
-    <nav className="flex items-center justify-between mb-4 md:mb-8 bg-background rounded-xl p-3 md:p-4 shadow-sm border border-border">
+    <nav className="hidden md:flex items-center justify-between mb-4 md:mb-8 bg-background rounded-xl p-3 md:p-4 shadow-sm border border-border">
       <div className="flex items-center">
         {showBackButton && (
           <button
@@ -100,6 +101,19 @@ export default function Navigation({
 
       {/* 데스크톱 네비게이션 - 모바일에서는 숨김 */}
       <div className="hidden md:flex items-center space-x-2">
+        {/* 게스트 모드에서도 일부 기능 사용 가능 */}
+        <Link
+          href={isFeatureEnabled('ENABLE_NEW_TASTING_FLOW') ? '/tasting-flow' : '/mode-selection'}
+          className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
+            isActive('record')
+              ? 'bg-primary text-primary-foreground'
+              : 'bg-primary hover:bg-primary-hover text-primary-foreground'
+          }`}
+        >
+          <Plus className="h-4 w-4 mr-2" />
+          기록하기
+        </Link>
+        
         {user && (
           <>
             <Link
@@ -114,15 +128,15 @@ export default function Navigation({
               성취
             </Link>
             <Link
-              href="/stats"
+              href="/my-records"
               className={`flex items-center px-3 py-2 rounded-lg transition-colors ${
-                isActive('stats')
+                isActive('my-records')
                   ? 'bg-secondary text-foreground'
                   : 'text-foreground-secondary hover:text-foreground hover:bg-secondary'
               }`}
             >
-              <BarChart3 className="h-4 w-4 mr-1" />
-              통계
+              <Coffee className="h-4 w-4 mr-1" />
+              내 기록
             </Link>
             <Link
               href="/settings"
@@ -134,17 +148,6 @@ export default function Navigation({
             >
               <Settings className="h-4 w-4 mr-1" />
               설정
-            </Link>
-            <Link
-              href={isFeatureEnabled('ENABLE_NEW_TASTING_FLOW') ? '/tasting-flow' : '/mode-selection'}
-              className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
-                isActive('record')
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-primary hover:bg-primary-hover text-primary-foreground'
-              }`}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              기록하기
             </Link>
           </>
         )}
@@ -172,14 +175,8 @@ export default function Navigation({
               <span className="text-sm font-medium text-foreground">{user.username}</span>
             </button>
           ) : (
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => openAuthModal('login')}
-                className="flex items-center px-3 py-2 text-foreground-secondary hover:text-foreground hover:bg-secondary rounded-lg transition-colors"
-              >
-                <LogIn className="h-4 w-4 mr-1" />
-                로그인
-              </button>
+            <div className="flex items-center space-x-3">
+              <NavigationGuestIndicator onLoginClick={() => openAuthModal('login')} />
               <button
                 onClick={() => openAuthModal('signup')}
                 className="flex items-center px-4 py-2 bg-accent hover:bg-accent-hover text-accent-foreground rounded-lg transition-colors"

@@ -24,14 +24,44 @@ import {
 import Navigation from '../../../../components/Navigation'
 import { isFeatureEnabled } from '../../../../config/feature-flags.config'
 import type { TastingSession, BrewSetup } from '../../../../types/tasting-flow.types'
+import { 
+  getHomeCafeEquipment, 
+  getBrewingMethodSuggestions,
+  getGrinderSuggestions,
+  getGrindSizeRecommendations,
+  getBrewingRecommendations 
+} from '../../../../utils/equipment-settings'
+import '../../../../utils/demo-equipment' // 개발 모드에서 데모 함수 사용 가능
 
-// 문서에 맞는 4개 드리퍼
-const DRIPPER_OPTIONS = [
-  { id: 'v60', name: 'V60', icon: '☕', description: '깔끔하고 밝은 맛' },
-  { id: 'kalita-wave', name: 'Kalita Wave', icon: '🌊', description: '균형 잡힌 바디감' },
-  { id: 'origami', name: 'Origami', icon: '🏮', description: '다재다능한 추출' },
-  { id: 'april', name: 'April', icon: '🌸', description: '균형 잡힌 맛' },
-]
+// 기본 드리퍼 옵션 (사용자 설정에 따라 동적으로 업데이트됨)
+const getDefaultDripperOptions = () => {
+  const userBrewingMethod = getHomeCafeEquipment().brewingMethod
+  
+  const baseOptions = [
+    { id: 'v60', name: 'V60', icon: '☕', description: '깔끔하고 밝은 맛' },
+    { id: 'kalita-wave', name: 'Kalita Wave', icon: '🌊', description: '균형 잡힌 바디감' },
+    { id: 'origami', name: 'Origami', icon: '🏮', description: '다재다능한 추출' },
+    { id: 'april', name: 'April', icon: '🌸', description: '균형 잡힌 맛' },
+    { id: 'aeropress', name: 'AeroPress', icon: '🔧', description: '풍부하고 깔끔한 맛' },
+    { id: 'french-press', name: 'French Press', icon: '🫖', description: '진하고 풀바디' },
+    { id: 'other', name: '기타', icon: '⚙️', description: '직접 입력' }
+  ]
+  
+  // 사용자 장비가 기본 옵션에 없으면 맨 앞에 추가
+  if (userBrewingMethod && !baseOptions.some(option => 
+    option.name.toLowerCase() === userBrewingMethod.toLowerCase() ||
+    option.id === userBrewingMethod.toLowerCase().replace(/\s+/g, '-')
+  )) {
+    baseOptions.unshift({
+      id: 'user-equipment',
+      name: userBrewingMethod,
+      icon: '⭐',
+      description: '내 장비'
+    })
+  }
+  
+  return baseOptions
+}
 
 // 7개 세분화된 비율 프리셋
 const RATIO_PRESETS = [
@@ -48,6 +78,13 @@ export default function BrewSetupPage() {
   const router = useRouter()
 
   const [session, setSession] = useState<Partial<TastingSession> | null>(null)
+  const [dripperOptions, setDripperOptions] = useState(getDefaultDripperOptions())
+  
+  // 사용자 장비 설정 불러오기
+  const userEquipment = getHomeCafeEquipment()
+  const grindRecommendations = getGrindSizeRecommendations(userEquipment.grinder)
+  const brewingRecommendations = getBrewingRecommendations(userEquipment)
+  
   const [brewSetup, setBrewSetup] = useState<BrewSetup>({
     dripper: '',
     coffeeAmount: 20,
@@ -132,8 +169,40 @@ export default function BrewSetupPage() {
           setLapTimes([])
         }
       }
+    } else {
+      // 기존 데이터가 없으면 사용자 장비 설정을 기본값으로 사용
+      if (userEquipment.brewingMethod) {
+        const matchedOption = dripperOptions.find(option => 
+          option.name.toLowerCase() === userEquipment.brewingMethod.toLowerCase() ||
+          option.id === userEquipment.brewingMethod.toLowerCase().replace(/\s+/g, '-')
+        )
+        
+        if (matchedOption) {
+          setBrewSetup(prev => ({ ...prev, dripper: matchedOption.id }))
+        } else if (userEquipment.brewingMethod) {
+          setBrewSetup(prev => ({ ...prev, dripper: 'user-equipment' }))
+          setCustomDripper(userEquipment.brewingMethod)
+        }
+      }
+      
+      // 추천 비율이 있으면 적용
+      if (brewingRecommendations.ratio) {
+        const ratio = parseFloat(brewingRecommendations.ratio.split(':')[1])
+        if (!isNaN(ratio)) {
+          setBrewSetup(prev => ({
+            ...prev,
+            ratio,
+            waterAmount: Math.round(prev.coffeeAmount * ratio)
+          }))
+        }
+      }
+      
+      // 그라인더 기반 분쇄도 추천이 있으면 첫 번째 추천값 설정
+      if (grindRecommendations.length > 0 && userEquipment.grinder) {
+        setGrindSetting(grindRecommendations[0])
+      }
     }
-  }, [router])
+  }, [router, userEquipment, dripperOptions, brewingRecommendations, grindRecommendations])
 
   // 타이머 로직
   useEffect(() => {
@@ -332,7 +401,7 @@ export default function BrewSetupPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100">
-      <div className="container mx-auto px-4 py-4 md:py-8 max-w-2xl">
+      <div className="container mx-auto px-4 py-4 md:py-8 max-w-2xl pb-20 md:pb-8">
         <Navigation showBackButton currentPage="record" />
 
         {/* 헤더 */}
@@ -406,7 +475,7 @@ export default function BrewSetupPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              {DRIPPER_OPTIONS.map((option) => (
+              {dripperOptions.map((option) => (
                 <button
                   key={option.id}
                   onClick={() => setBrewSetup(prev => ({ ...prev, dripper: option.id }))}
@@ -443,7 +512,14 @@ export default function BrewSetupPage() {
 
           {/* 원두량과 물량 */}
           <div className="bg-white rounded-2xl shadow-lg p-6">
-            <h3 className="text-lg font-bold text-coffee-800 mb-4">추출 비율</h3>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-coffee-800">추출 비율</h3>
+              {brewingRecommendations.ratio && (
+                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                  추천: {brewingRecommendations.ratio}
+                </span>
+              )}
+            </div>
             
             <div className="grid md:grid-cols-2 gap-6">
               {/* 원두량 */}
@@ -551,7 +627,38 @@ export default function BrewSetupPage() {
 
           {/* 분쇄도 설정 */}
           <div className="bg-white rounded-2xl shadow-lg p-6">
-            <h3 className="text-lg font-bold text-coffee-800 mb-4">분쇄도 설정 (선택)</h3>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-coffee-800">분쇄도 설정 (선택)</h3>
+              {userEquipment.grinder && (
+                <span className="text-xs bg-coffee-100 text-coffee-700 px-2 py-1 rounded-full">
+                  내 그라인더: {userEquipment.grinder}
+                </span>
+              )}
+            </div>
+            
+            {/* 추천 분쇄도 */}
+            {grindRecommendations.length > 0 && userEquipment.grinder && (
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {userEquipment.grinder} 추천 설정
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {grindRecommendations.map((recommendation, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setGrindSetting(recommendation)}
+                      className={`px-3 py-2 text-sm rounded-lg border transition-colors ${
+                        grindSetting === recommendation
+                          ? 'border-green-500 bg-green-50 text-green-700'
+                          : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+                      }`}
+                    >
+                      {recommendation}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
             
             <label className="block text-sm font-medium text-gray-700 mb-2">
               분쇄도 정보를 자유롭게 입력하세요
@@ -560,11 +667,15 @@ export default function BrewSetupPage() {
               type="text"
               value={grindSetting}
               onChange={(e) => setGrindSetting(e.target.value)}
-              placeholder="예: 바라짜 세테 30M - 5E, 커맨던트 12클릭, 중간 굵기"
+              placeholder={userEquipment.grinder 
+                ? `예: ${userEquipment.grinder} 설정값, 또는 입자 크기 설명`
+                : "예: 바라짜 세테 30M - 5E, 커맨던트 12클릭, 중간 굵기"
+              }
               className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
             />
             <p className="mt-2 text-sm text-gray-500">
               그라인더 이름과 설정값, 또는 입자 크기를 설명해주세요
+              {userEquipment.grinder && " (설정에서 변경 가능)"}
             </p>
           </div>
 
@@ -698,13 +809,59 @@ export default function BrewSetupPage() {
           </div>
 
           {/* 안내 메시지 */}
-          <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
-            <div className="flex items-start space-x-2">
-              <Info className="h-5 w-5 text-blue-600 mt-0.5" />
-              <p className="text-sm text-blue-700">
-                타이머는 선택사항입니다. 추출하면서 실시간으로 기록하거나, 나중에 입력해도 됩니다.
-              </p>
+          <div className="space-y-4">
+            <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
+              <div className="flex items-start space-x-2">
+                <Info className="h-5 w-5 text-blue-600 mt-0.5" />
+                <p className="text-sm text-blue-700">
+                  타이머는 선택사항입니다. 추출하면서 실시간으로 기록하거나, 나중에 입력해도 됩니다.
+                </p>
+              </div>
             </div>
+
+            {/* 설정 페이지 링크 */}
+            {(!userEquipment.grinder || !userEquipment.brewingMethod) && (
+              <div className="bg-coffee-50 rounded-xl p-4 border border-coffee-200">
+                <div className="flex items-start space-x-2">
+                  <Home className="h-5 w-5 text-coffee-600 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm text-coffee-700 mb-2">
+                      홈카페 장비를 설정하면 더 편리하게 사용할 수 있어요.
+                    </p>
+                    <a 
+                      href="/settings"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-coffee-600 hover:text-coffee-800 underline font-medium"
+                    >
+                      설정에서 장비 등록하기 →
+                    </a>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 추출 팁 표시 */}
+            {brewingRecommendations.notes && brewingRecommendations.notes.length > 0 && (
+              <div className="bg-green-50 rounded-xl p-4 border border-green-200">
+                <div className="flex items-start space-x-2">
+                  <Coffee className="h-5 w-5 text-green-600 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-green-700 mb-2">
+                      {userEquipment.brewingMethod || '선택한 도구'} 추출 팁
+                    </p>
+                    <ul className="text-sm text-green-600 space-y-1">
+                      {brewingRecommendations.notes.map((note, index) => (
+                        <li key={index} className="flex items-start">
+                          <span className="w-2 h-2 bg-green-400 rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
+                          {note}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -804,7 +961,9 @@ export default function BrewSetupPage() {
               <div className="space-y-1 text-sm text-gray-600">
                 <div className="flex justify-between">
                   <span>드리퍼:</span>
-                  <span className="font-medium">{DRIPPER_OPTIONS.find(d => d.id === brewSetup.dripper)?.name || '선택 안됨'}</span>
+                  <span className="font-medium">
+                    {dripperOptions.find(d => d.id === brewSetup.dripper)?.name || customDripper || '선택 안됨'}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span>원두량:</span>

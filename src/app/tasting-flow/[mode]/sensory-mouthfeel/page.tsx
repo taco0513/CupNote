@@ -210,7 +210,7 @@ export default function SensoryMouthFeelPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100">
-      <div className="container mx-auto px-4 py-4 md:py-8 max-w-3xl">
+      <div className="container mx-auto px-4 py-4 md:py-8 max-w-3xl pb-20 md:pb-8">
         <Navigation showBackButton currentPage="record" />
 
         {/* 헤더 */}

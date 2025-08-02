@@ -96,17 +96,17 @@ export default function SyncStatus() {
           isSyncing ? (
             <>
               <RefreshCw className="h-4 w-4 animate-spin" />
-              <span>동기화 중...</span>
+              <span>저장 중...</span>
             </>
           ) : pendingCount > 0 ? (
             <>
               <Cloud className="h-4 w-4" />
-              <span>{pendingCount}개 대기중</span>
+              <span>{pendingCount}개 저장 대기</span>
             </>
           ) : (
             <>
               <Cloud className="h-4 w-4" />
-              <span>동기화됨</span>
+              <span>모든 기록 저장됨</span>
             </>
           )
         ) : (
