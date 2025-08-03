@@ -7,6 +7,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### ✨ Added (2025-08-03)
+
+- **UI Component Enhancement v1.2.1**: Complete UI system overhaul
+  - **Empty State UI**: Enhanced with illustrations and variants (coffee, achievement, search)
+    - Gradient backgrounds with glassmorphism effects
+    - Integrated across OptimizedCoffeeList, RecentCoffeePreview, MyRecords, and Achievements pages
+    - Consolidated from 2 components to single ui/EmptyState component
+  - **Toast Notification System**: Hybrid design with 5 toast types
+    - Success, error, warning, info, and coffee-themed toasts
+    - Auto-dismiss with progress bar animation
+    - Support for actions and persistent notifications
+    - Demo page at /demo-toast for testing
+  - **Skeleton Loader**: Coffee-themed gradient animations
+    - New variants: coffee-card, analytics
+    - Shimmer effect for premium loading experience
+    - Named exports for convenience (CardSkeleton, ListSkeleton, etc.)
+
+- **Achievements Page v2.0**: Complete desktop redesign
+  - **3-Column Layout**: Sidebar for stats, 2-column grid for achievement cards
+  - **Enhanced Progress Visualization**: Lock/Unlock indicators, animated progress bars
+  - **Category Filters**: Achievement counts per category
+  - **Visual Improvements**: Gradient effects, hover animations, sparkle effects for unlocked achievements
+  - **Stats Dashboard**: 2x2 grid for streak, points, records statistics
+  - **Responsive Design**: Optimized for lg:grid-cols-3 layout
+
+- **Desktop View Optimization**: Enhanced desktop experience for my-records page
+  - **Advanced 2-Column Layout**: Fixed sidebar with filters + main content area
+  - **Enhanced Statistics Cards**: Larger icons, improved typography, 5-card layout on XL screens
+  - **Premium Coffee Cards**: Hover effects, image zoom, more information density
+  - **Desktop-Specific Sidebar**: Quick filters for date, mode, rating with instant apply
+  - **Responsive Grid System**: Adaptive 2→3→4 column grid based on screen size
+  - **Visual Hierarchy Improvements**: Larger headings, better spacing, premium shadows
+  - **Additional Card Information**: Tags, origin, memo indicators, photo count (desktop only)
+
 ### 🚀 Added (2025-08-02)
 - **Equipment Integration System**: Complete HomeCafe equipment management
   - Equipment settings in personal preferences (grinder, dripper, scale, kettle)

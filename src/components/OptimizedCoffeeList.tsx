@@ -248,8 +248,8 @@ export default function OptimizedCoffeeList() {
         )}
       </div>
 
-      {/* Coffee cards grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+      {/* Coffee cards grid - 데스크탑 최적화 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-5 lg:gap-6">
         {result.data.map(record => (
           <OptimizedCoffeeCard key={record.id} record={record} />
         ))}
@@ -283,16 +283,18 @@ export default function OptimizedCoffeeList() {
   )
 }
 
-// Optimized coffee card with lazy loading
+// Optimized coffee card with lazy loading - 데스크탑 향상
 const OptimizedCoffeeCard = ({ record }: { record: CoffeeRecord }) => {
   const getModeDisplay = (mode?: string, tasteMode?: string) => {
-    if (mode === 'cafe') return { icon: '🏪', text: 'Cafe', color: 'bg-blue-100 text-blue-800' }
+    if (mode === 'cafe') return { icon: '☕', text: 'Cafe', color: 'bg-blue-100 text-blue-800 border-blue-200' }
     if (mode === 'homecafe')
-      return { icon: '🏠', text: 'HomeCafe', color: 'bg-green-100 text-green-800' }
+      return { icon: '🏠', text: 'HomeCafe', color: 'bg-green-100 text-green-800 border-green-200' }
+    if (mode === 'lab')
+      return { icon: '🧪', text: 'Lab', color: 'bg-purple-100 text-purple-800 border-purple-200' }
 
     if (tasteMode === 'simple')
-      return { icon: '🌱', text: '편하게', color: 'bg-green-100 text-green-800' }
-    return { icon: '🎯', text: '전문가', color: 'bg-blue-100 text-blue-800' }
+      return { icon: '🌱', text: '편하게', color: 'bg-green-100 text-green-800 border-green-200' }
+    return { icon: '🎯', text: '전문가', color: 'bg-blue-100 text-blue-800 border-blue-200' }
   }
 
   const modeDisplay = getModeDisplay(record.mode, record.tasteMode)
@@ -300,66 +302,119 @@ const OptimizedCoffeeCard = ({ record }: { record: CoffeeRecord }) => {
   return (
     <a
       href={`/coffee/${record.id}`}
-      className="block bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden cursor-pointer"
+      className="block bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-200 overflow-hidden cursor-pointer group hover:scale-[1.02] border border-coffee-100"
     >
-      {/* Lazy loaded image */}
+      {/* Lazy loaded image - 데스크탑에서 더 큰 비율 */}
       {record.images && record.images.length > 0 && (
-        <div className="aspect-video relative">
+        <div className="aspect-video lg:aspect-[4/3] relative overflow-hidden">
           <LazyImage
             src={record.images[0]}
             alt={record.coffeeName}
-            className="w-full h-full"
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
           />
+          {/* 이미지 오버레이 그라디언트 */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
       )}
 
-      <div className={`${record.images && record.images.length > 0 ? 'p-4 md:p-6' : 'p-4 md:p-6'}`}>
+      <div className={`${record.images && record.images.length > 0 ? 'p-4 lg:p-5 xl:p-6' : 'p-4 lg:p-5 xl:p-6'}`}>
         <div className="mb-4">
-          <div className="flex items-start justify-between mb-2">
-            <h3 className="text-lg font-semibold text-coffee-800 flex-1 mr-2">
+          <div className="flex items-start justify-between mb-3">
+            <h3 className="text-lg lg:text-xl font-semibold text-coffee-800 flex-1 mr-2 group-hover:text-coffee-900 transition-colors">
               {record.coffeeName}
             </h3>
             <span
-              className={`px-2 py-1 rounded-full text-xs font-medium ${modeDisplay.color} whitespace-nowrap`}
+              className={`px-3 py-1.5 rounded-full text-xs lg:text-sm font-medium ${modeDisplay.color} whitespace-nowrap border`}
             >
               {modeDisplay.icon} {modeDisplay.text}
             </span>
           </div>
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-gray-600">
-              {record.roastery} · {record.date}
-            </p>
-            {record.rating && (
-              <div className="flex text-sm">
-                {'⭐'.repeat(record.rating)}
-                {'☆'.repeat(5 - record.rating)}
-              </div>
+          
+          {/* 로스터리, 원산지, 날짜 정보 - 데스크탑에서 더 자세하게 */}
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <p className="text-sm lg:text-base text-gray-700 font-medium">
+                {record.roastery}
+              </p>
+              {record.rating && (
+                <div className="flex text-sm lg:text-base">
+                  {'⭐'.repeat(record.rating)}
+                  {'☆'.repeat(5 - record.rating)}
+                </div>
+              )}
+            </div>
+            {record.origin && (
+              <p className="text-sm text-gray-600">
+                🌍 {record.origin}
+              </p>
             )}
+            <p className="text-sm text-gray-500">
+              📅 {record.date}
+            </p>
           </div>
         </div>
 
         <div className="space-y-3">
+          {/* 테이스팅 노트 - 데스크탑에서 3줄까지 표시 */}
           <div>
-            <p className="text-sm font-medium text-gray-700 mb-1">
+            <p className="text-sm font-medium text-gray-700 mb-1.5">
               {record.tasteMode === 'simple' ? '내가 느낀 맛' : '테이스팅 노트'}
             </p>
-            <p className="text-gray-600 line-clamp-2">{record.taste}</p>
+            <p className="text-sm lg:text-base text-gray-600 line-clamp-2 lg:line-clamp-3">
+              {record.taste}
+            </p>
           </div>
 
-          {record.matchScore && (
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-500">Match Score</span>
-              <div className="flex-1 bg-gray-200 rounded-full h-2">
-                <div
-                  className="bg-gradient-to-r from-coffee-400 to-coffee-600 h-2 rounded-full"
-                  style={{ width: `${record.matchScore.overall}%` }}
-                />
-              </div>
-              <span className="text-xs font-medium text-coffee-600">
-                {record.matchScore.overall}
-              </span>
+          {/* 태그 표시 - 데스크탑에서만 */}
+          {record.tags && record.tags.length > 0 && (
+            <div className="hidden lg:flex flex-wrap gap-1.5">
+              {record.tags.slice(0, 3).map((tag, index) => (
+                <span 
+                  key={index}
+                  className="px-2 py-0.5 bg-coffee-50 text-coffee-700 text-xs rounded-full border border-coffee-200"
+                >
+                  #{tag}
+                </span>
+              ))}
+              {record.tags.length > 3 && (
+                <span className="px-2 py-0.5 text-coffee-600 text-xs">
+                  +{record.tags.length - 3}
+                </span>
+              )}
             </div>
           )}
+
+          {/* Match Score - 더 프리미엄한 디자인 */}
+          {record.matchScore && (
+            <div className="pt-3 border-t border-coffee-100">
+              <div className="flex items-center gap-3">
+                <span className="text-xs lg:text-sm font-medium text-gray-600">Match Score</span>
+                <div className="flex-1 bg-gradient-to-r from-gray-100 to-gray-200 rounded-full h-2.5 overflow-hidden">
+                  <div
+                    className="bg-gradient-to-r from-coffee-400 to-coffee-600 h-full rounded-full transition-all duration-500 ease-out"
+                    style={{ width: `${record.matchScore.overall}%` }}
+                  />
+                </div>
+                <span className="text-sm lg:text-base font-bold text-coffee-700">
+                  {record.matchScore.overall}%
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* 추가 정보 - 데스크탑에서만 표시 */}
+          <div className="hidden lg:flex items-center justify-between pt-3 border-t border-coffee-100">
+            {record.memo && (
+              <span className="text-xs text-gray-500">
+                📝 메모 있음
+              </span>
+            )}
+            {record.images && record.images.length > 1 && (
+              <span className="text-xs text-gray-500">
+                📷 {record.images.length}장
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </a>
