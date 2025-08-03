@@ -4,13 +4,15 @@
     "rootDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e",
     "forbidOnly": false,
     "fullyParallel": true,
-    "globalSetup": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/global-setup.ts",
-    "globalTeardown": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/global-teardown.ts",
+    "globalSetup": null,
+    "globalTeardown": null,
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
-    "metadata": {},
+    "metadata": {
+      "actualWorkers": 5
+    },
     "preserveOutput": "always",
     "reporter": [
       [
@@ -40,7 +42,9 @@
         "outputDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 5
+        },
         "id": "setup",
         "name": "setup",
         "testDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e",
@@ -54,7 +58,9 @@
         "outputDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 5
+        },
         "id": "chromium",
         "name": "chromium",
         "testDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e",
@@ -68,7 +74,9 @@
         "outputDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 5
+        },
         "id": "firefox",
         "name": "firefox",
         "testDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e",
@@ -82,7 +90,9 @@
         "outputDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 5
+        },
         "id": "webkit",
         "name": "webkit",
         "testDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e",
@@ -96,7 +106,9 @@
         "outputDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 5
+        },
         "id": "Mobile Chrome",
         "name": "Mobile Chrome",
         "testDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e",
@@ -110,7 +122,9 @@
         "outputDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 5
+        },
         "id": "Mobile Safari",
         "name": "Mobile Safari",
         "testDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e",
@@ -128,26 +142,303 @@
     "workers": 5,
     "webServer": {
       "command": "npm run dev",
-      "url": "http://localhost:3001",
+      "url": "http://localhost:5173",
       "reuseExistingServer": true,
       "timeout": 120000,
       "stdout": "ignore",
       "stderr": "pipe"
     }
   },
-  "suites": [],
-  "errors": [
+  "suites": [
     {
-      "message": "Error: Process from config.webServer exited early.",
-      "stack": "Error: Process from config.webServer exited early."
+      "title": "homepage-login-test.spec.ts",
+      "file": "homepage-login-test.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "홈페이지 로그인 이슈 테스트",
+          "file": "homepage-login-test.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "비로그인 사용자도 홈페이지에 접근할 수 있어야 함",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 13498,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ 홈페이지가 정상적으로 표시됨\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-03T14:05:01.078Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59ce2f5f6fae52465b53-0252ac91da685b179957",
+              "file": "homepage-login-test.spec.ts",
+              "line": 4,
+              "column": 7
+            },
+            {
+              "title": "로그인 페이지로 직접 이동 테스트",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 13037,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ 로그인 페이지가 정상적으로 표시됨\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-03T14:05:01.084Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59ce2f5f6fae52465b53-3f1ae06b90bb1030c9a5",
+              "file": "homepage-login-test.spec.ts",
+              "line": 27,
+              "column": 7
+            },
+            {
+              "title": "네비게이션 링크 테스트",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 13941,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ 네비게이션이 정상적으로 표시됨\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-03T14:05:01.083Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59ce2f5f6fae52465b53-3984b94ab4f9d9d5b0a7",
+              "file": "homepage-login-test.spec.ts",
+              "line": 45,
+              "column": 7
+            },
+            {
+              "title": "관리자 페이지 접근 테스트 (비로그인)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 15056,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ 관리자 페이지는 정상적으로 보호됨\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-03T14:05:01.077Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59ce2f5f6fae52465b53-6f3ac2dab598dd829896",
+              "file": "homepage-login-test.spec.ts",
+              "line": 63,
+              "column": 7
+            },
+            {
+              "title": "데모 페이지 접근 테스트",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 13655,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ 데모 페이지가 정상적으로 표시됨\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-03T14:05:01.079Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59ce2f5f6fae52465b53-624fdd2bb40c69ef9370",
+              "file": "homepage-login-test.spec.ts",
+              "line": 76,
+              "column": 7
+            },
+            {
+              "title": "홈페이지에서 데모 페이지로 이동 테스트",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 3543,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"http://localhost:5173/\u001b[7mdemo\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:5173/\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"http://localhost:5173/\u001b[7mdemo\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:5173/\"\u001b[39m\n    at /Users/zimo_mbp16_m1max/Projects/CupNote/e2e/homepage-login-test.spec.ts:104:24",
+                        "location": {
+                          "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/homepage-login-test.spec.ts",
+                          "column": 24,
+                          "line": 104
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 102 |\u001b[39m     \n \u001b[90m 103 |\u001b[39m     \u001b[90m// 데모 페이지로 이동했는지 확인\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 104 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(\u001b[32m'http://localhost:5173/demo'\u001b[39m)\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 105 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'demo-page-title'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m 106 |\u001b[39m     \n \u001b[90m 107 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'✅ 홈페이지에서 데모 페이지로 정상 이동됨'\u001b[39m)\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/homepage-login-test.spec.ts",
+                            "column": 24,
+                            "line": 104
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"http://localhost:5173/\u001b[7mdemo\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:5173/\"\u001b[39m\n\n\u001b[0m \u001b[90m 102 |\u001b[39m     \n \u001b[90m 103 |\u001b[39m     \u001b[90m// 데모 페이지로 이동했는지 확인\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 104 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(\u001b[32m'http://localhost:5173/demo'\u001b[39m)\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 105 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'demo-page-title'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m 106 |\u001b[39m     \n \u001b[90m 107 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'✅ 홈페이지에서 데모 페이지로 정상 이동됨'\u001b[39m)\u001b[0m\n\u001b[2m    at /Users/zimo_mbp16_m1max/Projects/CupNote/e2e/homepage-login-test.spec.ts:104:24\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-03T14:05:15.237Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/test-results/homepage-login-test-홈페이지-로그인-이슈-테스트-홈페이지에서-데모-페이지로-이동-테스트-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/test-results/homepage-login-test-홈페이지-로그인-이슈-테스트-홈페이지에서-데모-페이지로-이동-테스트-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/test-results/homepage-login-test-홈페이지-로그인-이슈-테스트-홈페이지에서-데모-페이지로-이동-테스트-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/homepage-login-test.spec.ts",
+                        "column": 24,
+                        "line": 104
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "59ce2f5f6fae52465b53-39ac88d8df80972d81da",
+              "file": "homepage-login-test.spec.ts",
+              "line": 94,
+              "column": 7
+            }
+          ]
+        }
+      ]
     }
   ],
+  "errors": [],
   "stats": {
-    "startTime": "2025-08-01T19:50:27.793Z",
-    "duration": 826.904,
-    "expected": 0,
+    "startTime": "2025-08-03T14:05:00.446Z",
+    "duration": 18481.921000000002,
+    "expected": 5,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 1,
     "flaky": 0
   }
 }

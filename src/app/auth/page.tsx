@@ -288,6 +288,7 @@ function AuthPageContent() {
                     onChange={(e) => setForm(prev => ({ ...prev, email: e.target.value }))}
                     className="w-full pl-10 pr-3 py-2 border border-coffee-200 rounded-lg focus:ring-2 focus:ring-coffee-500 focus:border-coffee-500"
                     placeholder="이메일을 입력하세요"
+                    data-testid="email-input"
                     required
                   />
                 </div>
@@ -306,6 +307,7 @@ function AuthPageContent() {
                     onChange={(e) => setForm(prev => ({ ...prev, password: e.target.value }))}
                     className="w-full pl-10 pr-10 py-2 border border-coffee-200 rounded-lg focus:ring-2 focus:ring-coffee-500 focus:border-coffee-500"
                     placeholder={mode === 'signup' ? '최소 6자 이상' : '비밀번호를 입력하세요'}
+                    data-testid="password-input"
                     required
                   />
                   <button
@@ -359,6 +361,7 @@ function AuthPageContent() {
                 size="large"
                 disabled={isLoading}
                 className="w-full bg-coffee-500 hover:bg-coffee-600"
+                data-testid="auth-submit-button"
               >
                 {isLoading ? (
                   <div className="flex items-center justify-center space-x-2">

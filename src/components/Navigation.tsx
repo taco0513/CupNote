@@ -130,7 +130,7 @@ export default function Navigation({
                   <span className="font-medium">돌아가기</span>
                 </button>
               )}
-              <Link href="/" className="text-xl md:text-2xl font-bold text-coffee-800 hover:text-coffee-600 transition-colors">
+              <Link href="/" className="text-xl md:text-2xl font-bold text-coffee-800 hover:text-coffee-600 transition-colors" data-testid="navbar-logo">
                 ☕ CupNote
               </Link>
             </div>

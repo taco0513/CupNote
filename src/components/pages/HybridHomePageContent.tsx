@@ -91,7 +91,7 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
                 {/* 왼쪽: 메인 메시지 */}
                 <div className="space-y-8">
                   <div className="space-y-4">
-                    <h1 className="text-4xl lg:text-5xl font-bold text-coffee-800 leading-tight">
+                    <h1 className="text-4xl lg:text-5xl font-bold text-coffee-800 leading-tight" data-testid="homepage-hero-title">
                       커피 한 잔의 기록이<br />
                       <span className="text-coffee-600">당신을 전문가로</span><br />
                       만듭니다
@@ -109,16 +109,18 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
                         variant="primary" 
                         size="large"
                         className="w-full sm:w-auto bg-coffee-500 hover:bg-coffee-600 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                        data-testid="homepage-start-button"
                       >
                         <Coffee className="h-5 w-5 mr-2" />
                         지금 바로 시작하기
                       </UnifiedButton>
                     </Link>
-                    <Link href="/my-records">
+                    <Link href="/demo">
                       <UnifiedButton 
                         variant="outline" 
                         size="large"
                         className="w-full sm:w-auto border-coffee-300 text-coffee-700 hover:bg-coffee-50 px-8 py-4 text-lg"
+                        data-testid="homepage-demo-button"
                       >
                         먼저 구경하기
                       </UnifiedButton>
@@ -315,15 +317,15 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
         {/* 비로그인 사용자용 Quick Actions */}
         {!user && (
           <div className="grid grid-cols-2 gap-4 mb-12">
-            <Link href="/my-records">
-              <div className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 rounded-2xl p-4 text-center hover:bg-white/90 hover:shadow-md transition-all duration-200">
+            <Link href="/demo">
+              <div className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 rounded-2xl p-4 text-center hover:bg-white/90 hover:shadow-md transition-all duration-200" data-testid="quick-action-demo">
                 <div className="text-2xl mb-2">📋</div>
                 <div className="text-sm font-medium text-coffee-700">기록 보기</div>
               </div>
             </Link>
             
-            <Link href="/search">
-              <div className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 rounded-2xl p-4 text-center hover:bg-white/90 hover:shadow-md transition-all duration-200">
+            <Link href="/demo">
+              <div className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 rounded-2xl p-4 text-center hover:bg-white/90 hover:shadow-md transition-all duration-200" data-testid="quick-action-explore">
                 <div className="text-2xl mb-2">🔍</div>
                 <div className="text-sm font-medium text-coffee-700">커피 탐색</div>
               </div>

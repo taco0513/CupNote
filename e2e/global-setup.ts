@@ -14,7 +14,7 @@ async function globalSetup(config: FullConfig) {
   try {
     // 1. Verify test environment is accessible
     console.log('📡 Verifying test environment accessibility...')
-    await page.goto(process.env.BASE_URL || 'http://localhost:3001')
+    await page.goto(process.env.BASE_URL || 'http://localhost:5173')
     await page.waitForSelector('body', { timeout: 10000 })
     console.log('✅ Test environment is accessible')
 
@@ -163,7 +163,7 @@ async function globalSetup(config: FullConfig) {
 
     console.log('🎉 Global setup completed successfully!')
     console.log('📝 Test Environment Summary:')
-    console.log(`   - Base URL: ${process.env.BASE_URL || 'http://localhost:3001'}`)
+    console.log(`   - Base URL: ${process.env.BASE_URL || 'http://localhost:5173'}`)
     console.log(`   - Global Test User: ${process.env.GLOBAL_TEST_USER_EMAIL}`)
     console.log(`   - PWA Features: ${serviceWorkerSupported && cacheSupported ? 'Supported' : 'Limited'}`)
     console.log(`   - Database: ${process.env.DATABASE_URL ? 'Connected' : 'Local'}`)

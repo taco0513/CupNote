@@ -1,0 +1,43 @@
+# Page snapshot
+
+```yaml
+- navigation:
+  - link "☕ CupNote":
+    - /url: /
+  - link "기록하기":
+    - /url: /tasting-flow
+  - text: 게스트 |
+  - button "로그인"
+  - button "회원가입"
+- main:
+  - text: DEMO
+  - heading "CupNote 체험하기" [level=1]
+  - paragraph: 실제 사용자의 커피 기록을 샘플로 확인해보세요
+  - heading "커피 여정 통계" [level=2]
+  - text: 12 총 기록 5 이번 달 4.1 평균 평점 3 달성 뱃지
+  - heading "최근 커피 기록" [level=2]
+  - heading "에티오피아 예가체프" [level=3]
+  - text: 4.5 블루보틀 성수점 8/1/2024 카페
+  - paragraph: 밝은 산미와 플로럴한 향이 인상적이었어요. 처음 마셔본 싱글 오리진인데 정말 맛있었습니다!
+  - text: 밝은 플로럴 산미
+  - heading "콜롬비아 수프리모" [level=3]
+  - text: 4 홈카페 7/28/2024 홈카페
+  - paragraph: V60으로 추출했는데 달콤하고 부드러운 맛이 좋았어요. 원두 온도와 추출 시간을 더 연구해봐야겠습니다.
+  - text: 달콤 부드러운 V60 📍 V60 🌡️ 92°C ⏱️ 3:30
+  - heading "과테말라 안티구아" [level=3]
+  - text: 3.5 프리츠 카페 7/25/2024 카페
+  - paragraph: 진한 바디감과 초콜릿 향이 특징적이었어요. 개인적으로는 조금 더 밝은 맛을 선호하는 것 같아요.
+  - text: 진한 초콜릿 바디감
+  - heading "달성한 뱃지" [level=2]
+  - text: 🏆 첫 기록 ☕ 카페 러버 🏠 홈카페 마스터 🌟 10회 달성 📊 분석가 🎯 전문가
+  - heading "나만의 커피 여정을 시작해보세요!" [level=2]
+  - paragraph: 이런 기록들을 직접 작성하고, 당신만의 커피 취향을 발견해보세요
+  - link "회원가입하고 시작하기":
+    - /url: /auth
+    - button "회원가입하고 시작하기"
+  - link "바로 기록해보기":
+    - /url: /mode-selection
+    - button "바로 기록해보기"
+- button "온보딩 다시 보기 (개발용)"
+- alert
+```
