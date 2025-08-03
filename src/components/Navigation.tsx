@@ -9,7 +9,7 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 
-import { BarChart3, Settings, Plus, ArrowLeft, Trophy, User, LogIn, Coffee, ChevronDown, LogOut, Bell, HelpCircle } from 'lucide-react'
+import { BarChart3, Settings, Plus, ArrowLeft, Trophy, User, LogIn, Coffee, ChevronDown, LogOut, Bell, HelpCircle, Shield } from 'lucide-react'
 
 import { isFeatureEnabled } from '../config/feature-flags.config'
 import { useAuth } from '../contexts/AuthContext'
@@ -89,6 +89,15 @@ export default function Navigation({
   }
 
   const isActive = (page: string) => currentPage === page
+
+  // 관리자 권한 확인 함수
+  const isAdmin = () => {
+    if (!user) return false
+    return user.email === 'admin@mycupnote.com' || 
+           user.email?.endsWith('@mycupnote.com') ||
+           user.user_metadata?.role === 'admin' ||
+           process.env.NODE_ENV === 'development'
+  }
 
   const handleAuthNavigation = (mode: 'login' | 'signup') => {
     router.push(`/auth/${mode}`)
@@ -237,6 +246,18 @@ export default function Navigation({
                     </div>
                     
                     <div className="py-2">
+                      {/* 관리자 대시보드 (관리자만 표시) */}
+                      {isAdmin() && (
+                        <Link
+                          href="/admin"
+                          onClick={() => setShowProfileDropdown(false)}
+                          className="flex items-center px-4 py-3 text-coffee-700 hover:bg-coffee-50/80 transition-colors border-b border-coffee-100/50 mb-2"
+                        >
+                          <Shield className="h-4 w-4 mr-3 text-coffee-600" />
+                          <span className="text-sm font-medium">관리자 대시보드</span>
+                        </Link>
+                      )}
+                      
                       <Link
                         href="/profile"
                         onClick={() => setShowProfileDropdown(false)}
