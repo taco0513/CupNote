@@ -13,7 +13,6 @@ import { BarChart3, Settings, Plus, ArrowLeft, Trophy, User, LogIn, Coffee, Chev
 
 import { isFeatureEnabled } from '../config/feature-flags.config'
 import { useAuth } from '../contexts/AuthContext'
-import AuthModal from './auth/AuthModal'
 import UserProfile from './auth/UserProfile'
 import { NavigationGuestIndicator } from './GuestModeIndicator'
 
@@ -31,10 +30,8 @@ export default function Navigation({
   const { user, loading, logout } = useAuth()
   const router = useRouter()
   const pathname = usePathname()
-  const [showAuthModal, setShowAuthModal] = useState(false)
   const [showUserProfile, setShowUserProfile] = useState(false)
   const [showProfileDropdown, setShowProfileDropdown] = useState(false)
-  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login')
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   // 드롭다운 외부 클릭 감지
@@ -93,13 +90,8 @@ export default function Navigation({
 
   const isActive = (page: string) => currentPage === page
 
-  const handleAuthSuccess = () => {
-    setShowAuthModal(false)
-  }
-
-  const openAuthModal = (mode: 'login' | 'signup') => {
-    setAuthMode(mode)
-    setShowAuthModal(true)
+  const handleAuthNavigation = (mode: 'login' | 'signup') => {
+    router.push(`/auth/${mode}`)
   }
 
   const handleLogout = async () => {
@@ -211,9 +203,9 @@ export default function Navigation({
                   </button>
                 ) : (
                   <div className="flex items-center space-x-3">
-                    <NavigationGuestIndicator onLoginClick={() => openAuthModal('login')} />
+                    <NavigationGuestIndicator onLoginClick={() => handleAuthNavigation('login')} />
                     <button
-                      onClick={() => openAuthModal('signup')}
+                      onClick={() => handleAuthNavigation('signup')}
                       className="flex items-center px-4 py-2 bg-coffee-500 hover:bg-coffee-600 text-white rounded-lg transition-all duration-200 shadow-sm hover:shadow-md font-medium"
                     >
                       회원가입
@@ -384,7 +376,7 @@ export default function Navigation({
           {/* 로그인 버튼 (비로그인 사용자용) */}
           {!user && !loading && (
             <button
-              onClick={() => openAuthModal('login')}
+              onClick={() => handleAuthNavigation('login')}
               className="flex flex-col items-center justify-center space-y-1 text-coffee-600 active:scale-95 active:bg-coffee-50 rounded-lg mx-1 my-1 font-medium"
             >
               <LogIn className="h-5 w-5" />
@@ -402,13 +394,6 @@ export default function Navigation({
         </div>
       </nav>
 
-      {/* 인증 모달 */}
-      <AuthModal
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        onSuccess={handleAuthSuccess}
-        initialMode={authMode}
-      />
     </>
   )
 }
