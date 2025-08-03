@@ -215,27 +215,14 @@ export default function Navigation({
                   </button>
                 ) : (
                   <div className="flex items-center space-x-3">
-                    {/* 게스트 모드 브랜드 표시 - 강화된 디자인 */}
-                    <div className="hidden md:flex items-center px-3 py-2 bg-gradient-to-r from-coffee-50 to-coffee-100 rounded-xl border border-coffee-200/40 shadow-sm">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-6 h-6 bg-gradient-to-br from-coffee-300 to-coffee-400 rounded-full flex items-center justify-center shadow-sm">
-                          <Coffee className="h-3 w-3 text-white" />
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="text-xs font-semibold text-coffee-800 leading-none">게스트 체험</span>
-                          <span className="text-xs text-coffee-600 leading-none">무료로 시작하기</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Primary CTA - 체험해보기 (메인 액션) */}
+                    {/* Primary CTA - 무료로 시작하기 (메인 액션) */}
                     <Link
                       href={isFeatureEnabled('ENABLE_NEW_TASTING_FLOW') ? '/tasting-flow' : '/mode-selection'}
                       className="group relative flex items-center px-5 py-2.5 bg-gradient-to-r from-coffee-500 to-coffee-600 hover:from-coffee-600 hover:to-coffee-700 text-white rounded-xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
                     >
                       <div className="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       <Plus className="h-4 w-4 mr-2 relative z-10 transition-transform group-hover:rotate-90" />
-                      <span className="relative z-10">체험해보기</span>
+                      <span className="relative z-10">무료로 시작하기</span>
                       <div className="absolute -inset-1 bg-gradient-to-r from-coffee-400 to-coffee-500 rounded-xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-300 -z-10" />
                     </Link>
                     
@@ -435,7 +422,7 @@ export default function Navigation({
           {/* 비로그인 사용자 모바일 네비게이션 - 개선된 디자인 */}
           {!user && !loading && (
             <>
-              {/* 체험하기 - Primary CTA */}
+              {/* 무료 시작 - Primary CTA */}
               <Link
                 href={isFeatureEnabled('ENABLE_NEW_TASTING_FLOW') ? '/tasting-flow' : '/mode-selection'}
                 className="flex flex-col items-center justify-center space-y-1 relative h-full w-full transition-all duration-200 ease-out text-white active:scale-95 rounded-lg mx-1 my-1"
@@ -445,7 +432,7 @@ export default function Navigation({
                   <Plus className="h-6 w-6" />
                 </div>
                 <span className="text-xs relative transition-all duration-200 z-10 font-bold">
-                  체험
+                  시작
                 </span>
               </Link>
               
