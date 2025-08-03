@@ -223,8 +223,8 @@ export default function ProfilePage() {
                 
                 {/* 프로필 편집 버튼 - 데스크탑에서만 표시 */}
                 <div className="hidden md:block">
-                  <button className="px-4 py-2 bg-coffee-100 hover:bg-coffee-200 text-coffee-700 rounded-lg transition-colors flex items-center space-x-2">
-                    <Settings className="h-4 w-4" />
+                  <button className="btn-base btn-secondary btn-sm">
+                    <Settings className="h-4 w-4 mr-2" />
                     <span>편집</span>
                   </button>
                 </div>
@@ -342,7 +342,7 @@ export default function ProfilePage() {
                         <Coffee className="h-5 w-5 mr-2" />
                         홈카페 장비
                       </h3>
-                      <button className="text-sm text-coffee-500 hover:text-coffee-700 transition-colors">
+                      <button className="text-sm text-coffee-500 hover:text-coffee-700 transition-colors font-medium">
                         편집 →
                       </button>
                     </div>

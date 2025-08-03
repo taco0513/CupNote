@@ -301,12 +301,12 @@ export default function SettingsPage() {
               <div className="space-y-3">
                 <UnifiedButton
                   variant="secondary"
+                  size="md"
                   fullWidth
                   onClick={() => {
                     // 캐시 초기화 로직
                     showNotification('success', '캐시가 초기화되었습니다.')
                   }}
-                  className="bg-coffee-50/80 hover:bg-coffee-100/80 text-coffee-700 border-coffee-200/50"
                 >
                   <Zap className="h-4 w-4 mr-2" />
                   캐시 초기화
@@ -331,8 +331,8 @@ export default function SettingsPage() {
                 <UnifiedButton
                   onClick={exportData}
                   variant="secondary"
+                  size="md"
                   fullWidth
-                  className="bg-coffee-50/80 hover:bg-coffee-100/80 text-coffee-700 border-coffee-200/50"
                 >
                   <Download className="h-4 w-4 mr-2" />
                   데이터 내보내기 (JSON)
@@ -350,8 +350,9 @@ export default function SettingsPage() {
                     <UnifiedButton
                       as="span"
                       variant="outline"
+                      size="md"
                       fullWidth
-                      className="cursor-pointer bg-white/50 hover:bg-coffee-50/80 text-coffee-700 border-coffee-200/50"
+                      className="cursor-pointer"
                     >
                       <Upload className="h-4 w-4 mr-2" />
                       데이터 가져오기
@@ -378,8 +379,8 @@ export default function SettingsPage() {
                 <UnifiedButton
                   onClick={() => setShowDeleteConfirm(true)}
                   variant="danger"
+                  size="md"
                   fullWidth
-                  className="bg-red-500 hover:bg-red-600"
                 >
                   <Trash2 className="h-4 w-4 mr-2" />
                   모든 데이터 삭제
@@ -398,16 +399,16 @@ export default function SettingsPage() {
                     <UnifiedButton
                       onClick={deleteAllData}
                       variant="danger"
+                      size="md"
                       fullWidth
-                      className="bg-red-500 hover:bg-red-600"
                     >
                       삭제 확인
                     </UnifiedButton>
                     <UnifiedButton
                       onClick={() => setShowDeleteConfirm(false)}
                       variant="secondary"
+                      size="md"
                       fullWidth
-                      className="bg-gray-100 hover:bg-gray-200 text-gray-700"
                     >
                       취소
                     </UnifiedButton>

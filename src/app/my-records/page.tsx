@@ -178,30 +178,22 @@ function MyRecordsPageContent() {
           </div>
         )}
 
-        {/* 하이브리드 탭 네비게이션 */}
+        {/* 하이브리드 탭 네비게이션 - 새로운 디자인 토큰 적용 */}
         <div className="mb-6">
           <div className="flex space-x-2 bg-white/60 backdrop-blur-sm p-2 rounded-xl border border-coffee-200/30 shadow-sm">
             <button
               onClick={() => handleTabChange('list')}
-              className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
-                activeTab === 'list'
-                  ? 'bg-gradient-to-r from-coffee-500 to-coffee-600 text-white shadow-md'
-                  : 'text-coffee-600 hover:text-coffee-800 hover:bg-coffee-50/80'
-              }`}
+              className={`btn-base filter-btn ${activeTab === 'list' ? 'filter-btn-active' : 'filter-btn-inactive'} flex-1`}
             >
-              <List className="h-4 w-4" />
-              <span>목록</span>
+              <List className="icon" />
+              <span className={activeTab === 'list' ? 'text-on-dark' : 'text-high-contrast'}>목록</span>
             </button>
             <button
               onClick={() => handleTabChange('stats')}
-              className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
-                activeTab === 'stats'
-                  ? 'bg-gradient-to-r from-coffee-500 to-coffee-600 text-white shadow-md'
-                  : 'text-coffee-600 hover:text-coffee-800 hover:bg-coffee-50/80'
-              }`}
+              className={`btn-base filter-btn ${activeTab === 'stats' ? 'filter-btn-active' : 'filter-btn-inactive'} flex-1`}
             >
-              <BarChart3 className="h-4 w-4" />
-              <span>분석</span>
+              <BarChart3 className="icon" />
+              <span className={activeTab === 'stats' ? 'text-on-dark' : 'text-high-contrast'}>분석</span>
             </button>
           </div>
         </div>
@@ -232,10 +224,10 @@ function MyRecordsPageContent() {
                   <div>
                     <label className="block text-sm font-medium text-coffee-700 mb-2">기간</label>
                     <div className="grid grid-cols-2 gap-2">
-                      <button className="px-3 py-2 text-sm bg-coffee-100 text-coffee-700 rounded-lg hover:bg-coffee-200 transition-colors">오늘</button>
-                      <button className="px-3 py-2 text-sm bg-coffee-100 text-coffee-700 rounded-lg hover:bg-coffee-200 transition-colors">이번 주</button>
-                      <button className="px-3 py-2 text-sm bg-coffee-100 text-coffee-700 rounded-lg hover:bg-coffee-200 transition-colors">이번 달</button>
-                      <button className="px-3 py-2 text-sm bg-coffee-100 text-coffee-700 rounded-lg hover:bg-coffee-200 transition-colors">전체</button>
+                      <button className="btn-base filter-btn filter-btn-inactive btn-xs">오늘</button>
+                      <button className="btn-base filter-btn filter-btn-inactive btn-xs">이번 주</button>
+                      <button className="btn-base filter-btn filter-btn-inactive btn-xs">이번 달</button>
+                      <button className="btn-base filter-btn filter-btn-active btn-xs">전체</button>
                     </div>
                   </div>
 
@@ -262,10 +254,10 @@ function MyRecordsPageContent() {
                     </div>
                   </div>
 
-                  <button className="w-full py-2 bg-coffee-600 text-white rounded-lg hover:bg-coffee-700 transition-colors">
+                  <button className="btn-base btn-primary w-full">
                     필터 적용
                   </button>
-                  <button className="w-full py-2 text-coffee-600 border border-coffee-300 rounded-lg hover:bg-coffee-50 transition-colors">
+                  <button className="btn-base btn-secondary w-full">
                     초기화
                   </button>
                 </div>
@@ -316,7 +308,7 @@ function MyRecordsPageContent() {
                           className="w-full pl-10 pr-4 py-2 bg-white/50 border border-coffee-200/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-400 focus:border-transparent"
                         />
                       </div>
-                      <button className="flex items-center space-x-2 px-4 py-2 bg-coffee-50/80 hover:bg-coffee-100/80 text-coffee-700 rounded-lg border border-coffee-200/50 transition-colors">
+                      <button className="btn-base filter-btn filter-btn-inactive btn-sm">
                         <Filter className="h-4 w-4" />
                         <span>필터</span>
                       </button>
