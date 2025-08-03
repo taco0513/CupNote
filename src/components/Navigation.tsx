@@ -215,35 +215,47 @@ export default function Navigation({
                   </button>
                 ) : (
                   <>
-                    {/* 게스트 모드 표시 */}
-                    <div className="hidden md:flex items-center px-3 py-2 text-coffee-600">
-                      <UserX className="h-4 w-4 mr-2" />
-                      <span className="text-sm">게스트 모드</span>
+                    {/* 게스트 모드 브랜드 표시 - 강화된 디자인 */}
+                    <div className="hidden md:flex items-center px-3 py-2 bg-gradient-to-r from-coffee-50 to-coffee-100 rounded-xl border border-coffee-200/40 shadow-sm">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-6 h-6 bg-gradient-to-br from-coffee-300 to-coffee-400 rounded-full flex items-center justify-center shadow-sm">
+                          <Coffee className="h-3 w-3 text-white" />
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-xs font-semibold text-coffee-800 leading-none">게스트 체험</span>
+                          <span className="text-xs text-coffee-600 leading-none">무료로 시작하기</span>
+                        </div>
+                      </div>
                     </div>
                     
-                    {/* Secondary CTA - 기록하기 */}
+                    {/* Primary CTA - 체험해보기 (메인 액션) */}
                     <Link
                       href={isFeatureEnabled('ENABLE_NEW_TASTING_FLOW') ? '/tasting-flow' : '/mode-selection'}
-                      className="flex items-center px-4 py-2.5 bg-coffee-100 hover:bg-coffee-200 text-coffee-800 rounded-xl transition-all duration-200 font-medium"
+                      className="group relative flex items-center px-5 py-2.5 bg-gradient-to-r from-coffee-500 to-coffee-600 hover:from-coffee-600 hover:to-coffee-700 text-white rounded-xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
                     >
-                      <Plus className="h-4 w-4 mr-1.5" />
-                      <span>기록하기</span>
+                      <div className="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <Plus className="h-4 w-4 mr-2 relative z-10 transition-transform group-hover:rotate-90" />
+                      <span className="relative z-10">체험해보기</span>
+                      <div className="absolute -inset-1 bg-gradient-to-r from-coffee-400 to-coffee-500 rounded-xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-300 -z-10" />
                     </Link>
                     
-                    {/* Tertiary - 로그인 */}
-                    <button
-                      onClick={() => handleAuthNavigation('login')}
-                      className="px-4 py-2.5 text-coffee-700 hover:text-coffee-900 font-medium transition-colors"
-                    >
-                      로그인
-                    </button>
-                    
-                    {/* Primary CTA - 회원가입 */}
+                    {/* Secondary CTA - 회원가입 */}
                     <button
                       onClick={() => handleAuthNavigation('signup')}
-                      className="px-4 py-2.5 bg-coffee-600 hover:bg-coffee-700 text-white rounded-xl transition-all duration-200 font-medium shadow-sm hover:shadow-md"
+                      className="group flex items-center px-4 py-2.5 bg-white hover:bg-coffee-50 text-coffee-700 hover:text-coffee-800 rounded-xl border-2 border-coffee-200 hover:border-coffee-300 transition-all duration-200 font-medium shadow-sm hover:shadow-md transform hover:scale-102 active:scale-98"
                     >
-                      회원가입
+                      <span className="relative">회원가입</span>
+                      <div className="ml-2 w-1 h-1 bg-coffee-500 rounded-full opacity-60 group-hover:opacity-100 transition-opacity" />
+                    </button>
+                    
+                    {/* Tertiary - 로그인 (최소한의 스타일) */}
+                    <button
+                      onClick={() => handleAuthNavigation('login')}
+                      className="group flex items-center px-4 py-2.5 text-coffee-600 hover:text-coffee-800 hover:bg-coffee-50/80 rounded-lg font-medium transition-all duration-200 relative overflow-hidden"
+                    >
+                      <LogIn className="h-4 w-4 mr-2 transition-transform group-hover:translate-x-0.5" />
+                      <span>로그인</span>
+                      <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-coffee-500 group-hover:w-full transition-all duration-300" />
                     </button>
                   </>
                 )}
@@ -420,15 +432,32 @@ export default function Navigation({
             </>
           )}
 
-          {/* 로그인 버튼 (비로그인 사용자용) */}
+          {/* 비로그인 사용자 모바일 네비게이션 - 개선된 디자인 */}
           {!user && !loading && (
-            <button
-              onClick={() => handleAuthNavigation('login')}
-              className="flex flex-col items-center justify-center space-y-1 text-coffee-600 active:scale-95 active:bg-coffee-50 rounded-lg mx-1 my-1 font-medium"
-            >
-              <LogIn className="h-5 w-5" />
-              <span className="text-xs">로그인</span>
-            </button>
+            <>
+              {/* 체험하기 - Primary CTA */}
+              <Link
+                href={isFeatureEnabled('ENABLE_NEW_TASTING_FLOW') ? '/tasting-flow' : '/mode-selection'}
+                className="flex flex-col items-center justify-center space-y-1 relative h-full w-full transition-all duration-200 ease-out text-white active:scale-95 rounded-lg mx-1 my-1"
+              >
+                <div className="absolute inset-2 bg-gradient-to-br from-coffee-500 to-coffee-600 rounded-xl shadow-xl transition-all duration-200 hover:shadow-2xl hover:from-coffee-600 hover:to-coffee-700" />
+                <div className="relative transition-all duration-200 z-10">
+                  <Plus className="h-6 w-6" />
+                </div>
+                <span className="text-xs relative transition-all duration-200 z-10 font-bold">
+                  체험
+                </span>
+              </Link>
+              
+              {/* 로그인 - Secondary */}
+              <button
+                onClick={() => handleAuthNavigation('login')}
+                className="flex flex-col items-center justify-center space-y-1 text-coffee-600 hover:text-coffee-800 active:scale-95 active:bg-coffee-50 rounded-lg mx-1 my-1 font-medium transition-all duration-200"
+              >
+                <LogIn className="h-5 w-5" />
+                <span className="text-xs">로그인</span>
+              </button>
+            </>
           )}
 
           {/* 로딩 상태 */}

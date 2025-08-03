@@ -266,3 +266,83 @@
 .coffee-shadow-lg {
   box-shadow: 0 8px 30px rgba(139, 69, 19, 0.25);
 }
+
+/* Enhanced Navigation Button Styles */
+.nav-button-primary {
+  background: linear-gradient(135deg, var(--coffee-500), var(--coffee-600));
+  color: white;
+  font-weight: 600;
+  border-radius: var(--radius-xl);
+  box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+  transition: all var(--duration-base) var(--easing-default);
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-button-primary:hover {
+  background: linear-gradient(135deg, var(--coffee-600), var(--coffee-700));
+  transform: scale(1.05) translateY(-1px);
+  box-shadow: 0 8px 25px rgba(139, 69, 19, 0.4);
+}
+
+.nav-button-primary:active {
+  transform: scale(0.95) translateY(0);
+  box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+}
+
+.nav-button-secondary {
+  background: white;
+  color: var(--coffee-700);
+  font-weight: 500;
+  border: 2px solid var(--coffee-200);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--duration-base) var(--easing-default);
+}
+
+.nav-button-secondary:hover {
+  background: var(--coffee-50);
+  border-color: var(--coffee-300);
+  color: var(--coffee-800);
+  transform: scale(1.02);
+  box-shadow: var(--shadow-md);
+}
+
+.nav-button-tertiary {
+  color: var(--coffee-600);
+  font-weight: 500;
+  border-radius: var(--radius-lg);
+  transition: all var(--duration-base) var(--easing-default);
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-button-tertiary:hover {
+  color: var(--coffee-800);
+  background: rgba(250, 247, 242, 0.8);
+}
+
+.nav-button-tertiary::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--coffee-500);
+  transition: width var(--duration-base) var(--easing-default);
+}
+
+.nav-button-tertiary:hover::after {
+  width: 100%;
+}
+
+/* Guest Mode Badge */
+.guest-badge {
+  background: linear-gradient(135deg, var(--coffee-50), var(--coffee-100));
+  border: 1px solid rgba(232, 213, 190, 0.4);
+  border-radius: var(--radius-xl);
+  padding: var(--space-3);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(4px);
+}
