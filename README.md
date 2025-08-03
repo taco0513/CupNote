@@ -142,6 +142,9 @@ CupNote/
 ├── public/             # 정적 파일 (아이콘, 이미지)
 ├── docs/               # 📚 현재 문서
 │   ├── current/        # 최신 기능 문서
+│   │   ├── ADMIN_SYSTEM.md         # 관리자 시스템 종합 가이드
+│   │   ├── ADMIN_FEATURES_SPEC.md  # 관리자 기능 상세 명세서
+│   │   └── DEVELOPER_ONBOARDING.md # 개발자 온보딩 가이드
 │   ├── development/    # 개발 히스토리 (체크포인트, 커버리지)
 │   └── archive/        # 과거 문서 보관
 ├── e2e/                # 🧪 E2E 테스트 (Playwright)
@@ -149,6 +152,41 @@ CupNote/
 ├── archive/            # 📦 보관용 (프로토타입, 개발 파일)
 └── scripts/            # 🔧 유틸리티 스크립트
 ```
+
+## 🛡️ 관리자 시스템
+
+CupNote는 포괄적인 관리자 대시보드를 제공합니다.
+
+### 빠른 시작
+1. **관리자 계정 생성**: https://mycupnote.com/setup-admin
+2. **관리자 로그인**: https://mycupnote.com/auth  
+3. **대시보드 접근**: https://mycupnote.com/admin
+
+### 주요 기능
+- 📊 **시스템 대시보드**: 실시간 지표 및 시스템 현황
+- 👥 **사용자 관리**: 사용자 계정, 활동 통계, 권한 관리
+- ☕ **커피 기록 관리**: 모든 기록 조회 및 콘텐츠 관리
+- 📈 **성능 모니터링**: 실시간 성능, 오류 추적, 시스템 상태
+- 💬 **피드백 관리**: 베타 피드백, 버그 리포트, 사용자 문의
+- 🗄️ **데이터 관리**: 카페/로스터리 정보, 커피 원두 데이터
+- ⚙️ **시스템 설정**: 공지사항, 피처 플래그, 앱 설정
+
+### 문서
+- **[📋 관리자 시스템 종합 가이드](./docs/current/ADMIN_SYSTEM.md)** - 전체 시스템 개요
+- **[📊 관리자 기능 상세 명세서](./docs/current/ADMIN_FEATURES_SPEC.md)** - 모든 기능 상세 설명
+- **[🔧 관리자 계정 설정](./ADMIN_SETUP_GUIDE.md)** - 빠른 설정 가이드
+
+## 👨‍💻 개발자 가이드
+
+### 새 개발자 온보딩
+- **[🚀 개발자 온보딩 가이드](./docs/current/DEVELOPER_ONBOARDING.md)** - 완전한 팀 합류 가이드
+- **[⚙️ 프로젝트 설정](./CLAUDE.md)** - Claude Code 및 개발 환경 설정
+
+### 개발 원칙
+- **Package Manager**: npm 필수 사용 (bun, yarn 사용 금지)
+- **Coding Style**: TypeScript + Tailwind CSS + React Hooks
+- **Testing**: Vitest + Playwright + React Testing Library
+- **Quality Gates**: ESLint + TypeScript + 70% 테스트 커버리지
 
 ## 🤝 기여하기
 

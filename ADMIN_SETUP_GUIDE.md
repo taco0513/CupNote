@@ -1,8 +1,49 @@
 # CupNote 관리자 계정 설정 가이드
 
-## 🛡️ 관리자 계정 생성 방법
+> **⚠️ 중요**: 이 문서는 레거시 가이드입니다. 최신 종합 관리자 문서는 `docs/current/ADMIN_SYSTEM.md`를 참조하세요.
 
-### 방법 1: Supabase Dashboard (권장)
+## 🔗 최신 문서 링크
+- **[📋 관리자 시스템 종합 가이드](./docs/current/ADMIN_SYSTEM.md)** - 전체 시스템 개요 및 사용자 플로우
+- **[📊 관리자 기능 상세 명세서](./docs/current/ADMIN_FEATURES_SPEC.md)** - 대시보드 모든 기능 상세 설명  
+- **[👨‍💻 개발자 온보딩 가이드](./docs/current/DEVELOPER_ONBOARDING.md)** - 개발자 팀 합류 가이드
+
+## 🚀 빠른 시작 (Quick Start)
+
+### 1단계: 관리자 계정 생성
+**URL**: https://mycupnote.com/setup-admin
+
+```
+이메일: admin@mycupnote.com
+이름: CupNote Administrator  
+비밀번호: [안전한 비밀번호 생성 도구 사용]
+```
+
+### 2단계: 관리자 로그인  
+**URL**: https://mycupnote.com/auth
+
+관리자 계정으로 로그인 시 자동으로 `/admin` 대시보드로 리다이렉트됩니다.
+
+### 3단계: 관리자 대시보드 접근
+- **직접 접근**: https://mycupnote.com/admin
+- **네비게이션**: 프로필 드롭다운 → "관리자 대시보드" 클릭
+
+## 🛡️ 관리자 계정 생성 방법 (상세)
+
+### 방법 1: 웹 인터페이스 (권장)
+
+1. **설정 페이지 접속**
+   - https://mycupnote.com/setup-admin
+
+2. **관리자 정보 입력**
+   - 이메일: admin@mycupnote.com (기본값)
+   - 이름: CupNote Administrator (기본값)
+   - 비밀번호: "안전한 비밀번호 생성" 버튼 사용
+
+3. **계정 생성 완료**
+   - 자동으로 user_metadata에 role: 'admin' 설정
+   - 성공 페이지에서 바로 로그인 가능
+
+### 방법 2: Supabase Dashboard (개발자용)
 
 1. **Supabase 대시보드 접속**
    - https://supabase.com/dashboard
@@ -27,18 +68,6 @@
    ```
 
 5. **"Create user" 클릭**
-
-### 방법 2: 웹 인터페이스 사용
-
-1. **설정 페이지 접속**
-   - https://mycupnote.com/setup-admin
-
-2. **관리자 정보 입력**
-   - 이메일: admin@mycupnote.com
-   - 이름: CupNote Administrator
-   - 비밀번호: 안전한 비밀번호 생성 버튼 사용
-
-3. **계정 생성 완료**
 
 ### 방법 3: 기존 계정에 관리자 권한 부여
 
