@@ -1,36 +1,36 @@
-<testsuites id="" name="" tests="6" failures="1" skipped="0" errors="0" time="18.481921000000003">
-<testsuite name="homepage-login-test.spec.ts" timestamp="2025-08-03T14:05:00.670Z" hostname="chromium" tests="6" failures="1" skipped="0" time="72.73" errors="0">
-<testcase name="홈페이지 로그인 이슈 테스트 › 비로그인 사용자도 홈페이지에 접근할 수 있어야 함" classname="homepage-login-test.spec.ts" time="13.498">
+<testsuites id="" name="" tests="6" failures="1" skipped="0" errors="0" time="5.430107">
+<testsuite name="homepage-login-test.spec.ts" timestamp="2025-08-03T14:08:04.081Z" hostname="chromium" tests="6" failures="1" skipped="0" time="17.68" errors="0">
+<testcase name="홈페이지 로그인 이슈 테스트 › 비로그인 사용자도 홈페이지에 접근할 수 있어야 함" classname="homepage-login-test.spec.ts" time="3.369">
 <system-out>
 <![CDATA[✅ 홈페이지가 정상적으로 표시됨
 ]]>
 </system-out>
 </testcase>
-<testcase name="홈페이지 로그인 이슈 테스트 › 로그인 페이지로 직접 이동 테스트" classname="homepage-login-test.spec.ts" time="13.037">
+<testcase name="홈페이지 로그인 이슈 테스트 › 로그인 페이지로 직접 이동 테스트" classname="homepage-login-test.spec.ts" time="3.126">
 <system-out>
 <![CDATA[✅ 로그인 페이지가 정상적으로 표시됨
 ]]>
 </system-out>
 </testcase>
-<testcase name="홈페이지 로그인 이슈 테스트 › 네비게이션 링크 테스트" classname="homepage-login-test.spec.ts" time="13.941">
+<testcase name="홈페이지 로그인 이슈 테스트 › 네비게이션 링크 테스트" classname="homepage-login-test.spec.ts" time="3.362">
 <system-out>
 <![CDATA[✅ 네비게이션이 정상적으로 표시됨
 ]]>
 </system-out>
 </testcase>
-<testcase name="홈페이지 로그인 이슈 테스트 › 관리자 페이지 접근 테스트 (비로그인)" classname="homepage-login-test.spec.ts" time="15.056">
+<testcase name="홈페이지 로그인 이슈 테스트 › 관리자 페이지 접근 테스트 (비로그인)" classname="homepage-login-test.spec.ts" time="3.43">
 <system-out>
 <![CDATA[✅ 관리자 페이지는 정상적으로 보호됨
 ]]>
 </system-out>
 </testcase>
-<testcase name="홈페이지 로그인 이슈 테스트 › 데모 페이지 접근 테스트" classname="homepage-login-test.spec.ts" time="13.655">
+<testcase name="홈페이지 로그인 이슈 테스트 › 데모 페이지 접근 테스트" classname="homepage-login-test.spec.ts" time="2.887">
 <system-out>
 <![CDATA[✅ 데모 페이지가 정상적으로 표시됨
 ]]>
 </system-out>
 </testcase>
-<testcase name="홈페이지 로그인 이슈 테스트 › 홈페이지에서 데모 페이지로 이동 테스트" classname="homepage-login-test.spec.ts" time="3.543">
+<testcase name="홈페이지 로그인 이슈 테스트 › 홈페이지에서 데모 페이지로 이동 테스트" classname="homepage-login-test.spec.ts" time="1.506">
 <failure message="homepage-login-test.spec.ts:94:7 홈페이지에서 데모 페이지로 이동 테스트" type="FAILURE">
 <![CDATA[  [chromium] › homepage-login-test.spec.ts:94:7 › 홈페이지 로그인 이슈 테스트 › 홈페이지에서 데모 페이지로 이동 테스트 ──────────
 
@@ -39,14 +39,14 @@
     Expected: "http://localhost:5173/demo"
     Received: "http://localhost:5173/"
 
-      102 |     
-      103 |     // 데모 페이지로 이동했는지 확인
-    > 104 |     expect(page.url()).toBe('http://localhost:5173/demo')
+      108 |     
+      109 |     // 데모 페이지로 이동했는지 확인
+    > 110 |     expect(page.url()).toBe('http://localhost:5173/demo')
           |                        ^
-      105 |     await expect(page.getByTestId('demo-page-title')).toBeVisible()
-      106 |     
-      107 |     console.log('✅ 홈페이지에서 데모 페이지로 정상 이동됨')
-        at /Users/zimo_mbp16_m1max/Projects/CupNote/e2e/homepage-login-test.spec.ts:104:24
+      111 |     await expect(page.getByTestId('demo-page-title')).toBeVisible()
+      112 |     
+      113 |     console.log('✅ 홈페이지에서 데모 페이지로 정상 이동됨')
+        at /Users/zimo_mbp16_m1max/Projects/CupNote/e2e/homepage-login-test.spec.ts:110:24
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/homepage-login-test-홈페이지-로그인-이슈-테스트-홈페이지에서-데모-페이지로-이동-테스트-chromium/test-failed-1.png

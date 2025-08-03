@@ -9,12 +9,11 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 
-import { BarChart3, Settings, Plus, ArrowLeft, Trophy, User, LogIn, Coffee, ChevronDown, LogOut, Bell, HelpCircle, Shield } from 'lucide-react'
+import { BarChart3, Settings, Plus, ArrowLeft, Trophy, User, UserX, LogIn, Coffee, ChevronDown, LogOut, Bell, HelpCircle, Shield } from 'lucide-react'
 
 import { isFeatureEnabled } from '../config/feature-flags.config'
 import { useAuth } from '../contexts/AuthContext'
 import UserProfile from './auth/UserProfile'
-import { NavigationGuestIndicator } from './GuestModeIndicator'
 
 interface NavigationProps {
   showBackButton?: boolean
@@ -136,53 +135,57 @@ export default function Navigation({
             </div>
 
             {/* 오른쪽: 메뉴 + 사용자 */}
-            <div className="flex items-center space-x-2">
-              {/* 기록하기 버튼 - 하이브리드 프리미엄 스타일 */}
-              <Link
-                href={isFeatureEnabled('ENABLE_NEW_TASTING_FLOW') ? '/tasting-flow' : '/mode-selection'}
-                className="flex items-center px-4 py-2 bg-gradient-to-r from-coffee-500 to-coffee-600 hover:from-coffee-600 hover:to-coffee-700 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                <span className="font-medium">기록하기</span>
-              </Link>
+            <div className="flex items-center space-x-3">
               
+              {/* 로그인 사용자 네비게이션 */}
               {user && (
                 <>
-                  {/* 네비게이션 메뉴 - 하이브리드 스타일 */}
+                  {/* 네비게이션 링크들 - 간소화된 스타일 */}
+                  <div className="hidden md:flex items-center space-x-1">
+                    <Link
+                      href="/achievements"
+                      className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${
+                        isActive('achievements')
+                          ? 'bg-coffee-100 text-coffee-800'
+                          : 'text-coffee-600 hover:text-coffee-800 hover:bg-coffee-50'
+                      }`}
+                    >
+                      <Trophy className="h-4 w-4 mr-1.5" />
+                      <span className="font-medium">성취</span>
+                    </Link>
+                    
+                    <Link
+                      href="/my-records"
+                      className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${
+                        isActive('my-records')
+                          ? 'bg-coffee-100 text-coffee-800'
+                          : 'text-coffee-600 hover:text-coffee-800 hover:bg-coffee-50'
+                      }`}
+                    >
+                      <Coffee className="h-4 w-4 mr-1.5" />
+                      <span className="font-medium">내 기록</span>
+                    </Link>
+                    
+                    <Link
+                      href="/settings"
+                      className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${
+                        isActive('settings')
+                          ? 'bg-coffee-100 text-coffee-800'
+                          : 'text-coffee-600 hover:text-coffee-800 hover:bg-coffee-50'
+                      }`}
+                    >
+                      <Settings className="h-4 w-4 mr-1.5" />
+                      <span className="font-medium">설정</span>
+                    </Link>
+                  </div>
+
+                  {/* Primary CTA - 기록하기 버튼 */}
                   <Link
-                    href="/achievements"
-                    className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${
-                      isActive('achievements')
-                        ? 'bg-coffee-100/80 text-coffee-800 shadow-sm backdrop-blur-sm'
-                        : 'text-coffee-600 hover:text-coffee-800 hover:bg-coffee-50/80'
-                    }`}
+                    href={isFeatureEnabled('ENABLE_NEW_TASTING_FLOW') ? '/tasting-flow' : '/mode-selection'}
+                    className="flex items-center px-4 py-2.5 bg-coffee-600 hover:bg-coffee-700 text-white rounded-xl transition-all duration-200 font-medium shadow-sm hover:shadow-md"
                   >
-                    <Trophy className="h-4 w-4 mr-1" />
-                    <span className="font-medium">성취</span>
-                  </Link>
-                  
-                  <Link
-                    href="/my-records"
-                    className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${
-                      isActive('my-records')
-                        ? 'bg-coffee-100/80 text-coffee-800 shadow-sm backdrop-blur-sm'
-                        : 'text-coffee-600 hover:text-coffee-800 hover:bg-coffee-50/80'
-                    }`}
-                  >
-                    <Coffee className="h-4 w-4 mr-1" />
-                    <span className="font-medium">내 기록</span>
-                  </Link>
-                  
-                  <Link
-                    href="/settings"
-                    className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${
-                      isActive('settings')
-                        ? 'bg-coffee-100/80 text-coffee-800 shadow-sm backdrop-blur-sm'
-                        : 'text-coffee-600 hover:text-coffee-800 hover:bg-coffee-50/80'
-                    }`}
-                  >
-                    <Settings className="h-4 w-4 mr-1" />
-                    <span className="font-medium">설정</span>
+                    <Plus className="h-4 w-4 mr-1.5" />
+                    <span>기록하기</span>
                   </Link>
                 </>
               )}
@@ -194,9 +197,9 @@ export default function Navigation({
                 ) : user ? (
                   <button
                     onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-                    className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-coffee-50/80 hover:bg-coffee-100/80 border border-coffee-200/50 transition-all duration-200 backdrop-blur-sm shadow-sm hover:shadow-md"
+                    className="flex items-center space-x-2 px-3 py-2 rounded-xl hover:bg-coffee-50 transition-all duration-200"
                   >
-                    <div className="w-8 h-8 bg-gradient-to-r from-coffee-400 to-coffee-500 rounded-full flex items-center justify-center shadow-sm">
+                    <div className="w-8 h-8 bg-gradient-to-r from-coffee-400 to-coffee-500 rounded-full flex items-center justify-center">
                       {user.avatar_url ? (
                         <img
                           src={user.avatar_url}
@@ -207,19 +210,42 @@ export default function Navigation({
                         <User size={16} className="text-white" />
                       )}
                     </div>
-                    <span className="text-sm font-medium text-coffee-800">{user.username}</span>
+                    <span className="text-sm font-medium text-coffee-800 hidden md:block">{user.username}</span>
                     <ChevronDown className={`h-4 w-4 text-coffee-600 transition-transform duration-200 ${showProfileDropdown ? 'rotate-180' : ''}`} />
                   </button>
                 ) : (
-                  <div className="flex items-center space-x-3">
-                    <NavigationGuestIndicator onLoginClick={() => handleAuthNavigation('login')} />
+                  <>
+                    {/* 게스트 모드 표시 */}
+                    <div className="hidden md:flex items-center px-3 py-2 text-coffee-600">
+                      <UserX className="h-4 w-4 mr-2" />
+                      <span className="text-sm">게스트 모드</span>
+                    </div>
+                    
+                    {/* Secondary CTA - 기록하기 */}
+                    <Link
+                      href={isFeatureEnabled('ENABLE_NEW_TASTING_FLOW') ? '/tasting-flow' : '/mode-selection'}
+                      className="flex items-center px-4 py-2.5 bg-coffee-100 hover:bg-coffee-200 text-coffee-800 rounded-xl transition-all duration-200 font-medium"
+                    >
+                      <Plus className="h-4 w-4 mr-1.5" />
+                      <span>기록하기</span>
+                    </Link>
+                    
+                    {/* Tertiary - 로그인 */}
+                    <button
+                      onClick={() => handleAuthNavigation('login')}
+                      className="px-4 py-2.5 text-coffee-700 hover:text-coffee-900 font-medium transition-colors"
+                    >
+                      로그인
+                    </button>
+                    
+                    {/* Primary CTA - 회원가입 */}
                     <button
                       onClick={() => handleAuthNavigation('signup')}
-                      className="flex items-center px-4 py-2 bg-coffee-500 hover:bg-coffee-600 text-white rounded-lg transition-all duration-200 shadow-sm hover:shadow-md font-medium"
+                      className="px-4 py-2.5 bg-coffee-600 hover:bg-coffee-700 text-white rounded-xl transition-all duration-200 font-medium shadow-sm hover:shadow-md"
                     >
                       회원가입
                     </button>
-                  </div>
+                  </>
                 )}
 
                 {/* 프로필 드롭다운 메뉴 */}

@@ -179,7 +179,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 13498,
+                      "duration": 3369,
                       "errors": [],
                       "stdout": [
                         {
@@ -188,7 +188,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-03T14:05:01.078Z",
+                      "startTime": "2025-08-03T14:08:04.498Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -217,7 +217,7 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 13037,
+                      "duration": 3126,
                       "errors": [],
                       "stdout": [
                         {
@@ -226,7 +226,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-03T14:05:01.084Z",
+                      "startTime": "2025-08-03T14:08:04.496Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -255,7 +255,7 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 13941,
+                      "duration": 3362,
                       "errors": [],
                       "stdout": [
                         {
@@ -264,7 +264,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-03T14:05:01.083Z",
+                      "startTime": "2025-08-03T14:08:04.496Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -293,7 +293,7 @@
                       "workerIndex": 3,
                       "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 15056,
+                      "duration": 3430,
                       "errors": [],
                       "stdout": [
                         {
@@ -302,7 +302,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-03T14:05:01.077Z",
+                      "startTime": "2025-08-03T14:08:04.496Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -331,7 +331,7 @@
                       "workerIndex": 4,
                       "parallelIndex": 4,
                       "status": "passed",
-                      "duration": 13655,
+                      "duration": 2887,
                       "errors": [],
                       "stdout": [
                         {
@@ -340,7 +340,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-03T14:05:01.079Z",
+                      "startTime": "2025-08-03T14:08:04.495Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -366,34 +366,34 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
                       "status": "failed",
-                      "duration": 3543,
+                      "duration": 1506,
                       "error": {
                         "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"http://localhost:5173/\u001b[7mdemo\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:5173/\"\u001b[39m",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"http://localhost:5173/\u001b[7mdemo\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:5173/\"\u001b[39m\n    at /Users/zimo_mbp16_m1max/Projects/CupNote/e2e/homepage-login-test.spec.ts:104:24",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"http://localhost:5173/\u001b[7mdemo\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:5173/\"\u001b[39m\n    at /Users/zimo_mbp16_m1max/Projects/CupNote/e2e/homepage-login-test.spec.ts:110:24",
                         "location": {
                           "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/homepage-login-test.spec.ts",
                           "column": 24,
-                          "line": 104
+                          "line": 110
                         },
-                        "snippet": "\u001b[0m \u001b[90m 102 |\u001b[39m     \n \u001b[90m 103 |\u001b[39m     \u001b[90m// 데모 페이지로 이동했는지 확인\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 104 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(\u001b[32m'http://localhost:5173/demo'\u001b[39m)\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 105 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'demo-page-title'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m 106 |\u001b[39m     \n \u001b[90m 107 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'✅ 홈페이지에서 데모 페이지로 정상 이동됨'\u001b[39m)\u001b[0m"
+                        "snippet": "\u001b[0m \u001b[90m 108 |\u001b[39m     \n \u001b[90m 109 |\u001b[39m     \u001b[90m// 데모 페이지로 이동했는지 확인\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 110 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(\u001b[32m'http://localhost:5173/demo'\u001b[39m)\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 111 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'demo-page-title'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m 112 |\u001b[39m     \n \u001b[90m 113 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'✅ 홈페이지에서 데모 페이지로 정상 이동됨'\u001b[39m)\u001b[0m"
                       },
                       "errors": [
                         {
                           "location": {
                             "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/homepage-login-test.spec.ts",
                             "column": 24,
-                            "line": 104
+                            "line": 110
                           },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"http://localhost:5173/\u001b[7mdemo\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:5173/\"\u001b[39m\n\n\u001b[0m \u001b[90m 102 |\u001b[39m     \n \u001b[90m 103 |\u001b[39m     \u001b[90m// 데모 페이지로 이동했는지 확인\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 104 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(\u001b[32m'http://localhost:5173/demo'\u001b[39m)\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 105 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'demo-page-title'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m 106 |\u001b[39m     \n \u001b[90m 107 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'✅ 홈페이지에서 데모 페이지로 정상 이동됨'\u001b[39m)\u001b[0m\n\u001b[2m    at /Users/zimo_mbp16_m1max/Projects/CupNote/e2e/homepage-login-test.spec.ts:104:24\u001b[22m"
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"http://localhost:5173/\u001b[7mdemo\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:5173/\"\u001b[39m\n\n\u001b[0m \u001b[90m 108 |\u001b[39m     \n \u001b[90m 109 |\u001b[39m     \u001b[90m// 데모 페이지로 이동했는지 확인\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 110 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(\u001b[32m'http://localhost:5173/demo'\u001b[39m)\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 111 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'demo-page-title'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m 112 |\u001b[39m     \n \u001b[90m 113 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'✅ 홈페이지에서 데모 페이지로 정상 이동됨'\u001b[39m)\u001b[0m\n\u001b[2m    at /Users/zimo_mbp16_m1max/Projects/CupNote/e2e/homepage-login-test.spec.ts:110:24\u001b[22m"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-03T14:05:15.237Z",
+                      "startTime": "2025-08-03T14:08:07.726Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -415,7 +415,7 @@
                       "errorLocation": {
                         "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/homepage-login-test.spec.ts",
                         "column": 24,
-                        "line": 104
+                        "line": 110
                       }
                     }
                   ],
@@ -434,8 +434,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-08-03T14:05:00.446Z",
-    "duration": 18481.921000000002,
+    "startTime": "2025-08-03T14:08:03.831Z",
+    "duration": 5430.107,
     "expected": 5,
     "skipped": 0,
     "unexpected": 1,
