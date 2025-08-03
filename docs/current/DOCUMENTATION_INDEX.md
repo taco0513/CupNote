@@ -111,6 +111,7 @@ decisions/
 ```
 troubleshooting/
 ├── ENHANCED_MATCH_SCORE_BUILD_ISSUES.md # Enhanced Match Score 빌드 이슈
+├── NOTIFICATION_CONTEXT_ERROR_FIX.md    # 알림 컨텍스트 에러 해결 (NEW)
 ├── COMMON_ISSUES.md           # 일반적인 문제들
 ├── DEPLOYMENT_ISSUES.md       # 배포 관련 문제
 └── PERFORMANCE_ISSUES.md      # 성능 관련 문제
@@ -156,6 +157,7 @@ troubleshooting/
 
 ### 문제 해결
 - 🔧 [Enhanced Match Score 빌드 이슈](../troubleshooting/ENHANCED_MATCH_SCORE_BUILD_ISSUES.md)
+- 🔔 [알림 컨텍스트 에러 해결](../troubleshooting/NOTIFICATION_CONTEXT_ERROR_FIX.md) (NEW)
 - ❓ [일반적인 문제들](../troubleshooting/COMMON_ISSUES.md)
 - 🚀 [배포 관련 문제](../troubleshooting/DEPLOYMENT_ISSUES.md)
 - ⚡ [성능 관련 문제](../troubleshooting/PERFORMANCE_ISSUES.md)
@@ -205,6 +207,7 @@ troubleshooting/
 
 **문제 해결**:
 - ✅ Enhanced Match Score 빌드 이슈
+- ✅ **알림 컨텍스트 에러 해결** (NEW - 2025-08-03)
 
 ### 🚧 계획된 문서
 

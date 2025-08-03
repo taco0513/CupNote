@@ -23,8 +23,7 @@ const OnboardingTrigger = dynamic(() => import('../components/ui/OnboardingTrigg
 
 // 클라이언트 전용 컴포넌트들을 동적 import
 const AppHeader = dynamic(() => import('../components/AppHeader'), {
-  loading: () => null,
-  ssr: false
+  loading: () => null
 })
 import './globals.css'
 
