@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { Coffee, Calendar, MapPin, Star, ArrowRight } from 'lucide-react'
 
 // import LazyImage from './LazyImage' // 임시로 주석 처리
-import EmptyState from './EmptyState'
+import EmptyState from './ui/EmptyState'
 import { ListSkeleton } from './SkeletonLoader'
 import { useAuth } from '../contexts/AuthContext'
 import { useNotification } from '../contexts/NotificationContext'
@@ -74,7 +74,12 @@ export default function RecentCoffeePreview() {
   if (recentRecords.length === 0) {
     return (
       <div className="bg-white rounded-xl shadow-sm">
-        <EmptyState type="no-records" />
+        <EmptyState 
+          title="아직 기록이 없습니다"
+          description="첫 번째 커피를 기록해보세요"
+          variant="coffee"
+          illustration="coffee-cup"
+        />
       </div>
     )
   }

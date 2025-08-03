@@ -8,6 +8,7 @@ import ProtectedRoute from '../../components/auth/ProtectedRoute'
 import Navigation from '../../components/Navigation'
 import { StatsGridSkeleton, AchievementGridSkeleton } from '../../components/SkeletonLoader'
 import { Card, CardContent } from '../../components/ui/Card'
+import EmptyState from '../../components/ui/EmptyState'
 import PageHeader from '../../components/ui/PageHeader'
 import PageLayout from '../../components/ui/PageLayout'
 import { simpleDemoStats } from '../../data/simple-demo'
@@ -101,13 +102,12 @@ export default function AchievementsPage() {
       <ProtectedRoute>
         <Navigation showBackButton currentPage="achievements" />
         <PageLayout>
-          <div className="text-center py-16">
-            <div className="w-16 h-16 bg-coffee-100/80 rounded-xl flex items-center justify-center mx-auto mb-4">
-              <Trophy className="h-8 w-8 text-coffee-300" />
-            </div>
-            <h1 className="text-xl font-bold text-coffee-800 mb-2">아직 성취가 없어요</h1>
-            <p className="text-coffee-600">첫 커피 기록을 만들어보세요!</p>
-          </div>
+          <EmptyState
+            title="아직 성취가 없어요"
+            description="첫 커피 기록을 만들어보세요! 기록을 쌓아가면 다양한 성취를 얻을 수 있어요."
+            variant="achievement"
+            illustration="trophy"
+          />
         </PageLayout>
       </ProtectedRoute>
     )
@@ -346,12 +346,12 @@ export default function AchievementsPage() {
         </div>
 
         {filteredAchievements.length === 0 && (
-          <div className="text-center py-12">
-            <div className="w-16 h-16 bg-coffee-100/80 rounded-xl flex items-center justify-center mx-auto mb-4">
-              <Trophy className="h-8 w-8 text-coffee-300" />
-            </div>
-            <p className="text-coffee-500">이 카테고리에는 성취가 없어요</p>
-          </div>
+          <EmptyState
+            title="이 카테고리에는 성취가 없어요"
+            description="다른 카테고리를 확인해보세요"
+            variant="achievement"
+            illustration="trophy"
+          />
         )}
       </PageLayout>
     </ProtectedRoute>

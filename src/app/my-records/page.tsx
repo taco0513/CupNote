@@ -19,6 +19,7 @@ import { Card, CardContent } from '../../components/ui/Card'
 import PageHeader from '../../components/ui/PageHeader'
 import PageLayout from '../../components/ui/PageLayout'
 import UnifiedButton from '../../components/ui/UnifiedButton'
+import EmptyState from '../../components/ui/EmptyState'
 
 function MyRecordsPageContent() {
   const searchParams = useSearchParams()
@@ -236,25 +237,26 @@ function MyRecordsPageContent() {
 
         {/* 첫 기록 안내 - 기록이 없을 때 */}
         {quickStats.total === 0 && (
-          <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md text-center py-16">
+          <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md">
             <CardContent>
-              <div className="w-20 h-20 bg-coffee-100/80 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Coffee className="h-10 w-10 text-coffee-400" />
-              </div>
-              <h3 className="text-xl font-semibold text-coffee-800 mb-3">아직 기록이 없어요</h3>
-              <p className="text-coffee-600 mb-6 max-w-md mx-auto">
-                첫 번째 커피를 기록해보세요! 간단한 경험부터 전문적인 커핑까지 다양한 방식으로 기록할 수 있어요.
-              </p>
-              <Link href="/mode-selection">
-                <UnifiedButton
-                  variant="primary"
-                  size="large"
-                  className="bg-gradient-to-r from-coffee-500 to-coffee-600 hover:from-coffee-600 hover:to-coffee-700 shadow-md hover:shadow-lg"
-                >
-                  <Plus className="h-5 w-5 mr-2" />
-                  첫 기록 시작하기
-                </UnifiedButton>
-              </Link>
+              <EmptyState
+                title="아직 기록이 없어요"
+                description="첫 번째 커피를 기록해보세요! 간단한 경험부터 전문적인 커핑까지 다양한 방식으로 기록할 수 있어요."
+                variant="coffee"
+                illustration="coffee-cup"
+                action={
+                  <Link href="/mode-selection">
+                    <UnifiedButton
+                      variant="primary"
+                      size="large"
+                      className="bg-gradient-to-r from-coffee-500 to-coffee-600 hover:from-coffee-600 hover:to-coffee-700 shadow-md hover:shadow-lg"
+                    >
+                      <Plus className="h-5 w-5 mr-2" />
+                      첫 기록 시작하기
+                    </UnifiedButton>
+                  </Link>
+                }
+              />
             </CardContent>
           </Card>
         )}

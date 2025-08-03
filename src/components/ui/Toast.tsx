@@ -1,17 +1,19 @@
+/**
+ * Toast Notification Component - 하이브리드 디자인 시스템
+ * 미니멀한 구조 + 프리미엄 비주얼
+ */
 'use client'
 
 import { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react'
 
-import { X, CheckCircle, AlertTriangle, AlertCircle, Info } from 'lucide-react'
+import { X, CheckCircle, AlertTriangle, AlertCircle, Info, Coffee } from 'lucide-react'
 import { createPortal } from 'react-dom'
-
-import { Button } from './Button'
 
 interface Toast {
   id: string
   title?: string
   message: string
-  type: 'success' | 'error' | 'warning' | 'info'
+  type: 'success' | 'error' | 'warning' | 'info' | 'coffee'
   duration?: number
   action?: {
     label: string
@@ -77,7 +79,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   )
 }
 
-// Toast Container (Portal)
+// Toast Container (Portal) - 하이브리드 스타일
 function ToastContainer({ 
   toasts, 
   onRemove 
@@ -85,10 +87,16 @@ function ToastContainer({
   toasts: Toast[]
   onRemove: (id: string) => void 
 }) {
-  if (!toasts.length) return null
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted || !toasts.length) return null
 
   const toastContent = (
-    <div className="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-md">
+    <div className="fixed top-4 right-4 z-50 flex flex-col gap-3 max-w-md md:max-w-lg">
       {toasts.map(toast => (
         <ToastItem key={toast.id} toast={toast} onRemove={onRemove} />
       ))}
@@ -98,7 +106,7 @@ function ToastContainer({
   return createPortal(toastContent, document.body)
 }
 
-// Individual Toast Item
+// Individual Toast Item - 하이브리드 디자인
 function ToastItem({ 
   toast, 
   onRemove 
@@ -122,22 +130,40 @@ function ToastItem({
   const getIcon = () => {
     switch (toast.type) {
       case 'success':
-        return <CheckCircle className="h-5 w-5 text-green-500" />
+        return <CheckCircle className="h-5 w-5 text-green-600" />
       case 'error':
-        return <AlertCircle className="h-5 w-5 text-red-500" />
+        return <AlertCircle className="h-5 w-5 text-red-600" />
       case 'warning':
-        return <AlertTriangle className="h-5 w-5 text-yellow-500" />
+        return <AlertTriangle className="h-5 w-5 text-amber-600" />
       case 'info':
-        return <Info className="h-5 w-5 text-blue-500" />
+        return <Info className="h-5 w-5 text-blue-600" />
+      case 'coffee':
+        return <Coffee className="h-5 w-5 text-coffee-600" />
     }
   }
 
-  const getBorderColor = () => {
+  const getStyles = () => {
     switch (toast.type) {
-      case 'success': return 'border-l-green-500'
-      case 'error': return 'border-l-red-500'
-      case 'warning': return 'border-l-yellow-500'
-      case 'info': return 'border-l-blue-500'
+      case 'success':
+        return 'bg-green-50/95 border-green-200/50 text-green-800'
+      case 'error':
+        return 'bg-red-50/95 border-red-200/50 text-red-800'
+      case 'warning':
+        return 'bg-amber-50/95 border-amber-200/50 text-amber-800'
+      case 'info':
+        return 'bg-blue-50/95 border-blue-200/50 text-blue-800'
+      case 'coffee':
+        return 'bg-coffee-50/95 border-coffee-200/50 text-coffee-800'
+    }
+  }
+
+  const getProgressColor = () => {
+    switch (toast.type) {
+      case 'success': return 'bg-green-500'
+      case 'error': return 'bg-red-500'
+      case 'warning': return 'bg-amber-500'
+      case 'info': return 'bg-blue-500'
+      case 'coffee': return 'bg-coffee-500'
     }
   }
 
@@ -145,70 +171,70 @@ function ToastItem({
     <div
       className={`
         transform transition-all duration-300 ease-out
-        ${isVisible && !isLeaving ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}
-        bg-white rounded-lg shadow-lg border-l-4 ${getBorderColor()}
-        p-4 min-w-80 max-w-md
+        ${isVisible && !isLeaving ? 'translate-x-0 opacity-100 scale-100' : 'translate-x-full opacity-0 scale-95'}
+        ${getStyles()}
+        backdrop-blur-md rounded-2xl shadow-xl border
+        p-4 min-w-[320px] max-w-md
+        hover:shadow-2xl hover:scale-[1.02] cursor-pointer
       `}
       role="alert"
       aria-live="polite"
+      onClick={handleRemove}
     >
       <div className="flex items-start gap-3">
-        {/* 아이콘 */}
+        {/* 아이콘 - 하이브리드 스타일 */}
         <div className="flex-shrink-0 mt-0.5">
-          {getIcon()}
+          <div className="w-10 h-10 bg-white/60 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-sm">
+            {getIcon()}
+          </div>
         </div>
 
         {/* 콘텐츠 */}
         <div className="flex-1 min-w-0">
           {toast.title && (
-            <h4 className="font-medium text-gray-900 mb-1">
+            <h4 className="font-semibold text-sm mb-0.5">
               {toast.title}
             </h4>
           )}
-          <p className="text-sm text-gray-700">
+          <p className="text-sm opacity-90">
             {toast.message}
           </p>
           
-          {/* 액션 버튼 */}
+          {/* 액션 버튼 - 하이브리드 스타일 */}
           {toast.action && (
-            <div className="mt-3">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => {
+            <div className="mt-2">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
                   toast.action!.onClick()
                   handleRemove()
                 }}
-                className="text-xs"
+                className="text-xs font-medium underline hover:no-underline transition-all"
               >
                 {toast.action.label}
-              </Button>
+              </button>
             </div>
           )}
         </div>
 
-        {/* 닫기 버튼 */}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleRemove}
-          className="flex-shrink-0 h-6 w-6 text-gray-400 hover:text-gray-600"
+        {/* 닫기 버튼 - 미니멀 */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            handleRemove()
+          }}
+          className="flex-shrink-0 w-6 h-6 rounded-lg hover:bg-white/40 flex items-center justify-center transition-colors"
           aria-label="알림 닫기"
         >
-          <X className="h-4 w-4" />
-        </Button>
+          <X className="h-3.5 w-3.5" />
+        </button>
       </div>
 
-      {/* 진행률 바 (duration이 있는 경우) */}
+      {/* 진행률 바 - 미니멀 애니메이션 */}
       {!toast.persistent && toast.duration && (
-        <div className="mt-3 h-1 bg-gray-200 rounded-full overflow-hidden">
+        <div className="mt-3 h-0.5 bg-white/30 rounded-full overflow-hidden">
           <div 
-            className={`h-full ${
-              toast.type === 'success' ? 'bg-green-500' :
-              toast.type === 'error' ? 'bg-red-500' :
-              toast.type === 'warning' ? 'bg-yellow-500' :
-              'bg-blue-500'
-            } transition-all ease-linear`}
+            className={`h-full ${getProgressColor()} transition-all ease-linear rounded-full`}
             style={{
               animation: `shrink ${toast.duration}ms linear`
             }}
@@ -252,17 +278,23 @@ export function useInfoToast() {
   }, [addToast])
 }
 
-// CSS for progress bar animation
-const toastStyles = `
-  @keyframes shrink {
-    from { width: 100%; }
-    to { width: 0%; }
-  }
-`
+export function useCoffeeToast() {
+  const { addToast } = useToast()
+  
+  return useCallback((message: string, options?: Partial<Omit<Toast, 'type' | 'message'>>) => {
+    return addToast({ type: 'coffee', message, ...options })
+  }, [addToast])
+}
 
-// Inject styles
-if (typeof document !== 'undefined') {
+// CSS for progress bar animation
+if (typeof document !== 'undefined' && !document.getElementById('toast-styles')) {
   const style = document.createElement('style')
-  style.textContent = toastStyles
+  style.id = 'toast-styles'
+  style.textContent = `
+    @keyframes shrink {
+      from { width: 100%; }
+      to { width: 0%; }
+    }
+  `
   document.head.appendChild(style)
 }

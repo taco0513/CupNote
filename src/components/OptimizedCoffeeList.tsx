@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo, useCallback } from 'react'
 
-import EmptyState from './EmptyState'
+import EmptyState from './ui/EmptyState'
 import FilterPanel, { FilterOptions } from './FilterPanel'
 import LazyImage from './LazyImage'
 import OptimizedCoffeeCard from './OptimizedCoffeeCard'
@@ -204,9 +204,10 @@ export default function OptimizedCoffeeList() {
         </div>
 
         <EmptyState 
-          type={searchQuery || Object.keys(filters).length > 0 ? 'no-search-results' : 'no-records'}
-          searchQuery={searchQuery}
-          hasFilters={Object.keys(filters).length > 0}
+          title={searchQuery || Object.keys(filters).length > 0 ? '검색 결과가 없습니다' : '아직 기록이 없습니다'}
+          description={searchQuery || Object.keys(filters).length > 0 ? '다른 검색어를 시도해보세요' : '첫 번째 커피를 기록해보세요'}
+          variant={searchQuery || Object.keys(filters).length > 0 ? 'search' : 'coffee'}
+          illustration={searchQuery || Object.keys(filters).length > 0 ? 'search' : 'coffee-cup'}
         />
       </div>
     )
