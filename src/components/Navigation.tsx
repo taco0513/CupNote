@@ -27,7 +27,7 @@ export default function Navigation({
   backHref,
   currentPage = 'home',
 }: NavigationProps) {
-  const { user, loading, logout } = useAuth()
+  const { user, loading, signOut } = useAuth()
   const router = useRouter()
   const pathname = usePathname()
   const [showUserProfile, setShowUserProfile] = useState(false)
@@ -105,7 +105,7 @@ export default function Navigation({
 
   const handleLogout = async () => {
     try {
-      await logout()
+      await signOut()
       setShowProfileDropdown(false)
       router.push('/')
     } catch (error) {
