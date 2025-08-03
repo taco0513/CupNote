@@ -22,7 +22,7 @@ interface AppHeaderProps {
 export default function AppHeader({ 
   showSearch = true
 }: AppHeaderProps) {
-  const { user, logout } = useAuth()
+  const { user, signOut } = useAuth()
   const router = useRouter()
   const [showSearchInput, setShowSearchInput] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
@@ -34,7 +34,7 @@ export default function AppHeader({
 
   const handleLogout = async () => {
     try {
-      await logout()
+      await signOut()
       setShowMobileMenu(false)
       router.push('/')
     } catch (error) {
