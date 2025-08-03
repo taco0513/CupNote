@@ -58,9 +58,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           return
         }
 
-        // 실제 구현에서는 Supabase RLS 정책으로 관리자 권한 확인
-        // 현재는 개발용으로 모든 인증된 사용자에게 허용
-        const isAdmin = user.email === 'admin@cupnote.app' || 
+        // 관리자 권한 확인 - mycupnote.com 도메인 기반
+        const isAdmin = user.email === 'admin@mycupnote.com' || 
+                       user.email?.endsWith('@mycupnote.com') ||
                        user.user_metadata?.role === 'admin' ||
                        process.env.NODE_ENV === 'development'
 
