@@ -168,7 +168,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       {/* 사이드바 */}
       <div className={`fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-      } lg:translate-x-0`}>
+      }`}>
         <div className="flex flex-col h-full bg-white/95 backdrop-blur-sm border-r border-coffee-200/50 shadow-lg">
           {/* 헤더 */}
           <div className="flex items-center justify-between p-6 border-b border-coffee-100/50">
@@ -183,7 +183,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             </div>
             <button
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden p-2 rounded-lg hover:bg-coffee-100/50 transition-colors"
+              className="p-2 rounded-lg hover:bg-coffee-100/50 transition-colors"
             >
               <X className="h-5 w-5 text-coffee-600" />
             </button>
@@ -197,7 +197,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 onClick={() => {
                   setActiveTab(item.id)
                   router.push(item.href)
-                  setSidebarOpen(false) // 모바일에서 메뉴 닫기
+                  // 모바일에서만 메뉴 닫기
+                  if (window.innerWidth < 1024) {
+                    setSidebarOpen(false)
+                  }
                 }}
                 className={`w-full text-left p-3 rounded-xl transition-all duration-200 group relative ${
                   activeTab === item.id
@@ -263,10 +266,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </div>
       </div>
 
-      {/* 모바일 오버레이 */}
+      {/* 오버레이 */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/50 lg:bg-black/20"
           onClick={() => setSidebarOpen(false)}
         />
       )}
