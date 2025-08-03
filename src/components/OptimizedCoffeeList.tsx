@@ -289,8 +289,6 @@ const OptimizedCoffeeCard = ({ record }: { record: CoffeeRecord }) => {
     if (mode === 'cafe') return { icon: '☕', text: 'Cafe', color: 'bg-blue-100 text-blue-800 border-blue-200' }
     if (mode === 'homecafe')
       return { icon: '🏠', text: 'HomeCafe', color: 'bg-green-100 text-green-800 border-green-200' }
-    if (mode === 'lab')
-      return { icon: '🧪', text: 'Lab', color: 'bg-purple-100 text-purple-800 border-purple-200' }
 
     if (tasteMode === 'simple')
       return { icon: '🌱', text: '편하게', color: 'bg-green-100 text-green-800 border-green-200' }

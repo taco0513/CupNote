@@ -250,10 +250,6 @@ function MyRecordsPageContent() {
                         <input type="checkbox" className="mr-2 rounded text-coffee-600 focus:ring-coffee-400" />
                         <span className="text-sm">🏠 HomeCafe Mode</span>
                       </label>
-                      <label className="flex items-center">
-                        <input type="checkbox" className="mr-2 rounded text-coffee-600 focus:ring-coffee-400" />
-                        <span className="text-sm">🧪 Lab Mode</span>
-                      </label>
                     </div>
                   </div>
 
