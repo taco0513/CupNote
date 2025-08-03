@@ -193,247 +193,298 @@ export default function ProfilePage() {
           {/* 프로필 정보 - 하이브리드 프리미엄 카드 */}
           <Card variant="elevated" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-lg">
             <CardContent className="p-6">
-              <div className="flex items-center space-x-6">
-                <div className="w-20 h-20 bg-gradient-to-r from-coffee-400 to-coffee-500 rounded-full flex items-center justify-center shadow-lg">
-                  {profile.avatar_url ? (
-                    <img
-                      src={profile.avatar_url}
-                      alt={profile.username}
-                      className="w-20 h-20 rounded-full object-cover"
-                    />
-                  ) : (
-                    <User className="h-10 w-10 text-white" />
-                  )}
-                </div>
-                <div className="flex-1">
-                  <h2 className="text-2xl font-bold text-coffee-800 mb-1">{profile.username}</h2>
-                  <p className="text-coffee-600 mb-2">{profile.email}</p>
-                  <div className="flex items-center space-x-4 text-sm">
-                    <span className="bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 px-3 py-1 rounded-full font-medium">
-                      ⭐ Level {profile.level} {profile.title}
-                    </span>
-                    <span className="text-coffee-500">
-                      <Calendar className="h-4 w-4 inline mr-1" />
-                      가입: {new Date(profile.join_date).toLocaleDateString('ko-KR')}
-                    </span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-6">
+                  <div className="w-20 h-20 bg-gradient-to-r from-coffee-400 to-coffee-500 rounded-full flex items-center justify-center shadow-lg">
+                    {profile.avatar_url ? (
+                      <img
+                        src={profile.avatar_url}
+                        alt={profile.username}
+                        className="w-20 h-20 rounded-full object-cover"
+                      />
+                    ) : (
+                      <User className="h-10 w-10 text-white" />
+                    )}
                   </div>
+                  <div className="flex-1">
+                    <h2 className="text-2xl font-bold text-coffee-800 mb-1">{profile.username}</h2>
+                    <p className="text-coffee-600 mb-2">{profile.email}</p>
+                    <div className="flex items-center space-x-4 text-sm">
+                      <span className="bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 px-3 py-1 rounded-full font-medium">
+                        ⭐ Level {profile.level} {profile.title}
+                      </span>
+                      <span className="text-coffee-500">
+                        <Calendar className="h-4 w-4 inline mr-1" />
+                        가입: {new Date(profile.join_date).toLocaleDateString('ko-KR')}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* 프로필 편집 버튼 - 데스크탑에서만 표시 */}
+                <div className="hidden md:block">
+                  <button className="px-4 py-2 bg-coffee-100 hover:bg-coffee-200 text-coffee-700 rounded-lg transition-colors flex items-center space-x-2">
+                    <Settings className="h-4 w-4" />
+                    <span>편집</span>
+                  </button>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* 커피 여정 통계 - 하이브리드 그리드 */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {/* 커피 여정 통계 - 대시보드 스타일 4개 카드 */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {/* 총 포인트 */}
-            <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-shadow">
-              <CardContent className="p-4 text-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-amber-400 to-amber-500 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-md">
-                  <Trophy className="h-6 w-6 text-white" />
+            <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
+              <CardContent className="p-6 text-center">
+                <div className="w-14 h-14 bg-gradient-to-r from-amber-400 to-amber-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md">
+                  <Trophy className="h-7 w-7 text-white" />
                 </div>
-                <div className="text-lg font-bold text-coffee-700 mb-1">{profile.total_points}P</div>
-                <div className="text-xs text-coffee-600">총 포인트</div>
+                <div className="text-2xl font-bold text-coffee-700 mb-1">{profile.total_points}P</div>
+                <div className="text-sm text-coffee-600">총 포인트</div>
               </CardContent>
             </Card>
 
             {/* 총 기록 */}
-            <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-shadow">
-              <CardContent className="p-4 text-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-blue-500 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-md">
-                  <Coffee className="h-6 w-6 text-white" />
+            <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
+              <CardContent className="p-6 text-center">
+                <div className="w-14 h-14 bg-gradient-to-r from-blue-400 to-blue-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md">
+                  <Coffee className="h-7 w-7 text-white" />
                 </div>
-                <div className="text-lg font-bold text-coffee-700 mb-1">{profile.total_records}개</div>
-                <div className="text-xs text-coffee-600">총 기록</div>
+                <div className="text-2xl font-bold text-coffee-700 mb-1">{profile.total_records}개</div>
+                <div className="text-sm text-coffee-600">총 기록</div>
               </CardContent>
             </Card>
 
             {/* 현재 연속 */}
-            <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-shadow">
-              <CardContent className="p-4 text-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-orange-400 to-orange-500 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-md">
-                  <Target className="h-6 w-6 text-white" />
+            <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
+              <CardContent className="p-6 text-center">
+                <div className="w-14 h-14 bg-gradient-to-r from-orange-400 to-orange-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md">
+                  <Target className="h-7 w-7 text-white" />
                 </div>
-                <div className="text-lg font-bold text-coffee-700 mb-1">{profile.current_streak}일</div>
-                <div className="text-xs text-coffee-600">연속 기록</div>
+                <div className="text-2xl font-bold text-coffee-700 mb-1">{profile.current_streak}일</div>
+                <div className="text-sm text-coffee-600">연속 기록</div>
               </CardContent>
             </Card>
 
             {/* 평균 평점 */}
-            <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-shadow">
-              <CardContent className="p-4 text-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-green-400 to-green-500 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-md">
-                  <Star className="h-6 w-6 text-white" />
+            <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
+              <CardContent className="p-6 text-center">
+                <div className="w-14 h-14 bg-gradient-to-r from-green-400 to-green-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md">
+                  <Star className="h-7 w-7 text-white" />
                 </div>
-                <div className="text-lg font-bold text-coffee-700 mb-1">{journeySummary?.avg_rating.toFixed(1)}</div>
-                <div className="text-xs text-coffee-600">평균 평점</div>
+                <div className="text-2xl font-bold text-coffee-700 mb-1">{journeySummary?.avg_rating.toFixed(1)}</div>
+                <div className="text-sm text-coffee-600">평균 평점</div>
               </CardContent>
             </Card>
           </div>
 
-          {/* 커피 여정 요약 */}
-          <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md">
-            <CardContent className="p-6">
-              <h3 className="text-lg font-semibold text-coffee-800 mb-4 flex items-center">
-                <TrendingUp className="h-5 w-5 mr-2" />
-                이번 달 커피 여정
-              </h3>
-              
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h4 className="font-medium text-coffee-700 mb-3">활동 요약</h4>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-coffee-600">이번 달 기록</span>
-                      <span className="font-medium text-coffee-800">{journeySummary?.monthly_records}개</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-coffee-600">평균 평점</span>
-                      <span className="font-medium text-coffee-800 flex items-center">
-                        {journeySummary?.avg_rating.toFixed(1)}
-                        <Star className="h-3 w-3 text-amber-400 fill-current ml-1" />
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-coffee-600">최고 연속 기록</span>
-                      <span className="font-medium text-coffee-800">{profile.longest_streak}일</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div>
-                  <h4 className="font-medium text-coffee-700 mb-3">즐겨찾는 항목</h4>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-coffee-600">로스터리</span>
-                      <span className="font-medium text-coffee-800">{journeySummary?.favorite_roaster}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-coffee-600">원산지</span>
-                      <span className="font-medium text-coffee-800">{journeySummary?.favorite_origin}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-coffee-600">카페</span>
-                      <span className="font-medium text-coffee-800">{journeySummary?.favorite_cafe}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* 최근 성취 */}
-          {journeySummary?.recent_achievements && journeySummary.recent_achievements.length > 0 && (
-            <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-coffee-800 flex items-center">
-                    <Award className="h-5 w-5 mr-2" />
-                    최근 성취
+          {/* 대시보드 2컬럼 레이아웃 */}
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* 좌측 컬럼: 커피 여정 요약 */}
+            <div className="space-y-6">
+              <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md">
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-semibold text-coffee-800 mb-4 flex items-center">
+                    <TrendingUp className="h-5 w-5 mr-2" />
+                    이번 달 커피 여정
                   </h3>
-                  <Link 
-                    href="/achievements"
-                    className="text-sm text-coffee-500 hover:text-coffee-700 transition-colors"
-                  >
-                    전체 보기 →
-                  </Link>
-                </div>
-                
-                <div className="grid gap-3">
-                  {journeySummary.recent_achievements.map((achievement) => (
-                    <div key={achievement.id} className="flex items-center space-x-3 p-3 bg-coffee-50/50 rounded-lg">
-                      <div className="text-2xl">{achievement.icon}</div>
-                      <div className="flex-1">
-                        <p className="font-medium text-coffee-800">{achievement.title}</p>
-                        <p className="text-xs text-coffee-500">
-                          {new Date(achievement.unlocked_at).toLocaleDateString('ko-KR')}
-                        </p>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-medium text-coffee-700 mb-3">활동 요약</h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-coffee-600">이번 달 기록</span>
+                          <span className="font-medium text-coffee-800">{journeySummary?.monthly_records}개</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-coffee-600">평균 평점</span>
+                          <span className="font-medium text-coffee-800 flex items-center">
+                            {journeySummary?.avg_rating.toFixed(1)}
+                            <Star className="h-3 w-3 text-amber-400 fill-current ml-1" />
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-coffee-600">최고 연속 기록</span>
+                          <span className="font-medium text-coffee-800">{profile.longest_streak}일</span>
+                        </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
+                    
+                    <div className="border-t border-coffee-100 pt-4">
+                      <h4 className="font-medium text-coffee-700 mb-3">즐겨찾는 항목</h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-coffee-600">로스터리</span>
+                          <span className="font-medium text-coffee-800">{journeySummary?.favorite_roaster}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-coffee-600">원산지</span>
+                          <span className="font-medium text-coffee-800">{journeySummary?.favorite_origin}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-coffee-600">카페</span>
+                          <span className="font-medium text-coffee-800">{journeySummary?.favorite_cafe}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
 
-          {/* 홈카페 장비 */}
-          {equipment && (
-            <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md">
-              <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-coffee-800 mb-4 flex items-center">
-                  <Coffee className="h-5 w-5 mr-2" />
-                  홈카페 장비
-                </h3>
-                
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-3">
-                    <div>
-                      <label className="text-sm font-medium text-coffee-700">그라인더</label>
-                      <p className="text-coffee-600">{equipment.grinder}</p>
+              {/* 홈카페 장비 */}
+              {equipment && (
+                <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-semibold text-coffee-800 flex items-center">
+                        <Coffee className="h-5 w-5 mr-2" />
+                        홈카페 장비
+                      </h3>
+                      <button className="text-sm text-coffee-500 hover:text-coffee-700 transition-colors">
+                        편집 →
+                      </button>
                     </div>
-                    <div>
-                      <label className="text-sm font-medium text-coffee-700">드리퍼</label>
-                      <p className="text-coffee-600">{equipment.dripper}</p>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-3">
+                        <div>
+                          <label className="text-sm font-medium text-coffee-700">그라인더</label>
+                          <p className="text-coffee-600 text-sm">{equipment.grinder}</p>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium text-coffee-700">드리퍼</label>
+                          <p className="text-coffee-600 text-sm">{equipment.dripper}</p>
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        <div>
+                          <label className="text-sm font-medium text-coffee-700">저울</label>
+                          <p className="text-coffee-600 text-sm">{equipment.scale}</p>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium text-coffee-700">케틀</label>
+                          <p className="text-coffee-600 text-sm">{equipment.kettle}</p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="space-y-3">
-                    <div>
-                      <label className="text-sm font-medium text-coffee-700">저울</label>
-                      <p className="text-coffee-600">{equipment.scale}</p>
+                    
+                    {equipment.other_equipment.length > 0 && (
+                      <div className="mt-4">
+                        <label className="text-sm font-medium text-coffee-700">기타 장비</label>
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          {equipment.other_equipment.map((item, index) => (
+                            <span key={index} className="px-2 py-1 bg-coffee-100/50 text-coffee-700 rounded-full text-xs">
+                              {item}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+
+            {/* 우측 컬럼: 최근 성취 & 빠른 링크 */}
+            <div className="space-y-6">
+              {/* 최근 성취 */}
+              {journeySummary?.recent_achievements && journeySummary.recent_achievements.length > 0 && (
+                <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-semibold text-coffee-800 flex items-center">
+                        <Award className="h-5 w-5 mr-2" />
+                        최근 성취
+                      </h3>
+                      <Link 
+                        href="/achievements"
+                        className="text-sm text-coffee-500 hover:text-coffee-700 transition-colors"
+                      >
+                        전체 보기 →
+                      </Link>
                     </div>
-                    <div>
-                      <label className="text-sm font-medium text-coffee-700">케틀</label>
-                      <p className="text-coffee-600">{equipment.kettle}</p>
-                    </div>
-                  </div>
-                </div>
-                
-                {equipment.other_equipment.length > 0 && (
-                  <div className="mt-4">
-                    <label className="text-sm font-medium text-coffee-700">기타 장비</label>
-                    <div className="flex flex-wrap gap-2 mt-1">
-                      {equipment.other_equipment.map((item, index) => (
-                        <span key={index} className="px-3 py-1 bg-coffee-100/50 text-coffee-700 rounded-full text-sm">
-                          {item}
-                        </span>
+                    
+                    <div className="space-y-3">
+                      {journeySummary.recent_achievements.map((achievement) => (
+                        <div key={achievement.id} className="flex items-center space-x-3 p-3 bg-coffee-50/50 rounded-lg hover:bg-coffee-100/50 transition-colors">
+                          <div className="text-2xl">{achievement.icon}</div>
+                          <div className="flex-1">
+                            <p className="font-medium text-coffee-800 text-sm">{achievement.title}</p>
+                            <p className="text-xs text-coffee-500">
+                              {new Date(achievement.unlocked_at).toLocaleDateString('ko-KR')}
+                            </p>
+                          </div>
+                        </div>
                       ))}
                     </div>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          )}
+                  </CardContent>
+                </Card>
+              )}
 
-          {/* 빠른 링크 */}
-          <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md">
-            <CardContent className="p-6">
-              <h3 className="text-lg font-semibold text-coffee-800 mb-4">빠른 링크</h3>
-              
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <Link 
-                  href="/achievements"
-                  className="flex items-center space-x-3 p-3 rounded-lg bg-coffee-50/50 hover:bg-coffee-100/50 transition-colors"
-                >
-                  <Trophy className="h-5 w-5 text-coffee-600" />
-                  <span className="text-coffee-700 font-medium">전체 성취</span>
-                </Link>
-                
-                <Link 
-                  href="/my-records"
-                  className="flex items-center space-x-3 p-3 rounded-lg bg-coffee-50/50 hover:bg-coffee-100/50 transition-colors"
-                >
-                  <TrendingUp className="h-5 w-5 text-coffee-600" />
-                  <span className="text-coffee-700 font-medium">상세 통계</span>
-                </Link>
-                
-                <Link 
-                  href="/settings"
-                  className="flex items-center space-x-3 p-3 rounded-lg bg-coffee-50/50 hover:bg-coffee-100/50 transition-colors"
-                >
-                  <Settings className="h-5 w-5 text-coffee-600" />
-                  <span className="text-coffee-700 font-medium">앱 설정</span>
-                </Link>
+              {/* 빠른 링크 */}
+              <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md">
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-semibold text-coffee-800 mb-4">빠른 링크</h3>
+                  
+                  <div className="space-y-3">
+                    <Link 
+                      href="/achievements"
+                      className="flex items-center space-x-3 p-3 rounded-lg bg-coffee-50/50 hover:bg-coffee-100/50 transition-colors group"
+                    >
+                      <div className="w-10 h-10 bg-gradient-to-r from-amber-400 to-amber-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Trophy className="h-5 w-5 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <span className="text-coffee-700 font-medium">전체 성취</span>
+                        <p className="text-xs text-coffee-500">배지와 도전 과제 확인</p>
+                      </div>
+                    </Link>
+                    
+                    <Link 
+                      href="/my-records"
+                      className="flex items-center space-x-3 p-3 rounded-lg bg-coffee-50/50 hover:bg-coffee-100/50 transition-colors group"
+                    >
+                      <div className="w-10 h-10 bg-gradient-to-r from-blue-400 to-blue-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <TrendingUp className="h-5 w-5 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <span className="text-coffee-700 font-medium">상세 통계</span>
+                        <p className="text-xs text-coffee-500">분석과 인사이트 보기</p>
+                      </div>
+                    </Link>
+                    
+                    <Link 
+                      href="/settings"
+                      className="flex items-center space-x-3 p-3 rounded-lg bg-coffee-50/50 hover:bg-coffee-100/50 transition-colors group"
+                    >
+                      <div className="w-10 h-10 bg-gradient-to-r from-gray-400 to-gray-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Settings className="h-5 w-5 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <span className="text-coffee-700 font-medium">앱 설정</span>
+                        <p className="text-xs text-coffee-500">환경설정과 계정관리</p>
+                      </div>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* 여유 공간 - 향후 확장용 */}
+              <div className="hidden lg:block">
+                <Card variant="default" className="bg-gradient-to-br from-coffee-50/30 to-coffee-100/30 backdrop-blur-sm border border-coffee-200/20 shadow-sm">
+                  <CardContent className="p-6 text-center">
+                    <div className="w-12 h-12 bg-coffee-200/50 rounded-xl flex items-center justify-center mx-auto mb-3">
+                      <Coffee className="h-6 w-6 text-coffee-400" />
+                    </div>
+                    <p className="text-sm text-coffee-500 mb-2">새로운 기능이 곧 추가될 예정입니다</p>
+                    <p className="text-xs text-coffee-400">커뮤니티 기능과 더 많은 통계를 만나보세요</p>
+                  </CardContent>
+                </Card>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </PageLayout>
     </ProtectedRoute>

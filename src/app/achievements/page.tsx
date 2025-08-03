@@ -285,8 +285,8 @@ export default function AchievementsPage() {
 
           {/* 오른쪽: 성취 목록 */}
           <div className="lg:col-span-2">
-            {/* 카테고리 필터 - 개선된 디자인 */}
-            <div className="flex flex-wrap gap-2 mb-6">
+            {/* 카테고리 필터 - 통합 디자인 토큰 시스템 적용 */}
+            <div className="flex flex-wrap gap-3 mb-6">
               {categories.map(category => {
                 const Icon = category.icon
                 const isActive = selectedCategory === category.id
@@ -294,19 +294,12 @@ export default function AchievementsPage() {
                   <button
                     key={category.id}
                     onClick={() => setSelectedCategory(category.id)}
-                    className={`group flex items-center px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 transform ${
-                      isActive
-                        ? 'bg-gradient-to-r text-white shadow-lg scale-105'
-                        : 'bg-white/80 backdrop-blur-sm text-coffee-600 hover:bg-white hover:shadow-md hover:scale-105 border border-coffee-200/30'
-                    }`}
-                    style={isActive ? { backgroundImage: `linear-gradient(to right, var(--tw-gradient-stops))` } : {}}
+                    className={`btn-base filter-btn ${isActive ? 'filter-btn-active' : 'filter-btn-inactive'}`}
                   >
-                    <div className={`${isActive ? '' : `bg-gradient-to-r ${category.color} bg-clip-text text-transparent`}`}>
-                      <Icon className={`h-4 w-4 mr-2 ${isActive ? 'text-white' : ''}`} />
-                    </div>
-                    <span>{category.name}</span>
+                    <Icon className="icon" />
+                    <span className={isActive ? 'text-on-dark' : 'text-high-contrast'}>{category.name}</span>
                     {category.id !== 'all' && (
-                      <span className={`ml-2 text-xs ${isActive ? 'text-white/80' : 'text-coffee-400'}`}>
+                      <span className="filter-count">
                         ({userStats.achievements.filter(a => a.category === category.id && a.unlocked).length}/
                         {userStats.achievements.filter(a => a.category === category.id).length})
                       </span>

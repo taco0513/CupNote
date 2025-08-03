@@ -1,6 +1,6 @@
 /**
- * Unified Button Component
- * 모든 버튼에 일관된 스타일을 제공합니다
+ * Unified Button Component - Enhanced with Global Design Tokens
+ * 새로운 글로벌 디자인 토큰 시스템을 활용한 일관된 버튼 컴포넌트
  */
 'use client'
 
@@ -10,52 +10,78 @@ import { Loader2 } from 'lucide-react'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'
-  size?: 'small' | 'medium' | 'large' | 'icon'
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'filter-active' | 'filter-inactive'
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'icon'
   loading?: boolean
   fullWidth?: boolean
+  ripple?: boolean
 }
 
-export default function Button({
+export default function UnifiedButton({
   children,
   variant = 'primary',
-  size = 'medium',
+  size = 'md',
   loading = false,
   fullWidth = false,
+  ripple = false,
   className = '',
   disabled,
   ...props
 }: ButtonProps) {
-  const variantStyles = {
-    primary: 'bg-accent-warm text-white hover:bg-accent-warm/90',
-    secondary: 'bg-neutral-200 text-neutral-800 hover:bg-neutral-300',
-    outline: 'bg-transparent border-2 border-accent-warm text-accent-warm hover:bg-accent-warm/10',
-    ghost: 'bg-transparent text-neutral-700 hover:bg-neutral-100',
-    danger: 'bg-red-500 text-white hover:bg-red-600'
+  // Use unified design token classes from globals.css
+  const getVariantClass = () => {
+    switch (variant) {
+      case 'primary':
+        return 'btn-primary'
+      case 'secondary':
+        return 'btn-secondary'
+      case 'filter-active':
+        return 'filter-btn filter-btn-active'
+      case 'filter-inactive':
+        return 'filter-btn filter-btn-inactive'
+      case 'outline':
+        return 'btn-secondary border-2 border-coffee-400 bg-transparent hover:bg-coffee-50'
+      case 'ghost':
+        return 'bg-transparent text-coffee-600 hover:bg-coffee-50 hover:text-coffee-800'
+      case 'danger':
+        return 'btn-primary'
+      default:
+        return 'btn-primary'
+    }
   }
 
-  const sizeStyles = {
-    small: 'px-3 py-1.5 text-sm',
-    medium: 'px-4 py-2',
-    large: 'px-6 py-3 text-lg',
-    icon: 'p-2'
+  const getSizeClass = () => {
+    switch (size) {
+      case 'xs':
+        return 'btn-xs'
+      case 'sm':
+        return 'btn-sm'
+      case 'md':
+        return 'btn-md'
+      case 'lg':
+        return 'btn-lg'
+      case 'xl':
+        return 'btn-xl'
+      case 'icon':
+        return 'btn-sm p-3 aspect-square'
+      default:
+        return 'btn-md'
+    }
   }
 
   const widthStyle = fullWidth ? 'w-full' : ''
-  const disabledStyle = disabled || loading ? 'opacity-50 cursor-not-allowed' : ''
+  const rippleClass = ripple ? 'button-ripple' : ''
+  const dangerStyle = variant === 'danger' ? 'bg-red-500 hover:bg-red-600' : ''
 
   return (
     <button
       className={`
-        inline-flex items-center justify-center
-        font-medium rounded-lg
-        transition-all duration-200
-        focus:outline-none focus:ring-2 focus:ring-accent-warm focus:ring-offset-2
-        disabled:opacity-50 disabled:cursor-not-allowed
-        ${variantStyles[variant]}
-        ${sizeStyles[size]}
+        btn-base
+        ${getVariantClass()}
+        ${getSizeClass()}
         ${widthStyle}
-        ${disabledStyle}
+        ${rippleClass}
+        ${dangerStyle}
         ${className}
       `}
       disabled={disabled || loading}
@@ -64,7 +90,9 @@ export default function Button({
       {loading ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          로딩 중...
+          <span className={variant === 'primary' || variant === 'filter-active' ? 'text-on-dark' : 'text-high-contrast'}>
+            로딩 중...
+          </span>
         </>
       ) : (
         children

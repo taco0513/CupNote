@@ -72,6 +72,52 @@
     --color-warning-hover: 217 119 6; /* amber-600 */
     --color-warning-foreground: 255 255 255;
 
+    /* ===== UNIFIED BUTTON & FILTER DESIGN TOKENS ===== */
+    /* Primary Action Buttons */
+    --btn-primary-bg: linear-gradient(135deg, rgb(139 69 19), rgb(109 52 16));
+    --btn-primary-bg-hover: linear-gradient(135deg, rgb(109 52 16), rgb(74 36 11));
+    --btn-primary-text: 255 255 255;
+    --btn-primary-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+    --btn-primary-shadow-hover: 0 8px 25px rgba(139, 69, 19, 0.4);
+    
+    /* Secondary Action Buttons */
+    --btn-secondary-bg: rgba(255, 255, 255, 0.95);
+    --btn-secondary-bg-hover: rgba(255, 255, 255, 1);
+    --btn-secondary-text: 74 36 11;
+    --btn-secondary-text-hover: 45 21 7;
+    --btn-secondary-border: 2px solid rgba(232, 213, 190, 0.5);
+    --btn-secondary-border-hover: 2px solid rgba(212, 184, 150, 0.7);
+    --btn-secondary-shadow: 0 2px 8px rgba(139, 69, 19, 0.1);
+    --btn-secondary-shadow-hover: 0 4px 15px rgba(139, 69, 19, 0.15);
+    
+    /* Filter & Category Buttons */
+    --filter-inactive-bg: rgba(255, 255, 255, 0.9);
+    --filter-inactive-bg-hover: rgba(255, 255, 255, 1);
+    --filter-inactive-text: 74 36 11;
+    --filter-inactive-text-hover: 45 21 7;
+    --filter-inactive-border: 2px solid rgba(232, 213, 190, 0.4);
+    --filter-inactive-border-hover: 2px solid rgba(212, 184, 150, 0.6);
+    --filter-inactive-shadow: 0 2px 6px rgba(139, 69, 19, 0.08);
+    --filter-inactive-shadow-hover: 0 4px 12px rgba(139, 69, 19, 0.12);
+    
+    --filter-active-bg: linear-gradient(135deg, rgb(139 69 19), rgb(109 52 16));
+    --filter-active-bg-hover: linear-gradient(135deg, rgb(109 52 16), rgb(74 36 11));
+    --filter-active-text: 255 255 255;
+    --filter-active-shadow: 0 4px 15px rgba(139, 69, 19, 0.25);
+    --filter-active-shadow-hover: 0 6px 20px rgba(139, 69, 19, 0.3);
+    
+    /* Text Contrast Enhancement */
+    --text-high-contrast: 45 21 7; /* coffee-900 */
+    --text-medium-contrast: 74 36 11; /* coffee-700 */
+    --text-low-contrast: 139 69 19; /* coffee-500 */
+    --text-on-dark: 255 255 255;
+    --text-on-light: 45 21 7;
+    
+    /* Background Contrast Levels */
+    --bg-high-contrast: 250 247 242; /* coffee-50 */
+    --bg-medium-contrast: rgba(255, 255, 255, 0.95);
+    --bg-low-contrast: rgba(255, 255, 255, 0.8);
+
     /* Micro Animation System */
     --animation-duration-fast: 150ms;
     --animation-duration-normal: 250ms;
@@ -573,6 +619,226 @@
       opacity: 1;
       transform: scale(1);
     }
+  }
+}
+
+/* ========================================== */
+/* UNIFIED BUTTON & FILTER SYSTEM */
+/* ========================================== */
+
+@layer components {
+  /* Base Button Styles */
+  .btn-base {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: none;
+    border-radius: 1rem; /* rounded-xl */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    min-height: 44px;
+    line-height: 1.2;
+    text-decoration: none;
+  }
+
+  .btn-base:focus-visible {
+    outline: 2px solid rgb(var(--color-primary));
+    outline-offset: 2px;
+  }
+
+  .btn-base:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* Primary Button */
+  .btn-primary {
+    background: var(--btn-primary-bg);
+    color: rgb(var(--btn-primary-text));
+    box-shadow: var(--btn-primary-shadow);
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background: var(--btn-primary-bg-hover);
+    box-shadow: var(--btn-primary-shadow-hover);
+    transform: translateY(-1px) scale(1.02);
+  }
+
+  .btn-primary:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
+    box-shadow: var(--btn-primary-shadow);
+  }
+
+  /* Secondary Button */
+  .btn-secondary {
+    background: var(--btn-secondary-bg);
+    color: rgb(var(--btn-secondary-text));
+    border: var(--btn-secondary-border);
+    box-shadow: var(--btn-secondary-shadow);
+    backdrop-filter: blur(8px);
+    font-weight: 600;
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    background: var(--btn-secondary-bg-hover);
+    color: rgb(var(--btn-secondary-text-hover));
+    border: var(--btn-secondary-border-hover);
+    box-shadow: var(--btn-secondary-shadow-hover);
+    transform: translateY(-1px) scale(1.01);
+  }
+
+  .btn-secondary:active:not(:disabled) {
+    transform: translateY(0) scale(0.99);
+    box-shadow: var(--btn-secondary-shadow);
+  }
+
+  /* Button Sizes */
+  .btn-xs {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+    min-height: 32px;
+  }
+
+  .btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    min-height: 36px;
+  }
+
+  .btn-md {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    min-height: 44px;
+  }
+
+  .btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    min-height: 52px;
+  }
+
+  .btn-xl {
+    padding: 1.25rem 2.5rem;
+    font-size: 1.125rem;
+    min-height: 60px;
+  }
+
+  /* ============================================ */
+  /* FILTER & CATEGORY BUTTON SYSTEM */
+  /* ============================================ */
+
+  /* Base Filter Button */
+  .filter-btn {
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 0.75rem 1.25rem;
+    min-height: 44px;
+    border-radius: 1rem;
+    backdrop-filter: blur(8px);
+    position: relative;
+  }
+
+  /* Inactive Filter Button */
+  .filter-btn-inactive {
+    background: var(--filter-inactive-bg);
+    color: rgb(var(--filter-inactive-text));
+    border: var(--filter-inactive-border);
+    box-shadow: var(--filter-inactive-shadow);
+  }
+
+  .filter-btn-inactive:hover:not(:disabled) {
+    background: var(--filter-inactive-bg-hover);
+    color: rgb(var(--filter-inactive-text-hover));
+    border: var(--filter-inactive-border-hover);
+    box-shadow: var(--filter-inactive-shadow-hover);
+    transform: translateY(-1px) scale(1.02);
+  }
+
+  /* Active Filter Button */
+  .filter-btn-active {
+    background: var(--filter-active-bg);
+    color: rgb(var(--filter-active-text));
+    box-shadow: var(--filter-active-shadow);
+    border: 2px solid transparent;
+    font-weight: 700;
+  }
+
+  .filter-btn-active:hover:not(:disabled) {
+    background: var(--filter-active-bg-hover);
+    box-shadow: var(--filter-active-shadow-hover);
+    transform: translateY(-1px) scale(1.02);
+  }
+
+  .filter-btn-active:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
+    box-shadow: var(--filter-active-shadow);
+  }
+
+  /* Category Icon Enhancement */
+  .filter-btn .icon {
+    margin-right: 0.5rem;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  /* Filter Count Badge */
+  .filter-count {
+    margin-left: 0.5rem;
+    font-size: 0.75rem;
+    opacity: 0.8;
+    font-weight: 500;
+  }
+
+  .filter-btn-active .filter-count {
+    opacity: 0.9;
+    font-weight: 600;
+  }
+
+  /* ============================================ */
+  /* TEXT CONTRAST UTILITIES */
+  /* ============================================ */
+
+  .text-high-contrast {
+    color: rgb(var(--text-high-contrast));
+  }
+
+  .text-medium-contrast {
+    color: rgb(var(--text-medium-contrast));
+  }
+
+  .text-low-contrast {
+    color: rgb(var(--text-low-contrast));
+  }
+
+  .text-on-dark {
+    color: rgb(var(--text-on-dark));
+  }
+
+  .text-on-light {
+    color: rgb(var(--text-on-light));
+  }
+
+  /* Background Utilities */
+  .bg-high-contrast {
+    background-color: rgb(var(--bg-high-contrast));
+  }
+
+  .bg-medium-contrast {
+    background-color: var(--bg-medium-contrast);
+  }
+
+  .bg-low-contrast {
+    background-color: var(--bg-low-contrast);
   }
 }
 
