@@ -6,9 +6,16 @@
 
 ### 프로젝트 개요
 - **[README.md](README.md)** - 프로젝트 전체 개요 및 시작 가이드
+- **[HYBRID_COMPONENT_GUIDE.md](HYBRID_COMPONENT_GUIDE.md)** - 🆕 하이브리드 디자인 시스템 가이드
 - **[PWA_IMPLEMENTATION.md](PWA_IMPLEMENTATION.md)** - PWA 구현 상세
 - **[deployment-guide.md](deployment-guide.md)** - 배포 가이드
 - **[roadmap.md](roadmap.md)** - 개발 로드맵
+
+### 🎨 디자인 시스템 (v1.2.0)
+- **[HYBRID_DESIGN_SYSTEM_OVERVIEW.md](HYBRID_DESIGN_SYSTEM_OVERVIEW.md)** - 🆕 하이브리드 디자인 시스템 전체 개요
+- **[HYBRID_COMPONENT_GUIDE.md](HYBRID_COMPONENT_GUIDE.md)** - 하이브리드 컴포넌트 구현 가이드
+- **[MOBILE_UX_GUIDE.md](MOBILE_UX_GUIDE.md)** - 모바일 UX 최적화 가이드
+- **[COMPONENTS_GUIDE.md](COMPONENTS_GUIDE.md)** - 전체 컴포넌트 라이브러리
 
 ## 🎯 주요 기능 문서
 

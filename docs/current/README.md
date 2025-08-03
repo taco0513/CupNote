@@ -1,6 +1,19 @@
-# CupNote 문서화
+# CupNote v1.2.0 문서화
 
-> 나만의 커피 여정을 기록하는 온라인 커피 일기 - 개발 문서
+> 나만의 커피 여정을 기록하는 하이브리드 디자인 커피 앱 - 개발 문서
+
+## 🎨 v1.2.0 하이브리드 디자인 시스템
+
+### 핵심 디자인 문서
+- **[HYBRID_DESIGN_SYSTEM_OVERVIEW.md](./HYBRID_DESIGN_SYSTEM_OVERVIEW.md)** - 🆕 하이브리드 디자인 시스템 전체 개요
+- **[HYBRID_COMPONENT_GUIDE.md](./HYBRID_COMPONENT_GUIDE.md)** - 컴포넌트 사용법과 패턴
+- **[MOBILE_UX_GUIDE.md](./MOBILE_UX_GUIDE.md)** - 모바일 UX 최적화 가이드
+
+### 디자인 철학: "Minimal Structure + Premium Visual Quality"
+- **글래스모픽 효과**: `backdrop-blur-sm`, `bg-white/90` 일관된 시각적 효과
+- **커피 테마 그라데이션**: `from-coffee-400 to-coffee-500` 프리미엄 브랜딩
+- **통합 디자인 토큰**: CSS 변수 기반 글로벌 디자인 시스템
+- **모바일 최적화**: 네이티브 앱 수준 터치 인터랙션
 
 ## 📚 문서 구조
 
@@ -8,10 +21,11 @@
 
 구현된 기능들의 상세 설명과 사용법
 
+- [장비 통합 시스템](./features/EQUIPMENT_INTEGRATION.md) - 🆕 HomeCafe 장비 관리 ✅
+- [커뮤니티 매치 스코어 v2.0](./features/COMMUNITY_MATCH_SCORE_V2.md) - 🆕 커뮤니티 기반 점수 시스템 ✅
 - [검색 및 필터링](./features/SEARCH_AND_FILTER.md) - 커피 기록 검색/필터링 시스템 ✅
 - [성취 시스템](./features/ACHIEVEMENTS_SYSTEM.md) - 30+ 배지 및 레벨링 시스템 ✅
 - [모바일 최적화](./features/MOBILE_OPTIMIZATION.md) - 반응형 디자인 및 터치 최적화 ✅
-- [다크 모드 시스템](./features/DARK_MODE_THEME_SYSTEM.md) - 라이트/다크/시스템 테마 지원 ✅
 - [테스트 커버리지](./features/TEST_COVERAGE_SYSTEM.md) - 단위/컴포넌트/E2E 테스트 ✅
 - [커뮤니티 커핑](./features/COMMUNITY_CUPPING.md) - 그룹 커핑 세션 및 평가 비교 🚧
 
@@ -77,15 +91,29 @@ http://localhost:3001
 - **빌드**: npm scripts
 - **배포**: 준비 완료
 
-## 📊 프로젝트 현황 (v1.0.0-rc 기준)
+## 📊 프로젝트 현황 (v1.2.0 기준)
 
-### ✅ **완료된 핵심 기능**
+### ✅ **v1.2.0 하이브리드 디자인 시스템 완성**
 
-**4-Mode 시스템**:
-- ✅ **Quick Mode** - 1-2분 빠른 평가 (별점 + 간단 메모)
-- ✅ **Cafe Mode** - 3-5분 카페 기록 (4단계 플로우)
-- ✅ **HomeCafe Mode** - 5-8분 추출 레시피 + 타이머 시스템
-- 📋 **Pro Mode** - 8-12분 SCA 표준 전문가 평가 (설계 완료)
+**🎨 완료된 디자인 시스템**:
+- ✅ **글로벌 디자인 토큰**: CSS 변수 기반 통합 시스템 (globals.css)
+- ✅ **컴포넌트 표준화**: PageHeader, Card, UnifiedButton 100% 하이브리드 적용
+- ✅ **글래스모픽 효과**: `backdrop-blur-sm` 일관된 시각적 효과
+- ✅ **프리미엄 그라데이션**: 커피 테마 그라데이션 전체 적용
+- ✅ **텍스트 대비율 개선**: 접근성 향상 (WCAG 2.1 AA) - 성취 페이지 가독성 개선
+- ✅ **버튼/필터 표준화**: 내 기록, 설정, 프로필 페이지 통합 디자인 토큰 적용
+- ✅ **모바일 터치 최적화**: 네이티브 앱 수준 인터랙션
+
+**🛡️ 관리자 대시보드 시스템**:
+- ✅ **Admin Dashboard**: 8개 페이지 완전한 관리자 시스템
+- ✅ **Data Management**: 카페/로스터리/커피 원두 CSV 관리
+- ✅ **User Management**: 사용자 계정 및 활동 관리
+- ✅ **Performance Monitoring**: 실시간 성능 및 에러 추적
+
+**☕ 3-Mode 시스템**:
+- ✅ **Cafe Mode** - 5-7분 카페 경험 기록 (7단계 플로우)
+- ✅ **HomeCafe Mode** - 8-12분 추출 레시피 + 장비 통합 시스템
+- ✅ **Lab Mode** - 15-20분 SCA 표준 전문가 평가
 
 **Coffee Info Screen (Step1)**:
 - ✅ **Progressive Disclosure** - 기본/고급 정보 확장 패널
@@ -132,6 +160,6 @@ http://localhost:3001
 
 ---
 
-**문서 버전**: 1.2  
-**최종 업데이트**: 2025-07-31  
+**문서 버전**: 1.3.0  
+**최종 업데이트**: 2025-08-03 (v1.2.0 하이브리드 디자인 시스템 완성)  
 **관리자**: CupNote Team

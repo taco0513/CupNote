@@ -94,8 +94,7 @@ export default function Navigation({
     if (!user) return false
     return user.email === 'admin@mycupnote.com' || 
            user.email?.endsWith('@mycupnote.com') ||
-           user.user_metadata?.role === 'admin' ||
-           process.env.NODE_ENV === 'development'
+           user.user_metadata?.role === 'admin'
   }
 
   const handleAuthNavigation = (mode: 'login' | 'signup') => {
@@ -164,18 +163,6 @@ export default function Navigation({
                     >
                       <Coffee className="h-4 w-4 mr-1.5" />
                       <span className="font-medium">내 기록</span>
-                    </Link>
-                    
-                    <Link
-                      href="/settings"
-                      className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${
-                        isActive('settings')
-                          ? 'bg-coffee-100 text-coffee-800'
-                          : 'text-coffee-600 hover:text-coffee-800 hover:bg-coffee-50'
-                      }`}
-                    >
-                      <Settings className="h-4 w-4 mr-1.5" />
-                      <span className="font-medium">설정</span>
                     </Link>
                   </div>
 
