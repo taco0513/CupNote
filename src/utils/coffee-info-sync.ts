@@ -3,8 +3,9 @@
  * 사용자가 새로운 커피를 기록하면 자동으로 커피 정보 DB에 추가
  */
 
-import { supabase } from '../lib/supabase'
 import { logger } from '../lib/logger'
+import { supabase } from '../lib/supabase'
+
 import type { Coffee } from '../types/data-management'
 
 interface UserCoffeeRecord {

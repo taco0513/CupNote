@@ -5,6 +5,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { 
   Coffee as CoffeeIcon, 
   Search, 
@@ -34,15 +35,17 @@ import {
 
 import { Card, CardContent, CardHeader, CardTitle } from '../../../../components/ui/Card'
 import UnifiedButton from '../../../../components/ui/UnifiedButton'
-import { supabase } from '../../../../lib/supabase'
 import { logger } from '../../../../lib/logger'
-import type { Coffee, CoffeeFilters, DataManagementStats, CafeRoastery } from '../../../../types/data-management'
+import { supabase } from '../../../../lib/supabase'
+import { batchSyncCoffeeInfoFromRecords } from '../../../../utils/coffee-info-sync'
 import { 
   importCoffeesCSV, 
   exportCoffeesToCSV, 
   downloadFile 
 } from '../../../../utils/csv-handler'
-import { batchSyncCoffeeInfoFromRecords } from '../../../../utils/coffee-info-sync'
+
+import type { Coffee, CoffeeFilters, DataManagementStats, CafeRoastery } from '../../../../types/data-management'
+
 
 export default function AdminCoffeesPage() {
   const [coffees, setCoffees] = useState<Coffee[]>([])

@@ -5,6 +5,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { 
   Activity, 
   TrendingUp, 
@@ -26,12 +27,12 @@ import {
   Settings
 } from 'lucide-react'
 
+import PerformanceDashboard from '../../../components/performance/PerformanceDashboard'
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/Card'
 import UnifiedButton from '../../../components/ui/UnifiedButton'
-import PerformanceDashboard from '../../../components/performance/PerformanceDashboard'
 import usePerformanceMonitoring from '../../../hooks/usePerformanceMonitoring'
-import { getBundleMonitor } from '../../../lib/performance/bundle-monitor'
 import { logger } from '../../../lib/logger'
+import { getBundleMonitor } from '../../../lib/performance/bundle-monitor'
 
 interface SystemMetrics {
   cpu: { usage: number; cores: number }

@@ -5,6 +5,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { 
   Coffee, 
   Store,
@@ -33,14 +34,16 @@ import {
 
 import { Card, CardContent, CardHeader, CardTitle } from '../../../../components/ui/Card'
 import UnifiedButton from '../../../../components/ui/UnifiedButton'
-import { supabase } from '../../../../lib/supabase'
 import { logger } from '../../../../lib/logger'
-import type { CafeRoastery, CafeRoasteryFilters, DataManagementStats } from '../../../../types/data-management'
+import { supabase } from '../../../../lib/supabase'
 import { 
   importCafeRoasteriesCSV, 
   exportCafeRoasteriesToCSV, 
   downloadFile 
 } from '../../../../utils/csv-handler'
+
+import type { CafeRoastery, CafeRoasteryFilters, DataManagementStats } from '../../../../types/data-management'
+
 
 export default function AdminCafesPage() {
   const [cafeRoasteries, setCafeRoasteries] = useState<CafeRoastery[]>([])

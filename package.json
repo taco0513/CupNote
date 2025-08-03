@@ -6,6 +6,10 @@
     "dev": "next dev -p 5173",
     "build": "next build",
     "start": "next start",
+    "deploy": "vercel --prod",
+    "deploy:preview": "vercel",
+    "domain:add": "vercel domains add mycupnote.com",
+    "domain:verify": "vercel domains verify mycupnote.com",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "format": "prettier --write .",
@@ -27,6 +31,11 @@
     "analyze:server": "BUNDLE_ANALYZE=server npm run build",
     "analyze:browser": "BUNDLE_ANALYZE=browser npm run build"
   },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "packageManager": "npm@10.0.0",
   "dependencies": {
     "@sentry/nextjs": "^9.43.0",
     "@supabase/supabase-js": "^2.53.0",
@@ -36,6 +45,7 @@
     "@types/react-dom": "^19.1.7",
     "autoprefixer": "^10.4.21",
     "class-variance-authority": "^0.7.1",
+    "critters": "^0.0.23",
     "eslint": "^9.32.0",
     "eslint-config-next": "^15.4.5",
     "lucide-react": "^0.534.0",
@@ -61,6 +71,7 @@
     "@vitest/coverage-v8": "^3.2.4",
     "@vitest/ui": "^3.2.4",
     "chrome-launcher": "^1.2.0",
+    "dotenv": "^17.2.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.3",
     "jsdom": "^26.1.0",

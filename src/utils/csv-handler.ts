@@ -3,8 +3,9 @@
  * 카페/로스터리 및 커피 데이터 import/export
  */
 
-import { supabase } from '../lib/supabase'
 import { logger } from '../lib/logger'
+import { supabase } from '../lib/supabase'
+
 import type { CafeRoastery, Coffee } from '../types/data-management'
 
 // CSV 파싱 헬퍼

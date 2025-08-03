@@ -5,6 +5,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { 
   Users, 
   Coffee, 
@@ -23,13 +24,13 @@ import {
   Zap
 } from 'lucide-react'
 
+import PerformanceDashboard from '../../components/performance/PerformanceDashboard'
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import UnifiedButton from '../../components/ui/UnifiedButton'
 import { useAuth } from '../../contexts/AuthContext'
-import { supabase } from '../../lib/supabase'
 import usePerformanceMonitoring from '../../hooks/usePerformanceMonitoring'
-import PerformanceDashboard from '../../components/performance/PerformanceDashboard'
 import { logger } from '../../lib/logger'
+import { supabase } from '../../lib/supabase'
 
 interface DashboardStats {
   totalUsers: number

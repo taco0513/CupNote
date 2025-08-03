@@ -5,6 +5,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { 
   Users, 
   Search, 
@@ -30,8 +31,8 @@ import {
 
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/Card'
 import UnifiedButton from '../../../components/ui/UnifiedButton'
-import { supabase } from '../../../lib/supabase'
 import { logger } from '../../../lib/logger'
+import { supabase } from '../../../lib/supabase'
 
 interface UserData {
   id: string

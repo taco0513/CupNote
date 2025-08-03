@@ -5,7 +5,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+
 import { useRouter } from 'next/navigation'
+
 import { 
   LayoutDashboard, 
   Users, 
@@ -20,9 +22,9 @@ import {
   X
 } from 'lucide-react'
 
-import { useAuth } from '../../contexts/AuthContext'
 import { Card, CardContent } from '../../components/ui/Card'
 import UnifiedButton from '../../components/ui/UnifiedButton'
+import { useAuth } from '../../contexts/AuthContext'
 import { logger } from '../../lib/logger'
 
 interface AdminLayoutProps {
