@@ -12,6 +12,7 @@ import MobileNavigation from '../components/MobileNavigation'
 import NotificationContainer from '../components/notifications/NotificationContainer'
 import { AuthProvider } from '../contexts/AuthContext'
 import { NotificationProvider } from '../contexts/NotificationContext'
+import { SystemNotificationProvider } from '../contexts/SystemNotificationContext'
 import { SearchProvider } from '../contexts/SearchContext'
 import { ThemeProvider } from '../contexts/ThemeContext'
 
@@ -22,7 +23,8 @@ const OnboardingTrigger = dynamic(() => import('../components/ui/OnboardingTrigg
 
 // 클라이언트 전용 컴포넌트들을 동적 import
 const AppHeader = dynamic(() => import('../components/AppHeader'), {
-  loading: () => null
+  loading: () => null,
+  ssr: false
 })
 import './globals.css'
 
@@ -116,15 +118,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <ErrorBoundary>
             <NotificationProvider>
-              <AuthProvider>
-                <SearchProvider>
-                <AppHeader />
-                <div className="pb-16 md:pb-0 safe-area-inset">{children}</div>
-                <MobileNavigation />
-                <NotificationContainer />
-                <OnboardingTrigger />
-                </SearchProvider>
-              </AuthProvider>
+              <SystemNotificationProvider>
+                <AuthProvider>
+                  <SearchProvider>
+                  <AppHeader />
+                  <div className="pb-16 md:pb-0 safe-area-inset">{children}</div>
+                  <MobileNavigation />
+                  <NotificationContainer />
+                  <OnboardingTrigger />
+                  </SearchProvider>
+                </AuthProvider>
+              </SystemNotificationProvider>
             </NotificationProvider>
           </ErrorBoundary>
         </ThemeProvider>

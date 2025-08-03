@@ -197,22 +197,7 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
           {/* 모바일용 개선된 레이아웃 */}
           <div className="md:hidden">
             <div className="max-w-md mx-auto space-y-3">
-              {/* Primary CTA - 기록하기 */}
-              <Link href="/mode-selection">
-                <button className="w-full bg-gradient-to-r from-coffee-500 to-coffee-600 hover:from-coffee-600 hover:to-coffee-700
-                                 rounded-2xl shadow-lg hover:shadow-xl text-white text-lg font-semibold
-                                 hover:scale-102 transition-all duration-200 group relative overflow-hidden">
-                  <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
-                  <div className="relative flex items-center justify-center space-x-3 py-4">
-                    <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center group-hover:rotate-90 transition-transform duration-300">
-                      <Coffee className="h-5 w-5 text-white" />
-                    </div>
-                    <span>새 커피 기록하기</span>
-                  </div>
-                </button>
-              </Link>
-              
-              {/* Secondary CTA - 먼저 구경하기 (비로그인 사용자용) */}
+              {/* Secondary CTA - 먼저 구경하기 (비로그인 사용자용만) */}
               {!user && (
                 <Link href="/demo">
                   <button className="w-full bg-white hover:bg-coffee-50 border-2 border-coffee-300 hover:border-coffee-400
@@ -307,18 +292,42 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
 
             {/* First Time Guide for users with no records */}
             {stats.total === 0 && (
-              <div className="mb-12">
+              <div className="mb-12 relative">
+                {/* Coffee Tip at the top - 표준 coffee 테마 적용 */}
+                <div className="mb-6 bg-coffee-50/50 border border-coffee-200/50 rounded-2xl p-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-coffee-400 to-coffee-600 rounded-full flex items-center justify-center shadow-md">
+                      <Sparkles className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-coffee-800 mb-1">커피 팁</h4>
+                      <p className="text-coffee-700 text-sm">매일 같은 시간에 커피를 마시면 더 정확한 맛 평가를 할 수 있어요!</p>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 rounded-2xl p-6 shadow-md text-center">
                   <div className="w-16 h-16 mx-auto bg-coffee-100 rounded-full flex items-center justify-center mb-4">
                     <Coffee className="h-8 w-8 text-coffee-500" />
                   </div>
                   <h3 className="text-lg font-semibold text-coffee-800 mb-2">첫 번째 커피를 기록해보세요!</h3>
-                  <p className="text-coffee-600 text-sm mb-4">
+                  <p className="text-coffee-600 text-sm mb-6">
                     간단한 기록부터 시작해보세요. 전문 용어 없이도 충분합니다.
                   </p>
-                  <div className="flex items-center justify-center space-x-2 text-coffee-500 text-xs">
-                    <Sparkles className="h-4 w-4" />
-                    <span>첫 기록 작성 시 특별한 뱃지를 받을 수 있어요</span>
+                  
+                  {/* Simple CTA without floating elements */}
+                  <div className="text-center">
+                    <div className="flex items-center justify-center space-x-2 text-coffee-500 text-xs mb-4">
+                      <Sparkles className="h-4 w-4" />
+                      <span>첫 기록 작성 시 특별한 뱃지를 받을 수 있어요</span>
+                    </div>
+                    
+                    <div className="bg-coffee-50/50 rounded-xl p-4 border border-coffee-200/30">
+                      <p className="text-coffee-700 font-medium mb-2">하단의 ☕ 작성 버튼을 눌러보세요!</p>
+                      <div className="text-coffee-500 text-2xl animate-bounce">
+                        ↓
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -355,17 +364,6 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
           </div>
         )}
 
-        {/* Coffee Tips - Lazy loaded */}
-        <div className="mb-8">
-          <Suspense fallback={
-            <div className="bg-white/60 backdrop-blur-sm rounded-2xl border border-coffee-200/30 p-4 animate-pulse">
-              <div className="h-4 bg-coffee-200 rounded w-3/4 mb-2"></div>
-              <div className="h-3 bg-coffee-100 rounded w-full"></div>
-            </div>
-          }>
-            <CoffeeTip />
-          </Suspense>
-        </div>
 
         {/* CupNote 소개 - 비로그인 사용자용 */}
         {!user && (

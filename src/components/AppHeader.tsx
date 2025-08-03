@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation'
 import { Search, Bell, User, Settings, Menu, X, Coffee, TrendingUp, HelpCircle, LogOut } from 'lucide-react'
 
 import { useAuth } from '../contexts/AuthContext'
+import SafeNotificationBell from './notifications/SafeNotificationBell'
 
 interface AppHeaderProps {
   showSearch?: boolean
@@ -58,8 +59,22 @@ export default function AppHeader({
             </div>
           </div>
 
-          {/* 오른쪽: 프로필 버튼만 */}
-          <div className="flex items-center">
+          {/* 오른쪽: 알림 & 프로필 버튼 */}
+          <div className="flex items-center space-x-2">
+            {/* 검색 버튼 */}
+            {showSearch && (
+              <button
+                onClick={handleSearchClick}
+                className="p-2 rounded-lg hover:bg-coffee-50/80 active:bg-coffee-100/80 transition-colors"
+                aria-label="검색"
+              >
+                <Search className="h-5 w-5 text-coffee-600" />
+              </button>
+            )}
+
+            {/* 알림 벨 (로그인된 사용자만) */}
+            {user && <SafeNotificationBell />}
+
             {/* 프로필 버튼 */}
             <button
               onClick={() => setShowMobileMenu(true)}

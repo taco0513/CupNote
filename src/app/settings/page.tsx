@@ -16,6 +16,7 @@ import {
   Database,
   Zap,
   Info,
+  Bell,
 } from 'lucide-react'
 
 import ProtectedRoute from '../../components/auth/ProtectedRoute'
@@ -26,6 +27,7 @@ import PageHeader from '../../components/ui/PageHeader'
 import PageLayout from '../../components/ui/PageLayout'
 import UnifiedButton from '../../components/ui/UnifiedButton'
 import { CoffeeRecord } from '../../types/coffee'
+import NotificationSettings from '../../components/settings/NotificationSettings'
 
 interface AppSettings {
   autoSaveEnabled: boolean
@@ -283,6 +285,18 @@ export default function SettingsPage() {
                   </label>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+
+          {/* 알림 설정 - 하이브리드 카드 */}
+          <Card variant="default" className="bg-white/90 backdrop-blur-sm border border-coffee-200/40 shadow-lg hover:shadow-xl transition-shadow duration-200">
+            <CardContent className="p-6 md:p-8">
+              <h3 className="text-lg md:text-xl font-semibold text-coffee-800 mb-6 flex items-center">
+                <Bell className="h-5 w-5 mr-3" />
+                알림 설정
+              </h3>
+              
+              <NotificationSettings />
             </CardContent>
           </Card>
 

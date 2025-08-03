@@ -413,11 +413,23 @@ export class SupabaseStorage {
         console.log('Supabase 저장 성공:', data)
         // Save to offline storage as synced
         await offlineStorage.saveRecord(newRecord, 'synced')
+        
+        // 알림 시스템을 위한 이벤트 발생
+        window.dispatchEvent(new CustomEvent('cupnote-record-added', { 
+          detail: { record: newRecord } 
+        }))
+        
         return newRecord
       } else {
         console.log('오프라인 상태, IndexedDB에 저장')
         // Offline - save to IndexedDB
         await offlineStorage.saveRecord(newRecord, 'pending')
+        
+        // 알림 시스템을 위한 이벤트 발생 (오프라인에서도)
+        window.dispatchEvent(new CustomEvent('cupnote-record-added', { 
+          detail: { record: newRecord } 
+        }))
+        
         return newRecord
       }
     } catch (error) {

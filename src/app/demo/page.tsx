@@ -136,8 +136,9 @@ export default function DemoPage() {
           </h2>
           <div className="space-y-4">
             {sampleRecords.map((record) => (
-              <Card key={record.id} className="bg-white/80 backdrop-blur-sm border-coffee-200/30 hover:shadow-md transition-shadow">
-                <CardContent className="p-5">
+              <Link key={record.id} href={`/coffee/${record.id}`}>
+                <Card className="bg-white/80 backdrop-blur-sm border-coffee-200/30 hover:shadow-lg transition-all duration-200 cursor-pointer hover:scale-[1.02]">
+                  <CardContent className="p-5">
                   <div className="flex items-start space-x-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-coffee-400 to-coffee-500 rounded-xl flex items-center justify-center shadow-md flex-shrink-0">
                       <Coffee className="h-6 w-6 text-white" />
@@ -188,8 +189,9 @@ export default function DemoPage() {
                       )}
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         </div>
