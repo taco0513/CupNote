@@ -214,7 +214,7 @@ export default function Navigation({
                     <ChevronDown className={`h-4 w-4 text-coffee-600 transition-transform duration-200 ${showProfileDropdown ? 'rotate-180' : ''}`} />
                   </button>
                 ) : (
-                  <>
+                  <div className="flex items-center space-x-3">
                     {/* 게스트 모드 브랜드 표시 - 강화된 디자인 */}
                     <div className="hidden md:flex items-center px-3 py-2 bg-gradient-to-r from-coffee-50 to-coffee-100 rounded-xl border border-coffee-200/40 shadow-sm">
                       <div className="flex items-center space-x-2">
@@ -257,7 +257,7 @@ export default function Navigation({
                       <span>로그인</span>
                       <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-coffee-500 group-hover:w-full transition-all duration-300" />
                     </button>
-                  </>
+                  </div>
                 )}
 
                 {/* 프로필 드롭다운 메뉴 */}
