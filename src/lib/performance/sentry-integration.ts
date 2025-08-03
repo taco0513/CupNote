@@ -7,7 +7,7 @@ import * as Sentry from '@sentry/nextjs'
 
 import { PerformanceReport, WebVitalsMetric } from './web-vitals'
 
-// Sentry 성능 지표 전송
+// Sentry 성능 지표 전송 (확장된 RUM 버전)
 export function sendMetricsToSentry(metrics: WebVitalsMetric[]) {
   if (!Sentry.getClient()) {
     console.warn('Sentry not initialized, skipping metrics')
@@ -21,6 +21,13 @@ export function sendMetricsToSentry(metrics: WebVitalsMetric[]) {
     // Web Vitals 점수를 태그로 추가
     Sentry.setTag(`webvital.${metric.name.toLowerCase()}.rating`, metric.rating)
     
+    // RUM 확장 태그
+    if (metric.sessionId) Sentry.setTag('rum.session_id', metric.sessionId)
+    if (metric.navigationType) Sentry.setTag('rum.navigation_type', metric.navigationType)
+    if (metric.effectiveConnectionType) Sentry.setTag('rum.connection_type', metric.effectiveConnectionType)
+    if (metric.deviceMemory) Sentry.setTag('rum.device_memory', `${metric.deviceMemory}MB`)
+    if (metric.hardwareConcurrency) Sentry.setTag('rum.cpu_cores', metric.hardwareConcurrency.toString())
+    
     // 성능 지표별 커스텀 이벤트 생성
     if (metric.rating === 'poor') {
       Sentry.addBreadcrumb({
@@ -31,14 +38,17 @@ export function sendMetricsToSentry(metrics: WebVitalsMetric[]) {
           metric: metric.name,
           value: metric.value,
           rating: metric.rating,
-          delta: metric.delta
+          delta: metric.delta,
+          sessionId: metric.sessionId,
+          navigationType: metric.navigationType,
+          connectionType: metric.effectiveConnectionType
         }
       })
     }
   })
 }
 
-// 성능 리포트를 Sentry로 전송
+// 성능 리포트를 Sentry로 전송 (확장된 RUM 버전)
 export function sendPerformanceReportToSentry(report: PerformanceReport) {
   if (!Sentry.getClient()) {
     return
@@ -46,10 +56,15 @@ export function sendPerformanceReportToSentry(report: PerformanceReport) {
   
   // 성능 리포트를 Sentry 이벤트로 전송
   Sentry.withScope(scope => {
-    scope.setTag('report.type', 'performance')
+    scope.setTag('report.type', 'performance_rum')
     scope.setTag('report.url', new URL(report.url).pathname)
+    scope.setTag('report.session_id', report.sessionId)
+    scope.setTag('report.page_load_id', report.pageLoadId)
     scope.setTag('report.device.connection', report.deviceInfo.connection)
     scope.setTag('report.device.viewport', `${report.deviceInfo.viewport.width}x${report.deviceInfo.viewport.height}`)
+    scope.setTag('report.device.platform', report.deviceInfo.platform)
+    scope.setTag('report.device.is_mobile', report.deviceInfo.isMobile.toString())
+    scope.setTag('report.device.is_low_end', report.deviceInfo.isLowEndDevice.toString())
     
     // 디바이스 정보
     if (report.deviceInfo.memory) {
@@ -57,6 +72,25 @@ export function sendPerformanceReportToSentry(report: PerformanceReport) {
     }
     if (report.deviceInfo.cores) {
       scope.setTag('device.cores', report.deviceInfo.cores.toString())
+    }
+    if (report.deviceInfo.effectiveType) {
+      scope.setTag('device.network_effective_type', report.deviceInfo.effectiveType)
+    }
+    if (report.deviceInfo.downlink) {
+      scope.setTag('device.network_downlink', `${report.deviceInfo.downlink}Mbps`)
+    }
+    
+    // 사용자 상호작용 지표
+    scope.setTag('user.click_count', report.userInteractions.clickCount.toString())
+    scope.setTag('user.scroll_depth', `${report.userInteractions.scrollDepth}%`)
+    scope.setTag('user.time_on_page', `${Math.round(report.userInteractions.timeOnPage / 1000)}s`)
+    scope.setTag('user.engagement_score', report.userInteractions.engagementScore.toString())
+    
+    // 성능 예산 상태
+    scope.setTag('budget.within_budget', report.budgetStatus.isWithinBudget.toString())
+    scope.setTag('budget.score', report.budgetStatus.budgetScore.toString())
+    if (report.budgetStatus.exceededMetrics.length > 0) {
+      scope.setTag('budget.exceeded_metrics', report.budgetStatus.exceededMetrics.join(','))
     }
     
     // 각 메트릭을 측정값으로 설정
@@ -69,10 +103,21 @@ export function sendPerformanceReportToSentry(report: PerformanceReport) {
     
     // 커스텀 메트릭도 전송
     Object.entries(report.customMetrics).forEach(([key, value]) => {
-      if (value > 0) {
-        Sentry.setMeasurement(`custom.${key}`, value, 'millisecond')
+      if (typeof value === 'number' && value > 0) {
+        const unit = key.includes('Size') ? 'byte' : 
+                    key.includes('Score') || key.includes('Count') ? '' : 'millisecond'
+        Sentry.setMeasurement(`custom.${key}`, value, unit)
       }
     })
+    
+    // Navigation Timing 데이터
+    if (report.navigationTiming) {
+      const nav = report.navigationTiming
+      Sentry.setMeasurement('navigation.dns_lookup', nav.domainLookupEnd - nav.domainLookupStart, 'millisecond')
+      Sentry.setMeasurement('navigation.tcp_connect', nav.connectEnd - nav.connectStart, 'millisecond')
+      Sentry.setMeasurement('navigation.request_response', nav.responseEnd - nav.requestStart, 'millisecond')
+      Sentry.setMeasurement('navigation.dom_processing', nav.domComplete - nav.responseEnd, 'millisecond')
+    }
     
     // 성능 점수 계산
     const validMetrics = Object.values(report.metrics).filter(Boolean)
@@ -87,7 +132,18 @@ export function sendPerformanceReportToSentry(report: PerformanceReport) {
     // 성능 이슈가 발견된 경우 별도 이벤트 생성
     const poorMetrics = validMetrics.filter(m => m!.rating === 'poor')
     if (poorMetrics.length > 0) {
-      Sentry.captureMessage(`Performance issues detected: ${poorMetrics.length} poor metrics`, 'warning')
+      Sentry.captureMessage(
+        `Performance issues detected: ${poorMetrics.length} poor metrics (${poorMetrics.map(m => m!.name).join(', ')})`,
+        'warning'
+      )
+    }
+    
+    // 예산 초과 알림
+    if (!report.budgetStatus.isWithinBudget) {
+      Sentry.captureMessage(
+        `Performance budget exceeded: ${report.budgetStatus.exceededMetrics.join(', ')} (Score: ${report.budgetStatus.budgetScore}/100)`,
+        'warning'
+      )
     }
   })
 }
@@ -169,7 +225,7 @@ export function trackUserSession(sessionData: {
   })
 }
 
-// 성능 이상 감지 및 알림
+// 성능 이상 감지 및 알림 (확장된 RUM 버전)
 export function detectPerformanceAnomaly(currentMetrics: WebVitalsMetric[], historicalData: PerformanceReport[]) {
   if (historicalData.length < 5) return // 충분한 데이터가 없으면 건너뛰기
   
@@ -192,15 +248,23 @@ export function detectPerformanceAnomaly(currentMetrics: WebVitalsMetric[], hist
     if (deviation > (2 * stdDev) && stdDev > 0) {
       Sentry.withScope(scope => {
         scope.setLevel('warning')
-        scope.setTag('anomaly.type', 'performance')
+        scope.setTag('anomaly.type', 'performance_regression')
         scope.setTag('metric.name', metric.name)
+        scope.setTag('anomaly.session_id', metric.sessionId || 'unknown')
+        scope.setTag('anomaly.navigation_type', metric.navigationType || 'unknown')
+        scope.setTag('anomaly.connection_type', metric.effectiveConnectionType || 'unknown')
         
         scope.setContext('anomaly', {
           metric: metric.name,
           currentValue: metric.value,
           historicalAverage: Math.round(average),
           standardDeviation: Math.round(stdDev),
-          deviationFactor: Math.round(deviation / stdDev * 10) / 10
+          deviationFactor: Math.round(deviation / stdDev * 10) / 10,
+          sessionId: metric.sessionId,
+          navigationType: metric.navigationType,
+          connectionType: metric.effectiveConnectionType,
+          deviceMemory: metric.deviceMemory,
+          cpuCores: metric.hardwareConcurrency
         })
         
         Sentry.captureMessage(
@@ -210,6 +274,69 @@ export function detectPerformanceAnomaly(currentMetrics: WebVitalsMetric[], hist
       })
     }
   })
+}
+
+// 실시간 성능 회귀 감지
+export function detectPerformanceRegression(current: PerformanceReport, previous: PerformanceReport[]) {
+  if (previous.length < 3) return
+  
+  const recentReports = previous.slice(0, 5) // 최근 5개 리포트
+  
+  // 각 메트릭의 평균 계산
+  const metricAverages = {
+    lcp: 0, inp: 0, cls: 0, fcp: 0, ttfb: 0
+  }
+  
+  Object.keys(metricAverages).forEach(metricKey => {
+    const values = recentReports
+      .map(report => report.metrics[metricKey as keyof typeof report.metrics]?.value)
+      .filter(Boolean) as number[]
+    
+    if (values.length > 0) {
+      metricAverages[metricKey as keyof typeof metricAverages] = 
+        values.reduce((sum, val) => sum + val, 0) / values.length
+    }
+  })
+  
+  // 현재 성능과 비교하여 회귀 감지
+  const regressions: string[] = []
+  Object.entries(current.metrics).forEach(([key, metric]) => {
+    if (metric) {
+      const avgKey = key.toLowerCase() as keyof typeof metricAverages
+      const historicalAvg = metricAverages[avgKey]
+      
+      if (historicalAvg > 0) {
+        const regressionPercent = ((metric.value - historicalAvg) / historicalAvg) * 100
+        
+        // 20% 이상 성능 저하 시 회귀로 판단
+        if (regressionPercent > 20) {
+          regressions.push(`${metric.name}: +${Math.round(regressionPercent)}% (${Math.round(historicalAvg)}ms → ${metric.value}ms)`)
+        }
+      }
+    }
+  })
+  
+  if (regressions.length > 0) {
+    Sentry.withScope(scope => {
+      scope.setLevel('error')
+      scope.setTag('alert.type', 'performance_regression')
+      scope.setTag('regression.count', regressions.length.toString())
+      scope.setTag('regression.session_id', current.sessionId)
+      
+      scope.setContext('regression', {
+        regressions,
+        currentScore: current.customMetrics.performanceScore,
+        sessionId: current.sessionId,
+        url: current.url,
+        deviceInfo: current.deviceInfo
+      })
+      
+      Sentry.captureMessage(
+        `Performance regression detected: ${regressions.join(', ')}`,
+        'error'
+      )
+    })
+  }
 }
 
 // Sentry에서 성능 대시보드 링크 생성
@@ -225,7 +352,7 @@ export function generateSentryDashboardUrl(projectId?: string): string | null {
   return `${baseUrl}/performance/?${params.toString()}`
 }
 
-// 성능 알림 설정
+// 성능 알림 설정 (확장된 RUM 버전)
 export function setupPerformanceAlerts() {
   // 개발 환경에서는 알림 비활성화
   if (process.env.NODE_ENV === 'development') {
@@ -261,6 +388,55 @@ export function setupPerformanceAlerts() {
         })
       }
     }, true)
+    
+    // 메모리 압박 상황 모니터링
+    if ('memory' in performance) {
+      const checkMemoryPressure = () => {
+        const memory = (performance as any).memory
+        if (memory) {
+          const usagePercent = (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100
+          
+          if (usagePercent > 90) {
+            Sentry.withScope(scope => {
+              scope.setTag('alert.type', 'memory_pressure')
+              scope.setLevel('warning')
+              
+              scope.setContext('memory', {
+                usedHeapSize: Math.round(memory.usedJSHeapSize / 1024 / 1024),
+                totalHeapSize: Math.round(memory.totalJSHeapSize / 1024 / 1024),
+                heapSizeLimit: Math.round(memory.jsHeapSizeLimit / 1024 / 1024),
+                usagePercent: Math.round(usagePercent)
+              })
+              
+              Sentry.captureMessage(`High memory usage detected: ${Math.round(usagePercent)}%`, 'warning')
+            })
+          }
+        }
+      }
+      
+      // 30초마다 메모리 상태 확인
+      setInterval(checkMemoryPressure, 30000)
+    }
+    
+    // 네트워크 상태 변화 모니터링
+    if ('connection' in navigator) {
+      const connection = (navigator as any).connection
+      if (connection) {
+        connection.addEventListener('change', () => {
+          Sentry.addBreadcrumb({
+            category: 'network',
+            message: `Network change: ${connection.effectiveType} (${connection.downlink}Mbps)`,
+            level: 'info',
+            data: {
+              effectiveType: connection.effectiveType,
+              downlink: connection.downlink,
+              rtt: connection.rtt,
+              saveData: connection.saveData
+            }
+          })
+        })
+      }
+    }
   }
 }
 
@@ -270,6 +446,7 @@ const sentryIntegration = {
   alertThreshold: alertPerformanceThreshold,
   trackSession: trackUserSession,
   detectAnomaly: detectPerformanceAnomaly,
+  detectRegression: detectPerformanceRegression,
   generateDashboardUrl: generateSentryDashboardUrl,
   setupAlerts: setupPerformanceAlerts
 }

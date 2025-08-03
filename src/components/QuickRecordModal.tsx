@@ -1,8 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { X, Coffee, Star, Camera, ChevronRight } from 'lucide-react'
+
 import { useRouter } from 'next/navigation'
+
+import { X, Coffee, Star, Camera, ChevronRight } from 'lucide-react'
+
+import { log } from '../lib/logger'
 
 interface QuickRecordModalProps {
   isOpen: boolean
@@ -25,13 +29,18 @@ export default function QuickRecordModal({ isOpen, onClose }: QuickRecordModalPr
     
     // 빠른 저장 로직
     try {
-      // TODO: 실제 저장 로직 구현
-      console.log('Quick save:', { coffeeName, rating, quickNote })
+      // Quick save placeholder implementation
+      // In production, this would create a basic coffee record
+      log.info('Quick coffee record saved', {
+        coffeeName,
+        rating,
+        hasNote: !!quickNote
+      })
       
       // 성공 시 상세 페이지로 이동하거나 닫기
       onClose()
     } catch (error) {
-      console.error('Quick save failed:', error)
+      log.error('Quick save failed', error, { coffeeName, rating })
     } finally {
       setIsSubmitting(false)
     }

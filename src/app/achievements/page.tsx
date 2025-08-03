@@ -1,17 +1,18 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { Trophy, Target, TrendingUp, Award, Star, Zap, Users, Crown } from 'lucide-react'
 
 import ProtectedRoute from '../../components/auth/ProtectedRoute'
 import Navigation from '../../components/Navigation'
-import PageLayout from '../../components/ui/PageLayout'
-import PageHeader from '../../components/ui/PageHeader'
+import { StatsGridSkeleton, AchievementGridSkeleton } from '../../components/SkeletonLoader'
 import { Card, CardContent } from '../../components/ui/Card'
+import PageHeader from '../../components/ui/PageHeader'
+import PageLayout from '../../components/ui/PageLayout'
+import { simpleDemoStats } from '../../data/simple-demo'
 import { SupabaseStorage } from '../../lib/supabase-storage'
 import { UserStats, Achievement } from '../../types/achievement'
-import { simpleDemoStats } from '../../data/simple-demo'
-import { StatsGridSkeleton, AchievementGridSkeleton } from '../../components/SkeletonLoader'
 
 export default function AchievementsPage() {
   const [userStats, setUserStats] = useState<UserStats | null>(null)

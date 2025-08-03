@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { X, Trophy, Star, Gift } from 'lucide-react'
+
 import { Achievement } from '../../types/achievement'
 
 interface AchievementNotificationProps {

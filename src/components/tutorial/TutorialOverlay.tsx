@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+
 import { X, ArrowRight, ArrowLeft, Coffee, Target } from 'lucide-react'
 
 interface TutorialStep {

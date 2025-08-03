@@ -4,21 +4,23 @@
  */
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
+
+import Link from 'next/link'
 import { useSearchParams, useRouter } from 'next/navigation'
+
 import { List, BarChart3, Coffee, Plus, Filter, Search, TrendingUp, Calendar } from 'lucide-react'
 
+import CoffeeAnalytics from '../../components/analytics/CoffeeAnalytics'
 import ProtectedRoute from '../../components/auth/ProtectedRoute'
 import Navigation from '../../components/Navigation'
 import OptimizedCoffeeList from '../../components/OptimizedCoffeeList'
-import CoffeeAnalytics from '../../components/analytics/CoffeeAnalytics'
-import PageLayout from '../../components/ui/PageLayout'
-import PageHeader from '../../components/ui/PageHeader'
 import { Card, CardContent } from '../../components/ui/Card'
+import PageHeader from '../../components/ui/PageHeader'
+import PageLayout from '../../components/ui/PageLayout'
 import UnifiedButton from '../../components/ui/UnifiedButton'
-import Link from 'next/link'
 
-export default function MyRecordsPage() {
+function MyRecordsPageContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [activeTab, setActiveTab] = useState<'list' | 'stats'>('list')
@@ -258,5 +260,20 @@ export default function MyRecordsPage() {
         )}
       </PageLayout>
     </ProtectedRoute>
+  )
+}
+
+export default function MyRecordsPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-b from-coffee-50 to-coffee-100 flex items-center justify-center">
+        <div className="text-center">
+          <Coffee className="h-8 w-8 text-coffee-400 animate-pulse mx-auto mb-4" />
+          <p className="text-coffee-600">기록을 불러오는 중...</p>
+        </div>
+      </div>
+    }>
+      <MyRecordsPageContent />
+    </Suspense>
   )
 }

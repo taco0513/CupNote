@@ -64,6 +64,7 @@ docs/current/
 ├── DATABASE_SCHEMA.md          # 🗄️ 데이터베이스 스키마
 ├── TASTINGFLOW_V2_ARCHITECTURE.md # 🏗️ TastingFlow v2.0 아키텍처
 ├── DEPLOYMENT_GUIDE.md         # 🚢 배포 가이드
+├── ADMIN_DASHBOARD_GUIDE.md    # 🛡️ 관리자 대시보드 가이드 (NEW)
 └── DOCUMENTATION_INDEX.md      # 📚 이 문서
 ```
 
@@ -161,7 +162,7 @@ troubleshooting/
 
 ## 📋 문서 상태
 
-### ✅ 완성된 문서 (2025-08-02 기준)
+### ✅ 완성된 문서 (2025-08-03 기준)
 
 **핵심 문서**:
 - ✅ 개발 환경 설정 가이드
@@ -170,6 +171,7 @@ troubleshooting/
 - ✅ 데이터베이스 스키마 (ERD 포함)
 - ✅ TastingFlow v2.0 아키텍처
 - ✅ 배포 가이드
+- ✅ **관리자 대시보드 가이드** (NEW - 2025-08-03)
 
 **기능 문서**:
 - ✅ 현재 페이지 명세 (31개 페이지)
@@ -280,6 +282,6 @@ troubleshooting/
 
 ---
 
-**📅 최종 업데이트**: 2025-08-02  
+**📅 최종 업데이트**: 2025-08-03  
 **✏️ 작성자**: Claude Code SuperClaude  
-**🔄 버전**: 1.0.0
+**🔄 버전**: 1.1.0

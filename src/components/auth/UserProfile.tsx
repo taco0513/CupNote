@@ -2,8 +2,9 @@
 
 import { useState } from 'react'
 
-import { User, Settings, LogOut, Trophy, Coffee } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+
+import { User, Settings, LogOut, Trophy, Coffee } from 'lucide-react'
 
 import { useAuth } from '../../contexts/AuthContext'
 

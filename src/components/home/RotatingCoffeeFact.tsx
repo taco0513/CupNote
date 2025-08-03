@@ -5,7 +5,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { Lightbulb } from 'lucide-react'
+
 import { Card, CardContent } from '../ui/Card'
 
 const coffeeFacts = [

@@ -8,16 +8,16 @@ import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 
 // Component imports
-import { TutorialProvider } from '../../tutorial/TutorialProvider'
+import AdvancedFeatures from '../../advanced/AdvancedFeatures'
+import { AnimatedButton, AnimatedCard } from '../../animations/MicroInteractions'
+import { ThemeProvider, ThemeToggle } from '../../DarkModeEnhancer'
+import SmartSuggestions, { SmartInput } from '../../SmartSuggestions'
 import TutorialOverlay from '../../tutorial/TutorialOverlay'
+import { TutorialProvider } from '../../tutorial/TutorialProvider'
 import { Button } from '../../ui/Button'
 import { Input } from '../../ui/Input'
 import { Modal } from '../../ui/Modal'
 import { ToastProvider, useToast } from '../../ui/Toast'
-import { AnimatedButton, AnimatedCard } from '../../animations/MicroInteractions'
-import SmartSuggestions, { SmartInput } from '../../SmartSuggestions'
-import { ThemeProvider, ThemeToggle } from '../../DarkModeEnhancer'
-import AdvancedFeatures from '../../advanced/AdvancedFeatures'
 
 // Mock hooks and dependencies
 jest.mock('../../hooks/useGestures', () => ({

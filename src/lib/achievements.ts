@@ -1,5 +1,6 @@
 import { Achievement, AchievementCondition, UserLevel, UserStats } from '../types/achievement'
 import { CoffeeRecord } from '../types/coffee'
+
 import type { MatchScoreResult } from './match-score'
 
 // 기본 성취 목록 정의 - TastingFlow v2.0 호환

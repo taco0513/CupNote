@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { useRouter, useParams } from 'next/navigation'
+
 import { 
   Trophy, 
   Coffee, 
@@ -19,13 +21,14 @@ import {
   Users
 } from 'lucide-react'
 
-import Navigation from '../../../../components/Navigation'
 import AchievementNotification from '../../../../components/achievements/AchievementNotification'
+import Navigation from '../../../../components/Navigation'
 import { isFeatureEnabled } from '../../../../config/feature-flags.config'
-import type { TastingSession, TastingMode } from '../../../../types/tasting-flow.types'
-import { calculateMatchScore, getDefaultMatchScore, getDefaultMatchScoreAsync, type MatchScoreResult } from '../../../../lib/match-score'
 import { AchievementSystem } from '../../../../lib/achievements'
+import { calculateMatchScore, getDefaultMatchScore, getDefaultMatchScoreAsync, type MatchScoreResult } from '../../../../lib/match-score'
+
 import type { Achievement } from '../../../../types/achievement'
+import type { TastingSession, TastingMode } from '../../../../types/tasting-flow.types'
 
 const getScoreGrade = (score: number) => {
   if (score >= 90) return { color: 'text-green-600', message: '완벽한 매치!' }

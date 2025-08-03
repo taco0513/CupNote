@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { useRouter } from 'next/navigation'
+
 import { 
   Coffee, 
   ArrowRight, 
@@ -23,7 +25,6 @@ import {
 
 import Navigation from '../../../../components/Navigation'
 import { isFeatureEnabled } from '../../../../config/feature-flags.config'
-import type { TastingSession, BrewSetup } from '../../../../types/tasting-flow.types'
 import { 
   getHomeCafeEquipment, 
   getBrewingMethodSuggestions,
@@ -31,6 +32,8 @@ import {
   getGrindSizeRecommendations,
   getBrewingRecommendations 
 } from '../../../../utils/equipment-settings'
+
+import type { TastingSession, BrewSetup } from '../../../../types/tasting-flow.types'
 import '../../../../utils/demo-equipment' // 개발 모드에서 데모 함수 사용 가능
 
 // 기본 드리퍼 옵션 (사용자 설정에 따라 동적으로 업데이트됨)

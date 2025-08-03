@@ -1,19 +1,37 @@
 # 📋 CupNote 프로젝트 진행 상황
 
-_마지막 업데이트: 2025-08-02_
+_마지막 업데이트: 2025-08-03_
 
 ## 🎯 현재 상태
 
-### 🚀 **CupNote v1.0.0 RC 프로덕션 배포 완료** (2025-07-31)
+### 🚀 **CupNote v1.2.0 Admin Dashboard Complete** (2025-08-03)
 
-**모든 핵심 기능 구현 완료 - 라이트 모드 전용 배포**
+**관리자 대시보드 및 데이터 관리 시스템 완성**
 
-#### 최신 완성 기능 (2025-08-02)
+#### 최신 완성 기능 (2025-08-03)
+- [✅] **Admin Dashboard**: 8개 페이지로 구성된 완벽한 관리자 시스템
+- [✅] **Data Management**: 카페/로스터리 & 커피 원두 CSV 업로드/다운로드
+- [✅] **Supabase Integration**: 실시간 데이터베이스 연동 및 동기화
+- [✅] **User-Generated Content**: 사용자 기록에서 커피 정보 자동 추출
+- [✅] **Comprehensive Analytics**: 시스템 현황, 성능 지표, 사용자 활동 모니터링
+
+#### Admin Dashboard 구성 (v1.2.0)
+- **메인 대시보드**: 실시간 시스템 현황, 성능 지표, 빠른 작업
+- **사용자 관리**: 사용자 목록, 활동 통계, 계정 관리, 권한 설정
+- **커피 기록 관리**: 전체 기록 조회, 통계, 콘텐츠 관리, 품질 모니터링
+- **데이터 관리**: 
+  - 카페/로스터리 데이터 (CSV import/export, 크롤링)
+  - 커피 원두 데이터 (CSV import/export, 사용자 기록 동기화)
+- **성능 모니터링**: 실시간 성능, 서버 상태, 에러 추적
+- **피드백 관리**: 베타 피드백, 사용자 문의, 버그 리포트
+- **시스템 설정**: 공지사항, 앱 설정, 보안, 템플릿 관리
+
+#### 이전 완성 기능 (v1.1.0)
 - [✅] **장비 통합 시스템**: HomeCafe 모드와 개인 장비 설정 완벽 연동
 - [✅] **내 기록 통합**: 기록 목록과 통계를 하나의 탭 인터페이스로 통합
 - [✅] **모바일 UX 개선**: 하단 네비게이션 가림 문제 완전 해결
 - [✅] **Match Score v2.0**: 커뮤니티 기반 점수 시스템 (등급 제거)
-- [✅] **3-Mode 시스템**: Pro Mode 제거, Cafe/HomeCafe/Lab 모드로 정리
+- [✅] **2-Mode 시스템**: Cafe/HomeCafe 모드로 간소화 (Lab/Pro 모드 제외)
 
 #### 이전 완성 기능 (v1.0.0-rc.1)
 - [✅] **프로덕션 배포**: Vercel 배포 완료, SEO 최적화, 성능 최적화
@@ -39,6 +57,20 @@ _마지막 업데이트: 2025-08-02_
 
 ## ✅ 완성된 핵심 시스템
 
+### 🛡️ Admin Dashboard System (NEW - 2025-08-03)
+- [✅] **권한 시스템**: Admin role 기반 접근 제어
+- [✅] **시스템 모니터링**: 실시간 성능 및 사용자 활동 추적
+- [✅] **데이터 관리**: CSV 기반 대량 데이터 import/export
+- [✅] **사용자 관리**: 계정 상태, 활동 이력, 권한 관리
+- [✅] **피드백 시스템**: 베타 피드백 수집 및 관리
+
+### 📊 Data Management System (NEW - 2025-08-03)
+- [✅] **Supabase Tables**: cafe_roasteries, coffees, cafe_roastery_coffees
+- [✅] **CSV Handler**: 대량 데이터 업로드/다운로드 유틸리티
+- [✅] **User Sync**: 사용자 기록에서 커피 정보 자동 추출
+- [✅] **Data Validation**: 필수 필드 검증, 형식 검증, 중복 체크
+- [✅] **Audit Logs**: 모든 데이터 변경 이력 추적
+
 ### 🔐 사용자 인증 시스템
 - [✅] **Supabase Auth**: 이메일/비밀번호 회원가입 및 로그인
 - [✅] **보호된 라우트**: 미인증 사용자 자동 리디렉션
@@ -46,7 +78,7 @@ _마지막 업데이트: 2025-08-02_
 - [✅] **사용자 프로필**: 개인 정보 관리 및 계정 설정
 
 ### ☕ 커피 기록 시스템
-- [✅] **3-Mode 시스템**: Cafe, HomeCafe, Pro 모드 완벽 구현
+- [✅] **2-Mode 시스템**: Cafe, HomeCafe 모드 완벽 구현
 - [✅] **모드별 최적화**: 각 모드별 차별화된 단계와 입력 플로우
 - [✅] **Match Score**: 개인화된 점수 시스템 및 피드백
 - [✅] **이미지 업로드**: Supabase Storage 통합, 자동 압축
@@ -87,42 +119,21 @@ _마지막 업데이트: 2025-08-02_
 - [✅] **쿼리 최적화**: 페이지네이션 및 배치 로딩
 - [✅] **성능 모니터링**: 실시간 성능 지표 추적
 
-### 🛡️ 에러 처리 및 안정성
-- [✅] **포괄적 에러 바운더리**: 앱 크래시 방지
-- [✅] **사용자 친화적 피드백**: 명확한 에러 메시지
-- [✅] **복구 메커니즘**: 자동 재시도 및 대안 제공
-- [✅] **로깅 시스템**: 개발 환경 디버깅 지원
-
 ## 🔧 최근 기술적 개선사항
+
+### Admin Dashboard 구현 (2025-08-03)
+- [✅] **아키텍처 설계**: 8개 페이지 + 레이아웃 시스템
+- [✅] **Supabase 스키마**: 4개 테이블 생성 (cafe_roasteries, coffees, etc.)
+- [✅] **CSV 처리**: parseCSV, generateCSV, import/export 함수
+- [✅] **데이터 동기화**: syncCoffeeInfoFromUserRecord 자동화
+- [✅] **타입 정의**: CafeRoastery, Coffee, DataManagementStats 인터페이스
 
 ### 테스트 스위트 구축 (2025-07-31)
 - [✅] **포괄적인 테스트 환경**: Vitest + React Testing Library + Playwright 완전 설정
 - [✅] **Unit Tests**: 6개 파일, 361+ 테스트 케이스 - 핵심 서비스 및 유틸리티 완전 커버
 - [✅] **Component Tests**: 8개 파일, 185+ 테스트 케이스 - 주요 React 컴포넌트 테스트
 - [✅] **E2E Tests**: 5개 스위트 - 인증, 커피 기록, 검색, 성취, PWA 기능 테스트
-- [✅] **Page Object Model**: 유지보수 가능한 E2E 테스트 구조
-- [✅] **크로스 브라우저**: Desktop/Mobile Chrome, Firefox, Safari 지원
-- [✅] **Mock 시스템**: Supabase, Next.js 라우터, 브라우저 API 완전 모킹
 - [✅] **커버리지 목표**: 70% 라인/함수/브랜치 커버리지 설정
-
-### v1.0.0-rc.1 (2025-07-31)
-- [✅] **코드 품질 개선**: ESLint 경고 해결, Props 인터페이스 통일
-- [✅] **Hydration 오류 해결**: NetworkStatus, ConnectionIndicator 등 클라이언트 전용 컴포넌트 SSR 불일치 수정
-- [✅] **동적 import**: PWAInstallPrompt, SyncStatus 등을 ssr: false로 설정
-- [✅] **배포 최적화**: Vercel 재배포 문제 해결, 강제 배포 트리거 구현
-- [✅] **Import 경로 문제 해결**: 모든 @/ 경로를 상대경로로 변경 (40+ 파일)
-- [✅] **빌드 의존성 수정**: autoprefixer, typescript, eslint 등 production dependencies로 이동
-- [✅] **테스트 파일 제외**: tsconfig.json에 test 관련 파일 빌드 제외 설정
-
-### 프로덕션 준비 (2025-07-30)
-- [✅] **SEO 최적화**: 포괄적 메타데이터, robots.txt, sitemap 구현
-- [✅] **Next.js 최적화**: 성능 최적화 설정, 보안 헤더 적용
-- [✅] **Vercel 설정**: 환경 변수, 보안 헤더, 캐싱 정책 구성
-
-### 다크 모드 제거 (2025-07-30)
-- [✅] **UI 통일**: 라이트 모드로 완전 통일된 사용자 경험
-- [✅] **ThemeContext 단순화**: 불필요한 테마 전환 로직 제거
-- [✅] **설정 페이지 정리**: 테마 설정 섹션 완전 제거
 
 ## 🏗️ 아키텍처 현황
 
@@ -132,158 +143,17 @@ _마지막 업데이트: 2025-08-02_
 - **State Management**: React hooks + Context API
 - **Caching**: 2-tier caching (memory + localStorage)
 - **PWA**: next-pwa + Service Worker
-- **Testing**: Vitest + React Testing Library + Playwright (70% 커버리지 목표)
-
-### 프로젝트 구조
-```
-CupNote/
-├── src/
-│   ├── app/            # Next.js App Router pages
-│   ├── components/     # React components
-│   ├── contexts/       # React contexts
-│   ├── hooks/          # Custom React hooks
-│   ├── lib/           # Supabase client & utilities
-│   ├── types/         # TypeScript type definitions
-│   └── utils/         # Helper functions
-├── public/            # Static assets
-├── docs/              # Project documentation
-└── checkpoints/       # Development checkpoints
-```
+- **Testing**: Vitest + React Testing Library + Playwright
 
 ### 데이터베이스 스키마
 - **users**: 사용자 정보 (Supabase Auth)
 - **coffee_records**: 커피 기록 메인 테이블
 - **achievements**: 사용자 성취 데이터
-- **user_stats**: 통게 및 분석 데이터
-
-## 📦 최신 완료 작업 (2025-08-02)
-
-### 🛠️ **Equipment Integration & UX Improvements** - 장비 통합 및 사용성 개선
-
-#### ✅ 장비 통합 시스템 (완료)
-- **Equipment Settings**: 개인 설정에서 홈카페 장비 등록 (그라인더, 드리퍼, 저울, 케틀)
-- **Auto-Population**: HomeCafe 모드에서 저장된 장비 자동 표시
-- **Smart Recommendations**: 장비별 맞춤 추출 가이드라인
-  - 그라인더별 분쇄도 추천 (코만단테, 바라짜, 1zpresso)
-  - 드리퍼별 추출 파라미터 (비율, 온도, 시간)
-- **Visual Feedback**: ⭐ 아이콘으로 사용자 장비 표시
-- **Demo Utilities**: 개발 테스트용 데모 함수 제공
-
-#### ✅ 내 기록 페이지 통합 (완료)
-- **Unified Interface**: 기록 목록과 통계를 탭으로 통합
-- **Analytics Dashboard**: 8+ 주요 지표 포함
-  - 월별 트렌드, 평점 분포, 모드별 통계
-  - 선호 로스터리, 원산지, 플레이버 분석
-- **URL State Management**: 탭 상태 URL 쿼리로 관리
-- **Mobile Optimization**: 모바일 네비게이션 순서 최적화
-
-#### ✅ UX/UI 개선사항 (완료)
-- **Mobile Navigation Fix**: pb-20 padding으로 콘텐츠 가림 해결
-- **Navigation Enhancement**: 데이터 없을 때도 네비게이션 표시
-- **AuthModal Clarity**: 회원가입/로그인 버튼 동작 명확화
-- **Imperial Units Removal**: 커피는 미터법만 사용
-- **Client Error Fix**: QueryOptimizer 메서드 오류 해결
-
-### 🎨 **3-Phase IA/UX/UI 개선 완료** - 세계급 사용자 경험 구현
-
-CupNote가 현대적 웹 애플리케이션 표준에 부합하는 최첨단 사용자 경험을 제공하는 플랫폼으로 업그레이드되었습니다.
-
-#### ✅ Phase 1: 기본 사용성 개선 (완료)
-- **Interactive Tutorial System**: 7개 튜토리얼 플로우가 포함된 오버레이 기반 온보딩 시스템
-- **UI Component Library**: Button, Input, Modal, Toast - class-variance-authority 기반 완전한 컴포넌트 라이브러리
-- **기본 접근성**: ARIA 지원, 포커스 관리, 스크린 리더 호환성, 스킵 링크
-
-#### ✅ Phase 2: 중급 인터랙션 (완료)  
-- **마이크로인터랙션 시스템**: 리플 효과, 호버 상태, 애니메이션 피드백을 포함한 12개 컴포넌트
-- **CSS 애니메이션 라이브러리**: bounce-once, shake, fade-in 등 12+ 애니메이션 클래스
-- **Enhanced Mobile Navigation**: 활성 상태 인디케이터, 애니메이션, 터치 최적화
-
-#### ✅ Phase 3: 고급 사용성 & 최적화 (완료)
-- **스마트 제스처 시스템**: 스와이프 (네비게이션), 핀치 (확대/축소), 롱프레스 (컨텍스트) 지원
-- **키보드 단축키**: 15개 단축키 (⌘+K 검색, ⌘+N 새 기록 등) + 도움말 모달
-- **지능형 자동완성**: 커피, 로스터, 맛 기반 컨텍스트 인식 제안 + 사용자 히스토리
-- **실시간 성능 모니터**: LCP, FID, CLS, 메모리 사용량 추적 + 자동 최적화
-- **고급 테마 시스템**: 4개 컬러 스킴 (기본, 고대비, 따뜻한, 차가운) + 대비 조절 (50-150%)
-- **통합 고급 설정**: 성능, 제스처, 접근성, 키보드 설정을 통합한 설정 패널
-
-#### 📊 개선 성과
-- **접근성 점수**: 72 → 95 (WCAG AA 달성)
-- **UX 향상**: 40% 빠른 네비게이션 (키보드 + 제스처)
-- **온보딩 개선**: 90% 사용자 혼란 감소 (튜토리얼 시스템)
-- **성능 최적화**: Core Web Vitals 자동 모니터링 + 최적화
-
-#### 🛠️ 기술적 구현
-- **16개 새로운 컴포넌트**: tutorial/, ui/, accessibility/, animations/, advanced/ 디렉토리
-- **React Hooks**: useGestures, useKeyboardShortcuts 등 고급 훅 시스템
-- **TypeScript 인터페이스**: 완전한 타입 안전성과 개발자 경험
-- **CSS 확장**: 100+ 새로운 유틸리티 클래스와 애니메이션
-- **통합 초기화**: `initializeApp()` 함수로 모든 고급 기능 자동 활성화
-
----
-
-## 📦 이전 완료 작업 (2025-08-01)
-
-### 🔥 Auto-Save & 통계 시스템 통합 완료
-- [✅] **데이터베이스 스키마 문제 해결**: `additional_images` 컬럼 누락 식별 및 해결
-- [✅] **멀티 스토리지 통합**: Supabase + IndexedDB + localStorage 통합 데이터 로딩
-- [✅] **자동 저장 수정**: 게스트/로그인 모드 모두에서 완벽 동작
-- [✅] **통계 표시 수정**: 하드코딩된 값 → 실시간 데이터 계산
-- [✅] **성취 시스템 안정화**: 게스트 모드 오류 해결, 앱 크래시 방지
-- [✅] **사용자 경험 개선**: "결과를 찾을수가 없습니다" 문제 완전 해결
-
-### 기술적 개선사항
-- **Schema Testing**: 데이터베이스 스키마 검증 도구 구축
-- **Error Isolation**: 성취 시스템 오류가 핵심 기능을 방해하지 않도록 격리
-- **Data Deduplication**: 여러 저장소 간 중복 데이터 제거 로직
-- **Backward Compatibility**: 기존 localStorage 데이터 유지하면서 새 시스템 통합
-
-## 📦 이전 완료 작업 (2025-07-31)
-
-### 프로젝트 구조 완전 재정리
-- [✅] **Archive 시스템 구축**: 과거 파일들을 체계적으로 분류 보관 (200+ 파일)
-- [✅] **문서 구조 혁신**: current/development/archive로 명확한 분리
-- [✅] **루트 디렉토리 정리**: 핵심 파일들만 루트에 유지, 개발 파일 archive
-- [✅] **Documentation 업데이트**: CLAUDE.md, README.md, 새로운 INDEX.md 생성
-- [✅] **3-Mode 시스템 문서**: 완전한 가이드 문서 작성 완료
-
-## ✅ 최신 완료 작업 (2025-12-01)
-
-### 🎯 3-Mode 시스템 구현 완료!
-
-전체 3개 모드가 완벽하게 구현되어 프로덕션 준비가 완료되었습니다:
-
-#### ✅ Cafe Mode (카페 방문)
-- **구현 완료**: 7단계 종합 카페 경험
-- **핵심 기능**: 카페 정보, 커피 상세, 감각 평가, 환경 평가
-- **소요 시간**: 5-7분
-- **대상**: 카페에서 마신 커피의 상세 기록
-
-#### ✅ HomeCafe Mode (홈카페)
-- **구현 완료**: 상세 레시피 관리 시스템
-- **핵심 기능**: 
-  - 정밀 추출 제어 (±1g 원두량 조절)
-  - 비율 프리셋 (1:15 ~ 1:18)
-  - 통합 추출 타이머
-  - 레시피 라이브러리
-- **소요 시간**: 8-12분
-- **대상**: 집에서 직접 내리는 커피 애호가
-
-#### ✅ Pro Mode (전문가)
-- **구현 완료**: SCA 표준 커핑 시스템
-- **핵심 기능**:
-  - 9개 평가 항목 (Fragrance, Flavor, Aftertaste 등)
-  - 전문가 수준 평가 도구
-  - TDS 측정 및 추출 수율 기록
-  - 품질 등급 자동 계산
-- **소요 시간**: 15-20분
-- **대상**: 바리스타, 로스터, 커피 전문가
-
-### 기술적 구현 사항
-- [✅] **Config System**: `TASTING_MODES_CONFIG`로 중앙화
-- [✅] **라우팅 구조**: 모드별 독립적인 페이지 (`/record/[mode]`)
-- [✅] **UI/UX**: 모드별 차별화된 색상 테마 및 그라디언트
-- [✅] **데이터 구조**: 모드별 최적화된 인터페이스
-- [✅] **Supabase 통합**: 모든 모드 데이터 저장 준비 완료
+- **user_stats**: 통계 및 분석 데이터
+- **cafe_roasteries**: 카페/로스터리 정보 (NEW)
+- **coffees**: 커피 원두 정보 (NEW)
+- **cafe_roastery_coffees**: 연결 테이블 (NEW)
+- **data_update_logs**: 변경 이력 (NEW)
 
 ## 📋 남은 작업 (v2.0 계획)
 
@@ -294,8 +164,8 @@ CupNote가 현대적 웹 애플리케이션 표준에 부합하는 최첨단 사
 
 ### 고급 기능
 - [ ] **푸시 알림**: 기록 리마인더, 커뮤니티 알림
-- [ ] **OCR 기능**: 커피 패키지 스캔 자동 입력
 - [ ] **ML 추천**: 머신러닝 기반 개인화 추천
+- [ ] **API 개방**: 서드파티 연동을 위한 API
 
 ### 성능 및 확장성
 - [ ] **캐싱 고도화**: Redis 등 외부 캐시 연동
@@ -306,8 +176,8 @@ CupNote가 현대적 웹 애플리케이션 표준에 부합하는 최첨단 사
 
 ### 기능적 성과
 - **완전한 커피 기록 플랫폼**: 입력부터 분석까지 전 과정 지원
-- **개인화된 사용자 경험**: 모드별 차별화, 성취 시스템
-- **프로덕션 준비 완료**: 실제 사용자 서비스 가능한 수준
+- **관리자 대시보드**: 시스템 전체 관리 및 모니터링
+- **데이터 관리 시스템**: CSV 기반 대량 데이터 처리
 - **PWA 완전 구현**: 네이티브 앱 수준의 사용자 경험
 
 ### 기술적 성과
@@ -317,7 +187,7 @@ CupNote가 현대적 웹 애플리케이션 표준에 부합하는 최첨단 사
 - **프로덕션 배포**: Vercel 기반 안정적 배포 인프라
 
 ### 사용자 경험
-- **직관적 인터페이스**: 4단계 기록 플로우, 명확한 내비게이션
+- **직관적 인터페이스**: 2-Mode 기록 시스템, 명확한 내비게이션
 - **모바일 최적화**: 터치 친화적 인터페이스, 반응형 디자인
 - **오프라인 지원**: 네트워크 상황에 관계없이 사용 가능
 - **개인화**: 성취 시스템, 통계 분석, 맞춤 피드백
@@ -333,8 +203,9 @@ CupNote가 현대적 웹 애플리케이션 표준에 부합하는 최첨단 사
 - **2025-01-31**: Achievement 시스템 Supabase 통합
 - **2025-07-29**: Match Score 동적 레벨 시스템 확정
 - **2025-07-30**: LocalStorage → Supabase 마이그레이션 완료
-- **2025-07-30**: 프로덕션 배포 완료
 - **2025-07-31**: v1.0.0 RC 라이트 모드 전용 배포
+- **2025-08-02**: v1.1.0 Mobile App Experience 완성
+- **2025-08-03**: v1.2.0 Admin Dashboard 완성
 
 ### 기술적 진화
 1. **프로토타입**: Vue 3 기반 초기 구현
@@ -342,5 +213,6 @@ CupNote가 현대적 웹 애플리케이션 표준에 부합하는 최첨단 사
 3. **확장**: Supabase 통합, PWA 기능 추가
 4. **최적화**: 성능 튜닝, 캐싱 시스템 구현
 5. **프로덕션**: 배포 최적화, 안정성 강화
+6. **관리 시스템**: Admin Dashboard, 데이터 관리 추가
 
-**CupNote는 개인 프로젝트에서 프로덕션 준비가 완료된 커피 기록 플랫폼으로 성공적으로 진화했습니다!** ☕️🚀✨
+**CupNote는 개인 프로젝트에서 완전한 관리 시스템을 갖춘 프로덕션 커피 플랫폼으로 성공적으로 진화했습니다!** ☕️🚀✨

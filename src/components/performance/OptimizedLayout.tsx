@@ -1,6 +1,7 @@
 'use client'
 
 import { Suspense } from 'react'
+
 import CoreWebVitalsOptimizer, { CriticalContent, DynamicContent } from './CoreWebVitalsOptimizer'
 import { LoadingSpinner } from '../ui'
 

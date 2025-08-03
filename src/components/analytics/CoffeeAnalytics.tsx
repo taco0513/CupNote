@@ -1,11 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+
 import { BarChart3, TrendingUp, Coffee, Calendar, Award, Star } from 'lucide-react'
 
-import { CoffeeRecord } from '../../types/coffee'
-import { QueryOptimizer } from '../../lib/query-optimizer'
 import { useNotification } from '../../contexts/NotificationContext'
+import { QueryOptimizer } from '../../lib/query-optimizer'
+import { CoffeeRecord } from '../../types/coffee'
 
 interface AnalyticsData {
   totalRecords: number

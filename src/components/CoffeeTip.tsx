@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+
 import { Lightbulb, Coffee, Thermometer, Clock, Zap } from 'lucide-react'
 
 const coffeeTips = [

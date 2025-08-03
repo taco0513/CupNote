@@ -3,8 +3,10 @@
  */
 'use client'
 
-import Image from 'next/image'
 import { useState } from 'react'
+
+import Image from 'next/image'
+
 import { Coffee } from 'lucide-react'
 
 interface OptimizedImageProps {

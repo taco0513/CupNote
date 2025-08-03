@@ -1,11 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { useRouter, useParams } from 'next/navigation'
+
 import { ArrowRight, ArrowLeft, Palette, Search, X, Info, Check } from 'lucide-react'
 
 import Navigation from '../../../../components/Navigation'
 import { isFeatureEnabled } from '../../../../config/feature-flags.config'
+
 import type { TastingSession, TastingMode, FlavorProfile } from '../../../../types/tasting-flow.types'
 
 // SCA Flavor Wheel 데이터 (확장된 85개 향미)

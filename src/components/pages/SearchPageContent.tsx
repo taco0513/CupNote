@@ -6,8 +6,11 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+
 import { useRouter, useSearchParams } from 'next/navigation'
+
 import { Search, Filter, ArrowLeft, Clock, Sparkles } from 'lucide-react'
+
 import { useSearch } from '../../contexts/SearchContext'
 import Navigation from '../Navigation'
 import PageLayout from '../ui/PageLayout'

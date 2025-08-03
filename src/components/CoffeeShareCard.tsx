@@ -1,5 +1,7 @@
 import React from 'react'
+
 import { Share2, Heart, MessageCircle, Bookmark } from 'lucide-react'
+
 import { CoffeeRecord } from '../types/coffee'
 
 interface CoffeeShareCardProps {

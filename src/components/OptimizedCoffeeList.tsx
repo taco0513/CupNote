@@ -2,11 +2,11 @@
 
 import { useEffect, useState, useMemo, useCallback } from 'react'
 
+import EmptyState from './EmptyState'
 import FilterPanel, { FilterOptions } from './FilterPanel'
 import LazyImage from './LazyImage'
-import SearchBar from './SearchBar'
-import EmptyState from './EmptyState'
 import OptimizedCoffeeCard from './OptimizedCoffeeCard'
+import SearchBar from './SearchBar'
 import { CardGridSkeleton } from './SkeletonLoader'
 import { useNotification } from '../contexts/NotificationContext'
 import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor'

@@ -1,6 +1,9 @@
 import React from 'react'
+
 import Link from 'next/link'
+
 import { Coffee, MapPin, Calendar, Star, Camera } from 'lucide-react'
+
 import LazyImage from './LazyImage'
 import { CoffeeRecord } from '../types/coffee'
 

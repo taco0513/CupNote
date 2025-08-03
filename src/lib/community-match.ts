@@ -7,6 +7,7 @@
  */
 
 import { supabase } from './supabase'
+
 import type { MatchScoreResult } from './match-score'
 
 export interface CommunityData {

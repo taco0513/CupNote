@@ -5,13 +5,15 @@
 'use client'
 
 import { useState } from 'react'
+
 import { useRouter } from 'next/navigation'
+
 import { Coffee, ArrowRight, ArrowLeft, CheckCircle, Star, Trophy, Target, Sparkles } from 'lucide-react'
 
 import Navigation from '../../components/Navigation'
-import PageLayout from '../../components/ui/PageLayout'
-import PageHeader from '../../components/ui/PageHeader'
 import { Card, CardContent } from '../../components/ui/Card'
+import PageHeader from '../../components/ui/PageHeader'
+import PageLayout from '../../components/ui/PageLayout'
 import UnifiedButton from '../../components/ui/UnifiedButton'
 
 interface OnboardingStep {

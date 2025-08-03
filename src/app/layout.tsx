@@ -12,8 +12,8 @@ import MobileNavigation from '../components/MobileNavigation'
 import NotificationContainer from '../components/notifications/NotificationContainer'
 import { AuthProvider } from '../contexts/AuthContext'
 import { NotificationProvider } from '../contexts/NotificationContext'
-import { ThemeProvider } from '../contexts/ThemeContext'
 import { SearchProvider } from '../contexts/SearchContext'
+import { ThemeProvider } from '../contexts/ThemeContext'
 
 // 개발용 컴포넌트 - 클라이언트에서만 렌더링
 const OnboardingTrigger = dynamic(() => import('../components/ui/OnboardingTrigger'), {

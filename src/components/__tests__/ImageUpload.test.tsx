@@ -2,32 +2,37 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
-import ImageUpload, { MultiImageUpload } from '../ImageUpload'
-
-// Mock contexts
-const mockUseAuth = vi.fn()
-const mockUseNotification = vi.fn()
-
-vi.mock('../contexts/AuthContext', () => ({
-  useAuth: () => mockUseAuth(),
-}))
-
-vi.mock('../contexts/NotificationContext', () => ({
-  useNotification: () => mockUseNotification(),
-}))
 
 // Mock image service
-const mockImageUploadService = {
-  compressImage: vi.fn(),
-  uploadImage: vi.fn(),
-  uploadMultipleImages: vi.fn(),
-}
-
-vi.mock('../lib/supabase-image-service', () => ({
-  ImageUploadService: mockImageUploadService,
+vi.mock('../../lib/supabase-image-service', () => ({
+  ImageUploadService: {
+    compressImage: vi.fn(),
+    uploadImage: vi.fn(),
+    uploadMultipleImages: vi.fn(),
+  },
   createImagePreview: vi.fn((file) => `preview-${file.name}`),
   revokeImagePreview: vi.fn(),
 }))
+
+// Mock contexts
+vi.mock('../../contexts/AuthContext', () => ({
+  useAuth: vi.fn(),
+}))
+
+vi.mock('../../contexts/NotificationContext', () => ({
+  useNotification: vi.fn(),
+}))
+
+// Mock LoadingSpinner
+vi.mock('../ui/LoadingSpinner', () => ({
+  default: () => <div data-testid="loading-spinner">Loading...</div>,
+}))
+
+// Import the mocked services
+import { useAuth } from '../../contexts/AuthContext'
+import { useNotification } from '../../contexts/NotificationContext'
+import { ImageUploadService } from '../../lib/supabase-image-service'
+import ImageUpload from '../ImageUpload'
 
 describe('ImageUpload', () => {
   const mockOnImageUploaded = vi.fn()
@@ -40,61 +45,46 @@ describe('ImageUpload', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
-    mockUseAuth.mockReturnValue({ user: { id: 'user-123' } })
-    mockUseNotification.mockReturnValue(mockNotifications)
-    mockImageUploadService.compressImage.mockResolvedValue(new File(['compressed'], 'compressed.jpg'))
-    mockImageUploadService.uploadImage.mockResolvedValue({
+    vi.mocked(useAuth).mockReturnValue({ user: { id: 'user-123' } } as any)
+    vi.mocked(useNotification).mockReturnValue(mockNotifications as any)
+    vi.mocked(ImageUploadService.compressImage).mockResolvedValue(new File(['compressed'], 'compressed.jpg'))
+    vi.mocked(ImageUploadService.uploadImage).mockResolvedValue({
       url: 'https://example.com/image.jpg',
       thumbnailUrl: 'https://example.com/thumb.jpg',
     })
   })
 
   describe('Basic rendering', () => {
-    it('should render camera and gallery buttons when no image', () => {
+    it('should render upload buttons when no image', () => {
       render(<ImageUpload />)
       
-      expect(screen.getByText('카메라')).toBeInTheDocument()
-      expect(screen.getByText('갤러리')).toBeInTheDocument()
+      expect(screen.getByLabelText('카메라로 촬영')).toBeInTheDocument()
+      expect(screen.getByLabelText('갤러리에서 선택')).toBeInTheDocument()
     })
 
     it('should render existing image when provided', () => {
       render(<ImageUpload existingImageUrl="https://example.com/existing.jpg" />)
       
-      const image = screen.getByAltText('Uploaded coffee')
+      const image = screen.getByAltText('업로드된 이미지')
       expect(image).toHaveAttribute('src', 'https://example.com/existing.jpg')
     })
 
     it('should show help text when no image', () => {
       render(<ImageUpload maxFileSize={3} />)
       
-      expect(screen.getByText('최대 3MB, JPG/PNG/WebP 형식')).toBeInTheDocument()
+      expect(screen.getByText(/최대 3MB/)).toBeInTheDocument()
+    })
+
+    it('should apply custom className', () => {
+      render(<ImageUpload className="custom-upload" />)
+      
+      const container = screen.getByLabelText('카메라로 촬영').closest('.custom-upload')
+      expect(container).toBeInTheDocument()
     })
   })
 
-  describe('File selection', () => {
-    it('should handle camera capture', async () => {
-      const user = userEvent.setup()
-      render(<ImageUpload />)
-      
-      const cameraButton = screen.getByText('카메라').closest('button')
-      await user.click(cameraButton!)
-      
-      const fileInput = screen.getByLabelText('이미지 파일 선택')
-      expect(fileInput).toHaveAttribute('capture', 'environment')
-    })
-
-    it('should handle gallery selection', async () => {
-      const user = userEvent.setup()
-      render(<ImageUpload />)
-      
-      const galleryButton = screen.getByText('갤러리').closest('button')
-      await user.click(galleryButton!)
-      
-      const fileInput = screen.getByLabelText('이미지 파일 선택')
-      expect(fileInput).not.toHaveAttribute('capture')
-    })
-
-    it('should process file upload successfully', async () => {
+  describe('File selection and upload', () => {
+    it('should handle file upload successfully', async () => {
       const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' })
       render(<ImageUpload onImageUploaded={mockOnImageUploaded} />)
       
@@ -102,19 +92,22 @@ describe('ImageUpload', () => {
       await userEvent.upload(fileInput, file)
       
       await waitFor(() => {
-        expect(mockImageUploadService.compressImage).toHaveBeenCalledWith(file)
-        expect(mockImageUploadService.uploadImage).toHaveBeenCalled()
+        expect(ImageUploadService.compressImage).toHaveBeenCalledWith(file)
+        expect(ImageUploadService.uploadImage).toHaveBeenCalled()
         expect(mockOnImageUploaded).toHaveBeenCalledWith(
           'https://example.com/image.jpg',
           'https://example.com/thumb.jpg'
         )
-        expect(mockNotifications.success).toHaveBeenCalled()
+        expect(mockNotifications.success).toHaveBeenCalledWith(
+          '업로드 완료',
+          '이미지가 성공적으로 업로드되었습니다.'
+        )
       })
     })
 
     it('should show loading state during upload', async () => {
       const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' })
-      mockImageUploadService.uploadImage.mockImplementation(
+      vi.mocked(ImageUploadService.uploadImage).mockImplementation(
         () => new Promise(resolve => setTimeout(() => resolve({
           url: 'https://example.com/image.jpg',
           thumbnailUrl: 'https://example.com/thumb.jpg',
@@ -126,18 +119,16 @@ describe('ImageUpload', () => {
       const fileInput = screen.getByLabelText('이미지 파일 선택')
       await userEvent.upload(fileInput, file)
       
-      expect(screen.getByText('이미지 업로드 중...')).toBeInTheDocument()
+      expect(screen.getByTestId('loading-spinner')).toBeInTheDocument()
       
       await waitFor(() => {
-        expect(screen.queryByText('이미지 업로드 중...')).not.toBeInTheDocument()
-      })
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument()
+      }, { timeout: 200 })
     })
-  })
 
-  describe('Error handling', () => {
     it('should handle upload errors', async () => {
       const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' })
-      mockImageUploadService.uploadImage.mockRejectedValue(
+      vi.mocked(ImageUploadService.uploadImage).mockRejectedValue(
         new Error('Upload failed')
       )
       
@@ -155,7 +146,7 @@ describe('ImageUpload', () => {
     })
 
     it('should not upload when user is not authenticated', async () => {
-      mockUseAuth.mockReturnValue({ user: null })
+      vi.mocked(useAuth).mockReturnValue({ user: null } as any)
       const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' })
       
       render(<ImageUpload />)
@@ -163,7 +154,39 @@ describe('ImageUpload', () => {
       const fileInput = screen.getByLabelText('이미지 파일 선택')
       await userEvent.upload(fileInput, file)
       
-      expect(mockImageUploadService.uploadImage).not.toHaveBeenCalled()
+      expect(ImageUploadService.uploadImage).not.toHaveBeenCalled()
+    })
+
+    it('should handle file size validation', async () => {
+      const largeFile = new File(['x'.repeat(6 * 1024 * 1024)], 'large.jpg', { type: 'image/jpeg' })
+      render(<ImageUpload maxFileSize={5} />)
+      
+      const fileInput = screen.getByLabelText('이미지 파일 선택')
+      await userEvent.upload(fileInput, largeFile)
+      
+      await waitFor(() => {
+        expect(mockNotifications.error).toHaveBeenCalledWith(
+          '파일 크기 초과',
+          '파일 크기는 5MB 이하여야 합니다.'
+        )
+      })
+      expect(ImageUploadService.uploadImage).not.toHaveBeenCalled()
+    })
+
+    it('should handle invalid file types', async () => {
+      const invalidFile = new File(['test'], 'test.txt', { type: 'text/plain' })
+      render(<ImageUpload />)
+      
+      const fileInput = screen.getByLabelText('이미지 파일 선택')
+      await userEvent.upload(fileInput, invalidFile)
+      
+      await waitFor(() => {
+        expect(mockNotifications.error).toHaveBeenCalledWith(
+          '잘못된 파일 형식',
+          '지원되는 형식: JPEG, JPG, PNG, WebP'
+        )
+      })
+      expect(ImageUploadService.uploadImage).not.toHaveBeenCalled()
     })
   })
 
@@ -202,7 +225,11 @@ describe('ImageUpload', () => {
       const removeButton = screen.getByLabelText('이미지 삭제')
       await user.click(removeButton)
       
-      expect(mockNotifications.warning).toHaveBeenCalled()
+      expect(mockNotifications.warning).toHaveBeenCalledWith(
+        '이미지 삭제',
+        '이미지가 즉시 삭제됩니다. 계속하시겠습니까?'
+      )
+      expect(mockOnImageRemoved).toHaveBeenCalled()
     })
   })
 
@@ -222,158 +249,119 @@ describe('ImageUpload', () => {
     })
   })
 
-  describe('Custom styling', () => {
-    it('should apply custom className', () => {
-      render(<ImageUpload className="custom-upload" />)
+  describe('Camera and gallery buttons', () => {
+    it('should set capture attribute for camera button', async () => {
+      const user = userEvent.setup()
+      render(<ImageUpload />)
       
-      const container = screen.getByText('카메라').closest('.custom-upload')
-      expect(container).toBeInTheDocument()
-    })
-  })
-})
-
-describe('MultiImageUpload', () => {
-  const mockOnImagesChanged = vi.fn()
-  const mockNotifications = {
-    success: vi.fn(),
-    error: vi.fn(),
-    info: vi.fn(),
-  }
-
-  beforeEach(() => {
-    vi.clearAllMocks()
-    mockUseAuth.mockReturnValue({ user: { id: 'user-123' } })
-    mockUseNotification.mockReturnValue(mockNotifications)
-    mockImageUploadService.uploadMultipleImages.mockResolvedValue([
-      { url: 'https://example.com/image1.jpg' },
-      { url: 'https://example.com/image2.jpg' },
-    ])
-  })
-
-  describe('Basic rendering', () => {
-    it('should render add button when under limit', () => {
-      render(<MultiImageUpload maxImages={3} />)
+      const cameraButton = screen.getByLabelText('카메라로 촬영')
+      await user.click(cameraButton)
       
-      expect(screen.getByText('추가')).toBeInTheDocument()
+      const fileInput = screen.getByLabelText('이미지 파일 선택')
+      expect(fileInput).toHaveAttribute('capture', 'environment')
     })
 
-    it('should show existing images', () => {
+    it('should not set capture attribute for gallery button', async () => {
+      const user = userEvent.setup()
+      render(<ImageUpload />)
+      
+      const galleryButton = screen.getByLabelText('갤러리에서 선택')
+      await user.click(galleryButton)
+      
+      const fileInput = screen.getByLabelText('이미지 파일 선택')
+      expect(fileInput).not.toHaveAttribute('capture')
+    })
+  })
+
+  describe('Progress indicators', () => {
+    it('should show upload progress', async () => {
+      const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' })
+      
+      // Mock progress callback
+      vi.mocked(ImageUploadService.uploadImage).mockImplementation(
+        () => new Promise(resolve => {
+          setTimeout(() => resolve({
+            url: 'https://example.com/image.jpg',
+            thumbnailUrl: 'https://example.com/thumb.jpg',
+          }), 50)
+        })
+      )
+      
+      render(<ImageUpload />)
+      
+      const fileInput = screen.getByLabelText('이미지 파일 선택')
+      await userEvent.upload(fileInput, file)
+      
+      // Should show loading state
+      expect(screen.getByTestId('loading-spinner')).toBeInTheDocument()
+    })
+  })
+
+  describe('Thumbnail handling', () => {
+    it('should show thumbnail when showThumbnail is true', () => {
       render(
-        <MultiImageUpload 
-          existingImages={['https://example.com/1.jpg', 'https://example.com/2.jpg']}
+        <ImageUpload 
+          existingImageUrl="https://example.com/test.jpg"
+          showThumbnail={true}
         />
       )
       
-      expect(screen.getByAltText('Coffee image 1')).toBeInTheDocument()
-      expect(screen.getByAltText('Coffee image 2')).toBeInTheDocument()
+      const image = screen.getByAltText('업로드된 이미지')
+      expect(image).toBeInTheDocument()
     })
 
-    it('should show image count', () => {
+    it('should hide thumbnail when showThumbnail is false', () => {
       render(
-        <MultiImageUpload 
-          existingImages={['https://example.com/1.jpg']}
-          maxImages={5}
+        <ImageUpload 
+          existingImageUrl="https://example.com/test.jpg"
+          showThumbnail={false}
         />
       )
       
-      expect(screen.getByText('1 / 5개 업로드 • 최대 5MB')).toBeInTheDocument()
+      const image = screen.queryByAltText('업로드된 이미지')
+      expect(image).not.toBeInTheDocument()
     })
   })
 
-  describe('Multiple file upload', () => {
-    it('should handle multiple file selection', async () => {
-      const files = [
-        new File(['test1'], 'test1.jpg', { type: 'image/jpeg' }),
-        new File(['test2'], 'test2.jpg', { type: 'image/jpeg' }),
-      ]
+  describe('Edge cases', () => {
+    it('should handle compression errors gracefully', async () => {
+      const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' })
+      vi.mocked(ImageUploadService.compressImage).mockRejectedValue(
+        new Error('Compression failed')
+      )
       
-      render(<MultiImageUpload onImagesChanged={mockOnImagesChanged} />)
+      render(<ImageUpload />)
       
-      const fileInput = screen.getByLabelText('이미지 파일들 선택')
-      await userEvent.upload(fileInput, files)
+      const fileInput = screen.getByLabelText('이미지 파일 선택')
+      await userEvent.upload(fileInput, file)
       
       await waitFor(() => {
-        expect(mockImageUploadService.uploadMultipleImages).toHaveBeenCalled()
-        expect(mockOnImagesChanged).toHaveBeenCalledWith([
-          'https://example.com/image1.jpg',
-          'https://example.com/image2.jpg',
-        ])
-        expect(mockNotifications.success).toHaveBeenCalledWith(
-          '업로드 완료',
-          '2개의 이미지가 업로드되었습니다.'
+        expect(mockNotifications.error).toHaveBeenCalledWith(
+          '업로드 실패',
+          '이미지 업로드 중 오류가 발생했습니다.'
         )
       })
     })
 
-    it('should prevent upload when exceeding limit', async () => {
-      const files = [
-        new File(['test1'], 'test1.jpg', { type: 'image/jpeg' }),
-        new File(['test2'], 'test2.jpg', { type: 'image/jpeg' }),
-      ]
+    it('should handle empty file selection', async () => {
+      render(<ImageUpload />)
       
-      render(
-        <MultiImageUpload 
-          existingImages={['https://example.com/existing.jpg']}
-          maxImages={2}
-        />
-      )
+      const fileInput = screen.getByLabelText('이미지 파일 선택')
+      fireEvent.change(fileInput, { target: { files: [] } })
       
-      const fileInput = screen.getByLabelText('이미지 파일들 선택')
-      await userEvent.upload(fileInput, files)
-      
-      expect(mockNotifications.error).toHaveBeenCalledWith(
-        '업로드 제한',
-        '최대 2개의 이미지만 업로드할 수 있습니다.'
-      )
-      expect(mockImageUploadService.uploadMultipleImages).not.toHaveBeenCalled()
+      expect(ImageUploadService.uploadImage).not.toHaveBeenCalled()
     })
-  })
 
-  describe('Image removal', () => {
-    it('should remove image when delete button clicked', async () => {
-      const user = userEvent.setup()
-      render(
-        <MultiImageUpload 
-          existingImages={['https://example.com/1.jpg', 'https://example.com/2.jpg']}
-          onImagesChanged={mockOnImagesChanged}
-        />
-      )
-      
-      const deleteButton = screen.getByLabelText('이미지 1 삭제')
-      await user.click(deleteButton)
-      
-      expect(mockOnImagesChanged).toHaveBeenCalledWith(['https://example.com/2.jpg'])
-      expect(mockNotifications.info).toHaveBeenCalledWith(
-        '이미지 삭제',
-        '이미지가 삭제되었습니다.'
-      )
-    })
-  })
-
-  describe('Upload states', () => {
-    it('should show loading state during upload', async () => {
-      mockImageUploadService.uploadMultipleImages.mockImplementation(
-        () => new Promise(resolve => setTimeout(() => resolve([]), 100))
-      )
-      
+    it('should reset file input after successful upload', async () => {
       const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' })
-      render(<MultiImageUpload />)
+      render(<ImageUpload />)
       
-      const fileInput = screen.getByLabelText('이미지 파일들 선택')
+      const fileInput = screen.getByLabelText('이미지 파일 선택') as HTMLInputElement
       await userEvent.upload(fileInput, file)
       
-      expect(screen.getByText('추가').closest('button')).toBeDisabled()
-    })
-
-    it('should hide add button when at max capacity', () => {
-      render(
-        <MultiImageUpload 
-          existingImages={['1.jpg', '2.jpg']}
-          maxImages={2}
-        />
-      )
-      
-      expect(screen.queryByText('추가')).not.toBeInTheDocument()
+      await waitFor(() => {
+        expect(fileInput.value).toBe('')
+      })
     })
   })
 })

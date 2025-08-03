@@ -15,12 +15,24 @@ export interface WebVitalsMetric {
   timestamp: number
   url: string
   userAgent: string
+  // RUM 확장 필드
+  sessionId?: string
+  userId?: string
+  navigationType?: 'navigate' | 'reload' | 'back_forward' | 'prerender'
+  effectiveConnectionType?: string
+  deviceMemory?: number
+  hardwareConcurrency?: number
 }
 
 export interface PerformanceReport {
   timestamp: number
   url: string
   userAgent: string
+  // RUM 확장 정보
+  sessionId: string
+  userId?: string
+  pageLoadId: string
+  navigationTiming: PerformanceNavigationTiming | null
   metrics: {
     cls: WebVitalsMetric | null
     inp: WebVitalsMetric | null
@@ -33,12 +45,42 @@ export interface PerformanceReport {
     firstPaint: number
     domComplete: number
     loadComplete: number
+    // 추가 RUM 메트릭
+    resourceLoadTime: number
+    javascriptHeapSize: number
+    memoryUsage?: number
+    bundleSize?: number
+    timeToInteractive?: number
+    longTasksCount: number
+    performanceScore: number
   }
   deviceInfo: {
     viewport: { width: number; height: number }
     connection: string
     memory?: number
     cores?: number
+    // 확장된 디바이스 정보
+    platform: string
+    isMobile: boolean
+    isLowEndDevice: boolean
+    networkType?: string
+    effectiveType?: string
+    downlink?: number
+    rtt?: number
+  }
+  // 사용자 행동 추적
+  userInteractions: {
+    clickCount: number
+    scrollDepth: number
+    timeOnPage: number
+    bounceRate?: number
+    engagementScore: number
+  }
+  // 성능 예산 추적
+  budgetStatus: {
+    isWithinBudget: boolean
+    exceededMetrics: string[]
+    budgetScore: number
   }
 }
 
@@ -61,11 +103,41 @@ function getRating(name: string, value: number): 'good' | 'needs-improvement' | 
   return 'poor'
 }
 
-// 디바이스 정보 수집
+// RUM 세션 관리
+let sessionId = ''
+let pageLoadId = ''
+let userInteractionState = {
+  clickCount: 0,
+  scrollDepth: 0,
+  timeOnPage: 0,
+  startTime: Date.now(),
+  maxScroll: 0,
+  engagementEvents: [] as string[]
+}
+
+// 세션 ID 생성
+function generateSessionId(): string {
+  if (!sessionId) {
+    sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+  }
+  return sessionId
+}
+
+// 페이지 로드 ID 생성
+function generatePageLoadId(): string {
+  pageLoadId = `page_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+  return pageLoadId
+}
+
+// 디바이스 정보 수집 (확장된 RUM 버전)
 function getDeviceInfo() {
   const connection = (navigator as any).connection || {}
   const memory = (performance as any).memory
   const cores = navigator.hardwareConcurrency
+  
+  // 디바이스 성능 평가
+  const isLowEndDevice = cores <= 4 && (memory?.usedJSHeapSize || 0) < 1073741824 // 1GB
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent)
   
   return {
     viewport: {
@@ -74,25 +146,161 @@ function getDeviceInfo() {
     },
     connection: connection.effectiveType || 'unknown',
     memory: memory ? Math.round(memory.usedJSHeapSize / 1024 / 1024) : undefined,
-    cores: cores || undefined
+    cores: cores || undefined,
+    // 확장된 정보
+    platform: navigator.platform,
+    isMobile,
+    isLowEndDevice,
+    networkType: connection.type || undefined,
+    effectiveType: connection.effectiveType || undefined,
+    downlink: connection.downlink || undefined,
+    rtt: connection.rtt || undefined
   }
 }
 
-// 커스텀 성능 지표 수집
+// 커스텀 성능 지표 수집 (확장된 RUM 버전)
 function getCustomMetrics() {
   const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming
   const paint = performance.getEntriesByType('paint')
+  const memory = (performance as any).memory
+  
+  // Long Tasks 카운트
+  const longTasks = performance.getEntriesByType('longtask')
+  
+  // 리소스 로드 시간 계산
+  const resources = performance.getEntriesByType('resource')
+  const totalResourceTime = resources.reduce((sum, resource) => sum + resource.duration, 0)
+  
+  // Time to Interactive 추정 (단순화된 버전)
+  const timeToInteractive = navigation ? 
+    Math.max(
+      navigation.domContentLoadedEventEnd - navigation.startTime,
+      paint.find(entry => entry.name === 'first-contentful-paint')?.startTime || 0
+    ) : 0
   
   return {
     domContentLoaded: navigation?.domContentLoadedEventEnd - navigation?.domContentLoadedEventStart || 0,
     firstPaint: paint.find(entry => entry.name === 'first-paint')?.startTime || 0,
     domComplete: navigation?.domComplete - navigation?.startTime || 0,
-    loadComplete: navigation?.loadEventEnd - navigation?.startTime || 0
+    loadComplete: navigation?.loadEventEnd - navigation?.startTime || 0,
+    // 추가 RUM 메트릭
+    resourceLoadTime: totalResourceTime,
+    javascriptHeapSize: memory ? Math.round(memory.usedJSHeapSize / 1024 / 1024) : 0,
+    memoryUsage: memory ? Math.round((memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100) : undefined,
+    bundleSize: getBundleSize(),
+    timeToInteractive,
+    longTasksCount: longTasks.length,
+    performanceScore: 0 // 나중에 계산
   }
 }
 
-// Web Vitals 메트릭을 표준화된 형태로 변환
+// 번들 크기 추정 (단순화된 버전)
+function getBundleSize(): number {
+  const scripts = Array.from(document.querySelectorAll('script[src]'))
+  const stylesheets = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
+  
+  // 실제 크기는 네트워크 요청으로만 알 수 있음, 여기서는 예상 크기
+  return (scripts.length + stylesheets.length) * 50 // KB 추정
+}
+
+// 사용자 상호작용 추적 초기화
+function initUserInteractionTracking() {
+  let isTracking = false
+  
+  if (isTracking) return
+  isTracking = true
+  
+  // 클릭 추적
+  document.addEventListener('click', () => {
+    userInteractionState.clickCount++
+    userInteractionState.engagementEvents.push('click')
+  })
+  
+  // 스크롤 깊이 추적
+  let lastScrollTime = 0
+  document.addEventListener('scroll', () => {
+    const now = Date.now()
+    if (now - lastScrollTime > 100) { // 스로틀링
+      const scrollPercent = Math.round(
+        (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100
+      )
+      userInteractionState.maxScroll = Math.max(userInteractionState.maxScroll, scrollPercent || 0)
+      userInteractionState.scrollDepth = scrollPercent || 0
+      lastScrollTime = now
+    }
+  })
+  
+  // 페이지 이탈 시 시간 계산
+  const updateTimeOnPage = () => {
+    userInteractionState.timeOnPage = Date.now() - userInteractionState.startTime
+  }
+  
+  document.addEventListener('visibilitychange', updateTimeOnPage)
+  window.addEventListener('beforeunload', updateTimeOnPage)
+}
+
+// 사용자 상호작용 데이터 가져오기
+function getUserInteractions() {
+  const timeOnPage = Date.now() - userInteractionState.startTime
+  const engagementScore = Math.min(100, 
+    (userInteractionState.clickCount * 10) + 
+    (userInteractionState.maxScroll * 0.5) + 
+    Math.min(timeOnPage / 1000 / 60, 10) // 최대 10분
+  )
+  
+  return {
+    clickCount: userInteractionState.clickCount,
+    scrollDepth: userInteractionState.maxScroll,
+    timeOnPage,
+    engagementScore: Math.round(engagementScore)
+  }
+}
+
+// 성능 예산 검사
+function checkPerformanceBudget(metrics: { [key: string]: WebVitalsMetric | null }): {
+  isWithinBudget: boolean
+  exceededMetrics: string[]
+  budgetScore: number
+} {
+  const budgets = {
+    LCP: 2500,
+    INP: 200,
+    CLS: 0.1,
+    FCP: 1800,
+    TTFB: 800
+  }
+  
+  const exceededMetrics: string[] = []
+  let passedCount = 0
+  let totalCount = 0
+  
+  Object.entries(metrics).forEach(([key, metric]) => {
+    if (metric && budgets[metric.name as keyof typeof budgets]) {
+      totalCount++
+      const budget = budgets[metric.name as keyof typeof budgets]
+      if (metric.value > budget) {
+        exceededMetrics.push(metric.name)
+      } else {
+        passedCount++
+      }
+    }
+  })
+  
+  const budgetScore = totalCount > 0 ? Math.round((passedCount / totalCount) * 100) : 100
+  
+  return {
+    isWithinBudget: exceededMetrics.length === 0,
+    exceededMetrics,
+    budgetScore
+  }
+}
+
+// Web Vitals 메트릭을 표준화된 형태로 변환 (확장된 RUM 버전)
 function normalizeMetric(metric: any): WebVitalsMetric {
+  const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming
+  const connection = (navigator as any).connection || {}
+  const memory = (performance as any).memory
+  
   return {
     name: metric.name,
     value: Math.round(metric.value),
@@ -101,7 +309,13 @@ function normalizeMetric(metric: any): WebVitalsMetric {
     id: metric.id,
     timestamp: Date.now(),
     url: window.location.href,
-    userAgent: navigator.userAgent
+    userAgent: navigator.userAgent,
+    // RUM 확장 데이터
+    sessionId: generateSessionId(),
+    navigationType: navigation?.type as any || 'navigate',
+    effectiveConnectionType: connection.effectiveType || 'unknown',
+    deviceMemory: memory ? Math.round(memory.usedJSHeapSize / 1024 / 1024) : undefined,
+    hardwareConcurrency: navigator.hardwareConcurrency
   }
 }
 
@@ -125,19 +339,40 @@ class PerformanceStore {
   }
   
   private generateReport() {
+    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming
+    const customMetrics = getCustomMetrics()
+    const userInteractions = getUserInteractions()
+    
+    const metricsObj = {
+      cls: this.metrics.get('CLS') || null,
+      inp: this.metrics.get('INP') || null,
+      fcp: this.metrics.get('FCP') || null,
+      lcp: this.metrics.get('LCP') || null,
+      ttfb: this.metrics.get('TTFB') || null
+    }
+    
+    const budgetStatus = checkPerformanceBudget(metricsObj)
+    
+    // 성능 점수 계산
+    const validMetrics = Object.values(metricsObj).filter(Boolean)
+    const goodCount = validMetrics.filter(m => m!.rating === 'good').length
+    const performanceScore = validMetrics.length > 0 ? Math.round((goodCount / validMetrics.length) * 100) : 100
+    
     const report: PerformanceReport = {
       timestamp: Date.now(),
       url: window.location.href,
       userAgent: navigator.userAgent,
-      metrics: {
-        cls: this.metrics.get('CLS') || null,
-        inp: this.metrics.get('INP') || null,
-        fcp: this.metrics.get('FCP') || null,
-        lcp: this.metrics.get('LCP') || null,
-        ttfb: this.metrics.get('TTFB') || null
+      sessionId: generateSessionId(),
+      pageLoadId: generatePageLoadId(),
+      navigationTiming: navigation || null,
+      metrics: metricsObj,
+      customMetrics: {
+        ...customMetrics,
+        performanceScore
       },
-      customMetrics: getCustomMetrics(),
-      deviceInfo: getDeviceInfo()
+      deviceInfo: getDeviceInfo(),
+      userInteractions,
+      budgetStatus
     }
     
     // 모든 리스너에게 리포트 전송
@@ -178,8 +413,14 @@ class PerformanceStore {
 // 글로벌 성능 저장소
 const performanceStore = new PerformanceStore()
 
-// Web Vitals 초기화 및 모니터링 시작
+// Web Vitals 초기화 및 모니터링 시작 (확장된 RUM 버전)
 export function initWebVitals() {
+  // 사용자 상호작용 추적 초기화
+  initUserInteractionTracking()
+  
+  // 페이지 로드 ID 생성
+  generatePageLoadId()
+  
   // Core Web Vitals 모니터링
   onCLS((metric) => {
     performanceStore.addMetric(normalizeMetric(metric))
@@ -201,7 +442,22 @@ export function initWebVitals() {
     performanceStore.addMetric(normalizeMetric(metric))
   })
   
-  console.log('✅ Web Vitals monitoring initialized')
+  // Long Task 모니터링
+  if ('PerformanceObserver' in window) {
+    try {
+      const longTaskObserver = new PerformanceObserver((list) => {
+        const longTasks = list.getEntries()
+        if (longTasks.length > 0) {
+          console.warn(`🐌 Detected ${longTasks.length} long task(s)`, longTasks)
+        }
+      })
+      longTaskObserver.observe({ entryTypes: ['longtask'] })
+    } catch (error) {
+      console.warn('Long task monitoring not supported:', error)
+    }
+  }
+  
+  console.log('✅ Enhanced RUM Web Vitals monitoring initialized')
 }
 
 // 즉시 현재 지표 수집 (페이지 이탈 시 등)

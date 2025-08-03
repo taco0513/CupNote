@@ -4,7 +4,9 @@
  * @compliance-check 2025-08-02 - 커피 테마 애니메이션 아이콘
  */
 import React from 'react'
+
 import { Coffee } from 'lucide-react'
+
 import { useCoffeeAnimation } from '../../hooks/useAnimations'
 
 interface CoffeeIconProps {

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+
 import { Play, Pause, Square, Clock, Plus, RotateCcw } from 'lucide-react'
 
 interface LapTime {

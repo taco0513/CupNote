@@ -4,16 +4,19 @@
 'use client'
 
 import { memo, lazy, Suspense, useState, useEffect } from 'react'
-import { Coffee, TrendingUp, Users, Target, Clock, Calendar, Award, ChevronRight } from 'lucide-react'
+
 import Link from 'next/link'
-import { prefersReducedMotion } from '../../utils/accessibility'
+
+import { Coffee, TrendingUp, Users, Target, Clock, Calendar, Award, ChevronRight } from 'lucide-react'
+
 import { useAuth } from '../../contexts/AuthContext'
-import { Card, CardContent } from '../ui/Card'
-import UnifiedButton from '../ui/UnifiedButton'
-import Badge from '../ui/Badge'
-import EmptyState from '../ui/EmptyState'
+import { prefersReducedMotion } from '../../utils/accessibility'
 import OnboardingFlow from '../onboarding/OnboardingFlow'
+import Badge from '../ui/Badge'
+import { Card, CardContent } from '../ui/Card'
+import EmptyState from '../ui/EmptyState'
 import FirstTimeGuide from '../ui/FirstTimeGuide'
+import UnifiedButton from '../ui/UnifiedButton'
 
 // Lazy load non-critical components
 const CoffeeTip = lazy(() => import('../home/CoffeeTip'))

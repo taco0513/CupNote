@@ -2,8 +2,9 @@
  * Test utilities with proper act() wrapper
  */
 import React, { ReactElement } from 'react'
-import { render, RenderOptions, RenderResult } from '@testing-library/react'
 import { act } from 'react'
+
+import { render, RenderOptions, RenderResult } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 // All providers wrapper

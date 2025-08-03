@@ -1,7 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+
 import { Save, Star, Coffee } from 'lucide-react'
+
 import { SavedRecipe } from '../types/recipe'
 import { RecipeManager } from '../utils/recipeManager'
 

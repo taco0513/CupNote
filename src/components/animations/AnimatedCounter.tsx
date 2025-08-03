@@ -4,6 +4,7 @@
  * @compliance-check 2025-08-02 - 숫자 카운터 애니메이션 컴포넌트
  */
 import React from 'react'
+
 import { useCounterAnimation } from '../../hooks/useAnimations'
 
 interface AnimatedCounterProps {

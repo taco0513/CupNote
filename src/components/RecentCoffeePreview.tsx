@@ -1,16 +1,18 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+
 import Link from 'next/link'
+
 import { Coffee, Calendar, MapPin, Star, ArrowRight } from 'lucide-react'
 
 // import LazyImage from './LazyImage' // 임시로 주석 처리
+import EmptyState from './EmptyState'
+import { ListSkeleton } from './SkeletonLoader'
 import { useAuth } from '../contexts/AuthContext'
 import { useNotification } from '../contexts/NotificationContext'
 import { QueryOptimizer } from '../lib/query-optimizer'
 import { CoffeeRecord } from '../types/coffee'
-import EmptyState from './EmptyState'
-import { ListSkeleton } from './SkeletonLoader'
 
 const PREVIEW_LIMIT = 4 // 홈페이지에는 최근 4개만 표시
 

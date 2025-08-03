@@ -1,7 +1,10 @@
 'use client'
 
 import { useState, useRef } from 'react'
+
 import { Mic, MicOff, Loader2 } from 'lucide-react'
+
+import { log } from '../lib/logger'
 
 interface VoiceRecordButtonProps {
   onTranscript: (text: string) => void
@@ -31,8 +34,13 @@ export default function VoiceRecordButton({ onTranscript, className = '' }: Voic
         setIsProcessing(true)
         const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' })
         
-        // TODO: 실제 음성 인식 API 연동
-        // 임시로 샘플 텍스트 반환
+        // Voice recognition placeholder implementation
+        // In production, this would integrate with a speech-to-text service
+        log.info('Processing voice recording', { 
+          duration: audioBlob.size,
+          type: audioBlob.type 
+        })
+        
         setTimeout(() => {
           const sampleTexts = [
             "케냐 AA 아메리카노 마셨는데 산미가 강하고 과일향이 좋네요",
@@ -40,6 +48,7 @@ export default function VoiceRecordButton({ onTranscript, className = '' }: Voic
             "에티오피아 예가체프 라떼인데 부드럽고 달콤해요"
           ]
           const randomText = sampleTexts[Math.floor(Math.random() * sampleTexts.length)]
+          log.info('Voice transcript generated', { length: randomText.length })
           onTranscript(randomText)
           setIsProcessing(false)
         }, 1500)
@@ -51,7 +60,7 @@ export default function VoiceRecordButton({ onTranscript, className = '' }: Voic
       mediaRecorder.start()
       setIsRecording(true)
     } catch (error) {
-      console.error('마이크 접근 오류:', error)
+      log.error('마이크 접근 오류', error)
       alert('마이크 권한이 필요합니다')
     }
   }

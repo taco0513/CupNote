@@ -5,6 +5,7 @@
 'use client'
 
 import Link from 'next/link'
+
 import { ArrowLeft, Camera, Heart, MessageCircle, Share, TrendingUp, Trophy, Users } from 'lucide-react'
 
 export default function SocialDesignSample() {

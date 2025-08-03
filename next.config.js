@@ -4,39 +4,11 @@
  * @compliance-check 2025-08-02 - NextJS Production Reality 패턴 적용
  */
 const { withSentryConfig } = require('@sentry/nextjs')
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
 
-// PWA 설정 임시 비활성화
-// const withPWA = require('next-pwa')({
-//   dest: 'public',
-//   register: true,
-//   skipWaiting: true,
-//   disable: process.env.NODE_ENV === 'development',
-//   buildExcludes: [/middleware-manifest\.json$/],
-//   runtimeCaching: [
-//     {
-//       urlPattern: /^https:\/\/.*\.supabase\.co\/.*$/,
-//       handler: 'NetworkFirst',
-//       options: {
-//         cacheName: 'supabase-cache',
-//         expiration: {
-//           maxEntries: 50,
-//           maxAgeSeconds: 60 * 60 * 24 // 24 hours
-//         }
-//       }
-//     },
-//     {
-//       urlPattern: /^https:\/\/.*\.supabase\.co\/storage\/.*$/,
-//       handler: 'CacheFirst',
-//       options: {
-//         cacheName: 'supabase-images',
-//         expiration: {
-//           maxEntries: 100,
-//           maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
-//         }
-//       }
-//     }
-//   ]
-// })
+// PWA configuration removed - not currently needed for MVP
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -58,13 +30,12 @@ const nextConfig = {
   },
   // 번들 분석 설정
   productionBrowserSourceMaps: false, // 프로덕션 소스맵 비활성화
-  // ESLint 에러를 무시하고 빌드 진행
+  // TypeScript and ESLint validation enabled
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
-  // TypeScript 체크 제외 패턴
   typescript: {
-    ignoreBuildErrors: true, // 임시로 무시
+    ignoreBuildErrors: false,
   },
   // 빌드에서 제외할 디렉토리
   webpack: (config, { isServer }) => {
@@ -116,6 +87,4 @@ const sentryWebpackPluginOptions = {
   }
 }
 
-// PWA 임시 비활성화
-module.exports = withSentryConfig(nextConfig, sentryWebpackPluginOptions)
-// module.exports = withPWA(nextConfig)
+module.exports = withBundleAnalyzer(withSentryConfig(nextConfig, sentryWebpackPluginOptions))

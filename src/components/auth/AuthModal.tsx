@@ -7,10 +7,10 @@ import { X, Eye, EyeOff, Mail, Lock, User } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useNotification } from '../../contexts/NotificationContext'
 import { mapSupabaseError, logError } from '../../lib/error-handler'
-import UnifiedModal from '../ui/UnifiedModal'
-import UnifiedInput from '../ui/UnifiedInput'
-import UnifiedButton from '../ui/UnifiedButton'
 import Alert from '../ui/Alert'
+import UnifiedButton from '../ui/UnifiedButton'
+import UnifiedInput from '../ui/UnifiedInput'
+import UnifiedModal from '../ui/UnifiedModal'
 
 interface AuthModalProps {
   isOpen: boolean

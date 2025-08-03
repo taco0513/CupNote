@@ -1,8 +1,10 @@
 'use client'
 
 import { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react'
-import { createPortal } from 'react-dom'
+
 import { X, CheckCircle, AlertTriangle, AlertCircle, Info } from 'lucide-react'
+import { createPortal } from 'react-dom'
+
 import { Button } from './Button'
 
 interface Toast {

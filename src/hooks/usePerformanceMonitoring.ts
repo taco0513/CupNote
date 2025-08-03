@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react'
 
+import rumAnalytics, { RUMAnalysis } from '../lib/performance/rum-analytics'
 import sentryIntegration from '../lib/performance/sentry-integration'
 import { 
   initWebVitals, 
@@ -29,6 +30,13 @@ export interface PerformanceMonitoringState {
   latestReport: PerformanceReport | null
   isInitialized: boolean
   isCollecting: boolean
+  rumAnalysis: RUMAnalysis | null
+  performanceHistory: PerformanceReport[]
+  regressionAlerts: Array<{
+    timestamp: number
+    message: string
+    severity: 'warning' | 'error'
+  }>
 }
 
 export function usePerformanceMonitoring(options: UsePerformanceMonitoringOptions = {}) {
@@ -45,7 +53,10 @@ export function usePerformanceMonitoring(options: UsePerformanceMonitoringOption
     metrics: [],
     latestReport: null,
     isInitialized: false,
-    isCollecting: false
+    isCollecting: false,
+    rumAnalysis: null,
+    performanceHistory: [],
+    regressionAlerts: []
   })
   
   const unsubscribeRef = useRef<(() => void) | null>(null)
@@ -60,11 +71,58 @@ export function usePerformanceMonitoring(options: UsePerformanceMonitoringOption
       
       // 성능 리포트 리스너 등록
       const unsubscribe = onPerformanceReport((report) => {
-        setState(prev => ({
-          ...prev,
-          latestReport: report,
-          metrics: Object.values(report.metrics).filter(Boolean) as WebVitalsMetric[]
-        }))
+        setState(prev => {
+          const newHistory = [report, ...prev.performanceHistory.slice(0, 49)] // 최대 50개 유지
+          
+          // RUM 분석 수행
+          let rumAnalysis: RUMAnalysis | null = null
+          if (newHistory.length >= 5) {
+            try {
+              const analyzer = new rumAnalytics.RUMAnalyzer(newHistory)
+              rumAnalysis = analyzer.analyze()
+            } catch (error) {
+              console.warn('Failed to perform RUM analysis:', error)
+            }
+          }
+          
+          // 성능 회귀 감지
+          const newAlerts = [...prev.regressionAlerts]
+          if (enableAnomalyDetection && newHistory.length >= 3) {
+            try {
+              // 회귀 감지 로직 (간단한 버전)
+              const recentScores = newHistory.slice(0, 3).map(r => r.customMetrics.performanceScore)
+              const olderScores = newHistory.slice(3, 6).map(r => r.customMetrics.performanceScore)
+              
+              if (olderScores.length > 0) {
+                const recentAvg = recentScores.reduce((sum, s) => sum + s, 0) / recentScores.length
+                const olderAvg = olderScores.reduce((sum, s) => sum + s, 0) / olderScores.length
+                const regression = olderAvg - recentAvg
+                
+                if (regression > 10) { // 10점 이상 하락시 알림
+                  newAlerts.unshift({
+                    timestamp: Date.now(),
+                    message: `성능 점수가 ${Math.round(regression)}점 하락했습니다 (${Math.round(olderAvg)} → ${Math.round(recentAvg)})`,
+                    severity: regression > 20 ? 'error' : 'warning'
+                  })
+                  
+                  // 최대 10개 알림 유지
+                  newAlerts.splice(10)
+                }
+              }
+            } catch (error) {
+              console.warn('Failed to detect performance regression:', error)
+            }
+          }
+          
+          return {
+            ...prev,
+            latestReport: report,
+            metrics: Object.values(report.metrics).filter(Boolean) as WebVitalsMetric[],
+            rumAnalysis,
+            performanceHistory: newHistory,
+            regressionAlerts: newAlerts
+          }
+        })
         
         // 로깅 활성화 시 콘솔에 출력
         if (enableLogging) {
@@ -89,12 +147,13 @@ export function usePerformanceMonitoring(options: UsePerformanceMonitoringOption
             sentryIntegration.alertThreshold(metric)
           })
           
-          // 이상 감지 (히스토리가 있는 경우)
+          // 이상 감지 및 회귀 감지 (히스토리가 있는 경우)
           if (enableAnomalyDetection) {
             try {
               const history = loadPerformanceHistory()
               if (history.length > 0) {
                 sentryIntegration.detectAnomaly(validMetrics, history)
+                sentryIntegration.detectRegression(report, history)
               }
             } catch (error) {
               console.warn('Failed to detect performance anomaly:', error)
@@ -242,6 +301,17 @@ export function usePerformanceMonitoring(options: UsePerformanceMonitoringOption
     }
   }, [])
   
+  // RUM 분석 데이터 내보내기
+  const exportRUMData = useCallback((format: 'json' | 'csv' = 'json') => {
+    return rumAnalytics.exportRUMData(state.performanceHistory, format)
+  }, [state.performanceHistory])
+  
+  // 성능 벤치마크 비교
+  const getBenchmarkComparison = useCallback(() => {
+    if (!state.latestReport) return null
+    return rumAnalytics.compareWithBenchmarks(state.latestReport)
+  }, [state.latestReport])
+  
   return {
     // 상태
     ...state,
@@ -252,18 +322,29 @@ export function usePerformanceMonitoring(options: UsePerformanceMonitoringOption
     updateMetrics,
     resetMetrics,
     setEnabled,
+    exportRUMData,
     
     // 유틸리티
     hasMetrics: state.metrics.length > 0,
     metricsCount: state.metrics.length,
     lastReportTime: state.latestReport?.timestamp,
+    hasRUMData: state.performanceHistory.length >= 5,
+    hasAlerts: state.regressionAlerts.length > 0,
     
     // 분석 결과
     goodMetrics: state.metrics.filter(m => m.rating === 'good').length,
     poorMetrics: state.metrics.filter(m => m.rating === 'poor').length,
     averageValue: state.metrics.length > 0 
       ? Math.round(state.metrics.reduce((sum, m) => sum + m.value, 0) / state.metrics.length)
-      : 0
+      : 0,
+    
+    // RUM 인사이트
+    performanceScore: state.latestReport?.customMetrics.performanceScore || 0,
+    benchmarkComparison: getBenchmarkComparison(),
+    
+    // 알림 및 권장사항
+    latestAlerts: state.regressionAlerts.slice(0, 5),
+    recommendations: state.rumAnalysis?.recommendations || []
   }
 }
 

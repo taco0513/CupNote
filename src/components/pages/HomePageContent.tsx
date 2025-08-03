@@ -6,22 +6,24 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+
 import { LogIn, Coffee, TrendingUp, Award } from 'lucide-react'
 
-import AuthModal from '../auth/AuthModal'
-import Navigation from '../Navigation'
-import RecentCoffeePreview from '../RecentCoffeePreview'
-import SupabaseTest from '../SupabaseTest'
 import { useAuth } from '../../contexts/AuthContext'
-import { OptimizedLayout, OptimizedHero } from '../performance/OptimizedLayout'
-import CoreWebVitalsOptimizer from '../performance/CoreWebVitalsOptimizer'
-import { StatsGridSkeleton } from '../SkeletonLoader'
-import GuestModeIndicator from '../GuestModeIndicator'
-import FeedbackButton from '../FeedbackButton'
-import CoffeeTip from '../CoffeeTip'
+import AuthModal from '../auth/AuthModal'
 import CoffeeJourneyWidget from '../CoffeeJourneyWidget'
+import CoffeeTip from '../CoffeeTip'
+import FeedbackButton from '../FeedbackButton'
+import GuestModeIndicator from '../GuestModeIndicator'
+import Navigation from '../Navigation'
+import CoreWebVitalsOptimizer from '../performance/CoreWebVitalsOptimizer'
+import { OptimizedLayout, OptimizedHero } from '../performance/OptimizedLayout'
+import RecentCoffeePreview from '../RecentCoffeePreview'
+import { StatsGridSkeleton } from '../SkeletonLoader'
+import SupabaseTest from '../SupabaseTest'
 
 export default function HomePageContent() {
   const router = useRouter()

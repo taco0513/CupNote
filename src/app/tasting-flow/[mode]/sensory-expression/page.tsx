@@ -1,11 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { useRouter, useParams } from 'next/navigation'
+
 import { ArrowRight, ArrowLeft, Heart, Smile, Info, Lightbulb } from 'lucide-react'
 
 import Navigation from '../../../../components/Navigation'
 import { isFeatureEnabled } from '../../../../config/feature-flags.config'
+
 import type { TastingSession, TastingMode, SensoryExpression } from '../../../../types/tasting-flow.types'
 
 // 6 카테고리 x 7 표현 = 44개 한국어 감각 표현

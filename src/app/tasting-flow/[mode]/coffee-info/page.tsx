@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { useRouter, useParams } from 'next/navigation'
+
 import { 
   Coffee, 
   Search, 
@@ -21,6 +23,7 @@ import {
 
 import Navigation from '../../../../components/Navigation'
 import { isFeatureEnabled } from '../../../../config/feature-flags.config'
+
 import type { TastingSession, TastingMode, CoffeeInfo } from '../../../../types/tasting-flow.types'
 
 // Sample coffee database (실제로는 Supabase에서 가져올 데이터)

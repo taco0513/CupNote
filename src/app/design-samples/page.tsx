@@ -4,8 +4,11 @@
 'use client'
 
 import { useState } from 'react'
+
 import Link from 'next/link'
+
 import { ArrowLeft, Palette } from 'lucide-react'
+
 import { Card, CardContent } from '../../components/ui/Card'
 
 export default function DesignSamplesPage() {

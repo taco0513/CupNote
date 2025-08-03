@@ -1,7 +1,9 @@
 'use client'
 
 import { useEffect } from 'react'
+
 import { useRouter, usePathname } from 'next/navigation'
+
 import { FEATURE_FLAGS, LEGACY_MODE_MAPPING } from '../config'
 
 /**

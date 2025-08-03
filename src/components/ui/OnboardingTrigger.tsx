@@ -4,7 +4,9 @@
 'use client'
 
 import { useState } from 'react'
+
 import { RefreshCw } from 'lucide-react'
+
 import OnboardingFlow from '../onboarding/OnboardingFlow'
 
 export default function OnboardingTrigger() {

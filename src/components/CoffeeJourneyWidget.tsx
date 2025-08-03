@@ -4,6 +4,7 @@
  * @compliance-check 2025-08-02 - 마이크로 애니메이션 적용 완료
  */
 import React from 'react'
+
 import { TrendingUp, Calendar, MapPin, Star } from 'lucide-react'
 
 interface JourneyStats {

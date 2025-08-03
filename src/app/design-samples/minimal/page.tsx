@@ -5,6 +5,7 @@
 'use client'
 
 import Link from 'next/link'
+
 import { ArrowLeft, Coffee, BookOpen, TrendingUp } from 'lucide-react'
 
 export default function MinimalDesignSample() {

@@ -8,7 +8,10 @@
 'use client'
 
 import { useState } from 'react'
+
 import { MessageSquare, X, Send } from 'lucide-react'
+
+import { log } from '../lib/logger'
 
 export default function FeedbackButton() {
   const [isOpen, setIsOpen] = useState(false)
@@ -22,12 +25,12 @@ export default function FeedbackButton() {
 
     setIsSubmitting(true)
     
-    // TODO: 실제 피드백 전송 로직 구현
-    // 임시로 콘솔에 출력
-    console.log('Beta Feedback:', {
-      feedback,
+    // Feedback collection placeholder implementation
+    // In production, this would send to analytics service
+    log.info('Beta feedback submitted', {
+      feedbackLength: feedback.length,
       timestamp: new Date().toISOString(),
-      userAgent: navigator.userAgent
+      platform: navigator.platform
     })
     
     // 시뮬레이션 딜레이

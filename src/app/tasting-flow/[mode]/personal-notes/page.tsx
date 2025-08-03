@@ -1,11 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { useRouter, useParams } from 'next/navigation'
+
 import { ArrowRight, ArrowLeft, Edit3, Clock, Info, CheckCircle, Loader2 } from 'lucide-react'
 
 import Navigation from '../../../../components/Navigation'
 import { isFeatureEnabled } from '../../../../config/feature-flags.config'
+
 import type { TastingSession, TastingMode, PersonalNotes } from '../../../../types/tasting-flow.types'
 
 // 빠른 입력 도구

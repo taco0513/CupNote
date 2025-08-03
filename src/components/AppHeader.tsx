@@ -8,9 +8,12 @@
 'use client'
 
 import { useState } from 'react'
-import { Search, Bell, User, Settings, Menu, X, Coffee, TrendingUp, HelpCircle, LogOut } from 'lucide-react'
-import { useAuth } from '../contexts/AuthContext'
+
 import { useRouter } from 'next/navigation'
+
+import { Search, Bell, User, Settings, Menu, X, Coffee, TrendingUp, HelpCircle, LogOut } from 'lucide-react'
+
+import { useAuth } from '../contexts/AuthContext'
 
 interface AppHeaderProps {
   showSearch?: boolean

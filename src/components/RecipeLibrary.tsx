@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { 
   BookOpen, 
   Star, 
@@ -14,6 +15,7 @@ import {
   Trash2,
   Play
 } from 'lucide-react'
+
 import { SavedRecipe } from '../types/recipe'
 import { RecipeManager } from '../utils/recipeManager'
 

@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react'
 
+import { log } from '../lib/logger'
 import { AuthService } from '../lib/supabase-service'
 import { UserProfileService } from '../lib/supabase-service'
 
@@ -38,7 +39,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         profile = await UserProfileService.getProfile()
       } catch (error) {
         // 프로필이 없으면 생성
-        console.log('Profile not found, creating new profile...')
+        log.info('Profile not found, creating new profile...', { userId: authUser.id })
         const username = authUser.user_metadata?.username || authUser.email.split('@')[0]
         profile = await UserProfileService.createProfile({
           username,
@@ -55,7 +56,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         total_points: profile.total_points,
       }
     } catch (error) {
-      console.error('Error fetching/creating user profile:', error)
+      log.error('Error fetching/creating user profile', error, { userId: authUser.id })
       return null
     }
   }
@@ -70,7 +71,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUser(userProfile)
         }
       } catch (error) {
-        console.error('Error initializing auth:', error)
+        log.error('Error initializing auth', error)
       } finally {
         setLoading(false)
       }
@@ -112,20 +113,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signUp = async (email: string, password: string, username: string) => {
     setLoading(true)
     try {
-      console.log('Starting signup process...', { email, username })
+      log.info('Starting signup process', { email, username })
       const result = await AuthService.signUp(email, password, username)
-      console.log('Signup result:', result)
+      log.info('Signup completed', { hasUser: !!result.user, needsConfirmation: !result.user })
 
       if (result.user) {
-        console.log('User created, fetching profile...')
+        log.info('User created, fetching profile...', { userId: result.user.id })
         const userProfile = await fetchUserProfile(result.user)
-        console.log('Profile created/fetched:', userProfile)
+        log.info('Profile created/fetched', { username: userProfile?.username, level: userProfile?.level })
         setUser(userProfile)
       } else {
-        console.log('No user in result, might need email confirmation')
+        log.info('No user in result, might need email confirmation')
       }
     } catch (error) {
-      console.error('SignUp error in AuthContext:', error)
+      log.error('SignUp error in AuthContext', error, { email })
       throw error
     } finally {
       setLoading(false)
@@ -152,7 +153,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(userProfile)
       }
     } catch (error) {
-      console.error('Error refreshing profile:', error)
+      log.error('Error refreshing profile', error, { userId: user?.id })
     }
   }
 

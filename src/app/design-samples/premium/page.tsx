@@ -5,6 +5,7 @@
 'use client'
 
 import Link from 'next/link'
+
 import { ArrowLeft, Coffee, Star, Award, Sparkles } from 'lucide-react'
 
 export default function PremiumDesignSample() {

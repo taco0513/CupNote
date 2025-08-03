@@ -5,8 +5,9 @@
 'use client'
 
 import { TrendingUp, Award, Calendar } from 'lucide-react'
-import { Card, CardContent } from '../ui/Card'
+
 import Badge from '../ui/Badge'
+import { Card, CardContent } from '../ui/Card'
 
 interface CoffeeJourneyWidgetProps {
   stats: {

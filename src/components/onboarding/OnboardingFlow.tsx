@@ -5,7 +5,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { Coffee, BookOpen, TrendingUp, X, ArrowRight, ArrowLeft } from 'lucide-react'
+
 import { Card, CardContent } from '../ui/Card'
 import UnifiedButton from '../ui/UnifiedButton'
 

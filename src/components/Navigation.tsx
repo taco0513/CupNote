@@ -5,12 +5,14 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+
 import Link from 'next/link'
+import { useRouter, usePathname } from 'next/navigation'
+
 import { BarChart3, Settings, Plus, ArrowLeft, Trophy, User, LogIn, Coffee, ChevronDown, LogOut, Bell, HelpCircle } from 'lucide-react'
 
-import { useAuth } from '../contexts/AuthContext'
 import { isFeatureEnabled } from '../config/feature-flags.config'
+import { useAuth } from '../contexts/AuthContext'
 import AuthModal from './auth/AuthModal'
 import UserProfile from './auth/UserProfile'
 import { NavigationGuestIndicator } from './GuestModeIndicator'

@@ -5,14 +5,17 @@
 'use client'
 
 import { memo, lazy, Suspense, useState, useEffect } from 'react'
-import { Coffee, Star, Award, ChevronRight, Sparkles } from 'lucide-react'
+
 import Link from 'next/link'
+
+import { Coffee, Star, Award, ChevronRight, Sparkles } from 'lucide-react'
+
 import { useAuth } from '../../contexts/AuthContext'
-import { Card, CardContent } from '../ui/Card'
-import UnifiedButton from '../ui/UnifiedButton'
-import OnboardingFlow from '../onboarding/OnboardingFlow'
 import Navigation from '../Navigation'
+import OnboardingFlow from '../onboarding/OnboardingFlow'
+import { Card, CardContent } from '../ui/Card'
 import PageLayout from '../ui/PageLayout'
+import UnifiedButton from '../ui/UnifiedButton'
 
 // Lazy load non-critical components
 const CoffeeTip = lazy(() => import('../home/CoffeeTip'))

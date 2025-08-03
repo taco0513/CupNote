@@ -1,11 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { useRouter, useParams } from 'next/navigation'
+
 import { ArrowRight, ArrowLeft, BarChart3, FastForward, Info, CheckCircle, X } from 'lucide-react'
 
 import Navigation from '../../../../components/Navigation'
 import { isFeatureEnabled } from '../../../../config/feature-flags.config'
+
 import type { TastingSession, TastingMode, SensoryMouthFeel } from '../../../../types/tasting-flow.types'
 
 // 수치 평가 항목들

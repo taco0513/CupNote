@@ -1,13 +1,14 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+
 import { Coffee, Home, Clock, TrendingUp, Users } from 'lucide-react'
 
 import Navigation from '../../components/Navigation'
-import PageLayout from '../../components/ui/PageLayout'
-import PageHeader from '../../components/ui/PageHeader'
-import { Card, CardContent } from '../../components/ui/Card'
 import Badge from '../../components/ui/Badge'
+import { Card, CardContent } from '../../components/ui/Card'
+import PageHeader from '../../components/ui/PageHeader'
+import PageLayout from '../../components/ui/PageLayout'
 import { isFeatureEnabled } from '../../config/feature-flags.config'
 
 interface ModeCard {

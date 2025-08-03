@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+
 import { Coffee, ArrowRight } from 'lucide-react'
 
 // 임시로 매우 간단한 버전

@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 
 import { DEFAULT_ACHIEVEMENTS, LEVEL_SYSTEM } from './achievements'
+import { log } from './logger'
 import { Achievement, UserStats, UserLevel } from '../types/achievement'
 import { CoffeeRecord } from '../types/coffee'
 
@@ -16,7 +17,7 @@ export class SupabaseAchievements {
       // 사용자 인증 확인
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
-        console.log('성취 초기화 건너뜀: 사용자가 로그인하지 않음')
+        log.info('성취 초기화 건너뜀: 사용자가 로그인하지 않음')
         return
       }
 
@@ -150,7 +151,14 @@ export class SupabaseAchievements {
       if (achievementsError) throw achievementsError
 
       const newlyUnlocked: string[] = []
-      const achievementUpdates: any[] = []
+      interface AchievementUpdate {
+        user_id: string
+        achievement_id: string
+        progress: number
+        unlocked_at?: string
+        metadata?: Record<string, any>
+      }
+      const achievementUpdates: AchievementUpdate[] = []
 
       // 각 성취에 대해 진행도 계산 및 업데이트
       for (const achievementDef of DEFAULT_ACHIEVEMENTS) {
@@ -212,7 +220,12 @@ export class SupabaseAchievements {
   // 통계 계산 (기존 AchievementSystem.calculateUserStats와 유사)
   private static async calculateUserStats(
     records: CoffeeRecord[],
-    userAchievements: any[]
+    userAchievements: Array<{
+      achievement_id: string
+      progress: number
+      unlocked_at?: string
+      metadata?: Record<string, any>
+    }>
   ): Promise<UserStats> {
     const totalRecords = records.length
     const totalRatings = records.reduce((sum, record) => sum + (record.rating || 0), 0)
@@ -269,7 +282,7 @@ export class SupabaseAchievements {
 
   // 성취 진행도 계산 (기존 로직과 동일)
   private static calculateAchievementProgress(
-    achievement: any,
+    achievement: Achievement,
     records: CoffeeRecord[]
   ): { current: number; target: number } {
     const { condition } = achievement

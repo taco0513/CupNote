@@ -5,6 +5,7 @@
  */
 
 import { Suspense } from 'react'
+
 import HybridHomePageContent from '../components/pages/HybridHomePageContent'
 
 // Route Segment Config - NextJS Production Reality 패턴

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 
+import { log } from '../lib/logger'
 import { CoffeeRecord, TasteMode } from '../types/coffee'
 
 interface CoffeeRecordFormProps {
@@ -17,8 +18,13 @@ export default function CoffeeRecordForm({ onClose }: CoffeeRecordFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: API 연동
-    console.log('커피 기록:', record)
+    // Form submission placeholder implementation
+    // In production, this would save to database
+    log.info('Coffee record form submitted', {
+      mode: record.tasteMode,
+      hasName: !!record.coffeeName,
+      date: record.date
+    })
     onClose()
   }
 

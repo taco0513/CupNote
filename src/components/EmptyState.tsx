@@ -1,5 +1,7 @@
 import React from 'react'
+
 import Link from 'next/link'
+
 import { Coffee, Search, Filter, Plus, TrendingUp, Award } from 'lucide-react'
 
 interface EmptyStateProps {

@@ -4,19 +4,20 @@
  */
 'use client'
 
-import Link from 'next/link'
 import { useState } from 'react'
+
+import Link from 'next/link'
 
 import { Coffee, Home, Beaker, Clock, Users, TrendingUp, Zap, ArrowRight } from 'lucide-react'
 
-import Navigation from '../../components/Navigation'
-import PageLayout from '../../components/ui/PageLayout'
-import PageHeader from '../../components/ui/PageHeader'
-import { Card, CardContent } from '../../components/ui/Card'
-import Badge from '../../components/ui/Badge'
-import Alert from '../../components/ui/Alert'
-import GuestModeIndicator from '../../components/GuestModeIndicator'
 import AuthModal from '../../components/auth/AuthModal'
+import GuestModeIndicator from '../../components/GuestModeIndicator'
+import Navigation from '../../components/Navigation'
+import Alert from '../../components/ui/Alert'
+import Badge from '../../components/ui/Badge'
+import { Card, CardContent } from '../../components/ui/Card'
+import PageHeader from '../../components/ui/PageHeader'
+import PageLayout from '../../components/ui/PageLayout'
 import { TASTING_MODES_CONFIG, UI_LABELS } from '../../config'
 import { useAuth } from '../../contexts/AuthContext'
 

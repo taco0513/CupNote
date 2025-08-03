@@ -4,12 +4,14 @@ import { useState, useCallback } from 'react'
 
 import { useNotification } from '../contexts/NotificationContext'
 
+export type ValidationValue = string | number | boolean | null | undefined
+
 export interface ValidationRule {
   required?: boolean
   minLength?: number
   maxLength?: number
   pattern?: RegExp
-  custom?: (value: any) => string | null
+  custom?: (value: ValidationValue) => string | null
 }
 
 export interface ValidationRules {
@@ -26,7 +28,7 @@ export function useFormValidation(rules: ValidationRules) {
   const { error } = useNotification()
 
   const validateField = useCallback(
-    (field: string, value: any): string | null => {
+    (field: string, value: ValidationValue): string | null => {
       const rule = rules[field]
       if (!rule) return null
 
@@ -69,7 +71,7 @@ export function useFormValidation(rules: ValidationRules) {
   )
 
   const validateForm = useCallback(
-    (formData: { [key: string]: any }): boolean => {
+    (formData: Record<string, ValidationValue>): boolean => {
       const newErrors: ValidationErrors = {}
       let hasErrors = false
 
@@ -88,7 +90,7 @@ export function useFormValidation(rules: ValidationRules) {
   )
 
   const validateSingleField = useCallback(
-    (field: string, value: any) => {
+    (field: string, value: ValidationValue) => {
       const error = validateField(field, value)
       setErrors(prev => ({
         ...prev,
@@ -127,7 +129,7 @@ export function useFormValidation(rules: ValidationRules) {
   )
 
   const showFormErrors = useCallback(
-    (formData: { [key: string]: any }) => {
+    (formData: Record<string, ValidationValue>) => {
       const isValid = validateForm(formData)
       if (!isValid) {
         const firstError = Object.values(errors).find(err => err)

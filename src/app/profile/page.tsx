@@ -5,16 +5,18 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
+import Link from 'next/link'
+
 import { User, Award, Coffee, Settings, TrendingUp, Calendar, MapPin, Star, Trophy, Target } from 'lucide-react'
 
 import ProtectedRoute from '../../components/auth/ProtectedRoute'
 import Navigation from '../../components/Navigation'
-import PageLayout from '../../components/ui/PageLayout'
-import PageHeader from '../../components/ui/PageHeader'
 import { Card, CardContent } from '../../components/ui/Card'
+import PageHeader from '../../components/ui/PageHeader'
+import PageLayout from '../../components/ui/PageLayout'
 import { useAuth } from '../../contexts/AuthContext'
 import { SupabaseStorage } from '../../lib/supabase-storage'
-import Link from 'next/link'
 
 interface UserProfile {
   id: string

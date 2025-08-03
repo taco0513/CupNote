@@ -1,17 +1,21 @@
 // 중앙화된 에러 처리 시스템
 
+export interface ErrorContext {
+  [key: string]: string | number | boolean | null | undefined
+}
+
 export interface AppError {
   code: string
   message: string
   userMessage: string
-  context?: Record<string, any>
+  context?: ErrorContext
   retryable?: boolean
 }
 
 export class CupNoteError extends Error {
   public readonly code: string
   public readonly userMessage: string
-  public readonly context?: Record<string, any>
+  public readonly context?: ErrorContext
   public readonly retryable: boolean
 
   constructor(error: AppError) {
@@ -173,9 +177,18 @@ export function createError(
   })
 }
 
-// Supabase 에러 매핑
-export function mapSupabaseError(error: any): CupNoteError {
-  const message = error?.message || ''
+// Supabase 에러 매핑 타입
+interface SupabaseError {
+  message?: string
+  code?: string
+  details?: string
+  hint?: string
+}
+
+export function mapSupabaseError(error: SupabaseError | Error | unknown): CupNoteError {
+  const message = (error as SupabaseError)?.message || 
+                  (error as Error)?.message || 
+                  '알 수 없는 오류가 발생했습니다.'
 
   // 인증 관련 에러
   if (message.includes('Invalid login credentials')) {
@@ -212,7 +225,13 @@ export function mapSupabaseError(error: any): CupNoteError {
 }
 
 // 네트워크 에러 매핑
-export function mapNetworkError(error: any): CupNoteError {
+interface NetworkError {
+  message?: string
+  code?: string | number
+  status?: number
+}
+
+export function mapNetworkError(error: NetworkError | Error | unknown): CupNoteError {
   if (error.name === 'AbortError') {
     return createError('TIMEOUT_ERROR', { networkError: error })
   }
