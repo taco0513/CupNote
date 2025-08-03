@@ -194,22 +194,34 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
             </div>
           </div>
           
-          {/* 모바일용 기존 레이아웃 */}
+          {/* 모바일용 개선된 레이아웃 */}
           <div className="md:hidden">
-            <div className="max-w-md mx-auto">
+            <div className="max-w-md mx-auto space-y-3">
+              {/* Primary CTA - 기록하기 */}
               <Link href="/mode-selection">
-                <button className="w-full h-18 bg-white/90 backdrop-blur-sm border border-coffee-200/50 
-                                 rounded-2xl shadow-lg hover:shadow-xl text-coffee-800 text-lg font-semibold
+                <button className="w-full bg-gradient-to-r from-coffee-500 to-coffee-600 hover:from-coffee-600 hover:to-coffee-700
+                                 rounded-2xl shadow-lg hover:shadow-xl text-white text-lg font-semibold
                                  hover:scale-102 transition-all duration-200 group relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-coffee-400/5 to-coffee-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
-                <div className="relative flex items-center justify-center space-x-3 py-4">
-                  <div className="w-10 h-10 bg-coffee-500 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
-                    <Coffee className="h-5 w-5 text-white" />
+                  <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+                  <div className="relative flex items-center justify-center space-x-3 py-4">
+                    <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center group-hover:rotate-90 transition-transform duration-300">
+                      <Coffee className="h-5 w-5 text-white" />
+                    </div>
+                    <span>새 커피 기록하기</span>
                   </div>
-                  <span>새 커피 기록하기</span>
-                </div>
-              </button>
-            </Link>
+                </button>
+              </Link>
+              
+              {/* Secondary CTA - 먼저 구경하기 (비로그인 사용자용) */}
+              {!user && (
+                <Link href="/demo">
+                  <button className="w-full bg-white hover:bg-coffee-50 border-2 border-coffee-300 hover:border-coffee-400
+                                   rounded-2xl shadow-sm hover:shadow-md text-coffee-700 hover:text-coffee-800 text-base font-medium
+                                   transition-all duration-200 py-3.5">
+                    <span>먼저 구경하기 →</span>
+                  </button>
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -314,22 +326,32 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
           </>
         )}
 
-        {/* 비로그인 사용자용 Quick Actions */}
+        {/* 비로그인 사용자용 Quick Actions - 개선된 디자인 */}
         {!user && (
-          <div className="grid grid-cols-2 gap-4 mb-12">
-            <Link href="/demo">
-              <div className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 rounded-2xl p-4 text-center hover:bg-white/90 hover:shadow-md transition-all duration-200" data-testid="quick-action-demo">
-                <div className="text-2xl mb-2">📋</div>
-                <div className="text-sm font-medium text-coffee-700">기록 보기</div>
-              </div>
-            </Link>
-            
-            <Link href="/demo">
-              <div className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 rounded-2xl p-4 text-center hover:bg-white/90 hover:shadow-md transition-all duration-200" data-testid="quick-action-explore">
-                <div className="text-2xl mb-2">🔍</div>
-                <div className="text-sm font-medium text-coffee-700">커피 탐색</div>
-              </div>
-            </Link>
+          <div className="mb-12">
+            <h3 className="text-sm font-semibold text-coffee-700 mb-3 text-center">어떤 것을 해보고 싶으신가요?</h3>
+            <div className="grid grid-cols-3 gap-3">
+              <Link href="/demo">
+                <div className="bg-white/80 backdrop-blur-sm border border-coffee-200/40 rounded-xl p-3 text-center hover:bg-white hover:shadow-md hover:scale-105 transition-all duration-200" data-testid="quick-action-demo">
+                  <div className="text-xl mb-1">📋</div>
+                  <div className="text-xs font-medium text-coffee-700">샘플 기록</div>
+                </div>
+              </Link>
+              
+              <Link href="/demo#features">
+                <div className="bg-white/80 backdrop-blur-sm border border-coffee-200/40 rounded-xl p-3 text-center hover:bg-white hover:shadow-md hover:scale-105 transition-all duration-200">
+                  <div className="text-xl mb-1">✨</div>
+                  <div className="text-xs font-medium text-coffee-700">주요 기능</div>
+                </div>
+              </Link>
+              
+              <Link href="/auth">
+                <div className="bg-gradient-to-r from-coffee-100 to-amber-50 border border-coffee-300/40 rounded-xl p-3 text-center hover:shadow-md hover:scale-105 transition-all duration-200">
+                  <div className="text-xl mb-1">🚀</div>
+                  <div className="text-xs font-medium text-coffee-700">시작하기</div>
+                </div>
+              </Link>
+            </div>
           </div>
         )}
 
