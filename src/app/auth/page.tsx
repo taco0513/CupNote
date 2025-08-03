@@ -7,7 +7,7 @@ import { useState, useEffect, Suspense } from 'react'
 
 import { useRouter, useSearchParams } from 'next/navigation'
 
-import { Coffee, Eye, EyeOff, Mail, Lock, User, ArrowRight, AlertCircle } from 'lucide-react'
+import { Coffee, Eye, EyeOff, Mail, Lock, User, ArrowRight, AlertCircle, LogOut } from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import UnifiedButton from '../../components/ui/UnifiedButton'
@@ -27,7 +27,7 @@ interface AuthForm {
 function AuthPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { user, signIn, signUp } = useAuth()
+  const { user, signIn, signUp, logout } = useAuth()
   
   const [mode, setMode] = useState<AuthMode>('login')
   const [form, setForm] = useState<AuthForm>({
@@ -50,9 +50,9 @@ function AuthPageContent() {
     }
   }, [searchParams])
 
-  // 로그인된 사용자 리다이렉트
+  // 로그인된 사용자 리다이렉트 (강제 접근 시 제외)
   useEffect(() => {
-    if (user) {
+    if (user && !searchParams.get('force')) {
       const redirect = searchParams.get('redirect') || '/'
       router.push(redirect)
     }
@@ -146,6 +146,90 @@ function AuthPageContent() {
       name: '',
       confirmPassword: ''
     })
+  }
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+      setMessage('로그아웃되었습니다.')
+    } catch (error) {
+      setError('로그아웃 중 오류가 발생했습니다.')
+    }
+  }
+
+  // 이미 로그인된 사용자 처리
+  if (user && !searchParams.get('force')) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-amber-50 flex items-center justify-center p-4">
+        <div className="w-full max-w-md">
+          {/* 로고 */}
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-coffee-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <Coffee className="h-8 w-8 text-white" />
+            </div>
+            <h1 className="text-2xl font-bold text-coffee-800">CupNote</h1>
+            <p className="text-coffee-600 text-sm">이미 로그인되어 있습니다</p>
+          </div>
+
+          <Card className="shadow-xl border-coffee-100">
+            <CardHeader className="text-center">
+              <CardTitle className="text-coffee-800">
+                로그인됨
+              </CardTitle>
+            </CardHeader>
+            
+            <CardContent>
+              <div className="text-center space-y-4">
+                <div className="flex items-center justify-center space-x-3 mb-6">
+                  <div className="w-10 h-10 bg-gradient-to-r from-coffee-400 to-coffee-500 rounded-full flex items-center justify-center shadow-sm">
+                    <User size={20} className="text-white" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-sm font-semibold text-coffee-800">{user.username}</p>
+                    <p className="text-xs text-coffee-600">{user.email}</p>
+                  </div>
+                </div>
+                
+                {/* 에러/성공 메시지 */}
+                {error && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-start space-x-2">
+                    <AlertCircle className="h-4 w-4 text-red-500 mt-0.5 flex-shrink-0" />
+                    <p className="text-red-700 text-sm">{error}</p>
+                  </div>
+                )}
+                
+                {message && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                    <p className="text-green-700 text-sm">{message}</p>
+                  </div>
+                )}
+                
+                {/* 로그아웃 버튼 */}
+                <UnifiedButton
+                  onClick={handleLogout}
+                  variant="secondary"
+                  size="large"
+                  className="w-full bg-red-500 hover:bg-red-600 text-white"
+                >
+                  <div className="flex items-center justify-center space-x-2">
+                    <LogOut className="h-4 w-4" />
+                    <span>로그아웃</span>
+                  </div>
+                </UnifiedButton>
+                
+                {/* 홈으로 돌아가기 */}
+                <button
+                  onClick={() => router.push('/')}
+                  className="text-coffee-500 hover:text-coffee-700 font-medium text-sm transition-colors"
+                >
+                  ← 홈으로 돌아가기
+                </button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    )
   }
 
   return (
