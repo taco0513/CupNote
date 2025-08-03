@@ -82,28 +82,137 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
           />
         )}
         
-        <div className="md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 md:items-start">
-        
-
-        {/* Premium Main Action with Minimal Design */}
-        <div className="mb-12 md:col-span-2 lg:col-span-3">
-          <div className="max-w-md mx-auto">
-            <Link href="/mode-selection">
-              <button className="w-full h-18 bg-white/90 backdrop-blur-sm border border-coffee-200/50 
-                               rounded-2xl shadow-lg hover:shadow-xl text-coffee-800 text-lg font-semibold
-                               hover:scale-102 transition-all duration-200 group relative overflow-hidden">
-              {/* Subtle gradient overlay on hover */}
-              <div className="absolute inset-0 bg-gradient-to-r from-coffee-400/5 to-coffee-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
-              <div className="relative flex items-center justify-center space-x-3 py-4">
-                <div className="w-10 h-10 bg-coffee-500 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
-                  <Coffee className="h-5 w-5 text-white" />
+        {/* 데스크탑 히어로 섹션 - Phase 1 개선 */}
+        <div className="mb-12 md:mb-16">
+          {/* 데스크탑용 히어로 레이아웃 */}
+          <div className="hidden md:block">
+            <div className="max-w-6xl mx-auto">
+              <div className="grid grid-cols-2 gap-16 items-center min-h-[500px]">
+                {/* 왼쪽: 메인 메시지 */}
+                <div className="space-y-8">
+                  <div className="space-y-4">
+                    <h1 className="text-4xl lg:text-5xl font-bold text-coffee-800 leading-tight">
+                      커피 한 잔의 기록이<br />
+                      <span className="text-coffee-600">당신을 전문가로</span><br />
+                      만듭니다
+                    </h1>
+                    <p className="text-xl text-coffee-600 leading-relaxed">
+                      2분 투자로 내 취향을 발견하고,<br />
+                      30일 후엔 나만의 커피 DNA를 완성해보세요
+                    </p>
+                  </div>
+                  
+                  {/* CTA 버튼들 */}
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Link href="/mode-selection">
+                      <UnifiedButton 
+                        variant="primary" 
+                        size="large"
+                        className="w-full sm:w-auto bg-coffee-500 hover:bg-coffee-600 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                      >
+                        <Coffee className="h-5 w-5 mr-2" />
+                        지금 바로 시작하기
+                      </UnifiedButton>
+                    </Link>
+                    <Link href="/my-records">
+                      <UnifiedButton 
+                        variant="outline" 
+                        size="large"
+                        className="w-full sm:w-auto border-coffee-300 text-coffee-700 hover:bg-coffee-50 px-8 py-4 text-lg"
+                      >
+                        먼저 구경하기
+                      </UnifiedButton>
+                    </Link>
+                  </div>
+                  
+                  {/* 사회적 증거 */}
+                  <div className="flex items-center space-x-6 text-coffee-600">
+                    <div className="flex items-center space-x-2">
+                      <div className="flex -space-x-2">
+                        <div className="w-8 h-8 bg-coffee-200 rounded-full border-2 border-white"></div>
+                        <div className="w-8 h-8 bg-coffee-300 rounded-full border-2 border-white"></div>
+                        <div className="w-8 h-8 bg-coffee-400 rounded-full border-2 border-white"></div>
+                      </div>
+                      <span className="text-sm font-medium">이미 1,000명이 사용 중</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <Star className="h-4 w-4 text-amber-400 fill-current" />
+                      <Star className="h-4 w-4 text-amber-400 fill-current" />
+                      <Star className="h-4 w-4 text-amber-400 fill-current" />
+                      <Star className="h-4 w-4 text-amber-400 fill-current" />
+                      <Star className="h-4 w-4 text-amber-400 fill-current" />
+                      <span className="text-sm font-medium ml-1">5.0</span>
+                    </div>
+                  </div>
                 </div>
-                <span>새 커피 기록하기</span>
+                
+                {/* 오른쪽: 앱 스크린샷/데모 */}
+                <div className="relative">
+                  <div className="bg-gradient-to-br from-coffee-100 to-coffee-200 rounded-3xl p-8 shadow-2xl">
+                    <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+                      {/* 모바일 앱 모형 */}
+                      <div className="bg-coffee-500 p-4 text-white">
+                        <div className="flex items-center justify-between">
+                          <Coffee className="h-6 w-6" />
+                          <span className="font-semibold">CupNote</span>
+                          <div className="w-6 h-6"></div>
+                        </div>
+                      </div>
+                      <div className="p-6 space-y-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-12 h-12 bg-coffee-100 rounded-xl flex items-center justify-center">
+                            <Coffee className="h-6 w-6 text-coffee-500" />
+                          </div>
+                          <div>
+                            <div className="font-semibold text-coffee-800">에티오피아 예가체프</div>
+                            <div className="text-coffee-600 text-sm">블루보틀 성수점</div>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="h-3 bg-coffee-100 rounded-full"></div>
+                          <div className="h-3 bg-coffee-100 rounded-full w-3/4"></div>
+                          <div className="h-3 bg-coffee-100 rounded-full w-1/2"></div>
+                        </div>
+                        <div className="flex items-center justify-between pt-2">
+                          <div className="flex items-center space-x-1">
+                            <Star className="h-4 w-4 text-amber-400 fill-current" />
+                            <span className="font-medium">4.5</span>
+                          </div>
+                          <div className="text-coffee-500 text-sm">2분 전</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* 장식 요소 */}
+                  <div className="absolute -top-4 -right-4 w-16 h-16 bg-amber-400 rounded-full opacity-20"></div>
+                  <div className="absolute -bottom-6 -left-6 w-12 h-12 bg-coffee-400 rounded-full opacity-30"></div>
+                </div>
               </div>
-            </button>
-          </Link>
+            </div>
+          </div>
+          
+          {/* 모바일용 기존 레이아웃 */}
+          <div className="md:hidden">
+            <div className="max-w-md mx-auto">
+              <Link href="/mode-selection">
+                <button className="w-full h-18 bg-white/90 backdrop-blur-sm border border-coffee-200/50 
+                                 rounded-2xl shadow-lg hover:shadow-xl text-coffee-800 text-lg font-semibold
+                                 hover:scale-102 transition-all duration-200 group relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-coffee-400/5 to-coffee-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+                <div className="relative flex items-center justify-center space-x-3 py-4">
+                  <div className="w-10 h-10 bg-coffee-500 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+                    <Coffee className="h-5 w-5 text-white" />
+                  </div>
+                  <span>새 커피 기록하기</span>
+                </div>
+              </button>
+            </Link>
+            </div>
           </div>
         </div>
+
+        <div className="md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 md:items-start">
 
         {/* 로그인 사용자 전용 섹션 */}
         {user && (
