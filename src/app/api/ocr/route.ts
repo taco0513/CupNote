@@ -152,8 +152,9 @@ function parseStrageCoffeeInfo(text: string): any {
     const processPatterns = [
       /가공\s*방식?\s*[:：]\s*([A-Za-z가-힣\s]+)/i,
       /Process\s*[:：]\s*([A-Za-z\s]+)/i,
-      /(Natural|Washed|Honey|Semi-washed|Anaerobic|Wet|Dry|Pulped Natural)/i, // Pulped Natural 추가
-      /Metodo\s*[:：]?\s*([A-Za-z\s]+)/i // 스페인어 형식
+      /(Natural|Washed|Honey|Semi-washed|Anaerobic|Wet|Dry|Pulped Natural|Mossto Anaerobic Natural)/i, // Mossto Anaerobic Natural 추가
+      /Metodo\s*[:：]?\s*([A-Za-z\s]+)/i, // 스페인어 형식
+      /Mossto\s+([A-Za-z\s]+)/i // Mossto 형식
     ]
     
     for (const pattern of processPatterns) {
@@ -201,7 +202,7 @@ function parseStrageCoffeeInfo(text: string): any {
       /품종\s*[:：]\s*([A-Za-z가-힣\s,]+)/i,
       /Variety\s*[:：]\s*([A-Za-z\s,]+)/i,
       /Varietal\s*[:：]?\s*([A-Za-z\s,]+)/i,
-      /(Arabica|Bourbon|Typica|Caturra|Catuai|Mundo Novo|Yellow Bourbon|Red Bourbon)/i
+      /(Arabica|Bourbon|Typica|Caturra|Catuai|Mundo Novo|Yellow Bourbon|Red Bourbon|Omblgon)/i // Omblgon 추가
     ]
     
     for (const pattern of varietyPatterns) {
