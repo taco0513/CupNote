@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clear CupNote Local Storage</title>
+</head>
+<body>
+    <h1>CupNote 로컬 스토리지 초기화</h1>
+    <button onclick="clearStorage()">로컬 스토리지 초기화</button>
+    <div id="result"></div>
+    
+    <script>
+        function clearStorage() {
+            // CupNote 관련 모든 localStorage 키 제거
+            const keys = Object.keys(localStorage);
+            keys.forEach(key => {
+                if (key.includes('cupnote') || key.includes('coffee') || key.includes('onboarding')) {
+                    localStorage.removeItem(key);
+                }
+            });
+            
+            // 결과 표시
+            document.getElementById('result').innerHTML = 
+                '<p style="color: green;">✅ 로컬 스토리지가 초기화되었습니다!</p>' +
+                '<p>이제 localhost:5173을 새로고침하세요.</p>';
+        }
+        
+        // 현재 저장된 키들 표시
+        window.onload = function() {
+            const keys = Object.keys(localStorage);
+            const cupnoteKeys = keys.filter(key => 
+                key.includes('cupnote') || key.includes('coffee') || key.includes('onboarding')
+            );
+            
+            if (cupnoteKeys.length > 0) {
+                document.getElementById('result').innerHTML = 
+                    '<p>현재 저장된 CupNote 데이터:</p><ul>' +
+                    cupnoteKeys.map(key => `<li>${key}</li>`).join('') +
+                    '</ul>';
+            }
+        }
+    </script>
+</body>
+</html>
