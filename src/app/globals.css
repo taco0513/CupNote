@@ -306,6 +306,20 @@
     padding-bottom: env(safe-area-inset-bottom);
   }
 
+  /* PWA-specific styles */
+  .pwa-mode {
+    /* Ensure proper viewport handling in PWA */
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .pwa-mode input,
+  .pwa-mode textarea {
+    /* Re-enable selection for form fields */
+    -webkit-user-select: auto;
+  }
+
   /* Mobile tap highlight removal */
   * {
     -webkit-tap-highlight-color: transparent;

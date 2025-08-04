@@ -138,54 +138,37 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              // Enhanced PWA Navigation Handler - Force PWA mode retention
+              // PWA Mode Detection and Status Bar Handler
               (function() {
                 // Check if running in standalone PWA mode
                 const isPWA = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
-                if (!isPWA) return;
-
-                // Override all navigation to stay within PWA
-                document.addEventListener('click', function(e) {
-                  const link = e.target.closest('a');
-                  if (link && link.href) {
-                    const url = new URL(link.href);
-                    const currentUrl = new URL(window.location.href);
-                    
-                    // Only handle same-origin links
-                    if (url.origin === currentUrl.origin) {
-                      e.preventDefault();
+                
+                if (isPWA) {
+                  // Add PWA class to body for styling
+                  document.body.classList.add('pwa-mode');
+                  
+                  // Handle status bar style
+                  const meta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+                  if (meta) {
+                    meta.setAttribute('content', 'black-translucent');
+                  }
+                  
+                  // Only prevent external links from opening in browser
+                  document.addEventListener('click', function(e) {
+                    const link = e.target.closest('a');
+                    if (link && link.href && link.target === '_blank') {
+                      const url = new URL(link.href);
+                      const currentUrl = new URL(window.location.href);
                       
-                      // Use Next.js router for navigation
-                      if (window.__NEXT_ROUTER_BASEPATH !== undefined) {
-                        window.history.pushState(null, '', link.href);
-                        window.dispatchEvent(new PopStateEvent('popstate'));
-                      } else {
-                        // Fallback to location change
+                      // Only prevent external links
+                      if (url.origin !== currentUrl.origin) {
+                        e.preventDefault();
+                        // Keep external links within PWA
                         window.location.href = link.href;
                       }
                     }
-                  }
-                });
-
-                // Handle form submissions to stay in PWA
-                document.addEventListener('submit', function(e) {
-                  const form = e.target;
-                  if (form && form.action) {
-                    const url = new URL(form.action, window.location.href);
-                    if (url.origin === window.location.origin) {
-                      // Let Next.js handle form submission
-                      return;
-                    }
-                  }
-                });
-
-                // Prevent browser back/forward from exiting PWA
-                window.addEventListener('beforeunload', function(e) {
-                  // This helps maintain PWA state
-                  if (isPWA) {
-                    return undefined;
-                  }
-                });
+                  });
+                }
               })();
             `
           }}
