@@ -8,7 +8,8 @@ import { memo, useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Sparkles, Target, BarChart3 } from 'lucide-react'
 
-import { AppStatsService } from '../../lib/supabase-service'
+// Lazy import for performance
+const AppStatsService = () => import('../../lib/supabase-service').then(m => m.AppStatsService)
 import { Card, CardContent } from '../ui/Card'
 import FluidText from '../ui/FluidText'
 import UnifiedButton from '../ui/UnifiedButton'
@@ -18,10 +19,18 @@ const LandingPageContent = memo(function LandingPageContent() {
 
   useEffect(() => {
     const fetchAppStats = async () => {
-      const stats = await AppStatsService.getRealStats()
-      setAppStats(stats)
+      try {
+        const service = await AppStatsService()
+        const stats = await service.getRealStats()
+        setAppStats(stats)
+      } catch (error) {
+        console.warn('Failed to load app stats:', error)
+        // Fallback to default values
+      }
     }
-    fetchAppStats()
+    
+    // Delay stats loading to prioritize UI rendering
+    setTimeout(fetchAppStats, 100)
   }, [])
 
   return (

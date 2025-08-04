@@ -1,0 +1,372 @@
+/**
+ * Mobile-First Design Tokens - CupNote 2025
+ * 모바일 우선 최적화된 디자인 토큰 시스템
+ */
+
+:root {
+  /* ========================================
+   * 1. MOBILE-FIRST TOUCH TARGET SYSTEM
+   * ======================================== */
+  
+  /* Touch Target Sizes - iOS/Android Guidelines Compliant */
+  --touch-xs: 44px;     /* iOS minimum, comfortable for all users */
+  --touch-sm: 48px;     /* Android recommended, optimal balance */
+  --touch-md: 52px;     /* Spacious, accessibility preferred */
+  --touch-lg: 56px;     /* Large UI, senior-friendly */
+  --touch-xl: 64px;     /* Hero actions, critical buttons */
+  
+  /* Touch Spacing - Thumb-friendly gaps */
+  --touch-gap-tight: 4px;      /* Dense layouts, secondary actions */
+  --touch-gap-normal: 8px;     /* Standard spacing, most common */
+  --touch-gap-comfortable: 12px; /* Relaxed spacing, primary actions */
+  --touch-gap-spacious: 16px;   /* Wide spacing, critical separation */
+  
+  /* Safe Area Insets - iOS Device Support */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+
+  /* ========================================
+   * 2. MOBILE TYPOGRAPHY SCALE
+   * ======================================== */
+  
+  /* Mobile-Optimized Font Sizes */
+  --mobile-text-xs: 12px;      /* Captions, metadata */
+  --mobile-text-sm: 14px;      /* Secondary text, labels */
+  --mobile-text-base: 16px;    /* Body text, optimal readability */
+  --mobile-text-lg: 18px;      /* Emphasis, important content */
+  --mobile-text-xl: 20px;      /* Headings, section titles */
+  --mobile-text-2xl: 24px;     /* Page titles, hero text */
+  --mobile-text-3xl: 30px;     /* Display headings */
+  --mobile-text-4xl: 36px;     /* Hero titles, major headings */
+  
+  /* Line Heights - Reading Optimized */
+  --mobile-leading-tight: 1.2;   /* Headings, compact text */
+  --mobile-leading-normal: 1.4;  /* Body text, optimal readability */
+  --mobile-leading-relaxed: 1.6; /* Long-form content */
+  
+  /* Letter Spacing - Screen Readability */
+  --mobile-tracking-tight: -0.01em;  /* Large headings */
+  --mobile-tracking-normal: 0em;     /* Body text */
+  --mobile-tracking-wide: 0.01em;    /* Small text, UI labels */
+
+  /* ========================================
+   * 3. MOBILE SPACING HIERARCHY
+   * ======================================== */
+  
+  /* Component Internal Spacing */
+  --mobile-space-micro: 2px;    /* Border offsets, fine details */
+  --mobile-space-xs: 4px;       /* Icon gaps, tight spacing */
+  --mobile-space-sm: 8px;       /* Button padding, small gaps */
+  --mobile-space-md: 12px;      /* Card padding, medium gaps */
+  --mobile-space-lg: 16px;      /* Section padding, standard gaps */
+  --mobile-space-xl: 20px;      /* Page padding, major sections */
+  --mobile-space-2xl: 24px;     /* Large sections, page layout */
+  --mobile-space-3xl: 32px;     /* Hero sections, major spacing */
+  
+  /* Layout Container Spacing */
+  --mobile-container-padding: 16px;  /* Standard page margins */
+  --mobile-container-narrow: 12px;   /* Compact layouts */
+  --mobile-container-wide: 20px;     /* Spacious layouts */
+  
+  /* Section Spacing */
+  --mobile-section-gap: 24px;        /* Between major sections */
+  --mobile-section-padding: 16px;    /* Section internal padding */
+
+  /* ========================================
+   * 4. MOBILE-OPTIMIZED COMPONENT TOKENS
+   * ======================================== */
+  
+  /* Button System - Touch Optimized */
+  --mobile-btn-height-sm: var(--touch-xs);    /* 44px - minimum */
+  --mobile-btn-height-md: var(--touch-sm);    /* 48px - recommended */
+  --mobile-btn-height-lg: var(--touch-md);    /* 52px - comfortable */
+  --mobile-btn-height-xl: var(--touch-lg);    /* 56px - spacious */
+  
+  --mobile-btn-padding-x-sm: 12px;
+  --mobile-btn-padding-x-md: 16px;
+  --mobile-btn-padding-x-lg: 20px;
+  --mobile-btn-padding-x-xl: 24px;
+  
+  /* Card System - Mobile Reading Optimized */
+  --mobile-card-padding: var(--mobile-space-lg);      /* 16px */
+  --mobile-card-gap: var(--mobile-space-md);          /* 12px */
+  --mobile-card-radius: 12px;                         /* Friendly, modern */
+  --mobile-card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle elevation */
+  
+  /* Form Elements - Thumb-Friendly */
+  --mobile-input-height: var(--touch-sm);             /* 48px */
+  --mobile-input-padding: var(--mobile-space-lg);     /* 16px */
+  --mobile-input-radius: 8px;                         /* Clean, accessible */
+  --mobile-input-border: 2px;                         /* Clear boundaries */
+  
+  /* Navigation - Gesture Optimized */
+  --mobile-nav-height: 64px;                          /* Standard mobile nav */
+  --mobile-nav-item-width: var(--touch-lg);           /* 56px touch area */
+  --mobile-nav-padding: var(--mobile-space-sm);       /* 8px internal */
+  --mobile-nav-gap: var(--touch-gap-normal);          /* 8px between items */
+
+  /* ========================================
+   * 5. MOBILE VISUAL FEEDBACK SYSTEM
+   * ======================================== */
+  
+  /* Micro-interactions - Native App Feel */
+  --mobile-animation-fast: 150ms;      /* Quick feedback */
+  --mobile-animation-normal: 250ms;    /* Standard transitions */
+  --mobile-animation-slow: 350ms;      /* Deliberate animations */
+  
+  /* Touch Feedback */
+  --mobile-press-scale: 0.96;          /* Button press effect */
+  --mobile-hover-scale: 1.02;          /* Hover effect (trackpad) */
+  --mobile-focus-scale: 1.05;          /* Focus/selected state */
+  
+  /* Haptic-Inspired Visual Feedback */
+  --mobile-feedback-light: rgba(139, 69, 19, 0.05);   /* Light touch */
+  --mobile-feedback-medium: rgba(139, 69, 19, 0.1);   /* Medium press */
+  --mobile-feedback-strong: rgba(139, 69, 19, 0.15);  /* Strong press */
+
+  /* ========================================
+   * 6. MOBILE ACCESSIBILITY ENHANCEMENTS
+   * ======================================== */
+  
+  /* Focus Indicators - High Visibility */
+  --mobile-focus-ring: 3px solid rgb(139 69 19);      /* Coffee theme focus */
+  --mobile-focus-offset: 2px;                         /* Clear separation */
+  --mobile-focus-radius: 6px;                         /* Rounded corners */
+  
+  /* Color Contrast - WCAG AAA Compliant */
+  --mobile-text-primary: #1F0E04;     /* coffee-950 - Maximum contrast */
+  --mobile-text-secondary: #2D1507;   /* coffee-900 - High contrast */
+  --mobile-text-tertiary: #3C1D09;    /* coffee-800 - Medium contrast */
+  --mobile-text-muted: #6D3410;       /* coffee-600 - Low contrast */
+  
+  /* Interactive States - Clear Feedback */
+  --mobile-state-hover: rgba(139, 69, 19, 0.08);      /* Subtle hover */
+  --mobile-state-active: rgba(139, 69, 19, 0.12);     /* Clear active */
+  --mobile-state-focus: rgba(139, 69, 19, 0.16);      /* Strong focus */
+  --mobile-state-disabled: rgba(139, 69, 19, 0.3);    /* Clear disabled */
+
+  /* ========================================
+   * 7. MOBILE PERFORMANCE OPTIMIZATIONS
+   * ======================================== */
+  
+  /* GPU Acceleration Triggers */
+  --mobile-transform-gpu: translateZ(0);               /* Force GPU layer */
+  --mobile-will-change: transform, opacity;           /* Optimize animations */
+  
+  /* Image Loading - Mobile Optimized */
+  --mobile-img-placeholder: linear-gradient(90deg, #f0f 0%, #ff0 50%, #f0f 100%);
+  --mobile-img-lazy-threshold: 100px;                 /* Load images 100px before viewport */
+  
+  /* Content Loading - Perceived Performance */
+  --mobile-skeleton-base: #f3f4f6;                    /* Skeleton background */
+  --mobile-skeleton-shine: #e5e7eb;                   /* Skeleton animation */
+  --mobile-skeleton-animation: shimmer 1.5s infinite; /* Loading animation */
+
+  /* ========================================
+   * 8. MOBILE-SPECIFIC COMPONENT VARIANTS
+   * ======================================== */
+  
+  /* Modal/Dialog - Mobile Optimized */
+  --mobile-modal-padding: var(--mobile-space-xl);     /* 20px */
+  --mobile-modal-radius: 16px 16px 0 0;               /* Bottom sheet style */
+  --mobile-modal-backdrop: rgba(0, 0, 0, 0.5);        /* Clear backdrop */
+  
+  /* Toast/Alert - Thumb Zone Positioning */
+  --mobile-toast-position: calc(var(--safe-bottom) + 80px); /* Above navigation */
+  --mobile-toast-width: calc(100vw - 32px);           /* Full width with margins */
+  --mobile-toast-shadow: 0 4px 16px rgba(0, 0, 0, 0.15); /* Clear elevation */
+  
+  /* Loading States - Non-blocking */
+  --mobile-loading-overlay: rgba(255, 255, 255, 0.8); /* Semi-transparent */
+  --mobile-loading-spinner: 24px;                     /* Visible but not intrusive */
+  --mobile-loading-backdrop: backdrop-filter: blur(2px); /* Modern iOS effect */
+
+  /* ========================================
+   * 9. MOBILE LAYOUT GRID SYSTEM
+   * ======================================== */
+  
+  /* Grid Columns - Mobile First */
+  --mobile-grid-1: 1fr;                               /* Single column */
+  --mobile-grid-2: repeat(2, 1fr);                    /* Two columns */
+  --mobile-grid-3: repeat(3, 1fr);                    /* Three columns (rare) */
+  --mobile-grid-auto: repeat(auto-fit, minmax(140px, 1fr)); /* Responsive cards */
+  
+  /* Grid Gaps - Touch Friendly */
+  --mobile-grid-gap-tight: var(--mobile-space-sm);    /* 8px */
+  --mobile-grid-gap-normal: var(--mobile-space-md);   /* 12px */
+  --mobile-grid-gap-spacious: var(--mobile-space-lg); /* 16px */
+  
+  /* Flexbox Utilities - Mobile Patterns */
+  --mobile-flex-column: flex-direction: column;       /* Stack vertically */
+  --mobile-flex-wrap: flex-wrap: wrap;                /* Allow wrapping */
+  --mobile-flex-center: justify-content: center; align-items: center; /* Center content */
+
+  /* ========================================
+   * 10. MOBILE THEME VARIABLES
+   * ======================================== */
+  
+  /* Coffee Theme - Mobile Optimized */
+  --mobile-coffee-primary: #8B4513;                   /* coffee-500 */
+  --mobile-coffee-secondary: #6D3410;                 /* coffee-600 */
+  --mobile-coffee-light: #FAF7F2;                     /* coffee-50 */
+  --mobile-coffee-accent: #F59E0B;                    /* amber-500 */
+  
+  /* Background Hierarchy - Layer System */
+  --mobile-bg-base: var(--mobile-coffee-light);       /* Page background */
+  --mobile-bg-elevated: rgba(255, 255, 255, 0.95);    /* Card background */
+  --mobile-bg-overlay: rgba(255, 255, 255, 0.9);      /* Modal background */
+  --mobile-bg-active: rgba(139, 69, 19, 0.05);        /* Active states */
+  
+  /* Shadow System - Depth Perception */
+  --mobile-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);   /* Subtle elevation */
+  --mobile-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.12);  /* Standard elevation */
+  --mobile-shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.15); /* High elevation */
+  --mobile-shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.18); /* Maximum elevation */
+}
+
+/* ========================================
+ * MOBILE-SPECIFIC MEDIA QUERIES
+ * ======================================== */
+
+/* Small Mobile Devices - iPhone SE, etc. */
+@media screen and (max-width: 375px) {
+  :root {
+    --mobile-container-padding: 12px;   /* Tighter margins */
+    --mobile-text-base: 15px;           /* Slightly smaller text */
+    --mobile-section-gap: 20px;         /* Reduced spacing */
+  }
+}
+
+/* Large Mobile Devices - iPhone Pro Max, etc. */
+@media screen and (min-width: 414px) {
+  :root {
+    --mobile-container-padding: 20px;   /* More generous margins */
+    --mobile-text-base: 17px;           /* Larger, more readable text */
+    --mobile-section-gap: 28px;         /* Increased spacing */
+  }
+}
+
+/* Landscape Orientation - Tablet-like spacing */
+@media screen and (orientation: landscape) and (max-height: 500px) {
+  :root {
+    --mobile-section-gap: 16px;         /* Compact vertical spacing */
+    --mobile-nav-height: 56px;          /* Shorter navigation */
+    --mobile-container-padding: 24px;   /* Utilize horizontal space */
+  }
+}
+
+/* High DPI Displays - Retina, etc. */
+@media screen and (-webkit-min-device-pixel-ratio: 2) {
+  :root {
+    --mobile-input-border: 1px;         /* Thinner borders on sharp displays */
+    --mobile-focus-ring: 2px solid rgb(139 69 19); /* Thinner focus ring */
+  }
+}
+
+/* Accessibility - Prefer Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --mobile-animation-fast: 0ms;
+    --mobile-animation-normal: 0ms;
+    --mobile-animation-slow: 0ms;
+    --mobile-press-scale: 1;            /* Disable scale animations */
+    --mobile-hover-scale: 1;
+    --mobile-focus-scale: 1;
+  }
+}
+
+/* Accessibility - High Contrast */
+@media (prefers-contrast: high) {
+  :root {
+    --mobile-text-primary: #000000;     /* Pure black text */
+    --mobile-focus-ring: 4px solid #000000; /* High contrast focus */
+    --mobile-input-border: 3px;         /* Thicker borders */
+    --mobile-state-active: rgba(0, 0, 0, 0.2); /* Higher contrast states */
+  }
+}
+
+/* Dark Mode - Mobile Optimized */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --mobile-text-primary: #FFFFFF;
+    --mobile-text-secondary: #E5E7EB;
+    --mobile-text-tertiary: #D1D5DB;
+    --mobile-text-muted: #9CA3AF;
+    
+    --mobile-bg-base: #111827;          /* Dark background */
+    --mobile-bg-elevated: rgba(31, 41, 55, 0.95); /* Dark elevated */
+    --mobile-bg-overlay: rgba(17, 24, 39, 0.9);   /* Dark overlay */
+    --mobile-bg-active: rgba(255, 255, 255, 0.1); /* Light active state */
+    
+    --mobile-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --mobile-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --mobile-shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.5);
+    --mobile-shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* ========================================
+ * MOBILE UTILITY CLASSES
+ * ======================================== */
+
+/* Touch Target Utilities */
+.touch-xs { min-width: var(--touch-xs); min-height: var(--touch-xs); }
+.touch-sm { min-width: var(--touch-sm); min-height: var(--touch-sm); }
+.touch-md { min-width: var(--touch-md); min-height: var(--touch-md); }
+.touch-lg { min-width: var(--touch-lg); min-height: var(--touch-lg); }
+.touch-xl { min-width: var(--touch-xl); min-height: var(--touch-xl); }
+
+/* Safe Area Utilities */
+.safe-top { padding-top: var(--safe-top); }
+.safe-right { padding-right: var(--safe-right); }
+.safe-bottom { padding-bottom: var(--safe-bottom); }
+.safe-left { padding-left: var(--safe-left); }
+.safe-all { 
+  padding-top: var(--safe-top);
+  padding-right: var(--safe-right);
+  padding-bottom: var(--safe-bottom);
+  padding-left: var(--safe-left);
+}
+
+/* Mobile Typography Utilities */
+.mobile-text-xs { font-size: var(--mobile-text-xs); }
+.mobile-text-sm { font-size: var(--mobile-text-sm); }
+.mobile-text-base { font-size: var(--mobile-text-base); }
+.mobile-text-lg { font-size: var(--mobile-text-lg); }
+.mobile-text-xl { font-size: var(--mobile-text-xl); }
+.mobile-text-2xl { font-size: var(--mobile-text-2xl); }
+.mobile-text-3xl { font-size: var(--mobile-text-3xl); }
+.mobile-text-4xl { font-size: var(--mobile-text-4xl); }
+
+/* Mobile Spacing Utilities */
+.mobile-p-xs { padding: var(--mobile-space-xs); }
+.mobile-p-sm { padding: var(--mobile-space-sm); }
+.mobile-p-md { padding: var(--mobile-space-md); }
+.mobile-p-lg { padding: var(--mobile-space-lg); }
+.mobile-p-xl { padding: var(--mobile-space-xl); }
+
+.mobile-m-xs { margin: var(--mobile-space-xs); }
+.mobile-m-sm { margin: var(--mobile-space-sm); }
+.mobile-m-md { margin: var(--mobile-space-md); }
+.mobile-m-lg { margin: var(--mobile-space-lg); }
+.mobile-m-xl { margin: var(--mobile-space-xl); }
+
+/* Mobile Animation Utilities */
+.mobile-animate-fast { transition-duration: var(--mobile-animation-fast); }
+.mobile-animate-normal { transition-duration: var(--mobile-animation-normal); }
+.mobile-animate-slow { transition-duration: var(--mobile-animation-slow); }
+
+/* Mobile Focus Utilities */
+.mobile-focus-ring:focus {
+  outline: var(--mobile-focus-ring);
+  outline-offset: var(--mobile-focus-offset);
+  border-radius: var(--mobile-focus-radius);
+}
+
+/* Mobile Performance Utilities */
+.mobile-gpu-layer {
+  transform: var(--mobile-transform-gpu);
+  will-change: var(--mobile-will-change);
+}

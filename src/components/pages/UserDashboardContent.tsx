@@ -11,8 +11,10 @@ import { Coffee, Plus, BarChart3, Trophy, Target, TrendingUp, Calendar, Award } 
 import { Card, CardContent } from '../ui/Card'
 import UnifiedButton from '../ui/UnifiedButton'
 
-// Lazy load components
-const CoffeeTip = lazy(() => import('../home/CoffeeTip'))
+// Lazy load components with preload hints
+const CoffeeTip = lazy(() => 
+  import('../home/CoffeeTip').then(module => ({ default: module.default }))
+)
 
 interface UserDashboardProps {
   user: any
