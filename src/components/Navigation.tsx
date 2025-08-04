@@ -314,7 +314,30 @@ export default function Navigation({
       </nav>
 
       {/* 하이브리드 모바일 네비게이션 */}
-      <nav className="fixed bottom-0 left-0 right-0 md:hidden bg-white/95 backdrop-blur-md border-t border-coffee-200/30 shadow-lg z-50">
+      <nav 
+        className="fixed bottom-0 left-0 right-0 md:hidden bg-white/95 backdrop-blur-md border-t border-coffee-200/30 shadow-lg z-50" 
+        data-bottom-nav="true"
+        style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 50,
+          WebkitTransform: 'translate3d(0, 0, 0)',
+          transform: 'translate3d(0, 0, 0)',
+          WebkitBackfaceVisibility: 'hidden',
+          backfaceVisibility: 'hidden',
+          WebkitPerspective: 1000,
+          perspective: 1000,
+          willChange: 'transform',
+          // iOS WKWebView specific fixes
+          WebkitOverflowScrolling: 'touch',
+          touchAction: 'none',
+          WebkitUserSelect: 'none',
+          userSelect: 'none',
+          WebkitUserDrag: 'none',
+          userDrag: 'none'
+        }}>
         <div className={`grid h-16 ${user ? 'grid-cols-4' : 'grid-cols-2'}`}>
           {/* 홈 */}
           <Link

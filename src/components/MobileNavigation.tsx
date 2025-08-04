@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -21,6 +21,54 @@ export default function MobileNavigation() {
   const pathname = usePathname()
   const { user, loading } = useAuth()
   const [showAuthModal, setShowAuthModal] = useState(false)
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false)
+
+  // iOS 키보드 감지 및 하단 네비게이션 고정
+  useEffect(() => {
+    const handleResize = () => {
+      // iOS에서 키보드가 나타나면 visualViewport 높이가 줄어듦
+      if (typeof window !== 'undefined' && window.visualViewport) {
+        const isVisible = window.visualViewport.height < window.innerHeight * 0.75
+        setIsKeyboardVisible(isVisible)
+      }
+    }
+
+    // 하단 네비게이션 완전 고정
+    const fixBottomNav = () => {
+      const nav = document.querySelector('[data-testid="mobile-navigation"]') as HTMLElement
+      if (nav) {
+        nav.style.position = 'fixed'
+        nav.style.bottom = '0'
+        nav.style.left = '0'
+        nav.style.right = '0'
+        nav.style.transform = 'translate3d(0,0,0)'
+        nav.style.webkitTransform = 'translate3d(0,0,0)'
+      }
+    }
+
+    if (typeof window !== 'undefined') {
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', handleResize)
+      }
+      
+      // 스크롤, 터치, 리사이즈 시에도 네비게이션 고정 유지
+      window.addEventListener('scroll', fixBottomNav, { passive: true })
+      window.addEventListener('touchmove', fixBottomNav, { passive: true })
+      window.addEventListener('resize', fixBottomNav)
+      
+      // 초기 실행
+      fixBottomNav()
+      
+      return () => {
+        if (window.visualViewport) {
+          window.visualViewport.removeEventListener('resize', handleResize)
+        }
+        window.removeEventListener('scroll', fixBottomNav)
+        window.removeEventListener('touchmove', fixBottomNav)
+        window.removeEventListener('resize', fixBottomNav)
+      }
+    }
+  }, [])
 
   const handleAuthSuccess = () => {
     setShowAuthModal(false)
@@ -82,7 +130,17 @@ export default function MobileNavigation() {
   return (
     <>
       <nav 
-        className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-md border-t border-border md:hidden z-50 safe-area-inset shadow-lg"
+        className={`fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-md border-t border-border md:hidden z-50 safe-area-inset shadow-lg transition-transform duration-200 ${
+          isKeyboardVisible ? 'translate-y-full' : 'translate-y-0'
+        }`}
+        style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          transform: isKeyboardVisible ? 'translateY(100%)' : 'translateY(0)',
+          WebkitTransform: isKeyboardVisible ? 'translateY(100%)' : 'translateY(0)',
+        }}
         data-testid="mobile-navigation"
       >
         <div className={`grid h-16 ${user ? 'grid-cols-5' : 'grid-cols-2'}`}>

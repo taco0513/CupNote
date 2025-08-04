@@ -4,7 +4,7 @@
 
 import { Coffee, Award, BarChart3, Info, CheckCheck, Settings, ArrowRight, Bell } from 'lucide-react'
 import { useSystemNotifications } from '../../contexts/SystemNotificationContext'
-import { Notification } from '../../types/notification'
+import { CupNoteNotification } from '../../types/notification'
 import Link from 'next/link'
 
 interface NotificationDropdownProps {
@@ -16,8 +16,6 @@ export default function NotificationDropdown({ onClose }: NotificationDropdownPr
 
   const getIcon = (type: string) => {
     switch (type) {
-      case 'reminder':
-        return <Coffee className="h-4 w-4 text-coffee-500" />
       case 'achievement':
         return <Award className="h-4 w-4 text-amber-500" />
       case 'stats':
@@ -31,8 +29,6 @@ export default function NotificationDropdown({ onClose }: NotificationDropdownPr
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'reminder':
-        return 'bg-coffee-50 border-coffee-200'
       case 'achievement':
         return 'bg-amber-50 border-amber-200'
       case 'stats':
@@ -44,7 +40,7 @@ export default function NotificationDropdown({ onClose }: NotificationDropdownPr
     }
   }
 
-  const handleNotificationClick = (notification: Notification) => {
+  const handleNotificationClick = (notification: CupNoteNotification) => {
     if (!notification.read) {
       markAsRead(notification.id)
     }
@@ -151,7 +147,7 @@ export default function NotificationDropdown({ onClose }: NotificationDropdownPr
             
             {notifications.length > 10 && (
               <div className="p-3 text-center border-t border-coffee-100">
-                <Link href="/notifications" onClick={onClose}>
+                <Link href="/settings#notifications" onClick={onClose}>
                   <button className="text-coffee-600 text-sm hover:text-coffee-800">
                     모든 알림 보기 ({notifications.length})
                   </button>

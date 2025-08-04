@@ -13,6 +13,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // output: 'export',  // Temporarily disabled - using SSG instead
   // 성능 최적화 설정 - Production Reality 패턴
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
@@ -44,8 +45,9 @@ const nextConfig = {
     }
     return config
   },
-  // 이미지 최적화
+  // 이미지 최적화 - Static export requires unoptimized
   images: {
+    unoptimized: true,  // Required for static export with Capacitor
     domains: ['res.cloudinary.com', 'mycupnote.com'], // 이미지 호스팅 서비스
     remotePatterns: [
       {
@@ -61,9 +63,6 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
-    formats: ['image/webp', 'image/avif'],
-    deviceSizes: [640, 768, 1024, 1280, 1600],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
   // Gzip 압축 활성화
   compress: true,

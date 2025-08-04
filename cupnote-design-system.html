@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CupNote Design System - Figma Export</title>
+  <style>
+    /* CupNote Mobile-First Design System */
+    :root {
+      /* Coffee Theme Colors */
+      --coffee-50: #FAF7F2;
+      --coffee-100: #F5E6D3;
+      --coffee-200: #E8D5BE;
+      --coffee-300: #D4B896;
+      --coffee-400: #C09B70;
+      --coffee-500: #8B4513;
+      --coffee-600: #6D3410;
+      --coffee-700: #4A240B;
+      --coffee-800: #2D1507;
+      --coffee-900: #1F0E04;
+      
+      /* Touch Target System */
+      --touch-xs: 44px;
+      --touch-sm: 48px;
+      --touch-md: 52px;
+      --touch-lg: 56px;
+      
+      /* Mobile Typography */
+      --mobile-text-sm: 14px;
+      --mobile-text-base: 16px;
+      --mobile-text-lg: 18px;
+      --mobile-text-xl: 20px;
+      --mobile-text-2xl: 24px;
+      
+      /* Spacing System */
+      --mobile-space-xs: 4px;
+      --mobile-space-sm: 8px;
+      --mobile-space-md: 12px;
+      --mobile-space-lg: 16px;
+      --mobile-space-xl: 20px;
+      --mobile-space-2xl: 24px;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, var(--coffee-50) 0%, var(--coffee-100) 100%);
+      margin: 0;
+      padding: var(--mobile-space-lg);
+      color: var(--coffee-900);
+      line-height: 1.5;
+    }
+    
+    .design-system {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .section {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-radius: 16px;
+      padding: var(--mobile-space-2xl);
+      margin-bottom: var(--mobile-space-2xl);
+      border: 1px solid rgba(139, 69, 19, 0.1);
+      box-shadow: 0 4px 20px rgba(139, 69, 19, 0.08);
+    }
+    
+    .section-title {
+      font-size: var(--mobile-text-2xl);
+      font-weight: 700;
+      color: var(--coffee-800);
+      margin-bottom: var(--mobile-space-lg);
+      border-bottom: 2px solid var(--coffee-200);
+      padding-bottom: var(--mobile-space-sm);
+    }
+    
+    /* Color Palette */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: var(--mobile-space-md);
+    }
+    
+    .color-swatch {
+      height: 80px;
+      border-radius: 12px;
+      display: flex;
+      align-items: end;
+      padding: var(--mobile-space-sm);
+      color: white;
+      font-weight: 600;
+      font-size: var(--mobile-text-sm);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+    
+    /* Button System */
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--mobile-space-lg);
+      align-items: start;
+    }
+    
+    .mobile-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      border-radius: 12px;
+      transition: all 0.2s ease;
+      border: none;
+      cursor: pointer;
+      font-size: var(--mobile-text-base);
+      min-height: var(--touch-sm);
+      padding: 12px 20px;
+      margin: var(--mobile-space-xs) 0;
+      width: 100%;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--coffee-500), var(--coffee-600));
+      color: white;
+      box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-1px) scale(1.02);
+      box-shadow: 0 8px 25px rgba(139, 69, 19, 0.4);
+    }
+    
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.95);
+      color: var(--coffee-700);
+      border: 2px solid rgba(232, 213, 190, 0.5);
+      box-shadow: 0 2px 8px rgba(139, 69, 19, 0.1);
+    }
+    
+    .btn-secondary:hover {
+      background: white;
+      border-color: rgba(212, 184, 150, 0.7);
+      transform: translateY(-1px) scale(1.01);
+    }
+    
+    /* Card System */
+    .card-examples {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--mobile-space-lg);
+    }
+    
+    .mobile-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(232, 213, 190, 0.3);
+      border-radius: 16px;
+      padding: var(--mobile-space-lg);
+      box-shadow: 0 2px 8px rgba(139, 69, 19, 0.1);
+      transition: all 0.2s ease;
+    }
+    
+    .mobile-card:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 8px 25px rgba(139, 69, 19, 0.15);
+    }
+    
+    .card-title {
+      font-size: var(--mobile-text-lg);
+      font-weight: 600;
+      color: var(--coffee-800);
+      margin-bottom: var(--mobile-space-sm);
+    }
+    
+    .card-content {
+      color: var(--coffee-600);
+      font-size: var(--mobile-text-base);
+      line-height: 1.5;
+    }
+    
+    /* Input System */
+    .input-examples {
+      display: grid;
+      gap: var(--mobile-space-lg);
+    }
+    
+    .mobile-input {
+      width: 100%;
+      min-height: var(--touch-sm);
+      padding: var(--mobile-space-lg);
+      border: 2px solid rgba(232, 213, 190, 0.5);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.95);
+      font-size: var(--mobile-text-base);
+      color: var(--coffee-800);
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+    
+    .mobile-input:focus {
+      outline: none;
+      border-color: var(--coffee-500);
+      box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+    }
+    
+    /* Typography Scale */
+    .typography-example {
+      margin: var(--mobile-space-md) 0;
+      color: var(--coffee-800);
+    }
+    
+    .text-4xl { font-size: 36px; font-weight: 700; }
+    .text-3xl { font-size: 30px; font-weight: 600; }
+    .text-2xl { font-size: 24px; font-weight: 600; }
+    .text-xl { font-size: 20px; font-weight: 500; }
+    .text-lg { font-size: 18px; font-weight: 500; }
+    .text-base { font-size: 16px; font-weight: 400; }
+    .text-sm { font-size: 14px; font-weight: 400; }
+    
+    /* Navigation */
+    .mobile-nav {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid rgba(232, 213, 190, 0.3);
+      padding: var(--mobile-space-sm);
+      border-radius: 16px 16px 0 0;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin-top: var(--mobile-space-2xl);
+    }
+    
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: var(--mobile-space-sm);
+      color: var(--coffee-600);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      min-width: var(--touch-xs);
+      min-height: var(--touch-xs);
+      justify-content: center;
+    }
+    
+    .nav-item.active {
+      color: var(--coffee-800);
+      background: rgba(139, 69, 19, 0.1);
+    }
+    
+    .nav-icon {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 4px;
+      font-size: 20px;
+    }
+    
+    .nav-text {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* Component Specs */
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: var(--mobile-space-lg);
+    }
+    .spec-table th,
+    .spec-table td {
+      padding: var(--mobile-space-sm);
+      border: 1px solid var(--coffee-200);
+      text-align: left;
+    }
+    .spec-table th {
+      background: var(--coffee-100);
+      font-weight: 600;
+    }
+
+    /* Icon System */
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      gap: var(--mobile-space-md);
+      text-align: center;
+    }
+    .icon-item {
+      padding: var(--mobile-space-md);
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 8px;
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="design-system">
+    <!-- Header -->
+    <div class="section">
+      <h1 style="font-size: 48px; font-weight: 800; color: var(--coffee-800); text-align: center; margin: 0;">
+        ☕ CupNote Design System
+      </h1>
+      <p style="text-align: center; font-size: var(--mobile-text-lg); color: var(--coffee-600); margin: var(--mobile-space-lg) 0 0 0;">
+        모바일-퍼스트 커피 테마 디자인 시스템 | Mobile-First Coffee Theme Design System
+      </p>
+      <p style="text-align: center; font-size: var(--mobile-text-base); color: var(--coffee-500); margin: var(--mobile-space-sm) 0 0 0;">
+        Version 1.3.0 | Touch-optimized | WCAG AAA Compliant
+      </p>
+    </div>
+
+    <!-- Color System -->
+    <div class="section">
+      <h2 class="section-title">🎨 Coffee Color Palette</h2>
+      <div class="color-grid">
+        <div class="color-swatch" style="background: var(--coffee-50); color: var(--coffee-800);">coffee-50<br>#FAF7F2</div>
+        <div class="color-swatch" style="background: var(--coffee-100); color: var(--coffee-800);">coffee-100<br>#F5E6D3</div>
+        <div class="color-swatch" style="background: var(--coffee-200); color: var(--coffee-800);">coffee-200<br>#E8D5BE</div>
+        <div class="color-swatch" style="background: var(--coffee-300); color: var(--coffee-800);">coffee-300<br>#D4B896</div>
+        <div class="color-swatch" style="background: var(--coffee-400);">coffee-400<br>#C09B70</div>
+        <div class="color-swatch" style="background: var(--coffee-500);">coffee-500<br>#8B4513</div>
+        <div class="color-swatch" style="background: var(--coffee-600);">coffee-600<br>#6D3410</div>
+        <div class="color-swatch" style="background: var(--coffee-700);">coffee-700<br>#4A240B</div>
+        <div class="color-swatch" style="background: var(--coffee-800);">coffee-800<br>#2D1507</div>
+        <div class="color-swatch" style="background: var(--coffee-900);">coffee-900<br>#1F0E04</div>
+      </div>
+    </div>
+
+    <!-- Typography -->
+    <div class="section">
+      <h2 class="section-title">📝 Typography Scale</h2>
+      <div class="typography-example text-4xl">Display Heading (36px, Bold)</div>
+      <div class="typography-example text-3xl">Page Title (30px, SemiBold)</div>
+      <div class="typography-example text-2xl">Section Heading (24px, SemiBold)</div>
+      <div class="typography-example text-xl">Card Title (20px, Medium)</div>
+      <div class="typography-example text-lg">Emphasis Text (18px, Medium)</div>
+      <div class="typography-example text-base">Body Text (16px, Regular)</div>
+      <div class="typography-example text-sm">Caption Text (14px, Regular)</div>
+      
+      <table class="spec-table">
+        <thead>
+          <tr>
+            <th>Size</th>
+            <th>Font Size</th>
+            <th>Font Weight</th>
+            <th>Line Height</th>
+            <th>Use Case</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>4xl</td><td>36px</td><td>700</td><td>1.2</td><td>Hero titles, landing page headers</td></tr>
+          <tr><td>3xl</td><td>30px</td><td>600</td><td>1.2</td><td>Page titles, major headings</td></tr>
+          <tr><td>2xl</td><td>24px</td><td>600</td><td>1.3</td><td>Section titles, modal headers</td></tr>
+          <tr><td>xl</td><td>20px</td><td>500</td><td>1.4</td><td>Card titles, form labels</td></tr>
+          <tr><td>lg</td><td>18px</td><td>500</td><td>1.4</td><td>Emphasized text, important info</td></tr>
+          <tr><td>base</td><td>16px</td><td>400</td><td>1.5</td><td>Body text, paragraphs</td></tr>
+          <tr><td>sm</td><td>14px</td><td>400</td><td>1.5</td><td>Captions, metadata, helper text</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Button System -->
+    <div class="section">
+      <h2 class="section-title">🔘 Mobile Button System</h2>
+      <div class="button-grid">
+        <div>
+          <h3 style="color: var(--coffee-700); margin-bottom: var(--mobile-space-md);">Primary Actions</h3>
+          <button class="mobile-button btn-primary">기록하기</button>
+          <button class="mobile-button btn-primary">무료로 시작하기</button>
+          <button class="mobile-button btn-primary">로그인</button>
+        </div>
+        <div>
+          <h3 style="color: var(--coffee-700); margin-bottom: var(--mobile-space-md);">Secondary Actions</h3>
+          <button class="mobile-button btn-secondary">회원가입</button>
+          <button class="mobile-button btn-secondary">더보기</button>
+          <button class="mobile-button btn-secondary">취소</button>
+        </div>
+      </div>
+      
+      <table class="spec-table">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Background</th>
+            <th>Text Color</th>
+            <th>Border</th>
+            <th>Min Height</th>
+            <th>Padding</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Primary</td><td>Linear gradient coffee-500 → coffee-600</td><td>White</td><td>None</td><td>48px</td><td>12px 20px</td></tr>
+          <tr><td>Secondary</td><td>rgba(255,255,255,0.95)</td><td>coffee-700</td><td>2px solid coffee-200/50</td><td>48px</td><td>12px 20px</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Card System -->
+    <div class="section">
+      <h2 class="section-title">🎴 Mobile Card System</h2>
+      <div class="card-examples">
+        <div class="mobile-card">
+          <div class="card-title">Coffee Record Card</div>
+          <div class="card-content">
+            오늘 마신 원두: 에티오피아 예가체프<br>
+            로스터리: 로컬 커피 로스터즈<br>
+            평점: ⭐⭐⭐⭐⭐
+          </div>
+        </div>
+        <div class="mobile-card">
+          <div class="card-title">Achievement Card</div>
+          <div class="card-content">
+            🏆 First Cup<br>
+            첫 번째 커피 기록을 완료했습니다!<br>
+            획득일: 2025-08-04
+          </div>
+        </div>
+        <div class="mobile-card">
+          <div class="card-title">Stats Card</div>
+          <div class="card-content">
+            📊 이번 주 통계<br>
+            총 기록: 12잔<br>
+            평균 평점: 4.2/5
+          </div>
+        </div>
+      </div>
+      
+      <table class="spec-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Value</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Background</td><td>rgba(255,255,255,0.95)</td><td>Semi-transparent white with backdrop blur</td></tr>
+          <tr><td>Border</td><td>1px solid coffee-200/30</td><td>Subtle border for definition</td></tr>
+          <tr><td>Border Radius</td><td>16px</td><td>Rounded corners for modern feel</td></tr>
+          <tr><td>Padding</td><td>16px</td><td>Comfortable inner spacing</td></tr>
+          <tr><td>Shadow</td><td>0 2px 8px coffee-500/10</td><td>Subtle elevation</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Input System -->
+    <div class="section">
+      <h2 class="section-title">✏️ Mobile Input System</h2>
+      <div class="input-examples">
+        <input class="mobile-input" type="text" placeholder="커피 이름을 입력하세요" />
+        <input class="mobile-input" type="email" placeholder="이메일 주소" />
+        <textarea class="mobile-input" rows="4" placeholder="오늘의 커피 노트를 작성해보세요..."></textarea>
+      </div>
+      
+      <table class="spec-table">
+        <thead>
+          <tr>
+            <th>State</th>
+            <th>Border</th>
+            <th>Background</th>
+            <th>Min Height</th>
+            <th>Font Size</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Default</td><td>2px solid coffee-200/50</td><td>rgba(255,255,255,0.95)</td><td>48px</td><td>16px</td></tr>
+          <tr><td>Focus</td><td>2px solid coffee-500</td><td>rgba(255,255,255,0.95)</td><td>48px</td><td>16px</td></tr>
+          <tr><td>Error</td><td>2px solid red-400</td><td>rgba(255,255,255,0.95)</td><td>48px</td><td>16px</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Touch Targets -->
+    <div class="section">
+      <h2 class="section-title">👆 Touch Target System</h2>
+      <div style="display: flex; gap: var(--mobile-space-lg); align-items: center; flex-wrap: wrap; margin-bottom: var(--mobile-space-lg);">
+        <div style="width: var(--touch-xs); height: var(--touch-xs); background: var(--coffee-200); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; text-align: center;">44px<br>iOS Min</div>
+        <div style="width: var(--touch-sm); height: var(--touch-sm); background: var(--coffee-300); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; text-align: center;">48px<br>Android</div>
+        <div style="width: var(--touch-md); height: var(--touch-md); background: var(--coffee-400); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: white; text-align: center;">52px<br>Comfort</div>
+        <div style="width: var(--touch-lg); height: var(--touch-lg); background: var(--coffee-500); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: white; text-align: center;">56px<br>Large</div>
+      </div>
+      
+      <table class="spec-table">
+        <thead>
+          <tr>
+            <th>Size</th>
+            <th>Dimensions</th>
+            <th>Use Case</th>
+            <th>Accessibility</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>XS</td><td>44px × 44px</td><td>iOS minimum, compact UI</td><td>iOS Accessibility Guidelines</td></tr>
+          <tr><td>SM</td><td>48px × 48px</td><td>Android recommended, balanced</td><td>Android Material Design</td></tr>
+          <tr><td>MD</td><td>52px × 52px</td><td>Comfortable touch, preferred</td><td>WCAG 2.1 AAA</td></tr>
+          <tr><td>LG</td><td>56px × 56px</td><td>Large UI, accessibility focus</td><td>Senior-friendly design</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Icons -->
+    <div class="section">
+      <h2 class="section-title">🎯 Icon System</h2>
+      <div class="icon-grid">
+        <div class="icon-item">☕<br>Coffee</div>
+        <div class="icon-item">📊<br>Stats</div>
+        <div class="icon-item">➕<br>Add</div>
+        <div class="icon-item">🏆<br>Trophy</div>
+        <div class="icon-item">👤<br>User</div>
+        <div class="icon-item">⚙️<br>Settings</div>
+        <div class="icon-item">❤️<br>Favorite</div>
+        <div class="icon-item">🔍<br>Search</div>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div class="section">
+      <h2 class="section-title">🧭 Mobile Navigation</h2>
+      <div class="mobile-nav">
+        <a href="#" class="nav-item active">
+          <div class="nav-icon">☕</div>
+          <div class="nav-text">홈</div>
+        </a>
+        <a href="#" class="nav-item">
+          <div class="nav-icon">📊</div>
+          <div class="nav-text">내 기록</div>
+        </a>
+        <a href="#" class="nav-item">
+          <div class="nav-icon">➕</div>
+          <div class="nav-text">작성</div>
+        </a>
+        <a href="#" class="nav-item">
+          <div class="nav-icon">🏆</div>
+          <div class="nav-text">성취</div>
+        </a>
+      </div>
+      
+      <table class="spec-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Value</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Height</td><td>64px</td><td>Standard mobile navigation height</td></tr>
+          <tr><td>Background</td><td>rgba(255,255,255,0.95)</td><td>Semi-transparent with backdrop blur</td></tr>
+          <tr><td>Item Min Size</td><td>44px × 44px</td><td>iOS accessibility compliance</td></tr>
+          <tr><td>Icon Size</td><td>24px × 24px</td><td>Clear visibility without strain</td></tr>
+          <tr><td>Text Size</td><td>12px</td><td>Compact but readable labels</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Spacing System -->
+    <div class="section">
+      <h2 class="section-title">📏 Spacing System</h2>
+      <div style="display: flex; flex-direction: column; gap: var(--mobile-space-sm);">
+        <div style="display: flex; align-items: center; gap: var(--mobile-space-md);">
+          <div style="width: 4px; height: 20px; background: var(--coffee-300);"></div>
+          <span>XS: 4px - Fine details, border offsets</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--mobile-space-md);">
+          <div style="width: 8px; height: 20px; background: var(--coffee-400);"></div>
+          <span>SM: 8px - Icon gaps, tight spacing</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--mobile-space-md);">
+          <div style="width: 12px; height: 20px; background: var(--coffee-500);"></div>
+          <span>MD: 12px - Card padding, medium gaps</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--mobile-space-md);">
+          <div style="width: 16px; height: 20px; background: var(--coffee-600);"></div>
+          <span>LG: 16px - Section padding, standard gaps</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--mobile-space-md);">
+          <div style="width: 20px; height: 20px; background: var(--coffee-700);"></div>
+          <span>XL: 20px - Page padding, major sections</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--mobile-space-md);">
+          <div style="width: 24px; height: 20px; background: var(--coffee-800);"></div>
+          <span>2XL: 24px - Large sections, page layout</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Design Tokens Summary -->
+    <div class="section">
+      <h2 class="section-title">🔧 Design Tokens Export</h2>
+      <pre style="background: var(--coffee-100); padding: var(--mobile-space-lg); border-radius: 8px; overflow-x: auto; font-size: 14px;">
+{
+  "colors": {
+    "coffee": {
+      "50": "#FAF7F2",
+      "100": "#F5E6D3", 
+      "200": "#E8D5BE",
+      "300": "#D4B896",
+      "400": "#C09B70",
+      "500": "#8B4513",
+      "600": "#6D3410",
+      "700": "#4A240B",
+      "800": "#2D1507",
+      "900": "#1F0E04"
+    }
+  },
+  "spacing": {
+    "xs": "4px",
+    "sm": "8px", 
+    "md": "12px",
+    "lg": "16px",
+    "xl": "20px",
+    "2xl": "24px"
+  },
+  "typography": {
+    "sm": "14px",
+    "base": "16px",
+    "lg": "18px", 
+    "xl": "20px",
+    "2xl": "24px",
+    "3xl": "30px",
+    "4xl": "36px"
+  },
+  "touchTargets": {
+    "xs": "44px",
+    "sm": "48px",
+    "md": "52px", 
+    "lg": "56px"
+  }
+}
+      </pre>
+    </div>
+  </div>
+</body>
+</html>

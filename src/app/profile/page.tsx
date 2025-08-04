@@ -213,7 +213,7 @@ export default function ProfilePage() {
           <div className="space-y-6">
             {/* 프로필 헤더 스켈레톤 */}
             <Card variant="elevated" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30">
-              <CardContent className="p-6">
+              <CardContent className="p-4 md:p-6">
                 <div className="flex items-center space-x-4">
                   <div className="w-20 h-20 bg-coffee-200/50 rounded-full animate-pulse"></div>
                   <div className="flex-1">
@@ -274,7 +274,7 @@ export default function ProfilePage() {
         <div className="space-y-8">
           {/* 프로필 정보 - 하이브리드 프리미엄 카드 */}
           <Card variant="elevated" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-lg">
-            <CardContent className="p-6">
+            <CardContent className="p-4 md:p-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-6">
                   <div className="w-20 h-20 bg-gradient-to-r from-coffee-400 to-coffee-500 rounded-full flex items-center justify-center shadow-lg">
@@ -318,44 +318,52 @@ export default function ProfilePage() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {/* 총 포인트 */}
             <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
-              <CardContent className="p-6 text-center">
+              <CardContent className="p-4 md:p-6 text-center">
                 <div className="w-14 h-14 bg-gradient-to-r from-amber-400 to-amber-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md">
                   <Trophy className="h-7 w-7 text-white" />
                 </div>
-                <div className="text-2xl font-bold text-coffee-700 mb-1">{profile.total_points}P</div>
+                <div className="text-2xl font-bold text-coffee-700 mb-1">
+                  {profile.total_points > 0 ? `${profile.total_points}P` : '-'}
+                </div>
                 <div className="text-sm text-coffee-600">총 포인트</div>
               </CardContent>
             </Card>
 
             {/* 총 기록 */}
             <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
-              <CardContent className="p-6 text-center">
+              <CardContent className="p-4 md:p-6 text-center">
                 <div className="w-14 h-14 bg-gradient-to-r from-blue-400 to-blue-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md">
                   <Coffee className="h-7 w-7 text-white" />
                 </div>
-                <div className="text-2xl font-bold text-coffee-700 mb-1">{profile.total_records}개</div>
+                <div className="text-2xl font-bold text-coffee-700 mb-1">
+                  {profile.total_records > 0 ? `${profile.total_records}개` : '-'}
+                </div>
                 <div className="text-sm text-coffee-600">총 기록</div>
               </CardContent>
             </Card>
 
             {/* 현재 연속 */}
             <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
-              <CardContent className="p-6 text-center">
+              <CardContent className="p-4 md:p-6 text-center">
                 <div className="w-14 h-14 bg-gradient-to-r from-orange-400 to-orange-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md">
                   <Target className="h-7 w-7 text-white" />
                 </div>
-                <div className="text-2xl font-bold text-coffee-700 mb-1">{profile.current_streak}일</div>
+                <div className="text-2xl font-bold text-coffee-700 mb-1">
+                  {profile.current_streak > 0 ? `${profile.current_streak}일` : '-'}
+                </div>
                 <div className="text-sm text-coffee-600">연속 기록</div>
               </CardContent>
             </Card>
 
             {/* 평균 평점 */}
             <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
-              <CardContent className="p-6 text-center">
+              <CardContent className="p-4 md:p-6 text-center">
                 <div className="w-14 h-14 bg-gradient-to-r from-green-400 to-green-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md">
                   <Star className="h-7 w-7 text-white" />
                 </div>
-                <div className="text-2xl font-bold text-coffee-700 mb-1">{journeySummary?.avg_rating.toFixed(1)}</div>
+                <div className="text-2xl font-bold text-coffee-700 mb-1">
+                  {journeySummary?.avg_rating && journeySummary.avg_rating > 0 ? journeySummary.avg_rating.toFixed(1) : '-'}
+                </div>
                 <div className="text-sm text-coffee-600">평균 평점</div>
               </CardContent>
             </Card>
@@ -364,9 +372,9 @@ export default function ProfilePage() {
           {/* 대시보드 2컬럼 레이아웃 */}
           <div className="grid lg:grid-cols-2 gap-8">
             {/* 좌측 컬럼: 커피 여정 요약 */}
-            <div className="space-y-6">
+            <div className="space-y-6 md:space-y-8">
               <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md">
-                <CardContent className="p-6">
+                <CardContent className="p-4 md:p-6">
                   <h3 className="text-lg font-semibold text-coffee-800 mb-4 flex items-center">
                     <TrendingUp className="h-5 w-5 mr-2" />
                     이번 달 커피 여정
@@ -418,7 +426,7 @@ export default function ProfilePage() {
               {/* 홈카페 장비 */}
               {equipment && (
                 <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md">
-                  <CardContent className="p-6">
+                  <CardContent className="p-4 md:p-6">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-lg font-semibold text-coffee-800 flex items-center">
                         <Coffee className="h-5 w-5 mr-2" />
@@ -470,11 +478,11 @@ export default function ProfilePage() {
             </div>
 
             {/* 우측 컬럼: 최근 성취 & 빠른 링크 */}
-            <div className="space-y-6">
+            <div className="space-y-6 md:space-y-8">
               {/* 최근 성취 */}
               {journeySummary?.recent_achievements && journeySummary.recent_achievements.length > 0 && (
                 <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md">
-                  <CardContent className="p-6">
+                  <CardContent className="p-4 md:p-6">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-lg font-semibold text-coffee-800 flex items-center">
                         <Award className="h-5 w-5 mr-2" />
@@ -507,7 +515,7 @@ export default function ProfilePage() {
 
               {/* 빠른 링크 */}
               <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md">
-                <CardContent className="p-6">
+                <CardContent className="p-4 md:p-6">
                   <h3 className="text-lg font-semibold text-coffee-800 mb-4">빠른 링크</h3>
                   
                   <div className="space-y-3">
@@ -556,7 +564,7 @@ export default function ProfilePage() {
               {/* 여유 공간 - 향후 확장용 */}
               <div className="hidden lg:block">
                 <Card variant="default" className="bg-gradient-to-br from-coffee-50/30 to-coffee-100/30 backdrop-blur-sm border border-coffee-200/20 shadow-sm">
-                  <CardContent className="p-6 text-center">
+                  <CardContent className="p-4 md:p-6 text-center">
                     <div className="w-12 h-12 bg-coffee-200/50 rounded-xl flex items-center justify-center mx-auto mb-3">
                       <Coffee className="h-6 w-6 text-coffee-400" />
                     </div>

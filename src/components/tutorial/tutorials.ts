@@ -284,7 +284,7 @@ export const TUTORIALS = {
       },
       {
         id: 'stats',
-        target: '[href="/stats"]',
+        target: '[href="/my-records"]',
         title: '통계 확인',
         content: '당신의 커피 취향과 성장 과정을 시각적으로 확인할 수 있습니다.',
         placement: 'top' as const,

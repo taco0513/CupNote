@@ -84,6 +84,8 @@ export interface PersonalNotes {
   selectedQuickInputs: string[]
   selectedEmotions: string[]
   timeContext: string
+  imageUrl?: string // 사진 URL
+  thumbnailUrl?: string // 썸네일 URL
   createdAt: string
 }
 

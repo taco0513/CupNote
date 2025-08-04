@@ -1,15 +1,9 @@
 'use client'
 
-import { createClient } from '@supabase/supabase-js'
-
+import { supabase } from './supabase'
 import { offlineStorage } from './offline-storage'
 import { SupabaseAchievements } from './supabase-achievements'
 import { CoffeeRecord } from '../types/coffee'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
 
 export class SupabaseStorage {
   // 모든 기록 가져오기

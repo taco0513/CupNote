@@ -3,7 +3,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Bell, Clock, Award, BarChart3, Info, CheckCircle } from 'lucide-react'
+import { Bell, Award, BarChart3, Info, CheckCircle } from 'lucide-react'
 import { useSystemNotifications } from '../../contexts/SystemNotificationContext'
 import { NotificationSettings as NotificationSettingsType } from '../../types/notification'
 
@@ -45,18 +45,6 @@ export default function NotificationSettings() {
     setPermissionStatus(permission)
   }
 
-  const formatDayName = (day: number) => {
-    const days = ['일', '월', '화', '수', '목', '금', '토']
-    return days[day]
-  }
-
-  const toggleDay = (day: number) => {
-    const newDays = tempSettings.reminderDays.includes(day)
-      ? tempSettings.reminderDays.filter(d => d !== day)
-      : [...tempSettings.reminderDays, day].sort()
-    
-    handleToggle('reminderDays', newDays)
-  }
 
   return (
     <div className="space-y-6">
@@ -107,18 +95,15 @@ export default function NotificationSettings() {
             <Bell className="h-5 w-5 text-coffee-600" />
             <h3 className="text-lg font-semibold text-coffee-800">알림 설정</h3>
           </div>
-          <button
-            onClick={() => handleToggle('enabled', !tempSettings.enabled)}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-              tempSettings.enabled ? 'bg-coffee-500' : 'bg-gray-200'
-            }`}
-          >
-            <span
-              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                tempSettings.enabled ? 'translate-x-6' : 'translate-x-1'
-              }`}
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              checked={tempSettings.enabled}
+              onChange={(e) => handleToggle('enabled', e.target.checked)}
+              className="sr-only peer"
             />
-          </button>
+            <div className="w-11 h-6 bg-coffee-200/50 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-coffee-500 shadow-sm"></div>
+          </label>
         </div>
         
         <p className="text-sm text-coffee-600 mb-4">
@@ -129,70 +114,6 @@ export default function NotificationSettings() {
       {/* 세부 알림 설정 */}
       {tempSettings.enabled && (
         <div className="space-y-4">
-          {/* 리마인더 설정 */}
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-coffee-200/30">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center space-x-2">
-                <Clock className="h-5 w-5 text-blue-600" />
-                <h4 className="font-medium text-coffee-800">기록 작성 리마인더</h4>
-              </div>
-              <button
-                onClick={() => handleToggle('reminder', !tempSettings.reminder)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  tempSettings.reminder ? 'bg-coffee-500' : 'bg-gray-200'
-                }`}
-              >
-                <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    tempSettings.reminder ? 'translate-x-6' : 'translate-x-1'
-                  }`}
-                />
-              </button>
-            </div>
-            
-            {tempSettings.reminder && (
-              <div className="space-y-4">
-                {/* 알림 시간 설정 */}
-                <div>
-                  <label className="block text-sm font-medium text-coffee-700 mb-2">
-                    알림 시간
-                  </label>
-                  <input
-                    type="time"
-                    value={tempSettings.reminderTime}
-                    onChange={(e) => handleToggle('reminderTime', e.target.value)}
-                    className="block w-full px-3 py-2 border border-coffee-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-500 focus:border-transparent"
-                  />
-                </div>
-                
-                {/* 요일 설정 */}
-                <div>
-                  <label className="block text-sm font-medium text-coffee-700 mb-2">
-                    알림 요일
-                  </label>
-                  <div className="flex space-x-2">
-                    {[0, 1, 2, 3, 4, 5, 6].map(day => (
-                      <button
-                        key={day}
-                        onClick={() => toggleDay(day)}
-                        className={`w-8 h-8 rounded-full text-xs font-medium transition-colors ${
-                          tempSettings.reminderDays.includes(day)
-                            ? 'bg-coffee-500 text-white'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                        }`}
-                      >
-                        {formatDayName(day)}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-            
-            <p className="text-sm text-coffee-600 mt-3">
-              설정한 시간에 커피 기록 작성을 알려드려요.
-            </p>
-          </div>
 
           {/* 성취 알림 */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-coffee-200/30">
@@ -201,18 +122,15 @@ export default function NotificationSettings() {
                 <Award className="h-5 w-5 text-amber-600" />
                 <h4 className="font-medium text-coffee-800">새로운 뱃지 획득</h4>
               </div>
-              <button
-                onClick={() => handleToggle('achievement', !tempSettings.achievement)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  tempSettings.achievement ? 'bg-coffee-500' : 'bg-gray-200'
-                }`}
-              >
-                <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    tempSettings.achievement ? 'translate-x-6' : 'translate-x-1'
-                  }`}
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={tempSettings.achievement}
+                  onChange={(e) => handleToggle('achievement', e.target.checked)}
+                  className="sr-only peer"
                 />
-              </button>
+                <div className="w-11 h-6 bg-coffee-200/50 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-coffee-500 shadow-sm"></div>
+              </label>
             </div>
             
             <p className="text-sm text-coffee-600">
@@ -227,18 +145,15 @@ export default function NotificationSettings() {
                 <BarChart3 className="h-5 w-5 text-blue-600" />
                 <h4 className="font-medium text-coffee-800">주간/월간 요약</h4>
               </div>
-              <button
-                onClick={() => handleToggle('stats', !tempSettings.stats)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  tempSettings.stats ? 'bg-coffee-500' : 'bg-gray-200'
-                }`}
-              >
-                <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    tempSettings.stats ? 'translate-x-6' : 'translate-x-1'
-                  }`}
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={tempSettings.stats}
+                  onChange={(e) => handleToggle('stats', e.target.checked)}
+                  className="sr-only peer"
                 />
-              </button>
+                <div className="w-11 h-6 bg-coffee-200/50 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-coffee-500 shadow-sm"></div>
+              </label>
             </div>
             
             <p className="text-sm text-coffee-600">
@@ -253,18 +168,15 @@ export default function NotificationSettings() {
                 <Info className="h-5 w-5 text-gray-600" />
                 <h4 className="font-medium text-coffee-800">시스템 알림</h4>
               </div>
-              <button
-                onClick={() => handleToggle('system', !tempSettings.system)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  tempSettings.system ? 'bg-coffee-500' : 'bg-gray-200'
-                }`}
-              >
-                <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    tempSettings.system ? 'translate-x-6' : 'translate-x-1'
-                  }`}
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={tempSettings.system}
+                  onChange={(e) => handleToggle('system', e.target.checked)}
+                  className="sr-only peer"
                 />
-              </button>
+                <div className="w-11 h-6 bg-coffee-200/50 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-coffee-500 shadow-sm"></div>
+              </label>
             </div>
             
             <p className="text-sm text-coffee-600">

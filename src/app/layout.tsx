@@ -25,6 +25,10 @@ const OnboardingTrigger = dynamic(() => import('../components/ui/OnboardingTrigg
 const AppHeader = dynamic(() => import('../components/AppHeader'), {
   loading: () => null
 })
+
+const IOSPullToRefreshPreventer = dynamic(() => import('../components/ios/IOSPullToRefreshPreventer'), {
+  loading: () => null
+})
 import './globals.css'
 import '../styles/fluid.css'
 
@@ -108,6 +112,9 @@ export const metadata: Metadata = {
     'apple-mobile-web-app-status-bar-style': 'black-translucent',
     'apple-touch-fullscreen': 'yes',
     'format-detection': 'telephone=no',
+    // iOS Safari pull-to-refresh 및 bounce 효과 비활성화
+    'msapplication-tap-highlight': 'no',
+    'apple-mobile-web-app-title': 'CupNote',
   },
 }
 
@@ -117,6 +124,8 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: 'cover',
+  // iOS Safari bounce 효과 및 pull-to-refresh 비활성화
+  themeColor: '#8B4513',
   colorScheme: 'light',
 }
 
@@ -211,7 +220,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 }
 
                 // Register Service Worker for PWA
-                if ('serviceWorker' in navigator) {
+                // iOS WKWebView 감지
+                const isIOSWebView = /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(navigator.userAgent);
+                const isIOSApp = window.navigator.userAgent.includes('CupNote-iOS');
+                
+                // iOS 앱에서는 Service Worker 비활성화 (호환성 문제)
+                if ('serviceWorker' in navigator && !isIOSWebView && !isIOSApp) {
                   window.addEventListener('load', function() {
                     navigator.serviceWorker.register('/sw.js')
                       .then(function(registration) {
@@ -221,7 +235,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         registration.addEventListener('updatefound', function() {
                           const newWorker = registration.installing;
                           if (newWorker) {
-                            newWorker.postMessage({ type: 'SKIP_WAITING' });
+                            try {
+                              // iOS에서 postMessage가 실패할 수 있으므로 try-catch로 감싸기
+                              newWorker.postMessage({ type: 'SKIP_WAITING' });
+                            } catch (error) {
+                              console.log('CupNote SW: Skip waiting message failed (iOS compatibility)', error);
+                              // iOS에서는 페이지 새로고침으로 대체
+                              if (confirm('새 버전이 있습니다. 페이지를 새로고침하시겠습니까?')) {
+                                window.location.reload();
+                              }
+                            }
                           }
                         });
                       })
@@ -240,6 +263,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <SystemNotificationProvider>
                 <AuthProvider>
                   <SearchProvider>
+                  <IOSPullToRefreshPreventer />
                   <AppHeader />
                   <div className="pb-16 md:pb-0 safe-area-inset">{children}</div>
                   <MobileNavigation />

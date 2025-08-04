@@ -18,10 +18,12 @@ import {
   Snowflake,
   Mountain,
   Wheat,
-  Factory
+  Factory,
+  Scan
 } from 'lucide-react'
 
 import Navigation from '../../../../components/Navigation'
+import OCRScanner from '../../../../components/OCRScanner'
 import { isFeatureEnabled } from '../../../../config/feature-flags.config'
 
 import type { TastingSession, TastingMode, CoffeeInfo } from '../../../../types/tasting-flow.types'
@@ -116,6 +118,9 @@ export default function CoffeeInfoPage() {
   
   const [tastingDate, setTastingDate] = useState(new Date().toISOString().split('T')[0])
   const [errors, setErrors] = useState<Record<string, string>>({})
+  
+  // OCR 관련 상태
+  const [showOCRScanner, setShowOCRScanner] = useState(false)
 
   // Cascade 검색 결과 필터링
   const cafeResults = SAMPLE_CAFES.filter(cafe => 
@@ -253,6 +258,34 @@ export default function CoffeeInfoPage() {
     }
   }
 
+  // OCR 결과 처리
+  const handleOCRExtracted = (ocrInfo: import('../../../../lib/ocr-service').CoffeeInfoOCR) => {
+    // OCR 결과를 폼 필드에 적용
+    if (ocrInfo.coffeeName) {
+      setCoffeeQuery(ocrInfo.coffeeName)
+      setManualInput(prev => ({ ...prev, coffeeName: ocrInfo.coffeeName || '' }))
+    }
+    
+    if (ocrInfo.roasterName) {
+      setRoasterQuery(ocrInfo.roasterName)
+      setManualInput(prev => ({ ...prev, roasterName: ocrInfo.roasterName || '' }))
+    }
+    
+    // 추가 정보가 있으면 자동으로 섹션 펼치기
+    if (ocrInfo.origin || ocrInfo.variety || ocrInfo.processing || ocrInfo.roastLevel || ocrInfo.altitude) {
+      setAdditionalInfo({
+        origin: ocrInfo.origin || '',
+        variety: ocrInfo.variety || '',
+        processing: ocrInfo.processing || '',
+        roastLevel: ocrInfo.roastLevel || '',
+        altitude: ocrInfo.altitude || '',
+      })
+      setShowAdditionalInfo(true)
+    }
+    
+    setShowOCRScanner(false)
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-neutral-50">
       <div className="container mx-auto px-4 py-4 md:py-8 max-w-2xl pb-20 md:pb-8">
@@ -260,9 +293,9 @@ export default function CoffeeInfoPage() {
 
         {/* 헤더 */}
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-3">
-              <h1 className="text-2xl md:text-3xl font-bold text-coffee-800">커피 정보</h1>
+          <div className="flex items-center justify-between mb-4 gap-4">
+            <div className="flex items-center space-x-3 flex-1 min-w-0">
+              <h1 className="text-xl md:text-3xl font-bold text-coffee-800 whitespace-nowrap">커피 정보</h1>
               {/* 모드 표시 */}
               <div className={`px-3 py-1 rounded-full text-sm font-medium ${
                 mode === 'cafe' 
@@ -272,7 +305,23 @@ export default function CoffeeInfoPage() {
                 {mode === 'cafe' ? '☕ 카페' : '🏠 홈카페'}
               </div>
             </div>
-            <div className="text-sm text-coffee-600">1 / {mode === 'cafe' ? '6' : '7'}</div>
+            
+            <div className="flex items-center space-x-3 flex-shrink-0">
+              {/* OCR 스캔 버튼 */}
+              <button
+                onClick={() => setShowOCRScanner(true)}
+                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl hover:from-purple-600 hover:to-purple-700 transition-all duration-200 text-sm font-medium shadow-lg hover:shadow-xl touch-manipulation"
+                style={{
+                  minWidth: '80px',
+                  WebkitTapHighlightColor: 'transparent'
+                }}
+              >
+                <Scan className="h-4 w-4 flex-shrink-0" />
+                <span className="whitespace-nowrap">OCR 스캔</span>
+              </button>
+              
+              <div className="text-sm text-coffee-600 whitespace-nowrap">1 / {mode === 'cafe' ? '6' : '7'}</div>
+            </div>
           </div>
 
           {/* 진행바 */}
@@ -620,6 +669,15 @@ export default function CoffeeInfoPage() {
           </p>
         </div>
       </div>
+
+      {/* OCR Scanner Modal */}
+      {showOCRScanner && (
+        <OCRScanner
+          onInfoExtracted={handleOCRExtracted}
+          onClose={() => setShowOCRScanner(false)}
+          maxImages={2}
+        />
+      )}
     </div>
   )
 }

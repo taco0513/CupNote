@@ -9,10 +9,8 @@
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
-    "maxFailures": 0,
-    "metadata": {
-      "actualWorkers": 5
-    },
+    "maxFailures": 1,
+    "metadata": {},
     "preserveOutput": "always",
     "reporter": [
       [
@@ -42,9 +40,7 @@
         "outputDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 5
-        },
+        "metadata": {},
         "id": "setup",
         "name": "setup",
         "testDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e",
@@ -58,9 +54,7 @@
         "outputDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 5
-        },
+        "metadata": {},
         "id": "chromium",
         "name": "chromium",
         "testDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e",
@@ -74,9 +68,7 @@
         "outputDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 5
-        },
+        "metadata": {},
         "id": "firefox",
         "name": "firefox",
         "testDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e",
@@ -90,9 +82,7 @@
         "outputDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 5
-        },
+        "metadata": {},
         "id": "webkit",
         "name": "webkit",
         "testDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e",
@@ -106,9 +96,7 @@
         "outputDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 5
-        },
+        "metadata": {},
         "id": "Mobile Chrome",
         "name": "Mobile Chrome",
         "testDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e",
@@ -122,9 +110,7 @@
         "outputDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 5
-        },
+        "metadata": {},
         "id": "Mobile Safari",
         "name": "Mobile Safari",
         "testDir": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e",
@@ -149,296 +135,190 @@
       "stderr": "pipe"
     }
   },
-  "suites": [
+  "suites": [],
+  "errors": [
     {
-      "title": "homepage-login-test.spec.ts",
-      "file": "homepage-login-test.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "홈페이지 로그인 이슈 테스트",
-          "file": "homepage-login-test.spec.ts",
-          "line": 3,
-          "column": 6,
-          "specs": [
-            {
-              "title": "비로그인 사용자도 홈페이지에 접근할 수 있어야 함",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 3369,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "✅ 홈페이지가 정상적으로 표시됨\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-03T14:08:04.498Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "59ce2f5f6fae52465b53-0252ac91da685b179957",
-              "file": "homepage-login-test.spec.ts",
-              "line": 4,
-              "column": 7
-            },
-            {
-              "title": "로그인 페이지로 직접 이동 테스트",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 3126,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "✅ 로그인 페이지가 정상적으로 표시됨\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-03T14:08:04.496Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "59ce2f5f6fae52465b53-3f1ae06b90bb1030c9a5",
-              "file": "homepage-login-test.spec.ts",
-              "line": 27,
-              "column": 7
-            },
-            {
-              "title": "네비게이션 링크 테스트",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 3362,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "✅ 네비게이션이 정상적으로 표시됨\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-03T14:08:04.496Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "59ce2f5f6fae52465b53-3984b94ab4f9d9d5b0a7",
-              "file": "homepage-login-test.spec.ts",
-              "line": 45,
-              "column": 7
-            },
-            {
-              "title": "관리자 페이지 접근 테스트 (비로그인)",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 3430,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "✅ 관리자 페이지는 정상적으로 보호됨\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-03T14:08:04.496Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "59ce2f5f6fae52465b53-6f3ac2dab598dd829896",
-              "file": "homepage-login-test.spec.ts",
-              "line": 63,
-              "column": 7
-            },
-            {
-              "title": "데모 페이지 접근 테스트",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 4,
-                      "parallelIndex": 4,
-                      "status": "passed",
-                      "duration": 2887,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "✅ 데모 페이지가 정상적으로 표시됨\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-03T14:08:04.495Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "59ce2f5f6fae52465b53-624fdd2bb40c69ef9370",
-              "file": "homepage-login-test.spec.ts",
-              "line": 76,
-              "column": 7
-            },
-            {
-              "title": "홈페이지에서 데모 페이지로 이동 테스트",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 4,
-                      "parallelIndex": 4,
-                      "status": "failed",
-                      "duration": 1506,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"http://localhost:5173/\u001b[7mdemo\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:5173/\"\u001b[39m",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"http://localhost:5173/\u001b[7mdemo\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:5173/\"\u001b[39m\n    at /Users/zimo_mbp16_m1max/Projects/CupNote/e2e/homepage-login-test.spec.ts:110:24",
-                        "location": {
-                          "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/homepage-login-test.spec.ts",
-                          "column": 24,
-                          "line": 110
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 108 |\u001b[39m     \n \u001b[90m 109 |\u001b[39m     \u001b[90m// 데모 페이지로 이동했는지 확인\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 110 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(\u001b[32m'http://localhost:5173/demo'\u001b[39m)\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 111 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'demo-page-title'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m 112 |\u001b[39m     \n \u001b[90m 113 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'✅ 홈페이지에서 데모 페이지로 정상 이동됨'\u001b[39m)\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/homepage-login-test.spec.ts",
-                            "column": 24,
-                            "line": 110
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"http://localhost:5173/\u001b[7mdemo\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:5173/\"\u001b[39m\n\n\u001b[0m \u001b[90m 108 |\u001b[39m     \n \u001b[90m 109 |\u001b[39m     \u001b[90m// 데모 페이지로 이동했는지 확인\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 110 |\u001b[39m     expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoBe(\u001b[32m'http://localhost:5173/demo'\u001b[39m)\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 111 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'demo-page-title'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m 112 |\u001b[39m     \n \u001b[90m 113 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'✅ 홈페이지에서 데모 페이지로 정상 이동됨'\u001b[39m)\u001b[0m\n\u001b[2m    at /Users/zimo_mbp16_m1max/Projects/CupNote/e2e/homepage-login-test.spec.ts:110:24\u001b[22m"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-03T14:08:07.726Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/test-results/homepage-login-test-홈페이지-로그인-이슈-테스트-홈페이지에서-데모-페이지로-이동-테스트-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/test-results/homepage-login-test-홈페이지-로그인-이슈-테스트-홈페이지에서-데모-페이지로-이동-테스트-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/test-results/homepage-login-test-홈페이지-로그인-이슈-테스트-홈페이지에서-데모-페이지로-이동-테스트-chromium/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/homepage-login-test.spec.ts",
-                        "column": 24,
-                        "line": 110
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "59ce2f5f6fae52465b53-39ac88d8df80972d81da",
-              "file": "homepage-login-test.spec.ts",
-              "line": 94,
-              "column": 7
-            }
-          ]
-        }
-      ]
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/complete-user-flow.spec.ts",
+        "line": 5,
+        "column": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39mcomplete-user-flow.spec.ts:5\n\n\u001b[0m \u001b[90m 3 |\u001b[39m \u001b[90m// 전체 사용자 플로우 테스트\u001b[39m\n \u001b[90m 4 |\u001b[39m test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Complete User Flow Tests'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 5 |\u001b[39m   test\u001b[33m.\u001b[39muse(devices[\u001b[32m'iPhone 12'\u001b[39m])\n \u001b[90m   |\u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 6 |\u001b[39m\n \u001b[90m 7 |\u001b[39m   test\u001b[33m.\u001b[39mdescribe(\u001b[32m'First Time User Journey'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n \u001b[90m 8 |\u001b[39m     test(\u001b[32m'complete onboarding to first coffee record'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/complete-user-flow.spec.ts",
+        "line": 5,
+        "column": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39mcomplete-user-flow.spec.ts:5\n\n\u001b[0m \u001b[90m 3 |\u001b[39m \u001b[90m// 전체 사용자 플로우 테스트\u001b[39m\n \u001b[90m 4 |\u001b[39m test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Complete User Flow Tests'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 5 |\u001b[39m   test\u001b[33m.\u001b[39muse(devices[\u001b[32m'iPhone 12'\u001b[39m])\n \u001b[90m   |\u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 6 |\u001b[39m\n \u001b[90m 7 |\u001b[39m   test\u001b[33m.\u001b[39mdescribe(\u001b[32m'First Time User Journey'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n \u001b[90m 8 |\u001b[39m     test(\u001b[32m'complete onboarding to first coffee record'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/complete-user-flow.spec.ts",
+        "line": 5,
+        "column": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39mcomplete-user-flow.spec.ts:5\n\n\u001b[0m \u001b[90m 3 |\u001b[39m \u001b[90m// 전체 사용자 플로우 테스트\u001b[39m\n \u001b[90m 4 |\u001b[39m test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Complete User Flow Tests'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 5 |\u001b[39m   test\u001b[33m.\u001b[39muse(devices[\u001b[32m'iPhone 12'\u001b[39m])\n \u001b[90m   |\u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 6 |\u001b[39m\n \u001b[90m 7 |\u001b[39m   test\u001b[33m.\u001b[39mdescribe(\u001b[32m'First Time User Journey'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n \u001b[90m 8 |\u001b[39m     test(\u001b[32m'complete onboarding to first coffee record'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/complete-user-flow.spec.ts",
+        "line": 5,
+        "column": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39mcomplete-user-flow.spec.ts:5\n\n\u001b[0m \u001b[90m 3 |\u001b[39m \u001b[90m// 전체 사용자 플로우 테스트\u001b[39m\n \u001b[90m 4 |\u001b[39m test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Complete User Flow Tests'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 5 |\u001b[39m   test\u001b[33m.\u001b[39muse(devices[\u001b[32m'iPhone 12'\u001b[39m])\n \u001b[90m   |\u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 6 |\u001b[39m\n \u001b[90m 7 |\u001b[39m   test\u001b[33m.\u001b[39mdescribe(\u001b[32m'First Time User Journey'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n \u001b[90m 8 |\u001b[39m     test(\u001b[32m'complete onboarding to first coffee record'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/complete-user-flow.spec.ts",
+        "line": 5,
+        "column": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39mcomplete-user-flow.spec.ts:5\n\n\u001b[0m \u001b[90m 3 |\u001b[39m \u001b[90m// 전체 사용자 플로우 테스트\u001b[39m\n \u001b[90m 4 |\u001b[39m test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Complete User Flow Tests'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 5 |\u001b[39m   test\u001b[33m.\u001b[39muse(devices[\u001b[32m'iPhone 12'\u001b[39m])\n \u001b[90m   |\u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 6 |\u001b[39m\n \u001b[90m 7 |\u001b[39m   test\u001b[33m.\u001b[39mdescribe(\u001b[32m'First Time User Journey'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n \u001b[90m 8 |\u001b[39m     test(\u001b[32m'complete onboarding to first coffee record'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/complete-user-flow.spec.ts",
+        "line": 5,
+        "column": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39mcomplete-user-flow.spec.ts:5\n\n\u001b[0m \u001b[90m 3 |\u001b[39m \u001b[90m// 전체 사용자 플로우 테스트\u001b[39m\n \u001b[90m 4 |\u001b[39m test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Complete User Flow Tests'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 5 |\u001b[39m   test\u001b[33m.\u001b[39muse(devices[\u001b[32m'iPhone 12'\u001b[39m])\n \u001b[90m   |\u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 6 |\u001b[39m\n \u001b[90m 7 |\u001b[39m   test\u001b[33m.\u001b[39mdescribe(\u001b[32m'First Time User Journey'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n \u001b[90m 8 |\u001b[39m     test(\u001b[32m'complete onboarding to first coffee record'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/complete-user-flow.spec.ts",
+        "line": 5,
+        "column": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39mcomplete-user-flow.spec.ts:5\n\n\u001b[0m \u001b[90m 3 |\u001b[39m \u001b[90m// 전체 사용자 플로우 테스트\u001b[39m\n \u001b[90m 4 |\u001b[39m test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Complete User Flow Tests'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 5 |\u001b[39m   test\u001b[33m.\u001b[39muse(devices[\u001b[32m'iPhone 12'\u001b[39m])\n \u001b[90m   |\u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 6 |\u001b[39m\n \u001b[90m 7 |\u001b[39m   test\u001b[33m.\u001b[39mdescribe(\u001b[32m'First Time User Journey'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n \u001b[90m 8 |\u001b[39m     test(\u001b[32m'complete onboarding to first coffee record'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/complete-user-flow.spec.ts",
+        "line": 237,
+        "column": 10
+      },
+      "snippet": "\u001b[90m   at \u001b[39mcomplete-user-flow.spec.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m\n \u001b[90m 236 |\u001b[39m   test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Mobile Specific Features'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m     test\u001b[33m.\u001b[39muse(devices[\u001b[32m'iPhone SE'\u001b[39m])\n \u001b[90m     |\u001b[39m          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m\n \u001b[90m 239 |\u001b[39m     test(\u001b[32m'bottom navigation functionality'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n \u001b[90m 240 |\u001b[39m       \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/'\u001b[39m)\u001b[0m"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/complete-user-flow.spec.ts",
+        "line": 5,
+        "column": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39mcomplete-user-flow.spec.ts:5\n\n\u001b[0m \u001b[90m 3 |\u001b[39m \u001b[90m// 전체 사용자 플로우 테스트\u001b[39m\n \u001b[90m 4 |\u001b[39m test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Complete User Flow Tests'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 5 |\u001b[39m   test\u001b[33m.\u001b[39muse(devices[\u001b[32m'iPhone 12'\u001b[39m])\n \u001b[90m   |\u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 6 |\u001b[39m\n \u001b[90m 7 |\u001b[39m   test\u001b[33m.\u001b[39mdescribe(\u001b[32m'First Time User Journey'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n \u001b[90m 8 |\u001b[39m     test(\u001b[32m'complete onboarding to first coffee record'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/complete-user-flow.spec.ts",
+        "line": 237,
+        "column": 10
+      },
+      "snippet": "\u001b[90m   at \u001b[39mcomplete-user-flow.spec.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m\n \u001b[90m 236 |\u001b[39m   test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Mobile Specific Features'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m     test\u001b[33m.\u001b[39muse(devices[\u001b[32m'iPhone SE'\u001b[39m])\n \u001b[90m     |\u001b[39m          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m\n \u001b[90m 239 |\u001b[39m     test(\u001b[32m'bottom navigation functionality'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n \u001b[90m 240 |\u001b[39m       \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/'\u001b[39m)\u001b[0m"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/complete-user-flow.spec.ts",
+        "line": 5,
+        "column": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39mcomplete-user-flow.spec.ts:5\n\n\u001b[0m \u001b[90m 3 |\u001b[39m \u001b[90m// 전체 사용자 플로우 테스트\u001b[39m\n \u001b[90m 4 |\u001b[39m test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Complete User Flow Tests'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 5 |\u001b[39m   test\u001b[33m.\u001b[39muse(devices[\u001b[32m'iPhone 12'\u001b[39m])\n \u001b[90m   |\u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 6 |\u001b[39m\n \u001b[90m 7 |\u001b[39m   test\u001b[33m.\u001b[39mdescribe(\u001b[32m'First Time User Journey'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n \u001b[90m 8 |\u001b[39m     test(\u001b[32m'complete onboarding to first coffee record'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/complete-user-flow.spec.ts",
+        "line": 237,
+        "column": 10
+      },
+      "snippet": "\u001b[90m   at \u001b[39mcomplete-user-flow.spec.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m\n \u001b[90m 236 |\u001b[39m   test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Mobile Specific Features'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m     test\u001b[33m.\u001b[39muse(devices[\u001b[32m'iPhone SE'\u001b[39m])\n \u001b[90m     |\u001b[39m          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m\n \u001b[90m 239 |\u001b[39m     test(\u001b[32m'bottom navigation functionality'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n \u001b[90m 240 |\u001b[39m       \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/'\u001b[39m)\u001b[0m"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/complete-user-flow.spec.ts",
+        "line": 5,
+        "column": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39mcomplete-user-flow.spec.ts:5\n\n\u001b[0m \u001b[90m 3 |\u001b[39m \u001b[90m// 전체 사용자 플로우 테스트\u001b[39m\n \u001b[90m 4 |\u001b[39m test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Complete User Flow Tests'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 5 |\u001b[39m   test\u001b[33m.\u001b[39muse(devices[\u001b[32m'iPhone 12'\u001b[39m])\n \u001b[90m   |\u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 6 |\u001b[39m\n \u001b[90m 7 |\u001b[39m   test\u001b[33m.\u001b[39mdescribe(\u001b[32m'First Time User Journey'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n \u001b[90m 8 |\u001b[39m     test(\u001b[32m'complete onboarding to first coffee record'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/complete-user-flow.spec.ts",
+        "line": 322,
+        "column": 10
+      },
+      "snippet": "\u001b[90m   at \u001b[39mcomplete-user-flow.spec.ts:322\n\n\u001b[0m \u001b[90m 320 |\u001b[39m\n \u001b[90m 321 |\u001b[39m   test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Error Scenarios'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 322 |\u001b[39m     test\u001b[33m.\u001b[39muse(devices[\u001b[32m'Pixel 5'\u001b[39m])\n \u001b[90m     |\u001b[39m          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 323 |\u001b[39m\n \u001b[90m 324 |\u001b[39m     test(\u001b[32m'handle network offline'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page\u001b[33m,\u001b[39m context }) \u001b[33m=>\u001b[39m {\n \u001b[90m 325 |\u001b[39m       \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/'\u001b[39m)\u001b[0m"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/complete-user-flow.spec.ts",
+        "line": 5,
+        "column": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39mcomplete-user-flow.spec.ts:5\n\n\u001b[0m \u001b[90m 3 |\u001b[39m \u001b[90m// 전체 사용자 플로우 테스트\u001b[39m\n \u001b[90m 4 |\u001b[39m test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Complete User Flow Tests'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 5 |\u001b[39m   test\u001b[33m.\u001b[39muse(devices[\u001b[32m'iPhone 12'\u001b[39m])\n \u001b[90m   |\u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 6 |\u001b[39m\n \u001b[90m 7 |\u001b[39m   test\u001b[33m.\u001b[39mdescribe(\u001b[32m'First Time User Journey'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n \u001b[90m 8 |\u001b[39m     test(\u001b[32m'complete onboarding to first coffee record'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/complete-user-flow.spec.ts",
+        "line": 322,
+        "column": 10
+      },
+      "snippet": "\u001b[90m   at \u001b[39mcomplete-user-flow.spec.ts:322\n\n\u001b[0m \u001b[90m 320 |\u001b[39m\n \u001b[90m 321 |\u001b[39m   test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Error Scenarios'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 322 |\u001b[39m     test\u001b[33m.\u001b[39muse(devices[\u001b[32m'Pixel 5'\u001b[39m])\n \u001b[90m     |\u001b[39m          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 323 |\u001b[39m\n \u001b[90m 324 |\u001b[39m     test(\u001b[32m'handle network offline'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page\u001b[33m,\u001b[39m context }) \u001b[33m=>\u001b[39m {\n \u001b[90m 325 |\u001b[39m       \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/'\u001b[39m)\u001b[0m"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/complete-user-flow.spec.ts",
+        "line": 5,
+        "column": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39mcomplete-user-flow.spec.ts:5\n\n\u001b[0m \u001b[90m 3 |\u001b[39m \u001b[90m// 전체 사용자 플로우 테스트\u001b[39m\n \u001b[90m 4 |\u001b[39m test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Complete User Flow Tests'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 5 |\u001b[39m   test\u001b[33m.\u001b[39muse(devices[\u001b[32m'iPhone 12'\u001b[39m])\n \u001b[90m   |\u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 6 |\u001b[39m\n \u001b[90m 7 |\u001b[39m   test\u001b[33m.\u001b[39mdescribe(\u001b[32m'First Time User Journey'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n \u001b[90m 8 |\u001b[39m     test(\u001b[32m'complete onboarding to first coffee record'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/complete-user-flow.spec.ts",
+        "line": 322,
+        "column": 10
+      },
+      "snippet": "\u001b[90m   at \u001b[39mcomplete-user-flow.spec.ts:322\n\n\u001b[0m \u001b[90m 320 |\u001b[39m\n \u001b[90m 321 |\u001b[39m   test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Error Scenarios'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 322 |\u001b[39m     test\u001b[33m.\u001b[39muse(devices[\u001b[32m'Pixel 5'\u001b[39m])\n \u001b[90m     |\u001b[39m          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 323 |\u001b[39m\n \u001b[90m 324 |\u001b[39m     test(\u001b[32m'handle network offline'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page\u001b[33m,\u001b[39m context }) \u001b[33m=>\u001b[39m {\n \u001b[90m 325 |\u001b[39m       \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/'\u001b[39m)\u001b[0m"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/Users/zimo_mbp16_m1max/Projects/CupNote/e2e/complete-user-flow.spec.ts",
+        "line": 5,
+        "column": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39mcomplete-user-flow.spec.ts:5\n\n\u001b[0m \u001b[90m 3 |\u001b[39m \u001b[90m// 전체 사용자 플로우 테스트\u001b[39m\n \u001b[90m 4 |\u001b[39m test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Complete User Flow Tests'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 5 |\u001b[39m   test\u001b[33m.\u001b[39muse(devices[\u001b[32m'iPhone 12'\u001b[39m])\n \u001b[90m   |\u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 6 |\u001b[39m\n \u001b[90m 7 |\u001b[39m   test\u001b[33m.\u001b[39mdescribe(\u001b[32m'First Time User Journey'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n \u001b[90m 8 |\u001b[39m     test(\u001b[32m'complete onboarding to first coffee record'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+    },
+    {
+      "message": "TypeError: Cannot convert undefined or null to object",
+      "stack": "TypeError: Cannot convert undefined or null to object"
     }
   ],
-  "errors": [],
   "stats": {
-    "startTime": "2025-08-03T14:08:03.831Z",
-    "duration": 5430.107,
-    "expected": 5,
+    "startTime": "2025-08-04T11:24:24.210Z",
+    "duration": 514.652,
+    "expected": 0,
     "skipped": 0,
-    "unexpected": 1,
+    "unexpected": 0,
     "flaky": 0
   }
 }

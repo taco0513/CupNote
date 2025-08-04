@@ -4,9 +4,10 @@ import { useState, useEffect } from 'react'
 
 import { useRouter, useParams } from 'next/navigation'
 
-import { ArrowRight, ArrowLeft, Edit3, Clock, Info, CheckCircle, Loader2 } from 'lucide-react'
+import { ArrowRight, ArrowLeft, Edit3, Clock, Info, CheckCircle, Loader2, Camera } from 'lucide-react'
 
 import Navigation from '../../../../components/Navigation'
+import ImageUpload from '../../../../components/ImageUpload'
 import { isFeatureEnabled } from '../../../../config/feature-flags.config'
 
 import type { TastingSession, TastingMode, PersonalNotes } from '../../../../types/tasting-flow.types'
@@ -48,6 +49,8 @@ export default function PersonalNotesPage() {
   const [currentTime, setCurrentTime] = useState('')
   const [lastSavedTime, setLastSavedTime] = useState<Date | null>(null)
   const [isSaving, setIsSaving] = useState(false)
+  const [imageUrl, setImageUrl] = useState<string>('')
+  const [thumbnailUrl, setThumbnailUrl] = useState<string>('')
 
   // 자동 저장 타이머
   useEffect(() => {
@@ -145,12 +148,24 @@ export default function PersonalNotesPage() {
     }
   }
 
+  const handleImageUploaded = (url: string, thumbnail?: string) => {
+    setImageUrl(url)
+    setThumbnailUrl(thumbnail || '')
+  }
+
+  const handleImageRemoved = () => {
+    setImageUrl('')
+    setThumbnailUrl('')
+  }
+
   const handleNext = () => {
     const personalNotes: PersonalNotes = {
       noteText: noteText.trim(),
       selectedQuickInputs,
       selectedEmotions,
       timeContext: currentTime,
+      imageUrl: imageUrl || undefined,
+      thumbnailUrl: thumbnailUrl || undefined,
       createdAt: new Date().toISOString(),
     }
 
@@ -348,6 +363,26 @@ export default function PersonalNotesPage() {
                   </div>
                 </div>
               )}
+            </div>
+
+            {/* 사진 촬영 */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-4">
+                <Camera className="inline h-4 w-4 mr-2" />
+                커피 사진 (선택사항)
+              </label>
+              <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                <ImageUpload
+                  onImageUploaded={handleImageUploaded}
+                  onImageRemoved={handleImageRemoved}
+                  existingImageUrl={imageUrl}
+                  className="w-full"
+                  showThumbnail={true}
+                />
+                <p className="text-xs text-gray-500 mt-2">
+                  카메라로 촬영하거나 갤러리에서 선택할 수 있습니다
+                </p>
+              </div>
             </div>
 
             {/* 컨텍스트 정보 */}

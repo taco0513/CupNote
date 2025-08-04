@@ -457,7 +457,7 @@ export default function CoffeeAnalytics() {
             <p className="text-sm text-purple-600 mb-4">
               맛 프로파일 레이더 차트, 계절별 취향 변화, AI 추천 시스템으로 더 깊은 인사이트를 얻어보세요.
             </p>
-            <Link href="/analytics-concept">
+            <Link href="/my-records">
               <button className="px-4 py-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-lg font-medium hover:from-purple-600 hover:to-blue-600 transition-all duration-200 shadow-md">
                 고급 분석 보기 →
               </button>

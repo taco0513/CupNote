@@ -26,7 +26,7 @@ Sentry.init({
   release: process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0-rc.1',
   
   // 디버그 설정 (개발 환경에서만)
-  debug: process.env.NODE_ENV === 'development',
+  debug: process.env.NODE_ENV === 'development' && process.env.NEXT_PUBLIC_SENTRY_DEBUG === 'true',
   
   // 에러 필터링
   beforeSend(event, hint) {

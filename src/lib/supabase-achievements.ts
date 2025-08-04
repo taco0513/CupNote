@@ -1,13 +1,8 @@
-import { createClient } from '@supabase/supabase-js'
-
+import { supabase } from './supabase'
 import { DEFAULT_ACHIEVEMENTS, LEVEL_SYSTEM } from './achievements'
 import { log } from './logger'
 import { Achievement, UserStats, UserLevel } from '../types/achievement'
 import { CoffeeRecord } from '../types/coffee'
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-const supabase = createClient(supabaseUrl, supabaseKey)
 
 // Supabase 기반 성취 시스템
 export class SupabaseAchievements {
@@ -57,6 +52,34 @@ export class SupabaseAchievements {
     } catch (error) {
       console.error('성취 초기화 전체 오류:', error)
       // 성취 시스템 오류가 발생해도 앱 동작을 막지 않음
+    }
+  }
+
+  // 사용자의 모든 성취 리셋 (기록이 없을 때 사용)
+  static async resetUserAchievements(): Promise<boolean> {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    if (!user) return false
+
+    try {
+      // 모든 성취를 unlocked = false로 업데이트
+      const { error } = await supabase
+        .from('user_achievements')
+        .update({ 
+          unlocked: false, 
+          unlocked_at: null,
+          progress: 0 
+        })
+        .eq('user_id', user.id)
+
+      if (error) throw error
+      
+      console.log('사용자 성취가 리셋되었습니다.')
+      return true
+    } catch (error) {
+      console.error('성취 리셋 오류:', error)
+      return false
     }
   }
 

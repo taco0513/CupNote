@@ -1,8 +1,8 @@
 // 알림 시스템 타입 정의
 
-export type NotificationType = 'reminder' | 'achievement' | 'stats' | 'system'
+export type NotificationType = 'achievement' | 'stats' | 'system'
 
-export interface Notification {
+export interface CupNoteNotification {
   id: string
   type: NotificationType
   title: string
@@ -15,18 +15,9 @@ export interface Notification {
 
 export interface NotificationSettings {
   enabled: boolean
-  reminder: boolean
   achievement: boolean
   stats: boolean
   system: boolean
-  reminderTime: string // HH:mm 형식
-  reminderDays: number[] // 0-6 (일-토)
-}
-
-export interface ReminderData {
-  lastRecordDate?: string
-  consecutiveDays: number
-  totalRecords: number
 }
 
 export interface AchievementData {

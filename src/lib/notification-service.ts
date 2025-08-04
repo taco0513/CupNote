@@ -1,6 +1,6 @@
 // 알림 서비스 - 알림 생성 및 관리 로직
 
-import { Notification, NotificationSettings, NotificationType, ReminderData, AchievementData, StatsData } from '../types/notification'
+import { CupNoteNotification, NotificationSettings, NotificationType, AchievementData, StatsData } from '../types/notification'
 
 export class NotificationService {
   private static STORAGE_KEY = 'cupnote-notifications'
@@ -9,13 +9,10 @@ export class NotificationService {
   // 기본 설정
   static getDefaultSettings(): NotificationSettings {
     return {
-      enabled: true,
-      reminder: true,
-      achievement: true,
-      stats: true,
-      system: true,
-      reminderTime: '19:00', // 저녁 7시
-      reminderDays: [1, 2, 3, 4, 5, 6, 0] // 매일
+      enabled: false,
+      achievement: false,
+      stats: false,
+      system: false
     }
   }
 
@@ -34,7 +31,7 @@ export class NotificationService {
   }
 
   // 알림 목록 관리
-  static getNotifications(): Notification[] {
+  static getNotifications(): CupNoteNotification[] {
     try {
       const stored = localStorage.getItem(this.STORAGE_KEY)
       return stored ? JSON.parse(stored) : []
@@ -43,13 +40,13 @@ export class NotificationService {
     }
   }
 
-  static saveNotifications(notifications: Notification[]): void {
+  static saveNotifications(notifications: CupNoteNotification[]): void {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(notifications))
   }
 
   // 새 알림 추가
-  static addNotification(notification: Omit<Notification, 'id' | 'createdAt'>): Notification {
-    const newNotification: Notification = {
+  static addNotification(notification: Omit<CupNoteNotification, 'id' | 'createdAt'>): CupNoteNotification {
+    const newNotification: CupNoteNotification = {
       ...notification,
       id: Date.now().toString(),
       createdAt: new Date().toISOString()
@@ -99,36 +96,6 @@ export class NotificationService {
     return this.getNotifications().filter(n => !n.read).length
   }
 
-  // 리마인더 알림 생성
-  static createReminderNotification(data: ReminderData): void {
-    const settings = this.getSettings()
-    if (!settings.enabled || !settings.reminder) return
-
-    const { consecutiveDays, totalRecords } = data
-    
-    let title = '☕ 커피 기록 시간이에요!'
-    let message = '오늘 마신 커피는 어떠셨나요? 간단히 기록해보세요.'
-
-    // 연속 기록 일수에 따른 메시지 변경
-    if (consecutiveDays > 0) {
-      title = `🔥 ${consecutiveDays}일 연속 기록 중!`
-      message = '연속 기록을 이어가세요. 꾸준함이 취향 발견의 열쇠입니다!'
-    }
-
-    if (totalRecords === 0) {
-      title = '🌟 첫 번째 커피를 기록해보세요!'
-      message = '전문 용어 없이도 충분해요. 간단한 기록부터 시작해보세요.'
-    }
-
-    this.addNotification({
-      type: 'reminder',
-      title,
-      message,
-      data,
-      read: false,
-      actionUrl: '/mode-selection'
-    })
-  }
 
   // 성취 알림 생성
   static createAchievementNotification(data: AchievementData): void {
@@ -177,7 +144,7 @@ export class NotificationService {
   }
 
   // 브라우저 알림 표시
-  private static async showBrowserNotification(notification: Notification): Promise<void> {
+  private static async showBrowserNotification(notification: CupNoteNotification): Promise<void> {
     if ('Notification' in window && Notification.permission === 'granted') {
       try {
         const browserNotification = new Notification(notification.title, {
@@ -214,63 +181,6 @@ export class NotificationService {
     return 'denied'
   }
 
-  // 리마인더 체크 (앱 시작 시 호출)
-  static checkReminder(): void {
-    const settings = this.getSettings()
-    if (!settings.enabled || !settings.reminder) return
-
-    const now = new Date()
-    const today = now.getDay() // 0: 일요일, 6: 토요일
-    const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
-    
-    // 설정된 요일이 아니면 리턴
-    if (!settings.reminderDays.includes(today)) return
-
-    // 설정된 시간과 현재 시간 비교 (±5분 허용)
-    const [reminderHour, reminderMinute] = settings.reminderTime.split(':').map(Number)
-    const reminderTimeMinutes = reminderHour * 60 + reminderMinute
-    const currentTimeMinutes = now.getHours() * 60 + now.getMinutes()
-    const timeDiff = Math.abs(currentTimeMinutes - reminderTimeMinutes)
-
-    if (timeDiff <= 5) { // 5분 오차 허용
-      // 오늘 이미 리마인더를 보냈는지 확인
-      const todayString = now.toISOString().split('T')[0]
-      const notifications = this.getNotifications()
-      const todayReminder = notifications.find(n => 
-        n.type === 'reminder' && 
-        n.createdAt.startsWith(todayString)
-      )
-
-      if (!todayReminder) {
-        // 사용자 통계 가져오기
-        try {
-          const records = JSON.parse(localStorage.getItem('coffeeRecords') || '[]')
-          const lastRecord = records[0]
-          const lastRecordDate = lastRecord?.date
-          
-          // 연속 기록일 계산
-          let consecutiveDays = 0
-          if (lastRecordDate) {
-            const lastDate = new Date(lastRecordDate)
-            const yesterday = new Date()
-            yesterday.setDate(yesterday.getDate() - 1)
-            
-            if (lastDate.toDateString() === yesterday.toDateString()) {
-              consecutiveDays = 1 // 간단한 계산, 나중에 더 정교하게 개선 가능
-            }
-          }
-
-          this.createReminderNotification({
-            lastRecordDate,
-            consecutiveDays,
-            totalRecords: records.length
-          })
-        } catch (error) {
-          console.warn('리마인더 데이터 로드 실패:', error)
-        }
-      }
-    }
-  }
 
   // 뱃지 획득 체크 (기록 작성 후 호출)
   static checkAchievements(): void {

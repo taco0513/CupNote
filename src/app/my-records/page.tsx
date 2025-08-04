@@ -115,7 +115,7 @@ function MyRecordsPageContent() {
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-8">
             {/* 총 기록 */}
             <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-all hover:scale-105 group">
-              <CardContent className="p-4 lg:p-6">
+              <CardContent className="p-4 md:p-6">
                 <div className="flex items-center lg:items-start lg:flex-col">
                   <div className="w-12 h-12 lg:w-14 lg:h-14 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
                     <Coffee className="h-6 w-6 lg:h-7 lg:w-7 text-white" />
@@ -130,7 +130,7 @@ function MyRecordsPageContent() {
 
             {/* 이번 달 */}
             <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-all hover:scale-105 group">
-              <CardContent className="p-4 lg:p-6">
+              <CardContent className="p-4 md:p-6">
                 <div className="flex items-center lg:items-start lg:flex-col">
                   <div className="w-12 h-12 lg:w-14 lg:h-14 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
                     <Calendar className="h-6 w-6 lg:h-7 lg:w-7 text-white" />
@@ -145,7 +145,7 @@ function MyRecordsPageContent() {
 
             {/* 평균 평점 */}
             <Card variant="default" className="bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-all hover:scale-105 group">
-              <CardContent className="p-4 lg:p-6">
+              <CardContent className="p-4 md:p-6">
                 <div className="flex items-center lg:items-start lg:flex-col">
                   <div className="w-12 h-12 lg:w-14 lg:h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
                     <TrendingUp className="h-6 w-6 lg:h-7 lg:w-7 text-white" />
@@ -160,7 +160,7 @@ function MyRecordsPageContent() {
 
             {/* 마지막 기록 - 데스크탑에서만 표시 */}
             <Card variant="default" className="hidden xl:block bg-white/70 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg transition-all hover:scale-105 group">
-              <CardContent className="p-4 lg:p-6">
+              <CardContent className="p-4 md:p-6">
                 <div className="flex items-center lg:items-start lg:flex-col">
                   <div className="w-12 h-12 lg:w-14 lg:h-14 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
                     <Coffee className="h-6 w-6 lg:h-7 lg:w-7 text-white" />
@@ -177,7 +177,7 @@ function MyRecordsPageContent() {
 
             {/* 새 기록 추가 버튼 */}
             <Card variant="default" className="bg-gradient-to-br from-coffee-500 to-coffee-700 border border-coffee-400/30 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 group">
-              <CardContent className="p-4 lg:p-6">
+              <CardContent className="p-4 md:p-6">
                 <Link href="/mode-selection" className="flex items-center lg:items-start lg:flex-col h-full">
                   <div className="w-12 h-12 lg:w-14 lg:h-14 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
                     <Plus className="h-6 w-6 lg:h-7 lg:w-7 text-white" />
@@ -356,7 +356,7 @@ function MyRecordsPageContent() {
 
         {/* 첫 기록 안내 - 기록이 없을 때 */}
         {quickStats.total === 0 && (
-          <div className="space-y-6">
+          <div className="space-y-6 md:space-y-8">
             <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md">
               <CardContent>
                 <EmptyState

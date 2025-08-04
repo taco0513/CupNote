@@ -30,7 +30,13 @@ export default function AchievementsPage() {
         setLoading(true)
         // 실제 데이터 로드 시도
         const stats = await SupabaseStorage.getUserStats()
-        setUserStats(stats)
+        
+        // 기록이 없으면 성취도 표시하지 않음
+        if (stats && stats.totalRecords === 0) {
+          setUserStats(null)
+        } else {
+          setUserStats(stats)
+        }
       } catch (error) {
         console.error('통계 로드 실패:', error)
         setUserStats(null)
@@ -48,7 +54,7 @@ export default function AchievementsPage() {
       <ProtectedRoute>
         <Navigation showBackButton currentPage="achievements" />
         <PageLayout>
-          <div className="space-y-8">
+          <div className="space-y-6 md:space-y-8">
             <div className="animate-pulse">
               <div className="h-8 bg-coffee-200 rounded-lg w-32 mb-2"></div>
               <div className="h-4 bg-coffee-100 rounded-lg w-64"></div>
@@ -145,7 +151,7 @@ export default function AchievementsPage() {
           <div className="lg:col-span-1 space-y-6">
             {/* 전체 진행률 - 데스크탑에서 더 크게 */}
             <Card variant="elevated" className="bg-gradient-to-br from-coffee-50/90 to-amber-50/90 backdrop-blur-sm border border-coffee-200/30 shadow-xl">
-              <CardContent className="p-6">
+              <CardContent className="p-4 md:p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
                     <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-500 rounded-xl flex items-center justify-center shadow-lg">
@@ -199,7 +205,7 @@ export default function AchievementsPage() {
 
             {/* 레벨 카드 - 더 큰 디자인 */}
             <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-lg hover:shadow-xl transition-all">
-              <CardContent className="p-6">
+              <CardContent className="p-4 md:p-6">
                 <div className="flex items-center space-x-4">
                   <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-500 rounded-2xl flex items-center justify-center shadow-lg">
                     <Crown className="h-8 w-8 text-white" />

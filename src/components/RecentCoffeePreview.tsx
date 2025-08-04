@@ -153,7 +153,7 @@ export default function RecentCoffeePreview() {
 
       {/* 모든 기록 보기 버튼 */}
       <Link
-        href="/records"
+        href="/my-records"
         className="block w-full p-4 bg-coffee-50 hover:bg-coffee-100 rounded-xl transition-colors group"
       >
         <div className="flex items-center justify-center space-x-2 text-coffee-700">

@@ -37,10 +37,10 @@ interface AppSettings {
 }
 
 const defaultSettings: AppSettings = {
-  autoSaveEnabled: true,
-  showRatingInList: true,
+  autoSaveEnabled: false,
+  showRatingInList: false,
   compactView: false,
-  performanceMode: true
+  performanceMode: false
 }
 
 export default function SettingsPage() {
@@ -201,7 +201,7 @@ export default function SettingsPage() {
           <div className="space-y-6 md:space-y-8">
           {/* 앱 동작 설정 - 하이브리드 카드 */}
           <Card variant="default" className="bg-white/90 backdrop-blur-sm border border-coffee-200/40 shadow-lg hover:shadow-xl transition-shadow duration-200">
-            <CardContent className="p-6 md:p-8">
+            <CardContent className="p-4 md:p-6">
               <h3 className="text-lg md:text-xl font-semibold text-coffee-800 mb-6 flex items-center">
                 <SettingsIcon className="h-5 w-5 mr-3" />
                 앱 동작 설정
@@ -289,7 +289,7 @@ export default function SettingsPage() {
 
           {/* 알림 설정 - 하이브리드 카드 */}
           <Card variant="default" className="bg-white/90 backdrop-blur-sm border border-coffee-200/40 shadow-lg hover:shadow-xl transition-shadow duration-200">
-            <CardContent className="p-6 md:p-8">
+            <CardContent className="p-4 md:p-6">
               <h3 className="text-lg md:text-xl font-semibold text-coffee-800 mb-6 flex items-center">
                 <Bell className="h-5 w-5 mr-3" />
                 알림 설정
@@ -301,7 +301,7 @@ export default function SettingsPage() {
 
           {/* 성능 & 캐시 관리 - 하이브리드 카드 */}
           <Card variant="default" className="bg-white/90 backdrop-blur-sm border border-coffee-200/40 shadow-lg hover:shadow-xl transition-shadow duration-200">
-            <CardContent className="p-6 md:p-8">
+            <CardContent className="p-4 md:p-6">
               <h3 className="text-lg md:text-xl font-semibold text-coffee-800 mb-6 flex items-center">
                 <Zap className="h-5 w-5 mr-3" />
                 성능 & 캐시
@@ -330,7 +330,7 @@ export default function SettingsPage() {
 
           {/* 데이터 관리 - 하이브리드 카드 */}
           <Card variant="default" className="bg-white/90 backdrop-blur-sm border border-coffee-200/40 shadow-lg hover:shadow-xl transition-shadow duration-200">
-            <CardContent className="p-6 md:p-8">
+            <CardContent className="p-4 md:p-6">
               <h3 className="text-lg md:text-xl font-semibold text-coffee-800 mb-6 flex items-center">
                 <Database className="h-5 w-5 mr-3" />
                 데이터 관리
@@ -378,7 +378,7 @@ export default function SettingsPage() {
 
           {/* 위험한 작업 - 하이브리드 경고 카드 */}
           <Card variant="default" className="bg-red-50/90 backdrop-blur-sm border border-red-200/60 shadow-lg hover:shadow-xl transition-shadow duration-200">
-            <CardContent className="p-6 md:p-8">
+            <CardContent className="p-4 md:p-6">
               <h3 className="text-lg md:text-xl font-semibold text-red-800 mb-6 flex items-center">
                 <AlertTriangle className="h-5 w-5 mr-3" />
                 위험한 작업
@@ -433,7 +433,7 @@ export default function SettingsPage() {
 
           {/* 앱 정보 - 하이브리드 정보 카드 */}
           <Card variant="default" className="bg-white/90 backdrop-blur-sm border border-coffee-200/40 shadow-lg hover:shadow-xl transition-shadow duration-200">
-            <CardContent className="p-6 md:p-8">
+            <CardContent className="p-4 md:p-6">
               <h3 className="text-lg md:text-xl font-semibold text-coffee-800 mb-6 flex items-center">
                 <Info className="h-5 w-5 mr-3" />
                 앱 정보

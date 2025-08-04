@@ -68,28 +68,11 @@ export const fetchCommunityData = async (
  */
 const getFallbackCommunityData = (): CommunityData => {
   return {
-    flavorDistribution: {
-      '블루베리': 65,
-      '다크초콜릿': 58,
-      '견과류': 42,
-      '캐러멜': 35,
-      '오렌지': 28,
-      '바닐라': 25,
-      '꿀': 22,
-      '와인': 20
-    },
-    expressionDistribution: {
-      '싱그러운': 72,
-      '부드러운': 55,
-      '달콤한': 48,
-      '고소한': 38,
-      '상큼한': 32,
-      '묵직한': 28,
-      '깔끔한': 25
-    },
-    totalRecords: 50, // 샘플 데이터 기준
-    popularFlavors: ['블루베리', '다크초콜릿', '견과류', '캐러멜', '오렌지'],
-    popularExpressions: ['싱그러운', '부드러운', '달콤한', '고소한', '상큼한']
+    flavorDistribution: {},
+    expressionDistribution: {},
+    totalRecords: 0, // 실제 데이터 없음을 명시
+    popularFlavors: [],
+    popularExpressions: []
   }
 }
 
@@ -174,7 +157,12 @@ const generateCommunityMessageWithData = (
   sensoryMatches: number,
   totalRecords: number
 ): string => {
-  const recordText = totalRecords > 0 ? `${totalRecords}명의 다른 사용자들과` : '커뮤니티와'
+  // 실제 커뮤니티 데이터가 없는 경우
+  if (totalRecords === 0) {
+    return `🌟 첫 번째 기록! 당신이 이 커피의 첫 번째 탐험자입니다!`
+  }
+  
+  const recordText = `${totalRecords}명의 다른 사용자들과`
   
   if (score >= 85) {
     return `🎯 ${recordText} 완벽한 공감! 많은 분들이 비슷하게 느끼고 계세요!`

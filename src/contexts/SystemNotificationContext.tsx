@@ -3,12 +3,12 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { Notification, NotificationSettings } from '../types/notification'
+import { CupNoteNotification, NotificationSettings } from '../types/notification'
 import { NotificationService } from '../lib/notification-service'
 import { initializeDemoNotifications } from '../lib/demo-notification'
 
 interface SystemNotificationContextValue {
-  notifications: Notification[]
+  notifications: CupNoteNotification[]
   unreadCount: number
   settings: NotificationSettings
   refreshNotifications: () => void
@@ -34,7 +34,7 @@ interface SystemNotificationProviderProps {
 }
 
 export function SystemNotificationProvider({ children }: SystemNotificationProviderProps) {
-  const [notifications, setNotifications] = useState<Notification[]>([])
+  const [notifications, setNotifications] = useState<CupNoteNotification[]>([])
   const [settings, setSettings] = useState<NotificationSettings>(NotificationService.getDefaultSettings())
 
   // 알림 목록 새로고침
@@ -85,17 +85,11 @@ export function SystemNotificationProvider({ children }: SystemNotificationProvi
     refreshNotifications()
     refreshSettings()
 
-    // 앱 시작 시 리마인더 체크
-    NotificationService.checkReminder()
+    // 앱 시작 시 통계 체크
     NotificationService.checkStatsNotification()
     
     // 데모 알림 초기화 (첫 방문자용)
     initializeDemoNotifications()
-
-    // 5분마다 리마인더 체크
-    const reminderInterval = setInterval(() => {
-      NotificationService.checkReminder()
-    }, 5 * 60 * 1000) // 5분
 
     // 30분마다 알림 새로고침
     const refreshInterval = setInterval(() => {
@@ -103,7 +97,6 @@ export function SystemNotificationProvider({ children }: SystemNotificationProvi
     }, 30 * 60 * 1000) // 30분
 
     return () => {
-      clearInterval(reminderInterval)
       clearInterval(refreshInterval)
     }
   }, [])

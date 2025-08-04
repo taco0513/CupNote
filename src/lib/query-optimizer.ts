@@ -1,12 +1,6 @@
-import { createClient } from '@supabase/supabase-js'
-
+import { supabase } from './supabase'
 import { CacheService } from './cache-service'
 import { CoffeeRecord } from '../types/coffee'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
 
 export interface QueryOptions {
   page?: number

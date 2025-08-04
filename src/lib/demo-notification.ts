@@ -10,13 +10,7 @@ export function createDemoNotifications() {
     '/settings#notifications'
   )
 
-  // 기록 작성 독려 알림 (5초 후)
-  setTimeout(() => {
-    NotificationService.createReminderNotification({
-      consecutiveDays: 0,
-      totalRecords: 0
-    })
-  }, 5000)
+  // 기록 작성 독려 알림은 제거됨 (리마인더 기능 제거)
 
   // 뱃지 획득 데모 (10초 후)
   setTimeout(() => {
