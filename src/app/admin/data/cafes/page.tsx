@@ -529,7 +529,7 @@ export default function AdminCafesPage() {
           )}
           <UnifiedButton
             variant="outline"
-            size="small"
+            size="sm"
             onClick={startCrawling}
             disabled={isCrawling}
             className="border-coffee-200 text-coffee-600 hover:bg-coffee-50"
@@ -539,7 +539,7 @@ export default function AdminCafesPage() {
           </UnifiedButton>
           <UnifiedButton
             variant="outline"
-            size="small"
+            size="sm"
             onClick={exportToCSV}
             className="border-coffee-200 text-coffee-600 hover:bg-coffee-50"
           >
@@ -547,8 +547,8 @@ export default function AdminCafesPage() {
             CSV 내보내기
           </UnifiedButton>
           <UnifiedButton
-            variant="default"
-            size="small"
+            variant="secondary"
+            size="sm"
             onClick={() => setShowAddModal(true)}
             className="bg-gradient-to-r from-coffee-500 to-coffee-600"
           >
@@ -714,7 +714,7 @@ export default function AdminCafesPage() {
           <label htmlFor="csv-upload" className="cursor-pointer">
             <UnifiedButton
               variant="outline"
-              size="small"
+              size="sm"
               className="border-coffee-200 text-coffee-600 hover:bg-coffee-50"
               onClick={(e) => e.preventDefault()}
             >
@@ -841,7 +841,7 @@ export default function AdminCafesPage() {
                       <div className="flex items-center justify-center space-x-2">
                         <UnifiedButton
                           variant="ghost"
-                          size="small"
+                          size="sm"
                           onClick={() => {
                             setSelectedItem(item)
                             // 상세보기 모달 표시
@@ -852,7 +852,7 @@ export default function AdminCafesPage() {
                         </UnifiedButton>
                         <UnifiedButton
                           variant="ghost"
-                          size="small"
+                          size="sm"
                           onClick={() => {
                             setSelectedItem(item)
                             setShowEditModal(true)
@@ -863,7 +863,7 @@ export default function AdminCafesPage() {
                         </UnifiedButton>
                         <UnifiedButton
                           variant="ghost"
-                          size="small"
+                          size="sm"
                           className="p-2 text-red-600 hover:bg-red-50"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -885,7 +885,7 @@ export default function AdminCafesPage() {
               <div className="flex items-center space-x-2">
                 <UnifiedButton
                   variant="outline"
-                  size="small"
+                  size="sm"
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage(prev => prev - 1)}
                   className="border-coffee-200"
@@ -901,7 +901,7 @@ export default function AdminCafesPage() {
                     <UnifiedButton
                       key={page}
                       variant={currentPage === page ? "default" : "outline"}
-                      size="small"
+                      size="sm"
                       onClick={() => setCurrentPage(page)}
                       className={currentPage === page ? "bg-coffee-500" : "border-coffee-200"}
                     >
@@ -912,7 +912,7 @@ export default function AdminCafesPage() {
                 
                 <UnifiedButton
                   variant="outline"
-                  size="small"
+                  size="sm"
                   disabled={currentPage === totalPages}
                   onClick={() => setCurrentPage(prev => prev + 1)}
                   className="border-coffee-200"

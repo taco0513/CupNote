@@ -362,7 +362,7 @@ export default function AdminAnalyticsPage() {
           </div>
           <UnifiedButton
             variant={autoRefresh ? "default" : "outline"}
-            size="small"
+            size="sm"
             onClick={() => setAutoRefresh(!autoRefresh)}
             className={autoRefresh ? "bg-green-500 hover:bg-green-600" : "border-coffee-200 text-coffee-600"}
           >
@@ -371,7 +371,7 @@ export default function AdminAnalyticsPage() {
           </UnifiedButton>
           <UnifiedButton
             variant="outline"
-            size="small"
+            size="sm"
             onClick={loadAllData}
             className="border-coffee-200 text-coffee-600 hover:bg-coffee-50"
           >

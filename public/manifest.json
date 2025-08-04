@@ -5,11 +5,14 @@
   "theme_color": "#6F4E37",
   "background_color": "#FFF8F3",
   "display": "standalone",
-  "orientation": "portrait",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui", "browser"],
+  "orientation": "portrait-primary",
   "scope": "/",
-  "start_url": "/",
+  "start_url": "/?source=pwa",
   "id": "cupnote-coffee-app",
-  "categories": ["lifestyle", "food"],
+  "categories": ["lifestyle", "food", "productivity"],
+  "lang": "ko",
+  "dir": "ltr",
   "icons": [
     {
       "src": "/icons/icon-72x72.png",
@@ -85,7 +88,7 @@
       "name": "새 기록",
       "short_name": "기록",
       "description": "새로운 커피 기록 시작",
-      "url": "/mode-selection",
+      "url": "/mode-selection?source=shortcut",
       "icons": [
         {
           "src": "/icons/shortcut-record.png",
@@ -94,10 +97,22 @@
       ]
     },
     {
-      "name": "내 통계",
-      "short_name": "통계",
-      "description": "나의 커피 통계 보기",
-      "url": "/stats",
+      "name": "내 기록",
+      "short_name": "기록",
+      "description": "나의 커피 기록 보기",
+      "url": "/my-records?source=shortcut",
+      "icons": [
+        {
+          "src": "/icons/shortcut-stats.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "성취",
+      "short_name": "성취",
+      "description": "나의 커피 성취 확인",
+      "url": "/achievements?source=shortcut",
       "icons": [
         {
           "src": "/icons/shortcut-stats.png",
@@ -107,5 +122,18 @@
     }
   ],
   "prefer_related_applications": false,
-  "related_applications": []
+  "related_applications": [],
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "handle_links": "preferred",
+  "protocol_handlers": [
+    {
+      "protocol": "web+cupnote",
+      "url": "/import?data=%s"
+    }
+  ]
 }

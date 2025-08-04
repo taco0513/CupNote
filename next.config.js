@@ -22,12 +22,25 @@ const nextConfig = {
   // 성능 모니터링 강화
   poweredByHeader: false, // 보안 헤더 제거
   generateEtags: true, // ETag 생성으로 캐싱 최적화
-  // 실험적 기능 활성화 - Production Reality 패턴
+  // 서버 컴포넌트 외부 패키지 설정 (안정화됨)
+  serverExternalPackages: ['@supabase/supabase-js'],
+  
+  // 실험적 기능 활성화 - Production Reality 패턴 (App Router Optimized)
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion', 'recharts'],
     typedRoutes: true, // 타입 안전한 라우팅
     optimizeCss: true, // CSS 최적화
-    webVitalsAttribution: ['CLS', 'LCP', 'FCP', 'FID', 'TTFB'], // Web Vitals 추적
+    webVitalsAttribution: ['CLS', 'LCP', 'FCP', 'INP', 'TTFB'], // Web Vitals 추적 (INP replaces FID)
+  },
+  
+  // Turbopack 설정 (안정화됨)
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
   },
   // 번들 분석 설정
   productionBrowserSourceMaps: false, // 프로덕션 소스맵 비활성화

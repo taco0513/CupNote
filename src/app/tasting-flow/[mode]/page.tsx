@@ -1,37 +1,61 @@
-'use client'
-
-import { useEffect } from 'react'
-
-import { useRouter, useParams } from 'next/navigation'
-
 /**
- * Mode Entry Point
+ * Mode Entry Point - App Router Optimized
  * /tasting-flow/[mode] 접근 시 적절한 첫 번째 단계로 리다이렉트
  */
-export default function ModeEntryPage() {
-  const router = useRouter()
-  const params = useParams()
-  const mode = params.mode as string
+import { redirect } from 'next/navigation'
+import type { Metadata } from 'next'
 
-  useEffect(() => {
-    // 유효한 모드인지 확인
-    if (mode !== 'cafe' && mode !== 'homecafe') {
-      router.replace('/tasting-flow')
-      return
+// Route Segment Config
+export const dynamic = 'auto'
+export const revalidate = false // Static generation for valid modes
+
+// Generate static params for known modes
+export async function generateStaticParams() {
+  return [
+    { mode: 'cafe' },
+    { mode: 'homecafe' }
+  ]
+}
+
+// Generate metadata for each mode
+export async function generateMetadata({ 
+  params 
+}: { 
+  params: { mode: string } 
+}): Promise<Metadata> {
+  const mode = params.mode
+  
+  const modeNames = {
+    cafe: '카페 모드',
+    homecafe: '홈카페 모드'
+  } as const
+
+  const modeName = modeNames[mode as keyof typeof modeNames] || '테이스팅 플로우'
+  
+  return {
+    title: `${modeName} - CupNote`,
+    description: `${modeName}로 커피를 기록하세요. 전문적인 테이스팅 노트와 개인적인 감상을 남길 수 있습니다.`,
+    openGraph: {
+      title: `${modeName} - CupNote`,
+      description: `${modeName}로 커피를 기록하세요.`,
     }
+  }
+}
 
-    // 첫 번째 단계(coffee-info)로 리다이렉트
-    router.replace(`/tasting-flow/${mode}/coffee-info`)
-  }, [mode, router])
+interface ModeEntryPageProps {
+  params: {
+    mode: string
+  }
+}
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-neutral-50 flex items-center justify-center">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-coffee-500 mx-auto mb-4"></div>
-        <p className="text-coffee-600">
-          {mode === 'cafe' ? '카페 모드' : mode === 'homecafe' ? '홈카페 모드' : '테이스팅 플로우'}로 이동 중...
-        </p>
-      </div>
-    </div>
-  )
+export default function ModeEntryPage({ params }: ModeEntryPageProps) {
+  const mode = params.mode
+
+  // Server-side validation and redirect for invalid modes
+  if (mode !== 'cafe' && mode !== 'homecafe') {
+    redirect('/tasting-flow')
+  }
+
+  // For valid modes, redirect to first step
+  redirect(`/tasting-flow/${mode}/coffee-info`)
 }

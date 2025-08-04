@@ -39,16 +39,12 @@ export default function UnifiedButton({
         return 'btn-primary'
       case 'secondary':
         return 'btn-secondary'
-      case 'filter-active':
-        return 'filter-btn filter-btn-active'
-      case 'filter-inactive':
-        return 'filter-btn filter-btn-inactive'
       case 'outline':
         return 'btn-secondary border-2 border-coffee-400 bg-transparent hover:bg-coffee-50'
       case 'ghost':
         return 'bg-transparent text-coffee-600 hover:bg-coffee-50 hover:text-coffee-800'
       case 'danger':
-        return 'btn-primary'
+        return 'bg-red-500 hover:bg-red-600 text-white border border-red-600'
       case 'hero':
         // Hero maintains coffee DNA with responsive shadow
         return 'bg-gradient-to-r from-coffee-500 to-coffee-600 hover:from-coffee-600 hover:to-coffee-700 text-white shadow-md sm:shadow-lg hover:shadow-xl'
@@ -78,7 +74,6 @@ export default function UnifiedButton({
   }
 
   const widthStyle = fullWidth ? 'w-full' : ''
-  const dangerStyle = variant === 'danger' ? 'bg-red-500 hover:bg-red-600' : ''
   const isHero = variant === 'hero'
   const subtleAnimation = subtle ? 'transform hover:scale-105 transition-all duration-200' : ''
 
@@ -115,7 +110,6 @@ export default function UnifiedButton({
         ${getVariantClass()}
         ${getSizeClass()}
         ${widthStyle}
-        ${dangerStyle}
         ${subtleAnimation}
         ${isHero ? 'font-semibold rounded-xl' : ''}
         ${className}
