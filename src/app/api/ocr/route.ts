@@ -38,9 +38,9 @@ export async function POST(request: NextRequest) {
     const base64 = Buffer.from(buffer).toString('base64')
     const dataUrl = `data:${image.type};base64,${base64}`
 
-    // Tesseract 서버 사이드 처리 (타임아웃 30초)
+    // Tesseract 서버 사이드 처리 (타임아웃 40초, 더 나은 설정)
     const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => reject(new Error('OCR 처리 시간 초과')), 30000)
+      setTimeout(() => reject(new Error('OCR 처리 시간 초과')), 40000)
     })
     
     const ocrPromise = Tesseract.recognize(
@@ -52,7 +52,11 @@ export async function POST(request: NextRequest) {
           if (m.status === 'recognizing text') {
             console.log(`진행률: ${Math.round(m.progress * 100)}%`)
           }
-        }
+        },
+        // 더 나은 OCR 설정
+        tessedit_pageseg_mode: Tesseract.PSM.SINGLE_BLOCK,
+        tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789가-힣 .,:-',
+        preserve_interword_spaces: '1'
       }
     )
     
@@ -98,6 +102,8 @@ function parseStrageCoffeeInfo(text: string): any {
       /([A-Za-z가-힣\s]+)\s*(?:블렌드|싱글|에스프레소|드립)/i,
       /Coffee[:\s]*([A-Za-z가-힣\s]+)/i,
       /커피[:\s]*([A-Za-z가-힣\s]+)/i,
+      /El\s+([A-Za-z\s]+)/i, // El Diviso 형식
+      /([A-Za-z\s]+)\s*-\s*([A-Za-z\s]+)\s*Decaf/i, // "Name - Location Decaf" 형식
       /^([A-Za-z가-힣\s]{3,30})/m // 첫 줄에서 3-30자 사이
     ]
     
@@ -130,6 +136,7 @@ function parseStrageCoffeeInfo(text: string): any {
       /원산지\s*[:：]\s*([A-Za-z가-힣\s,]+)/i,
       /Origin\s*[:：]\s*([A-Za-z\s,]+)/i,
       /산지\s*[:：]\s*([A-Za-z가-힣\s,]+)/i,
+      /Region\s*[:：]?\s*([A-Za-z\s,]+)/i, // Region: 형식
       /(Ethiopia|Colombia|Brazil|Kenya|Guatemala|Costa Rica|Panama|Jamaica|Yemen|Honduras|Nicaragua|Peru|Bolivia|Ecuador)/i
     ]
     
@@ -145,7 +152,8 @@ function parseStrageCoffeeInfo(text: string): any {
     const processPatterns = [
       /가공\s*방식?\s*[:：]\s*([A-Za-z가-힣\s]+)/i,
       /Process\s*[:：]\s*([A-Za-z\s]+)/i,
-      /(Natural|Washed|Honey|Semi-washed|Anaerobic|Wet|Dry)/i
+      /(Natural|Washed|Honey|Semi-washed|Anaerobic|Wet|Dry|Pulped Natural)/i, // Pulped Natural 추가
+      /Metodo\s*[:：]?\s*([A-Za-z\s]+)/i // 스페인어 형식
     ]
     
     for (const pattern of processPatterns) {
@@ -184,6 +192,22 @@ function parseStrageCoffeeInfo(text: string): any {
       const match = text.match(pattern)
       if (match && match[1] && match[1].trim().length > 2) {
         info.notes = match[1].trim()
+        break
+      }
+    }
+
+    // 품종 추출 (추가)
+    const varietyPatterns = [
+      /품종\s*[:：]\s*([A-Za-z가-힣\s,]+)/i,
+      /Variety\s*[:：]\s*([A-Za-z\s,]+)/i,
+      /Varietal\s*[:：]?\s*([A-Za-z\s,]+)/i,
+      /(Arabica|Bourbon|Typica|Caturra|Catuai|Mundo Novo|Yellow Bourbon|Red Bourbon)/i
+    ]
+    
+    for (const pattern of varietyPatterns) {
+      const match = text.match(pattern)
+      if (match && match[1] && match[1].trim().length > 2) {
+        info.variety = match[1].trim()
         break
       }
     }
