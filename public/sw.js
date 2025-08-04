@@ -1,1 +1,95 @@
-if(!self.define){let e,s={};const a=(a,c)=>(a=new URL(a+".js",c).href,s[a]||new Promise(s=>{if("document"in self){const e=document.createElement("script");e.src=a,e.onload=s,document.head.appendChild(e)}else e=a,importScripts(a),s()}).then(()=>{let e=s[a];if(!e)throw new Error(`Module ${a} didn’t register its module`);return e}));self.define=(c,i)=>{const n=e||("document"in self?document.currentScript.src:"")||location.href;if(s[n])return;let t={};const r=e=>a(e,n),f={module:{uri:n},exports:t,require:r};s[n]=Promise.all(c.map(e=>f[e]||r(e))).then(e=>(i(...e),t))}}define(["./workbox-f52fd911"],function(e){"use strict";importScripts(),self.skipWaiting(),e.clientsClaim(),e.precacheAndRoute([{url:"/_next/app-build-manifest.json",revision:"c1b0d3240ba8fcee322f5605396ff262"},{url:"/_next/static/Gg3w7AVqfgPUZX-pm1uqf/_buildManifest.js",revision:"3933c389f904002d95fe56f77e0cbf52"},{url:"/_next/static/Gg3w7AVqfgPUZX-pm1uqf/_ssgManifest.js",revision:"b6652df95db52feb4daf4eca35380933"},{url:"/_next/static/chunks/490-7cc1943e74f4758a.js",revision:"7cc1943e74f4758a"},{url:"/_next/static/chunks/4bd1b696-cf72ae8a39fa05aa.js",revision:"cf72ae8a39fa05aa"},{url:"/_next/static/chunks/634-380a0b895218576e.js",revision:"380a0b895218576e"},{url:"/_next/static/chunks/647-7ed9a9bfc07cc72e.js",revision:"7ed9a9bfc07cc72e"},{url:"/_next/static/chunks/725-368617bddb6ad027.js",revision:"368617bddb6ad027"},{url:"/_next/static/chunks/964-60efd35770e0bfbd.js",revision:"60efd35770e0bfbd"},{url:"/_next/static/chunks/984-70fbe3a8fd5c457c.js",revision:"70fbe3a8fd5c457c"},{url:"/_next/static/chunks/app/_not-found/page-ab3b950042c153e9.js",revision:"ab3b950042c153e9"},{url:"/_next/static/chunks/app/achievements/page-abc7ad19b955d91b.js",revision:"abc7ad19b955d91b"},{url:"/_next/static/chunks/app/api/records/route-0e3b1cffb5e43a66.js",revision:"0e3b1cffb5e43a66"},{url:"/_next/static/chunks/app/coffee/%5Bid%5D/page-afb44cd0349aa4c1.js",revision:"afb44cd0349aa4c1"},{url:"/_next/static/chunks/app/layout-1f4d998b61c99d09.js",revision:"1f4d998b61c99d09"},{url:"/_next/static/chunks/app/migration/page-a8a40649cbf73c06.js",revision:"a8a40649cbf73c06"},{url:"/_next/static/chunks/app/mode-selection/page-5587e27aa698b57e.js",revision:"5587e27aa698b57e"},{url:"/_next/static/chunks/app/onboarding/page-3b0f5a06d126196b.js",revision:"3b0f5a06d126196b"},{url:"/_next/static/chunks/app/page-4363b115c63fe4b2.js",revision:"4363b115c63fe4b2"},{url:"/_next/static/chunks/app/record/step1/page-8fcb2d33ac0179f5.js",revision:"8fcb2d33ac0179f5"},{url:"/_next/static/chunks/app/record/step2/page-ca60dc65b0dd977d.js",revision:"ca60dc65b0dd977d"},{url:"/_next/static/chunks/app/record/step3/page-4ffe9ec5f4d27919.js",revision:"4ffe9ec5f4d27919"},{url:"/_next/static/chunks/app/record/step4/page-4fd550e62d6cbd85.js",revision:"4fd550e62d6cbd85"},{url:"/_next/static/chunks/app/result/page-beca7d1487606958.js",revision:"beca7d1487606958"},{url:"/_next/static/chunks/app/settings/page-2123c509caca6cdb.js",revision:"2123c509caca6cdb"},{url:"/_next/static/chunks/app/settings/performance/page-bae0b6e1323f7af1.js",revision:"bae0b6e1323f7af1"},{url:"/_next/static/chunks/app/sitemap.xml/route-0e3b1cffb5e43a66.js",revision:"0e3b1cffb5e43a66"},{url:"/_next/static/chunks/app/stats/page-a2141785fa4de0a5.js",revision:"a2141785fa4de0a5"},{url:"/_next/static/chunks/framework-306aa0968ce8efc5.js",revision:"306aa0968ce8efc5"},{url:"/_next/static/chunks/main-app-73f33982fd1b8fb9.js",revision:"73f33982fd1b8fb9"},{url:"/_next/static/chunks/main-b54bb673d3bc81bb.js",revision:"b54bb673d3bc81bb"},{url:"/_next/static/chunks/pages/_app-0a0020ddd67f79cf.js",revision:"0a0020ddd67f79cf"},{url:"/_next/static/chunks/pages/_error-03529f2c21436739.js",revision:"03529f2c21436739"},{url:"/_next/static/chunks/polyfills-42372ed130431b0a.js",revision:"846118c33b2c0e922d7b3a7676f81f6f"},{url:"/_next/static/chunks/webpack-e16b7df2851af18b.js",revision:"e16b7df2851af18b"},{url:"/_next/static/css/c5fa215aa1a65245.css",revision:"c5fa215aa1a65245"},{url:"/favicon.svg",revision:"8e6082b2145974fecbe160c54ccec9ae"},{url:"/icons/icon-128x128.svg",revision:"c80e89eec32890890a1040ccae575b96"},{url:"/icons/icon-144x144.svg",revision:"d07b73ce8a1311e060275f2af90b0182"},{url:"/icons/icon-152x152.svg",revision:"680e68daec14fc0c60c62cf37334ee18"},{url:"/icons/icon-192x192.svg",revision:"b12597f39cd40d84d543e2db697774d4"},{url:"/icons/icon-384x384.svg",revision:"b992fef335406207324f51cdc1c7f261"},{url:"/icons/icon-512x512.svg",revision:"2a392197069f0a2e244fadf02468ede0"},{url:"/icons/icon-72x72.svg",revision:"40601b126d5401ef154fcf460d30f490"},{url:"/icons/icon-96x96.svg",revision:"bd0547636b2c338bfb9b22ff451f9c21"},{url:"/images/placeholder.jpg",revision:"f5782fc35116ebc709b885edab7674de"},{url:"/manifest.json",revision:"8735bf970981b7208c47061d5a259d82"},{url:"/robots.txt",revision:"0b9da01aa1d13fbca39e70a9ad716aaf"}],{ignoreURLParametersMatching:[]}),e.cleanupOutdatedCaches(),e.registerRoute("/",new e.NetworkFirst({cacheName:"start-url",plugins:[{cacheWillUpdate:async({request:e,response:s,event:a,state:c})=>s&&"opaqueredirect"===s.type?new Response(s.body,{status:200,statusText:"OK",headers:s.headers}):s}]}),"GET"),e.registerRoute(/^https:\/\/.*\.supabase\.co\/.*$/,new e.NetworkFirst({cacheName:"supabase-cache",plugins:[new e.ExpirationPlugin({maxEntries:50,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/^https:\/\/.*\.supabase\.co\/storage\/.*$/,new e.CacheFirst({cacheName:"supabase-images",plugins:[new e.ExpirationPlugin({maxEntries:100,maxAgeSeconds:2592e3})]}),"GET")});
+/**
+ * CupNote Service Worker - PWA Navigation Control
+ * 모든 네비게이션을 PWA 모드로 강제 유지
+ */
+
+const CACHE_NAME = 'cupnote-v1.3.0'
+const urlsToCache = [
+  '/',
+  '/manifest.json',
+  '/icons/icon-192x192.png',
+  '/icons/icon-512x512.png'
+]
+
+// 설치 이벤트
+self.addEventListener('install', (event) => {
+  console.log('CupNote SW: Installing...')
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => {
+        console.log('CupNote SW: Caching app shell')
+        return cache.addAll(urlsToCache)
+      })
+      .then(() => {
+        // 즉시 활성화
+        return self.skipWaiting()
+      })
+  )
+})
+
+// 활성화 이벤트
+self.addEventListener('activate', (event) => {
+  console.log('CupNote SW: Activating...')
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) {
+            console.log('CupNote SW: Deleting old cache:', cacheName)
+            return caches.delete(cacheName)
+          }
+        })
+      )
+    }).then(() => {
+      // 모든 클라이언트 제어
+      return self.clients.claim()
+    })
+  )
+})
+
+// 가져오기 이벤트 - PWA 네비게이션 제어
+self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url)
+  
+  // 같은 오리진의 네비게이션 요청만 처리
+  if (event.request.mode === 'navigate' && url.origin === self.location.origin) {
+    console.log('CupNote SW: Handling navigation to:', url.pathname)
+    
+    event.respondWith(
+      fetch(event.request).catch(() => {
+        // 네트워크 실패 시 캐시에서 홈페이지 반환
+        return caches.match('/')
+      })
+    )
+    return
+  }
+  
+  // 정적 자원 캐싱
+  if (event.request.destination === 'image' || 
+      event.request.destination === 'script' || 
+      event.request.destination === 'style') {
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        return response || fetch(event.request).then((fetchResponse) => {
+          return caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, fetchResponse.clone())
+            return fetchResponse
+          })
+        })
+      })
+    )
+  }
+})
+
+// 메시지 처리 - 클라이언트와 통신
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting()
+  }
+  
+  if (event.data && event.data.type === 'FORCE_PWA_MODE') {
+    console.log('CupNote SW: Force PWA mode requested')
+    // PWA 모드 강제 활성화 신호
+    event.ports[0].postMessage({ success: true })
+  }
+})

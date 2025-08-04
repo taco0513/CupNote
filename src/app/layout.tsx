@@ -209,6 +209,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     }
                   });
                 }
+
+                // Register Service Worker for PWA
+                if ('serviceWorker' in navigator) {
+                  window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/sw.js')
+                      .then(function(registration) {
+                        console.log('CupNote SW: Registration successful');
+                        
+                        // Force update if new version available
+                        registration.addEventListener('updatefound', function() {
+                          const newWorker = registration.installing;
+                          if (newWorker) {
+                            newWorker.postMessage({ type: 'SKIP_WAITING' });
+                          }
+                        });
+                      })
+                      .catch(function(error) {
+                        console.log('CupNote SW: Registration failed', error);
+                      });
+                  });
+                }
               })();
             `
           }}
