@@ -48,7 +48,8 @@ export default function AppHeader({
     <>
       {/* Main Header */}
       <header className="md:hidden sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-neutral-200 shadow-sm">
-        <div className="flex items-center justify-between h-16 px-4">
+        <div className="pt-safe-top">
+          <div className="flex items-center justify-between h-16 px-4">
           {/* 왼쪽: 로고 & 앱 이름 */}
           <div className="flex items-center space-x-3 flex-1">
             <div className="flex items-center space-x-3">
@@ -104,6 +105,7 @@ export default function AppHeader({
             </button>
           </div>
         </div>
+        </div>
 
         {/* 검색 입력창 (확장된 상태) */}
         {showSearchInput && (
@@ -141,7 +143,8 @@ export default function AppHeader({
           {/* 프로필 슬라이더 */}
           <div className="absolute top-0 right-0 w-80 max-w-[90vw] h-full bg-white/95 backdrop-blur-md shadow-xl animate-slide-in-right">
             {/* 슬라이더 헤더 */}
-            <div className="flex items-center justify-between p-4 border-b border-coffee-200/30">
+            <div className="pt-safe-top">
+              <div className="flex items-center justify-between p-4 border-b border-coffee-200/30">
               <h2 className="text-lg font-semibold text-coffee-800">프로필 메뉴</h2>
               <button
                 onClick={() => setShowMobileMenu(false)}
@@ -149,6 +152,7 @@ export default function AppHeader({
               >
                 <X className="h-5 w-5 text-coffee-600" />
               </button>
+              </div>
             </div>
 
             {/* 프로필 슬라이더 콘텐츠 */}
