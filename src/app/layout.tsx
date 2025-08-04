@@ -138,34 +138,74 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              // PWA Mode Detection and Status Bar Handler
+              // Enhanced PWA Navigation - Force Standalone Mode Retention
               (function() {
-                // Check if running in standalone PWA mode
+                // Detect PWA mode
                 const isPWA = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
+                const isIOSPWA = ('standalone' in window.navigator) && (window.navigator.standalone);
+                const isInAppMode = isPWA || isIOSPWA;
                 
-                if (isPWA) {
-                  // Add PWA class to body for styling
+                if (isInAppMode) {
+                  // Add PWA class to body
                   document.body.classList.add('pwa-mode');
+                  console.log('PWA Mode Active - Navigation Override Enabled');
                   
-                  // Handle status bar style
-                  const meta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
-                  if (meta) {
-                    meta.setAttribute('content', 'black-translucent');
-                  }
-                  
-                  // Only prevent external links from opening in browser
+                  // Force all same-origin navigation to stay in PWA
                   document.addEventListener('click', function(e) {
                     const link = e.target.closest('a');
-                    if (link && link.href && link.target === '_blank') {
-                      const url = new URL(link.href);
-                      const currentUrl = new URL(window.location.href);
-                      
-                      // Only prevent external links
-                      if (url.origin !== currentUrl.origin) {
-                        e.preventDefault();
-                        // Keep external links within PWA
-                        window.location.href = link.href;
+                    if (link && link.href) {
+                      try {
+                        const url = new URL(link.href);
+                        const currentUrl = new URL(window.location.href);
+                        
+                        // Handle same-origin links
+                        if (url.origin === currentUrl.origin) {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          
+                          // Use pushState to navigate without browser UI
+                          if (url.pathname !== currentUrl.pathname || url.search !== currentUrl.search) {
+                            window.history.pushState(null, '', link.href);
+                            
+                            // Trigger Next.js router navigation
+                            window.dispatchEvent(new PopStateEvent('popstate'));
+                            
+                            // Fallback: force page reload if needed
+                            setTimeout(() => {
+                              if (window.location.href !== link.href) {
+                                window.location.replace(link.href);
+                              }
+                            }, 100);
+                          }
+                        } else {
+                          // External links - open in current window to stay in PWA
+                          e.preventDefault();
+                          window.location.href = link.href;
+                        }
+                      } catch (err) {
+                        console.warn('PWA Navigation Error:', err);
                       }
+                    }
+                  });
+                  
+                  // Handle browser back/forward to maintain PWA
+                  window.addEventListener('popstate', function(e) {
+                    // Ensure we stay in PWA mode
+                    if (!document.body.classList.contains('pwa-mode')) {
+                      document.body.classList.add('pwa-mode');
+                    }
+                  });
+                  
+                  // Prevent accidental exit from PWA
+                  let exitAttempts = 0;
+                  window.addEventListener('beforeunload', function(e) {
+                    exitAttempts++;
+                    if (exitAttempts === 1) {
+                      // First attempt - try to stay in PWA
+                      e.preventDefault();
+                      e.returnValue = '';
+                      setTimeout(() => { exitAttempts = 0; }, 1000);
+                      return '';
                     }
                   });
                 }
