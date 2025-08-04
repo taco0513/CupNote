@@ -135,6 +135,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="apple-touch-icon" href="/icons/apple-icon-180x180.png" />
       </head>
       <body className="min-h-screen bg-gradient-to-br from-background to-background-secondary antialiased">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // PWA Navigation Handler - Prevent external navigation
+              if (window.navigator && 'serviceWorker' in navigator) {
+                document.addEventListener('click', function(e) {
+                  const link = e.target.closest('a');
+                  if (link && link.href && link.href.startsWith(window.location.origin)) {
+                    // Ensure internal links stay within PWA
+                    if (link.target === '_blank') {
+                      link.target = '_self';
+                    }
+                  }
+                });
+              }
+            `
+          }}
+        />
         <ThemeProvider>
           <ErrorBoundary>
             <NotificationProvider>

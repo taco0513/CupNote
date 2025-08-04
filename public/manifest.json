@@ -8,6 +8,7 @@
   "orientation": "portrait",
   "scope": "/",
   "start_url": "/",
+  "navigation_scope": "/",
   "id": "cupnote-coffee-app",
   "categories": ["lifestyle", "food"],
   "icons": [
