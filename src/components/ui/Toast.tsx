@@ -96,7 +96,10 @@ function ToastContainer({
   if (!mounted || !toasts.length) return null
 
   const toastContent = (
-    <div className="fixed top-4 right-4 z-50 flex flex-col gap-3 max-w-md md:max-w-lg">
+    <div className="fixed z-50 flex flex-col gap-3 max-w-md md:max-w-lg" style={{ 
+      top: `calc(1rem + env(safe-area-inset-top))`, 
+      right: `calc(1rem + env(safe-area-inset-right))` 
+    }}>
       {toasts.map(toast => (
         <ToastItem key={toast.id} toast={toast} onRemove={onRemove} />
       ))}

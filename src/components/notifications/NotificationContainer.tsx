@@ -101,7 +101,13 @@ export default function NotificationContainer() {
   }
 
   return (
-    <div className="fixed top-0 right-0 z-50 p-4 space-y-4 max-h-screen overflow-y-auto">
+    <div 
+      className="fixed z-50 p-4 space-y-4 max-h-screen overflow-y-auto"
+      style={{ 
+        top: `env(safe-area-inset-top)`, 
+        right: `env(safe-area-inset-right)` 
+      }}
+    >
       <div className="flex flex-col items-end">
         {notifications.map(notification => (
           <NotificationItem key={notification.id} notification={notification} />
