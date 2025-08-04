@@ -351,55 +351,129 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
         {/* 로그인 사용자 전용 섹션 */}
         {user && (
           <>
-            {/* Clean Stats with Subtle Premium Touch */}
+            {/* Enhanced Stats Widget */}
             {stats.total > 0 && (
               <div className="mb-12">
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 text-center border border-coffee-100/50 shadow-sm">
-                    <div className="text-2xl font-bold text-coffee-700 mb-1">{stats.thisMonth}</div>
-                    <div className="text-xs text-coffee-600">이번 달</div>
+                <div className="bg-gradient-to-r from-coffee-50 to-amber-50 rounded-2xl p-6 border border-coffee-200/30 shadow-md">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-coffee-800">☕ 나의 커피 여정</h3>
+                    <Link href="/my-records">
+                      <button className="text-coffee-500 hover:text-coffee-700 text-sm font-medium flex items-center space-x-1 transition-colors">
+                        <span>더보기</span>
+                        <ChevronRight className="h-4 w-4" />
+                      </button>
+                    </Link>
                   </div>
-                  <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 text-center border border-coffee-100/50 shadow-sm">
-                    <div className="text-2xl font-bold text-coffee-700 mb-1">{stats.total}</div>
-                    <div className="text-xs text-coffee-600">총 기록</div>
-                  </div>
-                  <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 text-center border border-coffee-100/50 shadow-sm">
-                    <div className="flex items-center justify-center space-x-1 mb-1">
-                      <span className="text-2xl font-bold text-coffee-700">{stats.avgRating.toFixed(1)}</span>
-                      <Star className="h-4 w-4 text-amber-400 fill-current" />
+                  
+                  <div className="grid grid-cols-3 gap-4 mb-4">
+                    <div className="text-center">
+                      <div className="w-12 h-12 mx-auto bg-gradient-to-br from-coffee-400 to-coffee-500 rounded-full flex items-center justify-center mb-2 shadow-md">
+                        <BarChart3 className="h-6 w-6 text-white" />
+                      </div>
+                      <div className="text-xl font-bold text-coffee-700">{stats.thisMonth}</div>
+                      <div className="text-xs text-coffee-600">이번 달 기록</div>
                     </div>
-                    <div className="text-xs text-coffee-600">평균 평점</div>
+                    
+                    <div className="text-center">
+                      <div className="w-12 h-12 mx-auto bg-gradient-to-br from-amber-400 to-amber-500 rounded-full flex items-center justify-center mb-2 shadow-md">
+                        <Coffee className="h-6 w-6 text-white" />
+                      </div>
+                      <div className="text-xl font-bold text-coffee-700">{stats.total}</div>
+                      <div className="text-xs text-coffee-600">총 커피 기록</div>
+                    </div>
+                    
+                    <div className="text-center">
+                      <div className="w-12 h-12 mx-auto bg-gradient-to-br from-purple-400 to-purple-500 rounded-full flex items-center justify-center mb-2 shadow-md">
+                        <Star className="h-6 w-6 text-white fill-current" />
+                      </div>
+                      <div className="text-xl font-bold text-coffee-700">{stats.avgRating.toFixed(1)}</div>
+                      <div className="text-xs text-coffee-600">평균 평점</div>
+                    </div>
+                  </div>
+
+                  {/* Progress Bar */}
+                  <div className="bg-white/60 rounded-xl p-3 border border-coffee-200/30">
+                    <div className="flex items-center justify-between text-sm mb-2">
+                      <span className="text-coffee-600">월간 목표</span>
+                      <span className="text-coffee-700 font-medium">{stats.thisMonth}/10</span>
+                    </div>
+                    <div className="w-full bg-coffee-200/50 rounded-full h-2">
+                      <div 
+                        className="bg-gradient-to-r from-coffee-500 to-coffee-600 h-2 rounded-full transition-all duration-500"
+                        style={{ width: `${Math.min(100, (stats.thisMonth / 10) * 100)}%` }}
+                      />
+                    </div>
+                    <div className="text-xs text-coffee-500 mt-1 text-center">
+                      {stats.thisMonth >= 10 ? '🎉 월간 목표 달성!' : `${10 - stats.thisMonth}잔 더 마시면 목표 달성!`}
+                    </div>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* Recent Record - Minimal with Premium Feel */}
+            {/* Enhanced Recent Record Widget */}
             {recentRecords.length > 0 && (
               <div className="mb-12">
-                <h3 className="text-lg font-semibold text-coffee-800 mb-4">최근 기록</h3>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-coffee-800">📋 최근 기록</h3>
+                  <Link href="/my-records">
+                    <button className="text-coffee-500 hover:text-coffee-700 text-sm font-medium flex items-center space-x-1 transition-colors">
+                      <span>전체보기</span>
+                      <ChevronRight className="h-4 w-4" />
+                    </button>
+                  </Link>
+                </div>
+                
                 <Link href={`/coffee/${recentRecords[0].id}`}>
-                  <div className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 rounded-2xl p-5 shadow-md hover:shadow-lg transition-shadow">
+                  <div className="bg-gradient-to-r from-white to-coffee-50/30 border border-coffee-200/30 rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.99]">
                     <div className="flex items-start space-x-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-coffee-400 to-coffee-500 rounded-xl flex items-center justify-center shadow-md flex-shrink-0">
-                        <Coffee className="h-6 w-6 text-white" />
+                      {/* Coffee Icon with mode indicator */}
+                      <div className="relative">
+                        <div className="w-14 h-14 bg-gradient-to-br from-coffee-400 to-coffee-600 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
+                          <Coffee className="h-7 w-7 text-white" />
+                        </div>
+                        {recentRecords[0].mode && (
+                          <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-amber-500 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-md">
+                            {recentRecords[0].mode === 'cafe' ? '☕' : recentRecords[0].mode === 'homecafe' ? '🏠' : '🧪'}
+                          </div>
+                        )}
                       </div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-semibold text-coffee-800">{recentRecords[0].coffeeName}</h4>
+                      
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-bold text-coffee-800 text-lg truncate">{recentRecords[0].coffeeName}</h4>
+                            <p className="text-coffee-600 text-sm">
+                              {recentRecords[0].roaster || recentRecords[0].location}
+                            </p>
+                          </div>
                           {recentRecords[0].overall && (
-                            <div className="flex items-center space-x-1">
-                              <Star className="h-4 w-4 text-amber-400 fill-current" />
-                              <span className="text-sm font-medium text-coffee-700">{recentRecords[0].overall}</span>
+                            <div className="flex items-center space-x-1 bg-amber-50 rounded-full px-3 py-1 ml-2">
+                              <Star className="h-4 w-4 text-amber-500 fill-current" />
+                              <span className="text-sm font-bold text-amber-700">{recentRecords[0].overall}</span>
                             </div>
                           )}
-                          <ChevronRight className="h-4 w-4 text-coffee-400" />
                         </div>
-                        <p className="text-coffee-600 text-sm leading-relaxed mb-2">
-                          {recentRecords[0].notes || '커피 기록을 확인해보세요'}
-                        </p>
-                        <div className="text-xs text-coffee-500">
-                          {recentRecords[0].roaster || recentRecords[0].location} • {new Date(recentRecords[0].date).toLocaleDateString()}
+                        
+                        {/* Taste Notes Preview */}
+                        <div className="bg-coffee-50/50 rounded-lg p-3 mb-3 border border-coffee-200/20">
+                          <p className="text-coffee-700 text-sm leading-relaxed line-clamp-2">
+                            {recentRecords[0].notes || '맛 노트가 기록되지 않았어요'}
+                          </p>
+                        </div>
+                        
+                        <div className="flex items-center justify-between">
+                          <div className="text-xs text-coffee-500">
+                            {new Date(recentRecords[0].date).toLocaleDateString('ko-KR', { 
+                              month: 'long', 
+                              day: 'numeric',
+                              weekday: 'short'
+                            })}
+                          </div>
+                          <div className="flex items-center space-x-1 text-coffee-400">
+                            <span className="text-xs">자세히 보기</span>
+                            <ChevronRight className="h-3 w-3" />
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -408,60 +482,182 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
               </div>
             )}
 
-            {/* Achievement for users with records */}
+            {/* Enhanced Achievement Widget */}
             {stats.total > 0 && (
               <div className="mb-12">
-                <div className="bg-gradient-to-r from-coffee-100/80 to-amber-50/80 backdrop-blur-sm rounded-2xl p-4 border border-coffee-200/30 shadow-sm">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-gradient-to-r from-amber-400 to-amber-500 rounded-full flex items-center justify-center shadow-md">
-                      <Award className="h-5 w-5 text-white" />
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-coffee-800">🏆 최근 성취</h3>
+                  <Link href="/achievements">
+                    <button className="text-coffee-500 hover:text-coffee-700 text-sm font-medium flex items-center space-x-1 transition-colors">
+                      <span>모든 뱃지</span>
+                      <ChevronRight className="h-4 w-4" />
+                    </button>
+                  </Link>
+                </div>
+                
+                <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/50 rounded-2xl p-6 shadow-md">
+                  <div className="flex items-start space-x-4">
+                    <div className="relative">
+                      <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center shadow-lg">
+                        <Trophy className="h-8 w-8 text-white" />
+                      </div>
+                      <div className="absolute -top-1 -right-1 w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center">
+                        <Sparkles className="h-3 w-3 text-white" />
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-medium text-coffee-800">커피 여정 {stats.total}일째!</h4>
-                      <p className="text-coffee-600 text-sm">새로운 성취를 달성했어요 ✨</p>
+                    
+                    <div className="flex-1">
+                      <div className="mb-3">
+                        <h4 className="font-bold text-amber-800 text-lg">커피 애호가 Level {Math.floor(stats.total / 5) + 1}</h4>
+                        <p className="text-amber-700 text-sm">
+                          {stats.total}번의 커피 기록으로 성장 중이에요!
+                        </p>
+                      </div>
+                      
+                      {/* Level Progress */}
+                      <div className="bg-white/60 rounded-lg p-3 mb-3 border border-amber-200/30">
+                        <div className="flex items-center justify-between text-sm mb-2">
+                          <span className="text-amber-700">다음 레벨까지</span>
+                          <span className="text-amber-800 font-bold">
+                            {stats.total % 5}/{5}
+                          </span>
+                        </div>
+                        <div className="w-full bg-amber-200/50 rounded-full h-2">
+                          <div 
+                            className="bg-gradient-to-r from-amber-500 to-orange-500 h-2 rounded-full transition-all duration-500"
+                            style={{ width: `${((stats.total % 5) / 5) * 100}%` }}
+                          />
+                        </div>
+                      </div>
+                      
+                      {/* Recent Badge */}
+                      <div className="flex items-center space-x-2">
+                        <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-500 rounded-full flex items-center justify-center">
+                          <Award className="h-4 w-4 text-white" />
+                        </div>
+                        <div>
+                          <p className="text-amber-800 font-medium text-sm">최근 획득한 뱃지</p>
+                          <p className="text-amber-600 text-xs">
+                            {stats.total >= 10 ? '🏆 열정적인 커핀러' : 
+                             stats.total >= 5 ? '☕ 커피 탐험가' : 
+                             '🌟 첫 걸음'}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* First Time Guide for users with no records */}
+            {/* Enhanced First Time Guide for users with no records */}
             {stats.total === 0 && (
-              <div className="mb-12 relative">
-                {/* Coffee Tip at the top - 표준 coffee 테마 적용 */}
-                <div className="mb-6 bg-coffee-50/50 border border-coffee-200/50 rounded-2xl p-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-coffee-400 to-coffee-600 rounded-full flex items-center justify-center shadow-md">
-                      <Sparkles className="h-5 w-5 text-white" />
+              <div className="mb-12 space-y-6">
+                {/* Welcome Message */}
+                <div className="bg-gradient-to-r from-coffee-50 to-amber-50 border border-coffee-200/50 rounded-2xl p-6">
+                  <div className="text-center mb-4">
+                    <div className="w-12 h-12 mx-auto bg-gradient-to-br from-coffee-400 to-coffee-600 rounded-full flex items-center justify-center shadow-md mb-3">
+                      <Coffee className="h-6 w-6 text-white" />
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-coffee-800 mb-1">커피 팁</h4>
-                      <p className="text-coffee-700 text-sm">매일 같은 시간에 커피를 마시면 더 정확한 맛 평가를 할 수 있어요!</p>
+                    <h3 className="text-xl font-bold text-coffee-800 mb-2">CupNote에 오신 것을 환영합니다! ☕</h3>
+                    <p className="text-coffee-600 text-sm">첫 번째 커피 기록으로 여정을 시작해보세요</p>
+                  </div>
+                </div>
+
+                {/* 3-Step Guide */}
+                <div className="space-y-4">
+                  <h4 className="text-lg font-semibold text-coffee-800 text-center mb-4">📝 3단계로 쉽게 시작하기</h4>
+                  
+                  {/* Step 1 */}
+                  <div className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 rounded-xl p-4 shadow-sm">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-coffee-500 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
+                        1
+                      </div>
+                      <div className="flex-1">
+                        <h5 className="font-semibold text-coffee-800 mb-1">커피 정보 입력</h5>
+                        <p className="text-coffee-600 text-sm mb-2">커피 이름과 어디서 마셨는지만 기록하세요</p>
+                        <div className="text-xs text-coffee-500 bg-coffee-50/80 rounded-lg px-3 py-2">
+                          💡 예: "아메리카노 • 스타벅스"
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Step 2 */}
+                  <div className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 rounded-xl p-4 shadow-sm">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-coffee-500 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
+                        2
+                      </div>
+                      <div className="flex-1">
+                        <h5 className="font-semibold text-coffee-800 mb-1">맛 평가하기</h5>
+                        <p className="text-coffee-600 text-sm mb-2">별점과 간단한 느낌을 적어보세요</p>
+                        <div className="text-xs text-coffee-500 bg-coffee-50/80 rounded-lg px-3 py-2">
+                          💡 예: "⭐⭐⭐⭐ • 고소하고 부드러웠어요"
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Step 3 */}
+                  <div className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 rounded-xl p-4 shadow-sm">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-coffee-500 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
+                        3
+                      </div>
+                      <div className="flex-1">
+                        <h5 className="font-semibold text-coffee-800 mb-1">기록 완성</h5>
+                        <p className="text-coffee-600 text-sm mb-2">저장하면 첫 번째 뱃지를 획득해요!</p>
+                        <div className="flex items-center space-x-2">
+                          <div className="text-xs text-amber-600 bg-amber-50 rounded-lg px-3 py-2 flex items-center space-x-1">
+                            <Trophy className="h-3 w-3" />
+                            <span>🏆 "첫 기록" 뱃지 획득</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 rounded-2xl p-6 shadow-md text-center">
-                  <div className="w-16 h-16 mx-auto bg-coffee-100 rounded-full flex items-center justify-center mb-4">
-                    <Coffee className="h-8 w-8 text-coffee-500" />
+                {/* CTA Section */}
+                <div className="bg-gradient-to-r from-coffee-100 to-amber-100 rounded-2xl p-6 text-center shadow-md">
+                  <div className="mb-4">
+                    <h4 className="font-semibold text-coffee-800 mb-2">지금 바로 시작해보세요!</h4>
+                    <p className="text-coffee-600 text-sm">전문 용어를 몰라도 괜찮아요. 솔직한 느낌이 가장 중요합니다.</p>
                   </div>
-                  <h3 className="text-lg font-semibold text-coffee-800 mb-2">첫 번째 커피를 기록해보세요!</h3>
-                  <p className="text-coffee-600 text-sm mb-6">
-                    간단한 기록부터 시작해보세요. 전문 용어 없이도 충분합니다.
-                  </p>
                   
-                  {/* Simple CTA without floating elements */}
-                  <div className="text-center">
-                    <div className="flex items-center justify-center space-x-2 text-coffee-500 text-xs mb-4">
-                      <Sparkles className="h-4 w-4" />
-                      <span>첫 기록 작성 시 특별한 뱃지를 받을 수 있어요</span>
-                    </div>
-                    
-                    <div className="bg-coffee-50/50 rounded-xl p-4 border border-coffee-200/30">
-                      <p className="text-coffee-700 font-medium mb-2">하단의 ☕ 작성 버튼을 눌러보세요!</p>
-                      <div className="text-coffee-500 text-2xl animate-bounce">
-                        ↓
+                  {/* Visual Guide */}
+                  <div className="bg-white/60 rounded-xl p-4 mb-4 border border-coffee-200/30">
+                    <div className="flex items-center justify-center space-x-3 text-coffee-600">
+                      <div className="text-center">
+                        <div className="w-8 h-8 bg-coffee-500 rounded-lg flex items-center justify-center mb-1">
+                          <Coffee className="h-4 w-4 text-white" />
+                        </div>
+                        <span className="text-xs">하단 탭</span>
                       </div>
+                      <div className="text-coffee-400">→</div>
+                      <div className="text-center">
+                        <div className="w-8 h-8 bg-gradient-to-r from-coffee-500 to-coffee-600 rounded-lg flex items-center justify-center mb-1">
+                          <Plus className="h-4 w-4 text-white" />
+                        </div>
+                        <span className="text-xs font-medium">작성 버튼</span>
+                      </div>
+                      <div className="text-coffee-400">→</div>
+                      <div className="text-center">
+                        <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center mb-1">
+                          <Trophy className="h-4 w-4 text-white" />
+                        </div>
+                        <span className="text-xs">뱃지 획득!</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Pro Tip */}
+                  <div className="bg-coffee-50/50 rounded-xl p-3 border border-coffee-200/30">
+                    <div className="flex items-center justify-center space-x-2 text-coffee-600 text-xs">
+                      <Sparkles className="h-4 w-4 text-coffee-500" />
+                      <span><strong>꿀팁:</strong> 매일 같은 시간에 커피를 마시면 더 정확한 맛 평가를 할 수 있어요!</span>
                     </div>
                   </div>
                 </div>

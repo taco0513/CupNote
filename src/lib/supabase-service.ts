@@ -138,6 +138,127 @@ export class CoffeeRecordService {
     }
   }
 
+  // 커피 기록 검색
+  static async searchRecords(query: string, filters?: {
+    modes?: string[]
+    ratingRange?: { min: number; max: number }
+    dateRange?: { start: string; end: string }
+    sortBy?: 'relevance' | 'date' | 'rating'
+    sortOrder?: 'desc' | 'asc'
+    limit?: number
+    offset?: number
+  }) {
+    try {
+      const { data: user } = await supabase.auth.getUser()
+      if (!user.user) throw new Error('Not authenticated')
+
+      let queryBuilder = supabase
+        .from('coffee_records')
+        .select('*')
+        .eq('user_id', user.user.id)
+
+      // 텍스트 검색
+      if (query && query.trim()) {
+        queryBuilder = queryBuilder.or(
+          `coffee_name.ilike.%${query}%,roastery.ilike.%${query}%,origin.ilike.%${query}%,taste_notes.ilike.%${query}%,personal_notes.ilike.%${query}%`
+        )
+      }
+
+      // 필터 적용
+      if (filters) {
+        if (filters.modes && filters.modes.length > 0) {
+          queryBuilder = queryBuilder.in('mode', filters.modes)
+        }
+
+        if (filters.ratingRange) {
+          queryBuilder = queryBuilder
+            .gte('rating', filters.ratingRange.min)
+            .lte('rating', filters.ratingRange.max)
+        }
+
+        if (filters.dateRange) {
+          queryBuilder = queryBuilder
+            .gte('created_at', filters.dateRange.start)
+            .lte('created_at', filters.dateRange.end)
+        }
+
+        // 정렬
+        const sortColumn = filters.sortBy === 'rating' ? 'rating' : 
+                          filters.sortBy === 'date' ? 'created_at' : 
+                          'match_score' // relevance
+
+        queryBuilder = queryBuilder.order(sortColumn, { 
+          ascending: filters.sortOrder === 'asc' 
+        })
+
+        // 페이지네이션
+        if (filters.limit) {
+          queryBuilder = queryBuilder.limit(filters.limit)
+          if (filters.offset) {
+            queryBuilder = queryBuilder.range(filters.offset, filters.offset + filters.limit - 1)
+          }
+        }
+      } else {
+        // 기본 정렬: 관련도 -> 날짜순
+        queryBuilder = queryBuilder.order('match_score', { ascending: false })
+          .order('created_at', { ascending: false })
+      }
+
+      const { data, error } = await queryBuilder
+
+      if (error) throw error
+
+      return data || []
+    } catch (error: unknown) {
+      const mappedError = mapSupabaseError(error)
+      logError(mappedError, 'CoffeeRecordService.searchRecords')
+      throw mappedError
+    }
+  }
+
+  // 검색 자동완성
+  static async getSearchSuggestions(partialQuery: string, limit = 5) {
+    try {
+      const { data: user } = await supabase.auth.getUser()
+      if (!user.user) throw new Error('Not authenticated')
+
+      if (!partialQuery || partialQuery.length < 2) return []
+
+      // 커피명, 로스터리, 원산지에서 자동완성 제안
+      const { data, error } = await supabase
+        .from('coffee_records')
+        .select('coffee_name, roastery, origin')
+        .eq('user_id', user.user.id)
+        .or(
+          `coffee_name.ilike.%${partialQuery}%,roastery.ilike.%${partialQuery}%,origin.ilike.%${partialQuery}%`
+        )
+        .limit(limit * 3) // 중복 제거를 위해 더 많이 가져옴
+
+      if (error) throw error
+
+      // 중복 제거하고 관련도 순으로 정렬
+      const suggestions = new Set<string>()
+      
+      data?.forEach(record => {
+        if (record.coffee_name?.toLowerCase().includes(partialQuery.toLowerCase())) {
+          suggestions.add(record.coffee_name)
+        }
+        if (record.roastery?.toLowerCase().includes(partialQuery.toLowerCase())) {
+          suggestions.add(record.roastery)
+        }
+        if (record.origin?.toLowerCase().includes(partialQuery.toLowerCase())) {
+          suggestions.add(record.origin)
+        }
+      })
+
+      return Array.from(suggestions).slice(0, limit)
+    } catch (error: unknown) {
+      const mappedError = mapSupabaseError(error)
+      logError(mappedError, 'CoffeeRecordService.getSearchSuggestions')
+      throw mappedError
+    }
+  }
+
   // 통계 데이터 조회
   static async getStats() {
     try {

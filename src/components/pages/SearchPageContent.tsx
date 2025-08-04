@@ -19,7 +19,7 @@ import PageLayout from '../ui/PageLayout'
 export default function SearchPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { state, search, clearSearch, getSuggestions } = useSearch()
+  const { state, search, clearSearch, getSuggestions, updateFilters } = useSearch()
   
   const [query, setQuery] = useState('')
   const [showFilters, setShowFilters] = useState(false)
@@ -138,16 +138,25 @@ export default function SearchPageContent() {
                   기록 모드
                 </label>
                 <div className="flex space-x-2">
-                  {['Cafe', 'HomeCafe', 'Lab'].map((mode) => (
+                  {['cafe', 'homecafe'].map((mode) => (
                     <button
                       key={mode}
+                      onClick={() => {
+                        const currentModes = state.filters.modes || []
+                        const newModes = currentModes.includes(mode)
+                          ? currentModes.filter(m => m !== mode)
+                          : [...currentModes, mode]
+                        
+                        // 필터 업데이트
+                        updateFilters({ modes: newModes })
+                      }}
                       className={`px-3 py-2 rounded-xl border text-sm transition-all duration-200 ${
                         state.filters.modes?.includes(mode)
                           ? 'bg-coffee-500 text-white border-coffee-500 shadow-md'
                           : 'border-coffee-200/50 text-coffee-600 hover:bg-coffee-50/50'
                       }`}
                     >
-                      {mode}
+                      {mode === 'cafe' ? 'Cafe' : 'HomeCafe'}
                     </button>
                   ))}
                 </div>
@@ -160,6 +169,9 @@ export default function SearchPageContent() {
                 </label>
                 <select 
                   value={state.filters.sortBy}
+                  onChange={(e) => updateFilters({ 
+                    sortBy: e.target.value as 'relevance' | 'date' | 'rating' 
+                  })}
                   className="w-full px-3 py-2 border border-coffee-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-coffee-500 bg-white/80 backdrop-blur-sm text-coffee-700"
                 >
                   <option value="relevance">관련도순</option>
@@ -276,9 +288,10 @@ export default function SearchPageContent() {
               {/* 결과 목록 */}
               <div className="space-y-3">
                 {state.results.map((result, index) => (
-                  <div
+                  <button
                     key={result.id}
-                    className="p-4 bg-white/80 backdrop-blur-sm rounded-xl border border-coffee-200/30 hover:border-coffee-300/50 hover:bg-white/90 transition-all duration-200 hover:shadow-lg animate-fade-in"
+                    onClick={() => router.push(`/coffee/${result.id}`)}
+                    className="w-full text-left p-4 bg-white/80 backdrop-blur-sm rounded-xl border border-coffee-200/30 hover:border-coffee-300/50 hover:bg-white/90 transition-all duration-200 hover:shadow-lg animate-fade-in active:scale-[0.99]"
                     style={{ animationDelay: `${index * 50}ms` }}
                   >
                     <div className="flex items-start justify-between">
@@ -330,7 +343,7 @@ export default function SearchPageContent() {
                         {result.score}%
                       </div>
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>

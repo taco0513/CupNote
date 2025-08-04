@@ -67,10 +67,10 @@ npm install                  # Install all dependencies
    - 로스터 노트 vs 내 느낌 비교
    - 사진, 날짜, 장소, 함께한 사람 기록
 
-2. **3-Mode 기록 시스템**
+2. **2-Mode 기록 시스템** (현재 구현)
    - **Cafe Mode**: 카페에서 마신 커피 경험 기록 (7단계)
    - **HomeCafe Mode**: 집에서 직접 내린 커피 레시피 관리 (8-12분)
-   - **Lab Mode**: SCA 기준 전문가 평가 (15-20분)
+   - **Lab Mode**: *(BACKLOG FOR FUTURE ROADMAP - v3.0+)*
 
 3. **커뮤니티 커핑** (v2.0 계획)
    - 같은 원두 마신 사람들의 기록 비교
@@ -124,7 +124,7 @@ npm install                  # Install all dependencies
 - **Performance Optimization**: Vercel deployment configuration
 - **Core System**: Next.js 15.4.5 + TypeScript + Tailwind CSS 4.0
 - **Database**: Supabase integration (PostgreSQL + Auth + Storage)  
-- **Coffee Recording**: **3-Mode System** (Cafe/HomeCafe/Lab) ✨
+- **Coffee Recording**: **2-Mode System** (Cafe/HomeCafe) ✨ *(Lab Mode: BACKLOG FOR FUTURE ROADMAP)*
 - **Search & Filter**: Real-time search, advanced filters, multi-tag support
 - **Image Upload**: Supabase Storage with compression and thumbnails
 - **PWA Features**: Offline support, installable, background sync
@@ -136,7 +136,7 @@ npm install                  # Install all dependencies
 - **Stats & Analytics**: Data visualization, export/import functionality
 - **Error Handling**: Comprehensive error boundaries and user feedback
 
-✅ **3-Mode 시스템 구현 완료** (2025-12-01):
+✅ **2-Mode 시스템 구현 완료** (2025-12-01):
 
 ✅ **Match Score v2.0 - 커뮤니티 기반 시스템** (2025-08-02):
 - **등급 시스템 제거**: A+, A, B+, B, C 등급 표시 완전 제거
@@ -157,7 +157,7 @@ npm install                  # Install all dependencies
 - **최적화된 UX**: URL 상태 관리, 프로페셔널 로딩 상태, 신규 사용자 가이드
 - **성능 최적화**: 효율적 데이터 처리, 모바일 반응형 차트, <1s 로딩 시간
 
-### 🎯 3가지 전문화된 기록 모드:
+### 🎯 현재 구현된 2가지 기록 모드:
 
 1. **Cafe Mode** ☕ (5-7분)
    - 7단계 상세 카페 경험 기록
@@ -170,11 +170,13 @@ npm install                  # Install all dependencies
    - 통합 추출 타이머
    - 레시피 라이브러리 시스템
 
-3. **Lab Mode** 🧪 (15-20분)
-   - SCA 커핑 표준 (9개 평가 항목)
-   - 전문가 평가 도구
-   - TDS 측정 및 추출 수율
-   - 품질 등급 시스템
+### 📋 BACKLOG FOR FUTURE ROADMAP (v3.0+):
+
+3. **Lab Mode** 🧪 (전문가용 - 향후 계획)
+   - SCA 커핑 표준 (9개 평가 항목) - *계획 중*
+   - 전문가 평가 도구 - *계획 중*
+   - TDS 측정 및 추출 수율 - *계획 중*
+   - 품질 등급 시스템 - *계획 중*
 
 📋 **v1.2 Beta Testing Phase** (In Progress):
 

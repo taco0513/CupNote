@@ -333,7 +333,7 @@ export default function DesktopLayout({
       )}
       
       {/* 메인 3-컬럼 레이아웃 */}
-      <main className="flex flex-1 overflow-hidden">
+      <main className="flex flex-1 overflow-hidden relative">
         {/* 좌측 사이드바 */}
         <aside
           ref={leftPanelRef}
@@ -353,8 +353,8 @@ export default function DesktopLayout({
             {leftSidebarSlot}
           </div>
           
-          {/* 좌측 패널 토글 버튼 */}
-          {collapsiblePanels.left && (
+          {/* 좌측 패널 토글 버튼 (패널이 열려있을 때) */}
+          {collapsiblePanels.left && !state.leftPanelCollapsed && (
             <button
               {...createTouchOptimizedProps('md')}
               className={`
@@ -366,10 +366,10 @@ export default function DesktopLayout({
                 ${createTouchOptimizedProps('md').className}
               `}
               onClick={() => togglePanel('left')}
-              aria-label={state.leftPanelCollapsed ? '좌측 사이드바 열기' : '좌측 사이드바 닫기'}
+              aria-label="좌측 사이드바 닫기"
             >
               <svg 
-                className={`w-3 h-3 transition-transform duration-200 ${state.leftPanelCollapsed ? 'rotate-180' : ''}`}
+                className="w-3 h-3 transition-transform duration-200"
                 fill="none" 
                 viewBox="0 0 24 24" 
                 stroke="currentColor"
@@ -379,6 +379,32 @@ export default function DesktopLayout({
             </button>
           )}
         </aside>
+        
+        {/* 좌측 패널 열기 버튼 (패널이 닫혀있을 때) */}
+        {collapsiblePanels.left && state.leftPanelCollapsed && (
+          <button
+            {...createTouchOptimizedProps('md')}
+            className={`
+              absolute left-0 top-4 z-30
+              w-8 h-10 bg-coffee-500 text-white rounded-r-lg
+              hover:bg-coffee-600 active:scale-95 transition-all
+              flex items-center justify-center shadow-lg
+              focus:outline-none focus:ring-2 focus:ring-coffee-300
+              ${createTouchOptimizedProps('md').className}
+            `}
+            onClick={() => togglePanel('left')}
+            aria-label="좌측 사이드바 열기"
+          >
+            <svg 
+              className="w-4 h-4 transition-transform duration-200"
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        )}
         
         {/* 메인 콘텐츠 영역 */}
         <section
@@ -415,8 +441,8 @@ export default function DesktopLayout({
             {rightPanelSlot}
           </div>
           
-          {/* 우측 패널 토글 버튼 */}
-          {collapsiblePanels.right && (
+          {/* 우측 패널 토글 버튼 (패널이 열려있을 때) */}
+          {collapsiblePanels.right && !state.rightPanelCollapsed && (
             <button
               {...createTouchOptimizedProps('md')}
               className={`
@@ -428,10 +454,10 @@ export default function DesktopLayout({
                 ${createTouchOptimizedProps('md').className}
               `}
               onClick={() => togglePanel('right')}
-              aria-label={state.rightPanelCollapsed ? '우측 패널 열기' : '우측 패널 닫기'}
+              aria-label="우측 패널 닫기"
             >
               <svg 
-                className={`w-3 h-3 transition-transform duration-200 ${state.rightPanelCollapsed ? '' : 'rotate-180'}`}
+                className="w-3 h-3 transition-transform duration-200 rotate-180"
                 fill="none" 
                 viewBox="0 0 24 24" 
                 stroke="currentColor"
@@ -441,6 +467,32 @@ export default function DesktopLayout({
             </button>
           )}
         </aside>
+        
+        {/* 우측 패널 열기 버튼 (패널이 닫혀있을 때) */}
+        {collapsiblePanels.right && state.rightPanelCollapsed && (
+          <button
+            {...createTouchOptimizedProps('md')}
+            className={`
+              absolute right-0 top-4 z-30
+              w-8 h-10 bg-coffee-500 text-white rounded-l-lg
+              hover:bg-coffee-600 active:scale-95 transition-all
+              flex items-center justify-center shadow-lg
+              focus:outline-none focus:ring-2 focus:ring-coffee-300
+              ${createTouchOptimizedProps('md').className}
+            `}
+            onClick={() => togglePanel('right')}
+            aria-label="우측 패널 열기"
+          >
+            <svg 
+              className="w-4 h-4 transition-transform duration-200"
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+        )}
       </main>
       
       {/* 하단 상태바 */}

@@ -3,10 +3,11 @@
 ## Project Timeline
 
 ### Phase 1: Foundation (Completed ✅)
-- Core 3-Mode system implementation
+- Core 2-Mode system implementation (Cafe/HomeCafe)
 - Supabase integration and authentication
 - Basic UI/UX and mobile responsiveness
 - Production deployment
+- *Note: Lab Mode moved to future roadmap (v3.0+)*
 
 ### Phase 2: Enhancement (Completed ✅)
 - Match Score v2.0 community system
