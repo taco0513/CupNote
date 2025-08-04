@@ -38,14 +38,25 @@ export async function POST(request: NextRequest) {
     const base64 = Buffer.from(buffer).toString('base64')
     const dataUrl = `data:${image.type};base64,${base64}`
 
-    // Tesseract 서버 사이드 처리
-    const result = await Tesseract.recognize(
+    // Tesseract 서버 사이드 처리 (타임아웃 30초)
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('OCR 처리 시간 초과')), 30000)
+    })
+    
+    const ocrPromise = Tesseract.recognize(
       dataUrl,
       'eng+kor',
       {
-        logger: m => console.log('OCR Progress:', m)
+        logger: m => {
+          console.log('OCR Progress:', m.status, m.progress)
+          if (m.status === 'recognizing text') {
+            console.log(`진행률: ${Math.round(m.progress * 100)}%`)
+          }
+        }
       }
     )
+    
+    const result = await Promise.race([ocrPromise, timeoutPromise])
 
     // 커피 정보 추출 로직
     const extractedInfo = parseStrageCoffeeInfo(result.data.text)

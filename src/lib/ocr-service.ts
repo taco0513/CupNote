@@ -168,29 +168,37 @@ class OCRService {
     try {
       console.log('서버 사이드 OCR 시작')
       
-      // 진행률 시뮬레이션
+      // 진행률 시뮬레이션 (서버 처리 시간을 고려)
       if (onProgress) {
-        onProgress(0.3)
+        onProgress(0.1)
+        setTimeout(() => onProgress(0.3), 2000)
+        setTimeout(() => onProgress(0.6), 5000)
+        setTimeout(() => onProgress(0.8), 15000)
+        setTimeout(() => onProgress(0.9), 25000)
       }
       
       const formData = new FormData()
       formData.append('image', imageFile)
       
-      if (onProgress) {
-        onProgress(0.5)
-      }
+      // 타임아웃 설정 (35초)
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => {
+        controller.abort()
+      }, 35000)
       
       const response = await fetch('/api/ocr', {
         method: 'POST',
-        body: formData
+        body: formData,
+        signal: controller.signal
       })
       
-      if (onProgress) {
-        onProgress(0.8)
-      }
+      clearTimeout(timeoutId)
       
       if (!response.ok) {
-        throw new Error('서버 OCR 요청 실패')
+        if (response.status === 500) {
+          throw new Error('서버에서 OCR 처리 중 오류가 발생했습니다. 이미지가 너무 크거나 복잡할 수 있습니다.')
+        }
+        throw new Error(`서버 OCR 요청 실패: ${response.status}`)
       }
       
       const result = await response.json()
@@ -201,14 +209,23 @@ class OCRService {
       
       console.log('서버 사이드 OCR 완료:', result)
       
-      return {
-        text: result.text,
-        confidence: result.confidence,
-        extractedInfo: result.extractedInfo
+      if (!result.success) {
+        throw new Error(result.error || '서버 OCR 처리 실패')
       }
-    } catch (error) {
+      
+      return {
+        text: result.text || '',
+        confidence: result.confidence || 0,
+        extractedInfo: result.extractedInfo || {}
+      }
+    } catch (error: any) {
       console.error('서버 사이드 OCR 오류:', error)
-      throw new Error('서버 OCR 처리에 실패했습니다.')
+      
+      if (error.name === 'AbortError') {
+        throw new Error('OCR 처리 시간이 초과되었습니다. 더 작은 이미지나 더 선명한 이미지로 다시 시도해주세요.')
+      }
+      
+      throw new Error(error.message || '서버 OCR 처리에 실패했습니다.')
     }
   }
 
