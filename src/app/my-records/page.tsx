@@ -42,12 +42,13 @@ function MyRecordsPageContent() {
   }, [searchParams])
 
   useEffect(() => {
-    // 빠른 통계 로드
-    const loadQuickStats = () => {
+    // 빠른 통계 로드 - Supabase에서만 가져오기
+    const loadQuickStats = async () => {
       try {
-        const stored = localStorage.getItem('coffeeRecords')
-        if (stored) {
-          const records = JSON.parse(stored)
+        const { SupabaseStorage } = await import('../../lib/supabase-storage')
+        const records = await SupabaseStorage.getRecords()
+        
+        if (records && records.length > 0) {
           const now = new Date()
           const thisMonth = records.filter((r: any) => {
             const recordDate = new Date(r.date)
@@ -55,19 +56,32 @@ function MyRecordsPageContent() {
                    recordDate.getFullYear() === now.getFullYear()
           }).length
           
-          const avgRating = records.length > 0
-            ? records.reduce((sum: number, r: any) => sum + (r.overall || 0), 0) / records.length
-            : 0
+          const avgRating = records.reduce((sum: number, r: any) => sum + (r.overall || 0), 0) / records.length
           
           setQuickStats({
             total: records.length,
             thisMonth,
             avgRating,
-            lastRecord: records.length > 0 ? records[0] : null
+            lastRecord: records[0]
+          })
+        } else {
+          // 기록이 없으면 빈 상태로 설정
+          setQuickStats({
+            total: 0,
+            thisMonth: 0,
+            avgRating: 0,
+            lastRecord: null
           })
         }
       } catch (error) {
         console.error('Failed to load quick stats:', error)
+        // 에러 시에도 빈 상태로 설정
+        setQuickStats({
+          total: 0,
+          thisMonth: 0,
+          avgRating: 0,
+          lastRecord: null
+        })
       }
     }
 

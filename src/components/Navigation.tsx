@@ -323,7 +323,7 @@ export default function Navigation({
               currentPage === 'home' 
                 ? 'text-coffee-800' 
                 : 'text-coffee-400'
-            } active:scale-95 active:bg-coffee-50 rounded-lg mx-1 my-1`}
+            } active:scale-95 active:bg-coffee-50 rounded-lg mx-2 my-1.5`}
           >
             <div className={`relative transition-all duration-200 ${
               currentPage === 'home' ? 'scale-110' : ''
@@ -349,7 +349,7 @@ export default function Navigation({
                   currentPage === 'my-records' 
                     ? 'text-coffee-800' 
                     : 'text-coffee-400'
-                } active:scale-95 active:bg-coffee-50 rounded-lg mx-1 my-1`}
+                } active:scale-95 active:bg-coffee-50 rounded-lg mx-2 my-1.5`}
               >
                 <div className={`relative transition-all duration-200 ${
                   currentPage === 'my-records' ? 'scale-110' : ''
@@ -369,7 +369,7 @@ export default function Navigation({
               {/* 기록하기 (중앙 버튼) - 하이브리드 프리미엄 */}
               <Link
                 href={isFeatureEnabled('ENABLE_NEW_TASTING_FLOW') ? '/tasting-flow' : '/mode-selection'}
-                className="flex flex-col items-center justify-center space-y-1 relative h-full w-full transition-all duration-200 ease-out text-white active:scale-95 rounded-lg mx-1 my-1"
+                className="flex flex-col items-center justify-center space-y-1 relative h-full w-full transition-all duration-200 ease-out text-white active:scale-95 rounded-lg mx-2 my-1.5"
               >
                 <div className="absolute inset-2 bg-gradient-to-br from-coffee-500 to-coffee-600 rounded-xl shadow-xl transition-all duration-200 hover:shadow-2xl" />
                 <div className="relative transition-all duration-200 z-10">
@@ -387,7 +387,7 @@ export default function Navigation({
                   currentPage === 'achievements' 
                     ? 'text-coffee-800' 
                     : 'text-coffee-400'
-                } active:scale-95 active:bg-coffee-50 rounded-lg mx-1 my-1`}
+                } active:scale-95 active:bg-coffee-50 rounded-lg mx-2 my-1.5`}
               >
                 <div className={`relative transition-all duration-200 ${
                   currentPage === 'achievements' ? 'scale-110' : ''
@@ -412,7 +412,7 @@ export default function Navigation({
               {/* 무료 시작 - Primary CTA */}
               <Link
                 href={isFeatureEnabled('ENABLE_NEW_TASTING_FLOW') ? '/tasting-flow' : '/mode-selection'}
-                className="flex flex-col items-center justify-center space-y-1 relative h-full w-full transition-all duration-200 ease-out text-white active:scale-95 rounded-lg mx-1 my-1"
+                className="flex flex-col items-center justify-center space-y-1 relative h-full w-full transition-all duration-200 ease-out text-white active:scale-95 rounded-lg mx-2 my-1.5"
               >
                 <div className="absolute inset-2 bg-gradient-to-br from-coffee-500 to-coffee-600 rounded-xl shadow-xl transition-all duration-200 hover:shadow-2xl hover:from-coffee-600 hover:to-coffee-700" />
                 <div className="relative transition-all duration-200 z-10">
@@ -426,7 +426,7 @@ export default function Navigation({
               {/* 로그인 - Secondary */}
               <button
                 onClick={() => handleAuthNavigation('login')}
-                className="flex flex-col items-center justify-center space-y-1 text-coffee-600 hover:text-coffee-800 active:scale-95 active:bg-coffee-50 rounded-lg mx-1 my-1 font-medium transition-all duration-200"
+                className="flex flex-col items-center justify-center space-y-1 text-coffee-600 hover:text-coffee-800 active:scale-95 active:bg-coffee-50 rounded-lg mx-2 my-1.5 font-medium transition-all duration-200"
               >
                 <LogIn className="h-6 w-6" />
                 <span className="text-xs">로그인</span>

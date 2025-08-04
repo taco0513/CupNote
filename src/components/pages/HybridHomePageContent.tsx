@@ -27,13 +27,14 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
       return () => clearTimeout(timer)
     }
 
-    // 사용자 데이터 로드
+    // 사용자 데이터 로드 - Supabase에서만 가져오기
     if (user) {
-      const loadData = () => {
+      const loadData = async () => {
         try {
-          const stored = localStorage.getItem('coffeeRecords')
-          if (stored) {
-            const records = JSON.parse(stored)
+          const { SupabaseStorage } = await import('../../lib/supabase-storage')
+          const records = await SupabaseStorage.getRecords()
+          
+          if (records && records.length > 0) {
             setRecentRecords(records.slice(0, 3)) // 최근 3개
             
             // 통계 계산
@@ -44,14 +45,19 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
                      recordDate.getFullYear() === now.getFullYear()
             }).length
             
-            const avgRating = records.length > 0
-              ? records.reduce((sum, r) => sum + (r.overall || 0), 0) / records.length
-              : 0
+            const avgRating = records.reduce((sum, r) => sum + (r.overall || 0), 0) / records.length
             
             setStats({ total: records.length, thisMonth, avgRating })
+          } else {
+            // 기록이 없으면 빈 상태로 설정
+            setRecentRecords([])
+            setStats({ total: 0, thisMonth: 0, avgRating: 0 })
           }
         } catch (error) {
           console.error('Failed to load data:', error)
+          // 에러 시에도 빈 상태로 설정
+          setRecentRecords([])
+          setStats({ total: 0, thisMonth: 0, avgRating: 0 })
         }
       }
 

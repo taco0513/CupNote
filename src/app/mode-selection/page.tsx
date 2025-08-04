@@ -54,7 +54,7 @@ const ModeCard = ({
           popular 
             ? 'bg-white/90 backdrop-blur-sm border border-coffee-200/30 shadow-lg hover:shadow-xl' 
             : 'bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg'
-        } hover:scale-105 relative overflow-visible m-2`}
+        } hover:scale-105 relative overflow-visible mx-3 my-2`}
       >
         {/* 글로우 효과 */}
         {popular && (
@@ -166,7 +166,7 @@ export default function ModeSelectionPage() {
 
         {/* 모드 카드들 */}
         <FluidContainer maxWidth="full" className="mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 p-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 px-4 py-3">
           {/* Cafe Mode */}
           <ModeCard
             mode="cafe"

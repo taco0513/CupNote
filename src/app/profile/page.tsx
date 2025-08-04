@@ -54,6 +54,16 @@ interface HomeCafeEquipment {
   other_equipment: string[]
 }
 
+// 가장 자주 나타나는 값 찾기 헬퍼 함수
+const getMostFrequent = (arr: string[]): string => {
+  if (arr.length === 0) return ''
+  const frequency: { [key: string]: number } = {}
+  arr.forEach(item => {
+    frequency[item] = (frequency[item] || 0) + 1
+  })
+  return Object.keys(frequency).reduce((a, b) => frequency[a] > frequency[b] ? a : b, '')
+}
+
 export default function ProfilePage() {
   const { user } = useAuth()
   const [profile, setProfile] = useState<UserProfile | null>(null)
@@ -71,47 +81,119 @@ export default function ProfilePage() {
     try {
       setLoading(true)
       
-      // 임시 데모 데이터 (실제 구현 시 Supabase에서 로드)
-      const demoProfile: UserProfile = {
+      // 실제 사용자 데이터 로드
+      const [userStats, userRecords] = await Promise.all([
+        SupabaseStorage.getUserStats(),
+        SupabaseStorage.getRecords()
+      ])
+
+      // 기록 데이터에서 통계 계산
+      const recordsData = userRecords.length > 0 ? {
+        thisMonth: userRecords.filter(r => {
+          const recordDate = new Date(r.date)
+          const now = new Date()
+          return recordDate.getMonth() === now.getMonth() && recordDate.getFullYear() === now.getFullYear()
+        }).length,
+        avgRating: userRecords.reduce((sum, r) => sum + (r.overall || 0), 0) / userRecords.length,
+        favoriteRoaster: getMostFrequent(userRecords.map(r => r.roastery).filter(Boolean)),
+        favoriteOrigin: getMostFrequent(userRecords.map(r => r.origin).filter(Boolean)),
+        favoriteCafe: getMostFrequent(userRecords.map(r => r.location).filter(Boolean))
+      } : null
+
+      if (userStats && userRecords.length > 0) {
+        // 실제 데이터가 있을 때
+        const actualProfile: UserProfile = {
+          id: user?.id || '',
+          username: user?.username || user?.email?.split('@')[0] || 'User',
+          email: user?.email || '',
+          avatar_url: user?.avatar_url,
+          level: userStats.level?.level || 1,
+          title: userStats.level?.title || '커피 입문자',
+          total_points: userStats.totalPoints || 0,
+          total_records: userStats.totalRecords || 0,
+          current_streak: userStats.streaks?.current || 0,
+          longest_streak: userStats.streaks?.longest || 0,
+          join_date: user?.created_at || new Date().toISOString()
+        }
+
+        const actualJourney: CoffeeJourneySummary = {
+          monthly_records: recordsData.thisMonth || 0,
+          avg_rating: recordsData.avgRating || 0,
+          favorite_roaster: recordsData.favoriteRoaster || '',
+          favorite_origin: recordsData.favoriteOrigin || '',
+          favorite_cafe: recordsData.favoriteCafe || '',
+          recent_achievements: userStats.achievements?.filter(a => a.unlocked)
+            .sort((a, b) => new Date(b.unlockedAt).getTime() - new Date(a.unlockedAt).getTime())
+            .slice(0, 3)
+            .map(a => ({
+              id: a.id,
+              title: a.title,
+              icon: a.icon,
+              unlocked_at: a.unlockedAt
+            })) || []
+        }
+
+        setProfile(actualProfile)
+        setJourneySummary(actualJourney)
+        setEquipment(null) // 장비 데이터는 별도 구현 필요
+      } else {
+        // 데이터가 없을 때는 기본값으로 설정
+        const emptyProfile: UserProfile = {
+          id: user?.id || '',
+          username: user?.username || user?.email?.split('@')[0] || 'User',
+          email: user?.email || '',
+          avatar_url: user?.avatar_url,
+          level: 1,
+          title: '커피 입문자',
+          total_points: 0,
+          total_records: 0,
+          current_streak: 0,
+          longest_streak: 0,
+          join_date: user?.created_at || new Date().toISOString()
+        }
+
+        const emptyJourney: CoffeeJourneySummary = {
+          monthly_records: 0,
+          avg_rating: 0,
+          favorite_roaster: '',
+          favorite_origin: '',
+          favorite_cafe: '',
+          recent_achievements: []
+        }
+
+        setProfile(emptyProfile)
+        setJourneySummary(emptyJourney)
+        setEquipment(null)
+      }
+    } catch (error) {
+      console.error('프로필 데이터 로드 오류:', error)
+      // 에러 시에도 빈 프로필 표시
+      const errorProfile: UserProfile = {
         id: user?.id || '',
-        username: user?.username || 'beanzimo',
-        email: user?.email || 'zbrianjin@gmail.com',
+        username: user?.username || user?.email?.split('@')[0] || 'User',
+        email: user?.email || '',
         avatar_url: user?.avatar_url,
         level: 1,
         title: '커피 입문자',
-        total_points: 150,
-        total_records: 8,
-        current_streak: 3,
-        longest_streak: 5,
-        join_date: '2025-01-15'
+        total_points: 0,
+        total_records: 0,
+        current_streak: 0,
+        longest_streak: 0,
+        join_date: user?.created_at || new Date().toISOString()
       }
 
-      const demoJourney: CoffeeJourneySummary = {
-        monthly_records: 5,
-        avg_rating: 4.2,
-        favorite_roaster: '블루보틀',
-        favorite_origin: '에티오피아',
-        favorite_cafe: '커피스미스',
-        recent_achievements: [
-          { id: '1', title: '첫 기록 작성', icon: '🎯', unlocked_at: '2025-01-15' },
-          { id: '2', title: '연속 3일 기록', icon: '🔥', unlocked_at: '2025-01-18' },
-          { id: '3', title: '홈카페 도전', icon: '🏠', unlocked_at: '2025-01-20' }
-        ]
+      const errorJourney: CoffeeJourneySummary = {
+        monthly_records: 0,
+        avg_rating: 0,
+        favorite_roaster: '',
+        favorite_origin: '',
+        favorite_cafe: '',
+        recent_achievements: []
       }
 
-      const demoEquipment: HomeCafeEquipment = {
-        grinder: '바라짜 엔코 그라인더',
-        dripper: 'V60 02',
-        scale: '하리오 드립 스케일',
-        kettle: '보나비타 전기포트',
-        other_equipment: ['온도계', '타이머']
-      }
-
-      setProfile(demoProfile)
-      setJourneySummary(demoJourney)
-      setEquipment(demoEquipment)
-    } catch (error) {
-      console.error('프로필 데이터 로드 오류:', error)
+      setProfile(errorProfile)
+      setJourneySummary(errorJourney)
+      setEquipment(null)
     } finally {
       setLoading(false)
     }

@@ -29,22 +29,11 @@ export default function AchievementsPage() {
       try {
         setLoading(true)
         // 실제 데이터 로드 시도
-        try {
-          const stats = await SupabaseStorage.getUserStats()
-          if (stats) {
-            setUserStats(stats)
-          } else {
-            // 데이터가 없으면 데모 데이터 사용
-            setUserStats(simpleDemoStats as UserStats)
-          }
-        } catch (error) {
-          console.log('실제 데이터 로드 실패, 데모 데이터 사용:', error)
-          // 에러 발생 시 데모 데이터 사용
-          setUserStats(simpleDemoStats as UserStats)
-        }
+        const stats = await SupabaseStorage.getUserStats()
+        setUserStats(stats)
       } catch (error) {
         console.error('통계 로드 실패:', error)
-        setUserStats(simpleDemoStats as UserStats)
+        setUserStats(null)
       } finally {
         setLoading(false)
       }

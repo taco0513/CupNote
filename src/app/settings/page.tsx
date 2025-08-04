@@ -66,16 +66,15 @@ export default function SettingsPage() {
       }
     }
 
-    // 기록 개수 확인을 위해 로드
-    const loadRecords = () => {
+    // 기록 개수 확인을 위해 로드 - Supabase에서만 가져오기
+    const loadRecords = async () => {
       try {
-        const stored = localStorage.getItem('coffeeRecords')
-        if (stored) {
-          const parsedRecords = JSON.parse(stored)
-          setRecords(parsedRecords)
-        }
+        const { SupabaseStorage } = await import('../../lib/supabase-storage')
+        const records = await SupabaseStorage.getRecords()
+        setRecords(records || [])
       } catch (error) {
         console.error('Failed to load records:', error)
+        setRecords([])
       }
     }
 

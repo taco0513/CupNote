@@ -20,7 +20,7 @@ export default function PageLayout({
   return (
     <div className={`min-h-screen ${showBackground ? 'bg-gradient-to-br from-coffee-50 to-neutral-50' : ''}`}>
       <div className={`pb-20 md:pb-8 ${className}`}>
-        <main className="max-w-7xl mx-auto px-4 py-6 md:py-8">
+        <main className="max-w-7xl mx-auto px-4 py-5 md:py-8">
           {children}
         </main>
       </div>
