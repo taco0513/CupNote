@@ -55,7 +55,12 @@ export default function AppHeader({
               <div className="w-8 h-8 bg-gradient-to-br from-accent-warm to-neutral-600 rounded-lg flex items-center justify-center">
                 <Coffee className="h-5 w-5 text-white" />
               </div>
-              <h1 className="text-xl font-bold text-neutral-800">CupNote</h1>
+              <img 
+                src="/cupnote-text-logo.svg" 
+                alt="CupNote" 
+                className="h-7"
+                style={{ filter: 'brightness(0.2)' }}
+              />
             </div>
           </div>
 

@@ -4,6 +4,47 @@ import { supabase } from './supabase'
 import type { Achievement } from '../types/achievement'
 import type { CoffeeRecord } from '../types/coffee'
 
+// App Statistics Service
+export class AppStatsService {
+  // 실제 사용자 통계 가져오기
+  static async getRealStats() {
+    try {
+      // 전체 사용자 수 (실제 가입한 사용자)
+      const { count: userCount, error: userError } = await supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true })
+      
+      // 오늘 활동한 사용자 수
+      const today = new Date().toISOString().split('T')[0]
+      const { count: activeToday, error: activeError } = await supabase
+        .from('coffee_records')
+        .select('user_id', { count: 'exact', head: true })
+        .gte('created_at', today)
+      
+      // 전체 기록 수
+      const { count: totalRecords, error: recordError } = await supabase
+        .from('coffee_records')
+        .select('*', { count: 'exact', head: true })
+
+      return {
+        totalUsers: userCount || 0,
+        activeToday: activeToday || 0,
+        totalRecords: totalRecords || 0,
+        isBeta: true
+      }
+    } catch (error) {
+      console.error('Error fetching app stats:', error)
+      // 실패시 기본값 반환
+      return {
+        totalUsers: 0,
+        activeToday: 0,
+        totalRecords: 0,
+        isBeta: true
+      }
+    }
+  }
+}
+
 // Coffee Records Service
 export class CoffeeRecordService {
   // 커피 기록 생성

@@ -117,7 +117,7 @@ npm install                  # Install all dependencies
 
 ✅ **v1.0.0 RC - Production Deployment Completed** (2025-07-31):
 
-- **Production Deployment**: Live at https://cupnote.vercel.app
+- **Production Deployment**: Live at https://mycupnote.com
 - **Light Mode Only**: Dark mode removed, unified UX experience  
 - **Hydration Issues Fixed**: SSR mismatch errors completely resolved
 - **SEO Optimization**: Complete metadata, robots.txt, sitemap

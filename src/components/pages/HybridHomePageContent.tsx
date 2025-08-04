@@ -8,11 +8,12 @@ import { memo, lazy, Suspense, useState, useEffect } from 'react'
 
 import Link from 'next/link'
 
-import { Coffee, Star, Award, ChevronRight, Sparkles, Target, BarChart3, Trophy, Home } from 'lucide-react'
+import { Coffee, Star, Award, ChevronRight, Sparkles, Target, BarChart3, Trophy, Home, Plus } from 'lucide-react'
 
 import { useAuth } from '../../contexts/AuthContext'
 import Navigation from '../Navigation'
 import OnboardingFlow from '../onboarding/OnboardingFlow'
+import { AppStatsService } from '../../lib/supabase-service'
 import { Card, CardContent } from '../ui/Card'
 import FluidText from '../ui/FluidText'
 import FluidContainer from '../ui/FluidContainer'
@@ -27,8 +28,16 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
   const [recentRecords, setRecentRecords] = useState([])
   const [stats, setStats] = useState({ total: 0, thisMonth: 0, avgRating: 0 })
   const [showOnboarding, setShowOnboarding] = useState(false)
+  const [appStats, setAppStats] = useState({ totalUsers: 0, activeToday: 0, totalRecords: 0, isBeta: true })
 
   useEffect(() => {
+    // 실제 앱 통계 가져오기
+    const fetchAppStats = async () => {
+      const stats = await AppStatsService.getRealStats()
+      setAppStats(stats)
+    }
+    fetchAppStats()
+
     // 온보딩 상태 확인
     const hasCompletedOnboarding = localStorage.getItem('cupnote-onboarding-completed')
     if (!hasCompletedOnboarding && !user) {
@@ -86,8 +95,8 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
         
         {/* 데스크탑 히어로 섹션 - 시니어 디자인 개선 */}
         <div className="mb-12 md:mb-20">
-          {/* 데스크탑용 히어로 레이아웃 */}
-          <div className="hidden md:block">
+          {/* 데스크탑용 히어로 레이아웃 (1024px+) */}
+          <div className="hidden lg:block">
             {/* 배경 그래디언트 */}
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-b from-coffee-50/50 via-transparent to-transparent h-[600px]"></div>
@@ -95,13 +104,14 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
               <div className="relative max-w-6xl mx-auto px-4 pt-12">
                 {/* 메인 히어로 */}
                 <div className="text-center mb-20">
-                  {/* NEW 배지 */}
-                  <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-amber-100 to-coffee-100 text-coffee-700 px-4 py-2 rounded-full text-sm font-medium mb-8">
+                  {/* BETA 배지 */}
+                  <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium mb-8">
                     <Sparkles className="h-4 w-4" />
-                    <span>커피 기록의 새로운 기준</span>
+                    <span className="font-bold">BETA</span>
+                    <span className="text-purple-600">• 커피 기록의 새로운 시작</span>
                   </div>
                   
-                  {/* 타이틀 - Fluid Typography 적용 */}
+                  {/* 타이틀 - 더 감정적이고 구체적으로 개선 */}
                   <FluidText 
                     as="h1" 
                     size="hero" 
@@ -111,26 +121,39 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
                     balance
                     data-testid="homepage-hero-title"
                   >
-                    <span className="text-coffee-800">당신의 </span>
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-coffee-600 to-amber-600">커피 이야기</span>
-                    <span className="text-coffee-800">를</span>
-                    <span className="block mt-2 text-coffee-800">
-                      기록하고 <span className="text-coffee-600">성장</span>하세요
+                    <span className="block text-5xl text-coffee-800">매일 마시는 커피,</span>
+                    <span className="block text-6xl font-bold bg-gradient-to-r from-coffee-600 to-amber-600 bg-clip-text text-transparent mt-2">
+                      특별한 이야기가 되다
                     </span>
                   </FluidText>
                   
-                  {/* 서브타이틀 - Fluid Typography 적용 */}
+                  {/* 서브타이틀 - 구체적 가치 제안 */}
                   <FluidText 
                     as="p" 
                     size="xl"
                     color="secondary" 
                     align="center"
-                    className="max-w-3xl mx-auto mb-10" 
+                    className="max-w-3xl mx-auto mb-6" 
                     lineHeight="relaxed"
                   >
-                    하루 2분의 기록으로 시작하는 나만의 커피 여정.<br />
-                    AI가 분석한 개인 맞춤 취향 리포트를 받아보세요.
+                    2분 기록, 30초 분석, 평생 남는 나만의 커피 데이터베이스
                   </FluidText>
+                  
+                  {/* 베타 참여자 표시 - 실제 데이터 */}
+                  <div className="flex items-center justify-center gap-3 mb-10">
+                    <div className="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded-full">
+                      BETA
+                    </div>
+                    <p className="text-sm text-coffee-600">
+                      {appStats.totalUsers > 0 ? (
+                        <>
+                          <strong className="text-coffee-800">{appStats.totalUsers}명</strong>의 베타 테스터가 함께하고 있어요
+                        </>
+                      ) : (
+                        '베타 테스트 참여자 모집 중'
+                      )}
+                    </p>
+                  </div>
                   
                   {/* CTA 버튼 - 프리미엄 디자인 강화 */}
                   <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
@@ -151,7 +174,7 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
                         "
                         data-testid="homepage-start-button"
                       >
-                        ✨ 무료로 시작하기
+                        무료로 시작하고 Premium 혜택 받기
                       </UnifiedButton>
                     </Link>
                     
@@ -172,51 +195,34 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
                         "
                         data-testid="homepage-demo-button"
                       >
-                        🚀 먼저 둘러보기
+                        먼저 둘러보기
                       </UnifiedButton>
                     </Link>
                   </div>
                   
-                  {/* 개선된 신뢰 지표 - 더 시각적으로 */}
-                  <div className="inline-flex items-center space-x-6 bg-white/80 backdrop-blur-sm rounded-full px-8 py-4 shadow-lg">
-                    <div className="flex items-center space-x-3">
-                      <div className="flex -space-x-3">
-                        {[...Array(4)].map((_, i) => (
-                          <img 
-                            key={i}
-                            className="w-10 h-10 rounded-full border-2 border-white" 
-                            src={`https://i.pravatar.cc/100?img=${i + 1}`}
-                            alt="User"
-                          />
-                        ))}
+                  {/* 베타 버전 표시 - 실제 통계와 함께 */}
+                  <div className="inline-flex items-center space-x-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-full px-6 py-3 shadow-md border border-purple-200/50">
+                    <div className="flex items-center space-x-2">
+                      <div className="px-3 py-1 bg-gradient-to-r from-purple-500 to-blue-500 text-white text-xs font-bold rounded-full">
+                        BETA
                       </div>
                       <div className="text-left">
-                        <div className="font-bold text-coffee-800">1,247</div>
-                        <div className="text-xs text-coffee-600">활성 사용자</div>
+                        <div className="font-semibold text-coffee-800">얼리 액세스 진행 중</div>
+                        <div className="text-xs text-coffee-600">
+                          {appStats.totalRecords > 0 
+                            ? `${appStats.totalRecords}개의 커피 기록`
+                            : '함께 만들어가는 커피 기록 앱'}
+                        </div>
                       </div>
                     </div>
                     
-                    <div className="w-px h-10 bg-coffee-200"></div>
+                    <div className="w-px h-8 bg-purple-200"></div>
                     
                     <div className="flex items-center space-x-2">
-                      <div className="flex space-x-0.5">
-                        {[...Array(5)].map((_, i) => (
-                          <Star key={i} className="h-5 w-5 text-amber-400 fill-current" />
-                        ))}
-                      </div>
+                      <Sparkles className="h-5 w-5 text-purple-500" />
                       <div className="text-left">
-                        <div className="font-bold text-coffee-800">4.9/5.0</div>
-                        <div className="text-xs text-coffee-600">사용자 평점</div>
-                      </div>
-                    </div>
-                    
-                    <div className="w-px h-10 bg-coffee-200"></div>
-                    
-                    <div className="flex items-center space-x-2">
-                      <Award className="h-6 w-6 text-amber-500" />
-                      <div className="text-left">
-                        <div className="font-bold text-coffee-800">Editor's Choice</div>
-                        <div className="text-xs text-coffee-600">2024 App Store</div>
+                        <div className="font-medium text-coffee-700">무료 체험</div>
+                        <div className="text-xs text-coffee-600">모든 기능 이용 가능</div>
                       </div>
                     </div>
                   </div>
@@ -329,19 +335,121 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
             </div>
           </div>
           
-          {/* 모바일용 개선된 레이아웃 */}
-          <div className="md:hidden">
-            <div className="max-w-md mx-auto space-y-3">
-              {/* Secondary CTA - 먼저 구경하기 (비로그인 사용자용만) */}
-              {!user && (
-                <Link href="/demo">
-                  <button className="w-full bg-white hover:bg-coffee-50 border-2 border-coffee-300 hover:border-coffee-400
-                                   rounded-2xl shadow-sm hover:shadow-md text-coffee-700 hover:text-coffee-800 text-base font-medium
+          {/* 태블릿용 레이아웃 (768px - 1023px) */}
+          <div className="hidden md:block lg:hidden">
+            <div className="text-center px-6 py-12">
+              {/* 태블릿 타이틀 - 데스크탑과 모바일 중간 */}
+              <h1 className="text-4xl font-bold mb-4">
+                <span className="block text-coffee-800">오늘 마신 커피,</span>
+                <span className="block font-bold text-transparent bg-clip-text bg-gradient-to-r from-coffee-600 to-amber-600 mt-2">
+                  잊지 않고 기록하세요
+                </span>
+              </h1>
+              
+              {/* 태블릿 서브타이틀 */}
+              <p className="text-lg text-coffee-600 mb-6 max-w-lg mx-auto">
+                단 2분! 나만의 커피 취향을 발견하는 가장 쉬운 방법
+              </p>
+              
+              {/* 베타 버전 표시 */}
+              <div className="flex items-center justify-center gap-3 mb-8">
+                <div className="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded-full">
+                  BETA
+                </div>
+                <p className="text-sm text-coffee-600">
+                  {appStats.totalUsers > 0 
+                    ? `${appStats.totalUsers}명 참여 중`
+                    : '베타 테스트 참여자 모집 중'}
+                </p>
+              </div>
+              
+              {/* 태블릿 CTA 버튼들 */}
+              <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
+                <Link href="/mode-selection" className="flex-1">
+                  <button className="w-full bg-gradient-to-r from-coffee-600 to-coffee-700 text-white font-semibold
+                                   rounded-xl shadow-lg hover:shadow-xl text-base
                                    transition-all duration-200 py-3.5">
-                    <span>먼저 구경하기 →</span>
+                    무료로 시작하기
                   </button>
                 </Link>
-              )}
+                
+                {!user && (
+                  <Link href="/demo" className="flex-1">
+                    <button className="w-full bg-white hover:bg-coffee-50 border-2 border-coffee-300 hover:border-coffee-400
+                                     rounded-xl shadow-sm hover:shadow-md text-coffee-700 hover:text-coffee-800 text-base font-medium
+                                     transition-all duration-200 py-3.5">
+                      둘러보기
+                    </button>
+                  </Link>
+                )}
+              </div>
+              
+              {/* 태블릿용 3가지 핵심 기능 - 더 컴팩트하게 */}
+              <div className="grid grid-cols-3 gap-4 mt-12 max-w-3xl mx-auto">
+                <div className="text-center">
+                  <div className="w-12 h-12 mx-auto bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center shadow-md mb-3">
+                    <Target className="h-6 w-6 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-coffee-800 text-sm mb-1">2분 기록</h3>
+                  <p className="text-xs text-coffee-600">누구나 쉽게</p>
+                </div>
+                
+                <div className="text-center">
+                  <div className="w-12 h-12 mx-auto bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center shadow-md mb-3">
+                    <Sparkles className="h-6 w-6 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-coffee-800 text-sm mb-1">AI 분석</h3>
+                  <p className="text-xs text-coffee-600">취향 리포트</p>
+                </div>
+                
+                <div className="text-center">
+                  <div className="w-12 h-12 mx-auto bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-md mb-3">
+                    <Trophy className="h-6 w-6 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-coffee-800 text-sm mb-1">30+ 뱃지</h3>
+                  <p className="text-xs text-coffee-600">성장 기록</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* 모바일용 개선된 레이아웃 (< 768px) */}
+          <div className="md:hidden">
+            <div className="text-center px-4 py-8">
+              {/* 모바일 타이틀 - 더 짧고 임팩트 있게 */}
+              <h1 className="text-3xl font-bold mb-3">
+                <span className="text-coffee-800">커피 일기,</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-coffee-600 to-amber-600 block mt-1">
+                  2분이면 충분해요
+                </span>
+              </h1>
+              
+              {/* 모바일 베타 표시 */}
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <span className="px-2 py-0.5 bg-purple-100 text-purple-700 text-xs font-bold rounded-full">BETA</span>
+                <p className="text-sm text-coffee-600">무료 베타 테스트 중</p>
+              </div>
+              
+              {/* 모바일 CTA 버튼들 */}
+              <div className="space-y-3 max-w-xs mx-auto">
+                <Link href="/mode-selection">
+                  <button className="w-full bg-gradient-to-r from-coffee-600 to-coffee-700 text-white font-semibold
+                                   rounded-2xl shadow-lg hover:shadow-xl text-base
+                                   transition-all duration-200 py-4">
+                    무료로 시작하기 →
+                  </button>
+                </Link>
+                
+                {!user && (
+                  <Link href="/demo">
+                    <button className="w-full bg-white hover:bg-coffee-50 border-2 border-coffee-300 hover:border-coffee-400
+                                     rounded-2xl shadow-sm hover:shadow-md text-coffee-700 hover:text-coffee-800 text-base font-medium
+                                     transition-all duration-200 py-3.5">
+                      먼저 둘러보기
+                    </button>
+                  </Link>
+                )}
+              </div>
             </div>
           </div>
         </div>

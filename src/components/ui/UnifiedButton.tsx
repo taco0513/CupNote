@@ -58,22 +58,22 @@ export default function UnifiedButton({
   }
 
   const getSizeClass = () => {
-    // Responsive size variations - mobile first approach
+    // Responsive size variations - mobile first approach with 44px minimum touch targets
     switch (size) {
       case 'xs':
-        return 'px-2.5 py-1 text-xs sm:px-3 sm:py-1.5'
+        return 'min-h-[44px] px-3 py-2 text-xs sm:min-h-[36px] sm:px-3 sm:py-1.5'
       case 'sm':
-        return 'px-3 py-1.5 text-sm sm:px-3.5 sm:py-2 md:px-4'
+        return 'min-h-[44px] px-3.5 py-2.5 text-sm sm:min-h-[40px] sm:px-4 sm:py-2 md:px-4'
       case 'md':
-        return 'px-4 py-2 text-sm sm:px-5 sm:py-2.5 sm:text-base'
+        return 'min-h-[48px] px-4 py-3 text-sm sm:min-h-[44px] sm:px-5 sm:py-2.5 sm:text-base'
       case 'lg':
-        return 'px-5 py-2.5 text-base sm:px-6 sm:py-3 md:px-8 md:text-lg'
+        return 'min-h-[52px] px-5 py-3.5 text-base sm:min-h-[48px] sm:px-6 sm:py-3 md:px-8 md:text-lg'
       case 'xl':
-        return 'px-6 py-3 text-lg sm:px-8 sm:py-4 md:px-10 md:text-xl'
+        return 'min-h-[56px] px-6 py-4 text-lg sm:min-h-[52px] sm:px-8 sm:py-4 md:px-10 md:text-xl'
       case 'icon':
-        return 'p-2 sm:p-2.5 md:p-3 aspect-square'
+        return 'min-h-[44px] min-w-[44px] p-2.5 sm:min-h-[40px] sm:min-w-[40px] sm:p-2.5 md:p-3 aspect-square'
       default:
-        return 'px-4 py-2 text-sm sm:px-5 sm:py-2.5 sm:text-base'
+        return 'min-h-[48px] px-4 py-3 text-sm sm:min-h-[44px] sm:px-5 sm:py-2.5 sm:text-base'
     }
   }
 

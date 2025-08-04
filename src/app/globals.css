@@ -75,6 +75,24 @@
     --color-warning-foreground: 255 255 255;
 
     /* ===== UNIFIED BUTTON & FILTER DESIGN TOKENS ===== */
+    /* Button Size Tokens - Mobile First with Touch Target Compliance */
+    --btn-height-xs-mobile: 44px;  /* iOS/WCAG minimum */
+    --btn-height-sm-mobile: 44px;  
+    --btn-height-md-mobile: 48px;  /* Android recommended */
+    --btn-height-lg-mobile: 52px;
+    --btn-height-xl-mobile: 56px;
+    
+    --btn-height-xs-desktop: 36px;
+    --btn-height-sm-desktop: 40px;
+    --btn-height-md-desktop: 44px;
+    --btn-height-lg-desktop: 48px;
+    --btn-height-xl-desktop: 52px;
+    
+    /* Spacing Tokens */
+    --btn-group-gap-mobile: 12px;  /* gap-3 */
+    --btn-group-gap-desktop: 16px; /* gap-4 */
+    --btn-icon-gap: 8px;           /* gap-2 */
+    
     /* Primary Action Buttons */
     --btn-primary-bg: linear-gradient(135deg, rgb(139 69 19), rgb(109 52 16));
     --btn-primary-bg-hover: linear-gradient(135deg, rgb(109 52 16), rgb(74 36 11));
@@ -201,6 +219,39 @@
 
 /* Mobile-specific styles */
 @layer utilities {
+  /* Touch Target System - Mobile First Approach */
+  .touch-target-min {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .touch-target-recommended {
+    min-height: 48px;
+    min-width: 48px;
+  }
+  
+  .touch-target-large {
+    min-height: 56px;
+  }
+  
+  /* Button Spacing Utilities */
+  .button-group-mobile {
+    @apply gap-3; /* 12px */
+  }
+  
+  .button-group-desktop {
+    @apply sm:gap-4; /* 16px on desktop */
+  }
+  
+  .icon-text-gap {
+    @apply gap-2; /* 8px between icon and text */
+  }
+  
+  /* Container Padding Standards */
+  .container-padding {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+  
   /* Prevent text selection on interactive elements */
   .no-select {
     -webkit-user-select: none;
@@ -212,6 +263,22 @@
   /* Touch feedback */
   .touch-active {
     @apply scale-95 opacity-80;
+  }
+  
+  /* PWA Install Prompt Animation */
+  @keyframes slide-up {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .animate-slide-up {
+    animation: slide-up 0.3s ease-out;
   }
 
   /* Smooth scrolling for mobile */

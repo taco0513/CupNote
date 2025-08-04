@@ -2,7 +2,7 @@
 
 > 누구나 전문가처럼, 그러나 자기만의 방식으로 커피를 기록하고 나눌 수 있는 공간
 
-[![Vercel](https://vercelbadges.com/cupnote.vercel.app)](https://cupnote.vercel.app)
+[![Live](https://img.shields.io/badge/Live-mycupnote.com-success)](https://mycupnote.com)
 [![Next.js](https://img.shields.io/badge/Next.js-15.4.5-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.0-38B2AC)](https://tailwindcss.com/)
@@ -15,7 +15,7 @@
 전문가의 복잡한 용어에 부담을 느끼지 않고, 자신만의 언어로 커피를 기록하고 다른 사람들과 경험을 나눌 수 있습니다.
 
 ### 🌐 라이브 서비스
-- **프로덕션 URL**: https://cupnote.vercel.app
+- **프로덕션 URL**: https://mycupnote.com
 - **상태**: ✅ v1.3.0 AI 고급 분석 대시보드 추가 (2025-08-04)
 - **기능**: 완전한 PWA, 하이브리드 디자인, AI 분석 대시보드, 알림 시스템, 실시간 DB 연동
 - **최근 업데이트**: AI 기반 고급 분석 대시보드 - 맛 프로파일 레이더 차트 & AI 추천 시스템

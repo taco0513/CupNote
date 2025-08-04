@@ -143,7 +143,7 @@ export default function Navigation({
                   <div className="hidden md:flex items-center space-x-1">
                     <Link
                       href="/achievements"
-                      className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${
+                      className={`flex items-center px-4 py-2.5 rounded-lg transition-all duration-200 ${
                         isActive('achievements')
                           ? 'bg-coffee-100 text-coffee-800'
                           : 'text-coffee-600 hover:text-coffee-800 hover:bg-coffee-50'
@@ -155,7 +155,7 @@ export default function Navigation({
                     
                     <Link
                       href="/my-records"
-                      className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${
+                      className={`flex items-center px-4 py-2.5 rounded-lg transition-all duration-200 ${
                         isActive('my-records')
                           ? 'bg-coffee-100 text-coffee-800'
                           : 'text-coffee-600 hover:text-coffee-800 hover:bg-coffee-50'
@@ -169,7 +169,7 @@ export default function Navigation({
                   {/* Primary CTA - 기록하기 버튼 */}
                   <Link
                     href={isFeatureEnabled('ENABLE_NEW_TASTING_FLOW') ? '/tasting-flow' : '/mode-selection'}
-                    className="flex items-center px-4 py-2.5 bg-coffee-600 hover:bg-coffee-700 text-white rounded-xl transition-all duration-200 font-medium shadow-sm hover:shadow-md"
+                    className="flex items-center px-5 py-3 bg-coffee-600 hover:bg-coffee-700 text-white rounded-xl transition-all duration-200 font-medium shadow-sm hover:shadow-md"
                   >
                     <Plus className="h-4 w-4 mr-1.5" />
                     <span>기록하기</span>
@@ -184,7 +184,7 @@ export default function Navigation({
                 ) : user ? (
                   <button
                     onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-                    className="flex items-center space-x-2 px-3 py-2 rounded-xl hover:bg-coffee-50 transition-all duration-200"
+                    className="flex items-center space-x-2 px-4 py-2.5 rounded-xl hover:bg-coffee-50 transition-all duration-200"
                   >
                     <div className="w-8 h-8 bg-gradient-to-r from-coffee-400 to-coffee-500 rounded-full flex items-center justify-center">
                       {user.avatar_url ? (
@@ -328,7 +328,7 @@ export default function Navigation({
             <div className={`relative transition-all duration-200 ${
               currentPage === 'home' ? 'scale-110' : ''
             }`}>
-              <Coffee className="h-5 w-5" />
+              <Coffee className="h-6 w-6" />
             </div>
             <span className={`text-xs relative transition-all duration-200 ${
               currentPage === 'home' ? 'font-semibold transform scale-105' : 'font-medium'
@@ -354,7 +354,7 @@ export default function Navigation({
                 <div className={`relative transition-all duration-200 ${
                   currentPage === 'my-records' ? 'scale-110' : ''
                 }`}>
-                  <BarChart3 className="h-5 w-5" />
+                  <BarChart3 className="h-6 w-6" />
                 </div>
                 <span className={`text-xs relative transition-all duration-200 ${
                   currentPage === 'my-records' ? 'font-semibold transform scale-105' : 'font-medium'
@@ -373,7 +373,7 @@ export default function Navigation({
               >
                 <div className="absolute inset-2 bg-gradient-to-br from-coffee-500 to-coffee-600 rounded-xl shadow-xl transition-all duration-200 hover:shadow-2xl" />
                 <div className="relative transition-all duration-200 z-10">
-                  <Plus className="h-6 w-6" />
+                  <Plus className="h-7 w-7" />
                 </div>
                 <span className="text-xs relative transition-all duration-200 z-10 font-semibold">
                   작성
@@ -392,7 +392,7 @@ export default function Navigation({
                 <div className={`relative transition-all duration-200 ${
                   currentPage === 'achievements' ? 'scale-110' : ''
                 }`}>
-                  <Trophy className="h-5 w-5" />
+                  <Trophy className="h-6 w-6" />
                 </div>
                 <span className={`text-xs relative transition-all duration-200 ${
                   currentPage === 'achievements' ? 'font-semibold transform scale-105' : 'font-medium'
@@ -416,7 +416,7 @@ export default function Navigation({
               >
                 <div className="absolute inset-2 bg-gradient-to-br from-coffee-500 to-coffee-600 rounded-xl shadow-xl transition-all duration-200 hover:shadow-2xl hover:from-coffee-600 hover:to-coffee-700" />
                 <div className="relative transition-all duration-200 z-10">
-                  <Plus className="h-6 w-6" />
+                  <Plus className="h-7 w-7" />
                 </div>
                 <span className="text-xs relative transition-all duration-200 z-10 font-bold">
                   시작
@@ -428,7 +428,7 @@ export default function Navigation({
                 onClick={() => handleAuthNavigation('login')}
                 className="flex flex-col items-center justify-center space-y-1 text-coffee-600 hover:text-coffee-800 active:scale-95 active:bg-coffee-50 rounded-lg mx-1 my-1 font-medium transition-all duration-200"
               >
-                <LogIn className="h-5 w-5" />
+                <LogIn className="h-6 w-6" />
                 <span className="text-xs">로그인</span>
               </button>
             </>

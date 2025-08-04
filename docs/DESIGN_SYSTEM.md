@@ -72,6 +72,39 @@
 .section-spacing { @apply mb-8 md:mb-12; }
 .card-spacing { @apply p-4 md:p-6; }
 .element-spacing { @apply mb-4 md:mb-6; }
+
+/* Button Groups */
+.button-group-mobile { @apply gap-3; }  /* 12px */
+.button-group-desktop { @apply gap-4; } /* 16px */
+
+/* Icon Spacing */
+.icon-text-gap { @apply gap-2; }       /* 8px - consistent icon to text spacing */
+
+/* Container Padding */
+.container-mobile { @apply px-4; }     /* 16px */
+.container-tablet { @apply sm:px-6; }  /* 24px */
+.container-desktop { @apply lg:px-8; } /* 32px */
+```
+
+### Touch Target System (Mobile First)
+```css
+/* Minimum Touch Targets - WCAG AAA & Platform Guidelines */
+.touch-target-min { min-height: 44px; min-width: 44px; }  /* iOS/WCAG minimum */
+.touch-target-recommended { min-height: 48px; min-width: 48px; } /* Android/Recommended */
+.touch-target-large { min-height: 56px; }  /* Large CTAs */
+
+/* Button Size Tokens */
+--btn-height-xs-mobile: 44px;  /* Minimum on mobile */
+--btn-height-sm-mobile: 44px;  
+--btn-height-md-mobile: 48px;  /* Recommended default */
+--btn-height-lg-mobile: 52px;
+--btn-height-xl-mobile: 56px;
+
+--btn-height-xs-desktop: 36px;  /* Can be smaller on desktop */
+--btn-height-sm-desktop: 40px;
+--btn-height-md-desktop: 44px;
+--btn-height-lg-desktop: 48px;
+--btn-height-xl-desktop: 52px;
 ```
 
 ## 🧩 Component Patterns
@@ -110,7 +143,35 @@ interface PageHeaderProps {
 </Card>
 ```
 
-### 3. 하이브리드 스타일링
+### 3. Button System (UnifiedButton)
+```tsx
+// Size variants with guaranteed touch targets
+<UnifiedButton size="xs">  // 44px min height on mobile
+<UnifiedButton size="sm">  // 44px min height on mobile  
+<UnifiedButton size="md">  // 48px min height on mobile (default)
+<UnifiedButton size="lg">  // 52px min height on mobile
+<UnifiedButton size="xl">  // 56px min height on mobile
+<UnifiedButton size="icon"> // 44x44px minimum square
+
+// Variant styles
+<UnifiedButton variant="primary">   // Coffee gradient
+<UnifiedButton variant="secondary"> // White with border
+<UnifiedButton variant="outline">   // Transparent with border
+<UnifiedButton variant="ghost">     // Transparent, no border
+<UnifiedButton variant="danger">    // Red for destructive actions
+<UnifiedButton variant="hero">      // Large CTA with gradient
+
+// Mobile-optimized examples
+<UnifiedButton size="md" fullWidth>
+  시작하기
+</UnifiedButton>
+
+<UnifiedButton size="icon" variant="ghost">
+  <Settings className="h-6 w-6" />
+</UnifiedButton>
+```
+
+### 4. 하이브리드 스타일링
 ```css
 /* 글래스모피즘 배경 */
 .glass-bg {
@@ -125,6 +186,11 @@ interface PageHeaderProps {
 /* 그라디언트 요소 */
 .gradient-accent {
   @apply bg-gradient-to-r from-coffee-400 to-coffee-500;
+}
+
+/* Button interactions */
+.btn-interactive {
+  @apply active:scale-95 transition-transform duration-150;
 }
 ```
 

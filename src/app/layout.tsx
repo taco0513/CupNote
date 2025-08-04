@@ -29,7 +29,7 @@ import './globals.css'
 import '../styles/fluid.css'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://cupnote.vercel.app'),
+  metadataBase: new URL('https://mycupnote.com/'),
   title: {
     default: 'CupNote - 나만의 커피 여정',
     template: '%s | CupNote'
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     '커피 기록', '맛 평가', '로스터리', '원두', 'PWA', 
     'coffee journal', 'cupping notes', 'specialty coffee'
   ],
-  authors: [{ name: 'CupNote Team', url: 'https://cupnote.vercel.app' }],
+  authors: [{ name: 'CupNote Team', url: 'https://mycupnote.com' }],
   creator: 'CupNote Team',
   publisher: 'CupNote',
   category: 'Food & Drink',
@@ -61,12 +61,24 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: 'default',
     title: 'CupNote',
-    startupImage: '/icons/apple-icon-152x152.png',
+    startupImage: '/icons/apple-icon-180x180.png',
+  },
+  icons: {
+    icon: [
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/icons/apple-icon-120x120.png', sizes: '120x120' },
+      { url: '/icons/apple-icon-152x152.png', sizes: '152x152' },
+      { url: '/icons/apple-icon-180x180.png', sizes: '180x180' },
+    ],
   },
   openGraph: {
     title: 'CupNote - 나만의 커피 여정',
     description: '누구나 전문가처럼, 그러나 자기만의 방식으로 커피를 기록하고 나눌 수 있는 공간',
-    url: 'https://cupnote.vercel.app',
+    url: 'https://mycupnote.com/',
     siteName: 'CupNote',
     locale: 'ko_KR',
     type: 'website',
