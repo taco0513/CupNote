@@ -54,20 +54,20 @@ const ModeCard = ({
           popular 
             ? 'bg-white/90 backdrop-blur-sm border border-coffee-200/30 shadow-lg hover:shadow-xl' 
             : 'bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md hover:shadow-lg'
-        } hover:scale-105 relative overflow-hidden`}
+        } hover:scale-105 relative overflow-visible m-2`}
       >
         {/* 글로우 효과 */}
         {popular && (
           <div className="absolute inset-0 bg-gradient-to-r from-coffee-400/10 to-coffee-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         )}
         
-        {/* 배지 */}
+        {/* 배지 - 잘림 방지 */}
         {badge && (
-          <div className="absolute -top-3 -right-3 z-10">
+          <div className="absolute -top-2 -right-2 z-10">
             <Badge 
               variant={badgeVariant} 
-              size="medium"
-              className="shadow-md"
+              size="small"
+              className="shadow-md whitespace-nowrap min-w-fit px-2"
             >
               {badge}
             </Badge>
@@ -166,7 +166,7 @@ export default function ModeSelectionPage() {
 
         {/* 모드 카드들 */}
         <FluidContainer maxWidth="full" className="mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 p-4">
           {/* Cafe Mode */}
           <ModeCard
             mode="cafe"
