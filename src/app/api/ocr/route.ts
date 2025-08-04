@@ -18,6 +18,27 @@ export async function POST(request: NextRequest) {
 
     console.log('✅ 이미지 수신:', image.size, 'bytes', image.type)
     
+    // 이미지 크기 검증
+    if (image.size > 10 * 1024 * 1024) { // 10MB 제한
+      console.log('❌ 이미지 크기 초과:', image.size)
+      return NextResponse.json({
+        success: false,
+        error: '이미지 크기가 너무 큽니다. 10MB 이하의 이미지를 사용해주세요.'
+      }, { status: 400 })
+    }
+    
+    // 이미지 타입 검증
+    if (!image.type.startsWith('image/')) {
+      console.log('❌ 잘못된 파일 타입:', image.type)
+      return NextResponse.json({
+        success: false,
+        error: '이미지 파일만 업로드 가능합니다.'
+      }, { status: 400 })
+    }
+    
+    // 처리 시뮬레이션 (실제 OCR 처리 시간을 모방)
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    
     // 테스트용: 항상 성공적인 모의 데이터 반환
     const mockExtractedInfo = {
       coffeeName: 'El Diviso - Omblgon Decaf',

@@ -168,23 +168,26 @@ class OCRService {
     try {
       console.log('서버 사이드 OCR 시작')
       
-      // 진행률 시뮬레이션 (서버 처리 시간을 고려)
-      if (onProgress) {
-        onProgress(0.1)
-        setTimeout(() => onProgress(0.3), 2000)
-        setTimeout(() => onProgress(0.6), 5000)
-        setTimeout(() => onProgress(0.8), 15000)
-        setTimeout(() => onProgress(0.9), 25000)
-      }
-      
       const formData = new FormData()
       formData.append('image', imageFile)
       
-      // 타임아웃 설정 (35초)
+      // 진행률 시뮬레이션을 더 짧고 안정적으로 수정
+      if (onProgress) {
+        onProgress(0.1)
+      }
+      
+      // 타임아웃을 15초로 단축 (서버가 mock 데이터를 반환하므로)
       const controller = new AbortController()
       const timeoutId = setTimeout(() => {
         controller.abort()
-      }, 35000)
+      }, 15000)
+      
+      // 진행률 업데이트를 요청과 함께 처리
+      const progressInterval = setInterval(() => {
+        if (onProgress) {
+          onProgress(0.5) // 50%에서 멈추지 않도록 지속 업데이트
+        }
+      }, 500)
       
       const response = await fetch('/api/ocr', {
         method: 'POST',
@@ -193,8 +196,11 @@ class OCRService {
       })
       
       clearTimeout(timeoutId)
+      clearInterval(progressInterval)
       
       if (!response.ok) {
+        if (onProgress) onProgress(0)
+        
         if (response.status === 500) {
           throw new Error('서버에서 OCR 처리 중 오류가 발생했습니다. 이미지가 너무 크거나 복잡할 수 있습니다.')
         }
@@ -203,6 +209,7 @@ class OCRService {
       
       const result = await response.json()
       
+      // 성공 시 진행률을 100%로 설정
       if (onProgress) {
         onProgress(1)
       }
@@ -220,6 +227,11 @@ class OCRService {
       }
     } catch (error: any) {
       console.error('서버 사이드 OCR 오류:', error)
+      
+      // 진행률을 0으로 리셋
+      if (onProgress) {
+        onProgress(0)
+      }
       
       if (error.name === 'AbortError') {
         throw new Error('OCR 처리 시간이 초과되었습니다. 더 작은 이미지나 더 선명한 이미지로 다시 시도해주세요.')
