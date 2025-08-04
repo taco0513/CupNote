@@ -14,7 +14,7 @@ import { List, BarChart3, Coffee, Plus, Filter, Search, TrendingUp, Calendar } f
 import CoffeeAnalytics from '../../components/analytics/CoffeeAnalytics'
 import ProtectedRoute from '../../components/auth/ProtectedRoute'
 import Navigation from '../../components/Navigation'
-import OptimizedCoffeeList from '../../components/OptimizedCoffeeList'
+import CoffeeList from '../../components/CoffeeList'
 import { Card, CardContent } from '../../components/ui/Card'
 import PageHeader from '../../components/ui/PageHeader'
 import PageLayout from '../../components/ui/PageLayout'
@@ -318,7 +318,7 @@ function MyRecordsPageContent() {
 
                 {/* 커피 목록 - 데스크탑에서 더 큰 그리드 */}
                 <div className="lg:pr-4">
-                  <OptimizedCoffeeList />
+                  <CoffeeList />
                 </div>
               </div>
             )}

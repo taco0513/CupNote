@@ -11,7 +11,6 @@ import Link from 'next/link'
 import { Coffee, Home, Beaker, Clock, Users, TrendingUp, Zap, ArrowRight } from 'lucide-react'
 
 import AuthModal from '../../components/auth/AuthModal'
-import GuestModeIndicator from '../../components/GuestModeIndicator'
 import Navigation from '../../components/Navigation'
 import Alert from '../../components/ui/Alert'
 import Badge from '../../components/ui/Badge'
@@ -143,13 +142,19 @@ export default function ModeSelectionPage() {
       <Navigation showBackButton currentPage="record" />
       <PageLayout>
         
-        {/* 게스트 모드 표시 */}
+        {/* 게스트 모드 알림 */}
         {!user && (
-          <GuestModeIndicator 
-            variant="banner" 
-            onLoginClick={() => openAuthModal('login')}
-            className="mb-8"
-          />
+          <Alert variant="info" className="mb-8">
+            <div className="flex items-center justify-between">
+              <span>로그인하면 기록을 저장할 수 있어요</span>
+              <button 
+                onClick={() => openAuthModal('login')}
+                className="text-blue-600 hover:text-blue-800 underline"
+              >
+                로그인
+              </button>
+            </div>
+          </Alert>
         )}
 
         {/* 페이지 헤더 - 하이브리드 디자인 */}
