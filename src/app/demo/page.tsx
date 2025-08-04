@@ -5,7 +5,7 @@
 
 import Link from 'next/link'
 
-import { Coffee, Star, MapPin, Calendar, User, ArrowRight, Clock, Award, BarChart3 } from 'lucide-react'
+import { Coffee, Star, MapPin, Calendar, User, ArrowRight, Clock, Award, BarChart3, Sparkles } from 'lucide-react'
 
 import Navigation from '../../components/Navigation'
 import { Card, CardContent } from '../../components/ui/Card'
@@ -228,6 +228,59 @@ export default function DemoPage() {
               <div className="text-xs text-coffee-400">전문가</div>
             </div>
           </div>
+        </div>
+
+        {/* 고급 분석 체험 섹션 */}
+        <div className="mb-12">
+          <Card className="bg-gradient-to-br from-purple-50 to-blue-50 backdrop-blur-sm border border-purple-200/50 shadow-lg">
+            <CardContent className="p-8">
+              <div className="flex flex-col lg:flex-row items-center gap-8">
+                <div className="flex-1">
+                  <h2 className="text-2xl font-bold text-purple-800 mb-4 flex items-center">
+                    <Sparkles className="h-6 w-6 mr-2" />
+                    AI 고급 분석 대시보드 체험
+                  </h2>
+                  <p className="text-purple-600 mb-6">
+                    샘플 데이터로 고급 분석 기능을 미리 체험해보세요. 실제 기록이 쌓이면 더욱 정확한 개인화 분석이 가능합니다!
+                  </p>
+                  <div className="grid sm:grid-cols-3 gap-4 mb-6">
+                    <div className="bg-white/60 rounded-lg p-4">
+                      <div className="text-2xl mb-2">📊</div>
+                      <h4 className="font-semibold text-purple-800 mb-1">맛 프로파일</h4>
+                      <p className="text-sm text-purple-600">6가지 지표 레이더 차트</p>
+                    </div>
+                    <div className="bg-white/60 rounded-lg p-4">
+                      <div className="text-2xl mb-2">📈</div>
+                      <h4 className="font-semibold text-purple-800 mb-1">취향 트렌드</h4>
+                      <p className="text-sm text-purple-600">계절별 선호도 분석</p>
+                    </div>
+                    <div className="bg-white/60 rounded-lg p-4">
+                      <div className="text-2xl mb-2">🤖</div>
+                      <h4 className="font-semibold text-purple-800 mb-1">AI 추천</h4>
+                      <p className="text-sm text-purple-600">맞춤 카페 & 원두</p>
+                    </div>
+                  </div>
+                  <Link href="/analytics-concept">
+                    <UnifiedButton 
+                      variant="primary" 
+                      size="large"
+                      className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white shadow-md hover:shadow-lg"
+                    >
+                      <BarChart3 className="h-5 w-5 mr-2" />
+                      고급 분석 대시보드 체험하기
+                    </UnifiedButton>
+                  </Link>
+                </div>
+                <div className="lg:w-64">
+                  <div className="bg-gradient-to-br from-purple-100 to-blue-100 rounded-2xl p-6 text-center">
+                    <div className="text-6xl mb-3">📈</div>
+                    <div className="text-lg font-bold text-purple-800 mb-1">Beta Version</div>
+                    <div className="text-sm text-purple-600">v1.3.0 New Feature</div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* CTA 섹션 */}

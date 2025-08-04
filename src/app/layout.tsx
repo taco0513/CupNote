@@ -26,6 +26,7 @@ const AppHeader = dynamic(() => import('../components/AppHeader'), {
   loading: () => null
 })
 import './globals.css'
+import '../styles/fluid.css'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://cupnote.vercel.app'),

@@ -342,21 +342,22 @@ function MyRecordsPageContent() {
 
         {/* 첫 기록 안내 - 기록이 없을 때 */}
         {quickStats.total === 0 && (
-          <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md">
-            <CardContent>
-              <EmptyState
-                title="아직 기록이 없어요"
-                description="첫 번째 커피를 기록해보세요! 간단한 경험부터 전문적인 커핑까지 다양한 방식으로 기록할 수 있어요."
-                variant="coffee"
-                illustration="coffee-cup"
-                action={
-                  <Link href="/mode-selection">
-                    <UnifiedButton
-                      variant="primary"
-                      size="large"
-                      className="bg-gradient-to-r from-coffee-500 to-coffee-600 hover:from-coffee-600 hover:to-coffee-700 shadow-md hover:shadow-lg"
-                    >
-                      <Plus className="h-5 w-5 mr-2" />
+          <div className="space-y-6">
+            <Card variant="default" className="bg-white/80 backdrop-blur-sm border border-coffee-200/30 shadow-md">
+              <CardContent>
+                <EmptyState
+                  title="아직 기록이 없어요"
+                  description="첫 번째 커피를 기록해보세요! 간단한 경험부터 전문적인 커핑까지 다양한 방식으로 기록할 수 있어요."
+                  variant="coffee"
+                  illustration="coffee-cup"
+                  action={
+                    <Link href="/mode-selection">
+                      <UnifiedButton
+                        variant="primary"
+                        size="large"
+                        className="bg-gradient-to-r from-coffee-500 to-coffee-600 hover:from-coffee-600 hover:to-coffee-700 shadow-md hover:shadow-lg"
+                      >
+                        <Plus className="h-5 w-5 mr-2" />
                       첫 기록 시작하기
                     </UnifiedButton>
                   </Link>
@@ -364,6 +365,33 @@ function MyRecordsPageContent() {
               />
             </CardContent>
           </Card>
+          
+          {/* AI 고급 분석 대시보드 CTA - 기록이 없어도 표시 */}
+          <Card variant="default" className="bg-gradient-to-br from-purple-50 to-blue-50 backdrop-blur-sm border border-purple-200/50 shadow-md">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-purple-800 mb-2 flex items-center">
+                    <TrendingUp className="h-5 w-5 mr-2" />
+                    AI 고급 분석 대시보드 (Beta)
+                  </h3>
+                  <p className="text-sm text-purple-600 mb-4">
+                    맛 프로파일 레이더 차트와 AI 추천 시스템을 미리 체험해보세요. 기록이 쌓이면 더 정확한 분석이 가능해요!
+                  </p>
+                  <Link href="/analytics-concept">
+                    <UnifiedButton
+                      variant="primary"
+                      size="medium"
+                      className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white shadow-md hover:shadow-lg"
+                    >
+                      고급 분석 체험하기 →
+                    </UnifiedButton>
+                  </Link>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
         )}
       </PageLayout>
     </ProtectedRoute>

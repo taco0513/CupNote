@@ -16,6 +16,8 @@ import Navigation from '../../components/Navigation'
 import Alert from '../../components/ui/Alert'
 import Badge from '../../components/ui/Badge'
 import { Card, CardContent } from '../../components/ui/Card'
+import FluidText from '../../components/ui/FluidText'
+import FluidContainer from '../../components/ui/FluidContainer'
 import PageHeader from '../../components/ui/PageHeader'
 import PageLayout from '../../components/ui/PageLayout'
 import { TASTING_MODES_CONFIG, UI_LABELS } from '../../config'
@@ -84,31 +86,35 @@ const ModeCard = ({
               {icon}
             </div>
             <div>
-              <h3 className="text-xl font-bold text-coffee-800 mb-1">{title}</h3>
-              <p className="text-coffee-600 text-sm">{description}</p>
+              <FluidText as="h3" size="xl" weight="bold" color="primary" className="mb-1">
+                {title}
+              </FluidText>
+              <FluidText as="p" size="sm" color="secondary">
+                {description}
+              </FluidText>
             </div>
           </div>
 
           {/* 소요 시간 */}
           <div className="flex items-center mb-4 text-coffee-500">
             <Clock className="h-4 w-4 mr-2" />
-            <span className="text-sm font-medium">{duration}</span>
+            <FluidText as="span" size="sm" weight="medium">{duration}</FluidText>
           </div>
 
           {/* 주요 기능 */}
           <div className="space-y-3 mb-6">
             {features.map((feature, index) => (
-              <div key={index} className="flex items-center text-sm text-coffee-700">
+              <div key={index} className="flex items-center">
                 <div className="w-1.5 h-1.5 rounded-full mr-3 bg-coffee-500 flex-shrink-0" />
-                <span>{feature}</span>
+                <FluidText as="span" size="sm" color="primary">{feature}</FluidText>
               </div>
             ))}
           </div>
 
           {/* 시작하기 버튼 효과 */}
           <div className="mt-4 pt-4 border-t border-coffee-100/50">
-            <div className="flex items-center justify-between text-sm font-medium text-coffee-500 group-hover:text-coffee-600 transition-colors duration-200">
-              <span>시작하기</span>
+            <div className="flex items-center justify-between text-coffee-500 group-hover:text-coffee-600 transition-colors duration-200">
+              <FluidText as="span" size="sm" weight="medium">시작하기</FluidText>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
             </div>
           </div>
@@ -154,7 +160,8 @@ export default function ModeSelectionPage() {
         />
 
         {/* 모드 카드들 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-12">
+        <FluidContainer maxWidth="full" className="mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           {/* Cafe Mode */}
           <ModeCard
             mode="cafe"
@@ -189,7 +196,8 @@ export default function ModeSelectionPage() {
               '추출 타이머 및 레시피 저장',
             ]}
           />
-        </div>
+          </div>
+        </FluidContainer>
 
         {/* 모드 카테고리 설명 */}
         <div className="grid md:grid-cols-2 gap-6 mb-12">

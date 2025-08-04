@@ -1,0 +1,400 @@
+/**
+ * Design Tokens - CupNote 2025 디자인 시스템
+ * 반응형 디자인을 위한 CSS 커스텀 프로퍼티 시스템
+ */
+
+:root {
+  /* ========================================
+   * 1. COLOR SYSTEM - Coffee 테마 색상 팔레트
+   * ======================================== */
+  
+  /* Primary Coffee Colors */
+  --coffee-50: #FAF7F2;
+  --coffee-100: #F5E6D3;
+  --coffee-200: #E8D5BE;
+  --coffee-300: #D4B896;
+  --coffee-400: #B8956A;
+  --coffee-500: #8B4513;
+  --coffee-600: #6D3410;
+  --coffee-700: #4A240B;
+  --coffee-800: #3C1D09;
+  --coffee-900: #2D1507;
+  --coffee-950: #1F0E04;
+
+  /* Additional Coffee Tones */
+  --coffee-25: #FDFCFA;
+  --coffee-75: #F8F0E7;
+
+  /* Accent Colors */
+  --amber-50: #FFFBEB;
+  --amber-100: #FEF3C7;
+  --amber-200: #FDE68A;
+  --amber-300: #FCD34D;
+  --amber-400: #FBBF24;
+  --amber-500: #F59E0B;
+  --amber-600: #D97706;
+  --amber-700: #B45309;
+  --amber-800: #92400E;
+  --amber-900: #78350F;
+
+  /* Status Colors */
+  --success-50: #ECFDF5;
+  --success-100: #D1FAE5;
+  --success-500: #10B981;
+  --success-600: #059669;
+  --success-700: #047857;
+
+  --warning-50: #FFFBEB;
+  --warning-100: #FEF3C7;
+  --warning-500: #F59E0B;
+  --warning-600: #D97706;
+  --warning-700: #B45309;
+
+  --error-50: #FEF2F2;
+  --error-100: #FEE2E2;
+  --error-500: #EF4444;
+  --error-600: #DC2626;
+  --error-700: #B91C1C;
+
+  --info-50: #EFF6FF;
+  --info-100: #DBEAFE;
+  --info-500: #3B82F6;
+  --info-600: #2563EB;
+  --info-700: #1D4ED8;
+
+  /* Neutral Colors */
+  --gray-50: #F9FAFB;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-300: #D1D5DB;
+  --gray-400: #9CA3AF;
+  --gray-500: #6B7280;
+  --gray-600: #4B5563;
+  --gray-700: #374151;
+  --gray-800: #1F2937;
+  --gray-900: #111827;
+
+  /* ========================================
+   * 2. FLUID TYPOGRAPHY SYSTEM
+   * ======================================== */
+  
+  /* Font Sizes - Fluid scaling with clamp() */
+  --fluid-text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);    /* 12-14px */
+  --fluid-text-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);      /* 14-16px */
+  --fluid-text-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);      /* 16-18px */
+  --fluid-text-lg: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);     /* 18-20px */
+  --fluid-text-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);      /* 20-24px */
+  --fluid-text-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);           /* 24-32px */
+  --fluid-text-3xl: clamp(1.875rem, 1.5rem + 1.875vw, 3rem);     /* 30-48px */
+  --fluid-text-4xl: clamp(2.25rem, 1.8rem + 2.25vw, 3.5rem);     /* 36-56px */
+  --fluid-text-5xl: clamp(3rem, 2.4rem + 3vw, 4.5rem);           /* 48-72px */
+
+  /* Font Weights */
+  --font-thin: 100;
+  --font-extralight: 200;
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-extrabold: 800;
+  --font-black: 900;
+
+  /* Line Heights - Fluid scaling */
+  --fluid-leading-none: 1;
+  --fluid-leading-tight: clamp(1.25, 1.15 + 0.5vw, 1.375);
+  --fluid-leading-snug: clamp(1.375, 1.25 + 0.625vw, 1.5);
+  --fluid-leading-normal: clamp(1.5, 1.35 + 0.75vw, 1.75);
+  --fluid-leading-relaxed: clamp(1.625, 1.5 + 0.625vw, 1.875);
+  --fluid-leading-loose: clamp(2, 1.75 + 1.25vw, 2.25);
+
+  /* Letter Spacing */
+  --tracking-tighter: -0.05em;
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0em;
+  --tracking-wide: 0.025em;
+  --tracking-wider: 0.05em;
+  --tracking-widest: 0.1em;
+
+  /* ========================================
+   * 3. FLUID SPACING SYSTEM
+   * ======================================== */
+  
+  /* Spacing Scale - Fluid scaling with clamp() */
+  --fluid-space-px: 1px;
+  --fluid-space-0: 0px;
+  --fluid-space-0-5: clamp(0.125rem, 0.1rem + 0.125vw, 0.25rem);   /* 2-4px */
+  --fluid-space-1: clamp(0.25rem, 0.2rem + 0.25vw, 0.5rem);        /* 4-8px */
+  --fluid-space-1-5: clamp(0.375rem, 0.3rem + 0.375vw, 0.75rem);   /* 6-12px */
+  --fluid-space-2: clamp(0.5rem, 0.4rem + 0.5vw, 1rem);            /* 8-16px */
+  --fluid-space-2-5: clamp(0.625rem, 0.5rem + 0.625vw, 1.25rem);   /* 10-20px */
+  --fluid-space-3: clamp(0.75rem, 0.6rem + 0.75vw, 1.5rem);        /* 12-24px */
+  --fluid-space-3-5: clamp(0.875rem, 0.7rem + 0.875vw, 1.75rem);   /* 14-28px */
+  --fluid-space-4: clamp(1rem, 0.8rem + 1vw, 2rem);                /* 16-32px */
+  --fluid-space-5: clamp(1.25rem, 1rem + 1.25vw, 2.5rem);          /* 20-40px */
+  --fluid-space-6: clamp(1.5rem, 1.2rem + 1.5vw, 3rem);            /* 24-48px */
+  --fluid-space-7: clamp(1.75rem, 1.4rem + 1.75vw, 3.5rem);        /* 28-56px */
+  --fluid-space-8: clamp(2rem, 1.6rem + 2vw, 4rem);                /* 32-64px */
+  --fluid-space-9: clamp(2.25rem, 1.8rem + 2.25vw, 4.5rem);        /* 36-72px */
+  --fluid-space-10: clamp(2.5rem, 2rem + 2.5vw, 5rem);             /* 40-80px */
+  --fluid-space-11: clamp(2.75rem, 2.2rem + 2.75vw, 5.5rem);       /* 44-88px */
+  --fluid-space-12: clamp(3rem, 2.4rem + 3vw, 6rem);               /* 48-96px */
+  --fluid-space-14: clamp(3.5rem, 2.8rem + 3.5vw, 7rem);           /* 56-112px */
+  --fluid-space-16: clamp(4rem, 3.2rem + 4vw, 8rem);               /* 64-128px */
+  --fluid-space-20: clamp(5rem, 4rem + 5vw, 10rem);                /* 80-160px */
+  --fluid-space-24: clamp(6rem, 4.8rem + 6vw, 12rem);              /* 96-192px */
+  --fluid-space-28: clamp(7rem, 5.6rem + 7vw, 14rem);              /* 112-224px */
+  --fluid-space-32: clamp(8rem, 6.4rem + 8vw, 16rem);              /* 128-256px */
+
+  /* Semantic Spacing */
+  --space-section: var(--fluid-space-16);
+  --space-container: var(--fluid-space-6);
+  --space-component: var(--fluid-space-4);
+  --space-element: var(--fluid-space-2);
+
+  /* ========================================
+   * 4. BORDER RADIUS SYSTEM
+   * ======================================== */
+  
+  --radius-none: 0px;
+  --radius-sm: clamp(0.125rem, 0.1rem + 0.125vw, 0.25rem);    /* 2-4px */
+  --radius-base: clamp(0.25rem, 0.2rem + 0.25vw, 0.5rem);     /* 4-8px */
+  --radius-md: clamp(0.375rem, 0.3rem + 0.375vw, 0.75rem);    /* 6-12px */
+  --radius-lg: clamp(0.5rem, 0.4rem + 0.5vw, 1rem);          /* 8-16px */
+  --radius-xl: clamp(0.75rem, 0.6rem + 0.75vw, 1.5rem);      /* 12-24px */
+  --radius-2xl: clamp(1rem, 0.8rem + 1vw, 2rem);             /* 16-32px */
+  --radius-3xl: clamp(1.5rem, 1.2rem + 1.5vw, 3rem);         /* 24-48px */
+  --radius-full: 9999px;
+
+  /* Semantic Border Radius */
+  --radius-button: var(--radius-lg);
+  --radius-card: var(--radius-xl);
+  --radius-modal: var(--radius-2xl);
+  --radius-avatar: var(--radius-full);
+
+  /* ========================================
+   * 5. SHADOW SYSTEM
+   * ======================================== */
+  
+  /* Base Shadows */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-base: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --shadow-2xl: 0 50px 100px -20px rgb(0 0 0 / 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+  /* Coffee-themed Shadows */
+  --shadow-coffee-sm: 0 1px 3px 0 rgb(139 69 19 / 0.1), 0 1px 2px -1px rgb(139 69 19 / 0.1);
+  --shadow-coffee-md: 0 4px 6px -1px rgb(139 69 19 / 0.1), 0 2px 4px -2px rgb(139 69 19 / 0.1);
+  --shadow-coffee-lg: 0 10px 15px -3px rgb(139 69 19 / 0.1), 0 4px 6px -4px rgb(139 69 19 / 0.1);
+
+  /* Glow Effects */
+  --glow-coffee: 0 0 20px rgb(139 69 19 / 0.3);
+  --glow-amber: 0 0 20px rgb(245 158 11 / 0.4);
+  --glow-success: 0 0 20px rgb(16 185 129 / 0.3);
+
+  /* ========================================
+   * 6. ANIMATION & TRANSITION SYSTEM
+   * ======================================== */
+  
+  /* Duration */
+  --duration-75: 75ms;
+  --duration-100: 100ms;
+  --duration-150: 150ms;
+  --duration-200: 200ms;
+  --duration-300: 300ms;
+  --duration-500: 500ms;
+  --duration-700: 700ms;
+  --duration-1000: 1000ms;
+
+  /* Easing Functions */
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-back: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-elastic: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+
+  /* Common Transitions */
+  --transition-colors: color var(--duration-150) var(--ease-in-out),
+                      background-color var(--duration-150) var(--ease-in-out),
+                      border-color var(--duration-150) var(--ease-in-out);
+  --transition-opacity: opacity var(--duration-150) var(--ease-in-out);
+  --transition-shadow: box-shadow var(--duration-150) var(--ease-in-out);
+  --transition-transform: transform var(--duration-150) var(--ease-in-out);
+  --transition-all: all var(--duration-150) var(--ease-in-out);
+
+  /* ========================================
+   * 7. Z-INDEX SYSTEM
+   * ======================================== */
+  
+  --z-hide: -1;
+  --z-auto: auto;
+  --z-base: 0;
+  --z-docked: 10;
+  --z-dropdown: 1000;
+  --z-sticky: 1100;
+  --z-banner: 1200;
+  --z-overlay: 1300;
+  --z-modal: 1400;
+  --z-popover: 1500;
+  --z-skipLink: 1600;
+  --z-toast: 1700;
+  --z-tooltip: 1800;
+
+  /* ========================================
+   * 8. BREAKPOINT VARIABLES
+   * ======================================== */
+  
+  --bp-mobile: 0px;
+  --bp-tablet: 768px;
+  --bp-desktop: 1024px;
+  --bp-wide: 1440px;
+  --bp-ultra: 1920px;
+
+  /* ========================================
+   * 9. COMPONENT-SPECIFIC TOKENS
+   * ======================================== */
+  
+  /* Button Tokens */
+  --button-height-sm: clamp(2rem, 1.8rem + 1vw, 2.5rem);      /* 32-40px */
+  --button-height-md: clamp(2.5rem, 2.3rem + 1vw, 3rem);      /* 40-48px */
+  --button-height-lg: clamp(3rem, 2.8rem + 1vw, 3.5rem);      /* 48-56px */
+  --button-height-xl: clamp(3.5rem, 3.3rem + 1vw, 4rem);      /* 56-64px */
+
+  /* Touch Target Sizes */
+  --touch-target-min: 44px;
+  --touch-target-comfortable: 48px;
+  --touch-target-spacious: 56px;
+
+  /* Card Tokens */
+  --card-padding: var(--fluid-space-4);
+  --card-gap: var(--fluid-space-3);
+  --card-border-width: 1px;
+
+  /* Form Tokens */
+  --input-height: var(--button-height-md);
+  --input-padding-x: var(--fluid-space-3);
+  --input-padding-y: var(--fluid-space-2);
+  --label-gap: var(--fluid-space-1);
+
+  /* Navigation Tokens */
+  --nav-height-mobile: 64px;
+  --nav-height-desktop: 72px;
+  --sidebar-width-tablet: 320px;
+  --sidebar-width-desktop: 280px;
+
+  /* ========================================
+   * 10. SEMANTIC COLOR TOKENS
+   * ======================================== */
+  
+  /* Text Colors */
+  --text-primary: var(--coffee-800);
+  --text-secondary: var(--coffee-600);
+  --text-muted: var(--coffee-400);
+  --text-disabled: var(--coffee-300);
+  --text-inverse: var(--coffee-50);
+  --text-link: var(--info-600);
+  --text-link-hover: var(--info-700);
+
+  /* Background Colors */
+  --bg-primary: var(--coffee-50);
+  --bg-secondary: var(--coffee-25);
+  --bg-muted: var(--coffee-100);
+  --bg-elevated: white;
+  --bg-overlay: rgb(0 0 0 / 0.5);
+  --bg-inverse: var(--coffee-900);
+
+  /* Border Colors */
+  --border-primary: var(--coffee-200);
+  --border-secondary: var(--coffee-100);
+  --border-muted: var(--coffee-75);
+  --border-focus: var(--coffee-500);
+  --border-error: var(--error-500);
+  --border-success: var(--success-500);
+
+  /* Interactive Colors */
+  --interactive-primary: var(--coffee-500);
+  --interactive-primary-hover: var(--coffee-600);
+  --interactive-primary-active: var(--coffee-700);
+  --interactive-secondary: var(--coffee-100);
+  --interactive-secondary-hover: var(--coffee-200);
+  --interactive-secondary-active: var(--coffee-300);
+
+  /* ========================================
+   * 11. ACCESSIBILITY TOKENS
+   * ======================================== */
+  
+  /* Focus Indicators */
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  --focus-ring-color: var(--coffee-500);
+  --focus-ring-style: solid;
+  --focus-ring: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color);
+  --focus-ring-shadow: 0 0 0 var(--focus-ring-offset) var(--bg-elevated), 
+                      0 0 0 calc(var(--focus-ring-offset) + var(--focus-ring-width)) var(--focus-ring-color);
+
+  /* High Contrast Mode Support */
+  --border-contrast: CanvasText;
+  --text-contrast: CanvasText;
+  --bg-contrast: Canvas;
+
+  /* ========================================
+   * 12. FLUID CONTAINER SIZES
+   * ======================================== */
+  
+  --container-xs: clamp(20rem, 90vw, 28rem);      /* 320-448px */
+  --container-sm: clamp(24rem, 90vw, 32rem);      /* 384-512px */
+  --container-md: clamp(28rem, 90vw, 42rem);      /* 448-672px */
+  --container-lg: clamp(32rem, 90vw, 56rem);      /* 512-896px */
+  --container-xl: clamp(36rem, 90vw, 72rem);      /* 576-1152px */
+  --container-2xl: clamp(42rem, 90vw, 84rem);     /* 672-1344px */
+  --container-3xl: clamp(48rem, 90vw, 96rem);     /* 768-1536px */
+  --container-4xl: clamp(56rem, 90vw, 108rem);    /* 896-1728px */
+  --container-full: 100%;
+  --container-prose: clamp(16rem, 90vw, 65ch);    /* Optimal reading width */
+}
+
+/* ========================================
+ * DARK MODE SUPPORT (준비용)
+ * ======================================== */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* 다크 모드 토큰은 향후 구현 예정 */
+    /* --text-primary: var(--coffee-100); */
+    /* --bg-primary: var(--coffee-900); */
+  }
+}
+
+/* ========================================
+ * HIGH CONTRAST MODE SUPPORT
+ * ======================================== */
+
+@media (prefers-contrast: high) {
+  :root {
+    --border-primary: var(--border-contrast);
+    --text-secondary: var(--text-contrast);
+    --focus-ring-width: 3px;
+  }
+}
+
+/* ========================================
+ * REDUCED MOTION SUPPORT
+ * ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-75: 0ms;
+    --duration-100: 0ms;
+    --duration-150: 0ms;
+    --duration-200: 0ms;
+    --duration-300: 0ms;
+    --duration-500: 0ms;
+    --duration-700: 0ms;
+    --duration-1000: 0ms;
+  }
+}

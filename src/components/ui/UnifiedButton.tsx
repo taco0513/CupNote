@@ -10,11 +10,13 @@ import { Loader2 } from 'lucide-react'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'filter-active' | 'filter-inactive'
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'hero' // Simplified - hero is now a variant, not excessive options
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'icon'
   loading?: boolean
   fullWidth?: boolean
-  ripple?: boolean
+  icon?: ReactNode
+  iconPosition?: 'left' | 'right'
+  subtle?: boolean // For subtle animations
 }
 
 export default function UnifiedButton({
@@ -23,7 +25,9 @@ export default function UnifiedButton({
   size = 'md',
   loading = false,
   fullWidth = false,
-  ripple = false,
+  icon,
+  iconPosition = 'left',
+  subtle = false,
   className = '',
   disabled,
   ...props
@@ -45,33 +49,64 @@ export default function UnifiedButton({
         return 'bg-transparent text-coffee-600 hover:bg-coffee-50 hover:text-coffee-800'
       case 'danger':
         return 'btn-primary'
+      case 'hero':
+        // Hero maintains coffee DNA with responsive shadow
+        return 'bg-gradient-to-r from-coffee-500 to-coffee-600 hover:from-coffee-600 hover:to-coffee-700 text-white shadow-md sm:shadow-lg hover:shadow-xl'
       default:
         return 'btn-primary'
     }
   }
 
   const getSizeClass = () => {
+    // Responsive size variations - mobile first approach
     switch (size) {
       case 'xs':
-        return 'btn-xs'
+        return 'px-2.5 py-1 text-xs sm:px-3 sm:py-1.5'
       case 'sm':
-        return 'btn-sm'
+        return 'px-3 py-1.5 text-sm sm:px-3.5 sm:py-2 md:px-4'
       case 'md':
-        return 'btn-md'
+        return 'px-4 py-2 text-sm sm:px-5 sm:py-2.5 sm:text-base'
       case 'lg':
-        return 'btn-lg'
+        return 'px-5 py-2.5 text-base sm:px-6 sm:py-3 md:px-8 md:text-lg'
       case 'xl':
-        return 'btn-xl'
+        return 'px-6 py-3 text-lg sm:px-8 sm:py-4 md:px-10 md:text-xl'
       case 'icon':
-        return 'btn-sm p-3 aspect-square'
+        return 'p-2 sm:p-2.5 md:p-3 aspect-square'
       default:
-        return 'btn-md'
+        return 'px-4 py-2 text-sm sm:px-5 sm:py-2.5 sm:text-base'
     }
   }
 
   const widthStyle = fullWidth ? 'w-full' : ''
-  const rippleClass = ripple ? 'button-ripple' : ''
   const dangerStyle = variant === 'danger' ? 'bg-red-500 hover:bg-red-600' : ''
+  const isHero = variant === 'hero'
+  const subtleAnimation = subtle ? 'transform hover:scale-105 transition-all duration-200' : ''
+
+  const renderContent = () => {
+    if (loading) {
+      return (
+        <>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          <span className={variant === 'primary' || variant === 'hero' ? 'text-white' : 'text-high-contrast'}>
+            로딩 중...
+          </span>
+        </>
+      )
+    }
+
+    // Consistent icon handling for all variants
+    if (icon || isHero) {
+      return (
+        <div className="flex items-center justify-center space-x-2">
+          {icon && iconPosition === 'left' && <span className="flex-shrink-0">{icon}</span>}
+          <span>{children}</span>
+          {icon && iconPosition === 'right' && <span className="flex-shrink-0">{icon}</span>}
+        </div>
+      )
+    }
+
+    return children
+  }
 
   return (
     <button
@@ -80,23 +115,15 @@ export default function UnifiedButton({
         ${getVariantClass()}
         ${getSizeClass()}
         ${widthStyle}
-        ${rippleClass}
         ${dangerStyle}
+        ${subtleAnimation}
+        ${isHero ? 'font-semibold rounded-xl' : ''}
         ${className}
       `}
       disabled={disabled || loading}
       {...props}
     >
-      {loading ? (
-        <>
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          <span className={variant === 'primary' || variant === 'filter-active' ? 'text-on-dark' : 'text-high-contrast'}>
-            로딩 중...
-          </span>
-        </>
-      ) : (
-        children
-      )}
+      {renderContent()}
     </button>
   )
 }

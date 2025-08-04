@@ -8,6 +8,40 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      screens: {
+        // Mobile first approach
+        'xs': '375px',      // Small mobile (iPhone SE)
+        'sm': '640px',      // Large mobile (default Tailwind)
+        'md': '768px',      // Tablet portrait (iPad Mini)
+        'lg': '1024px',     // Tablet landscape / Small desktop
+        'xl': '1280px',     // Desktop (default Tailwind)
+        '2xl': '1536px',    // Large desktop (default Tailwind)
+        '3xl': '1920px',    // Full HD desktop
+        // Device-specific breakpoints
+        'mobile': {'max': '767px'},           // Mobile only
+        'tablet': {'min': '768px', 'max': '1023px'}, // Tablet only
+        'desktop': {'min': '1024px'},         // Desktop and up
+        'touch': {'raw': '(hover: none)'},    // Touch devices
+        'hover': {'raw': '(hover: hover)'},   // Devices with hover
+      },
+      spacing: {
+        // Responsive spacing scale
+        'safe-top': 'env(safe-area-inset-top)',
+        'safe-bottom': 'env(safe-area-inset-bottom)',
+        'safe-left': 'env(safe-area-inset-left)',
+        'safe-right': 'env(safe-area-inset-right)',
+      },
+      fontSize: {
+        // Responsive typography scale
+        'responsive-xs': 'clamp(0.75rem, 2vw, 0.875rem)',
+        'responsive-sm': 'clamp(0.875rem, 2.5vw, 1rem)',
+        'responsive-base': 'clamp(1rem, 3vw, 1.125rem)',
+        'responsive-lg': 'clamp(1.125rem, 3.5vw, 1.25rem)',
+        'responsive-xl': 'clamp(1.25rem, 4vw, 1.5rem)',
+        'responsive-2xl': 'clamp(1.5rem, 5vw, 2rem)',
+        'responsive-3xl': 'clamp(2rem, 6vw, 3rem)',
+        'responsive-4xl': 'clamp(2.5rem, 7vw, 4rem)',
+      },
       colors: {
         // Neutral color system
         neutral: {
@@ -101,11 +135,16 @@ module.exports = {
       },
       animation: {
         'theme-transition': 'theme-transition 0.3s ease-in-out',
+        'shine': 'shine 1s ease-in-out',
       },
       keyframes: {
         'theme-transition': {
           '0%': { opacity: '0.8' },
           '100%': { opacity: '1' },
+        },
+        'shine': {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
         },
       },
     },

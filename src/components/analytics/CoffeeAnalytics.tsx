@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react'
 
-import { BarChart3, TrendingUp, Coffee, Calendar, Award, Star } from 'lucide-react'
+import { BarChart3, TrendingUp, Coffee, Calendar, Award, Star, Sparkles } from 'lucide-react'
+import Link from 'next/link'
 
 import { useNotification } from '../../contexts/NotificationContext'
 import { QueryOptimizer } from '../../lib/query-optimizer'
@@ -442,6 +443,26 @@ export default function CoffeeAnalytics() {
               <span className="text-xs font-medium text-foreground">{day.count}</span>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* Advanced Analytics CTA */}
+      <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl p-6 border border-purple-200/50">
+        <div className="flex items-center justify-between">
+          <div className="flex-1">
+            <h3 className="text-lg font-semibold text-purple-800 mb-2 flex items-center">
+              <Sparkles className="h-5 w-5 mr-2" />
+              AI 고급 분석 대시보드
+            </h3>
+            <p className="text-sm text-purple-600 mb-4">
+              맛 프로파일 레이더 차트, 계절별 취향 변화, AI 추천 시스템으로 더 깊은 인사이트를 얻어보세요.
+            </p>
+            <Link href="/analytics-concept">
+              <button className="px-4 py-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-lg font-medium hover:from-purple-600 hover:to-blue-600 transition-all duration-200 shadow-md">
+                고급 분석 보기 →
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

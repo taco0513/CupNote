@@ -1,0 +1,275 @@
+/**
+ * Modern Fluid Design System
+ * Container Queries + Fluid Typography + Dynamic Spacing
+ * 2024-2025 Best Practices
+ */
+
+/* Container Query Contexts */
+@container (min-width: 320px) {
+  .container-responsive {
+    --container-padding: 1rem;
+  }
+}
+
+@container (min-width: 640px) {
+  .container-responsive {
+    --container-padding: 1.5rem;
+  }
+}
+
+@container (min-width: 1024px) {
+  .container-responsive {
+    --container-padding: 2rem;
+  }
+}
+
+/* Optimized Fluid Typography with Clamp */
+:root {
+  /* Core Fluid Font Sizes - optimized calculations */
+  --fluid-text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);      /* 12-14px */
+  --fluid-text-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);        /* 14-16px */
+  --fluid-text-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);        /* 16-18px */
+  --fluid-text-lg: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);       /* 18-20px */
+  --fluid-text-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);        /* 20-24px */
+  --fluid-text-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);             /* 24-32px */
+  --fluid-text-3xl: clamp(1.875rem, 1.5rem + 1.875vw, 3rem);       /* 30-48px */
+  --fluid-text-4xl: clamp(2.25rem, 1.75rem + 2.5vw, 4rem);         /* 36-64px */
+  --fluid-text-5xl: clamp(3rem, 2rem + 5vw, 6rem);                 /* 48-96px */
+  
+  /* Optimized Fluid Spacing - reduced variables */
+  --fluid-space-xs: clamp(0.25rem, 0.2rem + 0.25vw, 0.5rem);       /* 4-8px */
+  --fluid-space-sm: clamp(0.5rem, 0.4rem + 0.5vw, 1rem);           /* 8-16px */
+  --fluid-space-md: clamp(1rem, 0.8rem + 1vw, 1.5rem);             /* 16-24px */
+  --fluid-space-lg: clamp(1.5rem, 1.2rem + 1.5vw, 2rem);           /* 24-32px */
+  --fluid-space-xl: clamp(2rem, 1.5rem + 2.5vw, 3rem);             /* 32-48px */
+  
+  /* Extended Line Heights - 복원 및 확장 */
+  --fluid-leading-tight: clamp(1.25, 1.2 + 0.25vw, 1.375);
+  --fluid-leading-normal: clamp(1.5, 1.4 + 0.5vw, 1.625);
+  --fluid-leading-relaxed: clamp(1.625, 1.5 + 0.625vw, 1.75);
+  --fluid-leading-loose: clamp(2, 1.75 + 1.25vw, 2.25); /* 복원 */
+  
+  /* Extended Spacing - 더 많은 옵션 */
+  --fluid-space-2xs: clamp(0.125rem, 0.1rem + 0.125vw, 0.25rem);   /* 2-4px */
+  --fluid-space-3xl: clamp(3rem, 2.5rem + 2.5vw, 4rem);           /* 48-64px */
+  --fluid-space-4xl: clamp(4rem, 3rem + 5vw, 6rem);               /* 64-96px */
+  
+  /* Transition & Animation Tokens */
+  --fluid-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --fluid-transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --fluid-transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Shadow System */
+  --fluid-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --fluid-shadow-base: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --fluid-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --fluid-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --fluid-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  
+  /* Border Radius System */
+  --fluid-radius-sm: clamp(0.25rem, 0.2rem + 0.25vw, 0.375rem);
+  --fluid-radius-base: clamp(0.375rem, 0.3rem + 0.375vw, 0.5rem);
+  --fluid-radius-md: clamp(0.5rem, 0.4rem + 0.5vw, 0.75rem);
+  --fluid-radius-lg: clamp(0.75rem, 0.6rem + 0.75vw, 1rem);
+  --fluid-radius-xl: clamp(1rem, 0.8rem + 1vw, 1.5rem);
+}
+
+/* Container Query Components */
+.card-container {
+  container-type: inline-size;
+  container-name: card;
+}
+
+@container card (min-width: 320px) {
+  .card-responsive {
+    padding: var(--fluid-space-md);
+    font-size: var(--fluid-text-sm);
+  }
+}
+
+@container card (min-width: 480px) {
+  .card-responsive {
+    padding: var(--fluid-space-lg);
+    font-size: var(--fluid-text-base);
+  }
+}
+
+@container card (min-width: 640px) {
+  .card-responsive {
+    padding: var(--fluid-space-xl);
+    font-size: var(--fluid-text-lg);
+  }
+}
+
+/* Fluid Typography Classes */
+.fluid-text-xs { font-size: var(--fluid-text-xs); }
+.fluid-text-sm { font-size: var(--fluid-text-sm); }
+.fluid-text-base { font-size: var(--fluid-text-base); }
+.fluid-text-lg { font-size: var(--fluid-text-lg); }
+.fluid-text-xl { font-size: var(--fluid-text-xl); }
+.fluid-text-2xl { font-size: var(--fluid-text-2xl); }
+.fluid-text-3xl { font-size: var(--fluid-text-3xl); }
+.fluid-text-4xl { font-size: var(--fluid-text-4xl); }
+.fluid-text-5xl { font-size: var(--fluid-text-5xl); }
+
+/* Expanded Fluid Spacing Classes - 더 많은 옵션 */
+.fluid-p-2xs { padding: var(--fluid-space-2xs); }
+.fluid-p-xs { padding: var(--fluid-space-xs); }
+.fluid-p-sm { padding: var(--fluid-space-sm); }
+.fluid-p-md { padding: var(--fluid-space-md); }
+.fluid-p-lg { padding: var(--fluid-space-lg); }
+.fluid-p-xl { padding: var(--fluid-space-xl); }
+.fluid-p-3xl { padding: var(--fluid-space-3xl); }
+.fluid-p-4xl { padding: var(--fluid-space-4xl); }
+
+/* Expanded Margin utilities */
+.fluid-m-2xs { margin: var(--fluid-space-2xs); }
+.fluid-m-xs { margin: var(--fluid-space-xs); }
+.fluid-m-sm { margin: var(--fluid-space-sm); }
+.fluid-m-md { margin: var(--fluid-space-md); }
+.fluid-m-lg { margin: var(--fluid-space-lg); }
+.fluid-m-xl { margin: var(--fluid-space-xl); }
+.fluid-m-3xl { margin: var(--fluid-space-3xl); }
+.fluid-m-4xl { margin: var(--fluid-space-4xl); }
+
+/* Shadow utilities */
+.fluid-shadow-sm { box-shadow: var(--fluid-shadow-sm); }
+.fluid-shadow { box-shadow: var(--fluid-shadow-base); }
+.fluid-shadow-md { box-shadow: var(--fluid-shadow-md); }
+.fluid-shadow-lg { box-shadow: var(--fluid-shadow-lg); }
+.fluid-shadow-xl { box-shadow: var(--fluid-shadow-xl); }
+
+/* Border radius utilities */
+.fluid-rounded-sm { border-radius: var(--fluid-radius-sm); }
+.fluid-rounded { border-radius: var(--fluid-radius-base); }
+.fluid-rounded-md { border-radius: var(--fluid-radius-md); }
+.fluid-rounded-lg { border-radius: var(--fluid-radius-lg); }
+.fluid-rounded-xl { border-radius: var(--fluid-radius-xl); }
+
+/* Dynamic Grid with Container Queries */
+.fluid-grid {
+  display: grid;
+  gap: var(--fluid-space-md);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+}
+
+/* Modern Aspect Ratios */
+.aspect-fluid {
+  aspect-ratio: 16 / 9;
+}
+
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
+.aspect-portrait {
+  aspect-ratio: 3 / 4;
+}
+
+/* Optimized Transitions */
+.fluid-transition {
+  transition: all var(--fluid-transition-normal);
+}
+
+.fluid-transition-fast {
+  transition: all var(--fluid-transition-fast);
+}
+
+/* GPU-accelerated transforms for better performance */
+.fluid-transform {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Performance hint for complex layouts */
+.fluid-contain {
+  contain: layout style;
+}
+
+/* Logical Properties for i18n Support */
+.fluid-margin-block {
+  margin-block: var(--fluid-space-md);
+}
+
+.fluid-padding-inline {
+  padding-inline: var(--fluid-space-lg);
+}
+
+/* Advanced Responsive Utilities */
+@supports (container-type: inline-size) {
+  .supports-container-queries {
+    container-type: inline-size;
+  }
+}
+
+/* Accessibility & Preference-based Queries */
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .fluid-transition {
+    transition: none;
+  }
+  
+  /* Disable all animations for accessibility */
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  :root {
+    --fluid-text-contrast: 2;
+    --fluid-border-width: 2px;
+    --fluid-shadow: 0 0 0 2px currentColor;
+  }
+  
+  .fluid-high-contrast {
+    border: var(--fluid-border-width) solid currentColor;
+    background: Canvas;
+    color: CanvasText;
+  }
+  
+  /* Force high contrast colors */
+  .bg-coffee-50, .bg-coffee-100 { background: Canvas !important; }
+  .text-coffee-600, .text-coffee-700, .text-coffee-800 { color: CanvasText !important; }
+  .border-coffee-200, .border-coffee-300 { border-color: CanvasText !important; }
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fluid-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    --fluid-bg-primary: #1a1a1a;
+    --fluid-bg-secondary: #2a2a2a;
+    --fluid-text-primary: #f5f5f5;
+    --fluid-text-secondary: #d4d4d4;
+  }
+}
+
+/* Font Size Scaling for Accessibility */
+@media (min-resolution: 1dppx) {
+  /* Base font scaling - responds to user's browser font size settings */
+  html {
+    font-size: clamp(14px, 1rem, 18px); /* Respects user preferences */
+  }
+}
+
+/* High DPI Screens */
+@media (min-resolution: 2dppx) {
+  .fluid-text-base {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Foldable Devices Support */
+@media (horizontal-viewport-segments: 2) {
+  .foldable-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: env(viewport-segment-width 0 0);
+  }
+}
