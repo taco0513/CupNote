@@ -59,13 +59,20 @@ export async function POST(request: NextRequest) {
     const result = await Promise.race([ocrPromise, timeoutPromise])
 
     // 커피 정보 추출 로직
-    const extractedInfo = parseStrageCoffeeInfo(result.data.text)
+    let extractedInfo = {}
+    try {
+      extractedInfo = parseStrageCoffeeInfo(result.data.text)
+      console.log('파싱된 커피 정보:', extractedInfo)
+    } catch (parseError) {
+      console.warn('커피 정보 파싱 실패:', parseError)
+      // 파싱 실패해도 텍스트는 반환
+    }
 
     return NextResponse.json({
       success: true,
-      text: result.data.text,
-      confidence: result.data.confidence,
-      extractedInfo
+      text: result.data.text || '',
+      confidence: result.data.confidence || 0,
+      extractedInfo: extractedInfo || {}
     })
   } catch (error) {
     console.error('서버 OCR 오류:', error)
@@ -76,89 +83,116 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Strage 커피 정보 파싱 함수
+// 커피 정보 파싱 함수 (더 안전한 버전)
 function parseStrageCoffeeInfo(text: string): any {
+  if (!text || typeof text !== 'string') {
+    console.warn('빈 텍스트 또는 잘못된 형식:', text)
+    return {}
+  }
+
   const info: any = {}
   
-  // 커피 이름 추출
-  const nameMatch = text.match(/([A-Za-z가-힣\s]+)\s*(?:블렌드|싱글|에스프레소|드립)/i)
-  if (nameMatch) info.name = nameMatch[1].trim()
-  
-  // 로스터리 추출
-  const roasteryPatterns = [
-    /로스터리\s*[:：]\s*([A-Za-z가-힣\s]+)/i,
-    /Roastery\s*[:：]\s*([A-Za-z\s]+)/i,
-    /by\s+([A-Za-z가-힣\s]+)/i
-  ]
-  
-  for (const pattern of roasteryPatterns) {
-    const match = text.match(pattern)
-    if (match) {
-      info.roastery = match[1].trim()
-      break
+  try {
+    // 커피 이름 추출 (다양한 패턴)
+    const namePatterns = [
+      /([A-Za-z가-힣\s]+)\s*(?:블렌드|싱글|에스프레소|드립)/i,
+      /Coffee[:\s]*([A-Za-z가-힣\s]+)/i,
+      /커피[:\s]*([A-Za-z가-힣\s]+)/i,
+      /^([A-Za-z가-힣\s]{3,30})/m // 첫 줄에서 3-30자 사이
+    ]
+    
+    for (const pattern of namePatterns) {
+      const match = text.match(pattern)
+      if (match && match[1] && match[1].trim().length > 2) {
+        info.coffeeName = match[1].trim()
+        break
+      }
     }
-  }
-  
-  // 원산지 추출
-  const originPatterns = [
-    /원산지\s*[:：]\s*([A-Za-z가-힣\s,]+)/i,
-    /Origin\s*[:：]\s*([A-Za-z\s,]+)/i,
-    /산지\s*[:：]\s*([A-Za-z가-힣\s,]+)/i
-  ]
-  
-  for (const pattern of originPatterns) {
-    const match = text.match(pattern)
-    if (match) {
-      info.origin = match[1].trim()
-      break
+    
+    // 로스터리 추출
+    const roasteryPatterns = [
+      /로스터리\s*[:：]\s*([A-Za-z가-힣\s]+)/i,
+      /Roastery\s*[:：]\s*([A-Za-z\s]+)/i,
+      /Roasted\s+by\s+([A-Za-z가-힣\s]+)/i,
+      /by\s+([A-Za-z가-힣\s]{3,20})/i
+    ]
+    
+    for (const pattern of roasteryPatterns) {
+      const match = text.match(pattern)
+      if (match && match[1] && match[1].trim().length > 2) {
+        info.roasterName = match[1].trim()
+        break
+      }
     }
-  }
-  
-  // 가공 방식 추출
-  const processPatterns = [
-    /가공\s*[:：]\s*([A-Za-z가-힣\s]+)/i,
-    /Process\s*[:：]\s*([A-Za-z\s]+)/i,
-    /(Natural|Washed|Honey|Semi-washed|Anaerobic)/i
-  ]
-  
-  for (const pattern of processPatterns) {
-    const match = text.match(pattern)
-    if (match) {
-      info.process = match[1].trim()
-      break
+    
+    // 원산지 추출
+    const originPatterns = [
+      /원산지\s*[:：]\s*([A-Za-z가-힣\s,]+)/i,
+      /Origin\s*[:：]\s*([A-Za-z\s,]+)/i,
+      /산지\s*[:：]\s*([A-Za-z가-힣\s,]+)/i,
+      /(Ethiopia|Colombia|Brazil|Kenya|Guatemala|Costa Rica|Panama|Jamaica|Yemen|Honduras|Nicaragua|Peru|Bolivia|Ecuador)/i
+    ]
+    
+    for (const pattern of originPatterns) {
+      const match = text.match(pattern)
+      if (match && match[1] && match[1].trim().length > 1) {
+        info.origin = match[1].trim()
+        break
+      }
     }
-  }
-  
-  // 로스팅 포인트 추출
-  const roastPatterns = [
-    /로스팅\s*[:：]\s*([A-Za-z가-힣\s]+)/i,
-    /Roast\s*[:：]\s*([A-Za-z\s]+)/i,
-    /(Light|Medium|Dark|City|Full City)/i
-  ]
-  
-  for (const pattern of roastPatterns) {
-    const match = text.match(pattern)
-    if (match) {
-      info.roastLevel = match[1].trim()
-      break
+    
+    // 가공 방식 추출
+    const processPatterns = [
+      /가공\s*방식?\s*[:：]\s*([A-Za-z가-힣\s]+)/i,
+      /Process\s*[:：]\s*([A-Za-z\s]+)/i,
+      /(Natural|Washed|Honey|Semi-washed|Anaerobic|Wet|Dry)/i
+    ]
+    
+    for (const pattern of processPatterns) {
+      const match = text.match(pattern)
+      if (match && match[1] && match[1].trim().length > 2) {
+        info.processing = match[1].trim()
+        break
+      }
     }
-  }
-  
-  // 향미 노트 추출
-  const flavorPatterns = [
-    /향미\s*[:：]\s*([A-Za-z가-힣\s,]+)/i,
-    /Flavor\s*[:：]\s*([A-Za-z\s,]+)/i,
-    /Notes?\s*[:：]\s*([A-Za-z\s,]+)/i,
-    /테이스팅\s?노트\s*[:：]\s*([A-Za-z가-힣\s,]+)/i
-  ]
-  
-  for (const pattern of flavorPatterns) {
-    const match = text.match(pattern)
-    if (match) {
-      info.flavorNotes = match[1].trim()
-      break
+    
+    // 로스팅 레벨 추출
+    const roastPatterns = [
+      /로스팅\s*[:：]\s*([A-Za-z가-힣\s]+)/i,
+      /Roast\s*[:：]\s*([A-Za-z\s]+)/i,
+      /(Light|Medium|Dark|City|Full City|French|Italian)/i
+    ]
+    
+    for (const pattern of roastPatterns) {
+      const match = text.match(pattern)
+      if (match && match[1] && match[1].trim().length > 2) {
+        info.roastLevel = match[1].trim()
+        break
+      }
     }
+    
+    // 향미 노트 추출
+    const flavorPatterns = [
+      /향미\s*노트?\s*[:：]\s*([A-Za-z가-힣\s,]+)/i,
+      /Flavor\s*Notes?\s*[:：]\s*([A-Za-z\s,]+)/i,
+      /Notes?\s*[:：]\s*([A-Za-z\s,]+)/i,
+      /테이스팅\s?노트\s*[:：]\s*([A-Za-z가-힣\s,]+)/i,
+      /맛\s*[:：]\s*([A-Za-z가-힣\s,]+)/i
+    ]
+    
+    for (const pattern of flavorPatterns) {
+      const match = text.match(pattern)
+      if (match && match[1] && match[1].trim().length > 2) {
+        info.notes = match[1].trim()
+        break
+      }
+    }
+
+    console.log('추출된 정보:', info)
+    return info
+    
+  } catch (error) {
+    console.error('파싱 중 오류:', error)
+    return {}
   }
-  
-  return info
 }
