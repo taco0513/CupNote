@@ -40,7 +40,7 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
 
     // 온보딩 상태 확인
     const hasCompletedOnboarding = localStorage.getItem('cupnote-onboarding-completed')
-    if (!hasCompletedOnboarding && !user) {
+    if (!hasCompletedOnboarding) {
       const timer = setTimeout(() => setShowOnboarding(true), 1000)
       return () => clearTimeout(timer)
     }
