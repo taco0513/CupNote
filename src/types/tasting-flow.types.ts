@@ -147,6 +147,9 @@ export interface TastingSession {
   sensoryMouthFeel?: SensoryMouthFeel // Optional
   personalNotes?: PersonalNotes
   
+  // OCR extracted data
+  roasterNote?: string // 로스터 노트 (OCR로 추출한 경우)
+  
   // Computed Results
   matchScore?: MatchScoreResult
   achievements?: AchievementUnlock[]

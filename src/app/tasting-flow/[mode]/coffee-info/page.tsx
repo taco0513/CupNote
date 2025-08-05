@@ -283,6 +283,13 @@ export default function CoffeeInfoPage() {
       setShowAdditionalInfo(true)
     }
     
+    // 로스터 노트가 있으면 세션에 저장
+    if (ocrInfo.notes) {
+      const session = JSON.parse(sessionStorage.getItem('tf_session') || '{}')
+      session.roasterNote = ocrInfo.notes
+      sessionStorage.setItem('tf_session', JSON.stringify(session))
+    }
+    
     setShowOCRScanner(false)
   }
 

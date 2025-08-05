@@ -91,7 +91,13 @@ export default function ResultPage() {
         setCommunityMatchScore(communityScore)
         
         // 2. 로스터 노트 점수 (로스터 노트가 있을 때만)
-        // 초기 로드시에는 로스터 노트가 없으므로 null로 유지
+        // OCR로 받은 roasterNote를 확인하고 설정
+        if (parsedSession.roasterNote) {
+          setRoasterNotes(parsedSession.roasterNote)
+          const roasterScore = calculateMatchScore(userFlavors, userExpressions, parsedSession.roasterNote, true)
+          setRoasterMatchScore(roasterScore)
+          setCurrentScoreIndex(1) // 로스터 점수로 자동 전환
+        }
         
         // 기본 표시용 (하위 호환성)
         setMatchScoreResult(communityScore)
