@@ -207,9 +207,7 @@ export default function CoffeeInfoPage() {
     if (mode === 'cafe' && !manualInput.cafeName.trim()) {
       newErrors.cafeName = '카페명을 입력해주세요'
     }
-    if (!manualInput.roasterName.trim()) {
-      newErrors.roasterName = '로스터명을 입력해주세요'
-    }
+    // 로스터리는 선택사항이므로 검증하지 않음
     if (!manualInput.coffeeName.trim()) {
       newErrors.coffeeName = '커피명을 입력해주세요'
     }
@@ -403,7 +401,7 @@ export default function CoffeeInfoPage() {
               <div className="relative">
                 <label className="block text-sm font-medium text-coffee-700 mb-2">
                   <Factory className="inline h-4 w-4 mr-1" />
-                  로스터명 *
+                  로스터명 (선택)
                 </label>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-coffee-400" />
@@ -655,14 +653,14 @@ export default function CoffeeInfoPage() {
           <button
             onClick={handleNext}
             className="w-full py-4 px-8 bg-coffee-500 text-white rounded-xl hover:bg-coffee-600 transition-all duration-200 hover:scale-[1.02] text-lg font-medium flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
-            disabled={!temperature || !manualInput.roasterName || !manualInput.coffeeName || (mode === 'cafe' && !manualInput.cafeName)}
+            disabled={!temperature || !manualInput.coffeeName || (mode === 'cafe' && !manualInput.cafeName)}
           >
             다음 단계
             <ArrowRight className="h-5 w-5 ml-2" />
           </button>
           
           {/* 필수 입력 안내 */}
-          {(!temperature || !manualInput.roasterName || !manualInput.coffeeName || (mode === 'cafe' && !manualInput.cafeName)) && (
+          {(!temperature || !manualInput.coffeeName || (mode === 'cafe' && !manualInput.cafeName)) && (
             <p className="mt-2 text-sm text-red-600 text-center">
               필수 정보를 모두 입력해주세요
             </p>
