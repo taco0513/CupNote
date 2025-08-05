@@ -258,7 +258,7 @@ export default function OCRScanner({
                 <h3 className="text-sm font-medium text-gray-700">추출된 정보</h3>
                 <div className="bg-gray-50 rounded-lg p-3 space-y-2">
                   {Object.entries(result.extractedInfo).map(([key, value]) => {
-                    if (!value || key === 'notes') return null
+                    if (!value) return null
                     
                     const labels: Record<string, string> = {
                       coffeeName: '커피명',
@@ -267,10 +267,16 @@ export default function OCRScanner({
                       variety: '품종',
                       processing: '가공법',
                       roastLevel: '로스팅',
-                      altitude: '고도'
+                      altitude: '고도',
+                      notes: '로스터 노트'
                     }
 
-                    return (
+                    return key === 'notes' ? (
+                      <div key={key} className="pt-2 border-t border-gray-200">
+                        <span className="text-xs text-gray-600">{labels[key]}</span>
+                        <p className="text-sm font-medium text-gray-800 mt-1">{value}</p>
+                      </div>
+                    ) : (
                       <div key={key} className="flex justify-between items-center">
                         <span className="text-xs text-gray-600">{labels[key]}</span>
                         <span className="text-sm font-medium text-gray-800">{value}</span>
@@ -278,7 +284,7 @@ export default function OCRScanner({
                     )
                   })}
                   
-                  {Object.keys(result.extractedInfo).filter(k => result.extractedInfo[k as keyof CoffeeInfoOCR] && k !== 'notes').length === 0 && (
+                  {Object.keys(result.extractedInfo).filter(k => result.extractedInfo[k as keyof CoffeeInfoOCR]).length === 0 && (
                     <p className="text-sm text-gray-500 text-center">
                       추출된 정보가 없습니다
                     </p>
