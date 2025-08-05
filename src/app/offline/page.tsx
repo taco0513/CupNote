@@ -2,16 +2,21 @@
  * Offline Page - PWA Offline Experience
  * Displayed when user is offline and requested page is not cached
  */
-import { Metadata } from 'next'
+'use client'
+
 import { Coffee, Wifi, RefreshCw } from 'lucide-react'
 import Link from 'next/link'
-
-export const metadata: Metadata = {
-  title: '오프라인 모드',
-  description: '인터넷 연결을 확인해주세요'
-}
+import { useEffect } from 'react'
 
 export default function OfflinePage() {
+  // Set page metadata on the client side
+  useEffect(() => {
+    document.title = '오프라인 모드 | CupNote'
+    const metaDesc = document.querySelector('meta[name="description"]')
+    if (metaDesc) {
+      metaDesc.setAttribute('content', '인터넷 연결을 확인해주세요')
+    }
+  }, [])
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-background-secondary flex items-center justify-center p-4">
       <div className="max-w-md w-full text-center">
@@ -82,18 +87,24 @@ export default function OfflinePage() {
 
       {/* Background Animation */}
       <div className="fixed inset-0 pointer-events-none opacity-10">
-        <div className="absolute top-20 left-10 animate-float">
+        <div className="absolute top-20 left-10" style={{
+          animation: 'float 6s ease-in-out infinite'
+        }}>
           <Coffee className="h-8 w-8 text-coffee-300" />
         </div>
-        <div className="absolute top-40 right-20 animate-float-delayed">
+        <div className="absolute top-40 right-20" style={{
+          animation: 'float-delayed 8s ease-in-out infinite'
+        }}>
           <Coffee className="h-6 w-6 text-coffee-300" />
         </div>
-        <div className="absolute bottom-32 left-20 animate-float">
+        <div className="absolute bottom-32 left-20" style={{
+          animation: 'float 6s ease-in-out infinite'
+        }}>
           <Coffee className="h-10 w-10 text-coffee-300" />
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes float {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-20px); }
@@ -102,14 +113,6 @@ export default function OfflinePage() {
         @keyframes float-delayed {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-15px); }
-        }
-        
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-        
-        .animate-float-delayed {
-          animation: float-delayed 8s ease-in-out infinite;
         }
       `}</style>
     </div>

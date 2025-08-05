@@ -26,14 +26,14 @@ export default function CoffeeJourneyWidget({ stats }: { stats?: JourneyStats })
   const data = stats || defaultStats
 
   return (
-    <div className="bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-3xl p-6 shadow-sm border border-neutral-100 hover-lift">
+    <div className="bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-3xl card-padding shadow-sm border border-neutral-100 hover-lift">
       <h3 className="text-lg font-bold text-neutral-800 mb-4">
         나의 커피 여정 ☕
       </h3>
       
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-mobile">
         {/* 총 커피 수 */}
-        <div className="bg-white/70 backdrop-blur rounded-2xl p-4 coffee-button">
+        <div className="bg-white/70 backdrop-blur rounded-2xl p-mobile-base coffee-button">
           <div className="flex items-center justify-between mb-2">
             <Calendar className="h-5 w-5 text-neutral-500" />
             <span className="text-2xl font-bold text-neutral-800">
@@ -44,7 +44,7 @@ export default function CoffeeJourneyWidget({ stats }: { stats?: JourneyStats })
         </div>
         
         {/* 평균 평점 */}
-        <div className="bg-white/70 backdrop-blur rounded-2xl p-4 coffee-button">
+        <div className="bg-white/70 backdrop-blur rounded-2xl p-mobile-base coffee-button">
           <div className="flex items-center justify-between mb-2">
             <Star className="h-5 w-5 text-accent-warm" />
             <span className="text-2xl font-bold text-neutral-800">
@@ -55,7 +55,7 @@ export default function CoffeeJourneyWidget({ stats }: { stats?: JourneyStats })
         </div>
         
         {/* 연속 기록 */}
-        <div className="bg-white/70 backdrop-blur rounded-2xl p-4">
+        <div className="bg-white/70 backdrop-blur rounded-2xl p-mobile-base">
           <div className="flex items-center justify-between mb-2">
             <TrendingUp className="h-5 w-5 text-green-500" />
             <span className="text-2xl font-bold text-neutral-800">
@@ -66,7 +66,7 @@ export default function CoffeeJourneyWidget({ stats }: { stats?: JourneyStats })
         </div>
         
         {/* 여정 일수 */}
-        <div className="bg-white/70 backdrop-blur rounded-2xl p-4">
+        <div className="bg-white/70 backdrop-blur rounded-2xl p-mobile-base">
           <div className="flex items-center justify-between mb-2">
             <MapPin className="h-5 w-5 text-blue-500" />
             <span className="text-2xl font-bold text-neutral-800">

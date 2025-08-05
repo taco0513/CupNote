@@ -35,7 +35,7 @@ export default function CoffeeJourneyWidget({ stats }: CoffeeJourneyWidgetProps)
 
   return (
     <Card variant="elevated" className="max-w-md mx-auto mb-8">
-      <CardContent className="p-6">
+      <CardContent className="card-padding">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-lg font-semibold text-neutral-800">나의 커피 여정</h2>
@@ -61,7 +61,7 @@ export default function CoffeeJourneyWidget({ stats }: CoffeeJourneyWidgetProps)
         </div>
 
         {/* 통계 하이라이트 */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-mobile">
           <div className="text-center">
             <div className="w-12 h-12 bg-accent-warm/10 rounded-lg flex items-center justify-center mx-auto mb-2">
               <TrendingUp className="h-6 w-6 text-accent-warm" />

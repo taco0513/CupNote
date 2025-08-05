@@ -139,10 +139,34 @@
     --btn-height-lg-desktop: 48px;
     --btn-height-xl-desktop: 52px;
     
-    /* Spacing Tokens */
-    --btn-group-gap-mobile: 12px;  /* gap-3 */
-    --btn-group-gap-desktop: 16px; /* gap-4 */
-    --btn-icon-gap: 8px;           /* gap-2 */
+    /* ===== UNIFIED MOBILE SPACING SYSTEM ===== */
+    /* Base spacing scale: 4px unit system */
+    --spacing-xs: 4px;   /* 0.25rem - Fine details */
+    --spacing-sm: 8px;   /* 0.5rem  - Icon gaps, borders */
+    --spacing-md: 12px;  /* 0.75rem - Standard content gaps */
+    --spacing-lg: 16px;  /* 1rem    - Section spacing */
+    --spacing-xl: 20px;  /* 1.25rem - Card/component spacing */
+    --spacing-2xl: 24px; /* 1.5rem  - Large section gaps */
+    --spacing-3xl: 32px; /* 2rem    - Hero/prominent spacing */
+    
+    /* Responsive spacing tokens */
+    --spacing-mobile-base: var(--spacing-lg);   /* 16px - mobile standard */
+    --spacing-mobile-compact: var(--spacing-md); /* 12px - tight mobile */
+    --spacing-mobile-comfortable: var(--spacing-xl); /* 20px - generous mobile */
+    
+    --spacing-desktop-base: var(--spacing-xl);   /* 20px - desktop standard */
+    --spacing-desktop-compact: var(--spacing-lg); /* 16px - tight desktop */
+    --spacing-desktop-comfortable: var(--spacing-2xl); /* 24px - generous desktop */
+    
+    /* Component-specific spacing */
+    --btn-group-gap-mobile: var(--spacing-md);  /* 12px - gap-3 */
+    --btn-group-gap-desktop: var(--spacing-lg); /* 16px - gap-4 */
+    --btn-icon-gap: var(--spacing-sm);          /* 8px - gap-2 */
+    
+    --card-padding-mobile: var(--spacing-mobile-base);     /* 16px */
+    --card-padding-desktop: var(--spacing-desktop-base);   /* 20px */
+    --card-gap-mobile: var(--spacing-md);                  /* 12px */
+    --card-gap-desktop: var(--spacing-lg);                 /* 16px */
     
     /* Primary Action Buttons */
     --btn-primary-bg: linear-gradient(135deg, rgb(139 69 19), rgb(109 52 16));
@@ -387,6 +411,84 @@
   /* Smooth transitions for mobile interactions */
   .transition-mobile {
     @apply transition-all duration-200 ease-out;
+  }
+}
+
+/* ===== UNIFIED MOBILE SPACING UTILITIES ===== */
+@layer utilities {
+  /* Spacing utility classes using design tokens */
+  .spacing-xs { --tw-space: var(--spacing-xs); }
+  .spacing-sm { --tw-space: var(--spacing-sm); }
+  .spacing-md { --tw-space: var(--spacing-md); }
+  .spacing-lg { --tw-space: var(--spacing-lg); }
+  .spacing-xl { --tw-space: var(--spacing-xl); }
+  .spacing-2xl { --tw-space: var(--spacing-2xl); }
+  .spacing-3xl { --tw-space: var(--spacing-3xl); }
+  
+  /* Mobile-first responsive padding */
+  .p-mobile-compact { padding: var(--spacing-mobile-compact); }
+  .p-mobile-base { padding: var(--spacing-mobile-base); }
+  .p-mobile-comfortable { padding: var(--spacing-mobile-comfortable); }
+  
+  .px-mobile-compact { padding-left: var(--spacing-mobile-compact); padding-right: var(--spacing-mobile-compact); }
+  .px-mobile-base { padding-left: var(--spacing-mobile-base); padding-right: var(--spacing-mobile-base); }
+  .px-mobile-comfortable { padding-left: var(--spacing-mobile-comfortable); padding-right: var(--spacing-mobile-comfortable); }
+  
+  .py-mobile-compact { padding-top: var(--spacing-mobile-compact); padding-bottom: var(--spacing-mobile-compact); }
+  .py-mobile-base { padding-top: var(--spacing-mobile-base); padding-bottom: var(--spacing-mobile-base); }
+  .py-mobile-comfortable { padding-top: var(--spacing-mobile-comfortable); padding-bottom: var(--spacing-mobile-comfortable); }
+  
+  /* Desktop responsive padding */
+  @media (min-width: 640px) {
+    .p-mobile-compact { padding: var(--spacing-desktop-compact); }
+    .p-mobile-base { padding: var(--spacing-desktop-base); }
+    .p-mobile-comfortable { padding: var(--spacing-desktop-comfortable); }
+    
+    .px-mobile-compact { padding-left: var(--spacing-desktop-compact); padding-right: var(--spacing-desktop-compact); }
+    .px-mobile-base { padding-left: var(--spacing-desktop-base); padding-right: var(--spacing-desktop-base); }
+    .px-mobile-comfortable { padding-left: var(--spacing-desktop-comfortable); padding-right: var(--spacing-desktop-comfortable); }
+    
+    .py-mobile-compact { padding-top: var(--spacing-desktop-compact); padding-bottom: var(--spacing-desktop-compact); }
+    .py-mobile-base { padding-top: var(--spacing-desktop-base); padding-bottom: var(--spacing-desktop-base); }
+    .py-mobile-comfortable { padding-top: var(--spacing-desktop-comfortable); padding-bottom: var(--spacing-desktop-comfortable); }
+  }
+  
+  /* Gap utilities using design tokens */
+  .gap-mobile { gap: var(--card-gap-mobile); }
+  .gap-mobile-sm { gap: var(--spacing-sm); }
+  .gap-mobile-md { gap: var(--spacing-md); }
+  .gap-mobile-lg { gap: var(--spacing-lg); }
+  
+  @media (min-width: 640px) {
+    .gap-mobile { gap: var(--card-gap-desktop); }
+    .gap-mobile-sm { gap: var(--spacing-sm); }
+    .gap-mobile-md { gap: var(--spacing-md); }  
+    .gap-mobile-lg { gap: var(--spacing-lg); }
+  }
+  
+  /* Component-specific utilities */
+  .btn-group-gap {
+    gap: var(--btn-group-gap-mobile);
+  }
+  
+  @media (min-width: 640px) {
+    .btn-group-gap {
+      gap: var(--btn-group-gap-desktop);
+    }
+  }
+  
+  .btn-icon-gap {
+    gap: var(--btn-icon-gap);
+  }
+  
+  .card-padding {
+    padding: var(--card-padding-mobile);
+  }
+  
+  @media (min-width: 640px) {
+    .card-padding {
+      padding: var(--card-padding-desktop);
+    }
   }
 }
 

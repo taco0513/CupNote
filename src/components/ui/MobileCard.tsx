@@ -55,11 +55,11 @@ const MobileCard = forwardRef<HTMLDivElement, MobileCardProps>(({
     'relative overflow-hidden transition-all duration-200',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coffee-500 focus-visible:ring-offset-2',
     
-    // Size variants - mobile optimized spacing
+    // Size variants - using unified design tokens
     {
-      'p-3': size === 'compact',     // 12px - tight spacing
-      'p-4': size === 'comfortable', // 16px - standard spacing  
-      'p-6': size === 'spacious',    // 24px - generous spacing
+      'p-mobile-compact': size === 'compact',     // 12px mobile, 16px desktop
+      'p-mobile-base': size === 'comfortable',    // 16px mobile, 20px desktop  
+      'p-mobile-comfortable': size === 'spacious', // 20px mobile, 24px desktop
     },
     
     // Rounded corners - mobile friendly
@@ -144,7 +144,7 @@ MobileCard.displayName = 'MobileCard'
 // Mobile-optimized card skeleton
 const MobileCardSkeleton = ({ size }: { size: 'compact' | 'comfortable' | 'spacious' }) => (
   <div className="animate-pulse">
-    <div className="flex items-center space-x-3 mb-3">
+    <div className="flex items-center gap-mobile-md mb-3">
       <div className="w-10 h-10 bg-coffee-200/50 rounded-lg flex-shrink-0" />
       <div className="flex-1">
         <div className="h-4 bg-coffee-200/50 rounded mb-1" />
@@ -219,7 +219,7 @@ export const MobileCardFooter = ({
   ...props
 }: { children: ReactNode; className?: string } & HTMLAttributes<HTMLDivElement>) => (
   <div 
-    className={cn('mt-4 pt-3 border-t border-coffee-100/50 flex items-center justify-between', className)}
+    className={cn('mt-4 pt-3 border-t border-coffee-100/50 flex items-center justify-between gap-mobile-sm', className)}
     {...props}
   >
     {children}

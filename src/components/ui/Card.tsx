@@ -32,9 +32,9 @@ export function Card({
 
   const paddingStyles = {
     none: '',
-    small: 'p-3',
-    medium: 'p-4 md:p-6',
-    large: 'p-6 md:p-8'
+    small: 'p-mobile-compact',
+    medium: 'p-mobile-base',
+    large: 'p-mobile-comfortable'
   }
 
   const hoverStyles = hover || onClick ? 'transition-all duration-200 hover:shadow-lg hover:scale-[1.02] hover:bg-white/95 cursor-pointer group' : ''
