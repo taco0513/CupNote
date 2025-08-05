@@ -595,6 +595,22 @@ export class AuthService {
     }
   }
 
+  // 비밀번호 재설정 이메일 보내기
+  static async resetPassword(email: string) {
+    try {
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/reset-password`,
+      })
+      
+      if (error) throw error
+      return data
+    } catch (error: unknown) {
+      const mappedError = mapSupabaseError(error)
+      logError(mappedError, 'AuthService.resetPassword')
+      throw mappedError
+    }
+  }
+
   // 현재 사용자 조회
   static async getCurrentUser() {
     try {

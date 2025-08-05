@@ -364,7 +364,7 @@ export default function AdminSettingsPage() {
           )}
           <UnifiedButton
             variant="outline"
-            size="small"
+            size="sm"
             onClick={loadSettings}
             className="border-coffee-200 text-coffee-600 hover:bg-coffee-50"
           >
@@ -372,8 +372,8 @@ export default function AdminSettingsPage() {
             새로고침
           </UnifiedButton>
           <UnifiedButton
-            variant="default"
-            size="small"
+            variant="primary"
+            size="sm"
             onClick={saveSettings}
             disabled={!hasChanges || isSaving}
             className="bg-gradient-to-r from-coffee-500 to-coffee-600"
@@ -816,7 +816,7 @@ export default function AdminSettingsPage() {
                 />
               </div>
               <UnifiedButton
-                variant="default"
+                variant="primary"
                 onClick={addAnnouncement}
                 className="bg-gradient-to-r from-coffee-500 to-coffee-600"
               >
@@ -856,14 +856,14 @@ export default function AdminSettingsPage() {
                       <div className="flex items-center space-x-2 ml-4">
                         <UnifiedButton
                           variant="ghost"
-                          size="small"
+                          size="sm"
                           className="p-2"
                         >
                           <Edit className="h-4 w-4" />
                         </UnifiedButton>
                         <UnifiedButton
                           variant="ghost"
-                          size="small"
+                          size="sm"
                           onClick={() => deleteAnnouncement(announcement.id)}
                           className="p-2 text-red-600 hover:bg-red-50"
                         >
@@ -899,7 +899,7 @@ export default function AdminSettingsPage() {
                       </span>
                       <UnifiedButton
                         variant="ghost"
-                        size="small"
+                        size="sm"
                         className="p-2"
                       >
                         <Edit className="h-4 w-4" />

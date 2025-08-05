@@ -65,15 +65,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
+        log.info('🔐 Initializing auth...')
+        
+        // 세션 복원 시도
         const authUser = await AuthService.getCurrentUser()
+        
         if (authUser) {
+          log.info('✅ Session restored successfully', { 
+            userId: authUser.id, 
+            email: authUser.email 
+          })
           const userProfile = await fetchUserProfile(authUser)
           setUser(userProfile)
+        } else {
+          log.info('ℹ️ No active session found')
         }
       } catch (error) {
-        log.error('Error initializing auth', error)
+        log.error('❌ Error initializing auth', error)
       } finally {
         setLoading(false)
+      }
+    }
+
+    // 페이지가 보이게 될 때 세션 재확인 (iOS 앱 복원 시 유용)
+    const handleVisibilityChange = async () => {
+      if (!document.hidden && !user) {
+        log.info('🔄 Page visible - checking auth state...')
+        try {
+          const authUser = await AuthService.getCurrentUser()
+          if (authUser && !user) {
+            log.info('🔁 Restoring session on visibility change')
+            const userProfile = await fetchUserProfile(authUser)
+            setUser(userProfile)
+          }
+        } catch (error) {
+          log.error('Error checking auth on visibility change', error)
+        }
       }
     }
 
@@ -82,9 +109,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // 인증 상태 변화 구독
     const {
       data: { subscription },
-    } = AuthService.onAuthStateChange(async authUser => {
-      if (authUser) {
-        const userProfile = await fetchUserProfile(authUser)
+    } = AuthService.onAuthStateChange(async (event, session) => {
+      log.info(`🔐 Auth state changed: ${event}`, { 
+        hasSession: !!session,
+        hasUser: !!session?.user 
+      })
+      
+      if (session?.user) {
+        const userProfile = await fetchUserProfile(session.user)
         setUser(userProfile)
       } else {
         setUser(null)
@@ -92,8 +124,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(false)
     })
 
+    // 페이지 가시성 변화 감지 (앱 전환 시 세션 복원)
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
     return () => {
       subscription?.unsubscribe()
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
   }, [])
 

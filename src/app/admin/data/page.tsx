@@ -176,7 +176,7 @@ export default function DataManagementPage() {
           </div>
           <UnifiedButton
             variant="outline"
-            size="small"
+            size="sm"
             onClick={loadDataStats}
             className="border-coffee-200 text-coffee-600 hover:bg-coffee-50"
           >

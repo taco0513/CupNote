@@ -495,7 +495,7 @@ export default function AdminRecordsPage() {
         <div className="flex items-center space-x-3">
           <UnifiedButton
             variant="outline"
-            size="small"
+            size="sm"
             onClick={loadRecords}
             className="border-coffee-200 text-coffee-600 hover:bg-coffee-50"
           >
@@ -504,7 +504,7 @@ export default function AdminRecordsPage() {
           </UnifiedButton>
           <UnifiedButton
             variant="outline"
-            size="small"
+            size="sm"
             className="border-coffee-200 text-coffee-600 hover:bg-coffee-50"
           >
             <Download className="h-4 w-4 mr-2" />
@@ -904,7 +904,7 @@ export default function AdminRecordsPage() {
                       <div className="flex items-center justify-center space-x-2">
                         <UnifiedButton
                           variant="ghost"
-                          size="small"
+                          size="sm"
                           onClick={() => {
                             setSelectedRecord(record)
                             setShowRecordDetails(true)
@@ -915,14 +915,14 @@ export default function AdminRecordsPage() {
                         </UnifiedButton>
                         <UnifiedButton
                           variant="ghost"
-                          size="small"
+                          size="sm"
                           className="p-2"
                         >
                           <Edit className="h-4 w-4" />
                         </UnifiedButton>
                         <UnifiedButton
                           variant="ghost"
-                          size="small"
+                          size="sm"
                           className="p-2 text-red-600 hover:bg-red-50"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -944,7 +944,7 @@ export default function AdminRecordsPage() {
               <div className="flex items-center space-x-2">
                 <UnifiedButton
                   variant="outline"
-                  size="small"
+                  size="sm"
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage(prev => prev - 1)}
                   className="border-coffee-200"
@@ -959,8 +959,8 @@ export default function AdminRecordsPage() {
                   return (
                     <UnifiedButton
                       key={page}
-                      variant={currentPage === page ? "default" : "outline"}
-                      size="small"
+                      variant={currentPage === page ? "primary" : "outline"}
+                      size="sm"
                       onClick={() => setCurrentPage(page)}
                       className={currentPage === page ? "bg-coffee-500" : "border-coffee-200"}
                     >
@@ -971,7 +971,7 @@ export default function AdminRecordsPage() {
                 
                 <UnifiedButton
                   variant="outline"
-                  size="small"
+                  size="sm"
                   disabled={currentPage === totalPages}
                   onClick={() => setCurrentPage(prev => prev + 1)}
                   className="border-coffee-200"

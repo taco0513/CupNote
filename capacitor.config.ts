@@ -12,7 +12,15 @@ const config: CapacitorConfig = {
     contentInset: 'automatic',
     preferredContentMode: 'mobile',
     backgroundColor: '#FAF7F2',
-    allowsLinkPreview: false
+    allowsLinkPreview: false,
+    // 앱 백그라운드에서도 JavaScript 실행 유지
+    limitsNavigationsToAppBoundDomains: false,
+    allowsInlineMediaPlayback: true,
+    // 세션 유지를 위한 설정
+    webViewPreferences: {
+      'WKWebViewOnly': true,
+      'WKSuspendInBackground': false
+    }
   },
   plugins: {
     SplashScreen: {

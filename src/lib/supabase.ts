@@ -8,13 +8,49 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'your-anon-
 // Singleton pattern으로 Supabase 클라이언트 생성 (중복 인스턴스 방지)
 let supabaseInstance: SupabaseClient | null = null
 
+// Custom Storage for better iOS compatibility
+const createCustomStorage = () => {
+  if (typeof window === 'undefined') return undefined
+
+  return {
+    getItem: (key: string) => {
+      try {
+        const item = window.localStorage.getItem(key)
+        console.log(`Auth Storage GET ${key}:`, item ? 'found' : 'not found')
+        return item
+      } catch (error) {
+        console.error('Auth Storage GET error:', error)
+        return null
+      }
+    },
+    setItem: (key: string, value: string) => {
+      try {
+        window.localStorage.setItem(key, value)
+        console.log(`Auth Storage SET ${key}:`, 'success')
+      } catch (error) {
+        console.error('Auth Storage SET error:', error)
+      }
+    },
+    removeItem: (key: string) => {
+      try {
+        window.localStorage.removeItem(key)
+        console.log(`Auth Storage REMOVE ${key}:`, 'success')
+      } catch (error) {
+        console.error('Auth Storage REMOVE error:', error)
+      }
+    }
+  }
+}
+
 function createSupabaseClient() {
   if (!supabaseInstance) {
     supabaseInstance = createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
         persistSession: true,
-        storageKey: 'cupnote-auth',
-        storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+        storageKey: 'cupnote-auth-session',
+        storage: createCustomStorage(),
+        autoRefreshToken: true,
+        detectSessionInUrl: false, // iOS에서 URL 세션 감지 비활성화
       },
     })
   }

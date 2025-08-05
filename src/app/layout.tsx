@@ -16,17 +16,22 @@ import { SystemNotificationProvider } from '../contexts/SystemNotificationContex
 import { SearchProvider } from '../contexts/SearchContext'
 import { ThemeProvider } from '../contexts/ThemeContext'
 
+// Auth persistence hook - temporarily removed due to webpack issues
+// SSR safe imports
+
 // 개발용 컴포넌트 - 클라이언트에서만 렌더링
 const OnboardingTrigger = dynamic(() => import('../components/ui/OnboardingTrigger'), {
   loading: () => null
 })
 
-// 클라이언트 전용 컴포넌트들을 동적 import
-const AppHeader = dynamic(() => import('../components/AppHeader'), {
+// AppHeader 일반 import로 변경
+import AppHeader from '../components/AppHeader'
+
+const IOSPullToRefreshPreventer = dynamic(() => import('../components/ios/IOSPullToRefreshPreventer'), {
   loading: () => null
 })
 
-const IOSPullToRefreshPreventer = dynamic(() => import('../components/ios/IOSPullToRefreshPreventer'), {
+const FeedbackButton = dynamic(() => import('../components/FeedbackButton'), {
   loading: () => null
 })
 import './globals.css'
@@ -265,10 +270,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <SearchProvider>
                   <IOSPullToRefreshPreventer />
                   <AppHeader />
-                  <div className="pb-16 md:pb-0 safe-area-inset">{children}</div>
+                  <div className="pt-16 pb-16 md:pt-0 md:pb-0 safe-area-inset">{children}</div>
                   <MobileNavigation />
                   <NotificationContainer />
                   <OnboardingTrigger />
+                  <FeedbackButton />
                   </SearchProvider>
                 </AuthProvider>
               </SystemNotificationProvider>

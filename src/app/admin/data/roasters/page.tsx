@@ -417,7 +417,7 @@ export default function RoasterManagementPage() {
                 <div className="flex items-center space-x-2">
                   <UnifiedButton
                     variant="ghost"
-                    size="small"
+                    size="sm"
                     onClick={() => handleRoasterAction('view', roaster)}
                     className="text-coffee-600 hover:bg-coffee-50"
                   >
@@ -426,7 +426,7 @@ export default function RoasterManagementPage() {
                   
                   <UnifiedButton
                     variant="ghost"
-                    size="small"
+                    size="sm"
                     onClick={() => handleRoasterAction('toggle_featured', roaster)}
                     className={`${roaster.featured ? 'text-purple-600 hover:bg-purple-50' : 'text-gray-600 hover:bg-gray-50'}`}
                     title={roaster.featured ? '피처드 해제' : '피처드 설정'}
@@ -436,7 +436,7 @@ export default function RoasterManagementPage() {
                   
                   <UnifiedButton
                     variant="ghost"
-                    size="small"
+                    size="sm"
                     onClick={() => handleRoasterAction('edit', roaster)}
                     className="text-blue-600 hover:bg-blue-50"
                   >
@@ -445,7 +445,7 @@ export default function RoasterManagementPage() {
                   
                   <UnifiedButton
                     variant="ghost"
-                    size="small"
+                    size="sm"
                     onClick={() => handleRoasterAction('delete', roaster)}
                     className="text-red-600 hover:bg-red-50"
                   >

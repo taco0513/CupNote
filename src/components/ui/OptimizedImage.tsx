@@ -1,21 +1,23 @@
 /**
- * 최적화된 이미지 컴포넌트
+ * 성능 최적화된 이미지 컴포넌트
  * - Lazy loading
  * - WebP 지원
- * - 적응형 로딩
+ * - 반응형 이미지
+ * - 로딩 상태 표시
  * - 에러 처리
  */
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
-import Image from 'next/image'
+import { useState, useRef, useEffect, useCallback } from 'react'
+import { ImageIcon } from 'lucide-react'
 
 interface OptimizedImageProps {
   src: string
   alt: string
+  className?: string
   width?: number
   height?: number
-  className?: string
+  sizes?: string
   priority?: boolean
   placeholder?: 'blur' | 'empty'
   blurDataURL?: string
@@ -27,112 +29,215 @@ interface OptimizedImageProps {
 export default function OptimizedImage({
   src,
   alt,
+  className = '',
   width,
   height,
-  className = '',
+  sizes,
   priority = false,
   placeholder = 'empty',
   blurDataURL,
   onLoad,
   onError,
-  fallback = '/images/placeholder-coffee.jpg'
+  fallback = '/images/placeholder.jpg'
 }: OptimizedImageProps) {
-  const [isLoading, setIsLoading] = useState(true)
-  const [hasError, setHasError] = useState(false)
-  const [imageSrc, setImageSrc] = useState(src)
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [isError, setIsError] = useState(false)
   const [isInView, setIsInView] = useState(priority)
-  const imgRef = useRef<HTMLDivElement>(null)
+  const [currentSrc, setCurrentSrc] = useState<string>(priority ? src : '')
+  const imgRef = useRef<HTMLImageElement>(null)
+  const observerRef = useRef<IntersectionObserver | null>(null)
 
-  // Intersection Observer for lazy loading
+  // WebP 지원 감지
+  const supportsWebP = useCallback(() => {
+    if (typeof window === 'undefined') return false
+    
+    const canvas = document.createElement('canvas')
+    canvas.width = 1
+    canvas.height = 1
+    
+    return canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0
+  }, [])
+
+  // 최적화된 이미지 URL 생성
+  const getOptimizedSrc = useCallback((originalSrc: string) => {
+    if (!originalSrc) return fallback
+    
+    // Supabase Storage URL인 경우 변환 옵션 추가
+    if (originalSrc.includes('supabase') && originalSrc.includes('/storage/')) {
+      const webpSupport = supportsWebP()
+      const baseUrl = originalSrc.split('?')[0]
+      const params = new URLSearchParams()
+      
+      if (width) params.set('width', width.toString())
+      if (height) params.set('height', height.toString())
+      params.set('quality', '85')
+      if (webpSupport) params.set('format', 'webp')
+      
+      return `${baseUrl}?${params.toString()}`
+    }
+    
+    return originalSrc
+  }, [width, height, fallback, supportsWebP])
+
+  // Intersection Observer 설정
   useEffect(() => {
-    if (priority) return
+    if (priority || !imgRef.current) return
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true)
-          observer.disconnect()
-        }
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !isInView) {
+            setIsInView(true)
+            setCurrentSrc(getOptimizedSrc(src))
+          }
+        })
       },
       {
-        rootMargin: '50px', // Load image 50px before it comes into view
+        rootMargin: '50px',
         threshold: 0.1
       }
     )
 
     if (imgRef.current) {
-      observer.observe(imgRef.current)
+      observerRef.current.observe(imgRef.current)
     }
 
-    return () => observer.disconnect()
-  }, [priority])
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect()
+      }
+    }
+  }, [priority, isInView, src, getOptimizedSrc])
 
-  const handleLoad = () => {
-    setIsLoading(false)
+  // 이미지 로드 처리
+  const handleLoad = useCallback(() => {
+    setIsLoaded(true)
     onLoad?.()
-  }
+  }, [onLoad])
 
-  const handleError = () => {
-    setHasError(true)
-    setIsLoading(false)
-    setImageSrc(fallback)
+  // 이미지 에러 처리
+  const handleError = useCallback(() => {
+    setIsError(true)
+    setCurrentSrc(fallback)
     onError?.()
+  }, [fallback, onError])
+
+  // 스타일 클래스 생성
+  const getImageClasses = () => {
+    const baseClasses = 'transition-opacity duration-300 ease-in-out'
+    const loadingClasses = isLoaded ? 'opacity-100' : 'opacity-0'
+    const userClasses = className || ''
+    
+    return `${baseClasses} ${loadingClasses} ${userClasses}`.trim()
   }
 
-  // 블러 플레이스홀더 생성
-  const generateBlurDataURL = (w: number = 8, h: number = 8) => {
-    return `data:image/svg+xml;base64,${Buffer.from(
-      `<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-        <rect width="100%" height="100%" fill="#f3f4f6"/>
-        <rect width="100%" height="100%" fill="url(#gradient)"/>
-        <defs>
-          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#e5e7eb;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#d1d5db;stop-opacity:1" />
-          </linearGradient>
-        </defs>
-      </svg>`
-    ).toString('base64')}`
+  // 플레이스홀더 렌더링
+  const renderPlaceholder = () => {
+    if (placeholder === 'blur' && blurDataURL) {
+      return (
+        <div 
+          className={`absolute inset-0 bg-cover bg-center filter blur-sm ${isLoaded ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
+          style={{ backgroundImage: `url(${blurDataURL})` }}
+        />
+      )
+    }
+    
+    return (
+      <div className={`absolute inset-0 bg-gray-100 flex items-center justify-center ${isLoaded ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}>
+        <ImageIcon className="w-8 h-8 text-gray-400" />
+      </div>
+    )
   }
 
   return (
-    <div ref={imgRef} className={`relative overflow-hidden ${className}`}>
-      {/* Loading skeleton */}
-      {isLoading && !hasError && (
-        <div 
-          className="absolute inset-0 bg-gray-200 animate-pulse rounded"
-          style={{ width: width || '100%', height: height || '100%' }}
-        />
-      )}
-
-      {/* Image */}
-      {isInView && (
-        <Image
-          src={imageSrc}
-          alt={alt}
-          width={width}
-          height={height}
-          className={`transition-opacity duration-300 ${
-            isLoading ? 'opacity-0' : 'opacity-100'
-          }`}
-          priority={priority}
-          placeholder={placeholder}
-          blurDataURL={blurDataURL || generateBlurDataURL()}
-          onLoad={handleLoad}
-          onError={handleError}
-          sizes={width ? `${width}px` : '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
-        />
-      )}
-
-      {/* Error state */}
-      {hasError && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-400">
+    <div className="relative overflow-hidden">
+      {/* 플레이스홀더 */}
+      {!isLoaded && !isError && renderPlaceholder()}
+      
+      {/* 실제 이미지 */}
+      <img
+        ref={imgRef}
+        src={currentSrc || (priority ? getOptimizedSrc(src) : '')}
+        alt={alt}
+        className={getImageClasses()}
+        width={width}
+        height={height}
+        sizes={sizes}
+        loading={priority ? 'eager' : 'lazy'}
+        decoding="async"
+        onLoad={handleLoad}
+        onError={handleError}
+        style={{
+          aspectRatio: width && height ? `${width}/${height}` : undefined
+        }}
+      />
+      
+      {/* 에러 상태 */}
+      {isError && (
+        <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
           <div className="text-center">
-            <div className="w-8 h-8 mx-auto mb-2 opacity-50">☕</div>
-            <div className="text-xs">이미지 로드 실패</div>
+            <ImageIcon className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+            <p className="text-xs text-gray-500">이미지를 불러올 수 없습니다</p>
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+// 반응형 이미지 컴포넌트
+export function ResponsiveImage({
+  src,
+  alt,
+  className = '',
+  aspectRatio = '16/9',
+  priority = false,
+  sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
+  ...props
+}: OptimizedImageProps & { aspectRatio?: string }) {
+  return (
+    <div 
+      className={`relative w-full ${className}`}
+      style={{ aspectRatio }}
+    >
+      <OptimizedImage
+        src={src}
+        alt={alt}
+        className="absolute inset-0 w-full h-full object-cover"
+        sizes={sizes}
+        priority={priority}
+        {...props}
+      />
+    </div>
+  )
+}
+
+// 프로필 이미지 컴포넌트
+export function ProfileImage({
+  src,
+  alt,
+  size = 'md',
+  className = '',
+  fallback,
+  ...props
+}: OptimizedImageProps & { size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' }) {
+  const sizeClasses = {
+    xs: 'w-8 h-8',
+    sm: 'w-12 h-12',
+    md: 'w-16 h-16',
+    lg: 'w-24 h-24',
+    xl: 'w-32 h-32'
+  }
+
+  return (
+    <div className={`${sizeClasses[size]} ${className} rounded-full overflow-hidden bg-gray-100`}>
+      <OptimizedImage
+        src={src}
+        alt={alt}
+        className="w-full h-full object-cover"
+        fallback={fallback || '/images/default-avatar.jpg'}
+        {...props}
+      />
     </div>
   )
 }

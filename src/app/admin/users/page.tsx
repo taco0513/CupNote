@@ -376,7 +376,7 @@ export default function AdminUsersPage() {
         <div className="flex items-center space-x-3">
           <UnifiedButton
             variant="outline"
-            size="small"
+            size="sm"
             onClick={loadUsers}
             className="border-coffee-200 text-coffee-600 hover:bg-coffee-50"
           >
@@ -384,8 +384,8 @@ export default function AdminUsersPage() {
             새로고침
           </UnifiedButton>
           <UnifiedButton
-            variant="default"
-            size="small"
+            variant="primary"
+            size="sm"
             className="bg-gradient-to-r from-coffee-500 to-coffee-600"
           >
             <UserPlus className="h-4 w-4 mr-2" />
@@ -549,7 +549,7 @@ export default function AdminUsersPage() {
           </CardTitle>
           <UnifiedButton
             variant="outline"
-            size="small"
+            size="sm"
             className="border-coffee-200 text-coffee-600 hover:bg-coffee-50"
           >
             <Download className="h-4 w-4 mr-2" />
@@ -650,7 +650,7 @@ export default function AdminUsersPage() {
                       <div className="flex items-center justify-center space-x-2">
                         <UnifiedButton
                           variant="ghost"
-                          size="small"
+                          size="sm"
                           onClick={() => {
                             setSelectedUser(user)
                             setShowUserDetails(true)
@@ -661,14 +661,14 @@ export default function AdminUsersPage() {
                         </UnifiedButton>
                         <UnifiedButton
                           variant="ghost"
-                          size="small"
+                          size="sm"
                           className="p-2"
                         >
                           <Edit className="h-4 w-4" />
                         </UnifiedButton>
                         <UnifiedButton
                           variant="ghost"
-                          size="small"
+                          size="sm"
                           className="p-2 text-red-600 hover:bg-red-50"
                         >
                           <Ban className="h-4 w-4" />
@@ -690,7 +690,7 @@ export default function AdminUsersPage() {
               <div className="flex items-center space-x-2">
                 <UnifiedButton
                   variant="outline"
-                  size="small"
+                  size="sm"
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage(prev => prev - 1)}
                   className="border-coffee-200"
@@ -705,8 +705,8 @@ export default function AdminUsersPage() {
                   return (
                     <UnifiedButton
                       key={page}
-                      variant={currentPage === page ? "default" : "outline"}
-                      size="small"
+                      variant={currentPage === page ? "primary" : "outline"}
+                      size="sm"
                       onClick={() => setCurrentPage(page)}
                       className={currentPage === page ? "bg-coffee-500" : "border-coffee-200"}
                     >
@@ -717,7 +717,7 @@ export default function AdminUsersPage() {
                 
                 <UnifiedButton
                   variant="outline"
-                  size="small"
+                  size="sm"
                   disabled={currentPage === totalPages}
                   onClick={() => setCurrentPage(prev => prev + 1)}
                   className="border-coffee-200"

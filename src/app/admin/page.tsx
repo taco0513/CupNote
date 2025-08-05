@@ -28,7 +28,7 @@ import PerformanceDashboard from '../../components/performance/PerformanceDashbo
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import UnifiedButton from '../../components/ui/UnifiedButton'
 import { useAuth } from '../../contexts/AuthContext'
-import usePerformanceMonitoring from '../../hooks/usePerformanceMonitoring'
+import { usePerformanceMonitoring } from '../../hooks/usePerformanceMonitoring'
 import { logger } from '../../lib/logger'
 import { supabase } from '../../lib/supabase'
 
@@ -350,7 +350,7 @@ export default function AdminDashboard() {
           </div>
           <UnifiedButton
             variant="outline"
-            size="small"
+            size="sm"
             onClick={loadDashboardStats}
             className="border-coffee-200 text-coffee-600 hover:bg-coffee-50"
           >
@@ -538,7 +538,7 @@ export default function AdminDashboard() {
               </div>
               <UnifiedButton
                 variant="ghost"
-                size="small"
+                size="sm"
                 onClick={() => setShowPerformanceDetails(!showPerformanceDetails)}
                 className="text-coffee-600 hover:bg-coffee-50"
               >

@@ -2,6 +2,8 @@
  * Global Not Found UI for App Router
  * Displays when a route is not found
  */
+'use client'
+
 import Link from 'next/link'
 import { Home, Search, Coffee } from 'lucide-react'
 

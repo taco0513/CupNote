@@ -1133,7 +1133,7 @@ export default function AdminCoffeesPage() {
                   return (
                     <UnifiedButton
                       key={page}
-                      variant={currentPage === page ? "default" : "outline"}
+                      variant={currentPage === page ? "primary" : "outline"}
                       size="sm"
                       onClick={() => setCurrentPage(page)}
                       className={currentPage === page ? "bg-coffee-500" : "border-coffee-200"}

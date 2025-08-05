@@ -21,9 +21,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({ 
   params 
 }: { 
-  params: { mode: string } 
+  params: Promise<{ mode: string }> 
 }): Promise<Metadata> {
-  const mode = params.mode
+  const { mode } = await params
   
   const modeNames = {
     cafe: '카페 모드',
@@ -43,13 +43,13 @@ export async function generateMetadata({
 }
 
 interface ModeEntryPageProps {
-  params: {
+  params: Promise<{
     mode: string
-  }
+  }>
 }
 
-export default function ModeEntryPage({ params }: ModeEntryPageProps) {
-  const mode = params.mode
+export default async function ModeEntryPage({ params }: ModeEntryPageProps) {
+  const { mode } = await params
 
   // Server-side validation and redirect for invalid modes
   if (mode !== 'cafe' && mode !== 'homecafe') {

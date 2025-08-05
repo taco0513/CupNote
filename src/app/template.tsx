@@ -30,27 +30,34 @@ export default function Template({ children }: TemplateProps) {
 
   useEffect(() => {
     // Progressive enhancement: Add class for JavaScript-enabled styling
-    document.documentElement.classList.add('js-enabled')
-    
-    // Intersection Observer for progressive image loading
-    if ('IntersectionObserver' in window) {
-      const imageObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const img = entry.target as HTMLImageElement
-            if (img.dataset.src) {
-              img.src = img.dataset.src
-              img.classList.remove('lazy')
-              imageObserver.unobserve(img)
+    // Wrapped in requestAnimationFrame to avoid hydration issues
+    if (typeof window !== 'undefined') {
+      requestAnimationFrame(() => {
+        document.documentElement.classList.add('js-enabled')
+      })
+      
+      // Intersection Observer for progressive image loading
+      if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const img = entry.target as HTMLImageElement
+              if (img.dataset.src) {
+                img.src = img.dataset.src
+                img.classList.remove('lazy')
+                imageObserver.unobserve(img)
+              }
             }
-          }
+          })
         })
-      })
 
-      // Observe all lazy images
-      document.querySelectorAll('img[data-src]').forEach((img) => {
-        imageObserver.observe(img)
-      })
+        // Delayed to avoid hydration issues
+        setTimeout(() => {
+          document.querySelectorAll('img[data-src]').forEach((img) => {
+            imageObserver.observe(img)
+          })
+        }, 100)
+      }
     }
   }, [])
 

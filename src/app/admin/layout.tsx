@@ -255,7 +255,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             </div>
             <UnifiedButton
               variant="outline"
-              size="small"
+              size="sm"
               onClick={handleSignOut}
               className="w-full border-coffee-200 text-coffee-600 hover:bg-coffee-50"
             >

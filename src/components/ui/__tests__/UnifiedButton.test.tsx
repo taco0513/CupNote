@@ -11,8 +11,8 @@ describe('UnifiedButton', () => {
       
       const button = screen.getByRole('button', { name: 'Default Button' })
       expect(button).toBeInTheDocument()
-      expect(button).toHaveClass('bg-accent-warm', 'text-white') // primary variant
-      expect(button).toHaveClass('px-4', 'py-2') // medium size
+      expect(button).toHaveClass('btn-base', 'btn-primary') // primary variant
+      expect(button).toHaveClass('min-h-[48px]') // medium size
     })
 
     it('renders children correctly', () => {
@@ -38,65 +38,79 @@ describe('UnifiedButton', () => {
       render(<UnifiedButton variant="primary">Primary</UnifiedButton>)
       
       const button = screen.getByRole('button')
-      expect(button).toHaveClass('bg-accent-warm', 'text-white')
+      expect(button).toHaveClass('btn-base', 'btn-primary')
     })
 
     it('renders secondary variant correctly', () => {
       render(<UnifiedButton variant="secondary">Secondary</UnifiedButton>)
       
       const button = screen.getByRole('button')
-      expect(button).toHaveClass('bg-neutral-200', 'text-neutral-800')
+      expect(button).toHaveClass('btn-base', 'btn-secondary')
     })
 
     it('renders outline variant correctly', () => {
       render(<UnifiedButton variant="outline">Outline</UnifiedButton>)
       
       const button = screen.getByRole('button')
-      expect(button).toHaveClass('bg-transparent', 'border-2', 'border-accent-warm', 'text-accent-warm')
+      expect(button).toHaveClass('btn-base', 'btn-secondary', 'border-2', 'border-coffee-400', 'bg-transparent')
     })
 
     it('renders ghost variant correctly', () => {
       render(<UnifiedButton variant="ghost">Ghost</UnifiedButton>)
       
       const button = screen.getByRole('button')
-      expect(button).toHaveClass('bg-transparent', 'text-neutral-700')
+      expect(button).toHaveClass('btn-base', 'bg-transparent', 'text-coffee-600')
     })
 
     it('renders danger variant correctly', () => {
       render(<UnifiedButton variant="danger">Danger</UnifiedButton>)
       
       const button = screen.getByRole('button')
-      expect(button).toHaveClass('bg-red-500', 'text-white')
+      expect(button).toHaveClass('btn-base', 'bg-red-500', 'text-white', 'border-red-600')
     })
   })
 
   describe('Sizes', () => {
-    it('renders small size correctly', () => {
-      render(<UnifiedButton size="small">Small</UnifiedButton>)
+    it('renders xs size correctly', () => {
+      render(<UnifiedButton size="xs">Extra Small</UnifiedButton>)
       
       const button = screen.getByRole('button')
-      expect(button).toHaveClass('px-3', 'py-1.5', 'text-sm')
+      expect(button).toHaveClass('min-h-[44px]', 'px-3', 'text-xs')
     })
 
-    it('renders medium size correctly', () => {
-      render(<UnifiedButton size="medium">Medium</UnifiedButton>)
+    it('renders sm size correctly', () => {
+      render(<UnifiedButton size="sm">Small</UnifiedButton>)
       
       const button = screen.getByRole('button')
-      expect(button).toHaveClass('px-4', 'py-2')
+      expect(button).toHaveClass('min-h-[44px]', 'px-3.5', 'text-sm')
     })
 
-    it('renders large size correctly', () => {
-      render(<UnifiedButton size="large">Large</UnifiedButton>)
+    it('renders md size correctly', () => {
+      render(<UnifiedButton size="md">Medium</UnifiedButton>)
       
       const button = screen.getByRole('button')
-      expect(button).toHaveClass('px-6', 'py-3', 'text-lg')
+      expect(button).toHaveClass('min-h-[48px]', 'px-4', 'text-sm')
+    })
+
+    it('renders lg size correctly', () => {
+      render(<UnifiedButton size="lg">Large</UnifiedButton>)
+      
+      const button = screen.getByRole('button')
+      expect(button).toHaveClass('min-h-[52px]', 'px-5', 'text-base')
+    })
+
+    it('renders xl size correctly', () => {
+      render(<UnifiedButton size="xl">Extra Large</UnifiedButton>)
+      
+      const button = screen.getByRole('button')
+      expect(button).toHaveClass('min-h-[56px]', 'px-6', 'text-lg')
     })
 
     it('renders icon size correctly', () => {
       render(<UnifiedButton size="icon">Icon</UnifiedButton>)
       
       const button = screen.getByRole('button')
-      expect(button).toHaveClass('p-2')
+      expect(button).toHaveClass('min-h-[44px]', 'min-w-[44px]', 'aspect-square')
     })
   })
 
@@ -146,7 +160,7 @@ describe('UnifiedButton', () => {
       render(<UnifiedButton loading>Loading Button</UnifiedButton>)
       
       const button = screen.getByRole('button')
-      expect(button).toHaveClass('opacity-50', 'cursor-not-allowed')
+      expect(button).toBeDisabled()
     })
   })
 
@@ -162,7 +176,7 @@ describe('UnifiedButton', () => {
       render(<UnifiedButton disabled>Disabled Button</UnifiedButton>)
       
       const button = screen.getByRole('button')
-      expect(button).toHaveClass('opacity-50', 'cursor-not-allowed')
+      expect(button).toBeDisabled()
     })
 
     it('shows normal content when disabled', () => {
@@ -257,7 +271,7 @@ describe('UnifiedButton', () => {
       render(<UnifiedButton>Focus Button</UnifiedButton>)
       
       const button = screen.getByRole('button')
-      expect(button).toHaveClass('focus:outline-none', 'focus:ring-2', 'focus:ring-accent-warm')
+      expect(button).toHaveClass('btn-base')
     })
   })
 
@@ -289,7 +303,7 @@ describe('UnifiedButton', () => {
       render(<UnifiedButton>Focus Ring Button</UnifiedButton>)
       
       const button = screen.getByRole('button')
-      expect(button).toHaveClass('focus:ring-2', 'focus:ring-accent-warm', 'focus:ring-offset-2')
+      expect(button).toHaveClass('btn-base')
     })
   })
 
@@ -298,22 +312,14 @@ describe('UnifiedButton', () => {
       render(<UnifiedButton>Base Classes</UnifiedButton>)
       
       const button = screen.getByRole('button')
-      expect(button).toHaveClass(
-        'inline-flex',
-        'items-center',
-        'justify-center',
-        'font-medium',
-        'rounded-lg',
-        'transition-all',
-        'duration-200'
-      )
+      expect(button).toHaveClass('btn-base')
     })
 
     it('combines variant, size, and custom classes correctly', () => {
       render(
         <UnifiedButton
           variant="outline"
-          size="large"
+          size="lg"
           fullWidth
           className="custom-class"
         >
@@ -323,8 +329,9 @@ describe('UnifiedButton', () => {
       
       const button = screen.getByRole('button')
       expect(button).toHaveClass(
+        'btn-base', // base class
         'bg-transparent', // outline variant
-        'px-6', 'py-3', 'text-lg', // large size
+        'min-h-[52px]', // large size
         'w-full', // full width
         'custom-class' // custom class
       )

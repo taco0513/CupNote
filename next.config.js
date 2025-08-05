@@ -3,16 +3,11 @@
  * @design-ref DESIGN_SYSTEM.md#performance-budgets
  * @compliance-check 2025-08-02 - NextJS Production Reality 패턴 적용
  */
-const { withSentryConfig } = require('@sentry/nextjs')
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-})
+const path = require('path')
 
-// PWA configuration removed - not currently needed for MVP
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
   // output: 'export',  // Temporarily disabled - using SSG instead
   // 성능 최적화 설정 - Production Reality 패턴
   compiler: {
@@ -25,25 +20,16 @@ const nextConfig = {
   // 서버 컴포넌트 외부 패키지 설정 (안정화됨)
   serverExternalPackages: ['@supabase/supabase-js'],
   
-  // 실험적 기능 활성화 - Production Reality 패턴 (App Router Optimized)
-  experimental: {
-    optimizePackageImports: ['lucide-react', 'framer-motion', 'recharts'],
-    typedRoutes: true, // 타입 안전한 라우팅
-    optimizeCss: true, // CSS 최적화
-    webVitalsAttribution: ['CLS', 'LCP', 'FCP', 'INP', 'TTFB'], // Web Vitals 추적 (INP replaces FID)
-  },
+  // Next.js 14 안정성 설정
+  experimental: {},
   
-  // Turbopack 설정 (안정화됨)
-  turbopack: {
-    rules: {
-      '*.svg': {
-        loaders: ['@svgr/webpack'],
-        as: '*.js',
-      },
-    },
-  },
   // 번들 분석 설정
   productionBrowserSourceMaps: false, // 프로덕션 소스맵 비활성화
+  
+  // React Strict Mode 비활성화 (안정성)
+  reactStrictMode: false,
+  
+  // modularizeImports 제거 - optimizePackageImports로 통합
   // TypeScript and ESLint validation - temporarily relaxed for deployment
   eslint: {
     ignoreDuringBuilds: true, // Temporarily ignore for deployment
@@ -51,11 +37,14 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true, // Temporarily ignore for deployment
   },
-  // 빌드에서 제외할 디렉토리
-  webpack: (config, { isServer }) => {
+  // 웹팩 설정 간소화
+  webpack: (config) => {
+    // 별칭 설정만 유지
     config.resolve.alias = {
       ...config.resolve.alias,
+      '@': path.resolve(__dirname, 'src'),
     }
+    
     return config
   },
   // 이미지 최적화 - Static export requires unoptimized
@@ -83,26 +72,4 @@ const nextConfig = {
   pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
 }
 
-// Sentry 설정
-const sentryWebpackPluginOptions = {
-  // Sentry 빌드 최적화 설정
-  silent: true, // 빌드 시 로그 최소화
-  org: process.env.SENTRY_ORG,
-  project: process.env.SENTRY_PROJECT,
-  
-  // 소스맵 업로드 설정
-  widenClientFileUpload: true,
-  transpileClientSDK: true,
-  tunnelRoute: '/monitoring',
-  hideSourceMaps: true,
-  disableLogger: true,
-  automaticVercelMonitors: true,
-  
-  // 성능 최적화
-  sourcemaps: {
-    disable: process.env.NODE_ENV === 'development',
-    deleteAfterUpload: true,
-  }
-}
-
-module.exports = withBundleAnalyzer(withSentryConfig(nextConfig, sentryWebpackPluginOptions))
+module.exports = nextConfig

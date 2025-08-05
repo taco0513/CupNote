@@ -30,7 +30,7 @@ import {
 import PerformanceDashboard from '../../../components/performance/PerformanceDashboard'
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/Card'
 import UnifiedButton from '../../../components/ui/UnifiedButton'
-import usePerformanceMonitoring from '../../../hooks/usePerformanceMonitoring'
+import { usePerformanceMonitoring } from '../../../hooks/usePerformanceMonitoring'
 import { logger } from '../../../lib/logger'
 import { getBundleMonitor } from '../../../lib/performance/bundle-monitor'
 
@@ -361,7 +361,7 @@ export default function AdminAnalyticsPage() {
             마지막 업데이트: {lastUpdated.toLocaleTimeString()}
           </div>
           <UnifiedButton
-            variant={autoRefresh ? "default" : "outline"}
+            variant={autoRefresh ? "primary" : "outline"}
             size="sm"
             onClick={() => setAutoRefresh(!autoRefresh)}
             className={autoRefresh ? "bg-green-500 hover:bg-green-600" : "border-coffee-200 text-coffee-600"}

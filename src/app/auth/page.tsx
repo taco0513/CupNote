@@ -14,8 +14,9 @@ import UnifiedButton from '../../components/ui/UnifiedButton'
 import { useAuth } from '../../contexts/AuthContext'
 import { logger } from '../../lib/logger'
 import { supabase } from '../../lib/supabase'
+import { AuthService } from '../../lib/supabase-service'
 
-type AuthMode = 'login' | 'signup'
+type AuthMode = 'login' | 'signup' | 'reset'
 
 interface AuthForm {
   email: string
@@ -59,8 +60,17 @@ function AuthPageContent() {
   }, [user, router, searchParams])
 
   const validateForm = () => {
-    if (!form.email || !form.password) {
-      return '이메일과 비밀번호를 입력해주세요'
+    if (!form.email) {
+      return '이메일을 입력해주세요'
+    }
+    
+    if (mode === 'reset') {
+      // 비밀번호 재설정 모드에서는 이메일만 필요
+      return null
+    }
+    
+    if (!form.password) {
+      return '비밀번호를 입력해주세요'
     }
     
     if (mode === 'signup') {
@@ -94,7 +104,14 @@ function AuthPageContent() {
     setMessage('')
     
     try {
-      if (mode === 'login') {
+      if (mode === 'reset') {
+        await AuthService.resetPassword(form.email)
+        setMessage('비밀번호 재설정 이메일을 보냈습니다. 이메일을 확인해주세요.')
+        setTimeout(() => {
+          setMode('login')
+          setMessage('')
+        }, 5000)
+      } else if (mode === 'login') {
         const result = await signIn(form.email, form.password)
         
         if (result.error) {
@@ -136,8 +153,12 @@ function AuthPageContent() {
     }
   }
 
-  const switchMode = () => {
-    setMode(mode === 'login' ? 'signup' : 'login')
+  const switchMode = (newMode?: AuthMode) => {
+    if (newMode) {
+      setMode(newMode)
+    } else {
+      setMode(mode === 'login' ? 'signup' : 'login')
+    }
     setError('')
     setMessage('')
     setForm({
@@ -242,14 +263,18 @@ function AuthPageContent() {
           </div>
           <h1 className="text-2xl font-bold text-coffee-800">CupNote</h1>
           <p className="text-coffee-600 text-sm">
-            {mode === 'login' ? '커피 기록 여정을 계속하세요' : '커피 기록 여정을 시작하세요'}
+            {mode === 'login' ? '커피 기록 여정을 계속하세요' : 
+             mode === 'signup' ? '커피 기록 여정을 시작하세요' :
+             '비밀번호를 재설정하세요'}
           </p>
         </div>
 
         <Card className="shadow-xl border-coffee-100">
           <CardHeader className="text-center">
             <CardTitle className="text-coffee-800">
-              {mode === 'login' ? '로그인' : '회원가입'}
+              {mode === 'login' ? '로그인' : 
+               mode === 'signup' ? '회원가입' : 
+               '비밀번호 재설정'}
             </CardTitle>
           </CardHeader>
           
@@ -294,31 +319,33 @@ function AuthPageContent() {
                 </div>
               </div>
               
-              {/* 비밀번호 */}
-              <div>
-                <label className="block text-sm font-medium text-coffee-700 mb-2">
-                  비밀번호
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-coffee-400" />
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    value={form.password}
-                    onChange={(e) => setForm(prev => ({ ...prev, password: e.target.value }))}
-                    className="w-full pl-10 pr-10 py-2 border border-coffee-200 rounded-lg focus:ring-2 focus:ring-coffee-500 focus:border-coffee-500"
-                    placeholder={mode === 'signup' ? '최소 6자 이상' : '비밀번호를 입력하세요'}
-                    data-testid="password-input"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-coffee-400 hover:text-coffee-600"
-                  >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
+              {/* 비밀번호 - 재설정 모드에서는 숨김 */}
+              {mode !== 'reset' && (
+                <div>
+                  <label className="block text-sm font-medium text-coffee-700 mb-2">
+                    비밀번호
+                  </label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-coffee-400" />
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      value={form.password}
+                      onChange={(e) => setForm(prev => ({ ...prev, password: e.target.value }))}
+                      className="w-full pl-10 pr-10 py-2 border border-coffee-200 rounded-lg focus:ring-2 focus:ring-coffee-500 focus:border-coffee-500"
+                      placeholder={mode === 'signup' ? '최소 6자 이상' : '비밀번호를 입력하세요'}
+                      data-testid="password-input"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-coffee-400 hover:text-coffee-600"
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
               
               {/* 회원가입시 비밀번호 확인 */}
               {mode === 'signup' && (
@@ -366,11 +393,11 @@ function AuthPageContent() {
                 {isLoading ? (
                   <div className="flex items-center justify-center space-x-2">
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                    <span>{mode === 'login' ? '로그인 중...' : '가입 중...'}</span>
+                    <span>{mode === 'login' ? '로그인 중...' : mode === 'signup' ? '가입 중...' : '전송 중...'}</span>
                   </div>
                 ) : (
                   <div className="flex items-center justify-center space-x-2">
-                    <span>{mode === 'login' ? '로그인' : '회원가입'}</span>
+                    <span>{mode === 'login' ? '로그인' : mode === 'signup' ? '회원가입' : '이메일 보내기'}</span>
                     <ArrowRight className="h-4 w-4" />
                   </div>
                 )}
@@ -379,15 +406,40 @@ function AuthPageContent() {
             
             {/* 모드 전환 */}
             <div className="mt-6 text-center">
-              <p className="text-coffee-600 text-sm">
-                {mode === 'login' ? '아직 계정이 없으신가요?' : '이미 계정이 있으신가요?'}
-              </p>
-              <button
-                onClick={switchMode}
-                className="text-coffee-500 hover:text-coffee-700 font-medium text-sm mt-1 transition-colors"
-              >
-                {mode === 'login' ? '회원가입하기' : '로그인하기'}
-              </button>
+              {mode === 'reset' ? (
+                <>
+                  <p className="text-coffee-600 text-sm">비밀번호가 기억나셨나요?</p>
+                  <button
+                    onClick={() => switchMode('login')}
+                    className="text-coffee-500 hover:text-coffee-700 font-medium text-sm mt-1 transition-colors"
+                  >
+                    로그인으로 돌아가기
+                  </button>
+                </>
+              ) : (
+                <>
+                  <p className="text-coffee-600 text-sm">
+                    {mode === 'login' ? '아직 계정이 없으신가요?' : '이미 계정이 있으신가요?'}
+                  </p>
+                  <button
+                    onClick={() => switchMode()}
+                    className="text-coffee-500 hover:text-coffee-700 font-medium text-sm mt-1 transition-colors"
+                  >
+                    {mode === 'login' ? '회원가입하기' : '로그인하기'}
+                  </button>
+                  
+                  {mode === 'login' && (
+                    <div className="mt-3">
+                      <button
+                        onClick={() => switchMode('reset')}
+                        className="text-coffee-400 hover:text-coffee-600 text-sm transition-colors"
+                      >
+                        비밀번호를 잊으셨나요?
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
             
             {/* 홈으로 돌아가기 */}

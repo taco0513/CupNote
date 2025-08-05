@@ -263,7 +263,7 @@ export function logError(error: CupNoteError | Error, context?: string) {
 
   // 개발 환경에서는 콘솔에 출력
   if (process.env.NODE_ENV === 'development') {
-    console.error('CupNote Error:', logData)
+    console.error('CupNote Error:', error.message || 'Unknown error', logData)
   }
 
   // 프로덕션에서는 에러 추적 서비스로 전송
