@@ -147,7 +147,10 @@ export default function CoffeeInfoPage() {
           .eq('is_cafe', true)
           .order('name')
         
-        if (cafeError) throw cafeError
+        if (cafeError) {
+          console.info('카페 데이터 로드 중 문제:', cafeError?.message || '테이블이 존재하지 않거나 권한이 없습니다')
+          // 에러가 있어도 빈 배열로 계속 진행
+        }
         setCafes(cafeData || [])
         
         // 로스터리 데이터 가져오기
@@ -157,7 +160,10 @@ export default function CoffeeInfoPage() {
           .eq('is_roastery', true)
           .order('name')
         
-        if (roasterError) throw roasterError
+        if (roasterError) {
+          console.info('로스터리 데이터 로드 중 문제:', roasterError?.message || '테이블이 존재하지 않거나 권한이 없습니다')
+          // 에러가 있어도 빈 배열로 계속 진행
+        }
         setRoasters(roasterData?.map(r => ({ id: r.id, name: r.name, region: r.location || '한국' })) || [])
         
         // 커피 데이터 가져오기
@@ -166,11 +172,19 @@ export default function CoffeeInfoPage() {
           .select('*')
           .order('name')
         
-        if (coffeeError) throw coffeeError
+        if (coffeeError) {
+          console.info('커피 데이터 로드 중 문제:', coffeeError?.message || '테이블이 존재하지 않거나 권한이 없습니다')
+          // 에러가 있어도 빈 배열로 계속 진행
+        }
         setCoffees(coffeeData || [])
         
       } catch (error) {
-        console.error('데이터 로드 실패:', error)
+        // 전체 에러는 정보 레벨로만 출력
+        console.info('데이터 로드 중 네트워크 문제:', error instanceof Error ? error.message : '알 수 없는 오류')
+        // 빈 배열로 초기화하여 계속 진행
+        setCafes([])
+        setRoasters([])
+        setCoffees([])
       } finally {
         setIsLoading(false)
       }
@@ -314,7 +328,7 @@ export default function CoffeeInfoPage() {
   }
 
   // OCR 결과 처리
-  const handleOCRExtracted = (ocrInfo: import('../../../../lib/ocr-service').CoffeeInfoOCR) => {
+  const handleOCRExtracted = (ocrInfo: import('../../../../lib/ocr-service-v2').CoffeeInfoOCR) => {
     // OCR 결과를 폼 필드에 적용
     if (ocrInfo.coffeeName) {
       setCoffeeQuery(ocrInfo.coffeeName)

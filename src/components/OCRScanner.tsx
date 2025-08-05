@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 
 import { Camera, Scan, X, FileImage, AlertCircle, CheckCircle, Loader2 } from 'lucide-react'
 
-import OCRService, { type OCRResult, type CoffeeInfoOCR } from '../lib/ocr-service'
+import OCRServiceV2, { type OCRResult, type CoffeeInfoOCR } from '../lib/ocr-service-v2'
 import { useNotification } from '../contexts/NotificationContext'
 
 interface OCRScannerProps {
@@ -55,7 +55,7 @@ export default function OCRScanner({
       if (selectedImages.length === 1) {
         // 단일 이미지 처리
         console.log('단일 이미지 OCR 시작')
-        ocrResult = await OCRService.extractText(
+        ocrResult = await OCRServiceV2.extractText(
           selectedImages[0],
           (progress) => {
             console.log('OCR 진행률:', progress * 100)
@@ -65,7 +65,7 @@ export default function OCRScanner({
       } else {
         // 다중 이미지 처리
         console.log('다중 이미지 OCR 시작')
-        ocrResult = await OCRService.extractTextFromMultipleImages(
+        ocrResult = await OCRServiceV2.extractTextFromMultipleImages(
           selectedImages,
           (progress, imageIndex) => {
             console.log(`OCR 진행률 (이미지 ${imageIndex + 1}):`, progress * 100)

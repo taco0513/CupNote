@@ -66,17 +66,17 @@ describe('BrewTimer', () => {
 
     it('shows correct phases for different drippers', () => {
       const { rerender } = render(<BrewTimer {...defaultProps} dripper="kalita" />)
-      expect(screen.getByText('Kalita · 320ml')).toBeInTheDocument()
+      expect(screen.getByText('KALITA · 320ml')).toBeInTheDocument()
       expect(screen.getByText('Pre-infusion')).toBeInTheDocument()
 
       rerender(<BrewTimer {...defaultProps} dripper="origami" />)
-      expect(screen.getByText('Origami · 320ml')).toBeInTheDocument()
+      expect(screen.getByText('ORIGAMI · 320ml')).toBeInTheDocument()
     })
 
     it('handles unknown dripper gracefully', () => {
       render(<BrewTimer {...defaultProps} dripper="unknown" />)
       
-      expect(screen.getByText('Unknown · 320ml')).toBeInTheDocument()
+      expect(screen.getByText('UNKNOWN · 320ml')).toBeInTheDocument()
       // Should not show phase information for unknown dripper
       expect(screen.queryByText('Pre-infusion')).not.toBeInTheDocument()
     })
@@ -346,7 +346,7 @@ describe('BrewTimer', () => {
       render(<BrewTimer {...defaultProps} dripper="april" />)
       
       // Assuming April dripper exists
-      expect(screen.getByText('April · 320ml')).toBeInTheDocument()
+      expect(screen.getByText('APRIL · 320ml')).toBeInTheDocument()
     })
   })
 

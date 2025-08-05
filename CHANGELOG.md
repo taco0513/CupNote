@@ -5,6 +5,45 @@ All notable changes to CupNote will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### 🚀 TestFlight Beta Release Preparation - 2025-08-05
+
+#### Added
+- **Coffee Crawler System**: Automated coffee product data collection
+  - Phase 1 & 2 crawler implementation with TypeScript
+  - Puppeteer-based web scraping with bot detection bypass
+  - Supabase integration for data storage
+  - Successfully collected 12 products from Unspecialty
+  - Support for Korean coffee roasteries
+
+- **OCR Service v2**: Complete server-side OCR implementation
+  - Removed client-side Tesseract.js dependency
+  - Multi-language support (Korean, English, Japanese)
+  - Enhanced accuracy for coffee labels and roaster notes
+  - Table/label format recognition improvements
+
+- **TestFlight Documentation**: Beta testing preparation
+  - Comprehensive deployment checklist
+  - Beta tester guide with instructions
+  - Known issues documentation
+
+#### Fixed
+- **iOS App Icon Issues**: Resolved validation errors
+  - Added required icon sizes (120x120, 152x152, 180x180)
+  - Removed alpha channel from 1024x1024 App Store icon
+  - Updated AppIcon.appiconset configuration
+
+- **Test Suite**: Fixed failing component tests
+  - LoadingSpinner test selector updates
+  - Component test compatibility with new design system
+
+#### Changed
+- **Dependencies**: Updated for production deployment
+  - Cleaned up package.json
+  - Updated iOS Podfile dependencies
+  - Removed unused development packages
+
 ## [1.3.0] - 2025-08-04
 
 ### 🎉 Added

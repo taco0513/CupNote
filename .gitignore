@@ -138,3 +138,11 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vercel
+
+# Google Cloud Vision API keys
+google-vision-key.json
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!next.config.json
