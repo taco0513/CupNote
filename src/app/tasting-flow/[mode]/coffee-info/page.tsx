@@ -25,33 +25,39 @@ import {
 import Navigation from '../../../../components/Navigation'
 import OCRScanner from '../../../../components/OCRScanner'
 import { isFeatureEnabled } from '../../../../config/feature-flags.config'
+import { supabase } from '../../../../lib/supabase'
 
 import type { TastingSession, TastingMode, CoffeeInfo } from '../../../../types/tasting-flow.types'
 
-// Sample coffee database (실제로는 Supabase에서 가져올 데이터)
-const SAMPLE_CAFES = [
-  { id: '1', name: '블루보틀 성수점', location: '성수동' },
-  { id: '2', name: '앤썸 성수점', location: '성수동' },
-  { id: '3', name: '테라로사 성수점', location: '성수동' },
-  { id: '4', name: '프릳츠 성수점', location: '성수동' },
-  { id: '5', name: '커피 컨티뉴엄', location: '홍대' },
-]
+// Supabase에서 가져올 데이터 타입 정의
+interface CafeData {
+  id: string
+  name: string
+  location: string
+}
 
-const SAMPLE_ROASTERS = [
-  { id: '1', name: '블루보틀', region: '미국' },
-  { id: '2', name: '앤썸', region: '한국' },
-  { id: '3', name: '테라로사', region: '한국' },
-  { id: '4', name: '프릳츠', region: '독일' },
-  { id: '5', name: '파이브브루잉', region: '한국' },
-]
+interface RoasterData {
+  id: string
+  name: string
+  region: string
+}
 
-const SAMPLE_COFFEES = [
-  { id: '1', name: '에티오피아 예가체프', roasterId: '1', cafeId: '1', origin: '에티오피아', variety: '헤어룸', processing: '워시드', roastLevel: '미디엄', altitude: 1800 },
-  { id: '2', name: '과테말라 안티구아', roasterId: '5', cafeId: '2', origin: '과테말라', variety: '부르봉', processing: '내추럴', roastLevel: '미디엄 다크', altitude: 1600 },
-  { id: '3', name: '콜롬비아 수프레모', roasterId: '2', cafeId: '2', origin: '콜롬비아', variety: '카투라', processing: '워시드', roastLevel: '미디엄', altitude: 1400 },
-  { id: '4', name: '케냐 AA', roasterId: '3', cafeId: '3', origin: '케냐', variety: 'SL28', processing: '워시드', roastLevel: '미디엄 라이트', altitude: 1700 },
-  { id: '5', name: '브라질 산토스', roasterId: '4', cafeId: '4', origin: '브라질', variety: '부르봉', processing: '펄프드 내추럴', roastLevel: '다크', altitude: 1200 },
-]
+interface CoffeeData {
+  id: string
+  name: string
+  roaster_id?: string
+  cafe_id?: string
+  origin?: string
+  variety?: string
+  processing?: string
+  roast_level?: string
+  altitude?: number
+}
+
+// 임시 빈 데이터 (Supabase 로드 전)
+const SAMPLE_CAFES: CafeData[] = []
+const SAMPLE_ROASTERS: RoasterData[] = []
+const SAMPLE_COFFEES: CoffeeData[] = []
 
 export default function CoffeeInfoPage() {
   const router = useRouter()
@@ -88,9 +94,15 @@ export default function CoffeeInfoPage() {
   const [roasterQuery, setRoasterQuery] = useState('')
   const [coffeeQuery, setCoffeeQuery] = useState('')
   
-  const [selectedCafe, setSelectedCafe] = useState<typeof SAMPLE_CAFES[0] | null>(null)
-  const [selectedRoaster, setSelectedRoaster] = useState<typeof SAMPLE_ROASTERS[0] | null>(null)
-  const [selectedCoffee, setSelectedCoffee] = useState<typeof SAMPLE_COFFEES[0] | null>(null)
+  const [selectedCafe, setSelectedCafe] = useState<CafeData | null>(null)
+  const [selectedRoaster, setSelectedRoaster] = useState<RoasterData | null>(null)
+  const [selectedCoffee, setSelectedCoffee] = useState<CoffeeData | null>(null)
+  
+  // Supabase 데이터 상태
+  const [cafes, setCafes] = useState<CafeData[]>([])
+  const [roasters, setRoasters] = useState<RoasterData[]>([])
+  const [coffees, setCoffees] = useState<CoffeeData[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   
   const [showCafeResults, setShowCafeResults] = useState(false)
   const [showRoasterResults, setShowRoasterResults] = useState(false)
@@ -121,25 +133,70 @@ export default function CoffeeInfoPage() {
   
   // OCR 관련 상태
   const [showOCRScanner, setShowOCRScanner] = useState(false)
+  
+  // Supabase에서 데이터 가져오기
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true)
+        
+        // 카페 데이터 가져오기
+        const { data: cafeData, error: cafeError } = await supabase
+          .from('cafe_roasteries')
+          .select('id, name, location')
+          .eq('is_cafe', true)
+          .order('name')
+        
+        if (cafeError) throw cafeError
+        setCafes(cafeData || [])
+        
+        // 로스터리 데이터 가져오기
+        const { data: roasterData, error: roasterError } = await supabase
+          .from('cafe_roasteries')
+          .select('id, name, location')
+          .eq('is_roastery', true)
+          .order('name')
+        
+        if (roasterError) throw roasterError
+        setRoasters(roasterData?.map(r => ({ id: r.id, name: r.name, region: r.location || '한국' })) || [])
+        
+        // 커피 데이터 가져오기
+        const { data: coffeeData, error: coffeeError } = await supabase
+          .from('coffees')
+          .select('*')
+          .order('name')
+        
+        if (coffeeError) throw coffeeError
+        setCoffees(coffeeData || [])
+        
+      } catch (error) {
+        console.error('데이터 로드 실패:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    
+    fetchData()
+  }, [])
 
   // Cascade 검색 결과 필터링
-  const cafeResults = SAMPLE_CAFES.filter(cafe => 
+  const cafeResults = cafes.filter(cafe => 
     cafe.name.toLowerCase().includes(cafeQuery.toLowerCase())
   )
 
-  const roasterResults = SAMPLE_ROASTERS.filter(roaster => 
+  const roasterResults = roasters.filter(roaster => 
     roaster.name.toLowerCase().includes(roasterQuery.toLowerCase())
   )
 
-  const coffeeResults = SAMPLE_COFFEES.filter(coffee => {
+  const coffeeResults = coffees.filter(coffee => {
     const matchesName = coffee.name.toLowerCase().includes(coffeeQuery.toLowerCase())
-    const matchesRoaster = selectedRoaster ? coffee.roasterId === selectedRoaster.id : true
-    const matchesCafe = selectedCafe ? coffee.cafeId === selectedCafe.id : true
+    const matchesRoaster = selectedRoaster ? coffee.roaster_id === selectedRoaster.id : true
+    const matchesCafe = selectedCafe ? coffee.cafe_id === selectedCafe.id : true
     return matchesName && matchesRoaster && matchesCafe
   })
 
   // Cascade 핸들러 함수들
-  const handleCafeSelect = (cafe: typeof SAMPLE_CAFES[0]) => {
+  const handleCafeSelect = (cafe: CafeData) => {
     setSelectedCafe(cafe)
     setCafeQuery(cafe.name)
     setManualInput(prev => ({ ...prev, cafeName: cafe.name }))
@@ -152,7 +209,7 @@ export default function CoffeeInfoPage() {
     setCoffeeQuery('')
   }
 
-  const handleRoasterSelect = (roaster: typeof SAMPLE_ROASTERS[0]) => {
+  const handleRoasterSelect = (roaster: RoasterData) => {
     setSelectedRoaster(roaster)
     setRoasterQuery(roaster.name)
     setManualInput(prev => ({ ...prev, roasterName: roaster.name }))
@@ -163,7 +220,7 @@ export default function CoffeeInfoPage() {
     setCoffeeQuery('')
   }
 
-  const handleCoffeeSelect = (coffee: typeof SAMPLE_COFFEES[0]) => {
+  const handleCoffeeSelect = (coffee: CoffeeData) => {
     setSelectedCoffee(coffee)
     setCoffeeQuery(coffee.name)
     setManualInput(prev => ({ ...prev, coffeeName: coffee.name }))
