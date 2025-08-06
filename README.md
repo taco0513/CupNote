@@ -10,19 +10,20 @@
 
 ## 🎯 프로젝트 소개
 
-**CupNote v1.3.0**는 스페셜티 커피 애호가들을 위한 AI 기반 개인화 커피 기록 & 커뮤니티 플랫폼입니다.
+**CupNote v1.4.0**는 스페셜티 커피 애호가들을 위한 iOS TestFlight 출시 준비 완료된 커피 기록 & 커뮤니티 플랫폼입니다.
 
 전문가의 복잡한 용어에 부담을 느끼지 않고, 자신만의 언어로 커피를 기록하고 다른 사람들과 경험을 나눌 수 있습니다.
 
 ### 🌐 라이브 서비스
 - **프로덕션 URL**: https://mycupnote.com
-- **상태**: ✅ v1.3.0 AI 고급 분석 대시보드 추가 (2025-08-04)
+- **상태**: ✅ v1.4.0 iOS TestFlight 런칭 준비 완료 (2025-08-06)
 - **기능**: 완전한 PWA, 하이브리드 디자인, AI 분석 대시보드, 알림 시스템, 실시간 DB 연동
 - **최근 업데이트**: AI 기반 고급 분석 대시보드 - 맛 프로파일 레이더 차트 & AI 추천 시스템
 
-### 📱 TestFlight Beta (v1.2.0)
-- **상태**: 🚀 준비 중 (2025-08-05)
-- **빌드**: iOS App 아이콘 설정 완료, Validation 통과
+### 📱 TestFlight Beta (v1.4.0)
+- **상태**: ✅ 런칭 준비 완료 (2025-08-06)
+- **iOS 버전**: iPhone 전용 (iPad 지원 제거)
+- **빌드**: Marketing Version 1.4.0 (Build 4), 모든 TestFlight 검증 통과
 - **베타 문서**: [Beta Tester Guide](docs/current/beta-tester-guide.md), [Deployment Checklist](docs/current/testflight-deployment-checklist.md)
 
 ### 핵심 가치

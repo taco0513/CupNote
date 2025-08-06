@@ -5,9 +5,37 @@ All notable changes to CupNote will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.4.0] - 2025-08-06
 
-### 🚀 TestFlight Beta Release Preparation - 2025-08-05
+### 🚀 iOS TestFlight 런칭 준비 완료
+
+#### Added
+- **TypeScript Strict Checking**: noImplicitAny, noImplicitReturns 활성화로 타입 안전성 강화
+- **Specialized Error Boundaries**: AsyncErrorBoundary, FormErrorBoundary, DataErrorBoundary 구현
+- **CSP Security Headers**: Content Security Policy 완전 구현으로 XSS/CSRF 방어 강화
+- **Realtime Infrastructure**: Supabase Realtime Manager 중앙 관리 시스템
+- **Core Web Vitals Tracking**: LCP, CLS, INP, TTFB 자동 추적 및 RUM 구현
+- **iOS Deployment Documentation**: 완전한 TestFlight 배포 가이드 작성
+
+#### Changed
+- **iOS App Configuration**: iPhone 전용 앱으로 설정 (TARGETED_DEVICE_FAMILY = "1")
+- **Version Management**: iOS Marketing Version 1.4.0, Build Version 4로 업데이트
+- **Achievement Types**: 3개 중복 타입 정의를 `/src/types/achievement.ts` 단일 소스로 통합
+- **Package Version**: package.json 버전을 1.4.0으로 업데이트
+
+#### Removed
+- **iPad Support**: 모든 iPad 관련 아이콘, 설정, 인터페이스 완전 제거
+- **Invalid UIBackgroundModes**: background-processing, background-fetch 제거
+- **Duplicate Type Definitions**: Achievement 타입 중복 제거로 코드 일관성 향상
+
+#### Fixed
+- **App Store Connect Validation**: 모든 TestFlight 업로드 검증 오류 해결 완료
+- **TypeScript Errors**: strict checking 활성화로 컴파일 에러 완전 해결
+- **iPad Icon Requirements**: 167x167 iPad Pro 아이콘 요구사항 해결
+
+## [1.3.5] - 2025-08-05
+
+### 🚀 TestFlight Beta Release Preparation
 
 #### Added
 - **Coffee Crawler System**: Automated coffee product data collection
