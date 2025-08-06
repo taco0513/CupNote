@@ -131,7 +131,6 @@ export class PerformanceMonitor {
     const startTime = startMark ? this.marks.get(startMark) || 0 : 0
     const duration = endTime - startTime
 
-    console.log(`⏱️ ${name}: ${duration.toFixed(2)}ms`)
     return duration
   }
 
@@ -151,7 +150,6 @@ export function cleanupMemory() {
   }
 
   // 만료된 비동기 캐시 정리는 각 promise에서 자동으로 처리됨
-  console.log('🧹 Memory cleanup completed')
 }
 
 // 주기적 메모리 정리 (5분마다)

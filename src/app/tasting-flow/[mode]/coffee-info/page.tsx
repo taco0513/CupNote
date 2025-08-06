@@ -62,17 +62,20 @@ const SAMPLE_COFFEES: CoffeeData[] = []
 export default function CoffeeInfoPage() {
   const router = useRouter()
   const params = useParams()
-  const mode = params.mode as TastingMode
+  const mode = params?.mode as TastingMode
 
-  // Feature flag 체크
+  // Feature flag 체크 및 세션 초기화
   useEffect(() => {
+    // 클라이언트 사이드에서만 실행
+    if (typeof window === 'undefined') return
+
     if (!isFeatureEnabled('ENABLE_NEW_TASTING_FLOW')) {
       router.push('/mode-selection')
       return
     }
 
     // 유효한 모드 체크
-    if (mode !== 'cafe' && mode !== 'homecafe') {
+    if (!mode || (mode !== 'cafe' && mode !== 'homecafe')) {
       router.push('/tasting-flow')
       return
     }
@@ -275,10 +278,11 @@ export default function CoffeeInfoPage() {
     const newErrors: Record<string, string> = {}
 
     // 모드별 필수 필드 검증
-    if (mode === 'cafe' && !manualInput.cafeName.trim()) {
-      newErrors.cafeName = '카페명을 입력해주세요'
+    // 카페명은 선택사항으로 변경 (카페모드만)
+    // 로스터명을 필수로 변경 (모든 모드)
+    if (!manualInput.roasterName.trim()) {
+      newErrors.roasterName = '로스터명을 입력해주세요'
     }
-    // 로스터리는 선택사항이므로 검증하지 않음
     if (!manualInput.coffeeName.trim()) {
       newErrors.coffeeName = '커피명을 입력해주세요'
     }
@@ -321,7 +325,7 @@ export default function CoffeeInfoPage() {
 
     // 다음 페이지로 이동
     if (mode === 'homecafe') {
-      router.push('/tasting-flow/homecafe/brew-setup')
+      router.push(`/tasting-flow/${mode}/brew-setup`)
     } else {
       router.push(`/tasting-flow/${mode}/flavor-selection`)
     }
@@ -360,6 +364,17 @@ export default function CoffeeInfoPage() {
     }
     
     setShowOCRScanner(false)
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-neutral-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-coffee-600 mx-auto mb-4"></div>
+          <p className="text-coffee-600">로딩 중...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -428,7 +443,7 @@ export default function CoffeeInfoPage() {
                 <div className="relative">
                   <label className="block text-sm font-medium text-coffee-700 mb-2">
                     <MapPin className="inline h-4 w-4 mr-1" />
-                    카페명 *
+                    카페명 (선택)
                   </label>
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-coffee-400" />
@@ -442,7 +457,7 @@ export default function CoffeeInfoPage() {
                       }}
                       onFocus={() => setShowCafeResults(true)}
                       onBlur={() => setTimeout(() => setShowCafeResults(false), 200)}
-                      placeholder="카페명을 검색하거나 입력해주세요"
+                      placeholder="카페명을 검색하거나 입력해주세요 (선택사항)"
                       className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent bg-white/80 backdrop-blur-sm text-coffee-800 placeholder-coffee-400 transition-all duration-200 ${
                         errors.cafeName ? 'border-red-500' : 'border-coffee-200/50'
                       }`}
@@ -472,7 +487,7 @@ export default function CoffeeInfoPage() {
               <div className="relative">
                 <label className="block text-sm font-medium text-coffee-700 mb-2">
                   <Factory className="inline h-4 w-4 mr-1" />
-                  로스터명 (선택)
+                  로스터명 *
                 </label>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-coffee-400" />
@@ -486,7 +501,7 @@ export default function CoffeeInfoPage() {
                     }}
                     onFocus={() => setShowRoasterResults(true)}
                     onBlur={() => setTimeout(() => setShowRoasterResults(false), 200)}
-                    placeholder="로스터명을 검색하거나 입력해주세요"
+                    placeholder="로스터명을 검색하거나 입력해주세요 (필수)"
                     className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-coffee-500 focus:border-transparent bg-white/80 backdrop-blur-sm text-coffee-800 placeholder-coffee-400 transition-all duration-200 ${
                       errors.roasterName ? 'border-red-500' : 'border-coffee-200/50'
                     }`}
@@ -724,16 +739,16 @@ export default function CoffeeInfoPage() {
           <button
             onClick={handleNext}
             className="w-full py-4 px-8 bg-coffee-500 text-white rounded-xl hover:bg-coffee-600 transition-all duration-200 hover:scale-[1.02] text-lg font-medium flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
-            disabled={!temperature || !manualInput.coffeeName || (mode === 'cafe' && !manualInput.cafeName)}
+            disabled={!temperature || !manualInput.coffeeName || !manualInput.roasterName}
           >
             다음 단계
             <ArrowRight className="h-5 w-5 ml-2" />
           </button>
           
           {/* 필수 입력 안내 */}
-          {(!temperature || !manualInput.coffeeName || (mode === 'cafe' && !manualInput.cafeName)) && (
+          {(!temperature || !manualInput.coffeeName || !manualInput.roasterName) && (
             <p className="mt-2 text-sm text-red-600 text-center">
-              필수 정보를 모두 입력해주세요
+              필수 정보를 모두 입력해주세요 (로스터명, 커피명, 온도)
             </p>
           )}
         </div>

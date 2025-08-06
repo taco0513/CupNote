@@ -20,7 +20,6 @@ export class OfflineSync {
 
     // Sync when coming back online
     window.addEventListener('online', () => {
-      console.log('Back online, syncing...')
       this.sync()
     })
   }
@@ -36,12 +35,10 @@ export class OfflineSync {
   // Manual sync
   async sync(): Promise<{ synced: number; failed: number }> {
     if (this.syncInProgress) {
-      console.log('Sync already in progress')
       return { synced: 0, failed: 0 }
     }
 
     if (!navigator.onLine) {
-      console.log('Offline, skipping sync')
       return { synced: 0, failed: 0 }
     }
 
@@ -55,13 +52,11 @@ export class OfflineSync {
         data: { user },
       } = await supabase.auth.getUser()
       if (!user) {
-        console.log('No user, skipping sync')
         return { synced: 0, failed: 0 }
       }
 
       // Get pending records
       const pendingRecords = await offlineStorage.getPendingRecords(user.id)
-      console.log(`Found ${pendingRecords.length} pending records`)
 
       // Sync each record
       for (const record of pendingRecords) {
@@ -76,7 +71,6 @@ export class OfflineSync {
             // Update local record as synced
             await offlineStorage.updateSyncStatus(record.id, 'synced')
             synced++
-            console.log(`Synced record: ${record.id}`)
           } else {
             throw new Error('Failed to save to Supabase')
           }
@@ -99,7 +93,6 @@ export class OfflineSync {
         await offlineStorage.saveRecord(record, 'synced')
       }
 
-      console.log(`Sync complete: ${synced} synced, ${failed} failed`)
 
       // Notify UI about sync completion
       window.dispatchEvent(

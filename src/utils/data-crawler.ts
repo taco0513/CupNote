@@ -354,7 +354,6 @@ export async function crawlRoasteryCoffees(
  * Can be triggered by cron job or API endpoint
  */
 export async function scheduledCrawl(): Promise<void> {
-  console.log('🕷️ Starting scheduled crawl...')
 
   // Define crawl tasks
   const tasks = [
@@ -365,7 +364,6 @@ export async function scheduledCrawl(): Promise<void> {
   ]
 
   for (const task of tasks) {
-    console.log(`Crawling: ${task.query} from ${task.source}`)
     
     const result = await batchCrawlCafes({
       source: task.source,
@@ -374,13 +372,11 @@ export async function scheduledCrawl(): Promise<void> {
       limit: 20
     })
 
-    console.log(`Found ${result.summary.unique_cafes_found} unique cafes`)
     
     // Add delay to respect rate limits
     await new Promise(resolve => setTimeout(resolve, 2000))
   }
 
-  console.log('✅ Scheduled crawl completed')
 }
 
 /**

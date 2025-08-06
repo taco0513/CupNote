@@ -48,34 +48,28 @@ export default function OCRScanner({
     setCurrentImageIndex(0)
 
     try {
-      console.log('OCR 처리 시작, 이미지 개수:', selectedImages.length)
       
       let ocrResult: OCRResult
 
       if (selectedImages.length === 1) {
         // 단일 이미지 처리
-        console.log('단일 이미지 OCR 시작')
         ocrResult = await OCRServiceV2.extractText(
           selectedImages[0],
           (progress) => {
-            console.log('OCR 진행률:', progress * 100)
             setProgress(progress * 100)
           }
         )
       } else {
         // 다중 이미지 처리
-        console.log('다중 이미지 OCR 시작')
         ocrResult = await OCRServiceV2.extractTextFromMultipleImages(
           selectedImages,
           (progress, imageIndex) => {
-            console.log(`OCR 진행률 (이미지 ${imageIndex + 1}):`, progress * 100)
             setProgress(progress * 100)
             setCurrentImageIndex(imageIndex)
           }
         )
       }
 
-      console.log('OCR 결과:', ocrResult)
       setResult(ocrResult)
       
       if (Object.keys(ocrResult.extractedInfo).length > 0) {
@@ -108,9 +102,9 @@ export default function OCRScanner({
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] flex flex-col overflow-hidden">
         {/* 헤더 */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 flex-shrink-0">
           <div className="flex items-center space-x-2">
             <Scan className="h-5 w-5 text-coffee-600" />
             <h2 className="text-lg font-semibold text-coffee-800">
@@ -125,7 +119,15 @@ export default function OCRScanner({
           </button>
         </div>
 
-        <div className="p-4 space-y-4">
+        {/* 스크롤 가능한 컨텐츠 영역 - iOS에서도 확실히 스크롤되도록 개선 */}
+        <div 
+          className="overflow-y-auto flex-1 -webkit-overflow-scrolling-touch" 
+          style={{ 
+            WebkitOverflowScrolling: 'touch',
+            minHeight: '0px'
+          }}
+        >
+          <div className="p-4 space-y-4">
           {/* 안내 메시지 */}
           <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
             <div className="flex items-start space-x-2">
@@ -256,7 +258,10 @@ export default function OCRScanner({
               {/* 추출된 정보 */}
               <div className="space-y-2">
                 <h3 className="text-sm font-medium text-gray-700">추출된 정보</h3>
-                <div className="bg-gray-50 rounded-lg p-3 space-y-2">
+                <div 
+                  className="bg-gray-50 rounded-lg p-3 space-y-2 max-h-48 overflow-y-auto -webkit-overflow-scrolling-touch"
+                  style={{ WebkitOverflowScrolling: 'touch' }}
+                >
                   {Object.entries(result.extractedInfo).map(([key, value]) => {
                     if (!value) return null
                     
@@ -274,12 +279,17 @@ export default function OCRScanner({
                     return key === 'notes' ? (
                       <div key={key} className="pt-2 border-t border-gray-200">
                         <span className="text-xs text-gray-600">{labels[key]}</span>
-                        <p className="text-sm font-medium text-gray-800 mt-1">{value}</p>
+                        <div 
+                          className="text-sm font-medium text-gray-800 mt-1 whitespace-pre-wrap max-h-24 overflow-y-auto -webkit-overflow-scrolling-touch"
+                          style={{ WebkitOverflowScrolling: 'touch' }}
+                        >
+                          {value}
+                        </div>
                       </div>
                     ) : (
-                      <div key={key} className="flex justify-between items-center">
-                        <span className="text-xs text-gray-600">{labels[key]}</span>
-                        <span className="text-sm font-medium text-gray-800">{value}</span>
+                      <div key={key} className="flex justify-between items-start gap-2">
+                        <span className="text-xs text-gray-600 flex-shrink-0">{labels[key]}</span>
+                        <span className="text-sm font-medium text-gray-800 text-right break-words">{value}</span>
                       </div>
                     )
                   })}
@@ -293,7 +303,7 @@ export default function OCRScanner({
               </div>
 
               {/* 확인 버튼 */}
-              <div className="flex space-x-2">
+              <div className="flex space-x-2 pt-2">
                 <button
                   onClick={() => {
                     setResult(null)

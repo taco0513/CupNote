@@ -578,19 +578,13 @@ export const calculateEnhancedMatchScore = (
   roasterNote: string
 ): MatchScoreResult => {
   
-  console.log('🚀 Enhanced Match Score v2.0 시작')
-  console.log('향미 입력:', userFlavors)
-  console.log('감각 입력:', userExpressions)
-  console.log('로스터 노트:', roasterNote ? roasterNote.substring(0, 100) + '...' : '없음')
   
   // 1. 향미 매칭 계산 (70% 가중치)
   const flavorResult = calculateEnhancedFlavorMatching(userFlavors, roasterNote)
-  console.log('향미 매칭 결과:', flavorResult.score, '점, 매치:', flavorResult.matches)
   
   // 2. 감각 매칭 계산 (30% 가중치)
   const flatUserExpressions = flattenUserExpressions(userExpressions)
   const sensoryResult = calculateEnhancedSensoryMatching(flatUserExpressions, roasterNote)
-  console.log('감각 매칭 결과:', sensoryResult.score, '점, 매치:', sensoryResult.matches)
   
   // 3. 가중평균으로 최종 점수 계산
   const finalScore = Math.round(
@@ -612,7 +606,6 @@ export const calculateEnhancedMatchScore = (
     avgConfidence
   )
   
-  console.log('🎯 최종 Enhanced 점수:', finalScore, '점, 신뢰도:', Math.round(avgConfidence * 100) + '%')
   
   return {
     finalScore,

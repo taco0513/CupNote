@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('=== OCR Test API 시작 ===')
     
     const formData = await request.formData()
     const image = formData.get('image') as File
@@ -15,7 +14,6 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    console.log('✅ 이미지 수신:', image.size, 'bytes', image.type)
     
     // Google Vision API 직접 호출 (REST API)
     const GOOGLE_VISION_API_KEY = process.env.GOOGLE_VISION_API_KEY
@@ -23,7 +21,6 @@ export async function POST(request: NextRequest) {
     
     if (useGoogleVision) {
       try {
-        console.log('🔍 Google Vision API 테스트')
         
         // 이미지를 base64로 변환
         const buffer = Buffer.from(await image.arrayBuffer())
@@ -39,7 +36,6 @@ export async function POST(request: NextRequest) {
         
         if (detections && detections.length > 0) {
           const extractedText = detections[0].description || ''
-          console.log('✅ OCR 성공, 텍스트 길이:', extractedText.length)
           
           return NextResponse.json({
             success: true,
@@ -63,7 +59,6 @@ export async function POST(request: NextRequest) {
     }
     
     // 폴백: 시뮬레이션 모드
-    console.log('🔄 시뮬레이션 모드')
     return NextResponse.json({
       success: true,
       text: 'Simulated OCR Text',

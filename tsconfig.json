@@ -21,8 +21,21 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "target": "ES2017"
+    "target": "ES2017",
+    
+    // 🔧 Enhanced Type Checking (Progressive Enhancement)
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    // "noImplicitOverride": true,  // TODO: Enable after fixing override issues
+    // "noUncheckedIndexedAccess": true,  // TODO: Enable after fixing array access
+    // "exactOptionalPropertyTypes": true,  // TODO: Enable after fixing optional props
+    "noPropertyAccessFromIndexSignature": false,
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    "noFallthroughCasesInSwitch": true
+    // "noUncheckedSideEffectImports": true  // TODO: Enable when Next.js supports it
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "src/test", "**/*.test.*", "**/*.spec.*", "vitest.config.ts", "playwright.config.ts", "e2e/**/*", "ai-workflow-playbook/**/*", "scripts/**/*"]
+  "exclude": ["node_modules", "src/test", "**/*.test.*", "**/*.spec.*", "vitest.config.ts", "playwright.config.ts", "e2e/**/*", "ai-workflow-playbook/**/*", "scripts/**/*", "archive/**/*", "CupNote-Mobile/**/*", "CupNote-Dashboard/**/*"]
 }

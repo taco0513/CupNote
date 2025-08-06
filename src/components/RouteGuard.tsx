@@ -27,7 +27,6 @@ export default function RouteGuard({ children }: { children: React.ReactNode }) 
     if (pathname.includes('mode=lab') || pathname.includes('mode=pro')) {
       const url = new URL(window.location.href)
       url.searchParams.set('mode', 'homecafe')
-      console.log(`🔄 Redirecting Lab/Pro mode to HomeCafe`)
       router.replace(url.pathname + url.search)
       return
     }

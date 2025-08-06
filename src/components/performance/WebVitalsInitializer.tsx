@@ -31,7 +31,6 @@ export default function WebVitalsInitializer() {
           monitor.start()
           
           if (process.env.NODE_ENV === 'development') {
-            console.log('📦 Bundle performance monitoring initialized')
           }
         } catch (error) {
           console.warn('Failed to initialize bundle monitoring:', error)
@@ -44,8 +43,6 @@ export default function WebVitalsInitializer() {
   
   // 개발 모드에서만 초기화 상태 표시
   if (process.env.NODE_ENV === 'development' && isInitialized) {
-    console.log('🚀 Enhanced RUM monitoring is active')
-    console.log('📊 Features: Web Vitals, User Interactions, Bundle Performance, Memory Usage')
   }
   
   // 이 컴포넌트는 UI를 렌더링하지 않습니다

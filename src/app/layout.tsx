@@ -148,7 +148,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="alternate icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/icons/apple-icon-180x180.png" />
       </head>
-      <body className="min-h-screen bg-gradient-to-br from-background to-background-secondary antialiased">
+      <body className="bg-gradient-to-br from-background to-background-secondary antialiased">
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -162,7 +162,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 if (isInAppMode) {
                   // Add PWA class to body
                   document.body.classList.add('pwa-mode');
-                  console.log('PWA Mode Active - Navigation Override Enabled');
                   
                   // Force all same-origin navigation to stay in PWA
                   document.addEventListener('click', function(e) {
@@ -234,7 +233,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   window.addEventListener('load', function() {
                     navigator.serviceWorker.register('/sw.js')
                       .then(function(registration) {
-                        console.log('CupNote SW: Registration successful');
                         
                         // Force update if new version available
                         registration.addEventListener('updatefound', function() {
@@ -244,7 +242,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                               // iOS에서 postMessage가 실패할 수 있으므로 try-catch로 감싸기
                               newWorker.postMessage({ type: 'SKIP_WAITING' });
                             } catch (error) {
-                              console.log('CupNote SW: Skip waiting message failed (iOS compatibility)', error);
                               // iOS에서는 페이지 새로고침으로 대체
                               if (confirm('새 버전이 있습니다. 페이지를 새로고침하시겠습니까?')) {
                                 window.location.reload();
@@ -254,7 +251,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         });
                       })
                       .catch(function(error) {
-                        console.log('CupNote SW: Registration failed', error);
                       });
                   });
                 }
@@ -270,7 +266,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <SearchProvider>
                   <IOSPullToRefreshPreventer />
                   <AppHeader />
-                  <div className="pt-16 pb-16 md:pt-0 md:pb-0 safe-area-inset">{children}</div>
+                  {children}
                   <MobileNavigation />
                   <NotificationContainer />
                   <OnboardingTrigger />

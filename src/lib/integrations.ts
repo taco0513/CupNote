@@ -176,15 +176,12 @@ export function initializePerformanceMonitoring() {
   const observer = new PerformanceObserver((list) => {
     list.getEntries().forEach((entry) => {
       if (entry.entryType === 'largest-contentful-paint') {
-        console.log('LCP:', entry.startTime)
       }
       
       if (entry.entryType === 'first-input') {
-        console.log('FID:', (entry as any).processingStart - entry.startTime)
       }
       
       if (entry.entryType === 'layout-shift') {
-        console.log('CLS:', (entry as any).value)
       }
     })
   })
@@ -274,7 +271,6 @@ export function initializePerformanceOptimizations() {
     head.appendChild(link)
   }
 
-  console.log('Performance optimizations applied')
 }
 
 // 전체 초기화 함수
@@ -287,8 +283,6 @@ export function initializeApp() {
   
   // 개발 모드에서만 콘솔 출력
   if (process.env.NODE_ENV === 'development') {
-    console.log('CupNote initialized with settings:', settings)
-    console.log('Advanced features:', advancedFeatures)
   }
   
   return { ...settings, ...advancedFeatures }

@@ -23,7 +23,7 @@ export default function NotFound() {
 
           {/* Title */}
           <h1 className="text-2xl font-bold text-coffee-800 mb-4">
-            페이지를 찾을 수 없어요
+            페이지를 찾을 수 없습니다
           </h1>
 
           {/* Description */}

@@ -99,12 +99,10 @@ function useWebVitalsOptimization() {
       list.getEntries().forEach((entry) => {
         // Log LCP improvements
         if (entry.entryType === 'largest-contentful-paint') {
-          console.log('✅ LCP Optimized:', entry.startTime, 'ms')
         }
         
         // Log FID improvements  
         if (entry.entryType === 'first-input') {
-          console.log('✅ FID Optimized:', (entry as any).processingStart - entry.startTime, 'ms')
         }
       })
     })

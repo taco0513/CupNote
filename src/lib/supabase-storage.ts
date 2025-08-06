@@ -14,7 +14,6 @@ export class SupabaseStorage {
         data: { user },
       } = await supabase.auth.getUser()
       if (!user) {
-        console.log('No authenticated user, checking for guest records')
         return await this.getGuestRecords()
       }
 
@@ -87,7 +86,6 @@ export class SupabaseStorage {
       } = await supabase.auth.getUser()
       // 사용자가 로그인되어 있지 않은 경우 게스트 기록에서 찾기
       if (!user) {
-        console.log('게스트 모드: 로컬 스토리지에서 기록 검색')
         return await this.getGuestRecordById(id)
       }
 
@@ -152,26 +150,20 @@ export class SupabaseStorage {
     newAchievements: string[]
   }> {
     try {
-      console.log('addRecordWithAchievements 시작')
       const {
         data: { user },
       } = await supabase.auth.getUser()
       
       // 사용자가 로그인되어 있지 않은 경우 게스트 모드로 처리
       if (!user) {
-        console.log('사용자가 로그인되어 있지 않음 - 게스트 모드로 처리')
         return await this.handleGuestRecord(record)
       }
-      console.log('사용자 확인됨:', user.id)
 
       // Initialize achievements for new users
-      console.log('성취 시스템 초기화 중...')
       await SupabaseAchievements.initializeUserAchievements(user.id)
 
       // Add the record
-      console.log('기록 추가 시도 중...')
       const newRecord = await this.addRecord(record)
-      console.log('addRecord 결과:', newRecord)
       
       if (!newRecord) {
         console.error('addRecord가 null을 반환했습니다')
@@ -179,9 +171,7 @@ export class SupabaseStorage {
       }
 
       // Update achievements
-      console.log('성취 업데이트 중...')
       const newAchievements = await SupabaseAchievements.updateAchievements(user.id)
-      console.log('성취 업데이트 완료:', newAchievements)
 
       return { record: newRecord, newAchievements }
     } catch (error) {
@@ -196,11 +186,9 @@ export class SupabaseStorage {
     try {
       const guestUserId = localStorage.getItem('cupnote-guest-id')
       if (!guestUserId) {
-        console.log('게스트 ID가 없음, 빈 배열 반환')
         return []
       }
 
-      console.log('게스트 기록 조회:', guestUserId)
       const offlineRecords = await offlineStorage.getRecords(guestUserId)
       return offlineRecords.map(({ syncStatus, syncError, lastAttempt, ...record }) => record)
     } catch (error) {
@@ -214,11 +202,9 @@ export class SupabaseStorage {
     try {
       const guestUserId = localStorage.getItem('cupnote-guest-id')
       if (!guestUserId) {
-        console.log('게스트 ID가 없음')
         return null
       }
 
-      console.log('게스트 기록 ID 검색:', id, guestUserId)
       const offlineRecords = await offlineStorage.getRecords(guestUserId)
       
       // ID로 기록 찾기
@@ -226,11 +212,9 @@ export class SupabaseStorage {
       if (foundRecord) {
         // syncStatus 등 오프라인 전용 필드 제거
         const { syncStatus, syncError, lastAttempt, ...cleanRecord } = foundRecord
-        console.log('게스트 기록 찾음:', cleanRecord)
         return cleanRecord
       }
 
-      console.log('게스트 기록을 찾을 수 없음')
       return null
     } catch (error) {
       console.error('게스트 기록 ID 검색 오류:', error)
@@ -246,14 +230,12 @@ export class SupabaseStorage {
     newAchievements: string[]
   }> {
     try {
-      console.log('게스트 모드: 로컬 스토리지에 저장')
       
       // 게스트 사용자 ID 생성/가져오기
       let guestUserId = localStorage.getItem('cupnote-guest-id')
       if (!guestUserId) {
         guestUserId = `guest-${crypto.randomUUID()}`
         localStorage.setItem('cupnote-guest-id', guestUserId)
-        console.log('새 게스트 ID 생성:', guestUserId)
       }
 
       // 게스트 기록 생성
@@ -290,7 +272,6 @@ export class SupabaseStorage {
       // 로컬 스토리지에 저장 (오프라인 스토리지 사용)
       await offlineStorage.saveRecord(guestRecord, 'pending')
       
-      console.log('게스트 기록 저장 완료:', guestRecord)
       
       return { 
         record: guestRecord, 
@@ -307,7 +288,6 @@ export class SupabaseStorage {
     record: Omit<CoffeeRecord, 'id' | 'userId' | 'createdAt'>
   ): Promise<CoffeeRecord | null> {
     try {
-      console.log('addRecord 시작, 받은 데이터:', record)
       const {
         data: { user },
       } = await supabase.auth.getUser()
@@ -315,7 +295,6 @@ export class SupabaseStorage {
         console.error('addRecord: 사용자가 로그인되어 있지 않습니다')
         throw new Error('사용자가 로그인되어 있지 않습니다')
       }
-      console.log('addRecord: 사용자 확인됨:', user.id)
 
       // Calculate match score
       const matchScore = this.calculateMatchScore(
@@ -344,7 +323,6 @@ export class SupabaseStorage {
         updated_at: new Date().toISOString(),
       }
 
-      console.log('Match score 계산됨:', matchScore)
       
       // Create the record object first
       const newRecord: CoffeeRecord = {
@@ -377,18 +355,14 @@ export class SupabaseStorage {
         },
       }
       
-      console.log('newRecord 생성됨:', newRecord)
 
-      console.log('Supabase에 저장할 데이터:', supabaseRecord)
       
       // Try to save online first
       if (navigator.onLine) {
-        console.log('온라인 상태, Supabase에 저장 시도')
         const insertData = {
           ...supabaseRecord,
           id: newRecord.id,
         }
-        console.log('실제 insert 데이터:', insertData)
         
         const { data, error } = await supabase
           .from('coffee_records')
@@ -404,7 +378,6 @@ export class SupabaseStorage {
           return newRecord
         }
 
-        console.log('Supabase 저장 성공:', data)
         // Save to offline storage as synced
         await offlineStorage.saveRecord(newRecord, 'synced')
         
@@ -415,7 +388,6 @@ export class SupabaseStorage {
         
         return newRecord
       } else {
-        console.log('오프라인 상태, IndexedDB에 저장')
         // Offline - save to IndexedDB
         await offlineStorage.saveRecord(newRecord, 'pending')
         

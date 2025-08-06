@@ -118,6 +118,9 @@ export default function SensoryExpressionPage() {
 
   // 세션 로드 및 검증
   useEffect(() => {
+    // 클라이언트 사이드에서만 실행
+    if (typeof window === 'undefined') return
+
     if (!isFeatureEnabled('ENABLE_NEW_TASTING_FLOW')) {
       router.push('/mode-selection')
       return

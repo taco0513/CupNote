@@ -48,8 +48,8 @@ export default function AppHeader({
     <>
       {/* Main Header */}
       <header 
-        className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-neutral-200 shadow-sm pt-safe-top" 
-        data-header="true"
+        className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-neutral-200 shadow-sm pt-safe-top" 
+        data-testid="app-header"
         style={{
         position: 'fixed',
         top: 0,

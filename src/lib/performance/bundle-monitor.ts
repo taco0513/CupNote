@@ -82,13 +82,11 @@ export class BundlePerformanceMonitor {
       })
     }
     
-    console.log('📊 Bundle performance monitoring started')
   }
   
   // 모니터링 중지
   stop() {
     this.isMonitoring = false
-    console.log('⏹️ Bundle performance monitoring stopped')
   }
   
   // 메트릭 수집

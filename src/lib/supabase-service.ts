@@ -48,24 +48,36 @@ export class AppStatsService {
 // Coffee Records Service
 export class CoffeeRecordService {
   // 커피 기록 생성
-  static async createRecord(record: Omit<CoffeeRecord, 'id' | 'createdAt' | 'matchScore'>) {
+  static async createRecord(record: Omit<CoffeeRecord, 'id' | 'createdAt'> & { matchScore?: number }) {
     try {
-      // Match Score 계산
-      const { data: matchScoreData, error: scoreError } = await supabase.rpc(
-        'calculate_match_score',
-        {
-          p_rating: record.rating || 3,
-          p_mode: record.mode || 'cafe',
-          p_taste_notes: record.taste || '',
-          p_roaster_notes: record.roasterNote || null,
+      // Match Score 사용 (이미 계산된 값이 있으면 사용, 없으면 계산)
+      let matchScore = record.matchScore || 75
+      
+      if (!record.matchScore) {
+        // 기존 RPC 함수로 계산 시도 (fallback)
+        try {
+          const { data: matchScoreData, error: scoreError } = await supabase.rpc(
+            'calculate_match_score',
+            {
+              p_rating: record.rating || 3,
+              p_mode: record.mode || 'cafe',
+              p_taste_notes: record.taste || '',
+              p_roaster_notes: record.roasterNote || null,
+            }
+          )
+
+          if (scoreError) {
+            console.warn('RPC Match score calculation not available, using client-side calculation')
+            // 클라이언트 사이드 계산 fallback
+            matchScore = this.calculateClientSideMatchScore(record)
+          } else {
+            matchScore = matchScoreData || 75
+          }
+        } catch (err) {
+          console.warn('RPC not available, using client-side match score calculation')
+          matchScore = this.calculateClientSideMatchScore(record)
         }
-      )
-
-      if (scoreError) {
-        console.error('Match score calculation error:', scoreError)
       }
-
-      const matchScore = matchScoreData || 75 // 기본값
 
       // 데이터베이스에 저장
       const { data, error } = await supabase
@@ -98,6 +110,44 @@ export class CoffeeRecordService {
       logError(mappedError, 'CoffeeRecordService.createRecord')
       throw mappedError
     }
+  }
+
+  // 클라이언트 사이드 Match Score 계산 (RPC 함수 없을 때 fallback)
+  private static calculateClientSideMatchScore(record: any): number {
+    // 기본 점수: 평점 기반 (0-60점)
+    let score = (record.rating || 3) * 12
+    
+    // 모드별 보너스
+    const modeBonus = {
+      'quick': 5,
+      'cafe': 10, 
+      'homecafe': 15,
+      'pro': 20,
+      'lab': 20
+    }
+    score += modeBonus[record.mode as keyof typeof modeBonus] || 10
+    
+    // 상세 정보 보너스
+    let detailBonus = 0
+    const tasteLength = (record.taste || '').length
+    if (tasteLength > 50) detailBonus += 10
+    else if (tasteLength > 20) detailBonus += 5
+    
+    // 로스터 노트 보너스
+    if (record.roasterNote && record.roasterNote.length > 0) {
+      detailBonus += 10
+    }
+    
+    // 품질 승수
+    let qualityMultiplier = 1.0
+    if ((record.rating || 3) >= 4) qualityMultiplier = 1.2
+    else if ((record.rating || 3) <= 2) qualityMultiplier = 0.8
+    
+    // 최종 점수
+    score = Math.round((score + detailBonus) * qualityMultiplier)
+    
+    // 0-100 범위 제한
+    return Math.max(0, Math.min(100, score))
   }
 
   // 커피 기록 목록 조회
@@ -557,7 +607,6 @@ export class AuthService {
       }
 
       // 가입 성공 로그
-      console.log('Signup successful:', data)
       return data
     } catch (error: unknown) {
       const mappedError = mapSupabaseError(error)

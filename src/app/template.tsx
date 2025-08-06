@@ -20,7 +20,6 @@ export default function Template({ children }: TemplateProps) {
     // Page view tracking and Web Vitals setup
     if (typeof window !== 'undefined') {
       // Report page views to analytics
-      console.log('Page view:', pathname)
       
       // Initialize Web Vitals reporting on first load
       reportWebVitals()

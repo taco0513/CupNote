@@ -42,7 +42,6 @@ class PWAManager {
   // Service Worker Registration
   private async initializeServiceWorker() {
     if (!('serviceWorker' in navigator)) {
-      console.log('PWA: Service Worker not supported')
       return
     }
 
@@ -51,13 +50,11 @@ class PWAManager {
     const isIOSApp = navigator.userAgent.includes('CupNote-iOS')
     
     if (isIOSWebView || isIOSApp) {
-      console.log('PWA: Skipping SW registration for iOS WebView')
       return
     }
 
     try {
       this.sw = await navigator.serviceWorker.register('/sw.js')
-      console.log('PWA: Service Worker registered successfully')
 
       // Handle updates
       this.sw.addEventListener('updatefound', () => {
@@ -86,11 +83,9 @@ class PWAManager {
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault()
       window.deferredPrompt = e as PWAInstallPrompt
-      console.log('PWA: Install prompt ready')
     })
 
     window.addEventListener('appinstalled', () => {
-      console.log('PWA: App installed successfully')
       window.deferredPrompt = undefined
     })
   }
@@ -98,19 +93,16 @@ class PWAManager {
   // Online/Offline Detection
   private setupOnlineListener() {
     window.addEventListener('online', () => {
-      console.log('PWA: Back online - triggering sync')
       this.triggerBackgroundSync()
     })
 
     window.addEventListener('offline', () => {
-      console.log('PWA: Gone offline')
     })
   }
 
   // Install PWA
   async showInstallPrompt(): Promise<boolean> {
     if (!window.deferredPrompt) {
-      console.log('PWA: Install prompt not available')
       return false
     }
 
@@ -119,7 +111,6 @@ class PWAManager {
       const { outcome } = await window.deferredPrompt.userChoice
       window.deferredPrompt = undefined
       
-      console.log('PWA: Install prompt result:', outcome)
       return outcome === 'accepted'
     } catch (error) {
       console.error('PWA: Install prompt failed:', error)
@@ -192,9 +183,7 @@ class PWAManager {
 
     try {
       await this.sw.sync.register('coffee-data-sync')
-      console.log('PWA: Background sync registered')
     } catch (error) {
-      console.log('PWA: Background sync not supported')
     }
   }
 
@@ -219,7 +208,6 @@ class PWAManager {
   // Push Notifications
   async requestNotificationPermission(): Promise<NotificationPermission> {
     if (!('Notification' in window)) {
-      console.log('PWA: Notifications not supported')
       return 'denied'
     }
 
@@ -241,14 +229,12 @@ class PWAManager {
     try {
       const permission = await this.requestNotificationPermission()
       if (permission !== 'granted') {
-        console.log('PWA: Notification permission denied')
         return null
       }
 
       // You would need to replace this with your actual VAPID public key
       const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
       if (!vapidPublicKey) {
-        console.log('PWA: VAPID public key not configured')
         return null
       }
 
@@ -257,7 +243,6 @@ class PWAManager {
         applicationServerKey: this.urlBase64ToUint8Array(vapidPublicKey)
       })
 
-      console.log('PWA: Push subscription created')
       return subscription
     } catch (error) {
       console.error('PWA: Push subscription failed:', error)
@@ -275,16 +260,13 @@ class PWAManager {
   private handleServiceWorkerMessage(data: any) {
     switch (data.type) {
       case 'SW_ACTIVATED':
-        console.log('PWA: Service Worker activated, version:', data.version)
         break
         
       case 'SYNC_COMPLETE':
-        console.log('PWA: Sync complete, synced:', data.synced, 'pending:', data.pending)
         this.syncListeners.forEach(callback => callback(data))
         break
         
       default:
-        console.log('PWA: Unknown message from SW:', data)
     }
   }
 

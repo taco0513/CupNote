@@ -34,7 +34,6 @@ class OCRServiceV2 {
     imageFile: File,
     onProgress?: (progress: number) => void
   ): Promise<OCRResult> {
-    console.log('OCR v2 - 서버 사이드 처리 시작')
     
     if (!(imageFile instanceof File)) {
       throw new Error('File 객체만 지원됩니다.')
@@ -50,7 +49,6 @@ class OCRServiceV2 {
     imageFiles: File[],
     onProgress?: (progress: number, imageIndex: number) => void
   ): Promise<OCRResult> {
-    console.log('OCR v2 - 다중 이미지 서버 사이드 처리')
     
     const results = []
     let combinedText = ''
@@ -92,7 +90,6 @@ class OCRServiceV2 {
     onProgress?: (progress: number) => void
   ): Promise<OCRResult> {
     try {
-      console.log('Google Vision API 서버 사이드 OCR 시작')
       
       const formData = new FormData()
       formData.append('image', imageFile)
@@ -141,7 +138,6 @@ class OCRServiceV2 {
         onProgress(1)
       }
       
-      console.log('서버 사이드 OCR 완료:', result)
       
       if (!result.success) {
         throw new Error(result.error || '서버 OCR 처리 실패')
@@ -291,7 +287,6 @@ class OCRServiceV2 {
    * Cleanup (서버 사이드는 정리할 것 없음)
    */
   static async cleanup(): Promise<void> {
-    console.log('OCR v2 cleanup - 서버 사이드 전용, 정리할 것 없음')
   }
 }
 

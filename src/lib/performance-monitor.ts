@@ -22,7 +22,6 @@ export function initPerformanceMonitoring() {
       const lcpObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries()
         const lastEntry = entries[entries.length - 1]
-        console.log('[Performance] LCP:', lastEntry.startTime)
       })
       lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] })
 
@@ -30,7 +29,6 @@ export function initPerformanceMonitoring() {
       const fidObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           const fid = entry.processingStart - entry.startTime
-          console.log('[Performance] FID:', fid)
         }
       })
       fidObserver.observe({ entryTypes: ['first-input'] })
@@ -50,7 +48,6 @@ export function initPerformanceMonitoring() {
 
       // Log final CLS on page unload
       window.addEventListener('beforeunload', () => {
-        console.log('[Performance] CLS:', clsValue)
       })
     } catch (e) {
       console.warn('Performance monitoring not available')
@@ -175,9 +172,9 @@ export function trackBundleSize() {
   const totalJsSize = jsResources.reduce((acc, r) => acc + (r as any).transferSize, 0)
   const totalCssSize = cssResources.reduce((acc, r) => acc + (r as any).transferSize, 0)
   
-  console.log('[Performance] Bundle sizes:', {
+  return {
     js: `${(totalJsSize / 1024).toFixed(2)} KB`,
     css: `${(totalCssSize / 1024).toFixed(2)} KB`,
     total: `${((totalJsSize + totalCssSize) / 1024).toFixed(2)} KB`
-  })
+  }
 }

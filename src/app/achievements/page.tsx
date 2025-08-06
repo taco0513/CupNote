@@ -17,7 +17,7 @@ import PageHeader from '../../components/ui/PageHeader'
 import PageLayout from '../../components/ui/PageLayout'
 import { simpleDemoStats } from '../../data/simple-demo'
 import { SupabaseStorage } from '../../lib/supabase-storage'
-import { UserStats, Achievement } from '../../types/achievements.types'
+import { UserStats, Achievement, ACHIEVEMENT_CATEGORIES, ACHIEVEMENT_COLORS } from '../../types/achievement'
 
 export default function AchievementsPage() {
   const [userStats, setUserStats] = useState<UserStats | null>(null)

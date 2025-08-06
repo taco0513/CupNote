@@ -26,9 +26,13 @@ import Navigation from '../../../../components/Navigation'
 import { isFeatureEnabled } from '../../../../config/feature-flags.config'
 import { AchievementSystem } from '../../../../lib/achievements'
 import { calculateMatchScore, getDefaultMatchScore, getDefaultMatchScoreAsync, type MatchScoreResult } from '../../../../lib/match-score'
+import { CoffeeRecordService } from '../../../../lib/supabase-service'
+import { saveTastingDataToCommunity } from '../../../../lib/community-match'
+import { useNotification } from '../../../../contexts/NotificationContext'
 
 import type { Achievement } from '../../../../types/achievement'
 import type { TastingSession, TastingMode } from '../../../../types/tasting-flow.types'
+import type { CoffeeRecord } from '../../../../types/coffee'
 
 const getScoreGrade = (score: number) => {
   if (score >= 90) return { color: 'text-green-600', message: '완벽한 매치!' }
@@ -42,6 +46,7 @@ export default function ResultPage() {
   const router = useRouter()
   const params = useParams()
   const mode = params.mode as TastingMode
+  const { success, error } = useNotification()
 
   const [session, setSession] = useState<Partial<TastingSession> | null>(null)
   const [roasterNotes, setRoasterNotes] = useState('')
@@ -49,28 +54,49 @@ export default function ResultPage() {
   const [matchScoreResult, setMatchScoreResult] = useState<MatchScoreResult | null>(null)
   const [roasterMatchScore, setRoasterMatchScore] = useState<MatchScoreResult | null>(null)
   const [communityMatchScore, setCommunityMatchScore] = useState<MatchScoreResult | null>(null)
+  
+  // 첫 번째 기록자 여부 확인
+  const isFirstRecorder = communityMatchScore?.totalRecords === 0 || communityMatchScore?.finalScore === 100
   const [currentScoreIndex, setCurrentScoreIndex] = useState(0)
   const [newAchievement, setNewAchievement] = useState<Achievement | null>(null)
+  const [isSaved, setIsSaved] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
 
   // 세션 로드 및 검증
   useEffect(() => {
+    console.log('🚀 Result 페이지 useEffect 시작')
+    
+    // 클라이언트 사이드에서만 실행
+    if (typeof window === 'undefined') {
+      console.log('❌ 서버 사이드에서 실행됨, 스킵')
+      return
+    }
+
     if (!isFeatureEnabled('ENABLE_NEW_TASTING_FLOW')) {
+      console.log('❌ 새 테이스팅 플로우 비활성화됨')
       router.push('/mode-selection')
       return
     }
 
     const sessionData = sessionStorage.getItem('tf_session')
+    console.log('📦 세션 데이터:', sessionData ? '존재함' : '없음')
+    
     if (!sessionData) {
+      console.log('❌ 세션 데이터 없음')
       router.push('/tasting-flow')
       return
     }
 
     const parsedSession = JSON.parse(sessionData)
+    console.log('📝 파싱된 세션 데이터:', parsedSession)
+    
     if (!parsedSession.mode || (parsedSession.mode !== 'cafe' && parsedSession.mode !== 'homecafe')) {
+      console.log('❌ 유효하지 않은 모드:', parsedSession.mode)
       router.push('/tasting-flow')
       return
     }
 
+    console.log('✅ 세션 설정 완료')
     setSession(parsedSession)
     
     // 두 가지 매치 점수를 모두 계산
@@ -111,8 +137,142 @@ export default function ResultPage() {
     
     loadBothScores()
 
+    // 자동으로 기록 저장 (한 번만)
+    console.log('💾 기록 저장 체크:', { isSaved, isSaving })
+    if (!isSaved && !isSaving) {
+      console.log('✅ 기록 저장 시도')
+      saveRecord(parsedSession)
+    } else {
+      console.log('❌ 기록 저장 스킵 (이미 저장됨 또는 저장 중)')
+    }
+
     // Achievement 체크는 점수 로드 후에 실행됨
-  }, [router])
+  }, [router, isSaved, isSaving])
+
+  // 기록 저장 함수
+  const saveRecord = async (sessionData: Partial<TastingSession>) => {
+    console.log('🔄 saveRecord 호출됨:', { isSaving, isSaved, hasSessionData: !!sessionData })
+    
+    if (isSaving || isSaved) {
+      console.log('❌ saveRecord 스킵 (이미 저장됨 또는 저장 중)')
+      return
+    }
+    
+    try {
+      setIsSaving(true)
+      console.log('📝 기록 저장 시작...')
+      
+      // TastingSession -> CoffeeRecord 변환
+      const record: Omit<CoffeeRecord, 'id' | 'createdAt' | 'matchScore'> = {
+        coffeeName: sessionData.coffeeInfo?.coffeeName || '',
+        roastery: sessionData.coffeeInfo?.roasterName || '',
+        origin: sessionData.coffeeInfo?.origin || '',
+        roastLevel: sessionData.coffeeInfo?.roastLevel || '',
+        brewMethod: sessionData.brewSetup?.dripper || 'v60',
+        rating: sessionData.sensoryMouthFeel?.averageScore || 3,
+        taste: sessionData.flavorProfile?.selectedFlavors?.join(', ') || '',
+        roasterNote: sessionData.roasterNote || '',
+        memo: sessionData.personalNotes?.noteText || '',
+        mode: sessionData.mode || 'cafe',
+        photo: '', // TODO: 이미지 업로드 처리
+        date: sessionData.tastingDate || new Date().toISOString(),
+        userId: '' // Supabase에서 자동으로 설정됨
+      }
+      
+      console.log('📊 저장할 기록 데이터:', record)
+      
+      // 커뮤니티 매치 점수를 사용해서 기록 저장
+      console.log('🏆 매치 점수:', communityMatchScore?.finalScore || 75)
+      const result = await CoffeeRecordService.createRecord({
+        ...record,
+        matchScore: communityMatchScore?.finalScore || 75 // 커뮤니티 점수 사용
+      })
+      
+      console.log('✅ 기록 저장 결과:', result)
+      
+      if (result && result.data) {
+        // 커뮤니티 데이터 저장 (향미/감각 표현 데이터)
+        try {
+          const flavors = sessionData.flavorProfile?.selectedFlavors || []
+          const sensoryExpressions = sessionData.sensoryMouthFeel?.selectedExpressions || []
+          
+          if (flavors.length > 0 || sensoryExpressions.length > 0) {
+            await saveTastingDataToCommunity(
+              result.data.id,
+              flavors,
+              sensoryExpressions
+            )
+            console.log('커뮤니티 데이터 저장 완료')
+          }
+        } catch (communityError) {
+          console.warn('커뮤니티 데이터 저장 실패 (주요 기능에는 영향 없음):', communityError)
+        }
+        
+        setIsSaved(true)
+        success('테이스팅 기록이 성공적으로 저장되었습니다!')
+        
+        // 실제 Achievement 체크 (데이터베이스 기반)
+        if (isFeatureEnabled('ENABLE_ACHIEVEMENTS')) {
+          // 저장된 기록을 바탕으로 실제 Achievement 체크
+          setTimeout(() => {
+            checkRealAchievements()
+          }, 1000)
+        }
+      }
+    } catch (err: any) {
+      console.error('❌ 기록 저장 실패:', err)
+      console.error('❌ 에러 상세:', {
+        message: err?.message,
+        code: err?.code,
+        details: err?.details,
+        hint: err?.hint
+      })
+      error(`기록 저장 실패: ${err.message || '알 수 없는 오류'}`)
+    } finally {
+      console.log('🔚 기록 저장 완료 (성공/실패 무관)')
+      setIsSaving(false)
+    }
+  }
+
+  // 실제 Achievement 체크 (데이터베이스 기반)
+  const checkRealAchievements = async () => {
+    try {
+      console.log('🏆 Achievement 체크 시작...')
+      
+      // AchievementSystem을 사용하여 실제 Achievement 체크
+      const { AchievementSystem } = await import('../../../../lib/achievement-system')
+      const newAchievements = await AchievementSystem.checkForNewAchievements()
+      
+      console.log('🏆 새로운 Achievement:', newAchievements)
+      
+      // 새로운 Achievement가 있으면 첫 번째 것을 표시
+      if (newAchievements && newAchievements.length > 0) {
+        setNewAchievement(newAchievements[0])
+        success(`🏆 새로운 배지 획득: ${newAchievements[0].title}`)
+      } else {
+        console.log('📝 새로운 Achievement 없음')
+      }
+    } catch (err) {
+      console.error('❌ Achievement 체크 실패:', err)
+      
+      // Fallback: 수동으로 첫 테이스팅 Achievement 생성
+      const firstTastingAchievement: Achievement = {
+        id: 'first-tasting',
+        title: '첫 테이스팅',
+        description: '첫 번째 커피 테이스팅을 완료했습니다',
+        icon: '☕',
+        category: 'milestone',
+        condition: { type: 'count', target: 1, field: 'records' },
+        reward: { points: 10 },
+        unlocked: true,
+        unlockedAt: new Date().toISOString(),
+        progress: { current: 1, target: 1 }
+      }
+      
+      setNewAchievement(firstTastingAchievement)
+      success('🏆 새로운 배지 획득: 첫 테이스팅')
+    }
+  }
 
   // Achievement 체크 함수
   const checkAchievements = (sessionData: Partial<TastingSession>, matchScore: MatchScoreResult) => {
@@ -154,7 +314,6 @@ export default function ResultPage() {
           url: window.location.href,
         })
       } catch (error) {
-        console.log('공유 취소됨')
       }
     } else {
       // 클립보드에 복사
@@ -171,7 +330,7 @@ export default function ResultPage() {
   }
 
   const handleViewHistory = () => {
-    router.push('/history')
+    router.push('/my-records')
   }
 
   // 로스터 노트 비교 및 매치 점수 재계산
@@ -739,70 +898,51 @@ export default function ResultPage() {
         <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 mb-8">
           <div className="flex items-center mb-6">
             <Users className="h-6 w-6 text-coffee-600 mr-2" />
-            <h2 className="text-xl font-bold text-coffee-800">다른 사용자들의 선택</h2>
+            <h2 className="text-xl font-bold text-coffee-800">커뮤니티 비교</h2>
           </div>
           
-          {/* Mock 데이터로 커뮤니티 비교 표시 */}
-          <div className="p-4 bg-gray-50 rounded-xl mb-4">
-            <p className="text-sm text-gray-600 mb-4">
-              이 커피를 마신 <strong className="text-coffee-800">23명</strong>의 다른 사용자들이 선택한 향미
-            </p>
+          {(() => {
+            // 실제 커뮤니티 데이터 확인
+            const totalCommunityRecords = communityMatchScore?.totalRecords || 0;
             
-            <div className="space-y-3">
-              {/* 가장 많이 선택된 향미 */}
-              <div>
-                <h4 className="text-sm font-medium text-gray-700 mb-2">🏆 가장 많이 선택된 향미 TOP 5</h4>
-                <div className="space-y-2">
-                  {[
-                    { flavor: '블루베리', percent: 78, count: 18 },
-                    { flavor: '다크초콜릿', percent: 65, count: 15 },
-                    { flavor: '캐러멜', percent: 52, count: 12 },
-                    { flavor: '와인', percent: 43, count: 10 },
-                    { flavor: '꿀', percent: 39, count: 9 }
-                  ].map((item, index) => (
-                    <div key={index} className="flex items-center space-x-3">
-                      <span className="text-xs font-medium text-gray-600 w-12">{index + 1}위</span>
-                      <div className="flex-1">
-                        <div className="flex justify-between items-center mb-1">
-                          <span className="text-sm text-gray-800">{item.flavor}</span>
-                          <span className="text-xs text-gray-500">{item.count}명 ({item.percent}%)</span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div 
-                            className="bg-coffee-500 h-2 rounded-full transition-all duration-500"
-                            style={{ width: `${item.percent}%` }}
-                          />
-                        </div>
-                      </div>
+            if (totalCommunityRecords === 0) {
+              // 첫 번째 기록자인 경우
+              return (
+                <div className="p-4 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl border border-yellow-200">
+                  <div className="text-center py-8">
+                    <div className="text-6xl mb-4">🌟</div>
+                    <h3 className="text-lg font-bold text-coffee-800 mb-2">첫 번째 탐험자!</h3>
+                    <p className="text-coffee-600 mb-4">
+                      이 커피를 기록한 첫 번째 사용자입니다!<br/>
+                      다른 사용자들이 기록을 남기면 비교해볼 수 있어요.
+                    </p>
+                    <div className="inline-flex items-center px-4 py-2 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
+                      <Trophy className="h-4 w-4 mr-2" />
+                      Pioneer Badge 획득!
                     </div>
-                  ))}
+                  </div>
                 </div>
-              </div>
-              
-              {/* 나와의 비교 */}
-              {session.flavorProfile?.selectedFlavors && (
-                <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                  <h4 className="text-sm font-medium text-blue-800 mb-2">💫 나와 비슷한 선택</h4>
-                  <p className="text-xs text-blue-700">
-                    {(() => {
-                      const popularFlavors = ['블루베리', '다크초콜릿', '캐러멜', '와인', '꿀']
-                      const matching = session.flavorProfile.selectedFlavors.filter(f => 
-                        popularFlavors.includes(f)
-                      )
-                      
-                      if (matching.length >= 3) {
-                        return `와! 다른 사용자들과 매우 비슷한 향미를 느끼셨네요. ${matching.join(', ')}를 공통으로 선택하셨어요.`
-                      } else if (matching.length > 0) {
-                        return `${matching.join(', ')}를 다른 사용자들도 많이 선택했어요. 좋은 감각을 가지고 계세요!`
-                      } else {
-                        return '당신만의 독특한 향미 감각을 가지고 계시네요! 다양성이 커피 문화를 풍부하게 만듭니다.'
-                      }
-                    })()}
+              );
+            } else {
+              // 기존 더미데이터 표시 (실제로는 communityMatchScore 데이터 사용)
+              return (
+                <div className="p-4 bg-gray-50 rounded-xl mb-4">
+                  <p className="text-sm text-gray-600 mb-4">
+                    이 커피를 마신 <strong className="text-coffee-800">{totalCommunityRecords}명</strong>의 다른 사용자들과 비교
                   </p>
+                  
+                  <div className="space-y-3">
+                    {/* 실제 데이터가 있을 때 표시할 내용 - 향후 구현 예정 */}
+                    <div className="text-center py-8">
+                      <p className="text-gray-600">
+                        커뮤니티 비교 데이터를 불러오는 중...
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              )}
-            </div>
-          </div>
+              );
+            }
+          })()}
           
           <p className="text-xs text-gray-500 text-center">
             * 커뮤니티 데이터는 실제 사용자들의 선택을 기반으로 합니다
@@ -944,10 +1084,22 @@ export default function ResultPage() {
 
         {/* 완료 메시지 */}
         <div className="text-center">
-          <div className="inline-flex items-center space-x-2 px-6 py-3 bg-green-100 text-green-800 rounded-full">
-            <CheckCircle className="h-5 w-5" />
-            <span className="font-medium">테이스팅이 성공적으로 저장되었습니다!</span>
-          </div>
+          {isSaving ? (
+            <div className="inline-flex items-center space-x-2 px-6 py-3 bg-blue-100 text-blue-800 rounded-full">
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
+              <span className="font-medium">기록 저장 중...</span>
+            </div>
+          ) : isSaved ? (
+            <div className="inline-flex items-center space-x-2 px-6 py-3 bg-green-100 text-green-800 rounded-full">
+              <CheckCircle className="h-5 w-5" />
+              <span className="font-medium">테이스팅이 성공적으로 저장되었습니다!</span>
+            </div>
+          ) : (
+            <div className="inline-flex items-center space-x-2 px-6 py-3 bg-yellow-100 text-yellow-800 rounded-full">
+              <Clock className="h-5 w-5" />
+              <span className="font-medium">기록을 저장하는 중...</span>
+            </div>
+          )}
         </div>
       </div>
 

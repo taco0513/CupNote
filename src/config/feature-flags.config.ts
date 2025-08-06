@@ -25,8 +25,7 @@ export interface FeatureFlags {
 
 // 환경변수 기반 플래그 설정
 const getEnvFlag = (key: string, defaultValue: boolean = false): boolean => {
-  if (typeof window === 'undefined') return defaultValue
-  
+  // 환경변수 체크 (빌드 타임에 결정됨)
   const value = process.env[`NEXT_PUBLIC_${key}`]
   if (value === undefined) return defaultValue
   
@@ -63,7 +62,6 @@ export const isFeatureEnabled = (flag: keyof FeatureFlags): boolean => {
 
 // 개발환경에서 Feature Flag 상태 출력
 if (process.env.NODE_ENV === 'development' && FEATURE_FLAGS.SHOW_FEATURE_FLAGS) {
-  console.log('🚩 Feature Flags:', FEATURE_FLAGS)
 }
 
 // A/B 테스트를 위한 사용자 그룹 할당
@@ -87,6 +85,5 @@ export const shouldUseNewTastingFlow = (userId?: string): boolean => {
 export const overrideFeatureFlag = (flag: keyof FeatureFlags, value: boolean): void => {
   if (process.env.NODE_ENV === 'development') {
     FEATURE_FLAGS[flag] = value
-    console.log(`🚩 Feature flag '${flag}' overridden to: ${value}`)
   }
 }

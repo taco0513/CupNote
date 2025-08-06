@@ -457,7 +457,6 @@ export function initWebVitals() {
     }
   }
   
-  console.log('✅ Enhanced RUM Web Vitals monitoring initialized')
 }
 
 // 즉시 현재 지표 수집 (페이지 이탈 시 등)
@@ -603,7 +602,6 @@ export function logPerformanceInfo() {
       console.group('🚀 Performance Metrics')
       metrics.forEach(metric => {
         const emoji = metric.rating === 'good' ? '✅' : metric.rating === 'needs-improvement' ? '⚠️' : '❌'
-        console.log(`${emoji} ${metric.name}: ${metric.value}ms (${metric.rating})`)
       })
       console.groupEnd()
     }

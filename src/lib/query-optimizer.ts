@@ -100,7 +100,6 @@ export class QueryOptimizer {
           allRecords = [...allRecords, ...uniqueOfflineRecords]
         }
       } catch (error) {
-        console.log('IndexedDB access failed:', error)
       }
       
       // 클라이언트 사이드에서 필터링, 정렬, 페이지네이션 적용

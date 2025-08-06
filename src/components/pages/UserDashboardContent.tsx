@@ -189,7 +189,7 @@ const UserDashboardContent = memo(function UserDashboardContent({
       </div>
 
       {/* Motivation Section */}
-      <div className="mb-8">
+      <div className="mb-6">
         <Card className="bg-gradient-to-r from-orange-50 to-red-50 border-orange-200/40">
           <CardContent className="p-4 text-center">
             <TrendingUp className="h-8 w-8 text-orange-600 mx-auto mb-2" />

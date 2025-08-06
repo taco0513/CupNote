@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { Coffee, Home, Clock, TrendingUp, Users } from 'lucide-react'
@@ -136,11 +137,12 @@ const ModeCardComponent = ({ mode }: { mode: ModeCard }) => {
 export default function TastingFlowModePage() {
   const router = useRouter()
 
-  // Feature flag 체크
-  if (!isFeatureEnabled('ENABLE_NEW_TASTING_FLOW')) {
-    router.push('/mode-selection')
-    return null
-  }
+  // Feature flag 체크는 useEffect에서 처리
+  useEffect(() => {
+    if (!isFeatureEnabled('ENABLE_NEW_TASTING_FLOW')) {
+      router.push('/mode-selection')
+    }
+  }, [router])
 
   return (
     <>

@@ -34,7 +34,7 @@ const LandingPageContent = memo(function LandingPageContent() {
   }, [])
 
   return (
-    <div className="mb-12 md:mb-20">
+    <div>
       {/* 데스크탑용 히어로 레이아웃 (1024px+) */}
       <div className="hidden lg:block">
         <div className="relative">
@@ -94,7 +94,7 @@ const LandingPageContent = memo(function LandingPageContent() {
 
               {/* CTA 버튼들 */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/auth">
+                <Link href="/mode-selection">
                   <UnifiedButton 
                     size="lg" 
                     className="w-full sm:w-auto min-w-[200px]"
@@ -150,7 +150,7 @@ const LandingPageContent = memo(function LandingPageContent() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/auth">
+            <Link href="/mode-selection">
               <UnifiedButton size="md" className="w-full sm:w-auto min-w-[180px]">
                 무료로 시작하기 →
               </UnifiedButton>
@@ -195,7 +195,7 @@ const LandingPageContent = memo(function LandingPageContent() {
           </div>
 
           <div className="space-y-3">
-            <Link href="/auth" className="block">
+            <Link href="/mode-selection" className="block">
               <UnifiedButton size="md" className="w-full">
                 무료로 시작하기 →
               </UnifiedButton>

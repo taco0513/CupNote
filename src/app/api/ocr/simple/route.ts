@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('=== Simple OCR API 시작 ===')
     
     const formData = await request.formData()
     const image = formData.get('image') as File
@@ -15,7 +14,6 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    console.log('✅ 이미지 수신:', image.size, 'bytes')
     
     // 이미지를 버퍼로 변환
     const buffer = Buffer.from(await image.arrayBuffer())
@@ -25,7 +23,6 @@ export async function POST(request: NextRequest) {
       const vision = await import('@google-cloud/vision')
       const client = new vision.ImageAnnotatorClient()
       
-      console.log('🔍 Google Vision API 호출 중...')
       
       // 텍스트 감지 실행
       const [result] = await client.textDetection(buffer)
@@ -33,7 +30,6 @@ export async function POST(request: NextRequest) {
       
       if (detections && detections.length > 0) {
         const extractedText = detections[0].description || ''
-        console.log('✅ OCR 성공, 텍스트 길이:', extractedText.length)
         
         // 간단한 커피 정보 추출
         const extractedInfo = extractSimpleCoffeeInfo(extractedText)
@@ -45,7 +41,6 @@ export async function POST(request: NextRequest) {
           extractedInfo
         })
       } else {
-        console.log('⚠️ 텍스트를 찾을 수 없음')
         return NextResponse.json({
           success: false,
           error: '이미지에서 텍스트를 찾을 수 없습니다.'

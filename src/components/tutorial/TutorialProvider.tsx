@@ -68,7 +68,6 @@ export function TutorialProvider({ children }: TutorialProviderProps) {
     // 이미 완료된 튜토리얼인지 확인
     const isCompleted = localStorage.getItem(`tutorial-${tutorialId}-completed`)
     if (isCompleted) {
-      console.log(`Tutorial ${tutorialId} already completed`)
       return
     }
 
@@ -85,7 +84,6 @@ export function TutorialProvider({ children }: TutorialProviderProps) {
   const handleTutorialComplete = () => {
     if (activeTutorial) {
       // 완료 이벤트 트래킹
-      console.log(`Tutorial ${activeTutorial.id} completed`)
       
       // 사용자 데이터 업데이트 (예: 성취 시스템)
       // updateUserAchievements('tutorial_completed', activeTutorial.id)

@@ -99,6 +99,7 @@ export interface MatchScoreResult {
   matchedFlavors: string[]
   matchedSensory: string[]
   roasterNote: string
+  totalRecords?: number // 커뮤니티 총 기록 수 (첫 기록자 확인용)
 }
 
 // ===== Achievement Types =====

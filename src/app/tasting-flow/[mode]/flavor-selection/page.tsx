@@ -164,6 +164,9 @@ export default function FlavorSelectionPage() {
 
   // 세션 로드 및 검증
   useEffect(() => {
+    // 클라이언트 사이드에서만 실행
+    if (typeof window === 'undefined') return
+
     if (!isFeatureEnabled('ENABLE_NEW_TASTING_FLOW')) {
       router.push('/mode-selection')
       return
@@ -234,9 +237,9 @@ export default function FlavorSelectionPage() {
 
   const handleBack = () => {
     if (mode === 'homecafe') {
-      router.push('/tasting-flow/homecafe/brew-setup')
+      router.push(`/tasting-flow/${mode}/brew-setup`)
     } else {
-      router.push('/tasting-flow/cafe/coffee-info')
+      router.push(`/tasting-flow/${mode}/coffee-info`)
     }
   }
 

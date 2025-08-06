@@ -51,40 +51,40 @@
     padding-bottom: env(safe-area-inset-bottom, 0);
   }
   
-  /* iOS Safari Pull-to-Refresh 방지 */
-  body {
+  /* Modern iOS Safari bounce prevention - Performance optimized */
+  html {
+    /* Modern browsers (iOS 16+) - Simple and effective */
     overscroll-behavior-y: none;
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-x pan-y;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
   }
-  
-  /* iOS Safari에서 헤더 고정 문제 해결 */
-  @supports (-webkit-touch-callout: none) {
-    body {
-      padding-top: calc(4rem + env(safe-area-inset-top, 0));
+
+  body {
+    /* Improve touch and scroll performance */
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
+  }
+
+  /* Fallback for older iOS versions (iOS 12-15) - DISABLED due to scroll issues */
+  /* @supports not (overscroll-behavior: none) {
+    html {
+      overflow: hidden;
+      height: 100%;
+      position: fixed;
+      width: 100%;
     }
     
-    /* 헤더 드래그 방지 */
-    header {
-      -webkit-transform: translate3d(0,0,0);
-      transform: translate3d(0,0,0);
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
+    body {
+      overflow: auto;
+      height: 100%;
+      position: relative;
+      -webkit-overflow-scrolling: touch;
     }
-  }
+  } */
   
-  /* 하단 네비게이션 완전 고정 */
-  nav[data-testid="mobile-navigation"] {
-    position: fixed !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    -webkit-transform: translate3d(0,0,0);
-    transform: translate3d(0,0,0);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    will-change: transform;
-  }
+  /* Header and Navigation positioning handled by components themselves */
+  /* Removed duplicate position:fixed to prevent conflicts */
 }
 
 @layer base {

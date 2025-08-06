@@ -97,7 +97,6 @@ export default function CoffeeShareCard({
           url: window.location.href
         })
       } catch (error) {
-        console.log('공유 취소됨')
       }
     } else {
       // 폴백: 클립보드에 복사

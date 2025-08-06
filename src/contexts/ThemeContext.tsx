@@ -32,12 +32,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   const handleSetTheme = (newTheme: Theme) => {
     // 라이트 모드 고정이므로 실제로는 아무것도 하지 않음
-    console.log('Theme is fixed to light mode')
   }
 
   const toggleTheme = () => {
     // 라이트 모드 고정이므로 토글 불가
-    console.log('Theme toggle disabled - light mode only')
   }
 
   return (

@@ -27,7 +27,6 @@ export const setupDemoEquipment = () => {
   const success = saveUserSettings(demoSettings)
   
   if (success) {
-    console.log('✅ 데모 장비 설정이 저장되었습니다:', demoSettings.homeCafeEquipment)
     return true
   } else {
     console.error('❌ 데모 장비 설정 저장 실패')
@@ -56,7 +55,6 @@ export const setupAlternativeEquipment = () => {
   const success = saveUserSettings(altSettings)
   
   if (success) {
-    console.log('✅ 대체 장비 설정이 저장되었습니다:', altSettings.homeCafeEquipment)
     return true
   } else {
     console.error('❌ 대체 장비 설정 저장 실패')
@@ -84,7 +82,6 @@ export const clearEquipmentSettings = () => {
   const success = saveUserSettings(clearedSettings)
   
   if (success) {
-    console.log('✅ 장비 설정이 초기화되었습니다')
     return true
   } else {
     console.error('❌ 장비 설정 초기화 실패')
@@ -97,7 +94,6 @@ export const clearEquipmentSettings = () => {
  */
 export const checkCurrentEquipment = () => {
   const settings = getUserSettings()
-  console.log('🔍 현재 장비 설정:', settings.homeCafeEquipment)
   return settings.homeCafeEquipment
 }
 
@@ -110,9 +106,4 @@ if (typeof window !== 'undefined') {
     check: checkCurrentEquipment
   }
   
-  console.log('🧪 Demo Equipment functions available:')
-  console.log('- demoEquipment.setup() - 데모 장비 설정')
-  console.log('- demoEquipment.setupAlt() - 대체 장비 설정')
-  console.log('- demoEquipment.clear() - 장비 설정 초기화')
-  console.log('- demoEquipment.check() - 현재 설정 확인')
 }

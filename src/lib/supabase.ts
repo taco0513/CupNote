@@ -16,7 +16,6 @@ const createCustomStorage = () => {
     getItem: (key: string) => {
       try {
         const item = window.localStorage.getItem(key)
-        console.log(`Auth Storage GET ${key}:`, item ? 'found' : 'not found')
         return item
       } catch (error) {
         console.error('Auth Storage GET error:', error)
@@ -26,7 +25,6 @@ const createCustomStorage = () => {
     setItem: (key: string, value: string) => {
       try {
         window.localStorage.setItem(key, value)
-        console.log(`Auth Storage SET ${key}:`, 'success')
       } catch (error) {
         console.error('Auth Storage SET error:', error)
       }
@@ -34,7 +32,6 @@ const createCustomStorage = () => {
     removeItem: (key: string) => {
       try {
         window.localStorage.removeItem(key)
-        console.log(`Auth Storage REMOVE ${key}:`, 'success')
       } catch (error) {
         console.error('Auth Storage REMOVE error:', error)
       }

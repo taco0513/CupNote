@@ -1,4 +1,11 @@
-import { Achievement, AchievementCondition, UserLevel, UserStats } from '../types/achievement'
+import { 
+  Achievement, 
+  AchievementCondition, 
+  UserLevel, 
+  UserStats,
+  LEVEL_SYSTEM,
+  LevelSystemConfig
+} from '../types/achievement'
 import { CoffeeRecord } from '../types/coffee'
 
 import type { MatchScoreResult } from './match-score'
@@ -160,24 +167,7 @@ export const DEFAULT_ACHIEVEMENTS: Omit<Achievement, 'unlocked' | 'unlockedAt' |
   },
 ]
 
-// 레벨 시스템 정의
-export const LEVEL_SYSTEM = [
-  { level: 1, title: '커피 입문자', description: '커피 여행을 시작했어요', requiredPoints: 0 },
-  { level: 2, title: '커피 팬', description: '커피에 관심이 생겼어요', requiredPoints: 50 },
-  { level: 3, title: '커피 애호가', description: '커피를 좋아해요', requiredPoints: 150 },
-  { level: 4, title: '커피 마니아', description: '커피에 푹 빠졌어요', requiredPoints: 300 },
-  { level: 5, title: '커피 전문가', description: '커피를 잘 알아요', requiredPoints: 500 },
-  {
-    level: 6,
-    title: '커피 큐레이터',
-    description: '좋은 커피를 찾는 눈이 있어요',
-    requiredPoints: 800,
-  },
-  { level: 7, title: '커피 마스터', description: '커피의 달인이에요', requiredPoints: 1200 },
-  { level: 8, title: '커피 구루', description: '커피 지식이 풍부해요', requiredPoints: 1800 },
-  { level: 9, title: '커피 전설', description: '커피계의 전설이에요', requiredPoints: 2500 },
-  { level: 10, title: '커피 신', description: '커피의 신이에요', requiredPoints: 3500 },
-]
+// 레벨 시스템은 이제 중앙 타입에서 import
 
 export class AchievementSystem {
   // 사용자 통계 계산

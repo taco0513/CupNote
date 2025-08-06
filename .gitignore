@@ -146,3 +146,6 @@ google-vision-key.json
 !package-lock.json
 !tsconfig.json
 !next.config.json
+CupNote-Mobile/
+CupNote-Dashboard/
+archive/pre-mobile-cleanup-20250806/

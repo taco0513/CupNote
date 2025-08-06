@@ -78,7 +78,7 @@ export default function OnboardingFlow({ onComplete, onSkip }: OnboardingFlowPro
   if (!isVisible) return null
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[100] pointer-events-auto">
       <Card className="w-full max-w-md mx-auto bg-white">
         <CardContent className="p-6">
           {/* Header with close button */}

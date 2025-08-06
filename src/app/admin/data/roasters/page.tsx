@@ -210,7 +210,6 @@ export default function RoasterManagementPage() {
         break
       case 'toggle_featured':
         // 피처드 상태 토글
-        console.log('Toggle featured:', roaster.id)
         break
     }
   }
@@ -491,7 +490,6 @@ export default function RoasterManagementPage() {
               <UnifiedButton
                 variant="primary"
                 onClick={() => {
-                  console.log('로스터리 수정:', selectedRoaster.id)
                   setShowEditModal(false)
                 }}
               >
@@ -521,7 +519,6 @@ export default function RoasterManagementPage() {
               <UnifiedButton
                 variant="primary"
                 onClick={() => {
-                  console.log('로스터리 삭제:', selectedRoaster.id)
                   setShowDeleteModal(false)
                 }}
                 className="bg-red-600 hover:bg-red-700"

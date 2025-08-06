@@ -19,28 +19,35 @@ interface HomeStats {
 
 interface RecentRecord {
   id: string
-  coffeeName: string
-  roastery: string
-  overall: number
+  coffeeName?: string
+  coffee_name?: string
+  roastery?: string
+  overall?: number
+  rating?: number
   date: string
-  mode: string
+  mode?: string
 }
 
 const HybridHomePageContent = memo(function HybridHomePageContent() {
   const { user } = useAuth()
+  // 온보딩 임시 비활성화 - 스크롤 문제 해결을 위해
   const [showOnboarding, setShowOnboarding] = useState(false)
   const [stats, setStats] = useState<HomeStats>({ total: 0, thisMonth: 0, avgRating: 0 })
   const [recentRecords, setRecentRecords] = useState<RecentRecord[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    // 온보딩 상태 확인
-    const hasCompletedOnboarding = localStorage.getItem('cupnote-onboarding-completed')
-    if (!hasCompletedOnboarding && !user) {
-      const timer = setTimeout(() => setShowOnboarding(true), 2000)
-      return () => clearTimeout(timer)
-    }
-  }, [user])
+  // 온보딩 관련 useEffect 완전 비활성화
+  // useEffect(() => {
+  //   const hasCompletedOnboarding = localStorage.getItem('cupnote-onboarding-completed')
+  //   if (!hasCompletedOnboarding && !user && typeof window !== 'undefined') {
+  //     const isFirstVisit = !localStorage.getItem('cupnote-visited')
+  //     if (isFirstVisit) {
+  //       localStorage.setItem('cupnote-visited', 'true')
+  //       const timer = setTimeout(() => setShowOnboarding(true), 2000)
+  //       return () => clearTimeout(timer)
+  //     }
+  //   }
+  // }, [user])
 
   useEffect(() => {
     if (user) {
@@ -79,13 +86,13 @@ const HybridHomePageContent = memo(function HybridHomePageContent() {
 
   return (
     <>
-      {/* 온보딩 플로우 */}
-      {showOnboarding && (
+      {/* 온보딩 플로우 비활성화 */}
+      {/* {showOnboarding && (
         <OnboardingFlow
           onComplete={() => setShowOnboarding(false)}
           onSkip={() => setShowOnboarding(false)}
         />
-      )}
+      )} */}
       
       {/* 콘텐츠 분기 */}
       {user ? (

@@ -36,9 +36,6 @@ function sendToAnalytics(metric: WebVitalsMetric) {
   // Send to console in development
   if (process.env.NODE_ENV === 'development') {
     console.group(`🔍 Web Vital: ${metric.name}`)
-    console.log(`Value: ${metric.value.toFixed(2)}${metric.name === 'CLS' ? '' : 'ms'}`)
-    console.log(`Rating: ${rating}`)
-    console.log(`ID: ${metric.id}`)
     console.groupEnd()
   }
 

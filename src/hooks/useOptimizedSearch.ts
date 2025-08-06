@@ -69,7 +69,6 @@ export function useOptimizedSearch() {
     const cacheKey = getCacheKey(query, filters)
     const cached = getCachedResult(cacheKey)
     if (cached) {
-      console.log('🎯 Cache hit for:', query)
       return cached
     }
 
@@ -98,7 +97,6 @@ export function useOptimizedSearch() {
       return searchResults
     } catch (error: any) {
       if (error.name === 'AbortError') {
-        console.log('🚫 Search aborted:', query)
         throw error
       }
       
@@ -138,7 +136,6 @@ export function useOptimizedSearch() {
   // 캐시 정리
   const clearCache = useCallback(() => {
     searchCache.current = {}
-    console.log('🧹 Search cache cleared')
   }, [])
 
   // 캐시 통계

@@ -35,7 +35,6 @@ export async function POST(request: NextRequest) {
     
     // Log metric for development
     if (process.env.NODE_ENV === 'development') {
-      console.log(`📊 Web Vital - ${metric.name}: ${metric.value}${metric.name === 'CLS' ? '' : 'ms'} (${metric.rating})`)
     }
 
     // Send to external analytics services if configured
@@ -182,7 +181,6 @@ async function sendToSentry(metric: WebVitalMetric) {
   try {
     // This would typically be handled by the Sentry SDK on the client
     // Here we're just demonstrating the concept
-    console.log('Sentry Web Vital:', metric)
   } catch (error) {
     // Silently fail for analytics
   }

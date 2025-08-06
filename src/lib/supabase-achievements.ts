@@ -1,7 +1,7 @@
 import { supabase } from './supabase'
-import { DEFAULT_ACHIEVEMENTS, LEVEL_SYSTEM } from './achievements'
+import { DEFAULT_ACHIEVEMENTS } from './achievements'
 import { log } from './logger'
-import { Achievement, UserStats, UserLevel } from '../types/achievement'
+import { Achievement, UserStats, UserLevel, LEVEL_SYSTEM } from '../types/achievement'
 import { CoffeeRecord } from '../types/coffee'
 
 // Supabase 기반 성취 시스템
@@ -46,7 +46,6 @@ export class SupabaseAchievements {
           console.error('성취 초기화 오류:', error)
           // 오류가 발생해도 앱 동작을 막지 않음
         } else {
-          console.log(`${newAchievements.length}개의 새로운 성취가 초기화되었습니다`)
         }
       }
     } catch (error) {
@@ -75,7 +74,6 @@ export class SupabaseAchievements {
 
       if (error) throw error
       
-      console.log('사용자 성취가 리셋되었습니다.')
       return true
     } catch (error) {
       console.error('성취 리셋 오류:', error)

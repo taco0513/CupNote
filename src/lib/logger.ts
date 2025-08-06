@@ -165,15 +165,11 @@ class Logger {
 
     if (entry.context && Object.keys(entry.context).length > 0) {
       console.groupCollapsed(`%c${prefix} ${entry.message}`, style)
-      console.log('Context:', entry.context)
       if (entry.stack) {
-        console.log('Stack:', entry.stack)
       }
       console.groupEnd()
     } else {
-      console.log(`%c${prefix} ${entry.message}`, style)
       if (entry.stack) {
-        console.log(entry.stack)
       }
     }
   }

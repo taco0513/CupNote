@@ -28,24 +28,20 @@ const COFFEE_PATTERNS = {
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('=== OCR API 시작 ===')
     
     const formData = await request.formData()
     const image = formData.get('image') as File
     
     if (!image) {
-      console.log('❌ 이미지 없음')
       return NextResponse.json({
         success: false,
         error: '이미지가 제공되지 않았습니다.'
       }, { status: 400 })
     }
 
-    console.log('✅ 이미지 수신:', image.size, 'bytes', image.type)
     
     // 이미지 크기 검증
     if (image.size > 10 * 1024 * 1024) { // 10MB 제한
-      console.log('❌ 이미지 크기 초과:', image.size)
       return NextResponse.json({
         success: false,
         error: '이미지 크기가 너무 큽니다. 10MB 이하의 이미지를 사용해주세요.'
@@ -54,7 +50,6 @@ export async function POST(request: NextRequest) {
     
     // 이미지 타입 검증
     if (!image.type.startsWith('image/')) {
-      console.log('❌ 잘못된 파일 타입:', image.type)
       return NextResponse.json({
         success: false,
         error: '이미지 파일만 업로드 가능합니다.'
@@ -74,7 +69,6 @@ export async function POST(request: NextRequest) {
     let confidence = 0
     
     if (useGoogleVision) {
-      console.log('🔍 Google Cloud Vision API 사용')
       
       try {
         // Dynamic import
@@ -101,9 +95,7 @@ export async function POST(request: NextRequest) {
         if (detections && detections.length > 0) {
           extractedText = detections[0].description || ''
           confidence = 90 // Google Vision은 일반적으로 높은 정확도
-          console.log('✅ Google Vision OCR 성공')
         } else {
-          console.log('⚠️ 텍스트를 찾을 수 없음')
         }
       } catch (visionError: any) {
         console.error('❌ Google Vision API 오류:', visionError)
@@ -114,7 +106,6 @@ export async function POST(request: NextRequest) {
     
     // Google Vision이 실패하거나 설정되지 않은 경우 시뮬레이션 모드
     if (!extractedText) {
-      console.log('🔄 시뮬레이션 모드로 폴백')
       
       // 기존 시뮬레이션 로직
       const fileName = image.name.toLowerCase()
@@ -181,8 +172,6 @@ Altitude: ${selectedCoffee.altitude}`
     // 실제 OCR 텍스트에서 커피 정보 추출
     const extractedInfo = extractCoffeeInfo(extractedText)
     
-    console.log('📄 추출된 텍스트:', extractedText)
-    console.log('📋 파싱된 정보:', extractedInfo)
     
     return NextResponse.json({
       success: true,

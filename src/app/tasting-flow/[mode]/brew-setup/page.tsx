@@ -126,6 +126,9 @@ export default function BrewSetupPage() {
 
   // 세션 로드 및 검증
   useEffect(() => {
+    // 클라이언트 사이드에서만 실행
+    if (typeof window === 'undefined') return
+
     if (!isFeatureEnabled('ENABLE_NEW_TASTING_FLOW')) {
       router.push('/mode-selection')
       return
@@ -384,11 +387,11 @@ export default function BrewSetupPage() {
     }
 
     sessionStorage.setItem('tf_session', JSON.stringify(updatedSession))
-    router.push('/tasting-flow/homecafe/flavor-selection')
+    router.push(`/tasting-flow/${mode}/flavor-selection`)
   }
 
   const handleBack = () => {
-    router.push('/tasting-flow/homecafe/coffee-info')
+    router.push(`/tasting-flow/${mode}/coffee-info`)
   }
 
   if (!session) {
