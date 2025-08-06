@@ -5,6 +5,32 @@ All notable changes to CupNote will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2025-08-07
+
+### 🎯 Critical Bug Fixes & TestFlight 준비
+
+#### Fixed
+- **🌟 첫 기록자 매치 점수 수정**: 커뮤니티 데이터가 없을 때 40% → 100% 점수 표시 및 "첫 번째 탐험자!" 특별 메시지 적용
+- **💾 기록 저장 시스템 완전 수정**: 테이스팅 플로우 결과가 데이터베이스에 정상 저장되고 "내 기록" 및 성취 시스템에 반영
+- **🚫 더미 데이터 제거**: 실제 커뮤니티 데이터가 없을 때 하드코딩된 더미 데이터 대신 실제 상태 표시
+- **🔄 커뮤니티 데이터 저장**: 향미/감각 표현 데이터가 커뮤니티 통계에 정상 저장 및 통합
+
+#### Added
+- **✅ 시스템 검증 스크립트**: `scripts/test-system.js`로 전체 시스템 상태 자동 확인
+- **📖 TestFlight 배포 가이드**: 상세한 수동 배포 단계별 가이드 (`TESTFLIGHT_DEPLOYMENT_GUIDE.md`)
+- **🔄 Fallback 시스템**: RPC 함수 없어도 클라이언트 사이드 매치 점수 계산
+- **🏗️ 견고한 에러 처리**: 커뮤니티 데이터 저장 실패해도 주요 기능에 영향 없음
+
+#### Changed
+- **📱 iOS 버전 업데이트**: Marketing Version 1.5.0, Build Number 5
+- **📦 Package 버전**: package.json 버전을 1.5.0으로 업데이트
+- **🔧 Capacitor 동기화**: iOS 프로젝트와 웹 빌드 완전 동기화
+
+#### Technical Improvements
+- **⚡ 성능 최적화**: Next.js 프로덕션 빌드 최적화 및 Capacitor 통합
+- **🗄️ 데이터베이스 검증**: 모든 필수 테이블 존재 확인 및 커뮤니티 테이블 지원
+- **🔍 통합 매치 점수**: 3가지 다른 계산 방식을 하나로 통합
+
 ## [1.4.0] - 2025-08-06
 
 ### 🚀 iOS TestFlight 런칭 준비 완료

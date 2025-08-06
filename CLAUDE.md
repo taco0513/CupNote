@@ -92,6 +92,15 @@ npm install                  # Install all dependencies
 
 ## Current Implementation Status
 
+✅ **v1.5.0 - TestFlight 배포 준비 완료** (2025-08-07):
+
+- **커뮤니티 매치 점수 시스템 완전 수정**: 첫 번째 기록자 40% → 100% 점수 및 특별 메시지 표시
+- **기록 저장 시스템 완전 수정**: 테이스팅 플로우 결과가 데이터베이스에 정상 저장 및 성취 시스템 연동
+- **더미 데이터 완전 제거**: 실제 커뮤니티 데이터가 없을 때 "첫 번째 탐험자" UI로 표시
+- **데이터베이스 통합 완료**: Supabase 테이블 구조 검증 및 Fallback 시스템 구현
+- **시스템 검증 완료**: 모든 핵심 기능 정상 동작 확인 (scripts/test-system.js)
+- **iOS 앱 빌드 준비**: v1.5.0 (Build 5), Capacitor 동기화 완료, Xcode 프로젝트 준비
+
 ✅ **v1.4.0 - iOS TestFlight 런칭 준비 완료** (2025-08-06):
 
 - **iOS App 최적화**: iPhone 전용 앱 설정 (TARGETED_DEVICE_FAMILY = "1"), iPad 지원 완전 제거
