@@ -50,7 +50,7 @@ const getSecurityHeaders = () => {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',  // Enable static export for TestFlight
+  // output: 'export',  // Disabled to enable API routes on Vercel
   // 성능 최적화 설정 - Production Reality 패턴
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
