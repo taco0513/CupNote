@@ -42,7 +42,7 @@ export class SupabaseStorage {
           roastLevel: record.roasting_level || undefined,
           temperature: 'Hot', // Default since not stored in Supabase
           date: record.created_at?.split('T')[0] || new Date().toISOString().split('T')[0],
-          taste: record.taste_notes,
+          taste: typeof record.taste_notes === 'string' ? record.taste_notes : '',
           roasterNote: record.roaster_notes || undefined,
           tasteMode: 'simple', // Default since not stored in Supabase
           mode: record.mode,
@@ -112,7 +112,7 @@ export class SupabaseStorage {
         roastLevel: data.roasting_level || undefined,
         temperature: 'Hot',
         date: data.created_at?.split('T')[0] || new Date().toISOString().split('T')[0],
-        taste: data.taste_notes,
+        taste: typeof data.taste_notes === 'string' ? data.taste_notes : '',
         roasterNote: data.roaster_notes || undefined,
         tasteMode: 'simple',
         mode: data.mode,
@@ -509,7 +509,7 @@ export class SupabaseStorage {
         roastLevel: data.roasting_level || undefined,
         temperature: 'Hot',
         date: data.created_at?.split('T')[0] || new Date().toISOString().split('T')[0],
-        taste: data.taste_notes,
+        taste: typeof data.taste_notes === 'string' ? data.taste_notes : '',
         roasterNote: data.roaster_notes || undefined,
         tasteMode: 'simple',
         mode: data.mode,
