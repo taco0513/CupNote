@@ -113,93 +113,219 @@ function extractCoffeeInfo(text: string): CoffeeInfoOCR {
   const lines = text.split('\n').filter(line => line.trim())
   const info: CoffeeInfoOCR = {}
 
-  // 패턴 매칭으로 정보 추출
+  console.log('OCR Raw Text:', text)
+  console.log('OCR Lines:', lines)
+
+  // 1단계: 커피 이름 추출 (가장 중요)
+  extractCoffeeName(lines, info)
+  
+  // 2단계: 로스터리 추출 
+  extractRoasterName(lines, info)
+  
+  // 3단계: 원산지 추출
+  extractOrigin(lines, info)
+  
+  // 4단계: 기타 정보 추출
+  extractOtherInfo(lines, info)
+  
+  console.log('Extracted Info:', info)
+  return info
+}
+
+// 커피 이름 추출 - 한국 라벨 패턴 최적화
+function extractCoffeeName(lines: string[], info: CoffeeInfoOCR) {
+  // 패턴 1: "Ethiopia Yirgacheffe" 같은 원산지+지역 형태
+  for (const line of lines) {
+    if (line.match(/^[A-Z][a-z]+ [A-Z][a-z]+$/) && line.length > 10 && line.length < 40) {
+      info.coffeeName = line
+      return
+    }
+  }
+  
+  // 패턴 2: "에티오피아 예가체프" 같은 한글 형태
+  for (const line of lines) {
+    const koreanPattern = /^[가-힣]+ [가-힣]+$/
+    if (koreanPattern.test(line) && line.length > 6 && line.length < 20) {
+      info.coffeeName = line
+      return
+    }
+  }
+  
+  // 패턴 3: 대문자로 된 긴 이름 (브랜드명 제외)
+  const excludeBrands = ['TERAROSA', 'FRITZ', 'ANTHRACITE', 'CENTER', 'MONTAGE', 'LEAF']
+  for (const line of lines) {
+    if (line === line.toUpperCase() && 
+        line.length > 8 && 
+        line.length < 50 &&
+        !excludeBrands.some(brand => line.includes(brand)) &&
+        !line.includes('COFFEE') &&
+        !line.includes('ROASTERY')) {
+      info.coffeeName = line
+      return
+    }
+  }
+  
+  // 패턴 4: 첫 번째 의미있는 라인 (마지막 수단)
+  for (let i = 0; i < Math.min(3, lines.length); i++) {
+    const line = lines[i]
+    if (line.length > 5 && line.length < 50 && 
+        !line.toLowerCase().includes('coffee') &&
+        !line.toLowerCase().includes('roastery')) {
+      info.coffeeName = line
+      return
+    }
+  }
+}
+
+// 로스터리 추출 - 한국 로스터리 최적화
+function extractRoasterName(lines: string[], info: CoffeeInfoOCR) {
+  const koreanRoasters = [
+    '프릳츠', '테라로사', '앤트러사이트', '센터커피', '커피몽타주', 
+    '리프커피', '나무사이로', '커피리브레', '커피그래피티', '모모스커피',
+    '블루보틀', '스타벅스 리저브', '콜드브루 라운지', '빈브라더스'
+  ]
+  
+  const englishRoasters = [
+    'FRITZ', 'TERAROSA', 'ANTHRACITE', 'CENTER', 'MONTAGE',
+    'LEAF', 'NAMUSAIRO', 'LIBRE', 'GRAFFITI', 'MOMOS',
+    'BLUE BOTTLE', 'STARBUCKS RESERVE', 'BEAN BROTHERS'
+  ]
+  
+  // 정확한 로스터리 이름 매칭
+  for (const line of lines) {
+    for (const roaster of [...koreanRoasters, ...englishRoasters]) {
+      if (line.includes(roaster)) {
+        info.roasterName = roaster
+        return
+      }
+    }
+  }
+  
+  // "ROASTERY" 키워드 근처 찾기
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].toLowerCase()
+    if (line.includes('roastery') || line.includes('로스터리')) {
+      // 같은 줄에서 찾기
+      const parts = lines[i].split(/roastery|로스터리/i)
+      if (parts[0].trim().length > 2) {
+        info.roasterName = parts[0].trim()
+        return
+      }
+      // 이전 줄에서 찾기
+      if (i > 0 && lines[i-1].length > 2 && lines[i-1].length < 20) {
+        info.roasterName = lines[i-1]
+        return
+      }
+    }
+  }
+}
+
+// 원산지 추출 - 한국어/영어 모두 지원
+function extractOrigin(lines: string[], info: CoffeeInfoOCR) {
+  const countries = [
+    // 한국어
+    { ko: '에티오피아', en: 'ETHIOPIA' },
+    { ko: '케냐', en: 'KENYA' },
+    { ko: '콜롬비아', en: 'COLOMBIA' },
+    { ko: '브라질', en: 'BRAZIL' },
+    { ko: '과테말라', en: 'GUATEMALA' },
+    { ko: '코스타리카', en: 'COSTA RICA' },
+    { ko: '파나마', en: 'PANAMA' },
+    { ko: '르완다', en: 'RWANDA' },
+    { ko: '인도네시아', en: 'INDONESIA' },
+    { ko: '페루', en: 'PERU' },
+    { ko: '온두라스', en: 'HONDURAS' },
+    { ko: '니카라과', en: 'NICARAGUA' }
+  ]
+  
+  // 정확한 국가명 매칭
+  for (const line of lines) {
+    const upperLine = line.toUpperCase()
+    for (const country of countries) {
+      if (line.includes(country.ko) || upperLine.includes(country.en)) {
+        info.origin = country.ko
+        return
+      }
+    }
+  }
+  
+  // "ORIGIN" 키워드 근처 찾기
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].toLowerCase()
+    if (line.includes('origin') || line.includes('원산지')) {
+      const nextLine = lines[i + 1]
+      if (nextLine) {
+        // 다음 줄에서 국가 찾기
+        for (const country of countries) {
+          if (nextLine.includes(country.ko) || nextLine.toUpperCase().includes(country.en)) {
+            info.origin = country.ko
+            return
+          }
+        }
+      }
+    }
+  }
+}
+
+// 기타 정보 추출
+function extractOtherInfo(lines: string[], info: CoffeeInfoOCR) {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]
     const lineLower = line.toLowerCase()
     const nextLine = lines[i + 1]
 
-    // 커피 이름 (첫 번째 큰 텍스트)
-    if (!info.coffeeName && i === 0 && line.length > 3) {
-      info.coffeeName = line
+    // 품종 추출
+    if (!info.variety && (lineLower.includes('variety') || lineLower.includes('품종'))) {
+      const varieties = ['Geisha', 'Bourbon', 'Typica', 'Caturra', 'Catuai', 'SL28', 'SL34', 'Heirloom']
+      for (const variety of varieties) {
+        if (nextLine?.includes(variety) || line.includes(variety)) {
+          info.variety = variety
+          break
+        }
+      }
     }
 
-    // 로스터리
-    if (lineLower.includes('roaster') || lineLower.includes('로스터')) {
-      info.roasterName = nextLine || line.split(/[:：]/)[1]?.trim()
+    // 가공법 추출
+    if (!info.processing) {
+      const processes = ['Natural', 'Washed', 'Honey', 'Anaerobic', 'Semi-Washed', 'Wet Hulled']
+      for (const process of processes) {
+        if (line.includes(process)) {
+          info.processing = process
+          break
+        }
+      }
     }
 
-    // 원산지
-    if (lineLower.includes('origin') || lineLower.includes('원산지')) {
-      info.origin = nextLine || line.split(/[:：]/)[1]?.trim()
+    // 로스팅 레벨
+    if (!info.roastLevel) {
+      const roastLevels = ['Light', 'Medium', 'Dark', 'City', 'Full City']
+      for (const level of roastLevels) {
+        if (line.includes(level)) {
+          info.roastLevel = level
+          break
+        }
+      }
     }
 
-    // 품종
-    if (lineLower.includes('variety') || lineLower.includes('품종')) {
-      info.variety = nextLine || line.split(/[:：]/)[1]?.trim()
+    // 고도 추출 (숫자 + m 패턴)
+    if (!info.altitude) {
+      const altitudeMatch = line.match(/(\d{1,4}[-~]\d{1,4}m|\d{1,4}m)/i)
+      if (altitudeMatch) {
+        info.altitude = altitudeMatch[1]
+      }
     }
 
-    // 가공법
-    if (lineLower.includes('process') || lineLower.includes('가공')) {
-      info.processing = nextLine || line.split(/[:：]/)[1]?.trim()
-    }
-
-    // 로스팅
-    if (lineLower.includes('roast') || lineLower.includes('로스팅')) {
-      info.roastLevel = nextLine || line.split(/[:：]/)[1]?.trim()
-    }
-
-    // 고도
-    if (lineLower.includes('altitude') || lineLower.includes('고도')) {
-      info.altitude = nextLine || line.split(/[:：]/)[1]?.trim()
-    }
-
-    // 노트
-    if (lineLower.includes('note') || lineLower.includes('노트')) {
-      info.notes = nextLine || line.split(/[:：]/)[1]?.trim()
-    }
-  }
-
-  // 국가명 패턴 매칭
-  const countries = ['에티오피아', 'Ethiopia', '케냐', 'Kenya', '콜롬비아', 'Colombia', 
-                    '브라질', 'Brazil', '과테말라', 'Guatemala', '코스타리카', 'Costa Rica',
-                    '파나마', 'Panama', '르완다', 'Rwanda', '인도네시아', 'Indonesia']
-  if (!info.origin) {
-    for (const country of countries) {
-      const found = lines.find(line => line.includes(country))
-      if (found) {
-        info.origin = country
-        break
+    // 테이스팅 노트 (맛 키워드가 포함된 라인)
+    if (!info.notes) {
+      const flavorKeywords = [
+        'chocolate', 'berry', 'citrus', 'floral', 'fruity', 'nutty', 'wine',
+        '초콜릿', '베리', '시트러스', '꽃', '과일', '견과', '와인', '카라멜'
+      ]
+      
+      if (flavorKeywords.some(keyword => lineLower.includes(keyword)) ||
+          line.includes(',') && line.length > 10) {
+        info.notes = line
       }
     }
   }
-
-  // 한국 로스터리 매칭
-  const roasters = ['프릳츠', '테라로사', '앤트러사이트', '센터커피', '커피몽타주', 
-                   '리프커피', '나무사이로', '커피리브레', '커피그래피티', '모모스커피',
-                   '블루보틀', '스타벅스 리저브', '콜드브루 라운지']
-  if (!info.roasterName) {
-    for (const roaster of roasters) {
-      const found = lines.find(line => line.includes(roaster))
-      if (found) {
-        info.roasterName = roaster
-        break
-      }
-    }
-  }
-
-  // 가공법 패턴
-  const processes = ['Natural', 'Washed', 'Honey', 'Anaerobic', 'Semi-Washed', 
-                    '내추럴', '워시드', '허니', '혐기성', '세미워시드']
-  if (!info.processing) {
-    for (const process of processes) {
-      const found = lines.find(line => line.includes(process))
-      if (found) {
-        info.processing = process
-        break
-      }
-    }
-  }
-
-  return info
 }
