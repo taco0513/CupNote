@@ -266,7 +266,7 @@ function CoffeeCard({ record }: { record: CoffeeRecord }) {
 
   return (
     <a
-      href={`/coffee/${record.id}`}
+      href={`/records/${record.id}`}
       className="block bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden cursor-pointer"
     >
       {/* 이미지가 있으면 표시 */}
@@ -310,7 +310,79 @@ function CoffeeCard({ record }: { record: CoffeeRecord }) {
             <p className="text-sm font-medium text-gray-700 mb-1">
               {record.tasteMode === 'simple' ? '내가 느낀 맛' : '테이스팅 노트'}
             </p>
-            <p className="text-gray-600 line-clamp-2">{record.taste}</p>
+            <p className="text-gray-600 line-clamp-2">
+              {(() => {
+                // Handle different formats of taste data
+                if (!record.taste) return '기록 없음'
+                
+                // If it's already a string
+                if (typeof record.taste === 'string') {
+                  // Try to parse if it looks like JSON
+                  if (record.taste.startsWith('[') || record.taste.startsWith('{')) {
+                    try {
+                      const parsed = JSON.parse(record.taste)
+                      
+                      // Handle complex flavor object structure
+                      if (parsed.flavors && Array.isArray(parsed.flavors)) {
+                        // Extract flavor names from complex structure
+                        const flavorNames = parsed.flavors.map((f: any) => 
+                          typeof f === 'string' ? f : f.name || f.flavor || ''
+                        ).filter(Boolean)
+                        return flavorNames.length > 0 ? flavorNames.join(', ') : '기록 없음'
+                      }
+                      
+                      // Handle simple array
+                      if (Array.isArray(parsed)) {
+                        // Check if array contains objects or strings
+                        const items = parsed.map((item: any) => 
+                          typeof item === 'string' ? item : item.name || item.flavor || ''
+                        ).filter(Boolean)
+                        return items.length > 0 ? items.join(', ') : '기록 없음'
+                      }
+                      
+                      // If it's an object with selectedFlavors property
+                      if (parsed.selectedFlavors && Array.isArray(parsed.selectedFlavors)) {
+                        return parsed.selectedFlavors.join(', ')
+                      }
+                      
+                      // Can't parse meaningfully, return original
+                      return record.taste
+                    } catch {
+                      // Not valid JSON, return as is
+                      return record.taste
+                    }
+                  }
+                  // Not JSON, return as is
+                  return record.taste
+                }
+                
+                // If it's an array
+                if (Array.isArray(record.taste)) {
+                  const items = record.taste.map((item: any) => 
+                    typeof item === 'string' ? item : item.name || item.flavor || ''
+                  ).filter(Boolean)
+                  return items.length > 0 ? items.join(', ') : '기록 없음'
+                }
+                
+                // If it's an object
+                if (typeof record.taste === 'object' && record.taste !== null) {
+                  // Handle flavor object structure
+                  if ('flavors' in record.taste && Array.isArray(record.taste.flavors)) {
+                    const flavorNames = record.taste.flavors.map((f: any) => 
+                      typeof f === 'string' ? f : f.name || f.flavor || ''
+                    ).filter(Boolean)
+                    return flavorNames.length > 0 ? flavorNames.join(', ') : '기록 없음'
+                  }
+                  
+                  // Handle selectedFlavors property
+                  if ('selectedFlavors' in record.taste && Array.isArray(record.taste.selectedFlavors)) {
+                    return record.taste.selectedFlavors.join(', ')
+                  }
+                }
+                
+                return String(record.taste)
+              })()}
+            </p>
           </div>
 
           {record.origin && (

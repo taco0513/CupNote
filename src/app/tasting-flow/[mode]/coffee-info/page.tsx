@@ -379,48 +379,24 @@ export default function CoffeeInfoPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-neutral-50">
+      {/* 미니멀 프로그레스바 - sticky로 헤더에 붙이기 */}
+      <div className="sticky top-[calc(64px+env(safe-area-inset-top))] z-30 bg-white">
+        <div className="h-1 bg-gray-200">
+          <div 
+            className="h-full bg-gradient-to-r from-coffee-400 to-coffee-500 transition-all duration-300"
+            style={{ width: mode === 'cafe' ? '16.67%' : '14.29%' }}
+          />
+        </div>
+      </div>
+      
       <div className="container mx-auto px-4 py-4 md:py-8 max-w-2xl pb-20 md:pb-8">
         <Navigation showBackButton currentPage="record" />
-
-        {/* 헤더 */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4 gap-4">
-            <div className="flex items-center space-x-3 flex-1 min-w-0">
-              <h1 className="text-xl md:text-3xl font-bold text-coffee-800 whitespace-nowrap">커피 정보</h1>
-              {/* 모드 표시 */}
-              <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-                mode === 'cafe' 
-                  ? 'bg-blue-100 text-blue-800' 
-                  : 'bg-green-100 text-green-800'
-              }`}>
-                {mode === 'cafe' ? '☕ 카페' : '🏠 홈카페'}
-              </div>
-            </div>
-            
-            <div className="flex items-center space-x-3 flex-shrink-0">
-              {/* OCR 스캔 버튼 */}
-              <button
-                onClick={() => setShowOCRScanner(true)}
-                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl hover:from-purple-600 hover:to-purple-700 transition-all duration-200 text-sm font-medium shadow-lg hover:shadow-xl touch-manipulation"
-                style={{
-                  minWidth: '80px',
-                  WebkitTapHighlightColor: 'transparent'
-                }}
-              >
-                <Scan className="h-4 w-4 flex-shrink-0" />
-                <span className="whitespace-nowrap">OCR 스캔</span>
-              </button>
-              
-              <div className="text-sm text-coffee-600 whitespace-nowrap">1 / {mode === 'cafe' ? '6' : '7'}</div>
-            </div>
-          </div>
-
-          {/* 진행바 */}
-          <div className="w-full bg-coffee-200/50 rounded-full h-2">
-            <div
-              className="bg-coffee-500 h-2 rounded-full transition-all duration-300"
-              style={{ width: mode === 'cafe' ? '16.67%' : '14.29%' }}
-            />
+        
+        {/* 페이지 헤더 */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold text-coffee-800">커피 정보</h1>
+            <span className="text-sm text-coffee-600">1 / {mode === 'cafe' ? '6' : '7'}</span>
           </div>
         </div>
 
@@ -435,6 +411,15 @@ export default function CoffeeInfoPage() {
                 어떤 커피를 {mode === 'cafe' ? '마셨나요' : '내리셨나요'}?
               </h2>
               <p className="text-coffee-600">필수 정보를 입력해주세요</p>
+              
+              {/* OCR 스캔 버튼 */}
+              <button
+                onClick={() => setShowOCRScanner(true)}
+                className="mt-4 inline-flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl hover:from-purple-600 hover:to-purple-700 transition-all duration-200 text-sm font-medium shadow-lg hover:shadow-xl"
+              >
+                <Scan className="h-4 w-4" />
+                <span>OCR로 자동 입력</span>
+              </button>
             </div>
 
             <div className="space-y-6">

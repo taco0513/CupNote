@@ -101,30 +101,47 @@ export default function OCRScanner({
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] flex flex-col overflow-hidden">
-        {/* 헤더 */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 flex-shrink-0">
-          <div className="flex items-center space-x-2">
-            <Scan className="h-5 w-5 text-coffee-600" />
-            <h2 className="text-lg font-semibold text-coffee-800">
-              커피 정보 스캔
-            </h2>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50">
+      <div className="absolute inset-4 bg-white rounded-2xl overflow-hidden" 
+           style={{ 
+             maxWidth: '28rem',
+             maxHeight: '90vh',
+             margin: 'auto',
+             left: 0,
+             right: 0,
+             top: '50%',
+             transform: 'translateY(-50%)'
+           }}>
+        {/* 헤더 - 고정 */}
+        <div className="absolute top-0 left-0 right-0 bg-white z-10 border-b border-gray-200">
+          <div className="flex items-center justify-between p-4">
+            <div className="flex items-center space-x-2">
+              <Scan className="h-5 w-5 text-coffee-600" />
+              <h2 className="text-lg font-semibold text-coffee-800">
+                커피 정보 스캔
+              </h2>
+            </div>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <X className="h-5 w-5 text-gray-500" />
+            </button>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <X className="h-5 w-5 text-gray-500" />
-          </button>
         </div>
 
-        {/* 스크롤 가능한 컨텐츠 영역 - iOS에서도 확실히 스크롤되도록 개선 */}
+        {/* 스크롤 가능한 컨텐츠 영역 - position absolute로 완전히 재구성 */}
         <div 
-          className="overflow-y-auto flex-1 -webkit-overflow-scrolling-touch" 
+          className="absolute overflow-y-auto" 
           style={{ 
+            top: '60px', // 헤더 높이
+            left: 0,
+            right: 0,
+            bottom: 0,
             WebkitOverflowScrolling: 'touch',
-            minHeight: '0px'
+            overscrollBehavior: 'contain',
+            msOverflowStyle: 'none',
+            scrollbarWidth: 'none'
           }}
         >
           <div className="p-4 space-y-4">
@@ -259,8 +276,7 @@ export default function OCRScanner({
               <div className="space-y-2">
                 <h3 className="text-sm font-medium text-gray-700">추출된 정보</h3>
                 <div 
-                  className="bg-gray-50 rounded-lg p-3 space-y-2 max-h-48 overflow-y-auto -webkit-overflow-scrolling-touch"
-                  style={{ WebkitOverflowScrolling: 'touch' }}
+                  className="bg-gray-50 rounded-lg p-3 space-y-2"
                 >
                   {Object.entries(result.extractedInfo).map(([key, value]) => {
                     if (!value) return null
@@ -280,8 +296,7 @@ export default function OCRScanner({
                       <div key={key} className="pt-2 border-t border-gray-200">
                         <span className="text-xs text-gray-600">{labels[key]}</span>
                         <div 
-                          className="text-sm font-medium text-gray-800 mt-1 whitespace-pre-wrap max-h-24 overflow-y-auto -webkit-overflow-scrolling-touch"
-                          style={{ WebkitOverflowScrolling: 'touch' }}
+                          className="text-sm font-medium text-gray-800 mt-1 whitespace-pre-wrap"
                         >
                           {value}
                         </div>
@@ -322,6 +337,7 @@ export default function OCRScanner({
               </div>
             </div>
           )}
+          </div>
         </div>
       </div>
     </div>

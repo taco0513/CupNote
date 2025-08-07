@@ -169,7 +169,7 @@ export default function ResultPage() {
         origin: sessionData.coffeeInfo?.origin || '',
         roastLevel: sessionData.coffeeInfo?.roastLevel || '',
         brewMethod: sessionData.brewSetup?.dripper || 'v60',
-        rating: sessionData.sensoryMouthFeel?.averageScore || 3,
+        rating: (sessionData as any).rating || sessionData.sensoryMouthFeel?.averageScore || 3,
         taste: sessionData.flavorProfile?.selectedFlavors?.join(', ') || '',
         roasterNote: sessionData.roasterNote || '',
         memo: sessionData.personalNotes?.noteText || '',
@@ -240,8 +240,10 @@ export default function ResultPage() {
       console.log('🏆 Achievement 체크 시작...')
       
       // AchievementSystem을 사용하여 실제 Achievement 체크
-      const { AchievementSystem } = await import('../../../../lib/achievement-system')
-      const newAchievements = await AchievementSystem.checkForNewAchievements()
+      // TODO: achievement-system 파일이 없어서 임시로 비활성화
+      // const { AchievementSystem } = await import('../../../../lib/achievement-system')
+      // const newAchievements = await AchievementSystem.checkForNewAchievements()
+      const newAchievements: any[] = []
       
       console.log('🏆 새로운 Achievement:', newAchievements)
       

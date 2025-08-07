@@ -5,6 +5,8 @@
  * 세분화된 에러 처리를 위한 전용 Error Boundary 컴포넌트들
  */
 
+import React from 'react'
+
 export { ErrorBoundary } from './ErrorBoundary'
 export { default as AsyncErrorBoundary } from './AsyncErrorBoundary'
 export { default as FormErrorBoundary } from './FormErrorBoundary'

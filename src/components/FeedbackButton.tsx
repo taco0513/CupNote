@@ -49,15 +49,13 @@ export default function FeedbackButton() {
 
   return (
     <>
-      {/* Floating Beta Feedback Button */}
+      {/* Floating Beta Feedback Button - Circle only */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-20 right-4 md:bottom-8 md:right-8 z-40 bg-gradient-to-br from-purple-500 to-purple-600 text-white px-4 py-3 rounded-full shadow-lg backdrop-blur-sm flex items-center space-x-2 hover:from-purple-600 hover:to-purple-700 transform transition-all duration-300 hover:scale-105 active:scale-95"
+        className="fixed bottom-32 right-4 md:bottom-8 md:right-8 z-40 bg-gradient-to-br from-purple-500 to-purple-600 text-white w-14 h-14 rounded-full shadow-lg backdrop-blur-sm flex items-center justify-center hover:from-purple-600 hover:to-purple-700 transform transition-all duration-300 hover:scale-105 active:scale-95"
         aria-label="베타 피드백 보내기"
       >
-        <MessageSquare className="h-5 w-5" />
-        <span className="text-sm font-medium">베타 피드백</span>
-        <span className="bg-white/90 text-purple-800 text-xs px-1.5 py-0.5 rounded-full font-medium">Beta</span>
+        <MessageSquare className="h-6 w-6" />
       </button>
 
       {/* Feedback Modal */}

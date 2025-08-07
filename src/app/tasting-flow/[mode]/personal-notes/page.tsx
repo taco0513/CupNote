@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 
 import { useRouter, useParams } from 'next/navigation'
 
-import { ArrowRight, ArrowLeft, Edit3, Clock, Info, CheckCircle, Loader2, Camera } from 'lucide-react'
+import { ArrowRight, ArrowLeft, Edit3, Clock, Info, CheckCircle, Loader2, Camera, Star } from 'lucide-react'
 
 import Navigation from '../../../../components/Navigation'
 import ImageUpload from '../../../../components/ImageUpload'
@@ -51,6 +51,7 @@ export default function PersonalNotesPage() {
   const [isSaving, setIsSaving] = useState(false)
   const [imageUrl, setImageUrl] = useState<string>('')
   const [thumbnailUrl, setThumbnailUrl] = useState<string>('')
+  const [rating, setRating] = useState(0)
 
   // 자동 저장 타이머
   useEffect(() => {
@@ -175,6 +176,7 @@ export default function PersonalNotesPage() {
     const updatedSession = {
       ...session,
       personalNotes,
+      rating, // Add rating to session data
       currentScreen: 'result',
       completedAt: new Date().toISOString(),
     }
@@ -244,6 +246,34 @@ export default function PersonalNotesPage() {
           </div>
 
           <div className="space-y-8">
+            {/* 평점 섹션 */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-4">
+                <Star className="inline h-4 w-4 mr-1" />
+                전체적인 만족도는 어떠셨나요?
+              </label>
+              <div className="flex justify-center gap-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    onClick={() => setRating(star)}
+                    className="text-4xl transition-all hover:scale-110"
+                    type="button"
+                  >
+                    {star <= rating ? '⭐' : '☆'}
+                  </button>
+                ))}
+              </div>
+              <p className="text-center text-sm text-coffee-600 mt-2">
+                {rating === 0 && '별을 클릭해서 평점을 선택하세요'}
+                {rating === 1 && '😞 아쉬웠어요'}
+                {rating === 2 && '😐 그저 그래요'}
+                {rating === 3 && '🙂 괜찮았어요'}
+                {rating === 4 && '😊 좋았어요!'}
+                {rating === 5 && '🤩 최고예요!'}
+              </p>
+            </div>
+
             {/* 메인 텍스트 입력 */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">

@@ -238,13 +238,40 @@ class OCRServiceV2 {
         info.variety = lines[i + 1]
       }
       
-      // 로스터 노트 (콤마로 구분된 플레이버)
-      if (!info.notes && line.includes(',')) {
+      // 로스터 노트 - 명시적 레이블 패턴
+      if (!info.notes) {
+        // 한국어/영어 로스터 노트 레이블 체크
+        const noteLabels = ['로스터 노트', '테이스팅 노트', '노트', 'roaster note', 'tasting note', 'note', 'flavor']
+        const hasLabel = noteLabels.some(label => lineLower.includes(label))
+        
+        if (hasLabel) {
+          // 같은 줄에 콜론이나 화살표 뒤에 있는 내용
+          if (line.includes(':') || line.includes('→')) {
+            const parts = line.split(/[:→]/)
+            if (parts.length > 1) {
+              info.notes = parts[1].trim()
+            }
+          } 
+          // 다음 줄에 있는 경우
+          else if (i + 1 < lines.length) {
+            info.notes = lines[i + 1]
+          }
+        }
+      }
+      
+      // 로스터 노트 (콤마로 구분된 플레이버 또는 한국어 키워드)
+      if (!info.notes && (line.includes(',') || line.includes('·') || line.includes('|'))) {
         const flavors = ['berry', 'candy', 'chocolate', 'floral', 'fruity', 'nutty', 'caramel', 
                         'vanilla', 'honey', 'wine', 'tea', 'citrus', 'apple', 'cherry', 'silky', 
                         'cacao', 'nibs', 'raspberry', 'watermelon', 'melon']
         
-        if (flavors.some(flavor => lineLower.includes(flavor))) {
+        const koreanFlavors = ['베리', '초콜릿', '꽃', '과일', '견과', '캐러멜', 
+                               '바닐라', '꿀', '와인', '차', '시트러스', '사과', '체리', 
+                               '카카오', '라즈베리', '수박', '멜론', '오렌지', '레몬', 
+                               '자몽', '복숭아', '살구', '블루베리', '딸기', '포도']
+        
+        if (flavors.some(flavor => lineLower.includes(flavor)) || 
+            koreanFlavors.some(flavor => line.includes(flavor))) {
           info.notes = line
         }
       }
@@ -266,14 +293,24 @@ class OCRServiceV2 {
       }
     }
 
-    // 로스터 노트 대체 패턴
+    // 로스터 노트 대체 패턴 (한국어/영어 혼용)
     if (!info.notes) {
       for (const line of lines) {
         const lineLower = line.toLowerCase()
-        if ((lineLower.includes('blue') || lineLower.includes('raspberry') || 
-             lineLower.includes('watermelon') || lineLower.includes('candy') ||
-             lineLower.includes('silky')) &&
-            line !== info.coffeeName) {
+        
+        // 영어 키워드
+        const englishKeywords = ['blue', 'raspberry', 'watermelon', 'candy', 'silky', 
+                                 'chocolate', 'berry', 'fruit', 'floral', 'caramel']
+        
+        // 한국어 키워드
+        const koreanKeywords = ['블루베리', '라즈베리', '수박', '사탕', '실키', 
+                               '초콜릿', '베리', '과일', '꽃', '캐러멜', '달콤', 
+                               '산뜻', '부드러운', '깔끔한', '상큼한']
+        
+        const hasEnglish = englishKeywords.some(keyword => lineLower.includes(keyword))
+        const hasKorean = koreanKeywords.some(keyword => line.includes(keyword))
+        
+        if ((hasEnglish || hasKorean) && line !== info.coffeeName && line.length > 5) {
           info.notes = line
           break
         }

@@ -222,24 +222,24 @@ export default function SensoryExpressionPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-coffee-50 to-coffee-100">
+      {/* 미니멀 프로그레스바 - sticky로 헤더에 붙이기 */}
+      <div className="sticky top-[calc(64px+env(safe-area-inset-top))] z-30 bg-white">
+        <div className="h-1 bg-gray-200">
+          <div 
+            className="h-full bg-gradient-to-r from-coffee-400 to-coffee-500 transition-all duration-300"
+            style={{ width: mode === 'cafe' ? '66.67%' : '57.14%' }}
+          />
+        </div>
+      </div>
+      
       <div className="container mx-auto px-4 py-4 md:py-8 max-w-3xl pb-20 md:pb-8">
         <Navigation showBackButton currentPage="record" />
 
-        {/* 헤더 */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-2xl md:text-3xl font-bold text-coffee-800">감각 표현</h1>
-            <div className="text-sm text-coffee-600">
-              {mode === 'cafe' ? '4' : '4'} / {mode === 'cafe' ? '6' : '7'}
-            </div>
-          </div>
-
-          {/* 진행바 */}
-          <div className="w-full bg-coffee-200 rounded-full h-2">
-            <div
-              className="bg-coffee-600 h-2 rounded-full transition-all duration-300"
-              style={{ width: mode === 'cafe' ? '66.67%' : '57.14%' }}
-            />
+        {/* 페이지 헤더 */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold text-coffee-800">감각 표현</h1>
+            <span className="text-sm text-coffee-600">{mode === 'cafe' ? '4' : '4'} / {mode === 'cafe' ? '6' : '7'}</span>
           </div>
         </div>
 

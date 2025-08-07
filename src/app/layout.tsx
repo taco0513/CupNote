@@ -266,7 +266,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <SearchProvider>
                   <IOSPullToRefreshPreventer />
                   <AppHeader />
-                  {children}
+                  <div className="pt-10 pb-10">
+                    {children}
+                  </div>
                   <MobileNavigation />
                   <NotificationContainer />
                   <OnboardingTrigger />

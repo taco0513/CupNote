@@ -5,8 +5,10 @@ const config: CapacitorConfig = {
   appName: 'CupNote',
   webDir: 'out',  // Next.js static export directory
   server: {
-    url: 'https://mycupnote.com',
-    cleartext: true
+    // 로컬 개발 서버 사용 (Mac's IP address for iOS simulator)
+    url: 'http://192.168.0.108:5173',
+    cleartext: true,
+    allowNavigation: ['*']
   },
   ios: {
     contentInset: 'never',
