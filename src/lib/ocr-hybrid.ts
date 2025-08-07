@@ -73,8 +73,8 @@ class HybridOCRService {
 
     // Vercel Functions endpoint 사용
     const apiUrl = process.env.NODE_ENV === 'production' 
-      ? 'https://mycupnote.com/api/ocr'
-      : 'http://localhost:3000/api/ocr'
+      ? 'https://mycupnote.com/api/ocr-vision'
+      : 'http://localhost:3000/api/ocr-vision'
     
     const response = await fetch(apiUrl, {
       method: 'POST',

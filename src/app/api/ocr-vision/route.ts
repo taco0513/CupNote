@@ -1,22 +1,34 @@
 /**
- * Vercel Function - Google Vision OCR API
+ * Next.js App Router API - Google Vision OCR
  * Production endpoint for OCR processing
  */
 
-import { VercelRequest, VercelResponse } from '@vercel/node'
+import { NextRequest, NextResponse } from 'next/server'
 import vision from '@google-cloud/vision'
-import formidable from 'formidable'
-import fs from 'fs'
 
 // Google Vision Client 초기화
-const client = new vision.ImageAnnotatorClient({
-  keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS
-})
+let client: vision.ImageAnnotatorClient | null = null
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
+function getVisionClient() {
+  if (!client) {
+    // Vercel 환경에서는 환경 변수로 JSON 키를 직접 전달
+    const credentials = process.env.GOOGLE_VISION_CREDENTIALS
+    
+    if (credentials) {
+      // JSON 문자열로 저장된 경우
+      client = new vision.ImageAnnotatorClient({
+        credentials: JSON.parse(credentials)
+      })
+    } else if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+      // 로컬에서 파일 경로 사용
+      client = new vision.ImageAnnotatorClient({
+        keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS
+      })
+    } else {
+      throw new Error('Google Vision credentials not configured')
+    }
+  }
+  return client
 }
 
 interface CoffeeInfoOCR {
@@ -30,41 +42,38 @@ interface CoffeeInfoOCR {
   notes?: string
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // CORS 헤더 설정
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+// CORS 헤더 설정
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+}
 
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end()
-  }
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders })
+}
 
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' })
-  }
-
+export async function POST(request: NextRequest) {
   try {
     // FormData 파싱
-    const form = formidable({ multiples: false })
-    const [fields, files] = await new Promise<[any, any]>((resolve, reject) => {
-      form.parse(req, (err, fields, files) => {
-        if (err) reject(err)
-        else resolve([fields, files])
-      })
-    })
-
-    const imageFile = Array.isArray(files.image) ? files.image[0] : files.image
+    const formData = await request.formData()
+    const imageFile = formData.get('image') as File
+    
     if (!imageFile) {
-      return res.status(400).json({ error: 'No image file provided' })
+      return NextResponse.json(
+        { success: false, error: 'No image file provided' },
+        { status: 400, headers: corsHeaders }
+      )
     }
 
-    // 이미지 파일 읽기
-    const imageBuffer = fs.readFileSync(imageFile.filepath)
+    // File을 Buffer로 변환
+    const arrayBuffer = await imageFile.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
 
     // Google Vision API 호출
-    const [result] = await client.textDetection({
-      image: { content: imageBuffer.toString('base64') }
+    const visionClient = getVisionClient()
+    const [result] = await visionClient.textDetection({
+      image: { content: buffer.toString('base64') }
     })
 
     const detections = result.textAnnotations
@@ -77,20 +86,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const fieldsFound = Object.values(extractedInfo).filter(v => v).length
     const confidence = Math.min(95, fieldsFound * 12 + 35)
 
-    return res.status(200).json({
-      success: true,
-      text: fullText,
-      confidence,
-      extractedInfo,
-      method: 'google-vision'
-    })
+    return NextResponse.json(
+      {
+        success: true,
+        text: fullText,
+        confidence,
+        extractedInfo,
+        method: 'google-vision'
+      },
+      { headers: corsHeaders }
+    )
 
   } catch (error: any) {
     console.error('OCR processing error:', error)
-    return res.status(500).json({
-      success: false,
-      error: error.message || 'OCR processing failed'
-    })
+    return NextResponse.json(
+      {
+        success: false,
+        error: error.message || 'OCR processing failed'
+      },
+      { status: 500, headers: corsHeaders }
+    )
   }
 }
 
@@ -147,7 +162,8 @@ function extractCoffeeInfo(text: string): CoffeeInfoOCR {
 
   // 국가명 패턴 매칭
   const countries = ['에티오피아', 'Ethiopia', '케냐', 'Kenya', '콜롬비아', 'Colombia', 
-                    '브라질', 'Brazil', '과테말라', 'Guatemala', '코스타리카', 'Costa Rica']
+                    '브라질', 'Brazil', '과테말라', 'Guatemala', '코스타리카', 'Costa Rica',
+                    '파나마', 'Panama', '르완다', 'Rwanda', '인도네시아', 'Indonesia']
   if (!info.origin) {
     for (const country of countries) {
       const found = lines.find(line => line.includes(country))
@@ -160,12 +176,26 @@ function extractCoffeeInfo(text: string): CoffeeInfoOCR {
 
   // 한국 로스터리 매칭
   const roasters = ['프릳츠', '테라로사', '앤트러사이트', '센터커피', '커피몽타주', 
-                   '리프커피', '나무사이로', '커피리브레']
+                   '리프커피', '나무사이로', '커피리브레', '커피그래피티', '모모스커피',
+                   '블루보틀', '스타벅스 리저브', '콜드브루 라운지']
   if (!info.roasterName) {
     for (const roaster of roasters) {
       const found = lines.find(line => line.includes(roaster))
       if (found) {
         info.roasterName = roaster
+        break
+      }
+    }
+  }
+
+  // 가공법 패턴
+  const processes = ['Natural', 'Washed', 'Honey', 'Anaerobic', 'Semi-Washed', 
+                    '내추럴', '워시드', '허니', '혐기성', '세미워시드']
+  if (!info.processing) {
+    for (const process of processes) {
+      const found = lines.find(line => line.includes(process))
+      if (found) {
+        info.processing = process
         break
       }
     }
