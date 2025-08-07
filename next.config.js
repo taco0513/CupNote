@@ -50,7 +50,7 @@ const getSecurityHeaders = () => {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // output: 'export',  // Disabled - using local dev server for Capacitor
+  // output: 'export',  // Disabled - using local server
   // 성능 최적화 설정 - Production Reality 패턴
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',

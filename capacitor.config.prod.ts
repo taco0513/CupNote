@@ -3,9 +3,9 @@ import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'com.mycupnote.app',
   appName: 'CupNote',
-  webDir: 'out',
+  webDir: '.next',  // Next.js build directory
   server: {
-    // 프로덕션 서버 사용 (TestFlight용)
+    // Production server URL
     url: 'https://mycupnote.com',
     cleartext: false,
     allowNavigation: ['mycupnote.com', '*.mycupnote.com']

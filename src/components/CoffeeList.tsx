@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useMemo, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
 
 import FilterPanel, { FilterOptions } from './FilterPanel'
 import SearchBar from './SearchBar'
@@ -251,6 +252,8 @@ export default function CoffeeList() {
 }
 
 function CoffeeCard({ record }: { record: CoffeeRecord }) {
+  const router = useRouter()
+  
   const getModeDisplay = (mode?: string, tasteMode?: string) => {
     if (mode === 'cafe') return { icon: '🏪', text: 'Cafe', color: 'bg-blue-100 text-blue-800' }
     if (mode === 'homecafe')
@@ -265,8 +268,8 @@ function CoffeeCard({ record }: { record: CoffeeRecord }) {
   const modeDisplay = getModeDisplay(record.mode, record.tasteMode)
 
   return (
-    <a
-      href={`/records/${record.id}`}
+    <div
+      onClick={() => router.push(`/records/${record.id}`)}
       className="block bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden cursor-pointer"
     >
       {/* 이미지가 있으면 표시 */}
@@ -345,11 +348,11 @@ function CoffeeCard({ record }: { record: CoffeeRecord }) {
                         return parsed.selectedFlavors.join(', ')
                       }
                       
-                      // Can't parse meaningfully, return original
-                      return record.taste
+                      // If parsed but can't find flavor data, return default message
+                      return '맛 정보를 불러올 수 없음'
                     } catch {
-                      // Not valid JSON, return as is
-                      return record.taste
+                      // Not valid JSON, but don't show raw JSON to user
+                      return '맛 정보를 불러올 수 없음'
                     }
                   }
                   // Not JSON, return as is
@@ -378,9 +381,13 @@ function CoffeeCard({ record }: { record: CoffeeRecord }) {
                   if ('selectedFlavors' in record.taste && Array.isArray(record.taste.selectedFlavors)) {
                     return record.taste.selectedFlavors.join(', ')
                   }
+                  
+                  // If object but can't extract meaningful data, return default
+                  return '맛 정보를 불러올 수 없음'
                 }
                 
-                return String(record.taste)
+                // Fallback - never show raw data
+                return '맛 정보를 불러올 수 없음'
               })()}
             </p>
           </div>
@@ -417,6 +424,6 @@ function CoffeeCard({ record }: { record: CoffeeRecord }) {
           )}
         </div>
       </div>
-    </a>
+    </div>
   )
 }
