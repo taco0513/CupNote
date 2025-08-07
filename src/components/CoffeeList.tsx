@@ -269,7 +269,7 @@ function CoffeeCard({ record }: { record: CoffeeRecord }) {
 
   return (
     <div
-      onClick={() => router.push(`/records/${record.id}`)}
+      onClick={() => router.push(`/record-detail?id=${record.id}`)}
       className="block bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden cursor-pointer"
     >
       {/* 이미지가 있으면 표시 */}

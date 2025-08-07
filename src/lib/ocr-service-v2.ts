@@ -113,7 +113,11 @@ class OCRServiceV2 {
         }
       }, 300)
       
-      const response = await fetch('/api/ocr/enhanced', {
+      // Static export에서는 API 라우트를 사용할 수 없으므로 외부 API 사용
+      // 또는 클라이언트 사이드 OCR 사용
+      const apiUrl = process.env.NEXT_PUBLIC_OCR_API_URL || 'https://mycupnote.com/api/ocr/enhanced'
+      
+      const response = await fetch(apiUrl, {
         method: 'POST',
         body: formData,
         signal: controller.signal

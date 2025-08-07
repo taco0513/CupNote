@@ -19,7 +19,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.5.0</string>
 	<key>CFBundleVersion</key>
-	<string>7</string>
+	<string>9</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -45,5 +45,11 @@
 	</dict>
 	<key>CFBundleIconName</key>
 	<string>AppIcon</string>
+	<key>NSCameraUsageDescription</key>
+	<string>CupNote에서 커피 라벨을 스캔하여 정보를 자동으로 입력하기 위해 카메라 접근이 필요합니다.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>CupNote에서 커피 사진을 저장하고 불러오기 위해 사진 라이브러리 접근이 필요합니다.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>CupNote에서 촬영한 커피 사진을 저장하기 위해 사진 라이브러리 접근이 필요합니다.</string>
 </dict>
 </plist>

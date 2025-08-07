@@ -8,8 +8,8 @@ import type { Metadata } from 'next'
 import MyRecordsPageContent from '../../components/pages/MyRecordsPageContent'
 
 // Route Segment Config
-export const dynamic = 'force-dynamic' // Needs auth state and user data
-export const revalidate = 0 // Always fresh for user data
+// Static export - auth state handled on client
+export const revalidate = false
 
 // Enhanced metadata for better SEO
 export const metadata: Metadata = {

@@ -1,27 +1,29 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { ArrowLeft, Calendar, Coffee, MapPin, Star, Edit, Trash2, Thermometer, Clock, Heart, Share2, Camera, MessageCircle, TrendingUp, Award, Home, Store } from 'lucide-react'
-import Navigation from '../../../components/Navigation'
-import { CoffeeRecordService } from '../../../lib/supabase-service'
-import type { CoffeeRecord } from '../../../types/coffee'
+import Navigation from '../../components/Navigation'
+import { CoffeeRecordService } from '../../lib/supabase-service'
+import type { CoffeeRecord } from '../../types/coffee'
 
 export default function RecordDetailPage() {
-  const params = useParams()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const id = searchParams.get('id')
   const [record, setRecord] = useState<CoffeeRecord | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    loadRecord()
-  }, [params.id])
+    if (id) {
+      loadRecord(id)
+    }
+  }, [id])
 
-  const loadRecord = async () => {
+  const loadRecord = async (recordId: string) => {
     try {
-      const id = params.id as string
       const records = await CoffeeRecordService.getRecords()
-      const foundRecord = records.find(r => r.id === id)
+      const foundRecord = records.find(r => r.id === recordId)
       
       if (foundRecord) {
         setRecord(foundRecord)
@@ -71,9 +73,9 @@ export default function RecordDetailPage() {
             return parsed.selectedFlavors.join(', ')
           }
           
-          return taste
+          return '맛 정보를 불러올 수 없음'
         } catch {
-          return taste
+          return '맛 정보를 불러올 수 없음'
         }
       }
       return taste
@@ -86,7 +88,7 @@ export default function RecordDetailPage() {
       return items.length > 0 ? items.join(', ') : '기록 없음'
     }
     
-    return String(taste)
+    return '맛 정보를 불러올 수 없음'
   }
 
   if (loading) {

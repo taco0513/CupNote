@@ -1,10 +1,10 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-
+import { Camera as CapacitorCamera, CameraResultType, CameraSource } from '@capacitor/camera'
 import { Camera, Scan, X, FileImage, AlertCircle, CheckCircle, Loader2 } from 'lucide-react'
 
-import OCRServiceV2, { type OCRResult, type CoffeeInfoOCR } from '../lib/ocr-service-v2'
+import HybridOCRService, { type OCRResult, type CoffeeInfoOCR } from '../lib/ocr-hybrid'
 import { useNotification } from '../contexts/NotificationContext'
 
 interface OCRScannerProps {
@@ -36,6 +36,60 @@ export default function OCRScanner({
     setResult(null)
   }
 
+  const handleCameraCapture = async () => {
+    try {
+      const photo = await CapacitorCamera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.DataUrl,
+        source: CameraSource.Camera
+      })
+
+      if (photo.dataUrl) {
+        // DataURL을 File 객체로 변환
+        const response = await fetch(photo.dataUrl)
+        const blob = await response.blob()
+        const file = new File([blob], `photo_${Date.now()}.jpg`, { type: 'image/jpeg' })
+        
+        setSelectedImages(prev => {
+          const newImages = [...prev, file].slice(0, maxImages)
+          return newImages
+        })
+        setResult(null)
+      }
+    } catch (err: any) {
+      console.error('Camera capture error:', err)
+      error('카메라 사용 중 오류가 발생했습니다: ' + (err.message || '알 수 없는 오류'))
+    }
+  }
+
+  const handleGallerySelect = async () => {
+    try {
+      const photo = await CapacitorCamera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.DataUrl,
+        source: CameraSource.Photos
+      })
+
+      if (photo.dataUrl) {
+        // DataURL을 File 객체로 변환
+        const response = await fetch(photo.dataUrl)
+        const blob = await response.blob()
+        const file = new File([blob], `photo_${Date.now()}.jpg`, { type: 'image/jpeg' })
+        
+        setSelectedImages(prev => {
+          const newImages = [...prev, file].slice(0, maxImages)
+          return newImages
+        })
+        setResult(null)
+      }
+    } catch (err: any) {
+      console.error('Gallery select error:', err)
+      error('갤러리 선택 중 오류가 발생했습니다: ' + (err.message || '알 수 없는 오류'))
+    }
+  }
+
   const removeImage = (index: number) => {
     setSelectedImages(prev => prev.filter((_, i) => i !== index))
   }
@@ -51,24 +105,22 @@ export default function OCRScanner({
       
       let ocrResult: OCRResult
 
-      if (selectedImages.length === 1) {
-        // 단일 이미지 처리
-        ocrResult = await OCRServiceV2.extractText(
-          selectedImages[0],
-          (progress) => {
-            setProgress(progress * 100)
-          }
-        )
-      } else {
-        // 다중 이미지 처리
-        ocrResult = await OCRServiceV2.extractTextFromMultipleImages(
-          selectedImages,
-          (progress, imageIndex) => {
-            setProgress(progress * 100)
-            setCurrentImageIndex(imageIndex)
-          }
-        )
+      // Hybrid OCR 사용 - 가장 좋은 방법 자동 선택
+      ocrResult = await HybridOCRService.extractText(
+        selectedImages[0],
+        (progress) => {
+          setProgress(progress * 100)
+        }
+      )
+      
+      // 사용된 OCR 방법 표시
+      const methodMessage = {
+        'google-vision': '고품질 OCR',
+        'external-api': '표준 OCR',
+        'tesseract': '오프라인 OCR'
       }
+      
+      console.log(`OCR 방법: ${methodMessage[ocrResult.method]}`)
 
       setResult(ocrResult)
       
@@ -173,35 +225,53 @@ export default function OCRScanner({
             />
             
             {selectedImages.length === 0 ? (
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="w-full p-6 border-2 border-dashed border-gray-300 rounded-xl hover:border-coffee-400 hover:bg-coffee-50 transition-colors"
-              >
-                <div className="flex flex-col items-center space-y-2">
-                  <Camera className="h-8 w-8 text-gray-400" />
-                  <div className="text-center">
-                    <p className="text-sm font-medium text-gray-700">
-                      이미지 선택
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      카메라 촬영 또는 갤러리에서 선택
-                    </p>
-                  </div>
-                </div>
-              </button>
+              <div className="space-y-2">
+                <button
+                  onClick={handleCameraCapture}
+                  className="w-full p-4 bg-coffee-600 text-white rounded-xl hover:bg-coffee-700 transition-colors flex items-center justify-center space-x-2"
+                >
+                  <Camera className="h-5 w-5" />
+                  <span className="font-medium">카메라로 촬영</span>
+                </button>
+                <button
+                  onClick={handleGallerySelect}
+                  className="w-full p-4 border-2 border-coffee-600 text-coffee-600 rounded-xl hover:bg-coffee-50 transition-colors flex items-center justify-center space-x-2"
+                >
+                  <FileImage className="h-5 w-5" />
+                  <span className="font-medium">갤러리에서 선택</span>
+                </button>
+                {/* 웹 폴백 - 숨김 처리 */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  onChange={handleImageSelect}
+                />
+              </div>
             ) : (
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-gray-700">
                     선택된 이미지 ({selectedImages.length}/{maxImages})
                   </span>
-                  <button
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={selectedImages.length >= maxImages}
-                    className="text-xs text-coffee-600 hover:text-coffee-800 disabled:text-gray-400"
-                  >
-                    추가하기
-                  </button>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={handleCameraCapture}
+                      disabled={selectedImages.length >= maxImages}
+                      className="text-xs text-coffee-600 hover:text-coffee-800 disabled:text-gray-400"
+                    >
+                      카메라
+                    </button>
+                    <button
+                      onClick={handleGallerySelect}
+                      disabled={selectedImages.length >= maxImages}
+                      className="text-xs text-coffee-600 hover:text-coffee-800 disabled:text-gray-400"
+                    >
+                      갤러리
+                    </button>
+                  </div>
                 </div>
                 
                 <div className="grid grid-cols-2 gap-2">

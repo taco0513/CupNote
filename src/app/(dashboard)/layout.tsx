@@ -8,8 +8,8 @@ import type { Metadata } from 'next'
 import DashboardLayoutContent from '../../components/layouts/DashboardLayoutContent'
 
 // Route group config
-export const dynamic = 'force-dynamic' // Auth-required pages need dynamic rendering
-export const revalidate = 0
+// Static export - auth handled on client
+export const revalidate = false
 
 // Shared metadata for dashboard pages
 export const metadata: Metadata = {
